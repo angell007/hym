@@ -32,11 +32,15 @@ export class ProveedoresComponent implements OnInit {
   constructor(private http : HttpClient) { } 
 
   ngOnInit() {
-    this.http.get(this.ruta+'php/proveedores/lista_proveedores.php').subscribe((data:any)=>{
-        this.proveedores= data;
-    });
+    this.ActualizarProveedores();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
+    });
+  }
+
+  ActualizarProveedores(){
+    this.http.get(this.ruta+'php/proveedores/lista_proveedores.php').subscribe((data:any)=>{
+      this.proveedores= data;
     });
   }
 
@@ -48,14 +52,13 @@ export class ProveedoresComponent implements OnInit {
 
   GuardarProveedor(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();  
-    console.log(info);          
+    let datos = new FormData();
     datos.append("modulo",'Proveedor');
     datos.append("datos",info);
     modal.hide();
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
-      this.proveedores= data;
+      this.ActualizarProveedores();
     });
   }
 
@@ -64,15 +67,33 @@ export class ProveedoresComponent implements OnInit {
     datos.append("modulo", 'Proveedor');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.proveedores=data; 
+      this.ActualizarProveedores();
       this.deleteSwal.show();
-    })     
+    });
+  }
+
+  OcultarFormulario(modal)
+  {
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Direccion = null;
+    this.Telefono = null;
+    this.Celular = null;
+    this.Correo = null;
+    this.Detalle = null;
+    this.Confiable = null;
+    this.Regimen = null;
+    this.IdDepartamento = null;
+    this.IdMunicipio = null;
+    this.RazonSocial = null;
+    modal.hide();
   }
 
   EditarProveedor(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Proveedor', id:id}
     }).subscribe((data:any)=>{
+      console.log(data);      
       this.Identificacion = data.Id_Proveedor;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
@@ -83,9 +104,16 @@ export class ProveedoresComponent implements OnInit {
       this.Confiable = data.Confiable;
       this.Regimen = data.Regimen;
       this.IdDepartamento = data.Id_Departamento;
-      this.IdMunicipio = data.Id_Municipio;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
       this.RazonSocial = data.Razon_Social;
       modal.show();
+    });
+  }
+
+  AutoSleccionarMunicipio(Departamento, Municipio){
+    this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
+      this.Municipios= data;
+      this.IdMunicipio = Municipio;
     });
   }
 

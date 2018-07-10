@@ -24,11 +24,16 @@ export class BancosComponent implements OnInit {
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
-    this.http.get(this.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{
-        this.bancos= data;
-    });
+    this.ActualizarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
+    });
+  }
+
+  ActualizarVista()
+  {
+    this.http.get(this.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{
+      this.bancos= data;        
     });
   }
 
@@ -37,10 +42,10 @@ export class BancosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Banco');
     datos.append("datos",info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
-      this.bancos= data;
+      this.ActualizarVista();
     });
   }
 
@@ -49,7 +54,7 @@ export class BancosComponent implements OnInit {
     datos.append("modulo", 'Banco');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.bancos=data; 
+      this.ActualizarVista();
       this.deleteSwal.show();
     })    
   }
@@ -65,6 +70,16 @@ export class BancosComponent implements OnInit {
       this.Detalle = data.Detalle;
       this.ModalEditarBanco.show();
     });
+  }
+
+  OcultarFormulario(modal)
+  {
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Pais = null;
+    this.Identificador = null;
+    this.Detalle = null;
+    modal.hide();
   }
 
 }

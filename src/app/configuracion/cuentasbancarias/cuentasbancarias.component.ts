@@ -28,34 +28,39 @@ export class CuentasbancariasComponent implements OnInit {
   constructor(private http : HttpClient) { }
 
   ngOnInit() { 
-    this.http.get(this.ruta+'php/cuentasbancarias/lista_cuentas.php').subscribe((data:any)=>{
-      this.cuentas= data;
-    });
+    this.ActualizarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;
     });
-  } 
+  }
+
+  ActualizarVista()
+  {
+    this.http.get(this.ruta+'php/cuentasbancarias/lista_cuentas.php').subscribe((data:any)=>{
+      this.cuentas= data;
+    });
+  }
 
   GuardarCuenta(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();    
     datos.append("modulo",'Cuenta_Bancaria');
     datos.append("datos",info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
-      this.cuentas= data;
+      this.ActualizarVista();
     });
   }
 
   EliminarCuenta(id){
     let datos=new FormData();
-     datos.append("modulo", 'Cuenta_Bancaria');
-     datos.append ("id",id);
-     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-       this.cuentas=data; 
-       this.deleteSwal.show();
-      });    
+    datos.append("modulo", 'Cuenta_Bancaria');
+    datos.append ("id",id);
+    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+      this.ActualizarVista();
+      this.deleteSwal.show();
+    });    
   }
 
   EditarCuenta(id){
@@ -72,6 +77,19 @@ export class CuentasbancariasComponent implements OnInit {
       this.Detalle = data.Detalle;
       this.ModalEditarCuenta.show();
     });
+  }
+
+  OcultarFormulario(modal)
+  {
+    this.Identificacion = null;
+    this.NumeroCuenta = null;
+    this.IdBanco = null;
+    this.NombreTitular = null;
+    this.IdentificacionTitular = null;
+    this.SaldoInicial = null;
+    this.FechaInicial = null;
+    this.Detalle = null;
+    modal.hide();
   }
 
 }

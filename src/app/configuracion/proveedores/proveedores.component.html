@@ -22,9 +22,9 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let proveedor of proveedores">
-                    <td style="vertical-align: middle;">{{proveedor.Identificacion}}</td>
+                    <td style="vertical-align: middle;">{{proveedor.Id_Proveedor}}</td>
                     <td style="vertical-align: middle;">{{proveedor.Nombre}}</td>
-                    <td style="vertical-align: middle;">{{proveedor.Ciudad}}</td>
+                    <td style="vertical-align: middle;">{{proveedor.Municipio}}</td>
                     <td style="vertical-align: middle;" class="text-center">{{proveedor.Confiable}}</td>
                     <td style="vertical-align: middle;" class="text-center">
                             <button class="btn btn-default btn-xs" type="button" style="margin:0;">
@@ -260,7 +260,7 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalEditarProveedor.hide()">Cancelar</button>
+                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarProveedor)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este proveedor' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarProveedor(FormEditarProveedor, ModalEditarProveedor)">Guardar</button>

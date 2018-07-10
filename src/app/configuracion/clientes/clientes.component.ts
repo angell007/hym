@@ -36,11 +36,15 @@ export class ClientesComponent implements OnInit {
   constructor(private http : HttpClient) { } 
  
   ngOnInit() {
-    this.http.get(this.ruta+'php/clientes/lista_clientes.php').subscribe((data:any)=>{
-        this.clientes= data;
-    });
+    this.ActualizarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
+    });
+  }
+
+  ActualizarVista(){
+    this.http.get(this.ruta+'php/clientes/lista_clientes.php').subscribe((data:any)=>{
+      this.clientes= data;
     });
   }
 
@@ -59,8 +63,8 @@ export class ClientesComponent implements OnInit {
     modal.hide();
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
-      this.clientes= data;
-    });
+      this.ActualizarVista();
+    });    
   }
 
   EditarCliente(id, modal){
@@ -90,7 +94,7 @@ export class ClientesComponent implements OnInit {
     datos.append("modulo", 'Cliente');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.clientes=data; 
+      this.ActualizarVista();
       this.deleteSwal.show();
     });    
   }
