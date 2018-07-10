@@ -25,7 +25,7 @@ export class BancosComponent implements OnInit {
 
   ngOnInit() {
     this.http.get(this.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{
-        this.bancos= data;
+        this.bancos= data;        
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
