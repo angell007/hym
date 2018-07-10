@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  
+
+<div class="clearfix"></div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="widget card">
+      <div class="card-block">
+        <h5 class="card-title">Indicadores Generales Transferencias</h5>
+        <div class="row mrg-top-30">
+          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+            <div class="text-center pdd-vertical-10">
+              <h2 class="font-primary no-mrg-top">1.320</h2>
+              <p class="no-mrg-btm">Exitosas</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+            <div class="text-center pdd-vertical-10">
+              <h2 class="font-primary no-mrg-top">35</h2>
+              <p class="no-mrg-btm">Devueltas</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+            <div class="text-center pdd-vertical-10">
+              <h2 class="font-primary no-mrg-top">1.200</h2>
+              <p class="no-mrg-btm">Cobradas</p>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6 col-6">
+            <div class="text-center pdd-vertical-10">
+              <h2 class="font-primary no-mrg-top">120</h2>
+              <p class="no-mrg-btm">Pendientes</p>
+            </div>
+          </div>
+        </div>
+        <div class="row mrg-top-35">
+          <div class="col-md-12">
+            <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+              [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-heading">
+        <h4 class="card-title inline-block pdd-top-5">Agentes Externos Registrados</h4>
+        <a href="" class="btn btn-info pull-right no-mrg">
+          <i class="ti-plus"></i> Nuevo</a>
+      </div>
+      <div class="pdd-horizon-20 pdd-vertical-5">
+        <div [perfectScrollbar] class="overflow-y-auto relative" style="height: 381px">
+          <table class="table table-lg table-hover">
+            <tbody>
+              <tr *ngFor="let agente of agentes">
+                <td>
+                  <div class="list-info">
+                    <img class="thumb-img" src="assets/images/user.jpg" alt="">
+                    <div class="info">
+                      <span class="title">{{agente.Nombre}}</span>
+                      <span class="sub-title">Cupo: {{agente.Cupo | currency }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mrg-top-10">
+                    <span>{{fecha | date:'dd/MM/yyyy'}}</span> 
+                  </div>
+                </td>
+                <td>
+                  <div class="relative mrg-top-10">
+                    <span class="status online"> </span>
+                    <span class="pdd-left-20">Activo</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                    <i class="ti-search"></i>
+                  </button>
+                  <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarOficina(oficina.Id_Oficina, ModalEditarOficina)">
+                    <i class="ti-pencil"></i>
+                  </button>
+                  <button class="btn btn-default  btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a suspender este agente externo, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                    (confirm)="EliminarOficina(oficina.Id_Oficina)">
+                    <i class="ti-close"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

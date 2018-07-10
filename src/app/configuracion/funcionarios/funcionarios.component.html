@@ -1,0 +1,60 @@
+<div class="container-fluid">
+    <div class="page-title">
+      <h4 class="pull-left">Funcionarios</h4>
+      <button class="pull-right btn btn-info"  href="" [routerLink]="['/funcionariocrear']" ><i class="ti-plus"></i> Agregar Nuevo Funcionario</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-block">
+            <p>Todas los funcionarios que Laboran en nuestra compañía</p>
+            <div class="table-overflow">
+              <table class="table table-hover table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th>Funcionario</th>
+                    <th style="width:170px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  <tr *ngFor="let funcionario of funcionarios">
+                    <td>
+                      <ul class="list-unstyled list-info">
+                        <li>
+                            <div class="pdd-vertical-10 pdd-horizon-20">	
+                                <img class="thumb-img img-circle" src="assets/images/user.jpg" alt="">
+                                <div class="info">
+                                  <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
+                                  <span class="sub-title">
+                                    <span>{{funcionario.Cargo}}</span>
+                                  </span>
+                                </div>
+                            </div>
+                        </li>
+                      </ul>
+                    </td>
+                    <td class="text-center" style="vertical-align: middle;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-search"></i>
+                        </button>
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-pencil"></i>
+                        </button>
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-id-badge"></i>
+                        </button>
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-trash"></i>
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

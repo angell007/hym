@@ -1,0 +1,157 @@
+<div class="container-fluid">
+    <div class="page-title">
+      <h4 class="pull-left">Bancos</h4>
+      <button class="pull-right btn btn-info" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo Banco</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-block">
+            <p>Todos los bancos con los que trabajamos</p>
+            <div class="table-overflow">
+              <table class="table table-hover table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th>Nombre Banco</th>
+                    <th style="width:200px;">País</th>
+                    <th style="width:130px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let banco of bancos">
+                    <td>{{banco.Nombre}}</td>
+                    <td>{{banco.Pais}}</td>
+                    <td class="text-center">
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                              <i class="ti-search"></i>
+                            </button>
+                            <button class="btn btn-default btn-xs" type="button" (click)="EditarBanco(banco.Id_Banco)" style="margin:0;">
+                              <i class="ti-pencil"></i>
+                            </button>
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar este banco, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                            (confirm)="EliminarBanco(banco.Id_Banco)"
+                            >
+                              <i class="ti-trash"></i>
+                            </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalBanco" #ModalBanco>
+    <div class="app-modal-header">
+        <h4>Nuevo Banco</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormBanco="ngForm">
+            <div class="row">                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>País</label>
+                        <select class="form-control" required name="Id_Pais" ngModel="">
+                            <option value="">Seleccione un País</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Identificador de Cuentas</label>
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel=""></textarea>
+                    </div>
+                </div>
+            </div>            
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" type="button" (click)="ModalBanco.hide()">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button" (click)="GuardarBanco(FormBanco, ModalBanco)">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarBanco" #ModalEditarBanco>
+    <div class="app-modal-header">
+        <h4>Editar Banco</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarBanco="ngForm">
+            <div class="col-md-4">
+                <div class="form-group" hidden>
+                    <label>Identificación</label>
+                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>País</label>
+                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
+                            <option value="">Seleccione un País</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Identificador de Cuentas</label>
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>            
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" type="button" (click)="ModalEditarBanco.hide()">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" type="button"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)"
+                    >Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+<swal #deleteSwal
+  title="Banco eliminado"
+  text="Se ha eliminado correctamente el banco"
+  type="success"
+  >
+  </swal>

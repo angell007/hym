@@ -1,0 +1,203 @@
+<div class="container-fluid">
+    <div class="page-title">
+      <h4 class="pull-left">Destinatarios</h4>
+      <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()"><i class="ti-plus"></i> Agregar Nuevo Destinatario</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-block">
+            <p>Tenemos los destinatarios a quienes les hacemos transferencias o consignaciones</p>
+            <div class="table-overflow">
+              <table class="table table-hover table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th style="width:120px;">Identificación</th>
+                    <th>Nombre</th>
+                    <th style="width:350px">Cuentas Asociadas</th>
+                    <th style="width:130px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let destinatario of destinatarios">
+                    <td style="vertical-align: middle;">{{destinatario.Identificacion}}</td>
+                    <td style="vertical-align: middle;">{{destinatario.Nombre}}</td>
+                    <td style="vertical-align: middle;" >
+                      <li class="list-unstyled list-info">
+                          <ul>Banesco : 0134345445656778</ul>
+                          <ul>Provincial : 01031234567890</ul>
+                      </li>
+                    </td>
+                    <td style="vertical-align: middle;" class="text-center">
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                              <i class="ti-search"></i>
+                            </button>
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario)">
+                              <i class="ti-pencil"></i>
+                            </button>
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este destinatario, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                            (confirm)="EliminarDestinatario(destinatario.Id_Destinatario)"
+                            >
+                              <i class="ti-trash"></i>
+                            </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
+    <div class="app-modal-header">
+        <h4>Nuevo Destinatario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormDestinatario="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel=""></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Cuentas Asociadas</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>País</label>
+                        <select class="form-control" name="Id_Pais" ngModel="">
+                            <option>Seleccione País</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Banco</label>
+                        <select class="form-control" name="Id_Banco" ngModel="">
+                            <option>Seleccione Banco</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Numero de Cuenta</label>
+                        <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label>&nbsp;</label>
+                    <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" (click)="ModalDestinatario.hide()">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Guardar</button>
+                </div>
+            </div>
+        </form>        
+    </div>    
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
+    <div class="app-modal-header">
+        <h4>Editar Destinatario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarDestinatario="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Cuentas Asociadas</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>País</label>
+                        <select class="form-control" name="Id_Pais" ngModel="{{IdPais}}">
+                            <option>Seleccione País</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Banco</label>
+                        <select class="form-control" name="Id_Banco" ngModel="{{IdBanco}}">
+                            <option>Seleccione Banco</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Numero de Cuenta</label>
+                        <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="{{Cuentas}}">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label>&nbsp;</label>
+                    <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-default btn-sm" (click)="ModalEditarDestinatario.hide()">Cancelar</button>
+                    <button class="btn btn-primary btn-sm" 
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarDestinatario(FormEditarDestinatario, ModalEditarDestinatario)">Guardar</button>
+                </div>
+            </div>
+        </form>        
+    </div>    
+</app-modal-basic>
+
+<swal #deleteSwal
+  title="Destinatario Eliminado"
+  text="Se ha Eliminado Correctamente el destinatario"
+  type="success"
+  >
+  </swal>
