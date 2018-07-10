@@ -5,6 +5,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
 import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../shared/config/theme-constant';
+import { NgForm } from '@angular/forms';
 import 'ammap3';
 import 'ammap3/ammap/maps/js/usaLow';
 
@@ -23,6 +24,15 @@ export class AgentesexternosComponent implements OnInit {
 
   agentes = [];
 
+  //variables de formulario
+  public Identificacion : any[];
+  public Nombre : any[];
+  public Documento : any[];
+  public Cupo : any[];
+  public Username : any[];
+  public Password : any[];
+
+  @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild(DatatableComponent) table: DatatableComponent;
   constructor(private http : HttpClient,private colorConfig:ThemeConstants) {  
   }
@@ -66,6 +76,52 @@ export class AgentesexternosComponent implements OnInit {
     this.http.get(this.ruta+'php/agentesexternos/lista.php').subscribe((data:any)=>{
       this.agentes= data;
     });
+  }
+
+  GuardarAgente(formulario: NgForm, modal:any){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    this.OcultarFormulario(modal);
+    datos.append("modulo",'Agente_Externo');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+      this.agentes= data;
+      formulario.reset();
+    });    
+  }
+
+  EditarAgente(id, modal){
+    this.http.get(this.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Agente_Externo', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = data.Id_Agente_Externo;
+      this.Nombre = data.Nombre;
+      this.Documento = data.Documento;
+      this.Cupo = data.Cupo;
+      this.Username = data.Username;
+      this.Password = data.Password;
+      modal.show();
+    });
+  }
+
+  OcultarFormulario(modal){
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Documento = null;
+    this.Cupo = null;
+    this.Username = null;
+    this.Password = null;
+    modal.hide();
+  }
+
+  EliminarAgente(id){
+    let datos=new FormData();
+    datos.append("modulo", 'Agente_Externo');
+    datos.append ("id",id);
+    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+      this.agentes=data; 
+      this.deleteSwal.show();
+    })
   }
 
 }

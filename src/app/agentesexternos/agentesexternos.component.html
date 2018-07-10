@@ -1,98 +1,210 @@
 <div class="container-fluid">
-  
-
-<div class="clearfix"></div>
-<div class="row">
-  <div class="col-md-5">
-    <div class="widget card">
-      <div class="card-block">
-        <h5 class="card-title">Indicadores Generales Transferencias</h5>
-        <div class="row mrg-top-30">
-          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
-            <div class="text-center pdd-vertical-10">
-              <h2 class="font-primary no-mrg-top">1.320</h2>
-              <p class="no-mrg-btm">Exitosas</p>
+  <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="widget card">
+          <div class="card-block">
+            <h5 class="card-title">Indicadores Generales Transferencias</h5>
+            <div class="row mrg-top-30">
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">1.320</h2>
+                  <p class="no-mrg-btm">Exitosas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">35</h2>
+                  <p class="no-mrg-btm">Devueltas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">1.200</h2>
+                  <p class="no-mrg-btm">Cobradas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">120</h2>
+                  <p class="no-mrg-btm">Pendientes</p>
+                </div>
+              </div>
+          </div>
+            <div class="row mrg-top-35">
+              <div class="col-md-12">
+                <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                  [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+              </div>
             </div>
-          </div>
-          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
-            <div class="text-center pdd-vertical-10">
-              <h2 class="font-primary no-mrg-top">35</h2>
-              <p class="no-mrg-btm">Devueltas</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
-            <div class="text-center pdd-vertical-10">
-              <h2 class="font-primary no-mrg-top">1.200</h2>
-              <p class="no-mrg-btm">Cobradas</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6 col-6">
-            <div class="text-center pdd-vertical-10">
-              <h2 class="font-primary no-mrg-top">120</h2>
-              <p class="no-mrg-btm">Pendientes</p>
-            </div>
-          </div>
-        </div>
-        <div class="row mrg-top-35">
-          <div class="col-md-12">
-            <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
-              [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
-          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-7">
-    <div class="card">
-      <div class="card-heading">
-        <h4 class="card-title inline-block pdd-top-5">Agentes Externos Registrados</h4>
-        <a href="" class="btn btn-info pull-right no-mrg">
-          <i class="ti-plus"></i> Nuevo</a>
-      </div>
-      <div class="pdd-horizon-20 pdd-vertical-5">
-        <div [perfectScrollbar] class="overflow-y-auto relative" style="height: 381px">
-          <table class="table table-lg table-hover">
-            <tbody>
-              <tr *ngFor="let agente of agentes">
-                <td>
-                  <div class="list-info">
-                    <img class="thumb-img" src="assets/images/user.jpg" alt="">
-                    <div class="info">
-                      <span class="title">{{agente.Nombre}}</span>
-                      <span class="sub-title">Cupo: {{agente.Cupo | currency }}</span>
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-heading">
+          <h4 class="card-title inline-block pdd-top-5">Agentes Externos Registrados</h4>
+          <button href="" class="btn btn-info pull-right no-mrg" (click)="ModalAgente.show()">
+            <i class="ti-plus"></i> Nuevo</button>
+        </div>
+        <div class="pdd-horizon-20 pdd-vertical-5">
+          <div [perfectScrollbar] class="overflow-y-auto relative" style="height: 381px">
+            <table class="table table-lg table-hover">
+              <tbody>
+                <tr *ngFor="let agente of agentes">
+                  <td>
+                    <div class="list-info">
+                      <img class="thumb-img" src="assets/images/user.jpg" alt="">
+                      <div class="info">
+                        <span class="title">{{agente.Nombre}}</span>
+                        <span class="sub-title">Cupo: {{agente.Cupo | currency }}</span>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="mrg-top-10">
-                    <span>{{fecha | date:'dd/MM/yyyy'}}</span> 
-                  </div>
-                </td>
-                <td>
-                  <div class="relative mrg-top-10">
-                    <span class="status online"> </span>
-                    <span class="pdd-left-20">Activo</span>
-                  </div>
-                </td>
-                <td>
-                  <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                    <i class="ti-search"></i>
-                  </button>
-                  <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarOficina(oficina.Id_Oficina, ModalEditarOficina)">
-                    <i class="ti-pencil"></i>
-                  </button>
-                  <button class="btn btn-default  btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a suspender este agente externo, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                    (confirm)="EliminarOficina(oficina.Id_Oficina)">
-                    <i class="ti-close"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                  <td>
+                    <div class="mrg-top-10">
+                      <span>{{fecha | date:'dd/MM/yyyy'}}</span> 
+                    </div>
+                  </td>
+                  <td>
+                    <div class="relative mrg-top-10">
+                      <span class="status online"> </span>
+                      <span class="pdd-left-20">Activo</span>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                      <i class="ti-search"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarAgente(agente.Id_Agente_Externo, ModalEditarAgente)">
+                      <i class="ti-pencil"></i>
+                    </button>
+                    <button class="btn btn-default  btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a suspender este agente externo, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                      (confirm)="EliminarAgente(agente.Id_Agente_Externo)">
+                      <i class="ti-close"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-</div>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAgente" #ModalAgente>
+  <div class="app-modal-header">
+      <h4>Nuevo Agente</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormAgenteAgregar="ngForm">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="form-group">
+                  <label>Nombre</label>
+                  <input type="text" placeholder="Nombre Agente" class="form-control" name="Nombre" ngModel="">
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <label>Documento</label>
+                <input type="text" placeholder="Documento Agente" class="form-control" name="Documento" ngModel="">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Cupo</label>
+                <input type="text" placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="">
+            </div>
+        </div>
+      </div>
+      <div class="row">          
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label>Nombre de usuario</label>
+                  <input type="text" placeholder="Nombre de usuario" class="form-control" name="Username" ngModel="">
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="text" placeholder="Contraseña" class="form-control" name="Password" ngModel="">
+            </div>
+        </div>
+      </div>      
+      <div class="modal-footer no-border">
+          <div class="text-right">
+              <button class="btn btn-default btn-sm" (click)="ModalAgente.hide()">Cancelar</button>
+              <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
+          </div>
+      </div>
+    </form>                
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarAgente" #ModalEditarAgente>
+  <div class="app-modal-header">
+      <h4>Editar Agente</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormEditarAgente="ngForm">
+      <div class="row">
+          <div class="col-md-4" hidden>
+              <div class="form-group">
+                  <label>Identificación</label>
+                  <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+              </div>
+          </div>
+          <div class="col-md-12">
+              <div class="form-group">
+                  <label>Nombre</label>
+                  <input type="text" placeholder="Nombre Agente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <label>Documento</label>
+                <input type="text" placeholder="Documento Agente" class="form-control" name="Documento" ngModel="{{Documento}}">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Cupo</label>
+                <input type="text" placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+            </div>
+        </div>
+      </div>
+      <div class="row">          
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label>Nombre de usuario</label>
+                  <input type="text" placeholder="Nombre de usuario" class="form-control" name="Username" ngModel="{{Username}}">
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="text" placeholder="Contraseña" class="form-control" name="Password" ngModel="{{Password}}">
+            </div>
+        </div>
+      </div>      
+      <div class="modal-footer no-border">
+        <div class="text-right">
+          <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarAgente)">Cancelar</button>
+          <button class="btn btn-primary btn-sm"
+          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+          (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>
+        </div>
+      </div>
+    </form>                
+  </div>
+</app-modal-basic>
+
+<swal #deleteSwal
+  title="Agente eliminado"
+  text="Se ha eliminado correctamente el agente"
+  type="success"
+  >
+  </swal>
