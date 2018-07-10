@@ -23,11 +23,16 @@ export class CajasComponent implements OnInit {
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
-    this.http.get(this.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
-        this.cajas= data;
-    });
+    this.ActializarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Oficina'}}).subscribe((data:any)=>{
       this.Oficinas= data;
+    });
+  }
+
+  ActializarVista()
+  {
+    this.http.get(this.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
+      this.cajas= data;
     });
   }
 
@@ -41,13 +46,12 @@ export class CajasComponent implements OnInit {
   GuardarCaja(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    console.log(info);
     datos.append("modulo",'Caja');
     datos.append("datos",info);    
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       formulario.reset();
-      modal.hide();
-      this.cajas= data;      
+      this.OcultarFormulario(modal);
+      this.ActializarVista();     
     });
   }
 
@@ -59,11 +63,11 @@ export class CajasComponent implements OnInit {
    */
   EliminarCaja(id){
     let datos=new FormData();
-     datos.append("modulo", 'Caja');
-     datos.append ("id",id);
-     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-       this.cajas=data; 
-       this.deleteSwal.show();
+    datos.append("modulo", 'Caja');
+    datos.append ("id",id);
+    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+    this.ActializarVista();
+      this.deleteSwal.show();
     })     
   }
 
@@ -84,6 +88,14 @@ export class CajasComponent implements OnInit {
       this.Detalles = data.Detalle;
       this.ModalEditarCaja.show();
     });
+  }
+
+  OcultarFormulario(modal){
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Oficina = null;
+    this.Detalles = null;
+    modal.hide();
   }
 
 }

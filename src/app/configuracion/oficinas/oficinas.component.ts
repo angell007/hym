@@ -38,12 +38,16 @@ export class OficinasComponent implements OnInit {
   constructor(private http : HttpClient) { }  
   
   ngOnInit() {
-    this.http.get(this.ruta+'php/oficinas/lista_oficinas.php').subscribe((data:any)=>{
-        this.oficinas= data;
-        console.log(this.oficinas);
-    });
+    this.ActualizarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
+    });
+  }
+
+  ActualizarVista()
+  {
+    this.http.get(this.ruta+'php/oficinas/lista_oficinas.php').subscribe((data:any)=>{
+      this.oficinas= data;
     });
   }
 
@@ -71,11 +75,11 @@ export class OficinasComponent implements OnInit {
   GuardarOficina(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    modal.hide();
+    this.OcultarFormulario(modal);
     datos.append("modulo",'Oficina');
     datos.append("datos",info);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
-      this.oficinas= data;
+      this.ActualizarVista();
       formulario.reset();
     });    
   }
@@ -89,11 +93,9 @@ export class OficinasComponent implements OnInit {
    * @memberof OficinasComponent
    */
   EditarOficina(id, modal){
-    console.log("editar oficina");
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Oficina', id:id}
     }).subscribe((data:any)=>{
-      //console.log(data);
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
@@ -108,8 +110,6 @@ export class OficinasComponent implements OnInit {
       this.MinVenta = data.Min_Venta;
       this.MaxVenta = data.Max_Venta;
       this.Valores = data.Valores;
-      this.ModalEditarOficina.visibleAnimate = true;
-      this.ModalEditarOficina.visible = true;
       modal.show();
     });
   }
@@ -125,7 +125,7 @@ export class OficinasComponent implements OnInit {
     datos.append("modulo", 'Oficina');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.oficinas=data; 
+      this.ActualizarVista();
       this.deleteSwal.show();
     })
   }
@@ -143,6 +143,24 @@ export class OficinasComponent implements OnInit {
       this.Municipios= data;
       this.Municipio = Municipio;
     });
+  }
+
+  OcultarFormulario(modal){
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Direccion = null;
+    this.Departamento = null;
+    this.Municipio = null;
+    this.Telefono = null;
+    this.Celular = null;
+    this.Correo = null;
+    this.Comision = null;
+    this.MinCompra = null;
+    this.MaxCompra = null;
+    this.MinVenta = null;
+    this.MaxVenta = null;
+    this.Valores = null;
+    modal.hide();
   }
 
 }

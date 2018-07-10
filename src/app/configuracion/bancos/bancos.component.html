@@ -138,7 +138,7 @@
             </div>            
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" type="button" (click)="ModalEditarBanco.hide()">Cancelar</button>
+                    <button class="btn btn-default btn-sm" type="button" (click)="OcultarFormulario(ModalEditarBanco)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" type="button"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)"
