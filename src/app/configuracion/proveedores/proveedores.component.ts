@@ -55,7 +55,7 @@ export class ProveedoresComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Proveedor');
     datos.append("datos",info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarProveedores();

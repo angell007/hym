@@ -196,7 +196,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Cliente" ngModel="{{Identificacion}}">
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Cliente" ngModel="{{Identificacion}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -305,7 +305,7 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalEditarCliente.hide()">Cancelar</button>
+                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarCliente)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este cliente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                     (confirm)="GuardarCliente(FormEditarCliente, ModalEditarCliente)">Guardar</button>

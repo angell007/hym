@@ -49,7 +49,7 @@ export class DestinatariosComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     console.log(info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     datos.append("modulo",'Destinatario');
     datos.append("datos",info);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
@@ -81,7 +81,18 @@ export class DestinatariosComponent implements OnInit {
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
       this.destinatarios=data; 
       this.deleteSwal.show();
-    })     
+    })
+  }
+
+  OcultarFormulario(modal)
+  {
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Cuentas = null;
+    this.IdBanco = null; 
+    this.IdPais = null;
+    this.Detalle = null;
+    modal.hide();
   }
 
 }

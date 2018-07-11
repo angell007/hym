@@ -56,11 +56,10 @@ export class ClientesComponent implements OnInit {
 
   GuardarCliente(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
-    console.log(info);    
     let datos = new FormData();
     datos.append("modulo",'Cliente');
     datos.append("datos",info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
@@ -97,6 +96,25 @@ export class ClientesComponent implements OnInit {
       this.ActualizarVista();
       this.deleteSwal.show();
     });    
+  }
+
+  OcultarFormulario(modal)
+  {
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Direccion = null;
+    this.IdDepartamento = null;
+    this.IdMunicipio = null;
+    this.Telefono = null;
+    this.Celular = null;
+    this.Correo = null;
+    this.ClienteDesde = null;
+    this.Destacado = null;
+    this.Credito = null;
+    this.Cupo = null;
+    this.TipoCliente = null;
+    this.Detalle = null;
+    modal.hide();
   }
 
   /**

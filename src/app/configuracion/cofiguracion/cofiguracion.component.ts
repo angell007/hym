@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cofiguracion',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CofiguracionComponent implements OnInit {
 
-  constructor() { }
+  public configuracion : any[];
+
+  readonly ruta = 'https://hym.corvuslab.co/'; 
+  constructor(private http : HttpClient) { }
 
   ngOnInit() {
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Configuracion'}}).subscribe((data:any)=>{
+      this.configuracion= data;
+      console.log(this.configuracion);
+      
+    });
   }
 
 }
