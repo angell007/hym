@@ -10,6 +10,9 @@ import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import { ThemeConstants } from './shared/config/theme-constant';
 import { ChartsModule } from 'ng2-charts';
+import { StickyModule } from 'ng2-sticky-kit';
+import { ScrollToModule } from 'ng2-scroll-to';
+import { NgxMasonryModule } from 'ngx-masonry';
 import 'd3';
 import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
@@ -64,6 +67,9 @@ import { TransferenciasComponent } from './transferencias/transferencias.compone
         NgxDatatableModule,
         ChartsModule,
         NvD3Module,
+        StickyModule,
+        NgxMasonryModule,
+        ScrollToModule.forRoot(),
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
