@@ -27,6 +27,7 @@ import { ServiciosexternosComponent } from './serviciosexternos/serviciosexterno
 import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
+import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 
 export const AppRoutes: Routes = [
     { 
@@ -116,6 +117,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'grupos', component : CommonLayoutComponent,
         children:[{path : '', component : GruposComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'tipodocumento', component : CommonLayoutComponent,
+        children:[{path : '', component : TipodocumentoComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

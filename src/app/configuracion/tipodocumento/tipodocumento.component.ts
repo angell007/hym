@@ -3,19 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-grupos',
-  templateUrl: './grupos.component.html',
-  styleUrls: ['./grupos.component.css']
+  selector: 'app-tipodocumento',
+  templateUrl: './tipodocumento.component.html',
+  styleUrls: ['./tipodocumento.component.css']
 })
-export class GruposComponent implements OnInit {
+export class TipodocumentoComponent implements OnInit {
 
-  public grupos : any[];
+  public tiposDocumentos : any[];
 
   //variables de formulario
   public Identificacion : any[];
   public Nombre : any[];
-  public Detalle : any[];
-  public Padre : any[];
+  public Codigo : any[];
 
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
@@ -26,15 +25,15 @@ export class GruposComponent implements OnInit {
   }
 
   ActualizarVista(){
-    this.http.get(this.ruta+'php/grupos/lista_grupos.php').subscribe((data:any)=>{
-      this.grupos= data;          
+    this.http.get(this.ruta+'php/tiposdocumentos/lista_tipos_documentos.php').subscribe((data:any)=>{
+      this.tiposDocumentos= data;          
     });
   }
 
-  GuardarGrupo(formulario: NgForm, modal){
+  GuardarDocumento(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();        
-    datos.append("modulo",'Grupo');
+    datos.append("modulo",'Tipo_Documento');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
@@ -43,21 +42,20 @@ export class GruposComponent implements OnInit {
     });  
   }
 
-  EditarGrupo(id, modal){
+  EditarDocumento(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Grupo', id:id}
+      params:{modulo:'Tipo_Documento', id:id}
     }).subscribe((data:any)=>{      
       this.Identificacion = id;
       this.Nombre = data.Nombre;
-      this.Detalle = data.Detalle;
-      this.Padre = data.Padre;
+      this.Codigo = data.Codigo;
       modal.show();
     });
   }
 
-  EliminarGrupo(id){
+  EliminarDocumento(id){
     let datos=new FormData();
-    datos.append("modulo", 'Grupo');
+    datos.append("modulo", 'Tipo_Documento');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
       this.ActualizarVista();
@@ -69,8 +67,7 @@ export class GruposComponent implements OnInit {
   {
     this.Identificacion = null;
     this.Nombre = null;
-    this.Detalle = null;
-    this.Padre = null;
+    this.Codigo = null;
     modal.hide();
   }
 
