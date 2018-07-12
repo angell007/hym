@@ -1,0 +1,333 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Terceros</h4>
+    <button class="pull-right btn btn-info" (click)="ModalCliente.show()" ><i class="ti-plus"></i> Agregar Nuevo Cliente</button>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <p>Tenemos los terceros de nuestra empresa</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th style="width:50px"></th>
+                  <th style="width:120px;">Identificación</th>
+                  <th>Nombre</th>
+                  <th style="width:100px">Ciudad</th>
+                  <th style="width:80px;">Destacado</th>
+                  <th style="width:130px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tercero of terceros">
+                  <td style="vertical-align: middle;">
+                    <img src="assets/images/cliente.jpg" class="img img-responsive img-thumbnail" />
+                  </td>
+                  <td style="vertical-align: middle;">{{tercero.Id_Tercero}}</td>
+                  <td style="vertical-align: middle;">{{tercero.Nombre}}</td>
+                  <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
+                  <td style="vertical-align: middle;" class="text-center">{{tercero.Destacado}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-search"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCliente(tercero.Id_Tercero, ModalEditarCliente)">
+                            <i class="ti-pencil"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este cliente, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                          (confirm)="EliminarCliente(tercero.Id_Tercero)">
+                            <i class="ti-trash"></i>
+                          </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCliente" #ModalCliente>
+  <div class="app-modal-header">
+      <h4>Nuevo Cliente</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormCliente="ngForm">
+          <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Tipo de documento</label>
+                  <select class="form-control" required name="Id_Documento" ngModel="">
+                    <option value="">Seleccione tipo de documento</option>
+                    <option value="0">Tipo 1</option>
+                    <option value="1">Tipo 2</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Identificación</label>
+                      <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Cliente" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Dirección</label>
+                      <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Departamento</label>
+                      <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                          <option value="">Seleccione un Departamento</option>
+                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Municipio</label>
+                      <select class="form-control" required name="Id_Municipio" ngModel="">
+                          <option value="">Seleccione un Municipio</option>
+                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Teléfono</label>
+                      <input type="text" placeholder="Teléfono del Cliente" class="form-control" name="Telefono" ngModel="">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Celular</label>
+                      <input type="text" placeholder="Celular del Cliente" class="form-control" name="Celular" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Correo</label>
+                      <input type="text" placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Cliente Desde</label>
+                      <input type="month" placeholder="Seleccione Fecha" class="form-control" name="Cliente_Desde" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Destacado</label>
+                      <select class="form-control" name="Destacado" ngModel="">
+                          <option>No</option>
+                          <option>Si</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <hr>
+          <h3>Otros Datos</h3>
+          <div class="row">
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Crédito</label>
+                      <select class="form-control" name="Credito" ngModel="">
+                          <option>No</option>
+                          <option>Si</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Cupo</label>
+                      <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-7">
+                  <div class="form-group">
+                      <label>Tipo Cliente</label>
+                      <select class="form-control" name="Tipo" ngModel="">
+                          <option>Ganaderos</option>
+                          <option>Contratos</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Detalles</label>
+                      <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel=""></textarea>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer no-border">
+              <div class="text-right">
+                  <button class="btn btn-default btn-sm" (click)="ModalCliente.hide()">Cancelar</button>
+                  <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarCliente(FormCliente, ModalCliente)">Guardar</button>
+              </div>
+          </div>
+      </form>                
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCliente" #ModalEditarCliente>    
+  <div class="app-modal-header">
+      <h4>Editar Cliente</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormEditarCliente="ngForm">
+          <div class="row">
+              <div class="col-md-4" hidden>
+                  <div class="form-group">
+                      <label>Identificación</label>
+                      <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Identificación</label>
+                      <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Cliente" ngModel="{{Identificacion}}" readonly>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Dirección</label>
+                      <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Departamento</label>
+                      <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
+                          <option value="">Seleccione un Departamento</option>
+                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Municipio</label>
+                      <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
+                          <option value="">Seleccione un Municipio</option>
+                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Teléfono</label>
+                      <input type="text" placeholder="Teléfono del Cliente" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Celular</label>
+                      <input type="text" placeholder="Celular del Cliente" class="form-control" name="Celular" ngModel="{{Celular}}">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Correo</label>
+                      <input type="text" placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="{{Correo}}">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Cliente Desde</label>
+                      <input type="month" placeholder="Seleccione Fecha" class="form-control" name="Cliente_Desde" ngModel="{{ClienteDesde}}">
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Destacado</label>
+                      <select class="form-control" name="Destacado" ngModel="{{Destacado}}">
+                          <option>No</option>
+                          <option>Si</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <hr>
+          <h3>Otros Datos</h3>
+          <div class="row">
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Crédito</label>
+                      <select class="form-control" name="Credito" ngModel="{{Credito}}">
+                          <option>No</option>
+                          <option>Si</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Cupo</label>
+                      <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                  </div>
+              </div>
+              <div class="col-md-7">
+                  <div class="form-group">
+                      <label>Tipo Cliente</label>
+                      <select class="form-control" name="Tipo" ngModel="{{TipoCliente}}">
+                          <option>Ganaderos</option>
+                          <option>Contratos</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Detalles</label>
+                      <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer no-border">
+              <div class="text-right">
+                  <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarCliente)">Cancelar</button>
+                  <button class="btn btn-primary btn-sm" 
+                  [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este cliente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                  (confirm)="GuardarCliente(FormEditarCliente, ModalEditarCliente)">Guardar</button>
+              </div>
+          </div>
+      </form>                
+  </div>
+</app-modal-basic>
+
+<swal #deleteSwal
+title="Cliente eliminado"
+text="Se ha eliminado correctamente el cliente"
+type="success"
+>
+</swal>

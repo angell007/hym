@@ -53,6 +53,7 @@ import { CorresponsalesbancariosComponent } from './corresponsalesbancarios/corr
 import { ServiciosexternosComponent } from './serviciosexternos/serviciosexternos.component';
 import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TransferenciasComponent } from './transferencias/transferencias.component';
+import { TercerosComponent } from './configuracion/terceros/terceros.component';
 
 @NgModule({
     imports: [
@@ -103,6 +104,7 @@ import { TransferenciasComponent } from './transferencias/transferencias.compone
         ServiciosexternosComponent,
         IndicadoresComponent,
         TransferenciasComponent,
+        TercerosComponent,
     ],
     exports:[
         ModalBasicComponent
