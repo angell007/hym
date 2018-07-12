@@ -55,6 +55,7 @@ import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TransferenciasComponent } from './transferencias/transferencias.component';
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
+import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 
 @NgModule({
     imports: [
@@ -107,6 +108,7 @@ import { GruposComponent } from './configuracion/grupos/grupos.component';
         TransferenciasComponent,
         TercerosComponent,
         GruposComponent,
+        TipodocumentoComponent,
     ],
     exports:[
         ModalBasicComponent
