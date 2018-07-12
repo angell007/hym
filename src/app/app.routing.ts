@@ -26,6 +26,7 @@ import { CorresponsalesbancariosComponent } from './corresponsalesbancarios/corr
 import { ServiciosexternosComponent } from './serviciosexternos/serviciosexternos.component';
 import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
+import { GruposComponent } from './configuracion/grupos/grupos.component';
 
 export const AppRoutes: Routes = [
     { 
@@ -111,6 +112,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'terceros', component : CommonLayoutComponent,
         children:[{path : '', component : TercerosComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'grupos', component : CommonLayoutComponent,
+        children:[{path : '', component : GruposComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
