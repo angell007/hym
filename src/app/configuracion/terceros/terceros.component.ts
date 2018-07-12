@@ -1,16 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import * as $ from 'jquery';
 
 @Component({
-  selector: 'app-clientes',
-  templateUrl: './clientes.component.html',
-  styleUrls: ['./clientes.component.css']
+  selector: 'app-terceros',
+  templateUrl: './terceros.component.html',
+  styleUrls: ['./terceros.component.css']
 })
-export class ClientesComponent implements OnInit {
-
-  public clientes : any[];
+export class TercerosComponent implements OnInit {
+  public terceros : any[];
   public Departamentos : any[];
   public Municipios : any[];
 
@@ -23,18 +21,19 @@ export class ClientesComponent implements OnInit {
   public Telefono : any[];
   public Celular : any[];
   public Correo : any[];
-  public ClienteDesde : any[];
+  public TerceroDesde : any[];
   public Destacado : any[];
   public Credito : any[];
   public Cupo : any[];
-  public TipoCliente : any[];
+  public IdGrupo : any[];
   public Detalle : any[];
+  public IdDocumento : any[];
+  public Barrio : any[];
 
-  public ModalCliente : any = $('#ModalCliente');
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
-  constructor(private http : HttpClient) { } 
- 
+  constructor(private http : HttpClient) { }
+
   ngOnInit() {
     this.ActualizarVista();
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
@@ -43,8 +42,8 @@ export class ClientesComponent implements OnInit {
   }
 
   ActualizarVista(){
-    this.http.get(this.ruta+'php/clientes/lista_clientes.php').subscribe((data:any)=>{
-      this.clientes= data;
+    this.http.get(this.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
+      this.terceros= data;
     });
   }
 
@@ -54,23 +53,25 @@ export class ClientesComponent implements OnInit {
     });
   }
 
-  GuardarCliente(formulario: NgForm, modal){
+  GuardarTercero(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();    
-    datos.append("modulo",'Cliente');
+    let datos = new FormData();
+    console.log(info);
+    datos.append("modulo",'Tercero');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-    });    
+    });
   }
 
-  EditarCliente(id, modal){
+  EditarTercero(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Cliente', id:id}
-    }).subscribe((data:any)=>{      
-      this.Identificacion = data.Id_Cliente;
+      params:{modulo:'Tercero', id:id}
+    }).subscribe((data:any)=>{   
+      console.log(data);         
+      this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
       this.IdDepartamento = data.Id_Departamento;
@@ -78,19 +79,21 @@ export class ClientesComponent implements OnInit {
       this.Telefono = data.Telefono;
       this.Celular = data.Celular;
       this.Correo = data.Correo;
-      this.ClienteDesde = data.Cliente_Desde;
+      this.TerceroDesde = data.Tercero_Desde;
       this.Destacado = data.Destacado;
       this.Credito = data.Credito;
       this.Cupo = data.Cupo;
-      this.TipoCliente = data.Tipo;
+      this.IdGrupo = data.Id_Grupo;
       this.Detalle = data.Detalle;
+      this.IdDocumento = data.Id_Documento;
+      this.Barrio = data.Barrio;
       modal.show();
     });
   }
 
-  EliminarCliente(id){
+  EliminarTercero(id){
     let datos=new FormData();
-    datos.append("modulo", 'Cliente');
+    datos.append("modulo", 'Tercero');
     datos.append ("id",id);
     this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
       this.ActualizarVista();
@@ -108,23 +111,15 @@ export class ClientesComponent implements OnInit {
     this.Telefono = null;
     this.Celular = null;
     this.Correo = null;
-    this.ClienteDesde = null;
+    this.TerceroDesde = null;
     this.Destacado = null;
     this.Credito = null;
     this.Cupo = null;
-    this.TipoCliente = null;
+    this.IdGrupo = null;
     this.Detalle = null;
     modal.hide();
   }
 
-  /**
-   *carga los municipios correspondietes al departamento que se asigno al formulario en la consulta de la función
-   *Editar() y luego asigna el municipio correspondiente obtenido en la consulta de la función Editar.
-   *
-   * @param {*} Departamento departamento del que se obtendran los municipios
-   * @param {*} Municipio municipio que se asignara una vez se cargue la lista de municipios
-   * @memberof OficinasComponent
-   */
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
