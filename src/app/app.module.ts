@@ -54,6 +54,7 @@ import { ServiciosexternosComponent } from './serviciosexternos/serviciosexterno
 import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TransferenciasComponent } from './transferencias/transferencias.component';
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
+import { GruposComponent } from './configuracion/grupos/grupos.component';
 
 @NgModule({
     imports: [
@@ -105,6 +106,7 @@ import { TercerosComponent } from './configuracion/terceros/terceros.component';
         IndicadoresComponent,
         TransferenciasComponent,
         TercerosComponent,
+        GruposComponent,
     ],
     exports:[
         ModalBasicComponent

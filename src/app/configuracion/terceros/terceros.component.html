@@ -173,8 +173,7 @@
                         <label>Tipo Grupo</label>
                         <select class="form-control" name="Id_Grupo" ngModel="">
                             <option>Seleccione tipo de grupo</option>
-                            <option value="0">Ganaderos</option>
-                            <option value="1">Contratos</option>
+                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
                     </div>
                 </div>
@@ -334,7 +333,9 @@
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarTercero)">Cancelar</button>
-                    <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>
+                    <button class="btn btn-primary btn-sm" data-dismiss="modal" 
+                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                    (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>
                 </div>
             </div>
         </form>                
