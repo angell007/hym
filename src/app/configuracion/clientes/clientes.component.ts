@@ -56,7 +56,7 @@ export class ClientesComponent implements OnInit {
 
   GuardarCliente(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
+    let datos = new FormData();    
     datos.append("modulo",'Cliente');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
