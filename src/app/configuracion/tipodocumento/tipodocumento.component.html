@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="page-title">
     <h4 class="pull-left">Tipos de documentos</h4>
-    <button class="pull-right btn btn-info" (click)="ModalEditarDocumento.show()" ><i class="ti-plus"></i> Agregar Nuevo Cliente</button>
+    <button class="pull-right btn btn-info" (click)="ModalDocumento.show()" ><i class="ti-plus"></i> Agregar Nuevo Cliente</button>
   </div>
   <div class="clearfix"></div>
   <div class="row">
@@ -81,7 +81,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDocumento" #ModalEditarDocumento>        
   <div class="app-modal-header">
-      <h4>Nuevo Documento</h4>
+      <h4>Editar Documento</h4>
   </div>
   <div class="app-modal-body">
       <form #FormEditarDocumento="ngForm">

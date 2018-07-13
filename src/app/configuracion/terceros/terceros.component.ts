@@ -12,6 +12,7 @@ export class TercerosComponent implements OnInit {
   public Departamentos : any[];
   public Municipios : any[];
   public Grupos : any[];
+  public Documentos : any[];
 
   //variables de formulario
   public Identificacion : any[];
@@ -42,6 +43,9 @@ export class TercerosComponent implements OnInit {
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos = data;
+    });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
+      this.Documentos = data;
     });
   }
 
@@ -120,7 +124,9 @@ export class TercerosComponent implements OnInit {
     this.Credito = null;
     this.Cupo = null;
     this.IdGrupo = null;
+    this.IdDocumento = null;
     this.Detalle = null;
+    this.Barrio = null;
     modal.hide();
   }
 
