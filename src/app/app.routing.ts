@@ -28,6 +28,7 @@ import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
+import { MonedasComponent } from './configuracion/monedas/monedas.component';
 
 export const AppRoutes: Routes = [
     { 
@@ -121,6 +122,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'tipodocumento', component : CommonLayoutComponent,
         children:[{path : '', component : TipodocumentoComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'monedas', component : CommonLayoutComponent,
+        children:[{path : '', component : MonedasComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

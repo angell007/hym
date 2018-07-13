@@ -1,0 +1,132 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Tipos de monedas</h4>
+    <button class="pull-right btn btn-info" (click)="ModalMoneda.show()" ><i class="ti-plus"></i> Agregar Nuevo Cliente</button>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <p>Tenemos los tipos de monedas de nuestra empresa</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th style="width:50px"></th>
+                  <th>Nombre</th>
+                  <th style="width:100px">Código</th>
+                  <th style="width:130px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Moneda of Monedas">
+                  <td style="vertical-align: middle;">                    
+                  </td>
+                  <td style="vertical-align: middle;">{{Moneda.Nombre}}</td>
+                  <td style="vertical-align: middle;">{{Moneda.Codigo}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-search"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDocumento(Moneda.Id_Moneda, ModalEditarDocumento)">
+                            <i class="ti-pencil"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este documento, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                          (confirm)="EliminarDocumento(Moneda.Id_Moneda)">
+                            <i class="ti-trash"></i>
+                          </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" #ModalMoneda>        
+  <div class="app-modal-header">
+      <h4>Nueva moneda</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormMoneda="ngForm">
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Código</label>
+                      <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                    <label>Orden</label>
+                    <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+                </div>
+              </div>
+          </div>
+          <h3>Datos de Cambios</h3>
+          <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor maximo de venta en Efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor mínimo de venta en Efectivo</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor maximo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor mínimo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de venta sugerido</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra sugerido</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Precio por ventanilla</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+              </div>
+            </div>
+          </div>     
+          <div class="modal-footer no-border">
+              <div class="text-right">
+                  <button type="button" class="btn btn-default btn-sm" (click)="ModalMoneda.hide()">Cancelar</button>
+                  <button type="button" class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
+              </div>
+          </div> 
+      </form>                
+  </div>       
+</app-modal-basic>
