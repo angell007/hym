@@ -65,8 +65,7 @@
                     <label>Tipo de documento</label>
                     <select class="form-control" required name="Id_Documento" ngModel="">
                         <option value="">Seleccione tipo de documento</option>
-                        <option value="0">Tipo 1</option>
-                        <option value="1">Tipo 2</option>
+                        <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                     </select>
                     </div>
                 </div>
@@ -208,8 +207,7 @@
                     <label>Tipo de documento</label>
                     <select class="form-control" required name="Id_Documento" ngModel="{{IdDocumento}}">
                         <option value="">Seleccione tipo de documento</option>
-                        <option value="0">Tipo 1</option>
-                        <option value="1">Tipo 2</option>
+                        <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                     </select>
                     </div>
                 </div>
@@ -316,8 +314,7 @@
                         <label>Tipo Grupo</label>
                         <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
                             <option>Seleccione tipo de grupo</option>
-                            <option value="0">Ganaderos</option>
-                            <option value="1">Contratos</option>
+                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
                     </div>
                 </div>
