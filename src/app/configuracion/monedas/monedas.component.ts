@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgForm, CheckboxControlValueAccessor } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { html } from 'd3';
 
 @Component({
@@ -41,14 +41,15 @@ export class MonedasComponent implements OnInit {
   public Identificacion : any[];
 
   @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('myCheckbox') myCheckbox:any;
+  @ViewChild('ModalEditarMoneda') ModalEditarMoneda:any;
+  @ViewChild('ModalMoneda') ModalMoneda:any;
   @ViewChild('FormMoneda') FormMoneda:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
     this.ActualizarVista();
-    console.log(this.myCheckbox);
+    //console.log(this.myCheckbox);
     /*this.transferencia = false;
     this.transferencia = true;
     this.transferencia = false;      
@@ -56,6 +57,14 @@ export class MonedasComponent implements OnInit {
     this.dummy = <HTMLInputElement> document.getElementById("my_checkbox");
     console.log(this.dummy); 
     this.dummy.checked = false;*/
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormMoneda.reset();
+      this.OcultarFormulario(this.ModalMoneda);
+      this.OcultarFormulario(this.ModalEditarMoneda);
+    }
   }
 
   ActualizarVista(){
@@ -72,7 +81,9 @@ export class MonedasComponent implements OnInit {
     datos.append("modulo",'Moneda');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
+    console.log(datos["datos"]);    
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+      //console.log(data);      
       formulario.reset();
       this.ActualizarVista();
     });
@@ -158,8 +169,7 @@ export class MonedasComponent implements OnInit {
   {
     console.log(value);
     value.checked = true;
-    console.log("cambio checkbox");
-    
+    console.log("cambio checkbox");    
   }
 
 }
