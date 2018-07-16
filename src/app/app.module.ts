@@ -56,6 +56,7 @@ import { TransferenciasComponent } from './transferencias/transferencias.compone
 import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
+import { MonedasComponent } from './configuracion/monedas/monedas.component';
 
 @NgModule({
     imports: [
@@ -109,6 +110,7 @@ import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocume
         TercerosComponent,
         GruposComponent,
         TipodocumentoComponent,
+        MonedasComponent,
     ],
     exports:[
         ModalBasicComponent

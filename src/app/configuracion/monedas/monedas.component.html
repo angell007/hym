@@ -1,0 +1,442 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Tipos de monedas</h4>
+    <button class="pull-right btn btn-info" (click)="ModalMoneda.show()" ><i class="ti-plus"></i> Agregar Nuevo Cliente</button>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <p>Tenemos los tipos de monedas de nuestra empresa</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th style="width:50px"></th>
+                  <th>Nombre</th>
+                  <th style="width:100px">Código</th>
+                  <th style="width:130px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Moneda of Monedas">
+                  <td style="vertical-align: middle;">                    
+                  </td>
+                  <td style="vertical-align: middle;">{{Moneda.Nombre}}</td>
+                  <td style="vertical-align: middle;">{{Moneda.Codigo}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <i class="ti-search"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarMoneda(Moneda.Id_Moneda, ModalEditarMoneda)">
+                            <i class="ti-pencil"></i>
+                          </button>
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar esta moneda, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                          (confirm)="EliminarMoneda(Moneda.Id_Moneda)">
+                            <i class="ti-trash"></i>
+                          </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" #ModalMoneda>        
+  <div class="app-modal-header">
+      <h4>Nueva moneda</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormMoneda="ngForm">
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Código</label>
+                      <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                    <label>Orden</label>
+                    <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+                </div>
+              </div>
+          </div>
+          <h3>Datos de Cambios</h3>
+          <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor maximo de venta en Efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Max_Venta_Efectivo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor mínimo de venta en Efectivo</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Min_Venta_Efectivo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor maximo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Max_Venta_Cuenta" ngModel="">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor mínimo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Min_Venta_Cuenta" ngModel="">
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de venta sugerido</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Sugerido_Venta" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra sugerido</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Sugerido_Compra" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Precio por ventanilla</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Precio_Ventanilla" ngModel="">
+              </div>
+            </div>
+          </div>     
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra maximo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Max_Compra" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra mínimo</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Min_Compra" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Precio mínimo de no cobro</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Min_No_Cobro" ngModel="">
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Redondeo a pesos en efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Redondeo a pesos en cuenta</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="">
+                </div>
+            </div>
+          </div>  
+          <h3>Comisiones</h3>
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Comisión efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Comision_Efectivo" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Pagar comisión desde</label>
+                    <input type="date" placeholder="Código del documento" class="form-control" name="Pagar_Comision_Desde" ngModel="">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Comisión por recaudo</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Comision_Recaudo" ngModel="">
+              </div>
+            </div>
+          </div>  
+          <h3>Modulos</h3>
+          <div class="row">
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Cambio" ngModel="">
+                <input type="checkbox" value="si" name="Cambio" class="form-check" ngModel="">
+                <label for="form-4-1">Cambio</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Giro" ngModel="">
+                <input type="checkbox" value="si" name="Giro" class="form-check" ngModel="">
+                <label for="form-4-1">Giro</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Traslado" ngModel="">
+                <input type="checkbox" value="si" name="Traslado" class="form-check" ngModel="">
+                <label for="form-4-1">Traslado</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Corresponsal_Bancario" ngModel="">
+                <input type="checkbox" value="si" name="Corresponsal_Bancario" class="form-check" ngModel="">
+                <label for="form-4-1">Corresponsal bancario</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Servicio_Externo" ngModel="">
+                <input type="checkbox" value="si" name="Servicio_Externo" class="form-check" ngModel="">
+                <label for="form-4-1">Servicio externo</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Gasto" ngModel="">
+                <input type="checkbox" value="si" name="Gasto" ngModel="">
+                <label for="form-4-1">Gastos</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="'no'" name="Transferencia" ngModel="">
+                <input #myCheckbox checked type="checkbox" value="prueba" name="Transferencia" ngModel="" (onChange)="CambioCheckbox($event.target)">
+                <label for="form-4-1">Transferencias</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer no-border">
+            <div class="text-right">
+                <button class="btn btn-default btn-sm" (click)="ModalMoneda.hide()">Cancelar</button>
+                <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
+            </div>
+          </div> 
+      </form>                
+  </div>       
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarMoneda" #ModalEditarMoneda>        
+  <div class="app-modal-header">
+      <h4>Editar moneda</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormEditarMoneda="ngForm">
+          <div class="col-md-4" hidden>
+            <div class="form-group">
+              <label>Identificación</label>
+              <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Código</label>
+                      <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="{{Codigo}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                    <label>Orden</label>
+                    <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="{{Orden}}">
+                </div>
+              </div>
+          </div>
+          <h3>Datos de Cambios</h3>
+          <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor maximo de venta en Efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Max_Venta_Efectivo" ngModel="{{MaxVentaEfectivo}}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Valor mínimo de venta en Efectivo</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Min_Venta_Efectivo" ngModel="{{MinVentaEfectivo}}">
+                </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor maximo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta}}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                  <label>Valor mínimo de venta por cuenta</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta}}">
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de venta sugerido</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra sugerido</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Precio por ventanilla</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla}}">
+              </div>
+            </div>
+          </div>     
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra maximo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Precio de compra mínimo</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Precio mínimo de no cobro</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro}}">
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Redondeo a pesos en efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="{{RedondeoPesosEfectivo}}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Redondeo a pesos en cuenta</label>
+                    <input type="number" placeholder="Código del documento" class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="{{RedondeoPesosCuenta}}">
+                </div>
+            </div>
+          </div>  
+          <h3>Comisiones</h3>
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Comisión efectivo</label>
+                    <input type="number" placeholder="Nombre del documento" class="form-control" name="Comision_Efectivo" ngModel="{{ComisionEfectivo}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Pagar comisión desde</label>
+                    <input type="date" placeholder="Código del documento" class="form-control" name="Pagar_Comision_Desde" ngModel="{{PagarComisionDesde}}">
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label>Comisión por recaudo</label>
+                  <input type="number" placeholder="Orden de la moneda" class="form-control" name="Comision_Recaudo" ngModel="{{ComisionRecaudo}}">
+              </div>
+            </div>
+          </div>  
+          <h3>Modulos</h3>
+          <div class="row">
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Cambio" ngModel="{{Cambio}}">
+                <input type="checkbox" value="si" name="Cambio" class="form-check" ngModel="{{Cambio}}">
+                <label for="form-4-1">Cambio</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Giro" ngModel="{{Giro}}">
+                <input type="checkbox" value="si" name="Giro" class="form-check" ngModel="{{Giro}}">
+                <label for="form-4-1">Giro</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Traslado" ngModel="{{Traslado}}">
+                <input type="checkbox" value="si" name="Traslado" class="form-check" ngModel="{{Traslado}}">
+                <label for="form-4-1">Traslado</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Corresponsal_Bancario" ngModel="{{CorresponsalBancario}}">
+                <input type="checkbox" value="si" name="Corresponsal_Bancario" class="form-check" ngModel="{{CorresponsalBancario}}">
+                <label for="form-4-1">Corresponsal bancario</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Servicio_Externo" ngModel="{{ServicioExterno}}">
+                <input type="checkbox" value="si" name="Servicio_Externo" class="form-check" ngModel="{{ServicioExterno}}">
+                <label for="form-4-1">Servicio externo</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="no" name="Gasto" ngModel="{{Gasto}}">
+                <input type="checkbox" value="si" name="Gasto" ngModel="{{Gasto}}">
+                <label for="form-4-1">Gastos</label>
+              </div>
+            </div>
+            <div class="col-md-1.5">
+              <div class="form-check">
+                <input type="hidden" value="'no'" name="Transferencia" ngModel="{{Transferencia}}">
+                <input #myCheckbox checked type="checkbox" value="1" name="Transferencia" ngModel="{{Transferencia}}" (onChange)="CambioCheckbox($event.target)">
+                <label for="form-4-1">Transferencias</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer no-border">
+            <div class="text-right">
+                <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarMoneda)">Cancelar</button>
+                <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormEditarMoneda, ModalEditarMoneda)">Guardar</button>
+            </div>
+          </div> 
+      </form>                
+  </div>       
+</app-modal-basic>
+
+<swal #deleteSwal
+  title="Moneda Eliminada"
+  text="Se ha eliminado correctamente el perfil"
+  type="success"
+  >
+  </swal>
