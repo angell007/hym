@@ -84,7 +84,6 @@
           </div>
           <div class="modal-footer no-border">
               <div class="text-right">
-                  <button type="button" class="btn btn-default btn-sm" (click)="ModalGrupo.hide()">Cancelar</button>
                   <button type="button" class="btn btn-primary btn-sm" (click)="GuardarGrupo(FormGrupo, ModalGrupo)">Guardar</button>
               </div>
           </div> 
@@ -131,7 +130,6 @@
           </div>
           <div class="modal-footer no-border">
               <div class="text-right">
-                  <button type="button" class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarGrupo)">Cancelar</button>
                   <button type="button" class="btn btn-primary btn-sm"
                   [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este grupo' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                   (confirm)="GuardarGrupo(FormEditarGrupo, ModalEditarGrupo)">Guardar</button>

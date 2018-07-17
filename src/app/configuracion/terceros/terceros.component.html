@@ -187,7 +187,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalTercero.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarTercero(FormTercero, ModalTercero)">Guardar</button>
                 </div>
             </div>
@@ -329,7 +328,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarTercero)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" 
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                     (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>

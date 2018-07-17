@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -15,7 +15,9 @@ export class PerfilesComponent implements OnInit {
   public Nombre : any[];
   public Detalle : any[];
 
+  @ViewChild('ModalPerfil') ModalPerfil:any;
   @ViewChild('ModalEditarPerfil') ModalEditarPerfil:any;
+  @ViewChild('FormPerfil') FormPerfil:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
 
@@ -25,6 +27,14 @@ export class PerfilesComponent implements OnInit {
     this.http.get(this.ruta+'php/perfiles/lista_perfiles.php').subscribe((data:any)=>{
       this.perfiles= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormPerfil.reset();
+      this.OcultarFormulario(this.ModalPerfil);
+      this.OcultarFormulario(this.ModalEditarPerfil);
+    }
   }
 
   GuardarPerfil(formulario: NgForm, modal){
@@ -60,6 +70,11 @@ export class PerfilesComponent implements OnInit {
       this.perfiles=data; 
       this.deleteSwal.show();
     })     
+  }
+
+  OcultarFormulario(modal)
+  {
+    modal.hide();
   }
 
 }
