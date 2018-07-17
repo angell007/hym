@@ -164,7 +164,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
+                        <input type="text" mask="999.999.999.999.999" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -187,7 +187,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalTercero.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarTercero(FormTercero, ModalTercero)">Guardar</button>
                 </div>
             </div>
@@ -306,7 +305,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                        <input type="text" mask="999.999.999.999.999" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -329,7 +328,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarTercero)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" 
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                     (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>

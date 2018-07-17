@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -27,6 +27,9 @@ export class ProveedoresComponent implements OnInit {
   public IdMunicipio : any[];
   public RazonSocial : any[];
 
+  @ViewChild('ModalProveedor') ModalProveedor:any;
+  @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
+  @ViewChild('FormProveedor') FormProveedor:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { } 
@@ -36,6 +39,14 @@ export class ProveedoresComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormProveedor.reset();
+      this.OcultarFormulario(this.ModalProveedor);
+      this.OcultarFormulario(this.ModalEditarProveedor);
+    }
   }
 
   ActualizarProveedores(){

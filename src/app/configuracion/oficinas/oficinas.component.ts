@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { SwalComponent } from '@toverux/ngx-sweetalert2';
@@ -34,6 +34,7 @@ export class OficinasComponent implements OnInit {
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   readonly ruta = 'https://hym.corvuslab.co/';   
   constructor(private http : HttpClient) { }  
   
@@ -42,6 +43,14 @@ export class OficinasComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormOficinaAgregar.reset();
+      this.OcultarFormulario(this.ModalOficina);
+      this.OcultarFormulario(this.ModalEditarOficina);
+    }
   }
 
   ActualizarVista()

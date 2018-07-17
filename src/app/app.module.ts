@@ -57,6 +57,7 @@ import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
+import {NgxMaskModule} from 'ngx-mask'
 
 @NgModule({
     imports: [
@@ -79,7 +80,8 @@ import { MonedasComponent } from './configuracion/monedas/monedas.component';
             customClass: 'modal-content',
             confirmButtonClass: 'btn btn-primary',
             cancelButtonClass: 'btn btn-danger'  
-          }) 
+          }),
+        NgxMaskModule.forRoot()
     ],
     declarations: [
         AppComponent,

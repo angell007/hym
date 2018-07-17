@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -17,11 +17,22 @@ export class TipodocumentoComponent implements OnInit {
   public Codigo : any[];
 
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('ModalDocumento') ModalDocumento:any;
+  @ViewChild('ModalEditarDocumento') ModalEditarDocumento:any;
+  @ViewChild('FormDocumento') FormDocumento:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
     this.ActualizarVista();
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormDocumento.reset();
+      this.OcultarFormulario(this.ModalDocumento);
+      this.OcultarFormulario(this.ModalEditarDocumento);
+    }
   }
 
   ActualizarVista(){

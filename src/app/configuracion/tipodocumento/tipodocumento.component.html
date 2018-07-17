@@ -71,7 +71,6 @@
           </div>
           <div class="modal-footer no-border">
               <div class="text-right">
-                  <button type="button" class="btn btn-default btn-sm" (click)="ModalDocumento.hide()">Cancelar</button>
                   <button type="button" class="btn btn-primary btn-sm" (click)="GuardarDocumento(FormDocumento, ModalDocumento)">Guardar</button>
               </div>
           </div> 
@@ -107,7 +106,6 @@
           </div>
           <div class="modal-footer no-border">
               <div class="text-right">
-                  <button type="button" class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarDocumento)">Cancelar</button>
                   <button type="button" class="btn btn-primary btn-sm" 
                   [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este documento' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                   (confirm)="GuardarDocumento(FormEditarDocumento, ModalEditarDocumento)">Guardar</button>

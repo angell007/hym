@@ -89,7 +89,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Saldo Inicial</label>
-                        <input type="text" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="">
+                        <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -109,7 +109,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalCuenta.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" (click)="GuardarCuenta(FormCuenta, ModalCuenta)">Guardar</button>
                 </div>
             </div>
@@ -162,7 +161,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Saldo Inicial</label>
-                        <input type="text" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="{{SaldoInicial}}">
+                        <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="{{SaldoInicial}}">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -182,7 +181,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarCuenta)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)"

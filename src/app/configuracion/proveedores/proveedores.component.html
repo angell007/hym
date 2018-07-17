@@ -151,7 +151,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalProveedor.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" (click)="GuardarProveedor(FormProveedor, ModalProveedor)">Guardar</button>
                 </div>
             </div>
@@ -260,7 +259,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarProveedor)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este proveedor' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarProveedor(FormEditarProveedor, ModalEditarProveedor)">Guardar</button>
