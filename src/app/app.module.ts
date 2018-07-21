@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -58,6 +58,21 @@ import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
 import {NgxMaskModule} from 'ngx-mask'
+import { NgxCurrencyModule } from "ngx-currency";
+import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
+ 
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+    align: "right",
+    allowNegative: false,
+    allowZero: false,
+    decimal: ",",
+    precision: 0,
+    prefix: " ",
+    suffix: "",
+    thousands: ".",
+    nullable: true
+};
 
 @NgModule({
     imports: [
@@ -81,8 +96,11 @@ import {NgxMaskModule} from 'ngx-mask'
             confirmButtonClass: 'btn btn-primary',
             cancelButtonClass: 'btn btn-danger'  
           }),
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
+        NgxCurrencyModule,
+        MDBBootstrapModule.forRoot()
     ],
+    schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
         AppComponent,
         CommonLayoutComponent,
@@ -120,7 +138,8 @@ import {NgxMaskModule} from 'ngx-mask'
     providers: [
         FuncionarioService,
         AuthGuard,
-        ThemeConstants
+        ThemeConstants,
+        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     ],
     bootstrap: [AppComponent]
 })
