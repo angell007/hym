@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -60,6 +60,7 @@ import { MonedasComponent } from './configuracion/monedas/monedas.component';
 import {NgxMaskModule} from 'ngx-mask'
 import { NgxCurrencyModule } from "ngx-currency";
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -96,8 +97,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
             cancelButtonClass: 'btn btn-danger'  
           }),
         NgxMaskModule.forRoot(),
-        NgxCurrencyModule
+        NgxCurrencyModule,
+        MDBBootstrapModule.forRoot()
     ],
+    schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
         AppComponent,
         CommonLayoutComponent,
