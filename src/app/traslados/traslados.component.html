@@ -188,7 +188,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="">
+                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -211,7 +211,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalTraslado.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" (click)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar</button>
                 </div>
             </div>
@@ -357,7 +356,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="{{Valor}}">
+                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="{{Valor}}">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -380,7 +379,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalEditarTraslado.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarTraslado(FormEditarTraslado, ModalEditarTraslado)">Guardar</button>

@@ -65,8 +65,7 @@
                     <label>Tipo de documento</label>
                     <select class="form-control" required name="Id_Documento" ngModel="">
                         <option value="">Seleccione tipo de documento</option>
-                        <option value="0">Tipo 1</option>
-                        <option value="1">Tipo 2</option>
+                        <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                     </select>
                     </div>
                 </div>
@@ -165,7 +164,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -188,7 +187,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalTercero.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarTercero(FormTercero, ModalTercero)">Guardar</button>
                 </div>
             </div>
@@ -208,8 +206,7 @@
                     <label>Tipo de documento</label>
                     <select class="form-control" required name="Id_Documento" ngModel="{{IdDocumento}}">
                         <option value="">Seleccione tipo de documento</option>
-                        <option value="0">Tipo 1</option>
-                        <option value="1">Tipo 2</option>
+                        <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                     </select>
                     </div>
                 </div>
@@ -308,7 +305,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="number" placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -316,8 +313,7 @@
                         <label>Tipo Grupo</label>
                         <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
                             <option>Seleccione tipo de grupo</option>
-                            <option value="0">Ganaderos</option>
-                            <option value="1">Contratos</option>
+                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
                     </div>
                 </div>
@@ -332,7 +328,6 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarTercero)">Cancelar</button>
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" 
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                     (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>

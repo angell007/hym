@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -18,6 +18,8 @@ export class CajasComponent implements OnInit {
   public Detalles : any[];
 
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
+  @ViewChild('ModalCaja') ModalCaja:any;
+  @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
@@ -27,6 +29,14 @@ export class CajasComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Oficina'}}).subscribe((data:any)=>{
       this.Oficinas= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormCajaAgregar.reset();
+      this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalEditarCaja);
+    }
   }
 
   ActializarVista()

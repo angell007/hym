@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -12,6 +12,7 @@ export class TercerosComponent implements OnInit {
   public Departamentos : any[];
   public Municipios : any[];
   public Grupos : any[];
+  public Documentos : any[];
 
   //variables de formulario
   public Identificacion : any[];
@@ -31,6 +32,9 @@ export class TercerosComponent implements OnInit {
   public IdDocumento : any[];
   public Barrio : any[];
 
+  @ViewChild('ModalTercero') ModalTercero:any;
+  @ViewChild('ModalEditarTercero') ModalEditarTercero:any;
+  @ViewChild('FormTercero') FormTercero:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
@@ -43,6 +47,17 @@ export class TercerosComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos = data;
     });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
+      this.Documentos = data;
+    });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormTercero.reset();
+      this.OcultarFormulario(this.ModalTercero);
+      this.OcultarFormulario(this.ModalEditarTercero);
+    }
   }
 
   ActualizarVista(){
@@ -120,7 +135,9 @@ export class TercerosComponent implements OnInit {
     this.Credito = null;
     this.Cupo = null;
     this.IdGrupo = null;
+    this.IdDocumento = null;
     this.Detalle = null;
+    this.Barrio = null;
     modal.hide();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -24,6 +24,9 @@ export class TrasladosComponent implements OnInit {
   public Detalle : any[];
   public Estado : any[];
 
+  @ViewChild('ModalTraslado') ModalTraslado:any;
+  @ViewChild('ModalEditarTraslado') ModalEditarTraslado:any;
+  @ViewChild('FormTraslado') FormTraslado:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date(); 
@@ -34,6 +37,14 @@ export class TrasladosComponent implements OnInit {
   ngOnInit() {
     this.ActualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormTraslado.reset();
+      this.OcultarFormulario(this.ModalTraslado);
+      this.OcultarFormulario(this.ModalEditarTraslado);
+    }
   }
 
   ActualizarVista()

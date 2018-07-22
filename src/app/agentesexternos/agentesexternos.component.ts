@@ -1,7 +1,7 @@
 // Typing for Ammap
 /// <reference path="../shared/typings/ammaps/ammaps.d.ts" />
 
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import {DatatableComponent} from '@swimlane/ngx-datatable';
 import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../shared/config/theme-constant';
@@ -32,6 +32,9 @@ export class AgentesexternosComponent implements OnInit {
   public Username : any[];
   public Password : any[];
 
+  @ViewChild('ModalAgente') ModalAgente:any;
+  @ViewChild('ModalEditarAgente') ModalEditarAgente:any;
+  @ViewChild('FormAgenteAgregar') FormAgenteAgregar:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild(DatatableComponent) table: DatatableComponent;
   constructor(private http : HttpClient,private colorConfig:ThemeConstants) {  
@@ -76,6 +79,14 @@ export class AgentesexternosComponent implements OnInit {
     this.http.get(this.ruta+'php/agentesexternos/lista.php').subscribe((data:any)=>{
       this.agentes= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormAgenteAgregar.reset();
+      this.OcultarFormulario(this.ModalAgente);
+      this.OcultarFormulario(this.ModalEditarAgente);
+    }
   }
 
   GuardarAgente(formulario: NgForm, modal:any){

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -17,6 +17,9 @@ export class GruposComponent implements OnInit {
   public Detalle : any[];
   public Padre : any[];
 
+  @ViewChild('ModalGrupo') ModalGrupo:any;
+  @ViewChild('ModalEditarGrupo') ModalEditarGrupo:any;
+  @ViewChild('FormGrupo') FormGrupo:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
@@ -25,11 +28,17 @@ export class GruposComponent implements OnInit {
     this.ActualizarVista();
   }
 
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormGrupo.reset();
+      this.OcultarFormulario(this.ModalGrupo);
+      this.OcultarFormulario(this.ModalEditarGrupo);
+    }
+  }
+
   ActualizarVista(){
     this.http.get(this.ruta+'php/grupos/lista_grupos.php').subscribe((data:any)=>{
-      this.grupos= data;  
-      console.log(this.grupos);
-        
+      this.grupos= data;          
     });
   }
 

@@ -114,43 +114,42 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Comisión</label>
-                        <input type="text" placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="">
+                        <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Mín Compra</label>
-                        <input type="number" placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Compra</label>
-                        <input type="number" placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Min Venta</label>
-                        <input type="number" placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Venta</label>
-                        <input type="number" placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Valores</label>
-                        <input type="number" placeholder="Valores" class="form-control" name="Valores" ngModel="">
+                        <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="">
                     </div>
                 </div>
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-default btn-sm" (click)="ModalOficina.hide()">Cancelar</button>
                     <button class="btn btn-primary btn-sm" (click)="GuardarOficina(FormOficinaAgregar, ModalOficina)">Guardar</button>
                 </div>
             </div>
@@ -230,43 +229,42 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Comisión</label>
-                        <input type="text" placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}">
+                        <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Mín Compra</label>
-                        <input type="number" placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}">
+                        <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Compra</label>
-                        <input type="number" placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}">
+                        <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Min Venta</label>
-                        <input type="number" placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Venta</label>
-                        <input type="number" placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}">
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Valores</label>
-                        <input type="number" placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}">
+                        <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}">
                     </div>
                 </div>
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button type="button" class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarOficina)">Cancelar</button>
                     <button type="button" class="btn btn-primary btn-sm"
                         [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                         (confirm)="GuardarOficina(FormEditarOficina, ModalEditarOficina)">Guardar</button>

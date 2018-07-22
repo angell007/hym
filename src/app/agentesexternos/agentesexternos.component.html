@@ -116,7 +116,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Cupo</label>
-                <input type="text" placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="">
+                <input type="text" currencyMask placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="">
             </div>
         </div>
       </div>
@@ -136,7 +136,6 @@
       </div>      
       <div class="modal-footer no-border">
           <div class="text-right">
-              <button class="btn btn-default btn-sm" (click)="ModalAgente.hide()">Cancelar</button>
               <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
           </div>
       </div>
@@ -172,7 +171,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Cupo</label>
-                <input type="text" placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                <input type="text" currencyMask placeholder="Cupo Maximo" class="form-control" name="Cupo" ngModel="{{Cupo}}">
             </div>
         </div>
       </div>
@@ -192,7 +191,6 @@
       </div>      
       <div class="modal-footer no-border">
         <div class="text-right">
-          <button class="btn btn-default btn-sm" (click)="OcultarFormulario(ModalEditarAgente)">Cancelar</button>
           <button class="btn btn-primary btn-sm"
           [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
           (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -22,6 +22,8 @@ export class CuentasbancariasComponent implements OnInit {
   public Detalle : any[];
 
   @ViewChild('ModalEditarCuenta') ModalEditarCuenta:any;
+  @ViewChild('ModalCuenta') ModalCuenta:any;
+  @ViewChild('FormCuenta') FormCuenta:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   
@@ -32,6 +34,14 @@ export class CuentasbancariasComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormCuenta.reset();
+      this.OcultarFormulario(this.ModalCuenta);
+      this.OcultarFormulario(this.ModalEditarCuenta);
+    }
   }
 
   ActualizarVista()

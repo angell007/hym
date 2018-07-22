@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -23,6 +23,8 @@ export class DestinatariosComponent implements OnInit {
 
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
+  @ViewChild('ModalDestinatario') ModalDestinatario:any;
+  @ViewChild('FormDestinatario') FormDestinatario:any;
   readonly ruta = 'http://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { } 
 
@@ -36,6 +38,14 @@ export class DestinatariosComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;
     });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormDestinatario.reset();
+      this.OcultarFormulario(this.ModalDestinatario);
+      this.OcultarFormulario(this.ModalEditarDestinatario);
+    }
   }
 
   /**
