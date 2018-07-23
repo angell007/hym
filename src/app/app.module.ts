@@ -61,6 +61,8 @@ import {NgxMaskModule} from 'ngx-mask'
 import { NgxCurrencyModule } from "ngx-currency";
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
+import { ComprasComponent } from './configuracion/compras/compras.component';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -131,6 +133,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         GruposComponent,
         TipodocumentoComponent,
         MonedasComponent,
+        CajarecaudosComponent,
+        ComprasComponent,
     ],
     exports:[
         ModalBasicComponent
