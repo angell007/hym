@@ -330,6 +330,138 @@
                                 </li>
                             </ul>
                             <div class="mrg-top-30" style="min-height: 470px;">
+                                <form #FormGiroRemitente="ngForm">    
+                                    <h4>Remitente</h4>                                
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Número de documento</label>
+                                            <input type="text" placeholder="Número de documento" class="form-control" name="Documento_Remitente" ngModel="">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Nombre</label>
+                                            <input type="text" placeholder="Nombre" class="form-control" name="Nombre" ngModel="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Apellido</label>
+                                            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel="">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Teléfono</label>
+                                            <input type="text" placeholder="Teléfono" class="form-control" name="Telefono" ngModel="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Celular</label>
+                                            <input type="text" placeholder="Celular" class="form-control" name="Celular" ngModel="">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </form>
+                                <form #FormGiroDestinatario="ngForm">
+                                    <h4>Destinatario</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Número de documento</label>
+                                            <input type="text" placeholder="Número de documento" class="form-control" name="Documento_Destinatario" ngModel="">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Nombre</label>
+                                            <input type="text" placeholder="Nombre" class="form-control" name="Nombre" ngModel="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Apellido</label>
+                                            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel="">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Teléfono</label>
+                                            <input type="text" placeholder="Teléfono" class="form-control" name="Telefono" ngModel="">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Celular</label>
+                                            <input type="text" placeholder="Celular" class="form-control" name="Celular" ngModel="">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </form>
+                                <form #FormGiro="ngForm">
+                                    <h4>Datos del giro</h4>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Identificación</label>
+                                            <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Oficina</label>
+                                            <input name="Id_Oficina" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdOficina}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Caja</label>
+                                            <input name="Id_Caja" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdCaja}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Estado</label>
+                                            <input name="Estado" type="text" placeholder="Identificación" class="form-control" ngModel="{{Estado}}" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Valor del envio</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel="" (blur)="CalcularTotal($event.target.value)">
+                                            </div>
+                                        </div>  
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Comisión</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Comision" ngModel="{{Costo}}" readonly>
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Libre</label>
+                                                <input type="checkbox" placeholder="Precio" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor total</label>
+                                                <input type="text" placeholder="Precio" class="form-control" readonly name="Valor_Total" ngModel="{{ValorTotal}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Entregado</label>
+                                                <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega" ngModel="{{ValorEntrega}}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-sm btn-info btn-block" (click)="RealizarGiro(FormGiroRemitente, FormGiroDestinatario, FormGiro)">Hacer giro</button>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </form>
                             </div>
                         </div>
                     </div>
