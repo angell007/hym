@@ -22,6 +22,8 @@ export class PosComponent implements OnInit {
   public Costo : number;
   public PrecioSugerido : number;
   public CantidadRecibida : number;
+  public ValorTotal : number;
+  public ValorEntrega : number;
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
@@ -43,9 +45,9 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
       this.Destinatarios= data;
-      console.log(this.Destinatarios);      
+      //console.log(this.Destinatarios);      
     });
-    console.log(JSON.parse(localStorage['User']));    
+    //console.log(JSON.parse(localStorage['User']));    
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 1;
     this.IdCaja = 1;
@@ -82,6 +84,35 @@ export class PosComponent implements OnInit {
   {
     this.Recibe = tipo;
     console.log(this.Recibe);    
+  }
+
+  RealizarGiro(remitente: NgForm, destinatario: NgForm, giro: NgForm)
+  {
+    let formulario = giro.value;
+    console.log(remitente.value); 
+    formulario['Documento_Remitente'] = remitente.value.Documento_Remitente;
+    formulario['Nombre_Remitente'] = remitente.value.Nombre + " " + remitente.value.Apellido;
+    formulario['Telefono_Remitente'] = remitente.value.Telefono + " - " + remitente.value.Celular;
+    formulario['Documento_Destinatario'] = destinatario.value.Documento_Remitente;
+    formulario['Nombre_Destinatario'] = destinatario.value.Nombre + " " + destinatario.value.Apellido;
+    formulario['Telefono_Destinatario'] = destinatario.value.Telefono + " - " + destinatario.value.Celular;
+    console.log(formulario); 
+    let info = JSON.stringify(formulario);       
+    let datos = new FormData();
+    datos.append("modulo",'Giro');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
+      remitente.reset();
+      destinatario.reset();
+      giro.reset();
+    });
+  }
+
+  CalcularTotal(value)
+  {
+    this.ValorTotal = Number.parseInt(value) + this.Costo;
+    this.ValorEntrega = Number.parseInt(value) - this.Costo;
+    console.log(this.ValorTotal);
   }
 
 }
