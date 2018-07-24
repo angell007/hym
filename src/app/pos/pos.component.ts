@@ -13,7 +13,9 @@ export class PosComponent implements OnInit {
 
   public IdentificacionFuncionario : any[];
   public Destinatarios : any[] = [];
+  public Funcionarios : any[] = [];
   public Documentos : any[];
+  public Cajas : any[];
   public Monedas : any[];
   public Recibe : any[];
   public IdOficina : number;
@@ -40,8 +42,14 @@ export class PosComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
       this.Documentos= data;
     });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Caja'}}).subscribe((data:any)=>{
+      this.Cajas= data;
+    });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
       this.Monedas= data;
+    });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
+      this.Funcionarios= data;
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
       this.Destinatarios= data;
@@ -101,11 +109,29 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Giro');
     datos.append("datos",info);
-    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
-      remitente.reset();
-      destinatario.reset();
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{       
       giro.reset();
     });
+
+    let infoRemitente = JSON.stringify(remitente.value);       
+    let datosRemitente = new FormData();
+    datosRemitente.append("modulo",'Giro_Remitente');
+    datosRemitente.append("datos",infoRemitente);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datosRemitente).subscribe((data:any)=>{   
+      remitente.reset();
+    });
+
+    let infoDestinatario = JSON.stringify(destinatario.value);       
+    let datosDestinatario = new FormData();
+    datosDestinatario.append("modulo",'Giro_Destinatario');
+    datosDestinatario.append("datos",infoDestinatario);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datosDestinatario).subscribe((data:any)=>{  
+      destinatario.reset();
+    });
+    this.ValorTotal = null;
+    this.ValorEntrega = null;
+    this.Costo = 0;
+    this.Costo = 1;
   }
 
   CalcularTotal(value)
@@ -113,6 +139,18 @@ export class PosComponent implements OnInit {
     this.ValorTotal = Number.parseInt(value) + this.Costo;
     this.ValorEntrega = Number.parseInt(value) - this.Costo;
     console.log(this.ValorTotal);
+  }
+
+  RealizarTraslado(formulario: NgForm)
+  {
+    let info = JSON.stringify(formulario.value);
+    console.log(info);    
+    let datos = new FormData();
+    datos.append("modulo",'Traslado_Caja');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
+      formulario.reset();
+    });
   }
 
 }

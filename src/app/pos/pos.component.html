@@ -187,7 +187,7 @@
                                                 <label>Cédula</label>
                                                 <input name="Numero_Documento_Destino" type="text" placeholder="Identificación" class="form-control" ngModel="" required>
                                                 <!--<input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios" />
-                                                <ng-template #elseBlock>
+                                                <ng-template>
                                                 <input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios"
                                                     [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" 
                                                 />
@@ -479,7 +479,56 @@
                                 </li>
                             </ul>
                             <div class="mrg-top-30" style="min-height: 470px;">
-                                
+                                <form #FormTraslado="ngForm">
+                                    <h4>Datos del traslado</h4>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Cajero Origen</label>
+                                            <select name="Id_Cajero_Origen" class="form-control" name="Id_Cajero_Origen" ngModel="{{IdCaja}}">
+                                                <option value="">seleccione una opción</option>
+                                            </select>                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Cajero de destino</label>
+                                            <select name="Id_Cajero_Destino" class="form-control" ngModel="">
+                                                <option value="">seleccione una opción</option>
+                                                <option *ngFor="let Caja of Cajas" value="{{Caja.Id_Caja}}">{{Caja.Nombre}}</option>
+                                            </select>                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Moneda</label>
+                                            <select name="Id_Moneda" class="form-control" ngModel="">
+                                                <option value="">seleccione una opción</option>
+                                                <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                            </select> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Valor</label>
+                                            <input name="Valor" type="text" placeholder="Identificación" class="form-control" ngModel="" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-sm btn-info btn-block" (click)="RealizarTraslado(FormTraslado)">Hacer traslado</button>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </form>
                             </div>
                         </div>
                     </div>
