@@ -50,21 +50,12 @@
     </div>
 </div>
 
-
-
-
-
-
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCuenta" #ModalCuenta>
     <div class="app-modal-header">
         <h4>Nueva Cuenta Bancaria</h4>
     </div>
     <div class="app-modal-body">
         <form #FormCuenta="ngForm">
-
-            //AQUI
-
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
@@ -82,9 +73,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -128,29 +116,18 @@
     </div>        
 </app-modal-basic>
 
-
-
-
-
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCuenta" #ModalEditarCuenta>
     <div class="app-modal-header">
         <h4>Editar Cuenta Bancaria</h4>
     </div>
     <div class="app-modal-body">
         <form #FormEditarCuenta="ngForm">
-
-            
-
             <div class="col-md-4" hidden>
                 <div class="form-group">
                     <label>Identificación</label>
                     <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                 </div>
             </div>
-
-            //AQUI
-        
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
@@ -168,10 +145,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">

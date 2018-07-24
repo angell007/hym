@@ -36,6 +36,7 @@ export class OficinasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   readonly ruta = 'https://hym.corvuslab.co/';   
+  
   constructor(private http : HttpClient) { }  
   
   ngOnInit() {

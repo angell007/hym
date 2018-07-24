@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-cajarecaudos',
@@ -8,7 +9,27 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CajarecaudosComponent implements OnInit {
 
+
+
+
+  //variables que hacen referencia a los campos del formulario editar   
+
+
+
+
+
+
+
+
+
+
+
+  @ViewChild('ModalCaja') ModalCaja:any;
+  @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
+  @ViewChild('FormCaja') FormCaja:any;
+  @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/'; 
+  
   public fecha = new Date(); 
   public cajarecaudos = [];
   constructor(private http : HttpClient) { }

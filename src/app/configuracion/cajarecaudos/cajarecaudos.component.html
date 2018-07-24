@@ -57,64 +57,52 @@
             <h4>Nueva Caja Recaudo</h4>
         </div>
         <div class="app-modal-body">
-            <form #FormCuenta="ngForm">
+            <form #FormCaja="ngForm">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Nombre</label>
                             <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre_Caja" ngModel="">
                         </div>
                     </div>
+                    
+                    <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Tipo</label>
+                                <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo_Caja" ngModel="">
+                            </div>
+                    </div>
+                </div>
 
 
-                    //Editar desde aqui
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Banco</label>
-                            <select class="form-control" required name="Id_Banco" ngModel="">
-                                <option value="">Seleccione Banco</option>
-                                <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Titular</label>
-                            <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="">
+                        <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Departamento</label>
+                                    <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                                        <option value="">Seleccione un Departamento</option>
+                                        <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                                    </select>
+                                </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Identificación Titular</label>
-                            <input type="text" currencyMask placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="">
+                        <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Municipio</label>
+                                    <select class="form-control" required name="Id_Municipio" ngModel="">
+                                        <option value="">Seleccione un Municipio</option>
+                                        <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                                    </select>
+                                </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Saldo Inicial</label>
-                            <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Fecha Saldo Inicial</label>
-                            <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="">
-                        </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Detalles</label>
-                            <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel=""></textarea>
-                        </div>
-                    </div>
-                </div>
+
+
+
+
+
                 <div class="modal-footer no-border">
                     <div class="text-right">
-                        <button class="btn btn-primary btn-sm" (click)="GuardarCuenta(FormCuenta, ModalCaja)">Guardar</button>
+                        <button class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCaja, ModalCaja)">Guardar</button>
                     </div>
                 </div>
             </form>
@@ -125,74 +113,80 @@
 
 
 
-    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCuenta" #ModalEditarCuenta>
+    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
         <div class="app-modal-header">
-            <h4>Editar Cuenta Bancaria</h4>
+            <h4>Editar Caja Recaudo</h4>
         </div>
         <div class="app-modal-body">
-            <form #FormEditarCuenta="ngForm">
+            <form #FormEditarCaja="ngForm">
                 <div class="col-md-4" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                     </div>
                 </div>
+
+
+
+
+
+
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label>Cuenta</label>
-                            <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Nombre_Caja" ngModel="{{NumeroCuenta}}">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre_Caja" ngModel="">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Tipo</label>
+                                    <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo_Caja" ngModel="">
+                                </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Banco</label>
-                            <select class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
-                                <option value="">Seleccione Banco</option>
-                                <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                            </select>
-                        </div>
+    
+    
+                    <div class="row">
+                            <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Departamento</label>
+                                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                                            <option value="">Seleccione un Departamento</option>
+                                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Municipio</label>
+                                        <select class="form-control" required name="Id_Municipio" ngModel="">
+                                            <option value="">Seleccione un Municipio</option>
+                                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                                        </select>
+                                    </div>
+                            </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Titular</label>
-                            <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{NombreTitular}}">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Identificación Titular</label>
-                            <input type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="{{IdentificacionTitular}}">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Saldo Inicial</label>
-                            <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="{{SaldoInicial}}">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Fecha Saldo Inicial</label>
-                            <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="{{FechaInicial}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Detalles</label>
-                            <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
-                        </div>
-                    </div>
-                </div>
+
+
+
+
+
+
+
+
+
+
+                
+
+
+
                 <div class="modal-footer no-border">
                     <div class="text-right">
                         <button class="btn btn-primary btn-sm" 
-                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)"
+                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)"
                         >Guardar</button>
                     </div>
                 </div>
@@ -201,8 +195,8 @@
     </app-modal-basic>
     
     <swal #deleteSwal
-      title="Cuenta eliminada"
-      text="Se ha Eliminado Correctamente la cuenta"
+      title="Caja eliminada"
+      text="Se ha Eliminado Correctamente la caja"
       type="success"
       >
       </swal>
