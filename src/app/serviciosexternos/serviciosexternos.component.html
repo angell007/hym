@@ -1,66 +1,9 @@
 <div class="container-fluid">
-    <!-- <div class="row">
-        <div class="col-md-3">
-            <div class="card bg-info">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">155</h1>
-                            <span class="text-white">Transferencias</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="ti-control-shuffle font-size-50 text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-                <div class="card bg-success">
-                    <div class="card-block" style="padding:10px;">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h1 class="no-mrg-top font-size-30">135</h1>
-                                <span class="text-white">Realizadas</span>
-                            </div>
-                            <div class="col-md-5 text-center">
-                                <i class="ti-thumb-up font-size-50 text-white"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                    <div class="card bg-warning">
-                        <div class="card-block" style="padding:10px;">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <h1 class="no-mrg-top font-size-30">5</h1>
-                                    <span class="text-white">Devueltas</span>
-                                </div>
-                                <div class="col-md-5 text-center">
-                                    <i class="ti-thumb-down font-size-50 text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                        <div class="card bg-danger">
-                            <div class="card-block" style="padding:10px;">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h1 class="no-mrg-top font-size-30">15</h1>
-                                        <span class="text-white">Anuladas</span>
-                                    </div>
-                                    <div class="col-md-5 text-center">
-                                        <i class="ti-close font-size-50 text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    </div> -->
+    <div class="page-title">
+     <h4 class="pull-left">Servicios Externos</h4>
+     <button class="pull-right btn btn-info" (click)="ModalServicio.show()"><i class="ti-plus"></i> Agregar Nuevo Servicio Externo</button>
+    </div>
+    <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="widget card">
@@ -101,3 +44,139 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicio" #ModalServicio>
+        <div class="app-modal-header">
+            <h4>Nuevo Servicio Externo</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormServicio="ngForm">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre_Servicio" ngModel="">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Comision</label>
+                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision_Servicio" ngModel="">
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Adjunto</label>
+                                <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                <div class="modal-footer no-border">
+                    <div class="text-right">
+                        <button class="btn btn-primary btn-sm" (click)="GuardarCuenta(FormServicio, ModalServicio)">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </app-modal-basic>
+
+
+
+//Editando
+
+    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarServicio" #ModalEditarServicio>
+        <div class="app-modal-header">
+            <h4>Editar Servicio Externo</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormEditarServicio="ngForm">
+
+
+
+                <div class="col-md-4" hidden>
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    </div>
+                </div>
+
+
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Cuenta</label>
+                            <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Nombre_Servicio" ngModel="{{NumeroCuenta}}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
+                                <option value="">Seleccione Banco</option>
+                                <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Titular</label>
+                            <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{NombreTitular}}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Identificación Titular</label>
+                            <input type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="{{IdentificacionTitular}}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Saldo Inicial</label>
+                            <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Comision_Servicio" ngModel="{{SaldoInicial}}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Fecha Saldo Inicial</label>
+                            <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="{{FechaInicial}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Adjunto</label>
+                            <textarea class="form-control" placeholder="Adjunto de Cuenta Bancaria" name="Adjunto" ngModel="{{Adjunto}}"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer no-border">
+                    <div class="text-right">
+                        <button class="btn btn-primary btn-sm" 
+                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCuenta(FormEditarServicio, ModalEditarServicio)"
+                        >Guardar</button>
+                    </div>
+                </div>
+
+
+
+            </form>
+        </div>        
+    </app-modal-basic>
+    
+    <swal #deleteSwal
+      title="Cuenta eliminada"
+      text="Se ha Eliminado Correctamente la cuenta"
+      type="success"
+      >
+      </swal>
