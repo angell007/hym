@@ -9,6 +9,10 @@ import { NgForm } from '@angular/forms';
 })
 export class ServiciosexternosComponent implements OnInit {
 
+
+  public serviciosexternos : any[];
+  public fecha = new Date(); 
+
   
 
 
@@ -36,12 +40,27 @@ export class ServiciosexternosComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/'; 
 
-  public fecha = new Date(); 
-  public serviciosexternos = [];
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
+    this.ActualizarVista();
     this.http.get(this.ruta+'php/serviciosexternos/lista.php').subscribe((data:any)=>{
+      this.serviciosexternos= data;
+    });
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.FormServicio.reset();
+      this.OcultarFormulario(this.ModalServicio);
+      this.OcultarFormulario(this.ModalEditarServicio);
+    }
+  }
+
+
+  ActualizarVista()
+  {
+    this.http.get(this.ruta+'php/serviciosexternos/lista.php',{ params: { modulo: 'Servicios_Externos'}}).subscribe((data:any)=>{
       this.serviciosexternos= data;
     });
   }

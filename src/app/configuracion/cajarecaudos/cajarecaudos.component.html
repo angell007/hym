@@ -152,22 +152,22 @@
                             <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Departamento</label>
-                                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
                                             <option value="">Seleccione un Departamento</option>
                                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                                         </select>
                                     </div>
-                            </div>
-                            <div class="col-md-5">
+                                </div>
+                                <div class="col-md-5">
                                     <div class="form-group">
                                         <label>Municipio</label>
-                                        <select class="form-control" required name="Id_Municipio" ngModel="">
+                                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
                                             <option value="">Seleccione un Municipio</option>
                                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                                         </select>
                                     </div>
-                            </div>
-                    </div>
+                                </div>
+                        </div>
 
 
 
