@@ -9,7 +9,7 @@ import { NgbAccordionModule } from '../../../../node_modules/@ng-bootstrap/ng-bo
   styleUrls: ['./cofiguracion.component.css']
 })
 
-export class CofiguracionComponent implements OnInit, AfterViewInit {
+export class CofiguracionComponent implements OnInit {
 
   public configuracion : any[];
   public Monedas : any[];

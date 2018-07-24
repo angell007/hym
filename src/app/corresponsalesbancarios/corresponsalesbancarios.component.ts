@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-corresponsalesbancarios',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CorresponsalesbancariosComponent implements OnInit {
 
-  constructor() { }
+  readonly ruta = 'https://hym.corvuslab.co/'; 
+  public fecha = new Date(); 
+  public corresponsales = [];
+  constructor(private http : HttpClient) { }
 
   ngOnInit() {
+    this.http.get(this.ruta+'php/corresponsalesbancarios/lista.php').subscribe((data:any)=>{
+      this.corresponsales= data;
+    });
   }
 
 }

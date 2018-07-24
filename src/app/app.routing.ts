@@ -29,6 +29,9 @@ import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
+import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
+import { ComprasComponent } from './configuracion/compras/compras.component';
+
 
 export const AppRoutes: Routes = [
     { 
@@ -126,6 +129,14 @@ export const AppRoutes: Routes = [
     { 
         path : 'monedas', component : CommonLayoutComponent,
         children:[{path : '', component : MonedasComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cajarecaudos', component : CommonLayoutComponent,
+        children:[{path : '', component : CajarecaudosComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'compras', component : CommonLayoutComponent,
+        children:[{path : '', component : ComprasComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
