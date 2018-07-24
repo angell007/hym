@@ -82,7 +82,11 @@ export class OficinasComponent implements OnInit {
    * @param {NgForm} formulario
    * @memberof OficinasComponent
    */
-  GuardarOficina(formulario: NgForm, modal:any){
+  
+  
+  
+  
+   GuardarOficina(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     this.OcultarFormulario(modal);
