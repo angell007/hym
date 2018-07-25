@@ -12,12 +12,15 @@ export class CajarecaudosComponent implements OnInit {
   public cajarecaudos : any[];
   public Departamentos : any[];
   public Municipios : any[];
-  public fecha = new Date(); 
 
 
   //variables que hacen referencia a los campos del formulario editar   
 
-
+  public Identificacion : any[];
+  public Nombre : any[];
+  public Tipo : any[];
+  public Departamento : any[];
+  public Municipio : any[];
 
 
   @ViewChild('ModalCaja') ModalCaja:any;
@@ -30,8 +33,8 @@ export class CajarecaudosComponent implements OnInit {
 
   ngOnInit() {
     this.ActualizarVista();
-    this.http.get(this.ruta+'php/cajarecaudos/lista.php',{ params: { modulo: 'Caja_Recaudos'}}).subscribe((data:any)=>{
-      this.cajarecaudos= data;
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
+      this.Departamentos= data;
     });
   }
 
@@ -51,51 +54,34 @@ export class CajarecaudosComponent implements OnInit {
   }
 
 
-  /**
-   *se llama a esta función cuando se selecciona un departamento en el combo box de departamentos
-   *para hacer una consulta a la base de datos con el departamento seleccionado y llenar el combo box 
-   *de municipios con los municipios correspondientes a ese departamento
-   *
-   * @param {*} Departamento
-   * @memberof CajaRecaudosComponent
-   */
-  /*
+ 
+  
   Municipios_Departamento(Departamento){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
     });
   }
 
-  /**
-   *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
-   *datos.append("modulo", 'nombre de la tabla')
-   *
-   * @param {NgForm} formulario
-   * @memberof CajaRecaudosComponent
-   */
-/*
-  GuardarOficina(formulario: NgForm, modal:any){
+// MODIFICANDO
+  GuardarCaja(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    this.OcultarFormulario(modal);
-    datos.append("modulo",'Oficina');
+    
+
+
+    datos.append("modulo",'Caja_Recaudos');
     datos.append("datos",info);
+
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
-      this.ActualizarVista();
-      formulario.reset();
+    this.ActualizarVista();
+    formulario.reset();
     });    
   }
 
-  /**
-   *
-   *actualiza los datos correspondientes al id que se le pasa como primer parametro en la tabla que se especifica en
-   *params:{modulo:'nombre de la tabla', id:id}
-   * @param {*} id
-   * @param {*} modal
-   * @memberof OficinasComponent
-   */
-  /*
-  EditarOficina(id, modal){
+  
+  
+  EditarCaja(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Oficina', id:id}
     }).subscribe((data:any)=>{
@@ -117,13 +103,7 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-  /**
-   *elimina la oficina correspondiente al id que se le envia
-   *
-   * @param {*} id
-   * @memberof OficinasComponent
-   */
-  /*
+ 
   EliminarOficina(id){
     let datos=new FormData();
     datos.append("modulo", 'Oficina');
@@ -134,14 +114,7 @@ export class CajarecaudosComponent implements OnInit {
     })
   }
 
-  /**
-   *carga los municipios correspondietes al departamento que se asigno al formulario en la consulta de la función
-   *Editar() y luego asigna el municipio correspondiente obtenido en la consulta de la función Editar.
-   *
-   * @param {*} Departamento departamento del que se obtendran los municipios
-   * @param {*} Municipio municipio que se asignara una vez se cargue la lista de municipios
-   * @memberof OficinasComponent
-   */
+
   
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{

@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./corresponsalesbancarios.component.css']
 })
 export class CorresponsalesbancariosComponent implements OnInit {
+  
   public corresponsales : any[];
   public Departamentos : any[];
   public Municipios : any[];
