@@ -55,27 +55,17 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-
- 
-  
   Municipios_Departamento(Departamento){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
     });
   }
 
-
-
-
   GuardarCaja(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    
-
-
     datos.append("modulo",'Caja_Recaudos');
     datos.append("datos",info);
-
     this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
     this.ActualizarVista();
@@ -83,14 +73,10 @@ export class CajarecaudosComponent implements OnInit {
     });    
   }
 
-  
-
-
   EditarCaja(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Caja_Recaudos', id:id}
     }).subscribe((data:any)=>{
-  
   console.log(id);
       this.Identificacion = id;
       this.Nombre = data.Nombre;
@@ -103,11 +89,6 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-
-
-
-
-
   EliminarCaja(id){
     console.log(id);  
     let datos=new FormData();
@@ -119,18 +100,12 @@ export class CajarecaudosComponent implements OnInit {
     })
   }
   
-
-
-
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
       this.Municipio = Municipio;
     });
   }
-
-
-
 
   OcultarFormulario(modal){
     this.Identificacion = null;
@@ -142,11 +117,4 @@ export class CajarecaudosComponent implements OnInit {
     this.Municipio = null;
     modal.hide();
   }
-
-
-
-  
-
-
-
 }

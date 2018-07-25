@@ -24,16 +24,16 @@
                                     <td>{{servicioexterno.Comision}}</td>
                                     <td>{{servicioexterno.Adjunto}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                            <i class="ti-search"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
-                                            <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarTransferencia(oficina.Id_Oficina)">
-                                            <i class="ti-trash"></i>
-                                        </button>
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <i class="ti-search"></i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarServicio(servicioexterno.Id_Servicio_Externo, ModalEditarServicio)">
+                                        <i class="ti-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Servicio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="EliminarServicio(servicioexterno.Id_Servicio_Externo)">
+                                        <i class="ti-trash"></i>
+                                    </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -46,11 +46,6 @@
 </div>
 
 
-
-
-
-
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicio" #ModalServicio>
         <div class="app-modal-header">
             <h4>Nuevo Servicio Externo</h4>
@@ -61,13 +56,13 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <label>Nombre</label>
-                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre_Servicio" ngModel="">
+                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="">
                         </div>
                     </div>
                     <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comision</label>
-                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision_Servicio" ngModel="">
+                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="">
                             </div>
                     </div>
                 </div>
@@ -89,42 +84,29 @@
     </app-modal-basic>
 
 
-
-
-
-
-
-
-
-
     <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarServicio" #ModalEditarServicio>
         <div class="app-modal-header">
             <h4>Editar Servicio Externo</h4>
         </div>
         <div class="app-modal-body">
             <form #FormEditarServicio="ngForm">
-
-
-
                 <div class="col-md-4" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                     </div>
                 </div>
-
-
                 <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label>Nombre</label>
-                                <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre_Servicio" ngModel="">
+                                <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="{{Nombre}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Comision</label>
-                                    <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision_Servicio" ngModel="">
+                                    <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="{{Comision}}">
                                 </div>
                         </div>
                     </div>
@@ -132,30 +114,23 @@
                             <div class="col-md-11">
                                 <div class="form-group">
                                     <label>Adjunto</label>
-                                    <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel=""></textarea>
+                                    <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel="{{Adjunto}}"></textarea>
                                 </div>
                             </div>
                     </div>
-
-
                 <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" 
-                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarServicio(FormEditarServicio, ModalEditarServicio)"
-                        >Guardar</button>
-                    </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                (confirm)="GuardarServicio(FormEditarServicio, ModalEditarServicio)">Guardar</button>
+                        </div>
                 </div>
-
-
-
             </form>
         </div>        
     </app-modal-basic>
     
     <swal #deleteSwal
       title="Servicio eliminado"
-      text="Se ha Eliminado Correctamente la servicio"
+      text="Se ha Eliminado Correctamente el servicio"
       type="success"
       >
     </swal>
