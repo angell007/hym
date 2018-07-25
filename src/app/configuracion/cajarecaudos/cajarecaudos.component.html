@@ -28,8 +28,6 @@
                                     <td>{{cajarecaudo.Departamento}}</td>
                                     <td>{{cajarecaudo.Municipio }}</td>
                                     <td class="text-center">
-
-
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                             <i class="ti-search"></i>
                                         </button>
@@ -40,8 +38,6 @@
                                             (confirm)="EliminarCaja(cajarecaudo.Id_Caja_Recaudos)">
                                             <i class="ti-trash"></i>
                                         </button>
-
-
                                     </td>
                                 </tr>
                             </tbody>
@@ -52,9 +48,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
@@ -70,14 +63,12 @@
                         <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="">
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="">
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
@@ -111,23 +102,14 @@
                     </div>
                 </div>
             </div>
-
-
-
-
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCaja, ModalCaja)">Guardar</button>
                 </div>
             </div>
-
-
         </form>
     </div>
 </app-modal-basic>
-
-
-
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
@@ -142,12 +124,6 @@
                     <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                 </div>
             </div>
-
-
-
-
-
-
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -162,20 +138,14 @@
                         <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}">
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}">
                     </div>
                 </div>
-
             </div>
-
-
             <div class="row">
-
-
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
@@ -203,10 +173,6 @@
             </div>
 
 
-
-
-
-
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
@@ -216,6 +182,5 @@
         </form>
     </div>
 </app-modal-basic>
-
 <swal #deleteSwal title="Caja eliminada" text="Se ha Eliminado Correctamente la caja" type="success">
 </swal>

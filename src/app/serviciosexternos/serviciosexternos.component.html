@@ -24,8 +24,6 @@
                                     <td>{{servicioexterno.Comision}}</td>
                                     <td>{{servicioexterno.Adjunto}}</td>
                                     <td class="text-center">
-
-
                                     <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                         <i class="ti-search"></i>
                                     </button>
@@ -46,11 +44,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicio" #ModalServicio>
@@ -91,31 +84,18 @@
     </app-modal-basic>
 
 
-
-
-
-
-
-
-
-
     <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarServicio" #ModalEditarServicio>
         <div class="app-modal-header">
             <h4>Editar Servicio Externo</h4>
         </div>
         <div class="app-modal-body">
             <form #FormEditarServicio="ngForm">
-
-
-
                 <div class="col-md-4" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                     </div>
                 </div>
-
-
                 <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
@@ -138,19 +118,12 @@
                                 </div>
                             </div>
                     </div>
-
-
-
-
                 <div class="modal-footer no-border">
                         <div class="text-right">
                             <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                 (confirm)="GuardarServicio(FormEditarServicio, ModalEditarServicio)">Guardar</button>
                         </div>
                 </div>
-
-
-
             </form>
         </div>        
     </app-modal-basic>
