@@ -546,6 +546,53 @@
                                 </li>
                             </ul>
                             <div class="mrg-top-30" style="min-height: 470px;">
+                                <form #FormCorresponsal="ngForm">
+                                    <h4>Datos del corresponsal</h4>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Cajero Origen</label>
+                                            <input type="text" name="id" class="form-control" ngModel="{{IdCorresponsal}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" hidden>
+                                        <div class="form-group">
+                                            <label>Cajero Origen</label>
+                                            <input type="text" name="Identificacion_Funcionario" class="form-control" ngModel="{{IdentificacionFuncionario}}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Corresponsal</label>
+                                                <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="" (change)="ConsultarCorresponsal($event.target.value)">
+                                                    <option value="">seleccione un corresponsal</option>
+                                                    <option *ngFor="let CorresponsalBancario of CorresponsalesBancarios" value="{{CorresponsalBancario.Id_Corresponsal_Bancario}}">{{CorresponsalBancario.Nombre}}</option>
+                                                </select>                                            
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input name="Valor" type="text" placeholder="Comisión" class="form-control" ngModel="{{ValorCorresponsal}}">                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Detalles</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{DetalleCorresponsal}}">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarCorresponsal(FormCorresponsal)">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </form>
                             </div>
                         </div>
                     </div>

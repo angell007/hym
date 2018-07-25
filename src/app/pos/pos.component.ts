@@ -15,18 +15,22 @@ export class PosComponent implements OnInit {
   public Destinatarios : any[] = [];
   public Funcionarios : any[] = [];
   public ServiciosExternos : any[] = [];
+  public CorresponsalesBancarios : any[] = [];
   public Documentos : any[];
   public Cajas : any[];
   public Monedas : any[];
   public Recibe : any[];
+  public IdCorresponsal : number;
   public IdOficina : number;
   public IdCaja : number;
   public Estado : string;
+  public DetalleCorresponsal : string;  
   public Costo : number;
   public PrecioSugerido : number;
   public CantidadRecibida : number;
   public ValorTotal : number;
   public ValorEntrega : number;
+  public ValorCorresponsal : number;  
   public ComisionServicioExterno : number;
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
@@ -43,6 +47,9 @@ export class PosComponent implements OnInit {
   ngOnInit() {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
       this.Documentos= data;
+    });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Corresponsal_Bancario'}}).subscribe((data:any)=>{
+      this.CorresponsalesBancarios= data;
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Servicio_Externo'}}).subscribe((data:any)=>{
       this.ServiciosExternos= data;
@@ -177,6 +184,43 @@ export class PosComponent implements OnInit {
     }).subscribe((data:any)=>{
       this.ComisionServicioExterno = data.Comision;
     });
+  }
+
+  GuardarCorresponsal(formulario: NgForm)
+  {
+    let info = JSON.stringify(formulario.value);
+    console.log(info);    
+    let datos = new FormData();
+    datos.append("modulo",'Corresponsal_Diario');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/corresponsaldiario/guardar_corresponsal_diario.php',datos).subscribe((data:any)=>{   
+      //formulario.reset();      
+      this.ResetFormulario();
+      console.log("id_funcionario:");
+      console.log(this.IdentificacionFuncionario);      
+    });    
+  }
+
+  ConsultarCorresponsal(id)
+  {
+    console.log("mandar " + id);    
+    let datos = new FormData();
+    //let funcionario = this.IdentificacionFuncionario;
+    datos.append("Identificacion_Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    datos.append("Id_Corresponsal_Diario", id);
+    this.http.post(this.ruta+'php/corresponsaldiario/lista_corresponsales.php',datos).subscribe((data:any)=>{   
+      this.IdCorresponsal = data.Id_Corresponsal_Diario;
+      this.ValorCorresponsal = data.Valor;
+      this.DetalleCorresponsal = data.Detalle;
+      console.log(this.IdentificacionFuncionario);
+    });
+  }
+
+  ResetFormulario()
+  {
+    this.IdCorresponsal = null;
+    this.ValorCorresponsal = null;
+    this.DetalleCorresponsal = null;
   }
 
 }
