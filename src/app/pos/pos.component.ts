@@ -14,6 +14,7 @@ export class PosComponent implements OnInit {
   public IdentificacionFuncionario : any[];
   public Destinatarios : any[] = [];
   public Funcionarios : any[] = [];
+  public ServiciosExternos : any[] = [];
   public Documentos : any[];
   public Cajas : any[];
   public Monedas : any[];
@@ -26,6 +27,7 @@ export class PosComponent implements OnInit {
   public CantidadRecibida : number;
   public ValorTotal : number;
   public ValorEntrega : number;
+  public ComisionServicioExterno : number;
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
   constructor(private http : HttpClient) { }
@@ -41,6 +43,9 @@ export class PosComponent implements OnInit {
   ngOnInit() {
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
       this.Documentos= data;
+    });
+    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Servicio_Externo'}}).subscribe((data:any)=>{
+      this.ServiciosExternos= data;
     });
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Caja'}}).subscribe((data:any)=>{
       this.Cajas= data;
@@ -150,6 +155,27 @@ export class PosComponent implements OnInit {
     datos.append("datos",info);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
       formulario.reset();
+    });
+  }
+
+  GuardarServicio(formulario: NgForm)
+  {
+    let info = JSON.stringify(formulario.value);
+    console.log(info);    
+    let datos = new FormData();
+    datos.append("modulo",'Servicio');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
+      formulario.reset();
+    });
+  }
+
+  AsignarComisionServicioExterno(value)
+  {
+    this.http.get(this.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Servicio_Externo', id:value}
+    }).subscribe((data:any)=>{
+      this.ComisionServicioExterno = data.Comision;
     });
   }
 

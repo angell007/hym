@@ -563,6 +563,58 @@
                                 </li>
                             </ul>
                             <div class="mrg-top-30" style="min-height: 470px;"> 
+                                <form #FormServicio="ngForm">
+                                    <h4>Datos del servicio</h4>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Servicio</label>
+                                                <select name="Servicio_Externo" class="form-control" ngModel="" (change)="AsignarComisionServicioExterno($event.target.value)">
+                                                    <option value="">seleccione un servicio</option>
+                                                    <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                                </select>                                            
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Comisión</label>
+                                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Moneda</label>
+                                                <select name="Moneda" class="form-control" ngModel="">
+                                                    <option value="">seleccione una opción</option>
+                                                    <option *ngFor="let Moneda of Monedas" value="{{Moneda.Nombre}}">{{Moneda.Nombre}}</option>
+                                                </select> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input type="text" class="form-control" name="Valor" ngModel="">                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">                                        
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarServicio(FormServicio)">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </form>
                             </div>
                         </div>
                     </div>
