@@ -41,8 +41,8 @@ export class CajarecaudosComponent implements OnInit {
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormCaja.reset();
-      this.OcultarFormulario(this.ModalCaja);
-      this.OcultarFormulario(this.ModalEditarCaja);
+      //this.OcultarFormulario(this.ModalCaja);
+      //this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
 
@@ -62,7 +62,9 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-// MODIFICANDO
+
+
+
   GuardarCaja(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
@@ -72,7 +74,7 @@ export class CajarecaudosComponent implements OnInit {
     datos.append("modulo",'Caja_Recaudos');
     datos.append("datos",info);
 
-    this.OcultarFormulario(modal);
+    //this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
     this.ActualizarVista();
     formulario.reset();
@@ -81,49 +83,15 @@ export class CajarecaudosComponent implements OnInit {
 
   
   
-  EditarCaja(id, modal){
-    this.http.get(this.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Oficina', id:id}
-    }).subscribe((data:any)=>{
-      this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Direccion = data.Direccion;
-      this.Departamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
-      this.Telefono = data.Telefono;
-      this.Celular = data.Celular;
-      this.Correo = data.Correo;
-      this.Comision = data.Comision;
-      this.MinCompra = data.Min_Compra;
-      this.MaxCompra = data.Max_Compra;
-      this.MinVenta = data.Min_Venta;
-      this.MaxVenta = data.Max_Venta;
-      this.Valores = data.Valores;
-      modal.show();
-    });
-  }
-
- 
-  EliminarOficina(id){
-    let datos=new FormData();
-    datos.append("modulo", 'Oficina');
-    datos.append ("id",id);
-    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
-      this.deleteSwal.show();
-    })
-  }
-
-
-  
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
+      this.Municipio = Municipio;
     });
   }
 
-  OcultarFormulario(modal){
-    modal.hide();
-  }
+  
+
+
 
 }

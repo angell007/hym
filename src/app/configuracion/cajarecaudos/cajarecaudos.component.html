@@ -66,14 +66,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Nombre</label>
-                            <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre_Caja" ngModel="">
+                            <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="">
                         </div>
                     </div>
                     
                     <div class="col-md-5">
                             <div class="form-group">
                                 <label>Tipo</label>
-                                <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo_Caja" ngModel="">
+                                <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="">
                             </div>
                     </div>
                 </div>
@@ -103,12 +103,13 @@
 
 
 
-
                 <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCaja, ModalCaja)">Guardar</button>
-                    </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm" (click)="Caja(FormCaja, ModalCaja)">Guardar</button>
+                        </div>
                 </div>
+
+
             </form>
         </div>        
     </app-modal-basic>
@@ -179,20 +180,13 @@
 
 
 
-
-
-
-                
-
-
-
                 <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" 
-                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)"
-                        >Guardar</button>
-                    </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm" 
+                            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                            (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)"
+                            >Guardar</button>
+                        </div>
                 </div>
             </form>
         </div>        
