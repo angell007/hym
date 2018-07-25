@@ -38,13 +38,10 @@ export class CajarecaudosComponent implements OnInit {
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormCaja.reset();
-      this.OcultarFormulario(this.ModalCuenta);
-      this.OcultarFormulario(this.ModalEditarCuenta);
+      this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
-
-
-
 
   ActualizarVista()
   {
@@ -62,6 +59,7 @@ export class CajarecaudosComponent implements OnInit {
    * @param {*} Departamento
    * @memberof CajaRecaudosComponent
    */
+  /*
   Municipios_Departamento(Departamento){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
@@ -75,47 +73,7 @@ export class CajarecaudosComponent implements OnInit {
    * @param {NgForm} formulario
    * @memberof CajaRecaudosComponent
    */
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
+/*
   GuardarOficina(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
@@ -136,6 +94,7 @@ export class CajarecaudosComponent implements OnInit {
    * @param {*} modal
    * @memberof OficinasComponent
    */
+  /*
   EditarOficina(id, modal){
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Oficina', id:id}
@@ -164,6 +123,7 @@ export class CajarecaudosComponent implements OnInit {
    * @param {*} id
    * @memberof OficinasComponent
    */
+  /*
   EliminarOficina(id){
     let datos=new FormData();
     datos.append("modulo", 'Oficina');
@@ -182,28 +142,14 @@ export class CajarecaudosComponent implements OnInit {
    * @param {*} Municipio municipio que se asignara una vez se cargue la lista de municipios
    * @memberof OficinasComponent
    */
+  
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
-      this.Municipio = Municipio;
     });
   }
 
   OcultarFormulario(modal){
-    this.Identificacion = null;
-    this.Nombre = null;
-    this.Direccion = null;
-    this.Departamento = null;
-    this.Municipio = null;
-    this.Telefono = null;
-    this.Celular = null;
-    this.Correo = null;
-    this.Comision = null;
-    this.MinCompra = null;
-    this.MaxCompra = null;
-    this.MinVenta = null;
-    this.MaxVenta = null;
-    this.Valores = null;
     modal.hide();
   }
 

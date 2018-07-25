@@ -49,11 +49,12 @@ export class ServiciosexternosComponent implements OnInit {
     });
   }
 
+  
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormServicio.reset();
-      this.OcultarFormulario(this.ModalServicio);
-      this.OcultarFormulario(this.ModalEditarServicio);
+      //this.OcultarFormulario(this.ModalServicio);
+      //this.OcultarFormulario(this.ModalEditarServicio);
     }
   }
 
