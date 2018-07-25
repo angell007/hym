@@ -18,6 +18,8 @@ export class CajarecaudosComponent implements OnInit {
 
   public Identificacion : any[];
   public Nombre : any[];
+  public Username : any[];
+  public Password : any[];
   public Tipo : any[];
   public Departamento : any[];
   public Municipio : any[];
@@ -82,13 +84,71 @@ export class CajarecaudosComponent implements OnInit {
   }
 
   
+
+
+  EditarCaja(id, modal){
+    this.http.get(this.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Caja_Recaudos', id:id}
+    }).subscribe((data:any)=>{
   
+  console.log(id);
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Username = data.Username;
+      this.Password = data.Password;
+      
+
+      this.Tipo = data.Nombre;   //Corregir
+
+
+
+      this.Departamento = data.Id_Departamento;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      modal.show();
+    });
+  }
+
+
+
+
+
+
+  EliminarCaja(id){
+    console.log(id);  
+    let datos=new FormData();
+    datos.append("modulo", 'Caja_Recaudos');
+    datos.append ("id",id);
+    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+      this.ActualizarVista();
+      this.deleteSwal.show();
+    })
+  }
+  
+
+
+
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
       this.Municipio = Municipio;
     });
   }
+
+
+
+
+  OcultarFormulario(modal){
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Username = null;
+    this.Password = null;
+    this.Tipo = null;
+    this.Departamento = null;
+    this.Municipio = null;
+    modal.hide();
+  }
+
+
 
   
 
