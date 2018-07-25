@@ -43,8 +43,8 @@ export class CajarecaudosComponent implements OnInit {
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormCaja.reset();
-      //this.OcultarFormulario(this.ModalCaja);
-      //this.OcultarFormulario(this.ModalEditarCaja);
+      this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
 
@@ -76,7 +76,7 @@ export class CajarecaudosComponent implements OnInit {
     datos.append("modulo",'Caja_Recaudos');
     datos.append("datos",info);
 
-    //this.OcultarFormulario(modal);
+    this.OcultarFormulario(modal);
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
     this.ActualizarVista();
     formulario.reset();
@@ -96,12 +96,7 @@ export class CajarecaudosComponent implements OnInit {
       this.Nombre = data.Nombre;
       this.Username = data.Username;
       this.Password = data.Password;
-      
-
-      this.Tipo = data.Nombre;   //Corregir
-
-
-
+      this.Tipo = data.Tipo;
       this.Departamento = data.Id_Departamento;
       this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
       modal.show();
