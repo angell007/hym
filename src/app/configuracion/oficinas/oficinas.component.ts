@@ -36,6 +36,7 @@ export class OficinasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   readonly ruta = 'https://hym.corvuslab.co/';   
+  
   constructor(private http : HttpClient) { }  
   
   ngOnInit() {
@@ -81,7 +82,11 @@ export class OficinasComponent implements OnInit {
    * @param {NgForm} formulario
    * @memberof OficinasComponent
    */
-  GuardarOficina(formulario: NgForm, modal:any){
+  
+  
+  
+  
+   GuardarOficina(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     this.OcultarFormulario(modal);
