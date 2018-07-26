@@ -31,6 +31,7 @@ import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocume
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
 import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
 import { ComprasComponent } from './configuracion/compras/compras.component';
+import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 
 
 export const AppRoutes: Routes = [
@@ -137,6 +138,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'compras', component : CommonLayoutComponent,
         children:[{path : '', component : ComprasComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'informaciongiros', component : CommonLayoutComponent,
+        children:[{path : '', component : InformaciongirosComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
