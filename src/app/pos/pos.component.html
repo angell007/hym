@@ -564,7 +564,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Corresponsal</label>
-                                                <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="" (change)="ConsultarCorresponsal($event.target.value)">
+                                                <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="{{CorresponsalBancario}}" (change)="ConsultarCorresponsal($event.target.value)">
                                                     <option value="">seleccione un corresponsal</option>
                                                     <option *ngFor="let CorresponsalBancario of CorresponsalesBancarios" value="{{CorresponsalBancario.Id_Corresponsal_Bancario}}">{{CorresponsalBancario.Nombre}}</option>
                                                 </select>                                            

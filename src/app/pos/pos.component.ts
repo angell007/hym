@@ -31,6 +31,7 @@ export class PosComponent implements OnInit {
   public ValorTotal : number;
   public ValorEntrega : number;
   public ValorCorresponsal : number;  
+  public CorresponsalBancario : number;  
   public ComisionServicioExterno : number;
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
@@ -198,12 +199,13 @@ export class PosComponent implements OnInit {
       this.ResetFormulario();
       console.log("id_funcionario:");
       console.log(this.IdentificacionFuncionario);      
-    });    
+    });
   }
 
   ConsultarCorresponsal(id)
   {
-    console.log("mandar " + id);    
+    console.log("mandar " + id);   
+    this.CorresponsalBancario = id; 
     let datos = new FormData();
     //let funcionario = this.IdentificacionFuncionario;
     datos.append("Identificacion_Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
@@ -212,7 +214,7 @@ export class PosComponent implements OnInit {
       this.IdCorresponsal = data.Id_Corresponsal_Diario;
       this.ValorCorresponsal = data.Valor;
       this.DetalleCorresponsal = data.Detalle;
-      console.log(this.IdentificacionFuncionario);
+      console.log(data);
     });
   }
 
@@ -221,6 +223,7 @@ export class PosComponent implements OnInit {
     this.IdCorresponsal = null;
     this.ValorCorresponsal = null;
     this.DetalleCorresponsal = null;
+    this.CorresponsalBancario = null;
   }
 
 }
