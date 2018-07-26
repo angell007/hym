@@ -1,70 +1,13 @@
 <div class="container-fluid">
-    <!-- <div class="row">
-        <div class="col-md-3">
-            <div class="card bg-info">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">155</h1>
-                            <span class="text-white">Transferencias</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="ti-control-shuffle font-size-50 text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="page-title">
+         <h4 class="pull-left">Corresponsales Bancarios</h4>
+         <button class="pull-right btn btn-info" (click)="ModalCorresponsal.show()"><i class="ti-plus"></i> Agregar Nuevo Corresponsal Bancario</button>
         </div>
-        <div class="col-md-3">
-                <div class="card bg-success">
-                    <div class="card-block" style="padding:10px;">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h1 class="no-mrg-top font-size-30">135</h1>
-                                <span class="text-white">Realizadas</span>
-                            </div>
-                            <div class="col-md-5 text-center">
-                                <i class="ti-thumb-up font-size-50 text-white"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                    <div class="card bg-warning">
-                        <div class="card-block" style="padding:10px;">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <h1 class="no-mrg-top font-size-30">5</h1>
-                                    <span class="text-white">Devueltas</span>
-                                </div>
-                                <div class="col-md-5 text-center">
-                                    <i class="ti-thumb-down font-size-50 text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                        <div class="card bg-danger">
-                            <div class="card-block" style="padding:10px;">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h1 class="no-mrg-top font-size-30">15</h1>
-                                        <span class="text-white">Anuladas</span>
-                                    </div>
-                                    <div class="col-md-5 text-center">
-                                        <i class="ti-close font-size-50 text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    </div> -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="widget card">
-                <div class="card-block">
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget card">
+                    <div class="card-block">
                     <p>Corresponsales Bancarios en nuestro Sistema</p>
                     <div class="table-overflow">
                         <table class="table table-hover table-sm table-striped">
@@ -86,12 +29,12 @@
                                     <td class="text-center">
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                             <i class="ti-search"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
+                                          </button>
+                                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCorresponsal(corresponsal.Id_Corresponsal_Bancario, ModalEditarCorresponsal)">
                                             <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarTransferencia(oficina.Id_Oficina)">
+                                          </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Corresponsal, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="EliminarCorresponsal(corresponsal.Id_Corresponsal_Bancario)">
                                             <i class="ti-trash"></i>
                                         </button>
                                     </td>
@@ -104,3 +47,142 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCorresponsal" #ModalCorresponsal>
+        <div class="app-modal-header">
+            <h4>Nuevo Corresponsal Bancario</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormCorresponsal="ngForm">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Corresponsal</label>
+                            <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Cupo</label>
+                                <input type="text" placeholder="Cupo" class="form-control" name="Cupo" ngModel="">
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Departamento</label>
+                                <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                                    <option value="">Seleccione un Departamento</option>
+                                    <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Municipio</label>
+                                <select class="form-control" required name="Id_Municipio" ngModel="">
+                                    <option value="">Seleccione un Municipio</option>
+                                    <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer no-border">
+                    <div class="text-right">
+                        <button class="btn btn-primary btn-sm" (click)="GuardarCorresponsal(FormCorresponsal, ModalCorresponsal)">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </app-modal-basic>
+
+
+
+
+
+
+
+
+
+
+    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCorresponsal" #ModalEditarCorresponsal>
+        <div class="app-modal-header">
+            <h4>Editar Cuenta Bancaria</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormEditarCorresponsal="ngForm">
+                <div class="col-md-4" hidden>
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Corresponsal</label>
+                                <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                            </div>
+                            </div>
+                            <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Cupo</label>
+                                        <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                                    </div>
+                            </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Departamento</label>
+                                <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
+                                    <option value="">Seleccione un Departamento</option>
+                                    <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Municipio</label>
+                                <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
+                                    <option value="">Seleccione un Municipio</option>
+                                    <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+      
+                
+
+                
+                <div class="modal-footer no-border">
+                    <div class="text-right">
+                        <button class="btn btn-primary btn-sm" 
+                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCorresponsal(FormEditarCorresponsal, ModalEditarCorresponsal)"
+                        >Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </app-modal-basic>
+    
+    <swal #deleteSwal
+      title="Corresponsal eliminado"
+      text="Se ha Eliminado Correctamente el corresponsal"
+      type="success"
+      >
+    </swal>
