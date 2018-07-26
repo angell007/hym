@@ -34,12 +34,12 @@
                                       <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                           <i class="ti-search"></i>
                                       </button>
-                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)">
+                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarEgreso(Egreso.Id_Egreso, ModalEditarEgreso)">
                                           <i class="ti-pencil"></i>
                                       </button>
                                       <button class="btn btn-default btn-xs" type="button" style="margin:0;" 
-                                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                          (confirm)="EliminarTraslado(traslado.Id_Traslado)">
+                                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a eliminar esta egreso, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                          (confirm)="EliminarEgreso(Egreso.Id_Egreso)">
                                           <i class="ti-trash"></i>
                                       </button>
                                   </td>
@@ -116,3 +116,80 @@
     </form>
   </div>        
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarEgreso" #ModalEditarEgreso>
+    <div class="app-modal-header">
+      <h4>Editar Egreso</h4>
+    </div>
+    <div class="app-modal-body">
+      <form #FormEditarEgreso="ngForm">
+        <div class="col-md-4" hidden>
+            <div class="form-group">
+                <label>Identificación</label>
+                <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+            </div>
+        </div>
+        <div class="col-md-4" hidden>
+          <div class="form-group">
+            <label>Identificación</label>
+            <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Grupo</label>
+              <select class="form-control" required name="Id_Grupo" ngModel="{{IdGrupo}}" (change)="ListaTerceros($event.target.value)">
+                <option value="">Seleccione un grupo</option>
+                <option *ngFor="let Grupo of Grupos" value="{{Grupo.Id_Grupo}}">{{Grupo.Nombre}}</option>              
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Tercero</label>
+              <select class="form-control" required name="Id_Tercero" ngModel="{{IdTercero}}">
+                <option value="">Seleccione un tercero</option>
+                <option *ngFor="let Tercero of Terceros" value="{{Tercero.Id_Tercero}}">{{Tercero.Nombre}}</option>              
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Moneda</label>
+              <select class="form-control" required name="Moneda" ngModel="{{Moneda}}">
+                <option value="">Seleccione una moneda</option>
+                <option *ngFor="let Moneda of Monedas" value="{{Moneda.Nombre}}">{{Moneda.Nombre}}</option>              
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Valor</label>
+              <input type="text" name="Valor" ngModel="{{Valor}}" class="form-control" placeholder="Valor">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Detalles</label>
+                    <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer no-border">
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm" (click)="GuardarEgreso(FormEditarEgreso, ModalEditarEgreso)">Guardar</button>
+            </div>
+        </div>
+      </form>
+    </div>        
+  </app-modal-basic>
+
+<swal #deleteSwal
+  title="Traslado eliminado"
+  text="Se ha Eliminado Correctamente el traslado"
+  type="success"
+  >
+  </swal>
