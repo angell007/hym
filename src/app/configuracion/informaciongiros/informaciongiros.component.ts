@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InformaciongirosComponent implements OnInit {
 
+
+  public Giros : any[];
+
+  //variables de formulario
+
   constructor() { }
 
   ngOnInit() {
