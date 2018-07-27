@@ -69,6 +69,7 @@ import { FlujoefectivoComponent } from './indicadores/flujoefectivo/flujoefectiv
 import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobrar.component';
 import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
 import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
+import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -147,6 +148,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CuentascobrarComponent,
         CuentaspagarComponent,
         CuentastercerosComponent,
+        InformaciongirosComponent,
     ],
     exports:[
         ModalBasicComponent
