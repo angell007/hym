@@ -31,6 +31,12 @@ import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocume
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
 import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
 import { ComprasComponent } from './configuracion/compras/compras.component';
+import { EgresosComponent } from './egresos/egresos.component';
+import { BalancegeneralComponent } from './indicadores/balancegeneral/balancegeneral.component';
+import { FlujoefectivoComponent } from './indicadores/flujoefectivo/flujoefectivo.component';
+import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobrar.component';
+import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
+import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 
 
@@ -139,6 +145,30 @@ export const AppRoutes: Routes = [
         path : 'compras', component : CommonLayoutComponent,
         children:[{path : '', component : ComprasComponent, canActivate:[AuthGuard]}]
     },
+    { 
+        path : 'egresos', component : CommonLayoutComponent,
+        children:[{path : '', component : EgresosComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'balancegeneral', component : CommonLayoutComponent,
+        children:[{path : '', component : BalancegeneralComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'flujoefectivo', component : CommonLayoutComponent,
+        children:[{path : '', component : FlujoefectivoComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cuentascobrar', component : CommonLayoutComponent,
+        children:[{path : '', component : CuentascobrarComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cuentaspagar', component : CommonLayoutComponent,
+        children:[{path : '', component : CuentaspagarComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cuentasterceros', component : CommonLayoutComponent,
+        children:[{path : '', component : CuentastercerosComponent, canActivate:[AuthGuard]}]
+    },      
     { 
         path : 'informaciongiros', component : CommonLayoutComponent,
         children:[{path : '', component : InformaciongirosComponent, canActivate:[AuthGuard]}]
