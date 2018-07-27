@@ -37,6 +37,7 @@ import { FlujoefectivoComponent } from './indicadores/flujoefectivo/flujoefectiv
 import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobrar.component';
 import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
 import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
+import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 
 
 export const AppRoutes: Routes = [
@@ -167,6 +168,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'cuentasterceros', component : CommonLayoutComponent,
         children:[{path : '', component : CuentastercerosComponent, canActivate:[AuthGuard]}]
+    },      
+    { 
+        path : 'informaciongiros', component : CommonLayoutComponent,
+        children:[{path : '', component : InformaciongirosComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

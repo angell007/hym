@@ -1,0 +1,116 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Caja Recaudos</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+
+    <!--  CARD    -->
+    <div class="col-md-6">   <!-- ANCHO   -->
+      <div class="widget card" style="height:500px; max-height: 500px;">
+        <div class="card-block">
+          <h5 class="card-title">Remitente</h5>     <!--  TITULO    -->
+          <div class="pdd-horizon-1 pdd-vertical-5">
+             <!-- Side Nav START -->
+             <div [perfectScrollbar] class="overflow-y-auto relative" style="height: 381px">
+              <table class="table table-lg table-hover">             <!--  Tabla    -->
+                <thead>
+                  <tr>
+                    <th>Documento</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Telefono</th>
+                    <th>Celular</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let GiroRemitente of GirosRemitentes">
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroRemitente.Documento_Remitente}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroRemitente.Nombre}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroRemitente.Apellido}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroRemitente.Telefono}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroRemitente.Celular}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Side Nav END -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  CARD    -->
+    <div class="col-md-6">      <!-- ANCHO   -->
+      <div class="widget card" style="height:500px; max-height: 500px;">
+        <div class="card-block">
+          <h5 class="card-title">Destinatario</h5>      <!--  TITULO    -->
+          <div class="pdd-horizon-1 pdd-vertical-5">
+            <div [perfectScrollbar] class="overflow-y-auto relative" style="height: 381px">
+              <table class="table table-lg table-hover">          <!--  Tabla    -->
+                <thead>
+                  <tr>
+                      <th>Documento</th>
+                      <th>Nombre</th>
+                      <th>Apellido</th>
+                      <th>Telefono</th>
+                      <th>Celular</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let GiroDestinatario of GirosDestinatarios">
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroDestinatario.Documento_Destinatario}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroDestinatario.Nombre}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroDestinatario.Apellido}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroDestinatario.Telefono}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mrg-top-10">
+                        <span>{{GiroDestinatario.Celular}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
