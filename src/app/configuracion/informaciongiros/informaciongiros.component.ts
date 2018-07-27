@@ -12,6 +12,8 @@ export class InformaciongirosComponent implements OnInit {
   public GirosRemitentes : any[];
   public GirosDestinatarios : any[];
 
+  //listas
+
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
 
