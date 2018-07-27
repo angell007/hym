@@ -64,6 +64,11 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
 import { ComprasComponent } from './configuracion/compras/compras.component';
 import { EgresosComponent } from './egresos/egresos.component';
+import { BalancegeneralComponent } from './indicadores/balancegeneral/balancegeneral.component';
+import { FlujoefectivoComponent } from './indicadores/flujoefectivo/flujoefectivo.component';
+import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobrar.component';
+import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
+import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -137,6 +142,11 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CajarecaudosComponent,
         ComprasComponent,
         EgresosComponent,
+        BalancegeneralComponent,
+        FlujoefectivoComponent,
+        CuentascobrarComponent,
+        CuentaspagarComponent,
+        CuentastercerosComponent,
     ],
     exports:[
         ModalBasicComponent
