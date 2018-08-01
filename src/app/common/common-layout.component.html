@@ -63,6 +63,14 @@
                             </a>
                         </li>
                         <li clas="nav-item" routerLinkActive="active">
+                            <a href="" [routerLink]="['/egresos']">
+                                <span class="icon-holder">
+                                    <i class="ti-share"></i>
+                                </span>
+                                <span class="title">Egresos</span>
+                            </a>
+                        </li>
+                        <li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/giros']">
                                 <span class="icon-holder">
                                     <i class="ti-wallet"></i>
@@ -86,13 +94,34 @@
                                 <span class="title">Servicios Externos</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/indicadores']">
+
+                        <li class="nav-item dropdown" >
+                            <a class="dropdown-toggle" href="javascript:void(0);" >
                                 <span class="icon-holder">
                                     <i class="ti-bar-chart"></i>
                                 </span>
                                 <span class="title">Indicadores</span>
+                                <span class="arrow">
+                                    <i class="ti-angle-right"></i>
+                                </span>
                             </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="" [routerLink]="['/balancegeneral']" >Balance General</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/flujoefectivo']" >Flujo de efectivo</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/cuentascobrar']" >Cuentas por cobrar (Cartera)</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/cuentaspagar']" >Cuentas por pagar</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/cuentasterceros']" >Estado de cuentas terceros</a>
+                                </li>
+                            </ul>
                         </li>
 
                         <li class="nav-item dropdown" >
@@ -125,6 +154,9 @@
                                     <a href="" [routerLink]="['/destinatarios']">Destinatarios</a>
                                 </li>
                                 <li>
+                                    <a href="" [routerLink]="['/cajarecaudos']">Cajas Recaudos</a>
+                                </li>
+                                <li>
                                     <a href="" [routerLink]="['/perfiles']">Perfiles</a>
                                 </li>   
                                 <li>
@@ -141,6 +173,12 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/monedas']">Monedas</a>
+                                </li> 
+                                <li>
+                                    <a href="" [routerLink]="['/informaciongiros']">Informacion Giros</a>
+                                </li>                                 
+                                <li>
+                                    <a href="" [routerLink]="['/compras']">Compras</a>
                                 </li> 
                                 <li>
                                     <a href="" [routerLink]="['/proveedores']">Proveedores</a>

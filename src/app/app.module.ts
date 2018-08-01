@@ -61,6 +61,15 @@ import {NgxMaskModule} from 'ngx-mask'
 import { NgxCurrencyModule } from "ngx-currency";
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
+import { ComprasComponent } from './configuracion/compras/compras.component';
+import { EgresosComponent } from './egresos/egresos.component';
+import { BalancegeneralComponent } from './indicadores/balancegeneral/balancegeneral.component';
+import { FlujoefectivoComponent } from './indicadores/flujoefectivo/flujoefectivo.component';
+import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobrar.component';
+import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
+import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
+import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
  
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -131,6 +140,15 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         GruposComponent,
         TipodocumentoComponent,
         MonedasComponent,
+        CajarecaudosComponent,
+        ComprasComponent,
+        EgresosComponent,
+        BalancegeneralComponent,
+        FlujoefectivoComponent,
+        CuentascobrarComponent,
+        CuentaspagarComponent,
+        CuentastercerosComponent,
+        InformaciongirosComponent,
     ],
     exports:[
         ModalBasicComponent

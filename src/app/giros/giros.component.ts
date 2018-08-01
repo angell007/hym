@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-giros',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GirosComponent implements OnInit {
 
-  constructor() { }
+  readonly ruta = 'https://hym.corvuslab.co/'; 
+  public fecha = new Date(); 
+  public giros = [];
+  constructor(private http : HttpClient) { }
 
   ngOnInit() {
+    this.http.get(this.ruta+'php/giros/lista.php').subscribe((data:any)=>{
+      this.giros= data;
+    });
   }
 
 }

@@ -1,1 +1,136 @@
-<h2>Ops, there has been a problem connecting with local MySql, please check your connection information and if the systems have been launched</h2>
+<div class="container-fluid">
+    <div class="page-title">
+     <h4 class="pull-left">Servicios Externos</h4>
+     <button class="pull-right btn btn-info" (click)="ModalServicio.show()"><i class="ti-plus"></i> Agregar Nuevo Servicio Externo</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget card">
+                <div class="card-block">
+                    <p>Servicios Externos en nuestro Sistema</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Comision</th>
+                                    <th>Adjunto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let servicioexterno of serviciosexternos">
+                                    <td>{{servicioexterno.Nombre}}</td>
+                                    <td>{{servicioexterno.Comision}}</td>
+                                    <td>{{servicioexterno.Adjunto}}</td>
+                                    <td class="text-center">
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <i class="ti-search"></i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarServicio(servicioexterno.Id_Servicio_Externo, ModalEditarServicio)">
+                                        <i class="ti-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Servicio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="EliminarServicio(servicioexterno.Id_Servicio_Externo)">
+                                        <i class="ti-trash"></i>
+                                    </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicio" #ModalServicio>
+        <div class="app-modal-header">
+            <h4>Nuevo Servicio Externo</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormServicio="ngForm">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Comision</label>
+                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="">
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-11">
+                            <div class="form-group">
+                                <label>Adjunto</label>
+                                <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel=""></textarea>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer no-border">
+                    <div class="text-right">
+                        <button class="btn btn-primary btn-sm" (click)="GuardarServicio(FormServicio, ModalServicio)">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>        
+    </app-modal-basic>
+
+
+    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarServicio" #ModalEditarServicio>
+        <div class="app-modal-header">
+            <h4>Editar Servicio Externo</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormEditarServicio="ngForm">
+                <div class="col-md-4" hidden>
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Comision</label>
+                                    <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="{{Comision}}">
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                    <label>Adjunto</label>
+                                    <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel="{{Adjunto}}"></textarea>
+                                </div>
+                            </div>
+                    </div>
+                <div class="modal-footer no-border">
+                        <div class="text-right">
+                            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                (confirm)="GuardarServicio(FormEditarServicio, ModalEditarServicio)">Guardar</button>
+                        </div>
+                </div>
+            </form>
+        </div>        
+    </app-modal-basic>
+    
+    <swal #deleteSwal
+      title="Servicio eliminado"
+      text="Se ha Eliminado Correctamente el servicio"
+      type="success"
+      >
+    </swal>
