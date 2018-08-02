@@ -28,6 +28,7 @@ export class CommonLayoutComponent implements OnInit {
     public searchModel: any;
     public user : any;
     public changePasswordMessage: string;
+    public alertas : any[];
 
     @ViewChild('confirmSwal') confirmSwal:any;
     @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena:any;
@@ -62,6 +63,9 @@ export class CommonLayoutComponent implements OnInit {
 
     ngOnInit(){
         this.user = JSON.parse(localStorage.User);
+        this.http.get(this.globales.ruta+'php/sesion/alerta.php',{ params: { id: this.user.Identificacion_Funcionario}}).subscribe((data:any)=>{
+            this.alertas= data;
+        });
         if(this.user.Password==this.user.Username)
         {
           this.ModalCambiarContrasena.show(); 
