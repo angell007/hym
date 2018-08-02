@@ -154,10 +154,14 @@
                             <hr class="mrg-top-10 mrg-btm-10">
                             <h5>Destinatarios</h5>
                             <div class="row mrg-top-10">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Cédula</label>
-                                        <input name="Numero_Documento_Destino" type="text" placeholder="Identificación" class="form-control" ngModel="" required>
+                                        <label>Número Documento</label>
+                                        <input name="Numero_Documento_Destino" type="text" placeholder="Número Documento" class="form-control" ngModel="" autocomplete="off"
+                                         required list="browsers" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value)">
+                                        <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
+                                            <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
+                                        </datalist>
                                         <!--<input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios" />
                                             <ng-template>
                                             <input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios"
@@ -166,19 +170,16 @@
                                             </ng-template>-->
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Tipo Cuenta</label>
-                                        <select class="form-control" ng-model></select>
-                                    </div>
-                                </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Cuenta</label>
-                                        <input type="text" placeholder="Número de Cuenta" class="form-control" name="Numero_Cuenta_Destino" ngModel="">
+                                        <select type="text" placeholder="Número de Cuenta" class="form-control" name="Numero_Cuenta_Destino" ngModel="">
+                                            <option value="">Seleccione una cuenta</option>
+                                            <option *ngFor="let Cuenta of CuentasDestinatario" value="{{Cuenta.Numero_Cuenta}}">{{Cuenta.Numero_Cuenta}}</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valor</label>
                                         <input type="number" placeholder="Valor a Transferir" class="form-control" name="Valor_Transferencia" ngModel="">
@@ -191,13 +192,13 @@
                                 <div class="col-md-4">
                                     <div class="form-group text-center">
                                         <label>Moneda Recibida</label>
-                                        <select class="form-control" name="Moneda_Origen" ngModel="" (change)="CambiarTasa($event.target.selectedIndex)">
+                                        <select class="form-control" name="Moneda_Origen" ngModel="">
                                             <option value="">Seleccione una Moneda</option>
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Enviada" type="text" placeholder="Precio" class="form-control">
+                                        <input id="Cantidad_Enviada" type="text" autocomplete="off" placeholder="Precio" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -205,50 +206,41 @@
                                         <label>Tasa de Cambio</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" placeholder="Pesos" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}">
+                                        <input type="text" placeholder="Pesos" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group text-center">
                                         <label>Moneda de Transferencia</label>
-                                        <select class="form-control" name="Moneda_Destino" ngModel="">
+                                        <select class="form-control" name="Moneda_Destino" ngModel="" (change)="CambiarTasa($event.target.selectedIndex)">
                                             <option value="">Seleccione una Moneda</option>
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" type="text" placeholder="Precio" class="form-control">
+                                        <input id="Cantidad_Recibida" autocomplete="off" type="text" placeholder="Precio" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <hr class="mrg-top-10 mrg-btm-10">
                             <h5>Datos del Remitente</h5>
                             <div class="row mrg-top-20">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Tipo Doc.</label>
-                                        <select class="form-control" name="Tipo_Documento_Origen" ngModel="">
-                                            <option value="">Seleccione un Documento</option>
-                                            <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Número Documento</label>
-                                        <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel>
+                                        <input type="text" placeholder="Número Documento" autocomplete="off" class="form-control" name="Numero_Documento_Origen" ngModel>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" placeholder="Nombre Remitente" class="form-control" name="Persona_Envia" ngModel>
+                                        <input type="text" placeholder="Nombre Remitente" autocomplete="off" class="form-control" name="Persona_Envia" ngModel>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Teléfono</label>
-                                        <input type="text" placeholder="Teléfono Remitente" class="form-control" name="Telefono_Envia" ngModel>
+                                        <input type="text" placeholder="Teléfono Remitente" autocomplete="off" class="form-control" name="Telefono_Envia" ngModel>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +248,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel>
+                                        <textarea placeholder="Observaciones" class="form-control" autocomplete="off" name="Detalle" ngModel>
                                             </textarea>
                                     </div>
                                 </div>
@@ -633,3 +625,72 @@
         </div>
     </div>
 </div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
+        <div class="app-modal-header">
+            <h4>Nuevo Destinatario</h4>
+        </div>
+        <div class="app-modal-body" id="Destinatario">
+            <form #FormDestinatario="ngForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Identificación</label>
+                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detalles</label>
+                            <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel=""></textarea>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </form>
+            <h3>Cuentas Asociadas</h3>
+            <div id="ContainterCuentas">
+                <form #FormCuenta="ngForm" id="FormCuenta">                 
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>País</label>
+                                <select class="form-control" name="Id_Pais" ngModel="">
+                                    <option>Seleccione País</option>
+                                    <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Banco</label>
+                                <select class="form-control" name="Id_Banco" ngModel="">
+                                    <option>Seleccione Banco</option>
+                                    <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Numero de Cuenta</label>
+                                <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>                           
+            <div class="modal-footer no-border" id="guardar">
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Guardar</button>
+                </div>
+            </div>     
+        </div>    
+    </app-modal-basic>
