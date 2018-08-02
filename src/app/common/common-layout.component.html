@@ -419,3 +419,37 @@
          </div>
     </div>    
 </div>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>        
+    <div class="app-modal-header">
+        <h4>Cambiar contraseña</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCambiarContrasena="ngForm">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Escriba una nueva contraseña</label>
+                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
+                </div>
+            </div> 
+        </form>                
+    </div>       
+  </app-modal-basic>
+
+
+
+<swal #confirmSwal
+  title="Contraseña cambiada"
+  text= "Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
+  type="success"
+  (confirm)="salir()"
+  >
+  </swal>
