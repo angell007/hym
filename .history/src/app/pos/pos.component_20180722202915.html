@@ -1,0 +1,493 @@
+<div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <sticky [sticky-offset-top]="95">
+                        <a href="#cambios" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-calendar text-primary font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Cambios Efectivo</b>
+                                            <p class="no-mrg-btm ">Compras o Ventas</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                        <a href="#transferencias" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-control-shuffle text-primary font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Transferencias</b>
+                                            <p class="no-mrg-btm ">A cuentas Extrangeras</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                        <a href="#giros" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-wallet text-success font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Giros</b>
+                                            <p class="no-mrg-btm">Envío/Recepción Dinero</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                        <a href="#traslados" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-reload text-info font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Traslados</b>
+                                            <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                        <a href="#corresponsal" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-money text-warning font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Corresponsal Bancario</b>
+                                            <p class="no-mrg-btm">Saldo del día</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                        <a href="#servicios" scrollTo class="card mrg-btm-15 scroll-to">
+                            <div class="card-block padding-15">
+                                <ul class="list-unstyled list-info">
+                                    <li>
+                                        <span class="thumb-img pdd-top-10">
+                                                <i class="ti-truck text-danger font-size-30"></i>
+                                            </span>
+                                        <div class="info">
+                                            <b class="text-dark font-size-18">Servicios Externos</b>
+                                            <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </sticky>
+                </div>
+                <div class="col-md-8">
+                    <div class="card" id="cambios">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-calendar text-primary font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Cambios Efectivo</b>
+                                        <p class="no-mrg-btm ">Compras o Ventas</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Tipo de Transacción</label>
+                                            <select class="form-control">
+                                                <option>Cambio Ventanilla</option>
+                                                <option>Transferencia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Forma de Pago</label>
+                                            <select class="form-control">
+                                                <option>Efectivo</option>
+                                                <option>Credito</option>
+                                                <option>Consignacion</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Precio</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Precio" ngModel >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Pesos</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Pesos" ngModel >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Bolívares</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Bolivares" ngModel >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Recibido</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Cambio</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Cambio" readonly ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit"   class="btn btn-sm btn-info btn-block" >Realizar Cambio</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Tercero</label>
+                                                <select class="form-control">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Persona Entrega</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Teléfono</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Cambio" readonly ngModel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Pesos</label>
+                                                <input type="text" placeholder="Valor Pesos" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Bolivares</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Moneda</label>
+                                                <select class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Precio Venta</label>
+                                                <input type="text" placeholder="Precio Venta" class="form-control" name="Precio_Venta" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Costo Transferencia</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Costo_Transferencia" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Comisión</label>
+                                                <input type="text" placeholder="Comisión" class="form-control" name="Comision" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input type="text" placeholder="Valor" class="form-control" name="Valor" ngModel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Precio_Venta" ngModel>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-info btn-sm btn-block">Guardar Transferencia</button>
+                                        </div>
+                                    </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="transferencias">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-control-shuffle text-primary font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Transferencias</b>
+                                        <p class="no-mrg-btm ">A cuentas Extrangeras</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Tipo de Transacción</label>
+                                            <select class="form-control">
+                                                <option>Cambio Ventanilla</option>
+                                                <option>Transferencia</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Forma de Pago</label>
+                                            <select class="form-control">
+                                                <option>Efectivo</option>
+                                                <option>Credito</option>
+                                                <option>Consignacion</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Precio</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Precio" ngModel >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Pesos</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Pesos" ngModel >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Bolívares</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Bolivares" ngModel >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Recibido</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Cambio</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Cambio" readonly ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit"   class="btn btn-sm btn-info btn-block" >Realizar Cambio</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Tercero</label>
+                                                <select class="form-control">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Persona Entrega</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Teléfono</label>
+                                                <input type="text" placeholder="Pesos" class="form-control" name="Cambio" readonly ngModel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Pesos</label>
+                                                <input type="text" placeholder="Valor Pesos" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor Bolivares</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Moneda</label>
+                                                <select class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Precio Venta</label>
+                                                <input type="text" placeholder="Precio Venta" class="form-control" name="Precio_Venta" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Costo Transferencia</label>
+                                                <input type="text" placeholder="Precio" class="form-control" name="Costo_Transferencia" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Comisión</label>
+                                                <input type="text" placeholder="Comisión" class="form-control" name="Comision" ngModel>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input type="text" placeholder="Valor" class="form-control" name="Valor" ngModel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Precio_Venta" ngModel>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-info btn-sm btn-block">Guardar Transferencia</button>
+                                        </div>
+                                    </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="giros">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-wallet text-success font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Giros</b>
+                                        <p class="no-mrg-btm">Envío/Recepción Dinero</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="traslados">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-reload text-info font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Traslados</b>
+                                        <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="corresponsal">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-money text-warning font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Corresponsal Bancario</b>
+                                        <p class="no-mrg-btm">Saldo del día</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" id="servicios">
+                        <div class="card-block">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="thumb-img pdd-top-10">
+                                            <i class="ti-truck text-danger font-size-30"></i>
+                                        </span>
+                                    <div class="info">
+                                        <b class="text-dark font-size-22">Servicios Externos</b>
+                                        <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mrg-top-30" style="min-height: 470px;"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
