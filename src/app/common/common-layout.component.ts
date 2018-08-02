@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, Observable, Subscription } from 'rxjs/Rx';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
     selector: 'app-dashboard',
@@ -19,7 +21,7 @@ export class CommonLayoutComponent implements OnInit {
     public searchModel: any;
     public user : any;
 
-    constructor(private router : Router) {
+    constructor(private router : Router,private toastyService: ToastyService) {
         this.app = {
             layout: {
                 sidePanelOpen: false,
@@ -49,10 +51,28 @@ export class CommonLayoutComponent implements OnInit {
 
     ngOnInit(){
         this.user = JSON.parse(localStorage.User);
+        
     }
     salir(){
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
         this.router.navigate(["/login"]);
-      }
+    }
+    ngAfterViewInit() {
+        // this._toastyConfig.theme = 'bootstrap';
+        let toastOptions: ToastOptions = {
+            title: 'title',
+            msg: 'my message',
+            showClose: true,
+            timeout: 15000,
+            theme: "bootstrap",
+            onAdd: (toast: ToastData) => {
+                console.log('Toast ' + toast.id + ' has been added!');
+            },
+            onRemove: function (toast: ToastData) {
+                console.log('Toast ' + toast.id + ' has been removed!');
+            }
+        };
+        this.toastyService.error(toastOptions);
+    }
 }

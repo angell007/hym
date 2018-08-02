@@ -2,7 +2,7 @@
 /// <reference path="../shared/typings/ammaps/ammaps.d.ts" />
 
 import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
-import {DatatableComponent} from '@swimlane/ngx-datatable';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../shared/config/theme-constant';
 import { NgForm } from '@angular/forms';
@@ -34,7 +34,7 @@ export class AgentesexternosComponent implements OnInit {
   @ViewChild('FormAgenteAgregar') FormAgenteAgregar:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild(DatatableComponent) table: DatatableComponent;
-  constructor(private http : HttpClient,private colorConfig:ThemeConstants,private globales: Globales) {  
+  constructor(private http : HttpClient,private colorConfig:ThemeConstants, private globales: Globales) {  
   }
   themeColors = this.colorConfig.get().colors;
   //Line Chart Config

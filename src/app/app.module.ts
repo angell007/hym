@@ -13,6 +13,7 @@ import { ChartsModule } from 'ng2-charts';
 import { StickyModule } from 'ng2-sticky-kit';
 import { ScrollToModule } from 'ng2-scroll-to';
 import { NgxMasonryModule } from 'ngx-masonry';
+import { ToastyModule } from 'ng2-toasty';
 import 'd3';
 import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
@@ -25,6 +26,8 @@ import { AuthenticationLayoutComponent } from './common/authentication-layout.co
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Sidebar_Directives } from './shared/directives/side-nav.directive';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
+import { Globales } from './shared/globales/globales';
 
 // Routing Module
 import { AppRoutes } from './app.routing';
@@ -97,6 +100,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ChartsModule,
         NvD3Module,
         StickyModule,
+        ToastyModule,
         NgxMasonryModule,
         ScrollToModule.forRoot(),
         SweetAlert2Module.forRoot({
@@ -157,6 +161,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         FuncionarioService,
         AuthGuard,
         ThemeConstants,
+        Globales,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     ],
     bootstrap: [AppComponent]
