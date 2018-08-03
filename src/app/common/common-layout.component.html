@@ -241,7 +241,12 @@
                         <ul class="nav-right">
                             <li class="user-profile dropdown">           <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img class="profile-img img-fluid" src="assets/images/avatars/thumb-1.jpg">
+                                    <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">  
+                                            <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                                          </ng-template>    
+                                          <ng-template #loggedOut>   
+                                            <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
+                                    </ng-template>     
                                     <div class="user-info">
                                         <span class="name pdd-right-5">{{user.Nombres}} {{user.Apellidos}}</span>
                                         <i class="ti-angle-down font-size-10"></i>
@@ -275,11 +280,12 @@
                                     </li>
                                     <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
                                         <li *ngFor="let alerta of alertas">
-                                            <a href="">
-                                            <!--<img class="thumb-img" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="{{alerta.Nombre}}"> -->
+                                            <a href="">         
+                                                    <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
+                                                    <img class="thumb-img" *ngIf=" alerta.Imagen != '' "   src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
                                                 <div class="info">
                                                     <span class="title">
-                                                        <img class="thumb-img" src="assets/images/avatars/thumb-1.jpg" alt="">
+                                                        
                                                         <span class="font-size-14 text-semibold">{{alerta.Nombre}}</span> 
                                                         <span class="text-gray">{{alerta.Tipo}} <span class="text-dark">{{alerta.Detalles}}</span></span> 
                                                     </span>

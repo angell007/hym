@@ -66,11 +66,11 @@ export class CommonLayoutComponent implements OnInit {
         this.http.get(this.globales.ruta+'php/sesion/alerta.php',{ params: { id: this.user.Identificacion_Funcionario}}).subscribe((data:any)=>{
             this.alertas= data;
         });
+        
         if(this.user.Password==this.user.Username)
         {
           this.ModalCambiarContrasena.show(); 
-        }
-        
+        }        
     }
     salir(){
         localStorage.removeItem("Token");
