@@ -1,10 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Globales } from '../shared/globales/globales';
-import { Observable } from "rxjs";
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { bindCallback } from '../../../node_modules/rxjs/observable/bindCallback';
 
 @Component({
   selector: 'app-pos',
@@ -15,14 +12,22 @@ export class PosComponent implements OnInit {
 
   public IdentificacionFuncionario : any[];
   public Destinatarios : any[] = [];
+  public Remitentes : any[] = [];
   public Paises : any[] = [];
   public Bancos : any[] = [];
   public DestinatariosFiltrados : any[] = [];
   public RemitentesFiltrados : any[] = [];
+  public DatosRemitente : any[] = [];
   public Funcionarios : any[] = [];
   public ServiciosExternos : any[] = [];
   public CorresponsalesBancarios : any[] = [];
   public Documentos : any[];
+  public Cuentas : any[] = [{
+    Id_Destinatario:'',
+    Pais:'',
+    Banco: '',
+    Numero_Cuenta: ''
+   }];
   public CuentasDestinatario : any[];
   public Cajas : any[];
   public Monedas : any[];
@@ -43,7 +48,8 @@ export class PosComponent implements OnInit {
   public ComisionServicioExterno : number;
 
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
-  constructor(private http : HttpClient, private globales : Globales) { }
+  @ViewChild('FormCuenta') FormCuenta:any;
+  constructor(private http : HttpClient, private globales : Globales, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
@@ -67,12 +73,15 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
       this.Destinatarios= data;
     });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Transferencia_Remitente'}}).subscribe((data:any)=>{
+      this.Remitentes= data;
+      console.log(this.Remitentes); 
+    });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
-      this.Bancos= data;
-      console.log(this.Bancos);      
+      this.Bancos= data;           
     });
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 1;
@@ -113,7 +122,7 @@ export class PosComponent implements OnInit {
     else
     {       
       this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: destinatario}}).subscribe((data:any)=>{
-        console.log(data);      
+             
         if(data.length == 0)
         {
           this.CrearDestinatario(destinatario);
@@ -127,36 +136,91 @@ export class PosComponent implements OnInit {
   }
 
   AutoCompletarRemitente(modelo){ 
-    this.RemitentesFiltrados = this.Destinatarios.filter(number => number.Id_Destinatario.slice(0, modelo.length) == modelo);
+    console.log(modelo);
+    
+    this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
   }
 
-  LlenarValoresRemitente()
+  LlenarValoresRemitente(remitente)
+  {    
+    this.DatosRemitente = null; 
+    if(remitente.length < 5)
+    {
+      console.log("número de documento inconrrecto.");      
+    }
+    else
+    {       
+      this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: remitente}}).subscribe((data:any)=>{
+             
+        if(data.length == 0)
+        {
+          this.CrearRemitente(remitente);
+        }
+        else
+        {
+          this.DatosRemitente = data;
+        }        
+      });
+    }     
+  }
+
+  CrearRemitente(remitente)
   {
-    console.log("llenar valores remitente");    
+
   }
 
   CrearDestinatario(destinatario)
   {
-    let formulario = document.querySelector('#FormCuenta').cloneNode(true);
-    document.querySelector('#ContainterCuentas').appendChild(formulario);
-    //console.log(document.querySelector('#Destinatario'));    
-    //console.log(document.querySelector('#guardar'));             
     this.ModalDestinatario.show();
+    for(let i = 0; i < this.Cuentas.length; ++i)
+    {
+      this.Cuentas[i].Id_Destinatario = destinatario;
+    } 
     this.Cedula = destinatario;
   }
 
-  GuardarDestinatario(formulario:NgForm, modal)
+  AgregarFormCuenta()
   {
-    console.log(document.querySelector('#ContainterCuentas').children);    
-    /*let info = JSON.stringify(formulario.value);
+    let agregar:boolean = true;  
+    for(let i = 0; i < this.Cuentas.length; ++i)
+    {
+      if(this.Cuentas[i].Banco === "" || this.Cuentas[i].Pais === "" || this.Cuentas[i].Numero_Cuenta === "")
+      {
+        agregar = false;
+        return;
+      }
+    }
+    if(agregar)
+    {
+      this.Cuentas.push({
+        Id_Destinatario: this.Cedula,
+        Pais:'',
+        Banco: '',
+        Numero_Cuenta: ''
+      });
+      console.log(this.Cuentas);
+      
+    }    
+  }
+
+  GuardarDestinatario(formulario:NgForm)
+  { 
+    for(let i = 0; i < this.Cuentas.length; ++i)
+    {
+      this.Cuentas[i].Id_Destinatario = formulario.value.Id_Destinatario;
+    }
+    let info = JSON.stringify(formulario.value);
+    let cuentas = JSON.stringify(this.Cuentas);
     let datos = new FormData();
-    datos.append("modulo",'Destinatario');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    datos.append("cuentas",cuentas);
+    this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{ 
+      console.log(data);           
       this.ModalDestinatario.hide();
       this.LlenarValoresDestinatario(formulario.value.Id_Destinatario);
       formulario.reset();
-    }); */   
+      this.Cedula = null;
+    });
   }
 
   CambiarTasa(value)
@@ -286,5 +350,10 @@ export class PosComponent implements OnInit {
     this.DetalleCorresponsal = null;
     this.CorresponsalBancario = null;
   }
+
+   CrearForm(form:NgForm)
+   {
+      console.log(form);      
+   }
 
 }

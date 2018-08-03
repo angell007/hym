@@ -206,7 +206,7 @@
                                         <label>Tasa de Cambio</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" placeholder="Pesos" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}">
+                                        <input type="text" placeholder="Pesos" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -228,7 +228,11 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Número Documento</label>
-                                        <input type="text" placeholder="Número Documento" autocomplete="off" class="form-control" name="Numero_Documento_Origen" ngModel>
+                                        <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off"
+                                        required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value)">
+                                        <datalist id="remitentes" (select)="LlenarValoresRemitente($event.target.value)">
+                                            <option *ngFor="let Remitentente of RemitentesFiltrados" [value]="Remitentente.Id_Transferencia_Remitente">{{Remitentente.Nombre}}</option>
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -632,11 +636,11 @@
         </div>
         <div class="app-modal-body" id="Destinatario">
             <form #FormDestinatario="ngForm">
-                <div class="row">
+                <div class="row">                    
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="">
+                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="{{Cedula}}">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -657,39 +661,37 @@
                 <hr>
             </form>
             <h3>Cuentas Asociadas</h3>
-            <div id="ContainterCuentas">
-                <form #FormCuenta="ngForm" id="FormCuenta">                 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>País</label>
-                                <select class="form-control" name="Id_Pais" ngModel="">
-                                    <option>Seleccione País</option>
-                                    <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Banco</label>
-                                <select class="form-control" name="Id_Banco" ngModel="">
-                                    <option>Seleccione Banco</option>
-                                    <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label>Numero de Cuenta</label>
-                                <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="">
-                            </div>
+            <form #FormCuenta="ngForm">                  
+                <div class="row" *ngFor="let Cuenta of Cuentas; let i= index">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>País</label>
+                            <select class="form-control" (blur)="AgregarFormCuenta()" name="Pais{{i}}" [(ngModel)]="Cuenta.Pais">
+                                <option>Seleccione País</option>
+                                <option *ngFor="let Pais of Paises" [value]="Pais.Nombre">{{Pais.Nombre}}</option>
+                            </select>
                         </div>
                     </div>
-                </form>
-            </div>                           
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" (blur)="AgregarFormCuenta()" name="Banco{{i}}" [(ngModel)]="Cuenta.Banco">
+                                <option>Seleccione Banco</option>
+                                <option *ngFor="let Banco of Bancos" [value]="Banco.Nombre" >{{Banco.Nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Numero de Cuenta</label>
+                            <input type="number" (blur)="AgregarFormCuenta()" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta">
+                        </div>
+                    </div>
+                </div>
+            </form>
             <div class="modal-footer no-border" id="guardar">
                 <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Guardar</button>
+                    <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario)">Guardar</button>
                 </div>
             </div>     
         </div>    
