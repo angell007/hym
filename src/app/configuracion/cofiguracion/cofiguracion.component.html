@@ -8,49 +8,50 @@
                 <div class="card-block">
                     <div class="row">
                         <div class="col-md-12">
-                            <form>
+                            <form #FormEditarConfiguracion="ngForm">
                                 <div class="row">
+                                    <div class="col-md-4" hidden>
+                                            <div class="form-group">
+                                                <label>Identificación</label>
+                                                <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                                            </div>
+                                    </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Nombre Empresa</label>
-                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control">
+                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label>N.I.T.</label>
-                                            <input name="NIT" type="text" placeholder="" class="form-control">
+                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono</label>
-                                                <input name="Telefono" type="text" placeholder="" class="form-control">
+                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" required>
                                             </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Celular</label>
-                                                <input name="Celular" type="text" placeholder="" class="form-control">
+                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" required>
                                             </div>
                                     </div>
-
                                 </div>
-
-
-
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Dirección</label>
-                                            <input name="Direccion" type="text" placeholder="" class="form-control">
+                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Correo</label>
-                                                <input name="Correo" type="email" placeholder="" class="form-control">
+                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" required>
                                             </div>
                                     </div>
                                 </div>	
@@ -58,124 +59,132 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos Legales</label>
-                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control">
+                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Extras Legales</label>
-                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control">
+                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Llegadas tarde</label>
-                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control">
+                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" required>
                                         </div> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Salario Base</label>
-                                            <input name="Salario Base" type="text" placeholder="" class="form-control">
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Subsidio de transporte</label>
-                                            <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control">
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
                                             <label>Hora Inicio Dia</label>
-                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Fin Dia</label>
-                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" required>
                                         </div> 
+                                    </div>
+                                    <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Salario Base</label>
+                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" required>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Subsidio de transporte</label>
+                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" required>
+                                            </div> 
                                     </div>
                                 </div>	
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Diurna</label>
-                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Nocturna</label>
-                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Diurna</label>
-                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Nocturna</label>
-                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" required>
                                         </div> 
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Recargo Dominical Diurna</label>
-                                            <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control">
-                                        </div> 
+                                    <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Recargo Diurna</label>
+                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" required>
+                                            </div> 
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Recargo Dominical Nocturna</label>
-                                            <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control">
-                                        </div> 
+                                    <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Recargo Nocturno</label>
+                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" required>
+                                            </div> 
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Recargo Nocturno</label>
-                                            <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control">
-                                        </div> 
+                                    <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Recargo Dominical Diurna</label>
+                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" required>
+                                            </div> 
+                                    </div>
+                                    <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Recargo Dominical Nocturno</label>
+                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" required>
+                                            </div> 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora inicio de la jornada nocturna</label>
-                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora fin de la jornada nocturna</label>
-                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control">
+                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos</label>
-                                            <input name="Festivos" type="text" placeholder="" class="form-control">
+                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" required>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Libres</label>
-                                            <input name="Libres" type="text" placeholder="" class="form-control">
+                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" required>
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-xs-6">
-                                        <div class="text-right mrg-top-5">
-                                            <button type="submit" class="btn btn-primary">Actualizar Información</button>
+                                <div class="row">           <!-- Actualizar   -->
+                                    <div class="col-md-12 col-xs-6">
+                                        <div class="text-right mrg-top-5">                                            
+                                            <button type="submit" class="btn btn-primary"
+                                            [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                            (confirm)="GuardarConfiguracion(FormEditarConfiguracion)" >Actualizar Información</button>
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +194,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
+ 
+    <!-- SECCION NUEVA -->
     <h4>Monedas</h4>                    
     <mdb-accordion (multiple)="false" aria-multiselectable="false" #acordeon>
         <mdb-accordion-item  (collapsed)="false" *ngFor="let Moneda of Monedas" #acordeon>
