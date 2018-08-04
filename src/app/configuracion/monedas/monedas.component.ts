@@ -166,6 +166,10 @@ export class MonedasComponent implements OnInit {
     modal.hide();
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
+
   CambioCheckbox(value)
   {
     console.log(value);

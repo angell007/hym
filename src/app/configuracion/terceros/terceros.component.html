@@ -31,7 +31,7 @@
                   <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
                   <td style="vertical-align: middle;" class="text-center">{{tercero.Destacado}}</td>
                   <td style="vertical-align: middle;" class="text-center">
-                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTercero(tercero.Id_Tercero, ModalVerTercero)">
                             <i class="ti-search"></i>
                           </button>
                           <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalEditarTercero)">
@@ -188,6 +188,147 @@
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" (click)="GuardarTercero(FormTercero, ModalTercero)">Guardar</button>
+                </div>
+            </div>
+        </form>                
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTercero" #ModalVerTercero>
+    <div class="app-modal-header">
+        <h4>Ver Tercero</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerTercero="ngForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                    <label>Tipo de documento</label>
+                    <select class="form-control" required name="Id_Documento" ngModel="{{IdDocumento}}">
+                        <option value="">Seleccione tipo de documento</option>
+                        <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <input type="text" placeholder="Barrio del cliente" class="form-control" name="Barrio" ngModel="{{Barrio}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" placeholder="Teléfono del Cliente" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Celular</label>
+                        <input type="text" placeholder="Celular del Cliente" class="form-control" name="Celular" ngModel="{{Celular}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <input type="text" placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="{{Correo}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Cliente Desde</label>
+                        <input type="month" placeholder="Seleccione Fecha" class="form-control" name="Tercero_Desde" ngModel="{{TerceroDesde}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Destacado</label>
+                        <select class="form-control" name="Destacado" ngModel="{{Destacado}}">
+                            <option>No</option>
+                            <option>Si</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Otros Datos</h3>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Crédito</label>
+                        <select class="form-control" name="Credito" ngModel="{{Credito}}">
+                            <option>No</option>
+                            <option>Si</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Cupo</label>
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group">
+                        <label>Tipo Grupo</label>
+                        <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
+                            <option>Seleccione tipo de grupo</option>
+                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerTercero)" >Cerrar</button>
                 </div>
             </div>
         </form>                

@@ -25,7 +25,7 @@
                     <td>{{caja.Oficina}}</td>
                     <td>{{caja.Municipio}}</td>
                     <td class="text-center">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCaja(caja.Id_Caja, ModalVerCaja)">
                             <i class="ti-search"></i>
                         </button>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCaja(caja.Id_Caja)">
@@ -82,6 +82,58 @@
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCajaAgregar, ModalCaja)">Guardar</button>
+                </div>
+            </div> 
+        </form>                
+    </div>       
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCaja" #ModalVerCaja>        
+    <div class="app-modal-header">
+        <h4>Ver Caja</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerCaja="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label hidden>Identificación</label>
+                        <input name="Id_Paciente" hidden readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Oficina</label>
+                        <select class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
+                            <option value="">Seleccione una Oficina</option>
+                            <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles de Esta Caja" name="Detalle" ngModel="{{Detalles}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
                 </div>
             </div> 
         </form>                

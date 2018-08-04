@@ -26,6 +26,7 @@ export class CajarecaudosComponent implements OnInit {
 
 
   @ViewChild('ModalCaja') ModalCaja:any;
+  @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('FormCaja') FormCaja:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -43,6 +44,7 @@ export class CajarecaudosComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormCaja.reset();
       this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalVerCaja);
       this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
@@ -70,6 +72,21 @@ export class CajarecaudosComponent implements OnInit {
     this.ActualizarVista();
     formulario.reset();
     });    
+  }
+
+  VerCaja(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Caja', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Username = data.Username;
+      this.Password = data.Password;
+      this.Tipo = data.Tipo;
+      this.Departamento = data.Id_Departamento;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      modal.show();
+    });
   }
 
   EditarCaja(id, modal){
@@ -115,5 +132,9 @@ export class CajarecaudosComponent implements OnInit {
     this.Departamento = null;
     this.Municipio = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 }

@@ -27,7 +27,7 @@
                     <td>{{cuenta.Nombre_Titular}}</td>
                     <td class="text-right">{{cuenta.Saldo_Inicial}}</td>
                     <td class="text-center">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCuenta(cuenta.Id_Cuenta_Bancaria, ModalVerCuenta)">
                             <i class="ti-search"></i>
                         </button>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCuenta(cuenta.Id_Cuenta_Bancaria)">
@@ -115,6 +115,80 @@
         </form>
     </div>        
 </app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCuenta" #ModalVerCuenta>
+    <div class="app-modal-header">
+        <h4>Ver Cuenta Bancaria</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerCuenta="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Cuenta</label>
+                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="{{NumeroCuenta}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Banco</label>
+                        <select class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
+                            <option value="">Seleccione Banco</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Titular</label>
+                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{NombreTitular}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Identificación Titular</label>
+                        <input type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="{{IdentificacionTitular}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Saldo Inicial</label>
+                        <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="{{SaldoInicial}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Fecha Saldo Inicial</label>
+                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="{{FechaInicial}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCuenta)" >Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>        
+</app-modal-basic>
+
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCuenta" #ModalEditarCuenta>
     <div class="app-modal-header">
