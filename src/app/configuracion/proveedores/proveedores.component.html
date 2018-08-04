@@ -27,7 +27,7 @@
                     <td style="vertical-align: middle;">{{proveedor.Municipio}}</td>
                     <td style="vertical-align: middle;" class="text-center">{{proveedor.Confiable}}</td>
                     <td style="vertical-align: middle;" class="text-center">
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerProveedor(proveedor.Id_Proveedor, ModalVerProveedor)">
                               <i class="ti-search"></i>
                             </button>
                             <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarProveedor(proveedor.Id_Proveedor, ModalEditarProveedor)">
@@ -157,6 +157,115 @@
         </form>   
     </div>         
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerProveedor" #ModalVerProveedor>
+    <div class="app-modal-header">
+        <h4>Ver Proveedor</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerProveedor="ngForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Proveedor" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nombre Comercial</label>
+                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Razón Social</label>
+                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="{{RazonSocial}}">
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" name="Id_Departamento" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
+                            <option>Seleccione Departamento</option>
+                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" name="Id_Municipio" ngModel="{{IdMunicipio}}">
+                            <option>Seleccione Departamento</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Celular</label>
+                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="{{Celular}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="{{Correo}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Confiabilidad</label>
+                        <select class="form-control" name="Confiable" ngModel="{{Confiable}}">
+                            <option>Confiable</option>
+                            <option>No Confiable</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Régimen</label>
+                        <select class="form-control" name="Regimen" ngModel="{{Regimen}}">
+                            <option>Común</option>
+                            <option>Simplificado</option>
+                        </select>
+                    </div>
+                </div>
+            </div> 
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Proveedor" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerProveedor)" >Cerrar</button>
+                </div>
+            </div>
+        </form>   
+    </div>         
+</app-modal-basic>
+
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarProveedor" #ModalEditarProveedor>
     <div class="app-modal-header">

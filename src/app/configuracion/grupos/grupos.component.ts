@@ -19,6 +19,7 @@ export class GruposComponent implements OnInit {
   public Padre : any[];
 
   @ViewChild('ModalGrupo') ModalGrupo:any;
+  @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
   @ViewChild('ModalEditarGrupo') ModalEditarGrupo:any;
   @ViewChild('FormGrupo') FormGrupo:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -33,6 +34,7 @@ export class GruposComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormGrupo.reset();
       this.OcultarFormulario(this.ModalGrupo);
+      this.OcultarFormulario(this.ModalVerGrupo);
       this.OcultarFormulario(this.ModalEditarGrupo);
     }
   }
@@ -53,6 +55,18 @@ export class GruposComponent implements OnInit {
       formulario.reset();
       this.ActualizarVista();
     });  
+  }
+
+  VerGrupo(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Grupo', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Detalle = data.Detalle;
+      this.Padre = data.Padre;
+      modal.show();
+    });
   }
 
   EditarGrupo(id, modal){
@@ -86,4 +100,8 @@ export class GruposComponent implements OnInit {
     modal.hide();
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
+  
 }

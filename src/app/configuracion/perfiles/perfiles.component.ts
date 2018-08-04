@@ -77,4 +77,7 @@ export class PerfilesComponent implements OnInit {
     modal.hide();
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
 }

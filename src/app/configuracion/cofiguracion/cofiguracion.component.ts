@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { NgbAccordionModule } from '../../../../node_modules/@ng-bootstrap/ng-bootstrap';
@@ -16,6 +16,35 @@ export class CofiguracionComponent implements OnInit {
   public Monedas : any[];
   public Funcionarios : any[];
   public AtributosMonedas: { [email: string]: any; } = {};
+
+  //variables del formulario configuracion
+
+  public Identificacion : any;
+  public NombreEmpresa : any[];
+  public NIT : any[];
+  public Telefono : any[];
+  public Celular : any[];
+  public Direccion : any[];
+  public Correo : any[];
+  public FestivosLegales : any[];
+  public ExtrasLegales : any[];
+  public LlegadasTarde : any[];
+  public HoraInicioDia : any[];
+  public HoraFinDia : any[];
+  public SalarioBase : any[];
+  public SubsidioTransporte : any[];
+  public HoraExtraDiurna : any[];
+  public HoraExtraNocturna : any[];
+  public HoraExtraDomingoDiurna : any[];
+  public HoraExtraDomingoNocturna : any[];
+  public RecargoDiurna : any[];
+  public RecargoNocturno : any[];
+  public RecargoDominicalDiurna : any[];
+  public RecargoDominicalNocturna : any[];
+  public HoraInicioNoche : any[];
+  public HoraFinNoche : any[];
+  public Festivos : any[];
+  public Libres : any[];
 
   //variables del formulario moneda
   public MaxVentaEfectivo : any[];
@@ -61,6 +90,7 @@ export class CofiguracionComponent implements OnInit {
   public ComisionRecaudoFuncionario : any[];
 
   @ViewChild('acordeon') acordeon:NgbAccordionModule;
+  @ViewChild('FormEditarConfiguracion') FormEditarConfiguracion:any;
 
   constructor(private http : HttpClient, private globales:Globales) { }
 
@@ -105,6 +135,7 @@ export class CofiguracionComponent implements OnInit {
   }*/
 
   ngOnInit() {
+    //this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Configuracion'}}).subscribe((data:any)=>{
       this.configuracion= data;      
     });    
@@ -115,7 +146,70 @@ export class CofiguracionComponent implements OnInit {
       this.Monedas= data;   
       console.log(this.Monedas);                 
     });
+
+    this.EditarConfiguracion();
   }
+
+/*
+  ActualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/lista_cuentas.php').subscribe((data:any)=>{
+      this.configuracion= data;
+    });
+  }
+*/
+
+
+GuardarConfiguracion(formulario: NgForm){
+  let info = JSON.stringify(formulario.value);
+  let datos = new FormData();    
+  datos.append("modulo",'Configuracion');
+  datos.append("datos",info);
+  this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    //formulario.reset();    
+    //this.EditarConfiguracion();
+  });
+}
+
+
+EditarConfiguracion(){
+  this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+    params:{modulo:'Configuracion', id: '1'}
+  }).subscribe((data:any)=>{
+    console.log("Soy configuración:" );
+    console.log(data);
+    this.Identificacion = '1';
+    this.NombreEmpresa = data.Nombre_Empresa;
+    this.NIT = data.NIT;
+    this.Telefono = data.Telefono;
+    this.Celular = data.Celular;
+    this.Direccion = data.Direccion;
+    this.Correo = data.Correo;
+    this.FestivosLegales = data.Festivos_Legales;
+    this.ExtrasLegales = data.Extras_Legales;
+    this.LlegadasTarde = data.Llegadas_Tarde;
+    this.HoraInicioDia = data.Hora_Inicio_Dia;
+    this.HoraFinDia = data.Hora_Fin_Dia;
+    this.SalarioBase = data.Salario_Base;
+    this.SubsidioTransporte = data.Subsidio_Transporte;
+    this.HoraExtraDiurna = data.Hora_Extra_Diurna;
+    this.HoraExtraNocturna = data.Hora_Extra_Nocturna;
+    this.HoraExtraDomingoDiurna = data.Hora_Extra_Domingo_Diurna;
+    this.HoraExtraDomingoNocturna = data.Hora_Extra_Domingo_Nocturna;
+    this.RecargoDiurna = data.Recargo_Diurna;
+    this.RecargoNocturno = data.Recargo_Nocturno;
+    this.RecargoDominicalDiurna = data.Recargo_Dominical_Diurna;
+    this.RecargoDominicalNocturna = data.Recargo_Dominical_Nocturna;
+    this.HoraInicioNoche = data.Hora_Inicio_Noche;
+    this.HoraFinNoche = data.Hora_Fin_Noche;
+    this.Festivos = data.Festivos;
+    this.Libres = data.Libres;
+  });
+}
+
+
+
+
 
   GuardarMoneda(formularios: NgForm[]){
     for (var i = 0; i < formularios.length; i++) {  

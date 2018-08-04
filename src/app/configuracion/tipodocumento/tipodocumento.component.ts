@@ -17,9 +17,11 @@ export class TipodocumentoComponent implements OnInit {
   public Nombre : any[];
   public Codigo : any[];
 
-  @ViewChild('deleteSwal') deleteSwal:any;
+
   @ViewChild('ModalDocumento') ModalDocumento:any;
+  @ViewChild('ModalVerDocumento') ModalVerDocumento:any;
   @ViewChild('ModalEditarDocumento') ModalEditarDocumento:any;
+  @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormDocumento') FormDocumento:any;
 
   constructor(private http : HttpClient, private globales: Globales) { }
@@ -32,6 +34,7 @@ export class TipodocumentoComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormDocumento.reset();
       this.OcultarFormulario(this.ModalDocumento);
+      this.OcultarFormulario(this.ModalVerDocumento);
       this.OcultarFormulario(this.ModalEditarDocumento);
     }
   }
@@ -52,6 +55,17 @@ export class TipodocumentoComponent implements OnInit {
       formulario.reset();
       this.ActualizarVista();
     });  
+  }
+
+  VerDocumento(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Tipo_Documento', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Codigo = data.Codigo;
+      modal.show();
+    });
   }
 
   EditarDocumento(id, modal){
@@ -81,6 +95,10 @@ export class TipodocumentoComponent implements OnInit {
     this.Nombre = null;
     this.Codigo = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }

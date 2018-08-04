@@ -129,4 +129,8 @@ export class ProveedoresComponent implements OnInit {
     });
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
+
 }

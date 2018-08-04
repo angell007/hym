@@ -29,7 +29,7 @@
                   <td style="vertical-align: middle;">{{grupo.Detalle}}</td>
                   <td style="vertical-align: middle;" class="text-center">{{grupo.Nombre_Padre}}</td>
                   <td style="vertical-align: middle;" class="text-center">
-                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerGrupo(grupo.Id_Grupo, ModalVerGrupo)">
                             <i class="ti-search"></i>
                           </button>
                           <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGrupo(grupo.Id_Grupo, ModalEditarGrupo)">
@@ -90,6 +90,52 @@
       </form>                
   </div>       
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerGrupo" #ModalVerGrupo>        
+    <div class="app-modal-header">
+        <h4>Ver grupo</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerGrupo="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Padre</label>
+                        <select class="form-control" required name="Padre" ngModel="{{Padre}}">
+                            <option value="">Seleccione un padre</option>
+                            <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerGrupo)" >Cerrar</button>
+                </div>
+            </div> 
+        </form>                
+    </div>       
+  </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarGrupo" #ModalEditarGrupo>        
   <div class="app-modal-header">
