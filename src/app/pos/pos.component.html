@@ -129,6 +129,36 @@
                     <div class="mrg-top-10" style="min-height: 470px;">
                         <form #FormTransferencia="ngForm">
                             <div class="row">
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Identificación funcionario</label>
+                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Identificación funcionario</label>
+                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Id_Oficina" ngModel="{{IdOficina}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Identificación funcionario</label>
+                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Id_Caja" ngModel="{{IdCaja}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Identificación funcionario</label>
+                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Estado" ngModel="{{Estado}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" hidden>
+                                    <div class="form-group">
+                                        <label>Identificación funcionario</label>
+                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Costo_Transferencia" ngModel="{{Costo}}">
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <label>Forma de Pago</label>
                                     <select class="form-control" name="Forma_Pago" ng-init="'Efectivo'" ngModel="Forma_Pago">
@@ -146,46 +176,46 @@
                                 </div>
                                 <div class="col-md-6" *ngIf="Recibe==='Cliente'">
                                     <label>Seleccione Cliente</label>
-                                    <select class="form-control">
+                                    <select class="form-control" name="Id_Tercero" ngModel="">
                                         <option value=""></option>
+                                        <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                     </select>
                                 </div>
                             </div>
                             <hr class="mrg-top-10 mrg-btm-10">
-                            <h5>Destinatarios</h5>
-                            <div class="row mrg-top-10">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Número Documento</label>
-                                        <input name="Numero_Documento_Destino" type="text" placeholder="Número Documento" class="form-control" ngModel="" autocomplete="off"
-                                         required list="browsers" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value)">
-                                        <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
-                                            <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
-                                        </datalist>
-                                        <!--<input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios" />
-                                            <ng-template>
-                                            <input type="text" name="destinatario" id="Destinatario" class="form-control form-control-sm f-9" [(ngModel)]="Destinatarios"
-                                                [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" 
-                                            />
-                                            </ng-template>-->
+                            <div *ngIf="Recibe==='Transferencia'">
+                                <h5>Destinatarios</h5>
+                                <div *ngFor="let Envio of Envios; let i= index">                                    
+                                    <div class="row mrg-top-10">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Número Documento</label>
+                                                <input name="Numero_Documento_Destino{{i}}" type="text" placeholder="Número Documento" class="form-control" [(ngModel)]="Envio.Numero_Documento_Destino" autocomplete="off"
+                                                    required list="browsers" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value)">
+                                                <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
+                                                    <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Cuenta</label>
+                                                <select type="text" placeholder="Número de Cuenta" (blur)="NuevoDestinatario()" class="form-control" name="Numero_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Numero_Cuenta_Destino">
+                                                    <option value="">Seleccione una cuenta</option>
+                                                    <option *ngFor="let Cuenta of CuentasDestinatario" value="{{Cuenta.Numero_Cuenta}}">{{Cuenta.Numero_Cuenta}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input type="number" placeholder="Valor a Transferir" (blur)="NuevoDestinatario()" class="form-control" name="Valor_Transferencia{{i}}" [(ngModel)]="Envio.Valor_Transferencia">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Cuenta</label>
-                                        <select type="text" placeholder="Número de Cuenta" class="form-control" name="Numero_Cuenta_Destino" ngModel="">
-                                            <option value="">Seleccione una cuenta</option>
-                                            <option *ngFor="let Cuenta of CuentasDestinatario" value="{{Cuenta.Numero_Cuenta}}">{{Cuenta.Numero_Cuenta}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Valor</label>
-                                        <input type="number" placeholder="Valor a Transferir" class="form-control" name="Valor_Transferencia" ngModel="">
-                                    </div>
-                                </div>
+                                </div>                                
                             </div>
+                            
                             <hr class="mrg-top-10 mrg-btm-10">
                             <h5>Datos del Cambio</h5>
                             <div class="row mrg-top-20">
@@ -198,7 +228,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Enviada" type="text" autocomplete="off" placeholder="Precio" class="form-control">
+                                        <input id="Cantidad_Enviada" type="number" autocomplete="off" placeholder="Precio" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -218,7 +248,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" autocomplete="off" type="text" placeholder="Precio" class="form-control">
+                                        <input id="Cantidad_Recibida" autocomplete="off" type="number" placeholder="Precio" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -238,13 +268,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" placeholder="Nombre Remitente" autocomplete="off" class="form-control" name="Persona_Envia" ngModel>
+                                        <input type="text" placeholder="Nombre Remitente" readonly autocomplete="off" class="form-control" name="Persona_Envia" ngModel="{{DatosRemitente.Nombre}}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Teléfono</label>
-                                        <input type="text" placeholder="Teléfono Remitente" autocomplete="off" class="form-control" name="Telefono_Envia" ngModel>
+                                        <input type="text" placeholder="Teléfono Remitente" readonly autocomplete="off" class="form-control" name="Telefono_Envia" ngModel="{{DatosRemitente.Telefono}}">
                                     </div>
                                 </div>
                             </div>
@@ -257,9 +287,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mrg-top-20">
+                            <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
                                 <div class="col-md-12">
                                     <button class="btn btn-info btn-sm btn-block" (click)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia</button>
+                                </div>
+                            </div>
+                            <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
+                                <div class="col-md-12">
+                                    <button class="btn btn-info btn-sm btn-block" (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento</button>
                                 </div>
                             </div>
                         </form>
@@ -692,6 +727,44 @@
             <div class="modal-footer no-border" id="guardar">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario)">Guardar</button>
+                </div>
+            </div>     
+        </div>    
+    </app-modal-basic>
+
+    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
+        <div class="app-modal-header">
+            <h4>Nuevo Remitente</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormRemitente="ngForm">
+                <div class="row">                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Identificación</label>
+                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </form>            
+            <div class="modal-footer no-border" id="guardar">
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" (click)="GuardarRemitente(FormRemitente)">Guardar</button>
                 </div>
             </div>     
         </div>    

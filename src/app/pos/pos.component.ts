@@ -15,6 +15,7 @@ export class PosComponent implements OnInit {
   public Remitentes : any[] = [];
   public Paises : any[] = [];
   public Bancos : any[] = [];
+  public Clientes : any[] = [];
   public DestinatariosFiltrados : any[] = [];
   public RemitentesFiltrados : any[] = [];
   public DatosRemitente : any[] = [];
@@ -28,16 +29,22 @@ export class PosComponent implements OnInit {
     Banco: '',
     Numero_Cuenta: ''
    }];
+   public Envios : any[] = [{
+    Numero_Documento_Destino:'',
+    Numero_Cuenta_Destino:'',
+    Valor_Transferencia: ''
+   }];
   public CuentasDestinatario : any[];
   public Cajas : any[];
   public Monedas : any[];
-  public Recibe : any[];
+  public Recibe : any = "Transferencia";
   public IdCorresponsal : number;
   public IdOficina : number;
   public IdCaja : number;
   public Estado : string;
   public DetalleCorresponsal : string;  
   public Cedula : any[];  
+  public IdRemitente : any[];  
   public Costo : number;
   public PrecioSugerido : number;
   public CantidadRecibida : number;
@@ -48,7 +55,7 @@ export class PosComponent implements OnInit {
   public ComisionServicioExterno : number;
 
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
-  @ViewChild('FormCuenta') FormCuenta:any;
+  @ViewChild('ModalRemitente') ModalRemitente:any;
   constructor(private http : HttpClient, private globales : Globales, private renderer: Renderer2) { }
 
   ngOnInit() {
@@ -80,6 +87,9 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
     });
+    this.http.get(this.globales.ruta+'php/pos/lista_clientes.php',{ params: { modulo: 'Tercero'}}).subscribe((data:any)=>{
+      this.Clientes= data;
+    });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;           
     });
@@ -92,24 +102,42 @@ export class PosComponent implements OnInit {
 
   GuardarTransferencia(formulario: NgForm)
   {
+    console.log(formulario.value);    
+    let info = JSON.stringify(formulario.value);
+    let destinatarios = JSON.stringify(this.Envios);
+    let datos = new FormData();
+    datos.append("datos",info);
+    datos.append("envios",destinatarios);
+    this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
+      formulario.reset();
+      console.log(data);      
+    });
+  }
+
+  GuardarMovimiento(formulario: NgForm)
+  {
+    console.log(formulario.value);    
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    datos.append("modulo",'Transferencia');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{   
+    this.http.post(this.globales.ruta+'php/pos/movimiento.php',datos).subscribe((data:any)=>{   
       formulario.reset();
+      console.log(data);      
     });
   }
 
   AutoCompletarDestinatario(modelo){ 
-    if(modelo.length > 0)
+    if(modelo)
     {
-      this.DestinatariosFiltrados = this.Destinatarios.filter(number => number.Id_Destinatario.slice(0, modelo.length) == modelo);
-    }
-    else
-    {
-      this.DestinatariosFiltrados = null;
-    }
+      if(modelo.length > 0)
+      {
+        this.DestinatariosFiltrados = this.Destinatarios.filter(number => number.Id_Destinatario.slice(0, modelo.length) == modelo);
+      }
+      else
+      {
+        this.DestinatariosFiltrados = null;
+      }
+    }    
   }
 
   LlenarValoresDestinatario(destinatario)
@@ -135,23 +163,51 @@ export class PosComponent implements OnInit {
     }    
   }
 
-  AutoCompletarRemitente(modelo){ 
-    console.log(modelo);
-    
-    this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
+  NuevoDestinatario()
+  {
+    let agregar:boolean = true;  
+    for(let i = 0; i < this.Envios.length; ++i)
+    {
+      if(this.Envios[i].Numero_Documento_Destino === "" || this.Envios[i].Numero_Cuenta_Destino === "" || this.Envios[i].Valor_Transferencia === "")
+      {
+        agregar = false;
+        return;
+      }
+    }
+    if(agregar)
+    {
+      this.Envios.push({
+        Numero_Documento_Destino:'',
+        Numero_Cuenta_Destino:'',
+        Valor_Transferencia: ''
+       });      
+    }    
+  }
+
+  AutoCompletarRemitente(modelo){    
+    if(modelo)
+    {
+      if(modelo.length > 0)
+      {
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
+      }
+      else
+      {
+        this.RemitentesFiltrados = null;
+      }  
+    }  
   }
 
   LlenarValoresRemitente(remitente)
   {    
-    this.DatosRemitente = null; 
+    this.DatosRemitente = []; 
     if(remitente.length < 5)
     {
       console.log("número de documento inconrrecto.");      
     }
     else
     {       
-      this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: remitente}}).subscribe((data:any)=>{
-             
+      this.http.get(this.globales.ruta+'php/genericos/detalle.php',{ params: {modulo: 'Transferencia_Remitente', id: remitente}}).subscribe((data:any)=>{                     
         if(data.length == 0)
         {
           this.CrearRemitente(remitente);
@@ -161,12 +217,13 @@ export class PosComponent implements OnInit {
           this.DatosRemitente = data;
         }        
       });
-    }     
+    }
   }
 
   CrearRemitente(remitente)
   {
-
+    this.ModalRemitente.show();
+    this.IdRemitente = remitente;
   }
 
   CrearDestinatario(destinatario)
@@ -197,9 +254,7 @@ export class PosComponent implements OnInit {
         Pais:'',
         Banco: '',
         Numero_Cuenta: ''
-      });
-      console.log(this.Cuentas);
-      
+      });      
     }    
   }
 
@@ -220,6 +275,20 @@ export class PosComponent implements OnInit {
       this.LlenarValoresDestinatario(formulario.value.Id_Destinatario);
       formulario.reset();
       this.Cedula = null;
+    });
+  }
+
+  GuardarRemitente(formulario:NgForm)
+  { 
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo","Transferencia_Remitente");
+    datos.append("datos",info);
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{ 
+      console.log(data);
+      this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
+      this.ModalRemitente.hide();
+      formulario.reset();
     });
   }
 
