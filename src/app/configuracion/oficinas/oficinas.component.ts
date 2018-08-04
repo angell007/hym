@@ -33,6 +33,7 @@ export class OficinasComponent implements OnInit {
   public Valores : any[];
 
   @ViewChild('ModalOficina') ModalOficina:any;
+  @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
@@ -50,6 +51,7 @@ export class OficinasComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormOficinaAgregar.reset();
       this.OcultarFormulario(this.ModalOficina);
+      this.OcultarFormulario(this.ModalVerOficina);
       this.OcultarFormulario(this.ModalEditarOficina);
     }
   }
@@ -94,6 +96,32 @@ export class OficinasComponent implements OnInit {
       formulario.reset();
     });    
   }
+
+
+
+  VerOficina(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Oficina', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Direccion = data.Direccion;
+      this.Departamento = data.Id_Departamento;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio); 
+      this.Telefono = data.Telefono;
+      this.Celular = data.Celular;
+      this.Correo = data.Correo;
+      this.Comision = data.Comision;
+      this.MinCompra = data.Min_Compra;
+      this.MaxCompra = data.Max_Compra;
+      this.MinVenta = data.Min_Venta;
+      this.MaxVenta = data.Max_Venta;
+      this.Valores = data.Valores;
+      modal.show();
+    });
+  }
+
+
 
   /**
    *
@@ -172,6 +200,10 @@ export class OficinasComponent implements OnInit {
     this.MaxVenta = null;
     this.Valores = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }
