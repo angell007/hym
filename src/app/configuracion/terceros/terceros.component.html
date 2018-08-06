@@ -203,81 +203,78 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                    <label>Tipo de documento</label>
-                    <select class="form-control" required name="Id_Documento" ngModel="{{IdDocumento}}">
-                        <option value="">Seleccione tipo de documento</option>
+            <strong><label>Tipo de documento: </label></strong>
+                    <label class="form-control" required name="Id_Documento" ngModel="{{IdDocumento}}">
                         <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
-                    </select>
+                    </label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                <strong><label>Identificación: </label></strong>
+                        <label>{{Identificacion}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                <strong><label>Nombre: </label></strong>
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                <strong><label>Dirección: </label></strong>
+                        <label>{{Direccion}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
-                            <option value="">Seleccione un Departamento</option>
+                <strong><label>Departamento: </label></strong>
+                        <label class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
-                            <option value="">Seleccione un Municipio</option>
+                <strong><label>Municipio: </label></strong>
+                        <label class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del cliente" class="form-control" name="Barrio" ngModel="{{Barrio}}">
+                <strong><label>Barrio: </label></strong>
+                        <label>{{Barrio}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Cliente" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                <strong><label>Teléfono: </label></strong>
+                        <label>{{Telefono}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Celular</label>
-                        <input type="text" placeholder="Celular del Cliente" class="form-control" name="Celular" ngModel="{{Celular}}">
+                <strong><label>Celular: </label></strong>
+                        <label>{{Celular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Correo</label>
-                        <input type="text" placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="{{Correo}}">
+                <strong><label>Correo: </label></strong>
+                        <label>{{Correo}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Cliente Desde</label>
-                        <input type="month" placeholder="Seleccione Fecha" class="form-control" name="Tercero_Desde" ngModel="{{TerceroDesde}}">
+                <strong><label>Cliente Desde: </label></strong>
+                        <label>{{TerceroDesde}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -296,33 +293,32 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
-                        <select class="form-control" name="Credito" ngModel="{{Credito}}">
+                        <label class="form-control" name="Credito" ngModel="{{Credito}}">
                             <option>No</option>
                             <option>Si</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                <strong><label>Cupo</label></strong>
+                        <label>{{Cupo}}</label>
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
-                        <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
-                            <option>Seleccione tipo de grupo</option>
+                <strong><label>Tipo Grupo</label></strong>
+                        <label class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
                             <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                <strong><label>Detalles</label></strong>
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>

@@ -19,6 +19,7 @@ export class CajasComponent implements OnInit {
   public Detalles : any[];
 
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
+  @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -26,9 +27,9 @@ export class CajasComponent implements OnInit {
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
-    this.ActializarVista();
+    this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Oficina'}}).subscribe((data:any)=>{
-      this.Oficinas= data;
+    this.Oficinas= data;
     });
   }
 
@@ -36,16 +37,19 @@ export class CajasComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormCajaAgregar.reset();
       this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalVerCaja);
       this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
 
-  ActializarVista()
+  ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
       this.cajas= data;
     });
   }
+
+
 
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
@@ -62,7 +66,20 @@ export class CajasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       formulario.reset();
       this.OcultarFormulario(modal);
-      this.ActializarVista();     
+      this.ActualizarVista();     
+    });
+  }
+
+
+  VerCaja(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Caja', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Oficina = data.Id_Oficina;
+      this.Detalles = data.Detalle;
+      modal.show();
     });
   }
 
@@ -77,7 +94,7 @@ export class CajasComponent implements OnInit {
     datos.append("modulo", 'Caja');
     datos.append ("id",id);
     this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-    this.ActializarVista();
+    this.ActualizarVista();
       this.deleteSwal.show();
     })     
   }
@@ -107,6 +124,10 @@ export class CajasComponent implements OnInit {
     this.Oficina = null;
     this.Detalles = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }

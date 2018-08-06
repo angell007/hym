@@ -42,6 +42,7 @@ export class MonedasComponent implements OnInit {
   public Identificacion : any[];
 
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('ModalVerMoneda') ModalVerMoneda:any;
   @ViewChild('ModalEditarMoneda') ModalEditarMoneda:any;
   @ViewChild('ModalMoneda') ModalMoneda:any;
   @ViewChild('FormMoneda') FormMoneda:any;
@@ -64,6 +65,7 @@ export class MonedasComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormMoneda.reset();
       this.OcultarFormulario(this.ModalMoneda);
+      this.OcultarFormulario(this.ModalVerMoneda);
       this.OcultarFormulario(this.ModalEditarMoneda);
     }
   }
@@ -87,6 +89,41 @@ export class MonedasComponent implements OnInit {
       //console.log(data);      
       formulario.reset();
       this.ActualizarVista();
+    });
+  }
+
+
+  VerMoneda(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Moneda', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Codigo = data.Codigo;
+      this.Orden = data.Orden;
+      this.MaxVentaEfectivo = data.Max_Venta_Efectivo;
+      this.MinVentaEfectivo = data.Min_Venta_Efectivo;
+      this.MaxVentaCuenta = data.Max_Venta_Cuenta;
+      this.MinVentaCuenta = data.Min_Venta_Cuenta;
+      this.SugeridoVenta = data.Sugerido_Venta;
+      this.SugeridoCompra = data.Sugerido_Compra;
+      this.PrecioVentanilla = data.Precio_Ventanilla;
+      this.MaxCompra = data.Max_Compra;
+      this.MinCompra = data.Min_Compra;
+      this.MinNoCobro = data.Min_No_Cobro;
+      this.RedondeoPesosEfectivo = data.Redondeo_Pesos_Efectivo;
+      this.RedondeoPesosCuenta = data.Redondeo_Pesos_Cuenta;
+      this.ComisionEfectivo = data.Comision_Efectivo;
+      this.PagarComisionDesde = data.Pagar_Comision_Desde;
+      this.ComisionRecaudo = data.Comision_Recaudo;
+      this.Cambio = data.Cambio;
+      this.Giro = data.Giro;
+      this.Traslado = data.Traslado;
+      this.CorresponsalBancario = data.Corresponsal_Bancario;
+      this.ServicioExterno = data.Servicio_Externo;
+      this.Gasto = data.Gasto;
+      this.Transferencia = data.Transferencia;
+      modal.show();
     });
   }
 
@@ -176,5 +213,7 @@ export class MonedasComponent implements OnInit {
     value.checked = true;
     console.log("cambio checkbox");    
   }
+
+  
 
 }

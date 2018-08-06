@@ -103,8 +103,8 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                <strong><label>Nombre: </label></strong>
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -115,19 +115,18 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Oficina</label>
-                        <select class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
-                            <option value="">Seleccione una Oficina</option>
+                <strong><label>Oficina: </label></strong>
+                        <label class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Esta Caja" name="Detalle" ngModel="{{Detalles}}"></textarea>
+                <strong><label>Detalles: </label></strong>
+                    <label>{{Detalles}}</label>
                     </div>
                 </div>
             </div>
