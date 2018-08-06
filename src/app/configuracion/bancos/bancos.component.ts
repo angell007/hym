@@ -20,6 +20,7 @@ export class BancosComponent implements OnInit {
   public Detalle : any[];
 
   @ViewChild('ModalBanco') ModalBanco:any;
+  @ViewChild('ModalVerBanco') ModalVerBanco:any;
   @ViewChild('ModalEditarBanco') ModalEditarBanco:any;
   @ViewChild('FormBanco') FormBanco:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -37,6 +38,7 @@ export class BancosComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormBanco.reset();
       this.OcultarFormulario(this.ModalBanco);
+      this.OcultarFormulario(this.ModalVerBanco);
       this.OcultarFormulario(this.ModalEditarBanco);
     }
   }
@@ -57,6 +59,19 @@ export class BancosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+    });
+  }
+
+  VerBanco(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Banco', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Pais = data.Id_Pais;
+      this.Identificador = data.Identificador;
+      this.Detalle = data.Detalle;
+      modal.show();
     });
   }
 
@@ -93,4 +108,7 @@ export class BancosComponent implements OnInit {
     modal.hide();
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
 }

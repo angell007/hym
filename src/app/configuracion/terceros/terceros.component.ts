@@ -149,4 +149,8 @@ export class TercerosComponent implements OnInit {
     });
   }
 
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
+  }
+
 }

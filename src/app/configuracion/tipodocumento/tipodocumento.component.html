@@ -27,7 +27,7 @@
                   <td style="vertical-align: middle;">{{tipoDocumento.Nombre}}</td>
                   <td style="vertical-align: middle;">{{tipoDocumento.Codigo}}</td>
                   <td style="vertical-align: middle;" class="text-center">
-                          <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDocumento(tipoDocumento.Id_Tipo_Documento, ModalVerDocumento)">
                             <i class="ti-search"></i>
                           </button>
                           <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDocumento(tipoDocumento.Id_Tipo_Documento, ModalEditarDocumento)">
@@ -77,6 +77,41 @@
       </form>                
   </div>       
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDocumento" #ModalVerDocumento>        
+    <div class="app-modal-header">
+        <h4>Ver Documento</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerDocumento="ngForm">
+            <div class="col-md-4" hidden>
+              <div class="form-group">
+                  <label>Identificación</label>
+                  <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Código</label>
+                        <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="{{Codigo}}">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerOficina)" >Cerrar</button>
+                </div>
+            </div> 
+        </form>                
+    </div>       
+  </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDocumento" #ModalEditarDocumento>        
   <div class="app-modal-header">

@@ -239,9 +239,14 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="user-profile dropdown">
+                            <li class="user-profile dropdown">           <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img class="profile-img img-fluid" src="assets/images/user.jpg">
+                                    <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">  
+                                            <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                                          </ng-template>    
+                                          <ng-template #loggedOut>   
+                                            <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
+                                    </ng-template>     
                                     <div class="user-info">
                                         <span class="name pdd-right-5">{{user.Nombres}} {{user.Apellidos}}</span>
                                         <i class="ti-angle-down font-size-10"></i>
@@ -263,7 +268,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="notifications dropdown">
+                            <li class="notifications dropdown">     <!-- NOTIFICACIONES -->
                                 <span class="counter">2</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="ti-bell"></i>
@@ -274,19 +279,21 @@
                                         <span>Notificationes</span>
                                     </li>
                                     <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
-                                        <!-- <li>
-                                            <a href="">
-                                                <img class="thumb-img" src="assets/images/avatars/thumb-5.jpg" alt="">
+                                        <li *ngFor="let alerta of alertas">
+                                            <a href="">         
+                                                    <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
+                                                    <img class="thumb-img" *ngIf=" alerta.Imagen != '' "   src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
                                                 <div class="info">
                                                     <span class="title">
-                                                        <span class="font-size-14 text-semibold">Jennifer Watkins</span> 
-                                                        <span class="text-gray">commented on your <span class="text-dark">post</span></span> 
+                                                        
+                                                        <span class="font-size-14 text-semibold">{{alerta.Nombre}}</span> 
+                                                        <span class="text-gray">{{alerta.Tipo}} <span class="text-dark">{{alerta.Detalles}}</span></span> 
                                                     </span>
-                                                    <span class="sub-title">5 mins ago</span>
+                                                    <span class="sub-title">{{alerta.Fecha}}</span>
                                                 </div>
                                             </a>
                                         </li>
-                                        <li>
+                                        <!--<li>
                                             <a href="">
                                                 <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
                                                 <div class="info">
@@ -419,3 +426,61 @@
          </div>
     </div>    
 </div>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>        
+    <div class="app-modal-header">
+        <h4>Cambiar contraseña</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCambiarContrasena="ngForm">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Escriba una nueva contraseña</label>
+                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
+                </div>
+            </div> 
+        </form>                
+    </div>       
+  </app-modal-basic>
+
+
+
+<swal #confirmSwal
+  title="Contraseña cambiada"
+  text= "Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
+  type="success"
+  (confirm)="salir()"
+  >
+  </swal>
+
+
+
+
+
+
+
+
+
+
+
+  <!--
+                      <li *ngFor="let alerta of alertas">
+                  <div class="media">
+                    <img class="d-flex align-self-center img-radius" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="{{alerta.Nombre}}">
+                    <div class="media-body">
+                      <h5 class="notification-user">{{alerta.Nombre}}</h5>
+                      <p class="notification-msg">{{alerta.Detalles}}</p>
+                      <span class="notification-time">{{alerta.Fecha}}</span>
+                    </div>
+                  </div>
+                </li>
+
+            -->

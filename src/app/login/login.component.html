@@ -10,6 +10,9 @@
                       <div *ngIf="Error" class="alert alert-danger">
                           <strong>ERROR</strong> {{this.Mensaje}}
                      </div>
+                     <div *ngIf="Exito" class="alert alert-success">
+                          <strong>EXITOSO</strong> {{this.Mensaje}}
+                    </div>    
                     <div class="card">
                       <div class="card-body">
                         <div class="pdd-horizon-30 pdd-vertical-30">
@@ -25,13 +28,16 @@
                             <div class="form-group">
                               <input type="password" class="form-control" name="Password" placeholder="Contraseña" #Password ngModel required>
                             </div>
-                            <div class="pull-right">
-                              <a href="#">Recuperar Contraseña</a>
-                            </div>
+                            <div class="pull-right">        <!-- Inicio   --> 
+                              <a class="text-right f-w-600 text-inverse"
+                              [swal]="{ type : 'question', title:'Restablecer Contraseña', text: 'Por favor ingrese su número de Identificación, de esa manera restableceremos su contraseña', input: 'number', showCancelButton : true , confirmButtonText : 'Restablecer Contraseña', cancelButtonText : 'Cancelar' }" 
+                              (confirm)="saveIdentificacion($event)">
+                               Recupera Contraseña</a>
+                            </div>     <!-- Fin   --> 
                             <div class="pull-left mrg-top-20 text-right">
                               <button type="submit" class="btn btn-info" [disabled]="!FormLogin.valid" >Iniciar Sesión</button>
                             </div>
-                          </form>
+                          </form> 
                         </div>
                       </div>
                     </div>
@@ -44,3 +50,5 @@
       </div>
     </div>
   </div>  
+
+  <swal #confirmacionSwal title="" text="" type=""></swal>

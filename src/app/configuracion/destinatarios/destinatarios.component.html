@@ -30,10 +30,10 @@
                       </li>
                     </td>
                     <td style="vertical-align: middle;" class="text-center">
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
                               <i class="ti-search"></i>
                             </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario)">
+                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario, ModalEditarDestinatario)">
                               <i class="ti-pencil"></i>
                             </button>
                             <button class="btn btn-default btn-xs" type="button" style="margin:0;"
@@ -116,6 +116,75 @@
             <div class="modal-footer no-border">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Guardar</button>
+                </div>
+            </div>
+        </form>        
+    </div>    
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDestinatario" #ModalVerDestinatario>
+    <div class="app-modal-header">
+        <h4>Editar Destinatario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerDestinatario="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Cuentas Asociadas</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>País</label>
+                        <select class="form-control" name="Id_Pais" ngModel="{{IdPais}}">
+                            <option>Seleccione País</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Banco</label>
+                        <select class="form-control" name="Id_Banco" ngModel="{{IdBanco}}">
+                            <option>Seleccione Banco</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Numero de Cuenta</label>
+                        <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="{{Cuentas}}">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <label>&nbsp;</label>
+                    <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerDestinatario)" >Cerrar</button>
                 </div>
             </div>
         </form>        

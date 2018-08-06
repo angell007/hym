@@ -21,7 +21,7 @@
                   <tr *ngFor="let perfil of perfiles">
                     <td>{{perfil.Nombre}}</td>
                     <td class="text-center">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerPerfil(perfil.Id_Perfil, ModalVerPerfil)">
                             <i class="ti-search"></i>
                         </button>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarPerfil(perfil.Id_Perfil)">
@@ -308,6 +308,277 @@
         </form>    
     </div>        
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerPerfil" #ModalVerPerfil>
+    <div class="app-modal-header">
+        <h4>Ver Perfil de Privilegios</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerPerfil="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <input type="text" placeholder="Detalles del Perfil" class="form-control" name="Detalle" ngModel="{{Detalle}}">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h4>Privilegios</h4>
+            <div class="row">
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Transferencias</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Traslados</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;">
+                    <div class="form-group">
+                        <label>Cajas/Pos</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Giros</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Corresponsales Bancarios</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;">
+                    <div class="form-group">
+                        <label>Servicios Externos</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Configuración</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;border-right: 0;">
+                    <div class="form-group">
+                        <label>Indicadores Gráficos</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center" style="border: 1px dotted #c5c5c5;">
+                    <div class="form-group">
+                        <label>Reportes</label>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Ver</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Editar</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="checkbox checkbox-inline checkbox-primary">
+                                    <input type="checkbox" >
+                                    <label for="form-4-1">Eliminar</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerPerfil)" >Cerrar</button>
+                </div>
+            </div>
+        </form>    
+    </div>        
+</app-modal-basic>
+
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarPerfil" #ModalEditarPerfil>
     <div class="app-modal-header">

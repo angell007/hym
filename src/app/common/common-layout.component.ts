@@ -1,7 +1,14 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import {Component, Directive, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Observable, Subscription } from 'rxjs/Rx';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { NgForm } from '../../../node_modules/@angular/forms';
+import { Globales } from '../shared/globales/globales';
+import { HttpClient } from '@angular/common/http';
+
+
+
+
 
 @Component({
     selector: 'app-dashboard',
@@ -20,8 +27,13 @@ export class CommonLayoutComponent implements OnInit {
     public searchActived : any;
     public searchModel: any;
     public user : any;
+    public changePasswordMessage: string;
+    public alertas : any[];
 
-    constructor(private router : Router,private toastyService: ToastyService) {
+    @ViewChild('confirmSwal') confirmSwal:any;
+    @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena:any;
+
+    constructor(private router : Router, private http : HttpClient, private globales: Globales, private toastyService: ToastyService) {
         this.app = {
             layout: {
                 sidePanelOpen: false,
@@ -51,7 +63,14 @@ export class CommonLayoutComponent implements OnInit {
 
     ngOnInit(){
         this.user = JSON.parse(localStorage.User);
+        this.http.get(this.globales.ruta+'php/sesion/alerta.php',{ params: { id: this.user.Identificacion_Funcionario}}).subscribe((data:any)=>{
+            this.alertas= data;
+        });
         
+        if(this.user.Password==this.user.Username)
+        {
+          this.ModalCambiarContrasena.show(); 
+        }        
     }
     salir(){
         localStorage.removeItem("Token");
@@ -73,6 +92,34 @@ export class CommonLayoutComponent implements OnInit {
                 console.log('Toast ' + toast.id + ' has been removed!');
             }
         };
-        this.toastyService.error(toastOptions);
+        this.toastyService.error(toastOptions);  
     }
+
+
+
+    CambiarContrasena(formulario:NgForm)
+    {
+      console.log(formulario.value);    
+      let datos = new FormData();
+      datos.append("clave", formulario.value.clave);
+      datos.append("user", this.user.Identificacion_Funcionario);
+      this.http.post(this.globales.ruta+'php/funcionarios/cambia_clave.php',datos).subscribe((data:any)=>{          
+        this.changePasswordMessage = data.Mensaje;
+        console.log(this.changePasswordMessage);  
+        formulario.reset();
+        this.ModalCambiarContrasena.hide();
+        this.confirmSwal.show();
+      }); 
+      
+    }
+
+
+
+
+
+
+
+
+
+
 }

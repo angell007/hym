@@ -28,7 +28,7 @@
                                     <td>{{cajarecaudo.Departamento}}</td>
                                     <td>{{cajarecaudo.Municipio }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCaja(cajarecaudo.Id_Caja_Recaudos, ModalVerCaja)">
                                             <i class="ti-search"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCaja(cajarecaudo.Id_Caja_Recaudos, ModalEditarCaja)">
@@ -112,6 +112,77 @@
 </app-modal-basic>
 
 
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCaja" #ModalVerCaja>
+    <div class="app-modal-header">
+        <h4>Ver Caja Recaudo</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerCaja="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="{{Tipo}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
     <div class="app-modal-header">
         <h4>Editar Caja Recaudo</h4>
@@ -182,5 +253,6 @@
         </form>
     </div>
 </app-modal-basic>
+
 <swal #deleteSwal title="Caja eliminada" text="Se ha Eliminado Correctamente la caja" type="success">
 </swal>
