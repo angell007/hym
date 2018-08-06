@@ -27,9 +27,9 @@ export class CajasComponent implements OnInit {
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
-    this.ActializarVista();
+    this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Oficina'}}).subscribe((data:any)=>{
-      this.Oficinas= data;
+    this.Oficinas= data;
     });
   }
 
@@ -42,12 +42,14 @@ export class CajasComponent implements OnInit {
     }
   }
 
-  ActializarVista()
+  ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
       this.cajas= data;
     });
   }
+
+
 
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
@@ -64,7 +66,7 @@ export class CajasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       formulario.reset();
       this.OcultarFormulario(modal);
-      this.ActializarVista();     
+      this.ActualizarVista();     
     });
   }
 
@@ -92,7 +94,7 @@ export class CajasComponent implements OnInit {
     datos.append("modulo", 'Caja');
     datos.append ("id",id);
     this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-    this.ActializarVista();
+    this.ActualizarVista();
       this.deleteSwal.show();
     })     
   }

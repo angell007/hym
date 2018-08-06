@@ -68,7 +68,7 @@ export class CuentasbancariasComponent implements OnInit {
 
   VerCuenta(id, modal){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Oficina', id:id}
+      params:{modulo:'Cuenta_Bancaria', id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.NumeroCuenta = data.Numero_Cuenta;
