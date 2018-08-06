@@ -43,11 +43,14 @@ export class PosComponent implements OnInit {
   public IdCaja : number;
   public Estado : string;
   public DetalleCorresponsal : string;  
+  public MonedaTransferencia : any;
+  public MonedaRecibida : any;
   public Cedula : any[];  
   public IdRemitente : any[];  
   public Costo : number;
   public PrecioSugerido : number;
   public CantidadRecibida : number;
+  public CantidadTransferida : number;
   public ValorTotal : number;
   public ValorEntrega : number;
   public ValorCorresponsal : number;  
@@ -56,6 +59,8 @@ export class PosComponent implements OnInit {
 
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
   @ViewChild('ModalRemitente') ModalRemitente:any;
+  @ViewChild('warnSwal') warnSwal:any;
+  @ViewChild('warnTotalSwal') warnTotalSwal:any;
   constructor(private http : HttpClient, private globales : Globales, private renderer: Renderer2) { }
 
   ngOnInit() {
@@ -73,6 +78,9 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
       this.Monedas= data;
+      this.CambiarTasa(this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")+1);  
+      this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
+      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
       this.Funcionarios= data;
@@ -82,7 +90,6 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Transferencia_Remitente'}}).subscribe((data:any)=>{
       this.Remitentes= data;
-      console.log(this.Remitentes); 
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
@@ -108,10 +115,10 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("datos",info);
     datos.append("envios",destinatarios);
-    this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
+    /*this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
       formulario.reset();
       console.log(data);      
-    });
+    });*/
   }
 
   GuardarMovimiento(formulario: NgForm)
@@ -140,11 +147,30 @@ export class PosComponent implements OnInit {
     }    
   }
 
+  AutoCompletarCuenta(modelo){ 
+    if(modelo)
+    {
+      if(modelo.length > 0)
+      {
+        this.CuentasDestinatario = this.CuentasDestinatario.filter(number => number.Id_Destinatario.slice(0, modelo.length) == modelo);
+      }
+      else
+      {
+        this.CuentasDestinatario = null;
+      }
+    }    
+  }
+
   LlenarValoresDestinatario(destinatario)
   {
     this.CuentasDestinatario = null; 
-    if(destinatario.length < 5)
+    if(destinatario.length == 0)
     {
+      return;
+    }
+    if(destinatario.length < 5 && destinatario.length > 0)
+    {
+      this.warnSwal.show();
       console.log("número de documento inconrrecto.");      
     }
     else
@@ -165,22 +191,39 @@ export class PosComponent implements OnInit {
 
   NuevoDestinatario()
   {
-    let agregar:boolean = true;  
+    let agregar:boolean = true;
+    let totalTransferencia = 0;  
     for(let i = 0; i < this.Envios.length; ++i)
     {
-      if(this.Envios[i].Numero_Documento_Destino === "" || this.Envios[i].Numero_Cuenta_Destino === "" || this.Envios[i].Valor_Transferencia === "")
-      {
+      if(this.Envios[i].Numero_Documento_Destino === "" || this.Envios[i].Numero_Cuenta_Destino === "")
+      {        
         agregar = false;
         return;
       }
+      else
+      {
+        totalTransferencia += this.Envios[i].Valor_Transferencia;
+      }
     }
-    if(agregar)
+    console.log(totalTransferencia);    
+    if(agregar )
     {
-      this.Envios.push({
-        Numero_Documento_Destino:'',
-        Numero_Cuenta_Destino:'',
-        Valor_Transferencia: ''
-       });      
+      if(totalTransferencia == 0)
+      {
+        return;
+      }
+      if(totalTransferencia <= this.CantidadTransferida)
+      {
+        this.Envios.push({
+          Numero_Documento_Destino:'',
+          Numero_Cuenta_Destino:'',
+          Valor_Transferencia: ''
+        }); 
+      }   
+      else
+      {
+        this.warnTotalSwal.show();
+      }        
     }    
   }
 
@@ -201,8 +244,13 @@ export class PosComponent implements OnInit {
   LlenarValoresRemitente(remitente)
   {    
     this.DatosRemitente = []; 
-    if(remitente.length < 5)
+    if(remitente.length == 0)
     {
+      return;
+    }
+    if(remitente.length < 5 && remitente.length > 0)
+    {
+      this.warnSwal.show();
       console.log("número de documento inconrrecto.");      
     }
     else
@@ -224,6 +272,11 @@ export class PosComponent implements OnInit {
   {
     this.ModalRemitente.show();
     this.IdRemitente = remitente;
+  }
+
+  ValidarTransferencia()
+  { 
+    console.log("cerrar modal");    
   }
 
   CrearDestinatario(destinatario)
@@ -293,16 +346,35 @@ export class PosComponent implements OnInit {
   }
 
   CambiarTasa(value)
-  {
+  {  
     if(value>0)
     {
       this.PrecioSugerido = this.Monedas[value-1].Sugerido_Venta;
-    }    
+    }        
   }
 
-  RealizarCambio()
+  ValidarTotalTransferencia()
   {
-    console.log(this.PrecioSugerido);    
+
+  }
+
+  RealizarCambio(value, accion)
+  {
+    console.log(value);    
+    if(this.MonedaRecibida != this.MonedaTransferencia)
+    {
+      switch(accion)
+      {
+        case "transferir":
+          this.CantidadTransferida = value*this.PrecioSugerido;
+        break;
+
+        case "recibir":
+          this.CantidadRecibida = value/this.PrecioSugerido;
+        break;
+      }      
+    }
+        
   }
 
   SeleccionarTipo(tipo)
@@ -419,10 +491,5 @@ export class PosComponent implements OnInit {
     this.DetalleCorresponsal = null;
     this.CorresponsalBancario = null;
   }
-
-   CrearForm(form:NgForm)
-   {
-      console.log(form);      
-   }
 
 }
