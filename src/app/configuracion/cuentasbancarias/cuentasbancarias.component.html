@@ -132,43 +132,42 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="{{NumeroCuenta}}">
+                <strong><label>Cuenta: </label></strong>  
+                        <label>{{NumeroCuenta}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
-                            <option value="">Seleccione Banco</option>
+      <!--          <strong><label>Banco: </label></strong>
+                        <label class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                        </select>
+                        </label>  -->
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{NombreTitular}}">
+                <strong><label>Titular</label></strong>  
+                        <label>{{NombreTitular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Identificación Titular</label>
-                        <input type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="{{IdentificacionTitular}}">
+                <strong><label>Identificación Titular: </label></strong>
+                        <label>{{IdentificacionTitular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Saldo Inicial</label>
-                        <input type="text" mask="999.999.999.999.999" placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="{{SaldoInicial}}">
+                <strong><label>Saldo Inicial: </label></strong> 
+                        <label>{{SaldoInicial}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Fecha Saldo Inicial</label>
-                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="{{FechaInicial}}">
+                <strong><label>Fecha Saldo Inicial</label></strong>
+                        <label>{{FechaInicial}}</label>
                     </div>
                 </div>
             </div>
@@ -176,7 +175,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>

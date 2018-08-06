@@ -106,25 +106,24 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <label>Nombre: </label>
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Padre</label>
-                        <select class="form-control" required name="Padre" ngModel="{{Padre}}">
-                            <option value="">Seleccione un padre</option>
+                <strong><label>Padre: </label></strong>
+                        <label class="form-control" required name="Padre" ngModel="{{Padre}}">
                             <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                <strong><label>Detalles: </label></strong>
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>

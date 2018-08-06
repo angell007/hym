@@ -19,6 +19,7 @@ export class CajasComponent implements OnInit {
   public Detalles : any[];
 
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
+  @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -36,6 +37,7 @@ export class CajasComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormCajaAgregar.reset();
       this.OcultarFormulario(this.ModalCaja);
+      this.OcultarFormulario(this.ModalVerCaja);
       this.OcultarFormulario(this.ModalEditarCaja);
     }
   }
@@ -63,6 +65,19 @@ export class CajasComponent implements OnInit {
       formulario.reset();
       this.OcultarFormulario(modal);
       this.ActializarVista();     
+    });
+  }
+
+
+  VerCaja(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Caja', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Oficina = data.Id_Oficina;
+      this.Detalles = data.Detalle;
+      modal.show();
     });
   }
 
@@ -107,6 +122,10 @@ export class CajasComponent implements OnInit {
     this.Oficina = null;
     this.Detalles = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }

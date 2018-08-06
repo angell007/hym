@@ -29,6 +29,7 @@ export class ProveedoresComponent implements OnInit {
   public RazonSocial : any[];
 
   @ViewChild('ModalProveedor') ModalProveedor:any;
+  @ViewChild('ModalVerProveedor') ModalVerProveedor:any;
   @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
   @ViewChild('FormProveedor') FormProveedor:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -46,6 +47,7 @@ export class ProveedoresComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormProveedor.reset();
       this.OcultarFormulario(this.ModalProveedor);
+      this.OcultarFormulario(this.ModalVerProveedor);
       this.OcultarFormulario(this.ModalEditarProveedor);
     }
   }
@@ -73,6 +75,28 @@ export class ProveedoresComponent implements OnInit {
       this.ActualizarProveedores();
     });
   }
+
+
+  VerProveedor(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Proveedor', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = data.Id_Proveedor;
+      this.Nombre = data.Nombre;
+      this.Direccion = data.Direccion;
+      this.Telefono = data.Telefono;
+      this.Celular = data.Celular;
+      this.Correo = data.Correo;
+      this.Detalle = data.Detalle;
+      this.Confiable = data.Confiable;
+      this.Regimen = data.Regimen;
+      this.IdDepartamento = data.Id_Departamento;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.RazonSocial = data.Razon_Social;
+      modal.show();
+    });
+  }
+
 
   EliminarProveedor(id){
     let datos=new FormData();
