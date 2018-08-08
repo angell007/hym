@@ -16,6 +16,7 @@ export class CuentasbancariasComponent implements OnInit {
   public Identificacion : any[];
   public NumeroCuenta : any[];
   public IdBanco : any[];
+  public Banco : any[];
   public NombreTitular : any[];
   public IdentificacionTitular : any[];
   public SaldoInicial : any[];
@@ -67,16 +68,16 @@ export class CuentasbancariasComponent implements OnInit {
 
 
   VerCuenta(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Cuenta_Bancaria', id:id}
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/detalle_cuenta_bancaria.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
-      this.NumeroCuenta = data.Numero_Cuenta;
-      this.IdBanco = data.Id_Banco;
-      this.NombreTitular = data.Nombre_Titular;
-      this.IdentificacionTitular = data.Identificacion_Titular;
-      this.SaldoInicial = data.Saldo_Inicial;
-      this.FechaInicial = data.Fecha_Inicial;
+      this.NumeroCuenta = data.NumeroCuenta;
+      this.Banco = data.Banco;
+      this.NombreTitular = data.NombreTitular;
+      this.IdentificacionTitular = data.IdentificacionTitular;
+      this.SaldoInicial = data.SaldoInicial;
+      this.FechaInicial = data.FechaInicial;
       this.Detalle = data.Detalle;
       modal.show();
     });

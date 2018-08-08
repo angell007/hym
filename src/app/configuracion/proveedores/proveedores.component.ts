@@ -25,7 +25,9 @@ export class ProveedoresComponent implements OnInit {
   public Confiable : any[];
   public Regimen : any[];
   public IdDepartamento : any[];
+  public Departamento : any[];
   public IdMunicipio : any[];
+  public Municipio : any[];
   public RazonSocial : any[];
 
   @ViewChild('ModalProveedor') ModalProveedor:any;
@@ -78,8 +80,8 @@ export class ProveedoresComponent implements OnInit {
 
 
   VerProveedor(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Proveedor', id:id}
+    this.http.get(this.globales.ruta+'php/proveedores/detalle_proveedor.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = data.Id_Proveedor;
       this.Nombre = data.Nombre;
@@ -90,8 +92,8 @@ export class ProveedoresComponent implements OnInit {
       this.Detalle = data.Detalle;
       this.Confiable = data.Confiable;
       this.Regimen = data.Regimen;
-      this.IdDepartamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.RazonSocial = data.Razon_Social;
       modal.show();
     });

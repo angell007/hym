@@ -58,8 +58,8 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   VerDocumento(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Tipo_Documento', id:id}
+    this.http.get(this.globales.ruta+'php/tiposdocumentos/detalle_tipo_documento.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;

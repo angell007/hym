@@ -55,8 +55,8 @@ export class PerfilesComponent implements OnInit {
 
 
   VerPerfil(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Perfil', id:id}
+    this.http.get(this.globales.ruta+'php/perfiles/detalle_perfil.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;

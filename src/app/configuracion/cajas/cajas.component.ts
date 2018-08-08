@@ -72,12 +72,12 @@ export class CajasComponent implements OnInit {
 
 
   VerCaja(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Caja', id:id}
+    this.http.get(this.globales.ruta+'php/cajas/detalle_caja.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
-      this.Oficina = data.Id_Oficina;
+      this.Oficina = data.Oficina;
       this.Detalles = data.Detalle;
       modal.show();
     });

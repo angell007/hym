@@ -208,18 +208,14 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                <strong><label>Departamento: </label></strong>
-                        <label required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
-                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </label>
+                        <strong><label>Departamento: </label></strong>
+                                <label>{{Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                <strong><label>Municipio: </label></strong>
-                        <label required name="Id_Municipio" ngModel="{{Municipio}}">
-                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </label>
+                        <strong><label>Municipio: </label></strong>
+                                <label>{{Municipio}}</label>
                     </div>
                 </div>
             </div>
@@ -234,25 +230,25 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                <strong><label>Mín Compra: </label></strong>
+                <strong><label>MínCompra: </label></strong>
                         <label>{{MinCompra}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                <strong><label>Máx Compra: </label></strong>
+                <strong><label>MáxCompra: </label></strong>
                         <label>{{MaxCompra}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                <strong><label>Min Venta: </label></strong>
+                <strong><label>MinVenta: </label></strong>
                         <label>{{MaxVenta}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                <strong><label>Máx Venta</label></strong>
+                <strong><label>MáxVenta: </label></strong>
                         <label>{{MaxVenta}}</label>
                     </div>
                 </div>
