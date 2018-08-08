@@ -111,7 +111,6 @@ export class TercerosComponent implements OnInit {
       this.Cupo = data.Cupo;
       this.Grupo = data.Grupo;
       this.Detalle = data.Detalle;
-      this.Documento = data.Documento;
       this.Barrio = data.Barrio;
       modal.show();
     });
