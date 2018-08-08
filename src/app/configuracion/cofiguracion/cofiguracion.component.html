@@ -8,7 +8,7 @@
                 <div class="card-block">
                     <div class="row">
                         <div class="col-md-12">
-                            <form #FormEditarConfiguracion="ngForm">
+                            <form name="myForm" #FormEditarConfiguracion="ngForm">
                                 <div class="row">
                                     <div class="col-md-4" hidden>
                                             <div class="form-group">
@@ -19,25 +19,29 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Nombre Empresa</label>
-                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" required>
+                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" required #nombreEmpresa="ngModel">
+                                            <div *ngIf="!nombreEmpresa.valid" style="color:red">Houston, we have a problem</div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label>N.I.T.</label>
-                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" required>
+                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" required #nit="ngModel">
+                                            <div *ngIf="!nit.valid" style="color:red">Houston, we have a problem</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono</label>
-                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" required>
+                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" required #telefono="ngModel">
+                                                <div *ngIf="!telefono.valid" style="color:red">Houston, we have a problem</div>
                                             </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Celular</label>
-                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" required>
+                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" required #celular="ngModel">
+                                                <div *ngIf="!celular.valid" style="color:red">Houston, we have a problem</div>
                                             </div>
                                     </div>
                                 </div>
@@ -45,13 +49,15 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Dirección</label>
-                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" required>
+                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" required #direccion="ngModel">
+                                            <div *ngIf="!direccion.valid" style="color:red">Houston, we have a problem</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Correo</label>
-                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" required>
+                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" required #correo="ngModel">
+                                                <div *ngIf="!correo.valid" style="color:red">Houston, we have a problem</div>
                                             </div>
                                     </div>
                                 </div>	
@@ -59,19 +65,22 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos Legales</label>
-                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" required>
+                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" required #festivosLegales="ngModel">
+                                            <div *ngIf="!festivosLegales.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Extras Legales</label>
-                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" required>
+                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" required #extrasLegales="ngModel">
+                                            <div *ngIf="!extrasLegales.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Llegadas tarde</label>
-                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" required>
+                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" required #llegadasTarde="ngModel">
+                                            <div *ngIf="!llegadasTarde.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                 </div>
@@ -79,25 +88,29 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Inicio Dia</label>
-                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" required>
+                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" required #horaInicioDia="ngModel">
+                                            <div *ngIf="!horaInicioDia.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Fin Dia</label>
-                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" required>
+                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" required #horaFinDia="ngModel">
+                                            <div *ngIf="!horaFinDia.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Salario Base</label>
-                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" required>
+                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" required #salarioBase="ngModel">
+                                                <div *ngIf="!salarioBase.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Subsidio de transporte</label>
-                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" required>
+                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" required #subsidioTransporte="ngModel">
+                                                <div *ngIf="!subsidioTransporte.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                     </div>
                                 </div>	
@@ -105,25 +118,29 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Diurna</label>
-                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" required>
+                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" required #horaExtraDiurna="ngModel">
+                                            <div *ngIf="!horaExtraDiurna.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Nocturna</label>
-                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" required>
+                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" required required #horaExtraNocturna="ngModel">
+                                            <div *ngIf="!horaExtraNocturna.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Diurna</label>
-                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" required>
+                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" required #horaExtraDomingoDiurna="ngModel">
+                                            <div *ngIf="!horaExtraDomingoDiurna.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Nocturna</label>
-                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" required>
+                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" required #horaExtraDomingoNocturna="ngModel">
+                                            <div *ngIf="!horaExtraDomingoNocturna.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                 </div>
@@ -131,25 +148,29 @@
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Diurna</label>
-                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" required>
+                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" required #recargoDiurna="ngModel">
+                                                <div *ngIf="!recargoDiurna.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Nocturno</label>
-                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" required>
+                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" required #recargoNocturno="ngModel">
+                                                <div *ngIf="!recargoNocturno.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Dominical Diurna</label>
-                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" required>
+                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" required #recargoDominicalDiurna="ngModel">
+                                                <div *ngIf="!recargoDominicalDiurna.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Dominical Nocturno</label>
-                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" required>
+                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" required #recargoDominicalNocturna="ngModel">
+                                                <div *ngIf="!recargoDominicalNocturna.valid" style="color:red">Houston, we have a problem</div>
                                             </div> 
                                     </div>
                                 </div>
@@ -157,32 +178,38 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora inicio de la jornada nocturna</label>
-                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" required>
+                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" required #horaInicioNoche="ngModel">
+                                            <div *ngIf="!horaInicioNoche.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora fin de la jornada nocturna</label>
-                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" required>
+                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" required #horaFinNoche="ngModel">
+                                            <div *ngIf="!horaFinNoche.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos</label>
-                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" required>
+                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" required #festivos="ngModel">
+                                            <div *ngIf="!festivos.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Libres</label>
-                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" required>
+                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" required #libres="ngModel">
+                                            <div *ngIf="!libres.valid" style="color:red">Houston, we have a problem</div>
                                         </div> 
                                     </div>
                                 </div>
                                 <div class="row">           <!-- Actualizar   -->
                                     <div class="col-md-12 col-xs-6">
+                                    <!--*ngIf="nombreEmpresa.valid"-->
                                         <div class="text-right mrg-top-5">                                            
                                             <button type="submit" class="btn btn-primary"
+                                            [disabled]="!nombreEmpresa.valid || !nit.valid || !telefono.valid || !celular.valid || !direccion.valid || !correo.valid || !festivosLegales.valid || !extrasLegales.valid || !llegadasTarde.valid || !horaInicioDia.valid || !horaFinDia.valid || !salarioBase.valid || !subsidioTransporte.valid || !horaExtraDiurna.valid || !horaExtraNocturna.valid || !horaExtraDomingoDiurna.valid || !horaExtraDomingoNocturna.valid || !recargoDiurna.valid || !recargoNocturno.valid || !recargoDominicalDiurna.valid || !recargoDominicalNocturna.valid || !horaInicioNoche.valid || !horaFinNoche.valid || !festivos.valid || !libres.valid"
                                             [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                             (confirm)="GuardarConfiguracion(FormEditarConfiguracion)" >Actualizar Información</button>
                                         </div>
@@ -711,4 +738,10 @@
         </mdb-accordion-item>
     </mdb-accordion>
 </div>
-    
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>

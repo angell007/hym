@@ -21,6 +21,7 @@ export class TipodocumentoComponent implements OnInit {
   @ViewChild('ModalDocumento') ModalDocumento:any;
   @ViewChild('ModalVerDocumento') ModalVerDocumento:any;
   @ViewChild('ModalEditarDocumento') ModalEditarDocumento:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormDocumento') FormDocumento:any;
 
@@ -55,6 +56,7 @@ export class TipodocumentoComponent implements OnInit {
       formulario.reset();
       this.ActualizarVista();
     });  
+    this.saveSwal.show();
   }
 
   VerDocumento(id, modal){

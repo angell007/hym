@@ -91,6 +91,7 @@ export class CofiguracionComponent implements OnInit {
 
   @ViewChild('acordeon') acordeon:NgbAccordionModule;
   @ViewChild('FormEditarConfiguracion') FormEditarConfiguracion:any;
+  @ViewChild('saveSwal') saveSwal:any;
 
   constructor(private http : HttpClient, private globales:Globales) { }
 
@@ -169,6 +170,7 @@ GuardarConfiguracion(formulario: NgForm){
     //formulario.reset();    
     //this.EditarConfiguracion();
   });
+  this.saveSwal.show();
 }
 
 

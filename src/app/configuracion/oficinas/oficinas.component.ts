@@ -35,6 +35,7 @@ export class OficinasComponent implements OnInit {
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   
@@ -94,7 +95,8 @@ export class OficinasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       this.ActualizarVista();
       formulario.reset();
-    });    
+    });
+    this.saveSwal.show();
   }
 
 

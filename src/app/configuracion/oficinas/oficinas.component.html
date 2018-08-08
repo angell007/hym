@@ -58,7 +58,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="" required #nombreOficina="ngModel">
+                        <div *ngIf="!nombreOficina.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
             </div>
@@ -66,19 +67,22 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono Oficina" class="form-control" name="Telefono" ngModel="">
+                        <input type="text" placeholder="Teléfono Oficina" class="form-control" name="Telefono" ngModel="" required #telefono="ngModel">
+                        <div *ngIf="!telefono.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular Oficina" class="form-control" name="Celular" ngModel="">
+                        <input type="text" placeholder="Celular Oficina" class="form-control" name="Celular" ngModel="" required #celular="ngModel">
+                        <div *ngIf="!celular.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="">
+                        <input type="text" placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="" required #correo="ngModel">
+                        <div *ngIf="!correo.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
             </div>
@@ -86,14 +90,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="">
+                        <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="" required #direccion="ngModel">
+                        <div *ngIf="!direccion.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
-                            <option value="">Seleccione un Departamento</option>
+                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" required #departamento="ngModel">
+                            <option [ngValue]="undefined" value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
                     </div>
@@ -101,9 +106,10 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="">
+                        <select class="form-control" required name="Id_Municipio" ngModel="" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                            <div *ngIf="!municipio.valid" style="color:red">Houston, we have a problem</div>
                         </select>
                     </div>
                 </div>
@@ -114,43 +120,51 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Comisión</label>
-                        <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="">
+                        <input type="number" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="" required #comision="ngModel">
+                        <div *ngIf="!comision.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Mín Compra</label>
-                        <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="" required #minCompra="ngModel">
+                        <div *ngIf="!minCompra.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Compra</label>
-                        <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="" required #maxCompra="ngModel">
+                        <div *ngIf="!maxCompra.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Min Venta</label>
-                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="" required #minVenta="ngModel">
+                        <div *ngIf="!minVenta.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Venta</label>
-                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="">
+                        <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="" required #maxVenta="ngModel">
+                        <div *ngIf="!maxVenta.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Valores</label>
-                        <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="">
+                        <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="" required #valores="ngModel">
+                        <div *ngIf="!valores.valid" style="color:red">Houston, we have a problem</div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarOficina(FormOficinaAgregar, ModalOficina)">Guardar</button>
+                    <button class="btn btn-primary btn-sm"
+                    [disabled]="departamento.value=='' || municipio.value=='' || !nombreOficina.valid || !telefono.valid || !celular.valid || !correo.valid || !direccion.valid || !comision.valid || !minCompra.valid || !maxCompra.valid || !minVenta.valid || !maxVenta.valid || !valores.valid"
+                    (click)="GuardarOficina(FormOficinaAgregar, ModalOficina)">Guardar</button>
                 </div>
             </div>
         </form>                
@@ -394,6 +408,13 @@
         </form>                
     </div> 
 </app-modal-basic>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Oficina eliminada"
