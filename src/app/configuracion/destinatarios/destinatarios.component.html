@@ -131,22 +131,22 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                <strong><label>Identificación: </label></strong>
+                        <label>{{Identificacion}}</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                <strong><label>Nombre: </label></strong>
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                <strong><label>Detalles: </label></strong> 
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>
@@ -155,26 +155,24 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>País</label>
-                        <select class="form-control" name="Id_Pais" ngModel="{{IdPais}}">
-                            <option>Seleccione País</option>
+                <strong><label>País: </label></strong>
+                        <label class="form-control" name="Id_Pais" ngModel="{{IdPais}}">
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Banco</label>
-                        <select class="form-control" name="Id_Banco" ngModel="{{IdBanco}}">
-                            <option>Seleccione Banco</option>
+                <strong><label>Banco: </label></strong>
+                        <label class="form-control" name="Id_Banco" ngModel="{{IdBanco}}">
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label>Numero de Cuenta</label>
-                        <input type="number" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Cuentas" ngModel="{{Cuentas}}">
+                <strong><label>Numero de Cuenta: </label></strong> 
+                        <label>{{Cuentas}}</label>
                     </div>
                 </div>
                 <div class="col-md-1">

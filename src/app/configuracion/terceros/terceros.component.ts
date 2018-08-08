@@ -34,6 +34,7 @@ export class TercerosComponent implements OnInit {
   public Barrio : any[];
 
   @ViewChild('ModalTercero') ModalTercero:any;
+  @ViewChild('ModalVerTercero') ModalVerTercero:any;
   @ViewChild('ModalEditarTercero') ModalEditarTercero:any;
   @ViewChild('FormTercero') FormTercero:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -57,6 +58,7 @@ export class TercerosComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormTercero.reset();
       this.OcultarFormulario(this.ModalTercero);
+      this.OcultarFormulario(this.ModalVerTercero);
       this.OcultarFormulario(this.ModalEditarTercero);
     }
   }
@@ -83,6 +85,31 @@ export class TercerosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+    });
+  }
+
+
+  VerTercero(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Tercero', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Direccion = data.Direccion;
+      this.IdDepartamento = data.Id_Departamento;
+      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Telefono = data.Telefono;
+      this.Celular = data.Celular;
+      this.Correo = data.Correo;
+      this.TerceroDesde = data.Tercero_Desde;
+      this.Destacado = data.Destacado;
+      this.Credito = data.Credito;
+      this.Cupo = data.Cupo;
+      this.IdGrupo = data.Id_Grupo;
+      this.Detalle = data.Detalle;
+      this.IdDocumento = data.Id_Documento;
+      this.Barrio = data.Barrio;
+      modal.show();
     });
   }
 

@@ -108,31 +108,30 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                <strong><label>Nombre: </label></strong>
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>País</label>
-                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
-                            <option value="">Seleccione un País</option>
+                <strong><label>País: </label></strong>
+                        <label class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}">
+                <strong><label>Identificador de Cuentas: </label></strong>
+                        <label>{{Identificador}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                <strong><label>Detalles: </label></strong>
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>            

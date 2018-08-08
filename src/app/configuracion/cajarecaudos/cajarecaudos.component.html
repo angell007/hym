@@ -127,47 +127,45 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                <strong><label>Nombre: </label></strong> 
+                        <label>{{Nombre}}</label>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}">
+                        <label>Username: </label>
+                        <label>{{Username}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}">
+                <strong><label>Password: </label></strong>
+                        <label>{{Password}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Tipo</label>
-                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="{{Tipo}}">
+                <strong><label>Tipo: </label></strong>
+                        <label>{{Tipo}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
-                            <option value="">Seleccione un Departamento</option>
+                <strong><label>Departamento: </label></strong>
+                        <label required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
-                            <option value="">Seleccione un Municipio</option>
+                <strong><label>Municipio: </label></strong>
+                        <label required name="Id_Municipio" ngModel="{{Municipio}}">
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </select>
+                        </label>
                     </div>
                 </div>
             </div>

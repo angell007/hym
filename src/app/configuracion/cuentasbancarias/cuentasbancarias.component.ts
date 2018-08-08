@@ -23,6 +23,7 @@ export class CuentasbancariasComponent implements OnInit {
   public Detalle : any[];
 
   @ViewChild('ModalEditarCuenta') ModalEditarCuenta:any;
+  @ViewChild('ModalVerCuenta') ModalVerCuenta:any;
   @ViewChild('ModalCuenta') ModalCuenta:any;
   @ViewChild('FormCuenta') FormCuenta:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -40,6 +41,7 @@ export class CuentasbancariasComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormCuenta.reset();
       this.OcultarFormulario(this.ModalCuenta);
+      this.OcultarFormulario(this.ModalVerCuenta);
       this.OcultarFormulario(this.ModalEditarCuenta);
     }
   }
@@ -60,6 +62,23 @@ export class CuentasbancariasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+    });
+  }
+
+
+  VerCuenta(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Cuenta_Bancaria', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.NumeroCuenta = data.Numero_Cuenta;
+      this.IdBanco = data.Id_Banco;
+      this.NombreTitular = data.Nombre_Titular;
+      this.IdentificacionTitular = data.Identificacion_Titular;
+      this.SaldoInicial = data.Saldo_Inicial;
+      this.FechaInicial = data.Fecha_Inicial;
+      this.Detalle = data.Detalle;
+      modal.show();
     });
   }
 
@@ -100,6 +119,11 @@ export class CuentasbancariasComponent implements OnInit {
     this.FechaInicial = null;
     this.Detalle = null;
     modal.hide();
+  }
+
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }

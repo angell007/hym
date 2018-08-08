@@ -23,6 +23,7 @@ export class DestinatariosComponent implements OnInit {
   public Detalle : any[];
 
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
   @ViewChild('FormDestinatario') FormDestinatario:any;
@@ -45,6 +46,7 @@ export class DestinatariosComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormDestinatario.reset();
       this.OcultarFormulario(this.ModalDestinatario);
+      this.OcultarFormulario(this.ModalVerDestinatario);
       this.OcultarFormulario(this.ModalEditarDestinatario);
     }
   }
@@ -68,6 +70,22 @@ export class DestinatariosComponent implements OnInit {
       formulario.reset();
     });   
   }
+
+  VerDestinatario(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Destinatario', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Cuentas = data.Cuentas;
+      this.IdBanco = data.Id_Banco; 
+      this.IdPais = data.Id_Pais;
+      this.Detalle = data.Detalle;
+      modal.show();
+    });
+  }
+
+
 
   EditarDestinatario(id){
     console.log(id);  
@@ -104,6 +122,10 @@ export class DestinatariosComponent implements OnInit {
     this.IdPais = null;
     this.Detalle = null;
     modal.hide();
+  }
+
+  Cerrar(modal){
+    this.OcultarFormulario(modal)
   }
 
 }

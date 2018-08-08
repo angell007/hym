@@ -245,27 +245,27 @@
     <form #FormVerMoneda="ngForm">
       <div class="col-md-4" hidden>
         <div class="form-group">
-          <label>Identificación</label>
+          <strong><label>Identificación</label></strong>
           <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+            <strong><label>Nombre: </label></strong>
+            <label>{{Nombre}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Código</label>
-            <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="{{Codigo}}">
+            <strong><label>Código: </label></strong>
+            <label>{{Codigo}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Orden</label>
-            <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="{{Orden}}">
+            <strong><label>Orden: </label></strong>
+            <label>{{Orden}}</label>
           </div>
         </div>
       </div>
@@ -273,80 +273,80 @@
       <div class="row">
         <div class="col-md-3">
           <div class="form-group">
-            <label>Valor maximo de venta en Efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Venta_Efectivo" ngModel="{{MaxVentaEfectivo}}">
+            <strong><label>Valor maximo de venta en Efectivo: </label></strong>
+            <label>{{MaxVentaEfectivo}}</label>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Valor mínimo de venta en Efectivo</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Venta_Efectivo" ngModel="{{MinVentaEfectivo}}">
+            <strong><label>Valor mínimo de venta en Efectivo: </label></strong>
+            <label>{{MinVentaEfectivo}}</label>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Valor maximo de venta por cuenta</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta}}">
+            <strong><label>Valor maximo de venta por cuenta: </label></strong>
+            <label>{{MaxVentaCuenta}}</label>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Valor mínimo de venta por cuenta</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta}}">
+            <strong><label>Valor mínimo de venta por cuenta: </label></strong>
+            <label>{{MinVentaCuenta}}</label>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio de venta sugerido</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta}}">
+            <strong><label>Precio de venta sugerido: </label></strong>
+            <label>{{SugeridoVenta}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio de compra sugerido</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra}}">
+            <strong><label>Precio de compra sugerido: </label></strong>
+            <label>{{SugeridoCompra}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio por ventanilla</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla}}">
+            <strong><label>Precio por ventanilla: </label></strong>
+            <label>{{PrecioVentanilla}}</label>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio de compra maximo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}">
+            <strong><label>Precio de compra maximo: </label></strong>
+            <label>{{MaxCompra}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio de compra mínimo</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}">
+          <strong><label>Precio de compra mínimo: </label></strong>
+            <label>{{MinCompra}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Precio mínimo de no cobro</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro}}">
+            <strong><label>Precio mínimo de no cobro: </label></strong>
+            <label>{{MinNoCobro}}</label>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label>Redondeo a pesos en efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="{{RedondeoPesosEfectivo}}">
+            <strong><label>Redondeo a pesos en efectivo: </label></strong>
+            <label>{{RedondeoPesosEfectivo}}</label>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Redondeo a pesos en cuenta</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="{{RedondeoPesosCuenta}}">
+            <strong><label>Redondeo a pesos en cuenta: </label></strong>
+            <label>{{RedondeoPesosCuenta}}</label>
           </div>
         </div>
       </div>
@@ -354,20 +354,20 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label>Comisión efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Comision_Efectivo" ngModel="{{ComisionEfectivo}}">
+          <strong><label>Comisión efectivo: </label></strong>
+            <label>{{ComisionEfectivo}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Pagar comisión desde</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Pagar_Comision_Desde" ngModel="{{PagarComisionDesde}}">
+            <strong><label>Pagar comisión desde: </label></strong>
+            <label>{{PagarComisionDesde}}</label>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Comisión por recaudo</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Comision_Recaudo" ngModel="{{ComisionRecaudo}}">
+            <strong><label>Comisión por recaudo</label></strong>
+            <label>{{ComisionRecaudo}}</label>
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ export class PerfilesComponent implements OnInit {
   public Detalle : any[];
 
   @ViewChild('ModalPerfil') ModalPerfil:any;
+  @ViewChild('ModalVerPerfil') ModalVerOficina:any;
   @ViewChild('ModalEditarPerfil') ModalEditarPerfil:any;
   @ViewChild('FormPerfil') FormPerfil:any;
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -33,6 +34,7 @@ export class PerfilesComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.FormPerfil.reset();
       this.OcultarFormulario(this.ModalPerfil);
+      
       this.OcultarFormulario(this.ModalEditarPerfil);
     }
   }
@@ -51,6 +53,18 @@ export class PerfilesComponent implements OnInit {
     });
   }
 
+
+  VerPerfil(id, modal){
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Perfil', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Nombre = data.Nombre;
+      this.Detalle = data.Detalle;
+      modal.show();
+    });
+  }
+
   EditarPerfil(id){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Perfil', id:id}
@@ -61,6 +75,8 @@ export class PerfilesComponent implements OnInit {
       this.ModalEditarPerfil.show();
     });
   }
+
+  
 
   EliminarPerfil(id){
     let datos=new FormData();
