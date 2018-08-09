@@ -24,6 +24,11 @@ export class ComprasComponent implements OnInit {
   public Funcionario : any[];
 
 
+  rowsFilter = [];
+  tempFilter = [];
+
+
+
   @ViewChild('ModalCompra') ModalCompra:any;
   @ViewChild('ModalVerCompra') ModalVerCompra:any;
   @ViewChild('ModalEditarCompra') ModalEditarCompra:any;
@@ -31,7 +36,12 @@ export class ComprasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
 
 
-  constructor(private http : HttpClient, private globales : Globales) { }
+  constructor(private http: HttpClient,private globales: Globales) { 
+    this.fetchFilterData((data) => {
+      this.tempFilter = [...data];
+      this.rowsFilter = data; 
+    });
+  }
 
   ngOnInit() {
 
@@ -103,14 +113,28 @@ export class ComprasComponent implements OnInit {
 
 
   EliminarCompra(id){
-    console.log(id);  
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Compra');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.fetchFilterData((data) => {
+        this.tempFilter = [...data];
+        this.rowsFilter = data; 
+      });   
+    });
+  }
+
+
+    fetchFilterData(cb) {
+    const req = new XMLHttpRequest();
+    req.open('GET', this.globales.ruta+'php/compras/vista_compra.php');
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
   }
 
   OcultarFormulario(modal){

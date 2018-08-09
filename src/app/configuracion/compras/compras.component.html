@@ -36,9 +36,11 @@
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra, ModalEditarCompra)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Compra, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarCompra(compra.Id_Compra)">
-                                            <i class="ti-trash"></i>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                        [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
+                                        (confirm)="EliminarCompra(compra.Id_Compra)" 
+                                        >
+                                        <i class="ti-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
