@@ -52,6 +52,7 @@ export class PosComponent implements OnInit {
   public MonedaRecibida : any;
   public Cedula : any[];  
   public IdRemitente : any[];  
+  public FormaPago : string;  
   public Costo : number;
   public PrecioSugerido : number;
   public CantidadRecibida : number;
@@ -70,6 +71,7 @@ export class PosComponent implements OnInit {
   @ViewChild('remitenteCreadoSwal') remitenteCreadoSwal:any;
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal:any;
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal:any;
+  @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal:any;
   
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -117,7 +119,8 @@ export class PosComponent implements OnInit {
     this.IdOficina = 1;
     this.IdCaja = 1;
     this.Costo = 1;
-    this.Estado = "Enviado";        
+    this.Estado = "Enviado";     
+    this.FormaPago = "Efectivo";   
   }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
@@ -134,7 +137,13 @@ export class PosComponent implements OnInit {
 
   GuardarTransferencia(formulario: NgForm)
   {
-    console.log(formulario.value);    
+    formulario.value.Costo_Transferencia = 1;
+    formulario.value.Id_Caja = 1;
+    formulario.value.Estado = "Enviado" 
+    formulario.value.Id_Oficina = 1;
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    console.log(formulario.value);   
+    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
     let info = JSON.stringify(formulario.value);
     let destinatarios = JSON.stringify(this.Envios);
     let datos = new FormData();
@@ -143,19 +152,38 @@ export class PosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
       formulario.reset();
       this.transferenciaExitosaSwal.show();
+      this.Envios = [{
+        Numero_Documento_Destino:'',
+        Id_Cuenta_Destino:'',
+        Valor_Transferencia: '',
+        Cuentas: []
+      }];
+      this.MonedaTransferencia = null;
+      this.MonedaRecibida = null;      
       console.log(data);      
     });
   }
 
+  ResetValues()
+  {
+    this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
+    this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
+  }
+
   GuardarMovimiento(formulario: NgForm)
   {
-    console.log(formulario.value);    
+    formulario.value.Costo_Transferencia = 1;
+    formulario.value.Id_Caja = 1;
+    formulario.value.Estado = "Enviado" 
+    formulario.value.Id_Oficina = 1;
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
+    console.log(formulario.value); 
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos",info);
     this.http.post(this.globales.ruta+'php/pos/movimiento.php',datos).subscribe((data:any)=>{   
       formulario.reset();
-      this.transferenciaExitosaSwal.show();
+      this.movimientoExitosoSwal.show();
       console.log(data);      
     });
   }
