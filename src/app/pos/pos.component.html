@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label>Forma de Pago</label>
-                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago" ngModel="Efectivo" >
+                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago">
                                         <option value="Efectivo">Efectivo</option>
                                         <option value="Credito">Credito</option>
                                         <option value="Consignacion">Consignación</option>
@@ -807,6 +807,14 @@
 <swal #transferenciaExitosaSwal
   title="La transferencia se realizo con exito"
   text="Se ha registrado exitosamente la transferencia"
+  type="success"
+  confirm="ResetValues()"
+  >
+</swal>
+
+<swal #movimientoExitosoSwal
+  title="El movimiento se realizo con exito"
+  text="Se ha registrado exitosamente el movimiento"
   type="success"
   >
 </swal>
