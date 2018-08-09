@@ -50,6 +50,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" style="background-color:black; overflow-y: auto;" #ModalMoneda>
   <div class="app-modal-header">
+      <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
     <h4>Nueva moneda</h4>
   </div>
   <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
@@ -58,19 +59,25 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="">
+            <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+            <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Código</label>
-            <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="">
+            <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="" (focus)="$event.target.select()" (focusout)="boolCodigo = true" required #codigo="ngModel">
+            <div *ngIf="!codigo.valid && boolCodigo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="codigo.valid && boolCodigo==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Orden</label>
-            <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="">
+            <input type="number" placeholder="Orden de la moneda" class="form-control" name="Orden" ngModel="" (focus)="$event.target.select()" (focusout)="boolOrden = true" required #orden="ngModel">
+            <div *ngIf="!orden.valid && boolOrden==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="orden.valid && boolOrden==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -79,25 +86,33 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Valor maximo de venta en Efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Venta_Efectivo" ngModel="">
+            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Venta_Efectivo" ngModel="" (focus)="$event.target.select()" (focusout)="boolMaxVentaEfectivo = true" required #maxVentaEfectivo="ngModel">
+            <div *ngIf="!maxVentaEfectivo.valid && boolMaxVentaEfectivo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="maxVentaEfectivo.valid && boolMaxVentaEfectivo==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Valor mínimo de venta en Efectivo</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Venta_Efectivo" ngModel="">
+            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Venta_Efectivo" ngModel="" (focus)="$event.target.select()" (focusout)="boolMinVentaEfectivo = true" required #minVentaEfectivo="ngModel">
+            <div *ngIf="!minVentaEfectivo.valid && boolMinVentaEfectivo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="minVentaEfectivo.valid && boolMinVentaEfectivo==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Valor maximo de venta por cuenta</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Max_Venta_Cuenta" ngModel="">
+            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Max_Venta_Cuenta" ngModel="" (focus)="$event.target.select()" (focusout)="boolMaxVentaCuenta = true" required #maxVentaCuenta="ngModel">
+            <div *ngIf="!maxVentaCuenta.valid && boolMaxVentaCuenta==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="maxVentaCuenta.valid && boolMaxVentaCuenta==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Valor mínimo de venta por cuenta</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_Venta_Cuenta" ngModel="">
+            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_Venta_Cuenta" ngModel="" (focus)="$event.target.select()" (focusout)="boolMinVentaCuenta = true" required #minVentaCuenta="ngModel">
+            <div *ngIf="!minVentaCuenta.valid && boolMinVentaCuenta==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="minVentaCuenta.valid && boolMinVentaCuenta==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -105,19 +120,25 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de venta sugerido</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Sugerido_Venta" ngModel="">
+            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Sugerido_Venta" ngModel="" (focus)="$event.target.select()" (focusout)="boolSugeridoVenta = true" required #sugeridoVenta="ngModel">
+            <div *ngIf="!sugeridoVenta.valid && boolSugeridoVenta==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="sugeridoVenta.valid && boolSugeridoVenta==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra sugerido</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Sugerido_Compra" ngModel="">
+            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Sugerido_Compra" ngModel="" (focus)="$event.target.select()" (focusout)="boolSugeridoCompra = true" required #sugeridoCompra="ngModel">
+            <div *ngIf="!sugeridoCompra.valid && boolSugeridoCompra==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="sugeridoCompra.valid && boolSugeridoCompra==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio por ventanilla</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Precio_Ventanilla" ngModel="">
+            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Precio_Ventanilla" ngModel="" (focus)="$event.target.select()" (focusout)="boolPrecioVentanilla = true" required #precioVentanilla="ngModel">
+            <div *ngIf="!precioVentanilla.valid && boolPrecioVentanilla==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="precioVentanilla.valid && boolPrecioVentanilla==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -125,19 +146,25 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra maximo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Compra" ngModel="">
+            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Max_Compra" ngModel="" (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompra="ngModel">
+            <div *ngIf="!maxCompra.valid && boolMaxCompra==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="maxCompra.valid && boolMaxCompra==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra mínimo</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Compra" ngModel="">
+            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Min_Compra" ngModel="" (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompra="ngModel">
+            <div *ngIf="!minCompra.valid && boolMinCompra==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="minCompra.valid && boolMinCompra==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio mínimo de no cobro</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_No_Cobro" ngModel="">
+            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Min_No_Cobro" ngModel="" (focus)="$event.target.select()" (focusout)="boolMinNoCobro = true" required #minNoCobro="ngModel">
+            <div *ngIf="!minNoCobro.valid && boolMinNoCobro==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="minNoCobro.valid && boolMinNoCobro==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -145,13 +172,17 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Redondeo a pesos en efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="">
+            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="" (focus)="$event.target.select()" (focusout)="boolRedondeoPesosEfectivo = true" required #redondeoPesosEfectivo="ngModel">
+            <div *ngIf="!redondeoPesosEfectivo.valid && boolRedondeoPesosEfectivo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="redondeoPesosEfectivo.valid && boolRedondeoPesosEfectivo==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Redondeo a pesos en cuenta</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="">
+            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="" (focus)="$event.target.select()" (focusout)="boolRedondeoPesosCuenta = true" required #redondeoPesosCuenta="ngModel">
+            <div *ngIf="!redondeoPesosCuenta.valid && boolRedondeoPesosCuenta==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="redondeoPesosCuenta.valid && boolRedondeoPesosCuenta==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -160,19 +191,25 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Comisión efectivo</label>
-            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Comision_Efectivo" ngModel="">
+            <input type="text" currencyMask placeholder="Nombre del documento" class="form-control" name="Comision_Efectivo" ngModel="" (focus)="$event.target.select()" (focusout)="boolComisionEfectivo = true" required #comisionEfectivo="ngModel">
+            <div *ngIf="!comisionEfectivo.valid && boolComisionEfectivo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="comisionEfectivo.valid && boolComisionEfectivo==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Pagar comisión desde</label>
-            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Pagar_Comision_Desde" ngModel="">
+            <input type="text" currencyMask placeholder="Código del documento" class="form-control" name="Pagar_Comision_Desde" ngModel="" (focus)="$event.target.select()" (focusout)="boolPagarComisionDesde = true" required #pagarComisionDesde="ngModel">
+            <div *ngIf="!pagarComisionDesde.valid && boolPagarComisionDesde==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="pagarComisionDesde.valid && boolPagarComisionDesde==true" style="color:green">All checked!</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Comisión por recaudo</label>
-            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Comision_Recaudo" ngModel="">
+            <input type="text" currencyMask placeholder="Orden de la moneda" class="form-control" name="Comision_Recaudo" ngModel="" (focus)="$event.target.select()" (focusout)="boolComisionRecaudo = true" required #comisionRecaudo="ngModel">
+            <div *ngIf="!comisionRecaudo.valid && boolComisionRecaudo==true" style="color:red">Houston, we have a problem</div>
+            <div *ngIf="comisionRecaudo.valid && boolComisionRecaudo==true" style="color:green">All checked!</div>
           </div>
         </div>
       </div>
@@ -232,7 +269,10 @@
   </div>
   <div class="app-modal-footer ">
       <div class="text-right">
-        <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
+        <button type="submit" class="btn btn-primary"
+        [disabled]="!nombre.valid || !codigo.valid || !orden.valid || !maxVentaEfectivo.valid || !minVentaEfectivo.valid || !maxVentaCuenta.valid || !minVentaCuenta.valid || !sugeridoVenta.valid || !sugeridoCompra.valid || !precioVentanilla.valid || !maxCompra.valid || !minCompra.valid || !minNoCobro.valid || !redondeoPesosEfectivo.valid || !redondeoPesosCuenta.valid || !comisionEfectivo.valid || !pagarComisionDesde.valid || !comisionRecaudo.valid"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)" >Actualizar Información</button>
       </div>
     </div>
 </app-modal-basic>
@@ -626,6 +666,13 @@
     </form>
   </div>
 </app-modal-basic>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal title="Moneda Eliminada" text="Se ha eliminado correctamente el perfil" type="success">
 </swal>

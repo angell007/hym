@@ -36,11 +36,15 @@ export class GruposComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormGrupo.reset();
-      this.OcultarFormulario(this.ModalGrupo);
-      this.OcultarFormulario(this.ModalVerGrupo);
-      this.OcultarFormulario(this.ModalEditarGrupo);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalGrupo);
+    this.OcultarFormulario(this.ModalVerGrupo);
+    this.OcultarFormulario(this.ModalEditarGrupo);
   }
 
   InicializarBool()

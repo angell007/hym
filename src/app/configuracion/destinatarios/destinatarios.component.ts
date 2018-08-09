@@ -48,11 +48,15 @@ export class DestinatariosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormDestinatario.reset();
-      this.OcultarFormulario(this.ModalDestinatario);
-      this.OcultarFormulario(this.ModalVerDestinatario);
-      this.OcultarFormulario(this.ModalEditarDestinatario);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalDestinatario);
+    this.OcultarFormulario(this.ModalVerDestinatario);
+    this.OcultarFormulario(this.ModalEditarDestinatario);
   }
 
   InicializarBool()

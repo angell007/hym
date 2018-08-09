@@ -68,11 +68,15 @@ export class TercerosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormTercero.reset();
-      this.OcultarFormulario(this.ModalTercero);
-      this.OcultarFormulario(this.ModalVerTercero);
-      this.OcultarFormulario(this.ModalEditarTercero);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalTercero);
+    this.OcultarFormulario(this.ModalVerTercero);
+    this.OcultarFormulario(this.ModalEditarTercero);
   }
 
   InicializarBool()

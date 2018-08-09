@@ -39,11 +39,15 @@ export class CajasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCajaAgregar.reset();
-      this.OcultarFormulario(this.ModalCaja);
-      this.OcultarFormulario(this.ModalVerCaja);
-      this.OcultarFormulario(this.ModalEditarCaja);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalCaja);
+    this.OcultarFormulario(this.ModalVerCaja);
+    this.OcultarFormulario(this.ModalEditarCaja);
   }
 
   InicializarBool()

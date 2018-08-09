@@ -50,6 +50,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalOficina" #ModalOficina>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Oficina</h4>
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">

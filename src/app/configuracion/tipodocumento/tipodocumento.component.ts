@@ -35,11 +35,15 @@ export class TipodocumentoComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormDocumento.reset();
-      this.OcultarFormulario(this.ModalDocumento);
-      this.OcultarFormulario(this.ModalVerDocumento);
-      this.OcultarFormulario(this.ModalEditarDocumento);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalDocumento);
+    this.OcultarFormulario(this.ModalVerDocumento);
+    this.OcultarFormulario(this.ModalEditarDocumento);
   }
 
   InicializarBool()

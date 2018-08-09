@@ -47,13 +47,16 @@ export class CuentasbancariasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCuenta.reset();
-      this.OcultarFormulario(this.ModalCuenta);
-      this.OcultarFormulario(this.ModalVerCuenta);
-      this.OcultarFormulario(this.ModalEditarCuenta);
+      this.OcultarFormularios();
     }
   }
 
+OcultarFormularios()
+{
+  this.OcultarFormulario(this.ModalCuenta);
+  this.OcultarFormulario(this.ModalVerCuenta);
+  this.OcultarFormulario(this.ModalEditarCuenta);
+}
 
   InicializarBool()
   {

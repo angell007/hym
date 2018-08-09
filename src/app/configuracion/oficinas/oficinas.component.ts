@@ -64,11 +64,15 @@ export class OficinasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormOficinaAgregar.reset();
-      this.OcultarFormulario(this.ModalOficina);
-      this.OcultarFormulario(this.ModalVerOficina);
-      this.OcultarFormulario(this.ModalEditarOficina);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalOficina);
+    this.OcultarFormulario(this.ModalVerOficina);
+    this.OcultarFormulario(this.ModalEditarOficina);
   }
 
   InicializarBool()

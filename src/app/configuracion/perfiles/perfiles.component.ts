@@ -15,6 +15,7 @@ export class PerfilesComponent implements OnInit {
   public Identificacion : any[];
   public Nombre : any[];
   public Detalle : any[];
+  public asd : any[];
 
   public boolNombre:boolean = false;
 
@@ -33,11 +34,15 @@ export class PerfilesComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormPerfil.reset();
-      this.OcultarFormulario(this.ModalPerfil);
-      this.OcultarFormulario(this.ModalVerPerfil);
-      this.OcultarFormulario(this.ModalEditarPerfil);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalPerfil);
+    this.OcultarFormulario(this.ModalVerPerfil);
+    this.OcultarFormulario(this.ModalEditarPerfil);
   }
 
   ActualizarVista(){

@@ -41,11 +41,15 @@ export class BancosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormBanco.reset();
-      this.OcultarFormulario(this.ModalBanco);
-      this.OcultarFormulario(this.ModalVerBanco);
-      this.OcultarFormulario(this.ModalEditarBanco);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalBanco);
+    this.OcultarFormulario(this.ModalVerBanco);
+    this.OcultarFormulario(this.ModalEditarBanco);
   }
 
   InicializarBool()
