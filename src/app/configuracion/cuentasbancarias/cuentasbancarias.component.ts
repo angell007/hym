@@ -22,10 +22,18 @@ export class CuentasbancariasComponent implements OnInit {
   public FechaInicial : any[];
   public Detalle : any[];
 
+  public boolCuenta:boolean = false;
+  public boolBanco:boolean = false;
+  public boolTitular:boolean = false;
+  public boolIdTitular:boolean = false;
+  public boolSaldoInicial:boolean = false;
+  public boolFechaSaldoInicial:boolean = false;
+
   @ViewChild('ModalEditarCuenta') ModalEditarCuenta:any;
   @ViewChild('ModalVerCuenta') ModalVerCuenta:any;
   @ViewChild('ModalCuenta') ModalCuenta:any;
   @ViewChild('FormCuenta') FormCuenta:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
@@ -46,6 +54,17 @@ export class CuentasbancariasComponent implements OnInit {
     }
   }
 
+
+  InicializarBool()
+  {
+    this.boolCuenta = false;
+    this.boolBanco = false;
+    this.boolTitular = false;
+    this.boolIdTitular = false;
+    this.boolSaldoInicial = false;
+    this.boolFechaSaldoInicial = false;
+  }
+
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/cuentasbancarias/lista_cuentas.php').subscribe((data:any)=>{
@@ -62,7 +81,9 @@ export class CuentasbancariasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 

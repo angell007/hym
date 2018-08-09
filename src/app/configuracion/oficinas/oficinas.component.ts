@@ -32,6 +32,20 @@ export class OficinasComponent implements OnInit {
   public MaxVenta : any[];
   public Valores : any[];
 
+  public boolNombre:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolComision:boolean = false;
+  public boolMinCompra:boolean = false;
+  public boolMaxCompra:boolean = false;
+  public boolMinVenta:boolean = false;
+  public boolMaxVenta:boolean = false;
+  public boolValores:boolean = false;
+
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
@@ -55,6 +69,23 @@ export class OficinasComponent implements OnInit {
       this.OcultarFormulario(this.ModalVerOficina);
       this.OcultarFormulario(this.ModalEditarOficina);
     }
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolDireccion = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolComision = false;
+    this.boolMinCompra = false;
+    this.boolMaxCompra = false;
+    this.boolMinVenta = false;
+    this.boolMaxVenta = false;
+    this.boolValores = false;
   }
 
   ActualizarVista()
@@ -95,6 +126,7 @@ export class OficinasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       this.ActualizarVista();
       formulario.reset();
+      this.InicializarBool();
     });
     this.saveSwal.show();
   }

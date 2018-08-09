@@ -18,10 +18,14 @@ export class GruposComponent implements OnInit {
   public Detalle : any[];
   public Padre : any[];
 
+  public boolNombre:boolean = false;
+  public boolPadre:boolean = false;
+
   @ViewChild('ModalGrupo') ModalGrupo:any;
   @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
   @ViewChild('ModalEditarGrupo') ModalEditarGrupo:any;
   @ViewChild('FormGrupo') FormGrupo:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient,private globales : Globales) { }
@@ -39,6 +43,12 @@ export class GruposComponent implements OnInit {
     }
   }
 
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolPadre = false;
+  }
+
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/grupos/lista_grupos.php').subscribe((data:any)=>{
       this.grupos= data;          
@@ -54,7 +64,9 @@ export class GruposComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-    });  
+      this.InicializarBool();
+    });
+    this.saveSwal.show();
   }
 
   VerGrupo(id, modal){

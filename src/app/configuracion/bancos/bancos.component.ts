@@ -19,10 +19,15 @@ export class BancosComponent implements OnInit {
   public Identificador : any[];
   public Detalle : any[];
 
+  public boolNombre:boolean = false;
+  public boolId:boolean = false;
+  public boolPais:boolean = false;
+
   @ViewChild('ModalBanco') ModalBanco:any;
   @ViewChild('ModalVerBanco') ModalVerBanco:any;
   @ViewChild('ModalEditarBanco') ModalEditarBanco:any;
   @ViewChild('FormBanco') FormBanco:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
    
   constructor(private http : HttpClient, private globales : Globales) { }
@@ -43,6 +48,13 @@ export class BancosComponent implements OnInit {
     }
   }
 
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolId = false;
+    this.boolPais = false;
+  }
+
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{
@@ -59,7 +71,10 @@ export class BancosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });
+    
+    this.saveSwal.show();
   }
 
   VerBanco(id, modal){

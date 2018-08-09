@@ -7,7 +7,7 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-monedas',
   templateUrl: './monedas.component.html',
-  styleUrls: ['./monedas.component.css']
+  styleUrls: ['./monedas.component.css'],
 })
 export class MonedasComponent implements OnInit {
 

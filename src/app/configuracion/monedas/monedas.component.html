@@ -48,11 +48,11 @@
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" #ModalMoneda>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" style="background-color:black; overflow-y: auto;" #ModalMoneda>
   <div class="app-modal-header">
     <h4>Nueva moneda</h4>
   </div>
-  <div class="app-modal-body">
+  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
     <form #FormMoneda="ngForm">
       <div class="row">
         <div class="col-md-4">
@@ -228,13 +228,13 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer no-border">
-        <div class="text-right">
-          <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
-        </div>
-      </div>
     </form>
   </div>
+  <div class="app-modal-footer ">
+      <div class="text-right">
+        <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
+      </div>
+    </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerMoneda" #ModalVerMoneda>
@@ -423,7 +423,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer no-border">
+      <div class="app-modal-footer">
         <div class="text-right">
           <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerMoneda)" >Cerrar</button>
         </div>
@@ -618,7 +618,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer no-border">
+      <div class="app-modal-footer">
         <div class="text-right">
           <button class="btn btn-primary btn-sm" (click)="GuardarMoneda(FormEditarMoneda, ModalEditarMoneda)">Guardar</button>
         </div>

@@ -55,22 +55,26 @@
   <div class="app-modal-header">
       <h4>Nuevo grupo</h4>
   </div>
-  <div class="app-modal-body">
+  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
       <form #FormGrupo="ngForm">
           <div class="row">
               <div class="col-md-8">
                   <div class="form-group">
                       <label>Nombre</label>
-                      <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="">
+                      <input type="text" placeholder="Nombre Grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreGrupo="ngModel">
+                      <div *ngIf="!nombreGrupo.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                      <div *ngIf="nombreGrupo.valid && boolNombre==true" style="color:green">All checked!</div>
                   </div>
               </div>
               <div class="col-md-4">
                   <div class="form-group">
                       <label>Padre</label>
-                      <select class="form-control" required name="Padre" ngModel="">
+                      <select class="form-control" required name="Padre" ngModel="" (click)="boolPadre=true" required #padre="ngModel">
                           <option value="">Seleccione un padre</option>
                           <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
                       </select>
+                      <div *ngIf="padre.value=='' && boolPadre==true" style="color:red">Houston, we have a problem</div>
+                      <div *ngIf="!padre.value==''" style="color:green">All checked!</div>
                   </div>
               </div>
           </div>
@@ -82,13 +86,16 @@
                   </div>
               </div>
           </div>
-          <div class="modal-footer no-border">
-              <div class="text-right">
-                  <button type="button" class="btn btn-primary btn-sm" (click)="GuardarGrupo(FormGrupo, ModalGrupo)">Guardar</button>
-              </div>
-          </div> 
       </form>                
-  </div>       
+  </div>
+  <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary"
+            [disabled]="!nombreGrupo.valid || padre.value==''"
+            [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            (confirm)="GuardarGrupo(FormGrupo, ModalGrupo)" >Actualizar Información</button>
+        </div>
+    </div> 
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerGrupo" #ModalVerGrupo>        
@@ -127,7 +134,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
+            <div class="app-modal-footer">
                 <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerGrupo)" >Cerrar</button>
                 </div>
@@ -173,7 +180,7 @@
                   </div>
               </div>
           </div>
-          <div class="modal-footer no-border">
+          <div class="app-modal-footer">
               <div class="text-right">
                   <button type="button" class="btn btn-primary btn-sm"
                   [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este grupo' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
@@ -183,6 +190,13 @@
       </form>                
   </div>       
 </app-modal-basic>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
 title="Grupo eliminado"

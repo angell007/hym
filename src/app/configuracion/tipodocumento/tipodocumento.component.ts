@@ -17,6 +17,8 @@ export class TipodocumentoComponent implements OnInit {
   public Nombre : any[];
   public Codigo : any[];
 
+  public boolNombre:boolean = false;
+  public boolCodigo:boolean = false;
 
   @ViewChild('ModalDocumento') ModalDocumento:any;
   @ViewChild('ModalVerDocumento') ModalVerDocumento:any;
@@ -40,6 +42,12 @@ export class TipodocumentoComponent implements OnInit {
     }
   }
 
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolCodigo = false;
+  }
+
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/tiposdocumentos/lista_tipos_documentos.php').subscribe((data:any)=>{
       this.tiposDocumentos= data;          
@@ -55,6 +63,7 @@ export class TipodocumentoComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });  
     this.saveSwal.show();
   }

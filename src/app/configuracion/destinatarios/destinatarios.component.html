@@ -57,19 +57,23 @@
     <div class="app-modal-header">
         <h4>Nuevo Destinatario</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormDestinatario="ngForm">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="">
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificacion="ngModel">
+                        <div *ngIf="!identificacion.valid && boolId==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="identificacion.valid && boolId==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel=""  (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -113,13 +117,16 @@
                     <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Guardar</button>
-                </div>
-            </div>
         </form>        
-    </div>    
+    </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"
+                [disabled]="!nombre.valid || !identificacion.valid"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarDestinatario(FormDestinatario, ModalDestinatario)" >Actualizar Información</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDestinatario" #ModalVerDestinatario>
@@ -180,7 +187,7 @@
                     <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
                 </div>
             </div>
-            <div class="modal-footer no-border">
+            <div class="app-modal-footer">
                 <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerDestinatario)" >Cerrar</button>
                 </div>
@@ -249,7 +256,7 @@
                     <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
                 </div>
             </div>
-            <div class="modal-footer no-border">
+            <div class="app-modal-footer">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
@@ -259,6 +266,13 @@
         </form>        
     </div>    
 </app-modal-basic>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Destinatario Eliminado"

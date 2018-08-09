@@ -22,11 +22,15 @@ export class DestinatariosComponent implements OnInit {
   public IdPais : any[];
   public Detalle : any[];
 
-  @ViewChild('deleteSwal') deleteSwal:any;
+  public boolNombre:boolean = false;
+  public boolId:boolean = false;
+
   @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
   @ViewChild('FormDestinatario') FormDestinatario:any;
+  @ViewChild('saveSwal') saveSwal:any;
+  @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient, private globales: Globales) { } 
 
@@ -51,6 +55,12 @@ export class DestinatariosComponent implements OnInit {
     }
   }
 
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolId = false;
+  }
+
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
    *datos.append("modulo", 'nombre de la tabla')
@@ -68,7 +78,9 @@ export class DestinatariosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       this.destinatarios= data;
       formulario.reset();
-    });   
+      this.InicializarBool();
+    });
+    this.saveSwal.show();
   }
 
   VerDestinatario(id, modal){
