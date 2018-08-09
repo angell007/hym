@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label>Forma de Pago</label>
-                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago" ng-init="'Efectivo'" >
+                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago" ngModel="Efectivo" >
                                         <option value="Efectivo">Efectivo</option>
                                         <option value="Credito">Credito</option>
                                         <option value="Consignacion">Consignación</option>
@@ -204,11 +204,6 @@
                                                     <option value="">Seleccione una cuenta</option>
                                                     <option *ngFor="let Cuenta of Envio.Cuentas" [value]="Cuenta.Id_Cuenta_Destinatario">{{Cuenta.Numero_Cuenta}}</option>
                                                 </select>
-                                                <!--<input name="Numero_Cuenta_Destino{{i}}" type="text" placeholder="Número de Cuenta" class="form-control" [(ngModel)]="Envio.Numero_Cuenta_Destino" autocomplete="off"
-                                                    required list="cuentas" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="NuevoDestinatario()">
-                                                <datalist id="cuentas" (select)="LlenarValoresDestinatario($event.target.value)">
-                                                    <option *ngFor="let Cuenta of CuentasDestinatario" [value]="Cuenta.Numero_Cuenta">{{Cuenta.Numero_Cuenta}}</option>
-                                                </datalist>-->
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -252,7 +247,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" type="number" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Cantidad_Transferida">
+                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" type="number" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Total_Transferencia">
                                     </div>
                                 </div>
                             </div>
@@ -805,6 +800,20 @@
 <swal #destinatarioCreadoSwal
   title="El destinatario a sido creado"
   text="Ahora podra ingresar el documento del destinatario para una nueva transferencia."
+  type="success"
+  >
+</swal>
+
+<swal #transferenciaExitosaSwal
+  title="La transferencia se realizo con exito"
+  text="Se ha registrado exitosamente la transferencia"
+  type="success"
+  >
+</swal>
+
+<swal #remitenteCreadoSwal
+  title="El remitente a sido creado"
+  text="Ahora podra ingresar el documento del remitente para una nueva transferencia."
   type="success"
   >
 </swal>

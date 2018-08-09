@@ -30,13 +30,13 @@ export class PosComponent implements OnInit {
     Banco: '',
     Numero_Cuenta: '',
     Tipo_Cuenta: ''
-   }];
-   public Envios : any[] = [{
+  }];
+  public Envios : any[] = [{
     Numero_Documento_Destino:'',
     Id_Cuenta_Destino:'',
     Valor_Transferencia: '',
     Cuentas: []
-   }];
+  }];
   public CuentasDestinatario : any[];
   public Cajas : any[];
   public Monedas : any[];
@@ -67,7 +67,10 @@ export class PosComponent implements OnInit {
   @ViewChild('warnSwal') warnSwal:any;
   @ViewChild('warnTotalSwal') warnTotalSwal:any;
   @ViewChild('destinatarioCreadoSwal') destinatarioCreadoSwal:any;
+  @ViewChild('remitenteCreadoSwal') remitenteCreadoSwal:any;
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal:any;
+  @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal:any;
+  
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
@@ -137,10 +140,11 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("datos",info);
     datos.append("envios",destinatarios);
-    /*this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
+    this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
       formulario.reset();
+      this.transferenciaExitosaSwal.show();
       console.log(data);      
-    });*/
+    });
   }
 
   GuardarMovimiento(formulario: NgForm)
@@ -151,6 +155,7 @@ export class PosComponent implements OnInit {
     datos.append("datos",info);
     this.http.post(this.globales.ruta+'php/pos/movimiento.php',datos).subscribe((data:any)=>{   
       formulario.reset();
+      this.transferenciaExitosaSwal.show();
       console.log(data);      
     });
   }
@@ -368,9 +373,11 @@ export class PosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{ 
       console.log(data);           
       this.ModalDestinatario.hide();
+      this.destinatarioCreadoSwal.show();
       this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
       formulario.reset();
-      document.getElementById('detalleText').value = '';
+      let textArea : any = document.getElementById('detalleText');
+      textArea.value = '';
       this.Cedula = null;
     });
   }
@@ -385,6 +392,7 @@ export class PosComponent implements OnInit {
       console.log(data);
       this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
       this.ModalRemitente.hide();
+      this.remitenteCreadoSwal.show();
       formulario.reset();
     });
   }
