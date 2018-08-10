@@ -187,7 +187,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -448,7 +448,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-7">
@@ -479,6 +479,13 @@
         </form>                
     </div>
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
 
 <swal #saveSwal
 title="Documento guardado"

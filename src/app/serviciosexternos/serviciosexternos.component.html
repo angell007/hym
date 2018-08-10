@@ -62,7 +62,7 @@
                     <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comision</label>
-                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="">
+                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                             </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                         <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Comision</label>
-                                    <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="{{Comision}}">
+                                    <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="{{Comision}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                                 </div>
                         </div>
                     </div>

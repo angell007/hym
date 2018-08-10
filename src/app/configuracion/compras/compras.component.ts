@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -23,18 +26,22 @@ export class ComprasComponent implements OnInit {
   public TasaCambio : any[];
   public Funcionario : any[];
 
+  public boolProveedor:boolean = false;
+  public boolValor:boolean = false;
+  public boolTasaCambio:boolean = false;
+  public boolFuncionario:boolean = false;
+
 
   rowsFilter = [];
   tempFilter = [];
-
-
 
   @ViewChild('ModalCompra') ModalCompra:any;
   @ViewChild('ModalVerCompra') ModalVerCompra:any;
   @ViewChild('ModalEditarCompra') ModalEditarCompra:any;
   @ViewChild('FormCompra') FormCompra:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
-
+  @ViewChild('saveSwal') saveSwal:any;
 
   constructor(private http: HttpClient,private globales: Globales) { 
     this.fetchFilterData((data) => {
@@ -57,10 +64,24 @@ export class ComprasComponent implements OnInit {
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormCompra.reset();
-      this.OcultarFormulario(this.ModalCompra);
-      this.OcultarFormulario(this.ModalVerCompra);
-      this.OcultarFormulario(this.ModalEditarCompra);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalCompra);
+    this.OcultarFormulario(this.ModalVerCompra);
+    this.OcultarFormulario(this.ModalEditarCompra);
+  }
+
+  InicializarBool()
+  {
+    this.boolProveedor = false;
+    this.boolValor = false;
+    this.boolTasaCambio = false;
+    this.boolFuncionario = false;
   }
 
   ActualizarVista()
@@ -76,12 +97,25 @@ export class ComprasComponent implements OnInit {
     datos.append("modulo",'Compra');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
-    this.ActualizarVista();
-    formulario.reset();
-    });    
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
+      this.ActualizarVista();
+      this.InicializarBool();
+      formulario.reset();
+      this.saveSwal.show();
+    });
+
+    
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerCompra(id, modal){
     this.http.get(this.globales.ruta+'php/compras/detalle_compra.php',{
@@ -98,6 +132,7 @@ export class ComprasComponent implements OnInit {
 
 
   EditarCompra(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Compra', id:id}
     }).subscribe((data:any)=>{

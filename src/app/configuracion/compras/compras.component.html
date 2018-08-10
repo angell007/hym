@@ -65,22 +65,28 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required name="Id_Proveedor" ngModel="">
+                        <select class="form-control" required name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolProveedor = true" required #proveedor="ngModel">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
+                        <div *ngIf="proveedor.value=='' && boolProveedor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!proveedor.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" placeholder="" class="form-control" name="Valor" ngModel="">
+                        <input currencyMask class="form-control" name="Valor" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
+                        <div *ngIf="!valor.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="valor.valid && boolValor==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tasa Cambio</label>
-                        <input type="text" placeholder="" class="form-control" name="Tasa_Cambio" ngModel="">
+                        <input currencyMask class="form-control" name="Tasa_Cambio" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambio="ngModel">
+                        <div *ngIf="!tasaCambio.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="tasaCambio.valid && boolTasaCambio==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -88,19 +94,24 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="">
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="" (focus)="$event.target.select()" (focusout)="boolFuncionario = true" required #funcionario="ngModel">
                             <option value="">Seleccione un Funcionario</option>
                             <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
+                        <div *ngIf="funcionario.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!funcionario.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarCompra(FormCompra, ModalCompra)">Guardar</button>
-                </div>
-            </div>
         </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary"
+            [disabled]="!valor.valid || !tasaCambio.valid || proveedor.value=='' || funcionario.value==''"
+            [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            (confirm)="GuardarCompra(FormCompra, ModalCompra)" >Actualizar Información</button>
+        </div>
     </div>
 </app-modal-basic>
 
@@ -221,6 +232,20 @@
         </form>
     </div>
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal title="Compra eliminada" text="Se ha Eliminado Correctamente la compra" type="success">
     </swal>

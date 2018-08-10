@@ -137,7 +137,7 @@
                             <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Cupo</label>
-                                        <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}">
+                                        <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                                     </div>
                             </div>
                     </div>

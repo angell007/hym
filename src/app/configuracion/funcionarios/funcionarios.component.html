@@ -158,37 +158,37 @@
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Comisión</label>
-                      <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}">
+                      <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Mín Compra</label>
-                      <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}">
+                      <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Máx Compra</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}">
+                      <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Min Venta</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}">
+                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Máx Venta</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}">
+                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
               <div class="col-md-2">
                   <div class="form-group">
                       <label>Valores</label>
-                      <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}">
+                      <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
           </div>
@@ -202,6 +202,20 @@
       </form>                
   </div> 
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
 title="Oficina eliminada"
