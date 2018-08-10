@@ -38,16 +38,16 @@ export class ComprasComponent implements OnInit {
 
   constructor(private http: HttpClient,private globales: Globales) { }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Proveedor'}}).subscribe((data:any)=>{
-      this.Proveedores= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
-      this.Funcionarios= data;
-    });
-  }
+      this.ActualizarVista();
+      this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Proveedor'}}).subscribe((data:any)=>{
+        this.Proveedores= data;
+      });
+      this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
+        this.Funcionarios= data;
+      });
+    }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     

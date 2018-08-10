@@ -95,13 +95,13 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   EliminarDocumento(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Tipo_Documento');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    });    
+      this.ActualizarVista();
+    });
   }
 
   OcultarFormulario(modal)

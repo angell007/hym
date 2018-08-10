@@ -52,7 +52,7 @@ export class ProveedoresComponent implements OnInit {
   constructor(private http : HttpClient, private globales : Globales) { } 
 
   ngOnInit() {
-    this.ActualizarProveedores();
+    this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
     });
@@ -87,7 +87,7 @@ export class ProveedoresComponent implements OnInit {
     this.boolRazonSocial = false;
   }
 
-  ActualizarProveedores(){
+  ActualizarVista(){
     this.http.get(this.globales.ruta+'php/proveedores/lista_proveedores.php').subscribe((data:any)=>{
       this.proveedores= data;
     });
@@ -107,7 +107,7 @@ export class ProveedoresComponent implements OnInit {
     this.OcultarFormulario(modal);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
-      this.ActualizarProveedores();
+      this.ActualizarVista();
       this.InicializarBool();
     });
     this.saveSwal.show();
@@ -136,12 +136,12 @@ export class ProveedoresComponent implements OnInit {
 
 
   EliminarProveedor(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Proveedor');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta+ 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarProveedores();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
+      this.ActualizarVista();
     });
   }
 

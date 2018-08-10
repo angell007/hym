@@ -37,9 +37,7 @@ export class DestinatariosComponent implements OnInit {
   constructor(private http : HttpClient, private globales: Globales) { } 
 
   ngOnInit() {
-    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
-        this.destinatarios= data;
-    });
+    this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
     });
@@ -52,6 +50,13 @@ export class DestinatariosComponent implements OnInit {
     if (event.keyCode === 27) {     
       this.OcultarFormularios();
     }
+  }
+
+  ActualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
+      this.destinatarios= data;
+    });
   }
 
   OcultarFormularios()
@@ -122,13 +127,13 @@ export class DestinatariosComponent implements OnInit {
   }
 
   EliminarDestinatario(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Destinatario');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.destinatarios=data; 
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.ActualizarVista();
+    });
   }
 
   OcultarFormulario(modal)
