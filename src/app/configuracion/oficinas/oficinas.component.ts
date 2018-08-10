@@ -46,6 +46,9 @@ export class OficinasComponent implements OnInit {
   public boolMaxVenta:boolean = false;
   public boolValores:boolean = false;
 
+
+
+
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
@@ -53,7 +56,7 @@ export class OficinasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   
-  constructor(private http : HttpClient, private globales : Globales) { }  
+  constructor(private http: HttpClient,private globales: Globales) { }
   
   ngOnInit() {
     this.ActualizarVista();
@@ -198,14 +201,15 @@ export class OficinasComponent implements OnInit {
    * @memberof OficinasComponent
    */
   EliminarOficina(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Oficina');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta+ 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.ActualizarVista();
+    });
   }
+
 
   /**
    *carga los municipios correspondietes al departamento que se asigno al formulario en la consulta de la función

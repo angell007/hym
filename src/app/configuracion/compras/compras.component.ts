@@ -36,12 +36,7 @@ export class ComprasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
 
 
-  constructor(private http: HttpClient,private globales: Globales) { 
-    this.fetchFilterData((data) => {
-      this.tempFilter = [...data];
-      this.rowsFilter = data; 
-    });
-  }
+  constructor(private http: HttpClient,private globales: Globales) { }
 
   ngOnInit() {
 
@@ -65,7 +60,7 @@ export class ComprasComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.globales.ruta+'php/compras/lista.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/compras/lista_compras.php').subscribe((data:any)=>{
       this.compras= data;
     });
   }
@@ -118,15 +113,13 @@ export class ComprasComponent implements OnInit {
     datos.append("id", id); 
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-      this.fetchFilterData((data) => {
-        this.tempFilter = [...data];
-        this.rowsFilter = data; 
-      });   
+      this.ActualizarVista();
     });
   }
 
 
-    fetchFilterData(cb) {
+
+  fetchFilterData(cb) {
     const req = new XMLHttpRequest();
     req.open('GET', this.globales.ruta+'php/compras/vista_compra.php');
 
@@ -136,6 +129,8 @@ export class ComprasComponent implements OnInit {
 
     req.send();
   }
+
+
 
   OcultarFormulario(modal){
     this.Identificacion = null;
