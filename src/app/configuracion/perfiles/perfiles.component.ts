@@ -15,28 +15,45 @@ export class PerfilesComponent implements OnInit {
   public Identificacion : any[];
   public Nombre : any[];
   public Detalle : any[];
+  public asd : any[];
+
+  public boolNombre:boolean = false;
 
   @ViewChild('ModalPerfil') ModalPerfil:any;
-  @ViewChild('ModalVerPerfil') ModalVerOficina:any;
+  @ViewChild('ModalVerPerfil') ModalVerPerfil:any;
   @ViewChild('ModalEditarPerfil') ModalEditarPerfil:any;
   @ViewChild('FormPerfil') FormPerfil:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
+    this.ActualizarVista();
+  }
+
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+    if (event.keyCode === 27) {     
+      this.OcultarFormularios();
+    }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalPerfil);
+    this.OcultarFormulario(this.ModalVerPerfil);
+    this.OcultarFormulario(this.ModalEditarPerfil);
+  }
+
+  ActualizarVista(){
     this.http.get(this.globales.ruta+'php/perfiles/lista_perfiles.php').subscribe((data:any)=>{
       this.perfiles= data;
     });
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.FormPerfil.reset();
-      this.OcultarFormulario(this.ModalPerfil);
-      
-      this.OcultarFormulario(this.ModalEditarPerfil);
-    }
+  InicializarBool()
+  {
+    this.boolNombre = false;
   }
 
   GuardarPerfil(formulario: NgForm, modal){
@@ -45,12 +62,14 @@ export class PerfilesComponent implements OnInit {
     console.log(info);    
     datos.append("modulo",'Perfil');
     datos.append("datos",info);
-    modal.hide();
+    this.OcultarFormulario(modal);
     //console.log(datos);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.perfiles= data;
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 
@@ -90,6 +109,9 @@ export class PerfilesComponent implements OnInit {
 
   OcultarFormulario(modal)
   {
+    this.Identificacion = null;
+    this.Nombre = null;
+    this.Detalle = null;
     modal.hide();
   }
 

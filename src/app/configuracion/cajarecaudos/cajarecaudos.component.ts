@@ -24,11 +24,15 @@ export class CajarecaudosComponent implements OnInit {
   public Departamento : any[];
   public Municipio : any[];
 
+  public boolNombre:boolean = false;
+  public boolOficina:boolean = false;
+
 
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('FormCaja') FormCaja:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient,private globales : Globales) { }
@@ -42,11 +46,21 @@ export class CajarecaudosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCaja.reset();
-      this.OcultarFormulario(this.ModalCaja);
-      this.OcultarFormulario(this.ModalVerCaja);
-      this.OcultarFormulario(this.ModalEditarCaja);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalCaja);
+    this.OcultarFormulario(this.ModalVerCaja);
+    this.OcultarFormulario(this.ModalEditarCaja); 
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolOficina = false;
   }
 
   ActualizarVista()
@@ -69,9 +83,11 @@ export class CajarecaudosComponent implements OnInit {
     datos.append("datos",info);
     this.OcultarFormulario(modal);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
-    this.ActualizarVista();
-    formulario.reset();
-    });    
+      this.ActualizarVista();
+      formulario.reset();
+      this.InicializarBool();
+    });
+    this.saveSwal.show();
   }
 
   VerCaja(id, modal){
