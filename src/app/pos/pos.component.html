@@ -122,7 +122,7 @@
                             </span>
                             <div class="info">
                                 <b class="text-dark font-size-22">Transferencias</b>
-                                <p class="no-mrg-btm ">A cuentas Extrangeras</p>
+                                <p class="no-mrg-btm ">A cuentas Extranjeras</p>
                             </div>
                         </li>
                     </ul>
@@ -161,7 +161,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label>Forma de Pago</label>
-                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago" ng-init="'Efectivo'" >
+                                    <select class="form-control" placeholder="Seleccione una forma de pago" name="Forma_Pago">
                                         <option value="Efectivo">Efectivo</option>
                                         <option value="Credito">Credito</option>
                                         <option value="Consignacion">Consignación</option>
@@ -191,7 +191,7 @@
                                             <div class="form-group">
                                                 <label>Número Documento</label>
                                                 <input name="Numero_Documento_Destino{{i}}" type="text" placeholder="Número Documento" class="form-control" [(ngModel)]="Envio.Numero_Documento_Destino" autocomplete="off"
-                                                    required list="browsers" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value)">
+                                                    required list="browsers" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)">
                                                 <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
                                                     <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
                                                 </datalist>
@@ -200,11 +200,10 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Cuenta</label>
-                                                <input name="Numero_Cuenta_Destino{{i}}" type="text" placeholder="Número de Cuenta" class="form-control" [(ngModel)]="Envio.Numero_Cuenta_Destino" autocomplete="off"
-                                                    required list="cuentas" (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="NuevoDestinatario()">
-                                                <datalist id="cuentas" (select)="LlenarValoresDestinatario($event.target.value)">
-                                                    <option *ngFor="let Cuenta of CuentasDestinatario" [value]="Cuenta.Numero_Cuenta">{{Cuenta.Numero_Cuenta}}</option>
-                                                </datalist>
+                                                <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino" class="form-control" autocomplete="off">
+                                                    <option value="">Seleccione una cuenta</option>
+                                                    <option *ngFor="let Cuenta of Envio.Cuentas" [value]="Cuenta.Id_Cuenta_Destinatario">{{Cuenta.Numero_Cuenta}}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -248,7 +247,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" type="number" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Cantidad_Transferida">
+                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" type="number" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Total_Transferencia">
                                     </div>
                                 </div>
                             </div>
@@ -259,7 +258,7 @@
                                     <div class="form-group">
                                         <label>Número Documento</label>
                                         <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off"
-                                        required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value)">
+                                        required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value, i)">
                                         <datalist id="remitentes" (select)="LlenarValoresRemitente($event.target.value)">
                                             <option *ngFor="let Remitentente of RemitentesFiltrados" [value]="Remitentente.Id_Transferencia_Remitente">{{Remitentente.Nombre}}</option>
                                         </datalist>
@@ -672,6 +671,12 @@
         <div class="app-modal-body" id="Destinatario">
             <form #FormDestinatario="ngForm">
                 <div class="row">                    
+                    <div class="col-md-6" hidden>
+                        <div class="form-group">
+                            <label>indice</label>
+                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="{{Cedula}}">
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Identificación</label>
@@ -685,24 +690,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Detalles</label>
-                            <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel=""></textarea>
-                        </div>
-                    </div>
-                </div>
-                <hr>
             </form>
             <h3>Cuentas Asociadas</h3>
             <form #FormCuenta="ngForm">                  
                 <div class="row" *ngFor="let Cuenta of Cuentas; let i= index">
                     <div class="col-md-3">
                         <div class="form-group">
+                            <label>Numero de Cuenta</label>
+                            <input type="number" (blur)="AgregarFormCuenta()" (ngModelChange)="AutoSeleccionarBanco($event, i)" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Tipo de cuenta</label>
+                            <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="Cuenta.Tipo_Cuenta">
+                                <option value="">Seleccione un tipo de cuenta</option>
+                                <option *ngFor="let TipoCuenta of TipoCuentas" [value]="TipoCuenta.Nombre">{{TipoCuenta.Nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
                             <label>País</label>
                             <select class="form-control" (blur)="AgregarFormCuenta()" name="Pais{{i}}" [(ngModel)]="Cuenta.Pais">
-                                <option>Seleccione País</option>
+                                <option value="">Seleccione País</option>
                                 <option *ngFor="let Pais of Paises" [value]="Pais.Nombre">{{Pais.Nombre}}</option>
                             </select>
                         </div>
@@ -711,19 +722,21 @@
                         <div class="form-group">
                             <label>Banco</label>
                             <select class="form-control" (blur)="AgregarFormCuenta()" name="Banco{{i}}" [(ngModel)]="Cuenta.Banco">
-                                <option>Seleccione Banco</option>
+                                <option value="">Seleccione Banco</option>
                                 <option *ngFor="let Banco of Bancos" [value]="Banco.Nombre" >{{Banco.Nombre}}</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>Numero de Cuenta</label>
-                            <input type="number" (blur)="AgregarFormCuenta()" placeholder="Número de Cuenta sin Espacios" class="form-control" name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta">
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
             </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" id="detalleText" placeholder="Detalles del Destinatario" name="Detalle" [(ngModel)]="Detalle"></textarea>
+                    </div>
+                </div>
+            </div>
             <div class="modal-footer no-border" id="guardar">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" (click)="GuardarDestinatario(FormDestinatario)">Guardar</button>
@@ -732,43 +745,43 @@
         </div>    
     </app-modal-basic>
 
-    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
-        <div class="app-modal-header">
-            <h4>Nuevo Remitente</h4>
-        </div>
-        <div class="app-modal-body">
-            <form #FormRemitente="ngForm">
-                <div class="row">                    
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Nombre</label>
-                            <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
-                        </div>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
+    <div class="app-modal-header">
+        <h4>Nuevo Remitente</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormRemitente="ngForm">
+            <div class="row">                    
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="">
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
                     </div>
                 </div>
-                <hr>
-            </form>            
-            <div class="modal-footer no-border" id="guardar">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarRemitente(FormRemitente)">Guardar</button>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="">
+                    </div>
                 </div>
-            </div>     
-        </div>    
-    </app-modal-basic>
+            </div>
+            <hr>
+        </form>            
+        <div class="modal-footer no-border" id="guardar">
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm" (click)="GuardarRemitente(FormRemitente)">Guardar</button>
+            </div>
+        </div>     
+    </div>    
+</app-modal-basic>
 
 <swal #warnSwal
   title="Documento invalido"
@@ -782,4 +795,39 @@
   text="El valor total de la transferencia no es suficiente para realizar las transferencias individuales."
   type="warning"
   >
+</swal>
+
+<swal #destinatarioCreadoSwal
+  title="El destinatario a sido creado"
+  text="Ahora podra ingresar el documento del destinatario para una nueva transferencia."
+  type="success"
+  >
+</swal>
+
+<swal #transferenciaExitosaSwal
+  title="La transferencia se realizo con exito"
+  text="Se ha registrado exitosamente la transferencia"
+  type="success"
+  confirm="ResetValues()"
+  >
+</swal>
+
+<swal #movimientoExitosoSwal
+  title="El movimiento se realizo con exito"
+  text="Se ha registrado exitosamente el movimiento"
+  type="success"
+  >
+</swal>
+
+<swal #remitenteCreadoSwal
+  title="El remitente a sido creado"
+  text="Ahora podra ingresar el documento del remitente para una nueva transferencia."
+  type="success"
+  >
+</swal>
+
+<swal #bancoNoIdentificadoSwal
+  title="Número de cuenta incorrecto"
+  text="El número de cuenta introducido no coincide con ninguno de los bancos en nuestra base de datos."
+  type="warning">
 </swal>
