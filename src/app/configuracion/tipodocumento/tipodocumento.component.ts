@@ -17,10 +17,13 @@ export class TipodocumentoComponent implements OnInit {
   public Nombre : any[];
   public Codigo : any[];
 
+  public boolNombre:boolean = false;
+  public boolCodigo:boolean = false;
 
   @ViewChild('ModalDocumento') ModalDocumento:any;
   @ViewChild('ModalVerDocumento') ModalVerDocumento:any;
   @ViewChild('ModalEditarDocumento') ModalEditarDocumento:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormDocumento') FormDocumento:any;
 
@@ -32,11 +35,21 @@ export class TipodocumentoComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormDocumento.reset();
-      this.OcultarFormulario(this.ModalDocumento);
-      this.OcultarFormulario(this.ModalVerDocumento);
-      this.OcultarFormulario(this.ModalEditarDocumento);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalDocumento);
+    this.OcultarFormulario(this.ModalVerDocumento);
+    this.OcultarFormulario(this.ModalEditarDocumento);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolCodigo = false;
   }
 
   ActualizarVista(){
@@ -54,7 +67,9 @@ export class TipodocumentoComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });  
+    this.saveSwal.show();
   }
 
   VerDocumento(id, modal){

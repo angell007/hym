@@ -18,10 +18,14 @@ export class CajasComponent implements OnInit {
   public Oficina : any[];
   public Detalles : any[];
 
+  public boolNombre:boolean = false;
+  public boolOficina:boolean = false;
+
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient, private globales : Globales) { }
@@ -35,11 +39,21 @@ export class CajasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCajaAgregar.reset();
-      this.OcultarFormulario(this.ModalCaja);
-      this.OcultarFormulario(this.ModalVerCaja);
-      this.OcultarFormulario(this.ModalEditarCaja);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalCaja);
+    this.OcultarFormulario(this.ModalVerCaja);
+    this.OcultarFormulario(this.ModalEditarCaja);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolOficina = false;
   }
 
   ActualizarVista()
@@ -66,8 +80,10 @@ export class CajasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       formulario.reset();
       this.OcultarFormulario(modal);
-      this.ActualizarVista();     
+      this.ActualizarVista();
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 

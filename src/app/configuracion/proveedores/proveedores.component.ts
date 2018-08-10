@@ -28,10 +28,23 @@ export class ProveedoresComponent implements OnInit {
   public IdMunicipio : any[];
   public RazonSocial : any[];
 
+  public boolIdentificacion:boolean = false;
+  public boolNombre:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolConfiable:boolean = false;
+  public boolRegimen:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+  public boolRazonSocial:boolean = false;
+
   @ViewChild('ModalProveedor') ModalProveedor:any;
   @ViewChild('ModalVerProveedor') ModalVerProveedor:any;
   @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
   @ViewChild('FormProveedor') FormProveedor:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales : Globales) { } 
@@ -45,11 +58,31 @@ export class ProveedoresComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormProveedor.reset();
-      this.OcultarFormulario(this.ModalProveedor);
-      this.OcultarFormulario(this.ModalVerProveedor);
-      this.OcultarFormulario(this.ModalEditarProveedor);
+      this.OcultarFormularios;
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalProveedor);
+    this.OcultarFormulario(this.ModalVerProveedor);
+    this.OcultarFormulario(this.ModalEditarProveedor);
+  }
+
+  InicializarBool()
+  {
+    this.boolIdentificacion = false;
+    this.boolNombre = false;
+    this.boolDireccion = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolCelular = false;
+    this.boolConfiable = false;
+    this.boolRegimen = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+    this.boolRazonSocial = false;
   }
 
   ActualizarProveedores(){
@@ -73,7 +106,9 @@ export class ProveedoresComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarProveedores();
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 

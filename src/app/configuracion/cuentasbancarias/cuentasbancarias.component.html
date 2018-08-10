@@ -52,24 +52,29 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCuenta" #ModalCuenta>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Cuenta Bancaria</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormCuenta="ngForm">
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
                         <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="">
+                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="" (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuenta="ngModel">
+                        <div *ngIf="!cuenta.valid && boolCuenta==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="cuenta.valid && boolCuenta==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="">
+                        <select class="form-control" required name="Id_Banco" ngModel="" (click)="boolBanco=true" required #banco="ngModel">
                             <option value="">Seleccione Banco</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
+                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!banco.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -77,25 +82,33 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="">
+                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="" (focus)="$event.target.select()" (focusout)="boolTitular = true" required #titular="ngModel">
+                        <div *ngIf="!titular.valid && boolTitular==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="titular.valid && boolTitular==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificación Titular</label>
-                        <input type="text" currencyMask placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="">
+                        <input type="text" currencyMask placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdTitular = true" required #idTitular="ngModel">
+                        <div *ngIf="!idTitular.valid && boolIdTitular==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="idTitular.valid && boolIdTitular==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Saldo Inicial</label>
-                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="">
+                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Saldo_Inicial" ngModel="" (focus)="$event.target.select()" (focusout)="boolSaldoInicial = true" required #saldoInicial="ngModel">
+                        <div *ngIf="!saldoInicial.valid && boolSaldoInicial==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="saldoInicial.valid && boolSaldoInicial==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Fecha Saldo Inicial</label>
-                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="">
+                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="" (focus)="$event.target.select()" (focusout)="boolFechaSaldoInicial = true" required #fechaSaldoInicial="ngModel">
+                        <div *ngIf="!fechaSaldoInicial.valid && boolFechaSaldoInicial==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="fechaSaldoInicial.valid && boolFechaSaldoInicial==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -107,13 +120,16 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarCuenta(FormCuenta, ModalCuenta)">Guardar</button>
-                </div>
-            </div>
         </form>
     </div>        
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!cuenta.valid || !titular.valid || !idTitular.valid || !saldoInicial.valid || !fechaSaldoInicial.valid || banco.value==''"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarCuenta(FormCuenta, ModalCuenta)" >Actualizar Información</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 
@@ -179,7 +195,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
+            <div class="app-modal-footer">
                 <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCuenta)" >Cerrar</button>
                 </div>
@@ -252,17 +268,25 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
+            <div class="app-modal-footer">
                 <div class="text-right">
                     <button class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)"
                     >Guardar</button>
+
                 </div>
             </div>
         </form>
     </div>        
 </app-modal-basic>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Cuenta eliminada"

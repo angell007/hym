@@ -22,10 +22,18 @@ export class CuentasbancariasComponent implements OnInit {
   public FechaInicial : any[];
   public Detalle : any[];
 
+  public boolCuenta:boolean = false;
+  public boolBanco:boolean = false;
+  public boolTitular:boolean = false;
+  public boolIdTitular:boolean = false;
+  public boolSaldoInicial:boolean = false;
+  public boolFechaSaldoInicial:boolean = false;
+
   @ViewChild('ModalEditarCuenta') ModalEditarCuenta:any;
   @ViewChild('ModalVerCuenta') ModalVerCuenta:any;
   @ViewChild('ModalCuenta') ModalCuenta:any;
   @ViewChild('FormCuenta') FormCuenta:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
@@ -39,11 +47,25 @@ export class CuentasbancariasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCuenta.reset();
-      this.OcultarFormulario(this.ModalCuenta);
-      this.OcultarFormulario(this.ModalVerCuenta);
-      this.OcultarFormulario(this.ModalEditarCuenta);
+      this.OcultarFormularios();
     }
+  }
+
+OcultarFormularios()
+{
+  this.OcultarFormulario(this.ModalCuenta);
+  this.OcultarFormulario(this.ModalVerCuenta);
+  this.OcultarFormulario(this.ModalEditarCuenta);
+}
+
+  InicializarBool()
+  {
+    this.boolCuenta = false;
+    this.boolBanco = false;
+    this.boolTitular = false;
+    this.boolIdTitular = false;
+    this.boolSaldoInicial = false;
+    this.boolFechaSaldoInicial = false;
   }
 
   ActualizarVista()
@@ -62,7 +84,9 @@ export class CuentasbancariasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 

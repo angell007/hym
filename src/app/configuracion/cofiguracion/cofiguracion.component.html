@@ -8,36 +8,44 @@
                 <div class="card-block">
                     <div class="row">
                         <div class="col-md-12">
-                            <form #FormEditarConfiguracion="ngForm">
+                            <form name="myForm" #FormEditarConfiguracion="ngForm">
                                 <div class="row">
                                     <div class="col-md-4" hidden>
                                             <div class="form-group">
                                                 <label>Identificación</label>
-                                                <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                                                <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" >
                                             </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Nombre Empresa</label>
-                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" required>
+                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEmpresa="ngModel">
+                                            <div *ngIf="!nombreEmpresa.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="nombreEmpresa.valid && boolNombre==true" style="color:green">All checked!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label>N.I.T.</label>
-                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" required>
+                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
+                                            <div *ngIf="!nit.valid && boolNit==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="nit.valid && boolNit==true" style="color:green">All checked!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono</label>
-                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" required>
+                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
+                                                <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">All checked!</div>
                                             </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Celular</label>
-                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" required>
+                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
+                                                <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="celular.valid && boolCelular==true" style="color:green">All checked!</div>
                                             </div>
                                     </div>
                                 </div>
@@ -45,13 +53,17 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Dirección</label>
-                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" required>
+                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
+                                            <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">All checked!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Correo</label>
-                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" required>
+                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
+                                                <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="correo.valid && boolCorreo==true" style="color:green">All checked!</div>
                                             </div>
                                     </div>
                                 </div>	
@@ -59,19 +71,25 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos Legales</label>
-                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" required>
+                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" (focus)="$event.target.select()" (focusout)="boolFestivosLegales = true" required #festivosLegales="ngModel">
+                                            <div *ngIf="!festivosLegales.valid && boolFestivosLegales==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="festivosLegales.valid && boolFestivosLegales==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Extras Legales</label>
-                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" required>
+                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" (focus)="$event.target.select()" (focusout)="boolExtrasLegales = true" required #extrasLegales="ngModel">
+                                            <div *ngIf="!extrasLegales.valid && boolExtrasLegales==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="extrasLegales.valid && boolExtrasLegales==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Llegadas tarde</label>
-                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" required>
+                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" (focus)="$event.target.select()" (focusout)="boolLlegadasTarde = true" required #llegadasTarde="ngModel">
+                                            <div *ngIf="!llegadasTarde.valid && boolLlegadasTarde==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="llegadasTarde.valid && boolLlegadasTarde==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                 </div>
@@ -79,25 +97,33 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Inicio Dia</label>
-                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" required>
+                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioDia = true" required #horaInicioDia="ngModel">
+                                            <div *ngIf="!horaInicioDia.valid  && boolHoraInicioDia==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaInicioDia.valid && boolHoraInicioDia==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Fin Dia</label>
-                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" required>
+                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" (focus)="$event.target.select()" (focusout)="boolHoraFinDia = true" required #horaFinDia="ngModel">
+                                            <div *ngIf="!horaFinDia.valid && boolHoraFinDia==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaFinDia.valid && boolHoraFinDia==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Salario Base</label>
-                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" required>
+                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" (focus)="$event.target.select()" (focusout)="boolSalarioBase = true" required #salarioBase="ngModel">
+                                                <div *ngIf="!salarioBase.valid && boolSalarioBase==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="salarioBase.valid && boolSalarioBase==true" style="color:green">All checked!</div>
                                             </div> 
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Subsidio de transporte</label>
-                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" required>
+                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" (focus)="$event.target.select()" (focusout)="boolSubsidioTransporte = true" required #subsidioTransporte="ngModel">
+                                                <div *ngIf="!subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:green">All checked!</div>
                                             </div> 
                                     </div>
                                 </div>	
@@ -105,25 +131,33 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Diurna</label>
-                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" required>
+                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDiurna = true" required #horaExtraDiurna="ngModel">
+                                            <div *ngIf="!horaExtraDiurna.valid" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaExtraDiurna.valid && boolHoraExtraDiurna==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Nocturna</label>
-                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" required>
+                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraNocturna = true" required #horaExtraNocturna="ngModel">
+                                            <div *ngIf="!horaExtraNocturna.valid" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaExtraNocturna.valid && boolHoraExtraNocturna==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Diurna</label>
-                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" required>
+                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoDiurna = true" required #horaExtraDomingoDiurna="ngModel">
+                                            <div *ngIf="!horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora Extra Domingo Nocturna</label>
-                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" required>
+                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoNocturna = true" required #horaExtraDomingoNocturna="ngModel">
+                                            <div *ngIf="!horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                 </div>
@@ -131,25 +165,33 @@
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Diurna</label>
-                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" required>
+                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDiurna = true" required #recargoDiurna="ngModel">
+                                                <div *ngIf="!recargoDiurna.valid && boolRecargoDiurna==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="recargoDiurna.valid && boolRecargoDiurna==true" style="color:green">All checked!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Nocturno</label>
-                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" required>
+                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" (focus)="$event.target.select()" (focusout)="boolRecargoNocturno = true" required #recargoNocturno="ngModel">
+                                                <div *ngIf="!recargoNocturno.valid && boolRecargoNocturno==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="recargoNocturno.valid && boolRecargoNocturno==true" style="color:green">All checked!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Dominical Diurna</label>
-                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" required>
+                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalDiurna = true" required #recargoDominicalDiurna="ngModel">
+                                                <div *ngIf="!recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:green">All checked!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Recargo Dominical Nocturno</label>
-                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" required>
+                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalNocturna = true" required #recargoDominicalNocturna="ngModel">
+                                                <div *ngIf="!recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:green">All checked!</div>
                                             </div> 
                                     </div>
                                 </div>
@@ -157,32 +199,42 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora inicio de la jornada nocturna</label>
-                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" required>
+                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioNoche = true" required #horaInicioNoche="ngModel">
+                                            <div *ngIf="!horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Hora fin de la jornada nocturna</label>
-                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" required>
+                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraFinNoche = true" required #horaFinNoche="ngModel">
+                                            <div *ngIf="!horaFinNoche.valid && boolHoraFinNoche==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="horaFinNoche.valid && boolHoraFinNoche==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Festivos</label>
-                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" required>
+                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" (focus)="$event.target.select()" (focusout)="boolFestivos = true" required #festivos="ngModel">
+                                            <div *ngIf="!festivos.valid && boolFestivos==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="festivos.valid && boolFestivos==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Libres</label>
-                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" required>
+                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" (focus)="$event.target.select()" (focusout)="boolLibres = true" required #libres="ngModel">
+                                            <div *ngIf="!libres.valid && boolLibres==true" style="color:red">Houston, we have a problem</div>
+                                            <div *ngIf="libres.valid && boolLibres==true" style="color:green">All checked!</div>
                                         </div> 
                                     </div>
                                 </div>
                                 <div class="row">           <!-- Actualizar   -->
                                     <div class="col-md-12 col-xs-6">
+                                    <!--*ngIf="nombreEmpresa.valid"-->
                                         <div class="text-right mrg-top-5">                                            
                                             <button type="submit" class="btn btn-primary"
+                                            [disabled]="!nombreEmpresa.valid || !nit.valid || !telefono.valid || !celular.valid || !direccion.valid || !correo.valid || !festivosLegales.valid || !extrasLegales.valid || !llegadasTarde.valid || !horaInicioDia.valid || !horaFinDia.valid || !salarioBase.valid || !subsidioTransporte.valid || !horaExtraDiurna.valid || !horaExtraNocturna.valid || !horaExtraDomingoDiurna.valid || !horaExtraDomingoNocturna.valid || !recargoDiurna.valid || !recargoNocturno.valid || !recargoDominicalDiurna.valid || !recargoDominicalNocturna.valid || !horaInicioNoche.valid || !horaFinNoche.valid || !festivos.valid || !libres.valid"
                                             [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                             (confirm)="GuardarConfiguracion(FormEditarConfiguracion)" >Actualizar Información</button>
                                         </div>
@@ -207,13 +259,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Efectivo" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Efectivo" (focusout)="boolNombre = true" required>
                         </div>
                     </div>    
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>                
                     <div class="row">
@@ -233,7 +285,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Max_Venta_Efectivo]}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Max_Venta_Efectivo]}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -245,13 +297,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Efectivo" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Efectivo" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -271,7 +323,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Min_Venta_Efectivo]}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Min_Venta_Efectivo]}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -283,13 +335,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Cuenta" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Cuenta" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -309,7 +361,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{MaxVentaCuentaFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MaxVentaCuentaFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -321,13 +373,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Cuenta" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Cuenta" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -347,7 +399,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{MinVentaCuentaFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinVentaCuentaFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -359,13 +411,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Compra" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Compra" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -385,7 +437,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{MaxCompraFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MaxCompraFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -397,13 +449,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Compra" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Compra" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -423,7 +475,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{MinCompraFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinCompraFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -435,13 +487,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Venta" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Venta" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -461,7 +513,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{SugeridoVentaFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{SugeridoVentaFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -473,13 +525,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Compra" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Compra" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -499,7 +551,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{SugeridoCompraFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{SugeridoCompraFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -511,13 +563,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Precio_Ventanilla" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Precio_Ventanilla" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -537,7 +589,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{PrecioVentanillaFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{PrecioVentanillaFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -549,13 +601,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_No_Cobro" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_No_Cobro" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -575,7 +627,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{MinNoCobroFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinNoCobroFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -588,13 +640,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Efectivo" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Efectivo" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -614,7 +666,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{ComisionEfectivoFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{ComisionEfectivoFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -626,13 +678,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Recaudo" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Recaudo" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -652,7 +704,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{ComisionRecaudoFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{ComisionRecaudoFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -664,13 +716,13 @@
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Pagar_Comision_Desde" required>
+                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Pagar_Comision_Desde" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="col-md-4" hidden>
                         <div class="form-group">
                             <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
                         </div>
                     </div>
                     <div class="row">
@@ -690,7 +742,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Funcionarios</label>
-                                <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{PagarComisionDesdeFuncionario}}" >
+                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{PagarComisionDesdeFuncionario}}" >
                                     <option value="">Seleccione un funcionario</option>
                                     <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
                                 </select>
@@ -711,4 +763,10 @@
         </mdb-accordion-item>
     </mdb-accordion>
 </div>
-    
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>

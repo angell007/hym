@@ -7,7 +7,7 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-monedas',
   templateUrl: './monedas.component.html',
-  styleUrls: ['./monedas.component.css']
+  styleUrls: ['./monedas.component.css'],
 })
 export class MonedasComponent implements OnInit {
 
@@ -41,7 +41,27 @@ export class MonedasComponent implements OnInit {
   public Transferencia : boolean;
   public Identificacion : any[];
 
+  public boolNombre:boolean = false;
+  public boolCodigo:boolean = false;
+  public boolOrden:boolean = false;
+  public boolMaxVentaEfectivo:boolean = false;
+  public boolMinVentaEfectivo:boolean = false;
+  public boolMaxVentaCuenta:boolean = false;
+  public boolMinVentaCuenta:boolean = false;
+  public boolSugeridoVenta:boolean = false;
+  public boolSugeridoCompra:boolean = false;
+  public boolPrecioVentanilla:boolean = false;
+  public boolMaxCompra:boolean = false;
+  public boolMinCompra:boolean = false;
+  public boolMinNoCobro:boolean = false;
+  public boolRedondeoPesosEfectivo:boolean = false;
+  public boolRedondeoPesosCuenta:boolean = false;
+  public boolComisionEfectivo:boolean = false;
+  public boolPagarComisionDesde:boolean = false;
+  public boolComisionRecaudo:boolean = false;
+
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('ModalVerMoneda') ModalVerMoneda:any;
   @ViewChild('ModalEditarMoneda') ModalEditarMoneda:any;
   @ViewChild('ModalMoneda') ModalMoneda:any;
@@ -63,11 +83,37 @@ export class MonedasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormMoneda.reset();
-      this.OcultarFormulario(this.ModalMoneda);
-      this.OcultarFormulario(this.ModalVerMoneda);
-      this.OcultarFormulario(this.ModalEditarMoneda);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalMoneda);
+    this.OcultarFormulario(this.ModalVerMoneda);
+    this.OcultarFormulario(this.ModalEditarMoneda);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolCodigo = false;
+    this.boolOrden = false;
+    this.boolMaxVentaEfectivo = false;
+    this.boolMinVentaEfectivo = false;
+    this.boolMaxVentaCuenta = false;
+    this.boolMinVentaCuenta = false;
+    this.boolSugeridoVenta = false;
+    this.boolSugeridoCompra = false;
+    this.boolPrecioVentanilla = false;
+    this.boolMaxCompra = false;
+    this.boolMinCompra = false;
+    this.boolMinNoCobro = false;
+    this.boolRedondeoPesosEfectivo = false;
+    this.boolRedondeoPesosCuenta = false;
+    this.boolComisionEfectivo = false;
+    this.boolPagarComisionDesde = false;
+    this.boolComisionRecaudo = false;
   }
 
   ActualizarVista(){
@@ -89,7 +135,10 @@ export class MonedasComponent implements OnInit {
       //console.log(data);      
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });
+
+    this.saveSwal.show();
   }
 
 
@@ -212,8 +261,6 @@ export class MonedasComponent implements OnInit {
     console.log(value);
     value.checked = true;
     console.log("cambio checkbox");    
-  }
-
-  
+  } 
 
 }

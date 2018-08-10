@@ -18,10 +18,14 @@ export class GruposComponent implements OnInit {
   public Detalle : any[];
   public Padre : any[];
 
+  public boolNombre:boolean = false;
+  public boolPadre:boolean = false;
+
   @ViewChild('ModalGrupo') ModalGrupo:any;
   @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
   @ViewChild('ModalEditarGrupo') ModalEditarGrupo:any;
   @ViewChild('FormGrupo') FormGrupo:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient,private globales : Globales) { }
@@ -32,11 +36,21 @@ export class GruposComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormGrupo.reset();
-      this.OcultarFormulario(this.ModalGrupo);
-      this.OcultarFormulario(this.ModalVerGrupo);
-      this.OcultarFormulario(this.ModalEditarGrupo);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalGrupo);
+    this.OcultarFormulario(this.ModalVerGrupo);
+    this.OcultarFormulario(this.ModalEditarGrupo);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolPadre = false;
   }
 
   ActualizarVista(){
@@ -54,7 +68,9 @@ export class GruposComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-    });  
+      this.InicializarBool();
+    });
+    this.saveSwal.show();
   }
 
   VerGrupo(id, modal){

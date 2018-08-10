@@ -33,10 +33,22 @@ export class TercerosComponent implements OnInit {
   public IdDocumento : any[];
   public Barrio : any[];
 
+  public boolNombre:boolean = false;
+  public boolIdTercero:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolBarrio:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolTerceroDesde:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+
   @ViewChild('ModalTercero') ModalTercero:any;
   @ViewChild('ModalVerTercero') ModalVerTercero:any;
   @ViewChild('ModalEditarTercero') ModalEditarTercero:any;
   @ViewChild('FormTercero') FormTercero:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
@@ -56,12 +68,30 @@ export class TercerosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormTercero.reset();
-      this.OcultarFormulario(this.ModalTercero);
-      this.OcultarFormulario(this.ModalVerTercero);
-      this.OcultarFormulario(this.ModalEditarTercero);
+      this.OcultarFormularios();
     }
   }
+
+  OcultarFormularios()
+  {
+    this.OcultarFormulario(this.ModalTercero);
+    this.OcultarFormulario(this.ModalVerTercero);
+    this.OcultarFormulario(this.ModalEditarTercero);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolIdTercero = false;
+    this.boolDireccion = false;
+    this.boolBarrio = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolTerceroDesde = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+   }
 
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
@@ -85,7 +115,9 @@ export class TercerosComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
     });
+    this.saveSwal.show();
   }
 
 
