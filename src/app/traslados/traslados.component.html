@@ -188,7 +188,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="">
+                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -356,7 +356,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="{{Valor}}">
+                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-3">

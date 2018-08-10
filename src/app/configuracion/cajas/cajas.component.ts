@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -25,6 +28,7 @@ export class CajasComponent implements OnInit {
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
@@ -45,6 +49,7 @@ export class CajasComponent implements OnInit {
 
   OcultarFormularios()
   {
+    this.InicializarBool();
     this.OcultarFormulario(this.ModalCaja);
     this.OcultarFormulario(this.ModalVerCaja);
     this.OcultarFormulario(this.ModalEditarCaja);
@@ -77,15 +82,25 @@ export class CajasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Caja');
     datos.append("datos",info);    
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
       formulario.reset();
       this.OcultarFormulario(modal);
       this.ActualizarVista();
       this.InicializarBool();
+      this.saveSwal.show();
     });
-    this.saveSwal.show();
+
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerCaja(id, modal){
     this.http.get(this.globales.ruta+'php/cajas/detalle_caja.php',{
@@ -123,6 +138,7 @@ export class CajasComponent implements OnInit {
    * @memberof CajasComponent
    */
   EditarCaja(id){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Caja', id:id}
     }).subscribe((data:any)=>{

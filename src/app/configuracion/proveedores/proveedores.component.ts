@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -46,6 +49,7 @@ export class ProveedoresComponent implements OnInit {
   @ViewChild('ModalVerProveedor') ModalVerProveedor:any;
   @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
   @ViewChild('FormProveedor') FormProveedor:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
@@ -66,6 +70,7 @@ export class ProveedoresComponent implements OnInit {
 
   OcultarFormularios()
   {
+    this.InicializarBool();
     this.OcultarFormulario(this.ModalProveedor);
     this.OcultarFormulario(this.ModalVerProveedor);
     this.OcultarFormulario(this.ModalEditarProveedor);
@@ -105,14 +110,24 @@ export class ProveedoresComponent implements OnInit {
     datos.append("modulo",'Proveedor');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarProveedores();
       this.InicializarBool();
+      this.saveSwal.show();
     });
-    this.saveSwal.show();
+    
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerProveedor(id, modal){
     this.http.get(this.globales.ruta+'php/proveedores/detalle_proveedor.php',{
@@ -163,6 +178,7 @@ export class ProveedoresComponent implements OnInit {
   }
 
   EditarProveedor(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Proveedor', id:id}
     }).subscribe((data:any)=>{
