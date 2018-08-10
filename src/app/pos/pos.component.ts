@@ -158,6 +158,7 @@ export class PosComponent implements OnInit {
         Valor_Transferencia: '',
         Cuentas: []
       }];
+      this.PrecioSugerido = null;
       this.MonedaTransferencia = null;
       this.MonedaRecibida = null;      
       console.log(data);      
@@ -166,6 +167,8 @@ export class PosComponent implements OnInit {
 
   ResetValues()
   {
+    console.log("resetear valores");
+    this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
   }
