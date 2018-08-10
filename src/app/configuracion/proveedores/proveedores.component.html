@@ -187,7 +187,7 @@
     <div class="app-modal-body">
         <form #FormVerProveedor="ngForm">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input type="text" placeholder="Identificación Proveedor" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
@@ -195,78 +195,66 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Nombre Comercial</label>
-                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="{{Nombre}}">
-                    </div>
+                        <strong><label>Nombre Comercial: </label></strong>
+                                <label>{{Nombre}}</label>
+                            </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Razón Social</label>
-                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="{{RazonSocial}}">
-                    </div>
+                        <strong><label>Razon Social: </label></strong>
+                                <label>{{RazonSocial}}</label>
+                            </div>
                 </div>
                 </div>
                 <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                        <strong><label>Direccion: </label></strong>
+                                <label>{{Direccion}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
-                            <option>Seleccione Departamento</option>
-                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </select>
+                        <strong><label>Departamento: </label></strong>
+                                <label>{{Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="{{IdMunicipio}}">
-                            <option>Seleccione Departamento</option>
-                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </select>
+                        <strong><label>Municipio: </label></strong>
+                                <label>{{Municipio}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                        <strong><label>Telefono: </label></strong>
+                                <label>{{Telefono}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Celular</label>
-                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="{{Celular}}">
+                        <strong><label>Celular: </label></strong>
+                                <label>{{Celular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Correo</label>
-                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="{{Correo}}">
+                        <strong><label>Correo: </label></strong>
+                                <label>{{Correo}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Confiabilidad</label>
-                        <select class="form-control" name="Confiable" ngModel="{{Confiable}}">
-                            <option>Confiable</option>
-                            <option>No Confiable</option>
-                        </select>
+                        <strong><label>Confiabilidad: </label></strong>
+                                <label>{{Confiable}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Régimen</label>
-                        <select class="form-control" name="Regimen" ngModel="{{Regimen}}">
-                            <option>Común</option>
-                            <option>Simplificado</option>
-                        </select>
+                        <strong><label>Regimen: </label></strong>
+                                <label>{{Regimen}}</label>
                     </div>
                 </div>
             </div> 
@@ -274,8 +262,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Proveedor" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <strong><label>Detalles: </label></strong>
+                                <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>

@@ -132,7 +132,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDestinatario" #ModalVerDestinatario>
     <div class="app-modal-header">
-        <h4>Editar Destinatario</h4>
+        <h4>Ver Destinatario</h4>
     </div>
     <div class="app-modal-body">
         <form #FormVerDestinatario="ngForm">
@@ -163,18 +163,14 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                <strong><label>País: </label></strong>
-                        <label class="form-control" name="Id_Pais" ngModel="{{IdPais}}">
-                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                        </label>
+                        <strong><label>Pais: </label></strong> 
+                                <label>{{Pais}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                <strong><label>Banco: </label></strong>
-                        <label class="form-control" name="Id_Banco" ngModel="{{IdBanco}}">
-                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                        </label>
+                        <strong><label>Banco: </label></strong> 
+                                <label>{{Banco}}</label>
                     </div>
                 </div>
                 <div class="col-md-5">

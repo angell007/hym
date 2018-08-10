@@ -154,26 +154,24 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-               <strong><label>Banco: </label></strong>
-                        <label class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}">
-                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                        </label>
+                        <strong><label>Banco: </label></strong>  
+                                <label>{{Banco}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                <strong><label>Titular: </label></strong>  
-                        <label>{{NombreTitular}}</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
                 <strong><label>Identificación Titular: </label></strong>
                         <label>{{IdentificacionTitular}}</label>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                <strong><label>Titular: </label></strong>  
+                        <label>{{NombreTitular}}</label>
+                    </div>
+                </div>                
                 <div class="col-md-3">
                     <div class="form-group">
                 <strong><label>Saldo Inicial: </label></strong> 

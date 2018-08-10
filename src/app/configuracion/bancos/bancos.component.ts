@@ -82,12 +82,12 @@ export class BancosComponent implements OnInit {
   }
 
   VerBanco(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Banco', id:id}
+    this.http.get(this.globales.ruta+'php/bancos/detalle_banco.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
-      this.Pais = data.Id_Pais;
+      this.Pais = data.Pais;
       this.Identificador = data.Identificador;
       this.Detalle = data.Detalle;
       modal.show();

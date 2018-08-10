@@ -17,7 +17,7 @@ export class OficinasComponent implements OnInit {
   //variables que hacen referencia a los campos del formulario editar   
   public edi_visible = false;
   public edi_visibleAnimate  = false;
-  public Identificacion : any[];
+  public Identificacion ;
   public Nombre : any[];
   public Direccion : any[];
   public Departamento : any[];
@@ -138,22 +138,22 @@ export class OficinasComponent implements OnInit {
 
 
   VerOficina(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Oficina', id:id}
+    this.http.get(this.globales.ruta+'php/oficinas/detalle_oficina.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
-      this.Departamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio); 
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.Telefono = data.Telefono;
       this.Celular = data.Celular;
       this.Correo = data.Correo;
       this.Comision = data.Comision;
-      this.MinCompra = data.Min_Compra;
-      this.MaxCompra = data.Max_Compra;
-      this.MinVenta = data.Min_Venta;
-      this.MaxVenta = data.Max_Venta;
+      this.MinCompra = data.MinCompra;
+      this.MaxCompra = data.MaxCompra;
+      this.MinVenta = data.MinVenta;
+      this.MaxVenta = data.MaxVenta;
       this.Valores = data.Valores;
       modal.show();
     });

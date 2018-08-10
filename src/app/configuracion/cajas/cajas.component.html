@@ -117,16 +117,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label hidden>Identificación</label>
-                        <input name="Id_Paciente" hidden readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                <strong><label>Oficina: </label></strong>
-                        <label class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
-                            <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
-                        </label>
+                        <strong><label>Oficina: </label></strong>
+                            <label>{{Oficina}}</label>
                     </div>
                 </div>
             </div>

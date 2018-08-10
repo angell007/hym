@@ -19,7 +19,9 @@ export class DestinatariosComponent implements OnInit {
   public Nombre : any[];
   public Cuentas : any[];
   public IdBanco : any[];
+  public Banco : any[];
   public IdPais : any[];
+  public Pais : any[];
   public Detalle : any[];
 
   public boolNombre:boolean = false;
@@ -88,14 +90,14 @@ export class DestinatariosComponent implements OnInit {
   }
 
   VerDestinatario(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Destinatario', id:id}
+    this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Cuentas = data.Cuentas;
-      this.IdBanco = data.Id_Banco; 
-      this.IdPais = data.Id_Pais;
+      this.Banco = data.Banco; 
+      this.Pais = data.Pais;
       this.Detalle = data.Detalle;
       modal.show();
     });

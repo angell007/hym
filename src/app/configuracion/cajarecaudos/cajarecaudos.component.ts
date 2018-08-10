@@ -91,16 +91,16 @@ export class CajarecaudosComponent implements OnInit {
   }
 
   VerCaja(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Caja_Recaudos', id:id}
+    this.http.get(this.globales.ruta+'php/cajarecaudos/detalle_caja_recaudo.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Username = data.Username;
       this.Password = data.Password;
       this.Tipo = data.Tipo;
-      this.Departamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       modal.show();
     });
   }
