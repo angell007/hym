@@ -74,8 +74,8 @@ export class GruposComponent implements OnInit {
   }
 
   VerGrupo(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Grupo', id:id}
+    this.http.get(this.globales.ruta+'php/grupos/detalle_grupo.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;

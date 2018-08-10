@@ -20,7 +20,9 @@ export class TercerosComponent implements OnInit {
   public Nombre : any[];
   public Direccion : any[];
   public IdDepartamento : any[];
+  public Departamento : any[];
   public IdMunicipio : any[];
+  public Municipio : any[];
   public Telefono : any[];
   public Celular : any[];
   public Correo : any[];
@@ -29,8 +31,10 @@ export class TercerosComponent implements OnInit {
   public Credito : any[];
   public Cupo : any[];
   public IdGrupo : any[];
+  public Grupo : any[];
   public Detalle : any[];
   public IdDocumento : any[];
+  public Documento : any[];
   public Barrio : any[];
 
   public boolNombre:boolean = false;
@@ -122,14 +126,14 @@ export class TercerosComponent implements OnInit {
 
 
   VerTercero(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Tercero', id:id}
+    this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
-      this.IdDepartamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.Telefono = data.Telefono;
       this.Celular = data.Celular;
       this.Correo = data.Correo;
@@ -137,9 +141,8 @@ export class TercerosComponent implements OnInit {
       this.Destacado = data.Destacado;
       this.Credito = data.Credito;
       this.Cupo = data.Cupo;
-      this.IdGrupo = data.Id_Grupo;
+      this.Grupo = data.Grupo;
       this.Detalle = data.Detalle;
-      this.IdDocumento = data.Id_Documento;
       this.Barrio = data.Barrio;
       modal.show();
     });

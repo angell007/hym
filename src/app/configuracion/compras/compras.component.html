@@ -1,108 +1,226 @@
 <div class="container-fluid">
-  <!-- <div class="row">
-      <div class="col-md-3">
-          <div class="card bg-info">
-              <div class="card-block" style="padding:10px;">
-                  <div class="row">
-                      <div class="col-md-7">
-                          <h1 class="no-mrg-top font-size-30">155</h1>
-                          <span class="text-white">Transferencias</span>
-                      </div>
-                      <div class="col-md-5 text-center">
-                          <i class="ti-control-shuffle font-size-50 text-white"></i>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="col-md-3">
-              <div class="card bg-success">
-                  <div class="card-block" style="padding:10px;">
-                      <div class="row">
-                          <div class="col-md-7">
-                              <h1 class="no-mrg-top font-size-30">135</h1>
-                              <span class="text-white">Realizadas</span>
-                          </div>
-                          <div class="col-md-5 text-center">
-                              <i class="ti-thumb-up font-size-50 text-white"></i>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-                  <div class="card bg-warning">
-                      <div class="card-block" style="padding:10px;">
-                          <div class="row">
-                              <div class="col-md-7">
-                                  <h1 class="no-mrg-top font-size-30">5</h1>
-                                  <span class="text-white">Devueltas</span>
-                              </div>
-                              <div class="col-md-5 text-center">
-                                  <i class="ti-thumb-down font-size-50 text-white"></i>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                      <div class="card bg-danger">
-                          <div class="card-block" style="padding:10px;">
-                              <div class="row">
-                                  <div class="col-md-7">
-                                      <h1 class="no-mrg-top font-size-30">15</h1>
-                                      <span class="text-white">Anuladas</span>
-                                  </div>
-                                  <div class="col-md-5 text-center">
-                                      <i class="ti-close font-size-50 text-white"></i>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-  </div> -->
-  <div class="row">
-      <div class="col-md-12">
-          <div class="widget card">
-              <div class="card-block">
-                  <p>Compras en nuestro Sistema</p>
-                  <div class="table-overflow">
-                      <table class="table table-hover table-sm table-striped">
-                          <thead>
-                              <tr>
-                                  <th style="width:150px;">Fecha</th>
-                                  <th>Proveedor</th>
-                                  <th>Valor</th>
-                                  <th>Tasa Cambio</th>
-                                  <th>Nombre Funcionario</th>
-                                  <th style="width:300px;"></th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr *ngFor="let compra of compras">
-                                  <td>{{compra.Fecha}}</td>
-                                  <td>{{compra.Proveedor}}</td>
-                                  <td>{{compra.Valor}}</td>
-                                  <td>{{compra.Tasa_Cambio}}</td>
-                                  <td>{{compra.Nombre}}</td>
-                                  <td class="text-center">
-                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                          <i class="ti-search"></i>
-                                      </button>
-                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
-                                          <i class="ti-pencil"></i>
-                                      </button>
-                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                          (confirm)="EliminarTransferencia(oficina.Id_Oficina)">
-                                          <i class="ti-trash"></i>
-                                      </button>
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="page-title">
+        <h4 class="pull-left">Compras en nuestro Sistema</h4>
+        <button class="pull-right btn btn-info" (click)="ModalCompra.show()">
+            <i class="ti-plus"></i> Agregar Nueva Compra</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget card">
+                <div class="card-block">
+                    <p>Caja Recaudos en nuestro Sistema</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:150px;">Fecha</th>
+                                    <th>Proveedor</th>
+                                    <th>Valor</th>
+                                    <th>Tasa Cambio</th>
+                                    <th>Nombre Funcionario</th>
+                                    <th style="width:300px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let compra of compras">
+                                    <td>{{compra.Fecha}}</td>
+                                    <td>{{compra.Proveedor}}</td>
+                                    <td>{{compra.Valor}}</td>
+                                    <td>{{compra.Tasa_Cambio}}</td>
+                                    <td>{{compra.Nombre}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCompra(compra.Id_Compra, ModalVerCompra)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra, ModalEditarCompra)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                        [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
+                                        (confirm)="EliminarCompra(compra.Id_Compra)" 
+                                        >
+                                        <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCompra" #ModalCompra>
+    <div class="app-modal-header">
+        <h4>Nueva Compra</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCompra="ngForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select class="form-control" required name="Id_Proveedor" ngModel="">
+                            <option value="">Seleccione un Proveedor</option>
+                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="text" placeholder="" class="form-control" name="Valor" ngModel="">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Tasa Cambio</label>
+                        <input type="text" placeholder="" class="form-control" name="Tasa_Cambio" ngModel="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Funcionario</label>
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="">
+                            <option value="">Seleccione un Funcionario</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" (click)="GuardarCompra(FormCompra, ModalCompra)">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCompra" #ModalVerCompra>
+    <div class="app-modal-header">
+        <h4>Ver Compra</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerCompra="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proveedor: </label>
+                        </strong>
+                        <label>{{Proveedor}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Valor: </label>
+                        </strong>
+                        <label>{{Valor}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Tasa Cambio: </label>
+                        </strong>
+                        <label>{{TasaCambio}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Funcionario: </label>
+                        </strong>
+                        <label>{{Funcionario}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCompra)">Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCompra" #ModalEditarCompra>
+    <div class="app-modal-header">
+        <h4>Editar Compra</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarCompra="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select class="form-control" required name="Id_Proveedor" ngModel="{{Proveedor}}">
+                            <option value="">Seleccione un Proveedor</option>
+                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Valor</label>
+                        <input type="text" placeholder="" class="form-control" name="Valor" ngModel="{{Valor}}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Tasa Cambio</label>
+                        <input type="text" placeholder="" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Funcionario</label>
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}">
+                            <option value="">Seleccione un Funcionario</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+<swal #deleteSwal title="Compra eliminada" text="Se ha Eliminado Correctamente la compra" type="success">
+    </swal>
