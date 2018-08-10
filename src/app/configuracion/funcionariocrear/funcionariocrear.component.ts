@@ -11,7 +11,16 @@ import { Globales } from '../../shared/globales/globales';
   styleUrls: ['./funcionariocrear.component.css']
 })
 export class FuncionariocrearComponent implements OnInit {
-
+ // public funcionario: any [];
+ /* public Id_Funcionario: any [];
+  public Punto_Dispensacion: any [];
+  public Suspendido: any [];
+  public Id_Perfil: any [];
+  public Perfil: any [];
+  
+  public cargo:any[];
+  public Procesos: any[]; 
+  public Proceso: any[];*/
   public Grupos : any[];
   public Dependencias : any[];
   public Cargos: any[];
