@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -17,7 +20,7 @@ export class OficinasComponent implements OnInit {
   //variables que hacen referencia a los campos del formulario editar   
   public edi_visible = false;
   public edi_visibleAnimate  = false;
-  public Identificacion : any[];
+  public Identificacion ;
   public Nombre : any[];
   public Direccion : any[];
   public Departamento : any[];
@@ -32,9 +35,25 @@ export class OficinasComponent implements OnInit {
   public MaxVenta : any[];
   public Valores : any[];
 
+  public boolNombre:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolComision:boolean = false;
+  public boolMinCompra:boolean = false;
+  public boolMaxCompra:boolean = false;
+  public boolMinVenta:boolean = false;
+  public boolMaxVenta:boolean = false;
+  public boolValores:boolean = false;
+
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
   
@@ -49,11 +68,33 @@ export class OficinasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormOficinaAgregar.reset();
-      this.OcultarFormulario(this.ModalOficina);
-      this.OcultarFormulario(this.ModalVerOficina);
-      this.OcultarFormulario(this.ModalEditarOficina);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalOficina);
+    this.OcultarFormulario(this.ModalVerOficina);
+    this.OcultarFormulario(this.ModalEditarOficina);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolDireccion = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolComision = false;
+    this.boolMinCompra = false;
+    this.boolMaxCompra = false;
+    this.boolMinVenta = false;
+    this.boolMaxVenta = false;
+    this.boolValores = false;
   }
 
   ActualizarVista()
@@ -91,31 +132,42 @@ export class OficinasComponent implements OnInit {
     this.OcultarFormulario(modal);
     datos.append("modulo",'Oficina');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
       this.ActualizarVista();
       formulario.reset();
-    });    
+      this.InicializarBool();
+      this.saveSwal.show();
+    });
+    
   }
 
-
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerOficina(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Oficina', id:id}
+    this.http.get(this.globales.ruta+'php/oficinas/detalle_oficina.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
-      this.Departamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio); 
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.Telefono = data.Telefono;
       this.Celular = data.Celular;
       this.Correo = data.Correo;
       this.Comision = data.Comision;
-      this.MinCompra = data.Min_Compra;
-      this.MaxCompra = data.Max_Compra;
-      this.MinVenta = data.Min_Venta;
-      this.MaxVenta = data.Max_Venta;
+      this.MinCompra = data.MinCompra;
+      this.MaxCompra = data.MaxCompra;
+      this.MinVenta = data.MinVenta;
+      this.MaxVenta = data.MaxVenta;
       this.Valores = data.Valores;
       modal.show();
     });
@@ -132,6 +184,7 @@ export class OficinasComponent implements OnInit {
    * @memberof OficinasComponent
    */
   EditarOficina(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Oficina', id:id}
     }).subscribe((data:any)=>{

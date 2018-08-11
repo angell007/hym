@@ -50,24 +50,29 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>        
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormCajaAgregar="ngForm">
             <div class="row">
                 <div class="col-md-8">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreCaja="ngModel">
+                        <div *ngIf="!nombreCaja.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombreCaja.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Oficina</label>
-                        <select class="form-control" required name="Id_Oficina" ngModel="">
+                        <select class="form-control" required name="Id_Oficina" ngModel="" (click)="boolOficina=true" required #oficina="ngModel">
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
+                        <div *ngIf="oficina.value=='' && boolOficina==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!oficina.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -79,20 +84,24 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCajaAgregar, ModalCaja)">Guardar</button>
-                </div>
-            </div> 
         </form>                
-    </div>       
+    </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!nombreCaja.valid || oficina.value==''"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarCaja(FormCajaAgregar, ModalCaja)" >Actualizar Información</button>
+            </div>
+        </div> 
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCaja" #ModalVerCaja>        
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Ver Caja</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -109,16 +118,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label hidden>Identificación</label>
-                        <input name="Id_Paciente" hidden readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                <strong><label>Oficina: </label></strong>
-                        <label class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
-                            <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
-                        </label>
+                        <strong><label>Oficina: </label></strong>
+                            <label>{{Oficina}}</label>
                     </div>
                 </div>
             </div>
@@ -130,20 +131,21 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
-                </div>
-            </div> 
         </form>                
-    </div>       
+    </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>        
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Caja</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -155,7 +157,9 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreCajaEd="ngModel">
+                        <div *ngIf="!nombreCajaEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombreCajaEd.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -167,10 +171,12 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Oficina</label>
-                        <select class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}">
+                        <select class="form-control" required name="Id_Oficina" ngModel="{{Oficina}}" (click)="boolOficina=true" required #oficinaEd="ngModel">
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
+                        <div *ngIf="oficinaEd.value=='' && boolOficina==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!oficinaEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -182,20 +188,35 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" 
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este Paciente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
-                </div>
-            </div> 
         </form>                
-    </div>       
+    </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="button" class="btn btn-primary btn-sm"
+                [disabled]="!nombreCajaEd.valid || oficinaEd.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este Paciente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
+            </div>
+        </div>
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Caja eliminada"
   text="Se ha eliminado correctamente la caja"
   type="success"
   >
-  </swal>
+</swal>

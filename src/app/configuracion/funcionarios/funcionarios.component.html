@@ -1,14 +1,14 @@
 <div class="container-fluid">
     <div class="page-title">
       <h4 class="pull-left">Funcionarios</h4>
-      <button class="pull-right btn btn-info"  href="" [routerLink]="['/funcionariocrear']" ><i class="ti-plus"></i> Agregar Nuevo Funcionario</button>
+         <a class="pull-right btn btn-info" href="/funcionariocrear"><i class="ti-plus"></i> Agregar Nuevo Funcionario</a>
     </div>
     <div class="clearfix"></div>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
           <div class="card-block">
-            <p>Todas los funcionarios que Laboran en nuestra compañía</p>
+            <p>Todos los funcionarios que laboran en nuestra compañía</p>
             <div class="table-overflow">
               <table class="table table-hover table-sm table-striped">
                 <thead>
@@ -36,16 +36,18 @@
                       </ul>
                     </td>
                     <td class="text-center" style="vertical-align: middle;">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"  (click)="VerFuncionario(funcionario.Id_ , ModalVerFuncionario)">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"  (click)="VerFuncionario(funcionario.Identificacion_Funcionario , ModalVerFuncionario)">
                             <i class="ti-search"></i>
                         </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarFuncionario(funcionario.Identificacion_Funcionario, ModalEditarFuncionario)">
                             <i class="ti-pencil"></i>
                         </button>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                             <i class="ti-id-badge"></i>
                         </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este Funcionario, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                        (confirm)="EliminarFuncionario(Funcionario.Identificacion_Funcionario)">
                             <i class="ti-trash"></i>
                         </button>
                     </td>
@@ -58,3 +60,166 @@
       </div>
     </div>
 </div>
+
+
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerFuncionario" #ModalVerFuncionario>
+  <div class="app-modal-header">
+      <h4>Ver Funcionario</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormVerFuncionario="ngForm">
+
+
+        
+
+        
+          <div class="modal-footer no-border">
+              <div class="text-right">
+                  <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerFuncionario)" >Cerrar</button>
+              </div>
+          </div>
+      </form>                
+  </div> 
+</app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarFuncionario" #ModalEditarFuncionario>
+  <div class="app-modal-header">
+      <h4>Editar Funcionario</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormEditarFuncionario="ngForm">
+          <div class="row">
+              <div class="col-md-4" hidden>
+                  <div class="form-group">
+                      <label>Identificación</label>
+                      <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Teléfono</label>
+                      <input type="text" placeholder="Teléfono Oficina" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Celular</label>
+                      <input type="text" placeholder="Celular Oficina" class="form-control" name="Celular" ngModel="{{Celular}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Correo</label>
+                      <input type="text" placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="{{Correo}}">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Dirección</label>
+                      <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Departamento</label>
+                      <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
+                          <option value="">Seleccione un Departamento</option>
+                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Municipio</label>
+                      <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
+                          <option value="">Seleccione un Municipio</option>
+                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+          <hr>
+          <h3>Datos de Cambios</h3>
+          <div class="row">
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Comisión</label>
+                      <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Mín Compra</label>
+                      <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Máx Compra</label>
+                      <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Min Venta</label>
+                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Máx Venta</label>
+                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Valores</label>
+                      <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer no-border">
+              <div class="text-right">
+                  <button type="button" class="btn btn-primary btn-sm"
+                      [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este funcionario' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                      (confirm)="GuardarFuncionario(FormEditarFuncionario, ModalEditarFuncionario)">Guardar</button>
+              </div>
+          </div>
+      </form>                
+  </div> 
+</app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
+
+<swal #deleteSwal
+title="Oficina eliminada"
+text="Se ha eliminado correctamente la oficina"
+type="success"
+>
+</swal>

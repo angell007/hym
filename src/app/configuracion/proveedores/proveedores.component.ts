@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -25,13 +28,29 @@ export class ProveedoresComponent implements OnInit {
   public Confiable : any[];
   public Regimen : any[];
   public IdDepartamento : any[];
+  public Departamento : any[];
   public IdMunicipio : any[];
+  public Municipio : any[];
   public RazonSocial : any[];
+
+  public boolIdentificacion:boolean = false;
+  public boolNombre:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolConfiable:boolean = false;
+  public boolRegimen:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+  public boolRazonSocial:boolean = false;
 
   @ViewChild('ModalProveedor') ModalProveedor:any;
   @ViewChild('ModalVerProveedor') ModalVerProveedor:any;
   @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
   @ViewChild('FormProveedor') FormProveedor:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales : Globales) { } 
@@ -45,11 +64,32 @@ export class ProveedoresComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormProveedor.reset();
-      this.OcultarFormulario(this.ModalProveedor);
-      this.OcultarFormulario(this.ModalVerProveedor);
-      this.OcultarFormulario(this.ModalEditarProveedor);
+      this.OcultarFormularios;
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalProveedor);
+    this.OcultarFormulario(this.ModalVerProveedor);
+    this.OcultarFormulario(this.ModalEditarProveedor);
+  }
+
+  InicializarBool()
+  {
+    this.boolIdentificacion = false;
+    this.boolNombre = false;
+    this.boolDireccion = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolCelular = false;
+    this.boolConfiable = false;
+    this.boolRegimen = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+    this.boolRazonSocial = false;
   }
 
   ActualizarProveedores(){
@@ -70,16 +110,28 @@ export class ProveedoresComponent implements OnInit {
     datos.append("modulo",'Proveedor');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarProveedores();
+      this.InicializarBool();
+      this.saveSwal.show();
     });
+    
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerProveedor(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Proveedor', id:id}
+    this.http.get(this.globales.ruta+'php/proveedores/detalle_proveedor.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = data.Id_Proveedor;
       this.Nombre = data.Nombre;
@@ -90,8 +142,8 @@ export class ProveedoresComponent implements OnInit {
       this.Detalle = data.Detalle;
       this.Confiable = data.Confiable;
       this.Regimen = data.Regimen;
-      this.IdDepartamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.RazonSocial = data.Razon_Social;
       modal.show();
     });
@@ -126,6 +178,7 @@ export class ProveedoresComponent implements OnInit {
   }
 
   EditarProveedor(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Proveedor', id:id}
     }).subscribe((data:any)=>{

@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -89,8 +92,36 @@ export class CofiguracionComponent implements OnInit {
   public PagarComisionDesdeFuncionario : any[];
   public ComisionRecaudoFuncionario : any[];
 
+  public boolNombre:boolean = false;
+  public boolNit:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolFestivosLegales:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolExtrasLegales:boolean = false;
+  public boolLlegadasTarde:boolean = false;
+  public boolHoraInicioDia:boolean = false;
+  public boolHoraFinDia:boolean = false;
+  public boolSalarioBase:boolean = false;
+  public boolSubsidioTransporte:boolean = false;
+  public boolHoraExtraDiurna:boolean = false;
+  public boolHoraExtraNocturna:boolean = false;
+  public boolHoraExtraDomingoDiurna:boolean = false;
+  public boolHoraExtraDomingoNocturna:boolean = false;
+  public boolRecargoDiurna:boolean = false;
+  public boolRecargoNocturno:boolean = false;
+  public boolRecargoDominicalDiurna:boolean = false;
+  public boolRecargoDominicalNocturna:boolean = false;
+  public boolHoraInicioNoche:boolean = false;
+  public boolHoraFinNoche:boolean = false;
+  public boolFestivos:boolean = false;
+  public boolLibres:boolean = false;
+  
   @ViewChild('acordeon') acordeon:NgbAccordionModule;
   @ViewChild('FormEditarConfiguracion') FormEditarConfiguracion:any;
+  @ViewChild('saveSwal') saveSwal:any;
+  @ViewChild('errorSwal') errorSwal:any;
 
   constructor(private http : HttpClient, private globales:Globales) { }
 
@@ -159,20 +190,60 @@ export class CofiguracionComponent implements OnInit {
   }
 */
 
+InicializarBool()
+{
+  this.boolNombre = false;
+  this.boolNit = false;
+  this.boolTelefono = false;
+  this.boolCelular = false;
+  this.boolCorreo = false;
+  this.boolFestivosLegales = false;
+  this.boolDireccion = false;
+  this.boolExtrasLegales = false;
+  this.boolLlegadasTarde = false;
+  this.boolHoraInicioDia = false;
+  this.boolHoraFinDia = false;
+  this.boolSalarioBase = false;
+  this.boolSubsidioTransporte = false;
+  this.boolHoraExtraDiurna = false;
+  this.boolHoraExtraNocturna = false;
+  this.boolHoraExtraDomingoDiurna = false;
+  this.boolHoraExtraDomingoNocturna = false;
+  this.boolRecargoDiurna = false;
+  this.boolRecargoNocturno = false;
+  this.boolRecargoDominicalDiurna = false;
+  this.boolRecargoDominicalNocturna = false;
+  this.boolHoraInicioNoche = false;
+  this.boolHoraFinNoche = false;
+  this.boolFestivos = false;
+  this.boolLibres = false;
+}
 
 GuardarConfiguracion(formulario: NgForm){
   let info = JSON.stringify(formulario.value);
   let datos = new FormData();    
   datos.append("modulo",'Configuracion');
   datos.append("datos",info);
-  this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
-    //formulario.reset();    
-    //this.EditarConfiguracion();
-  });
+  this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
+      //formulario.reset();    
+      //this.EditarConfiguracion();
+      this.InicializarBool();
+      this.saveSwal.show();
+    });
 }
 
+handleError(error: Response) {
+    return Observable.throw(error);
+}
 
 EditarConfiguracion(){
+  this.InicializarBool();
   this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
     params:{modulo:'Configuracion', id: '1'}
   }).subscribe((data:any)=>{

@@ -52,6 +52,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalProveedor" #ModalProveedor>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nuevo Proveedor</h4>
     </div>
     <div class="app-modal-body">
@@ -60,19 +61,25 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Proveedor" class="form-control" name="Id_Proveedor" ngModel="">
+                        <input type="text" placeholder="Identificación Proveedor" class="form-control" name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdentificacion = true" required #identificacion="ngModel">
+                        <div *ngIf="!identificacion.valid && boolIdentificacion==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="identificacion.valid && boolIdentificacion==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre Comercial</label>
-                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Razón Social</label>
-                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="">
+                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="" (focus)="$event.target.select()" (focusout)="boolRazonSocial = true" required #razonSocial="ngModel">
+                        <div *ngIf="!razonSocial.valid && boolRazonSocial==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="razonSocial.valid && boolRazonSocial==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -80,31 +87,39 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="">
+                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
+                        <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)">
-                            <option>Seleccione Departamento</option>
+                        <select class="form-control" name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
+                            <option value="" >Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
+                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!departamento.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="">
-                            <option>Seleccione Departamento</option>
+                        <select class="form-control" name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                            <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
+                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!municipio.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="">
+                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
+                        <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -112,20 +127,24 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="">
+                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
+                        <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="celular.valid && boolCelular==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="">
+                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
+                        <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="correo.valid && boolCorreo==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Confiabilidad</label>
-                        <select class="form-control" name="Confiable" ngModel="">
-                            <option>Confiable</option>
+                        <select class="form-control" name="Confiable" ng-model="selected" >
+                            <option ng-selected="selected">Confiable</option>
                             <option>No Confiable</option>
                         </select>
                     </div>
@@ -133,8 +152,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Régimen</label>
-                        <select class="form-control" name="Regimen" ngModel="">
-                            <option>Común</option>
+                        <select class="form-control" name="Regimen" ng-model="selected">
+                            <option ng-selected="selected">Común</option>
                             <option>Simplificado</option>
                         </select>
                     </div>
@@ -149,13 +168,16 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarProveedor(FormProveedor, ModalProveedor)">Guardar</button>
-                </div>
-            </div>
         </form>   
-    </div>         
+    </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"
+                [disabled]="!nombre.valid || !identificacion.valid || !direccion.valid || !telefono.valid || !celular.valid || !correo.valid || !razonSocial.valid || departamento.value=='' || municipio.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarProveedor(FormProveedor, ModalProveedor)" >Actualizar Información</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerProveedor" #ModalVerProveedor>
@@ -165,7 +187,7 @@
     <div class="app-modal-body">
         <form #FormVerProveedor="ngForm">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input type="text" placeholder="Identificación Proveedor" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
@@ -173,78 +195,66 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Nombre Comercial</label>
-                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="{{Nombre}}">
-                    </div>
+                        <strong><label>Nombre Comercial: </label></strong>
+                                <label>{{Nombre}}</label>
+                            </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Razón Social</label>
-                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="{{RazonSocial}}">
-                    </div>
+                        <strong><label>Razon Social: </label></strong>
+                                <label>{{RazonSocial}}</label>
+                            </div>
                 </div>
                 </div>
                 <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                        <strong><label>Direccion: </label></strong>
+                                <label>{{Direccion}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
-                            <option>Seleccione Departamento</option>
-                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </select>
+                        <strong><label>Departamento: </label></strong>
+                                <label>{{Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="{{IdMunicipio}}">
-                            <option>Seleccione Departamento</option>
-                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </select>
+                        <strong><label>Municipio: </label></strong>
+                                <label>{{Municipio}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                        <strong><label>Telefono: </label></strong>
+                                <label>{{Telefono}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Celular</label>
-                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="{{Celular}}">
+                        <strong><label>Celular: </label></strong>
+                                <label>{{Celular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Correo</label>
-                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="{{Correo}}">
+                        <strong><label>Correo: </label></strong>
+                                <label>{{Correo}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Confiabilidad</label>
-                        <select class="form-control" name="Confiable" ngModel="{{Confiable}}">
-                            <option>Confiable</option>
-                            <option>No Confiable</option>
-                        </select>
+                        <strong><label>Confiabilidad: </label></strong>
+                                <label>{{Confiable}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Régimen</label>
-                        <select class="form-control" name="Regimen" ngModel="{{Regimen}}">
-                            <option>Común</option>
-                            <option>Simplificado</option>
-                        </select>
+                        <strong><label>Regimen: </label></strong>
+                                <label>{{Regimen}}</label>
                     </div>
                 </div>
             </div> 
@@ -252,8 +262,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Proveedor" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <strong><label>Detalles: </label></strong>
+                                <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>
@@ -303,7 +313,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" #SelectDepartamento (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
+                        <select class="form-control" name="Id_Departamento" (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
                             <option>Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
@@ -376,6 +386,20 @@
         </form>   
     </div>         
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Proveedor Eliminado"

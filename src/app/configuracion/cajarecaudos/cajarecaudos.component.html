@@ -52,27 +52,34 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormCaja="ngForm">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="">
+                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="" (focus)="$event.target.select()" (focusout)="boolUsername = true" required #username="ngModel">
+                        <div *ngIf="!username.valid && boolUsername==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="username.valid && boolUsername==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="">
+                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="" (focus)="$event.target.select()" (focusout)="boolPassword = true" required #password="ngModel">
+                        <div *ngIf="!password.valid && boolPassword==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="password.valid && boolPassword==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -80,43 +87,53 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="">
+                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="" (focus)="$event.target.select()" (focusout)="boolTipo = true" required #tipo="ngModel">
+                        <div *ngIf="!tipo.valid && boolTipo==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="tipo.valid && boolTipo==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
+                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
+                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!departamento.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="">
+                        <select class="form-control" required name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
+                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!municipio.value==''" style="color:green">All checked!</div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarCaja(FormCaja, ModalCaja)">Guardar</button>
                 </div>
             </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary"
+                    [disabled]="!nombre.valid || !username.valid || !password.valid || !tipo.valid || departamento.value=='' || municipio.value==''"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarCaja(FormCaja, ModalCaja)" >Actualizar Información</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCaja" #ModalVerCaja>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Ver Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -131,19 +148,6 @@
                         <label>{{Nombre}}</label>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Username: </label>
-                        <label>{{Username}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                <strong><label>Password: </label></strong>
-                        <label>{{Password}}</label>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
@@ -154,38 +158,34 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                <strong><label>Departamento: </label></strong>
-                        <label required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
-                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                        </label>
+                        <strong><label>Departamento: </label></strong>
+                                <label>{{Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                <strong><label>Municipio: </label></strong>
-                        <label required name="Id_Municipio" ngModel="{{Municipio}}">
-                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                        </label>
+                        <strong><label>Municipio: </label></strong>
+                                <label>{{Municipio}}</label>
                     </div>
                 </div>
             </div>
 
-
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
-                </div>
-            </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCaja)" >Cerrar</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -197,20 +197,26 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}">
+                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}" (focus)="$event.target.select()" (focusout)="boolUsername = true" required #usernameEd="ngModel">
+                        <div *ngIf="!usernameEd.valid && boolUsername==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="usernameEd.valid && boolUsername==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}">
+                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}" (focus)="$event.target.select()" (focusout)="boolPassword = true" required #passwordEd="ngModel">
+                        <div *ngIf="!passwordEd.valid && boolPassword==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="passwordEd.valid && boolPassword==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -218,39 +224,62 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="{{Tipo}}">
+                        <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="{{Tipo}}" (focus)="$event.target.select()" (focusout)="boolTipo = true" required #tipoEd="ngModel">
+                        <div *ngIf="!tipoEd.valid && boolTipo==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="tipoEd.valid && boolTipo==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamentoEd="ngModel">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
+                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!departamentoEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}" (click)="boolMunicipio=true" required #municipioEd="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
+                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!municipioEd.value==''" style="color:green">All checked!</div>
                     </div>
-                </div>
-            </div>
-
-
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
                 </div>
             </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm"
+                [disabled]="!nombreEd.valid || !usernameEd.valid || !passwordEd.valid || !tipoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
+            </div>
+        </div>
 </app-modal-basic>
 
-<swal #deleteSwal title="Caja eliminada" text="Se ha Eliminado Correctamente la caja" type="success">
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
+
+<swal #deleteSwal 
+title="Caja eliminada" 
+text="Se ha Eliminado Correctamente la caja" 
+type="success">
 </swal>

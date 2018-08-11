@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -18,10 +21,15 @@ export class CajasComponent implements OnInit {
   public Oficina : any[];
   public Detalles : any[];
 
+  public boolNombre:boolean = false;
+  public boolOficina:boolean = false;
+
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('FormCajaAgregar') FormCajaAgregar:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient, private globales : Globales) { }
@@ -35,11 +43,22 @@ export class CajasComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormCajaAgregar.reset();
-      this.OcultarFormulario(this.ModalCaja);
-      this.OcultarFormulario(this.ModalVerCaja);
-      this.OcultarFormulario(this.ModalEditarCaja);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalCaja);
+    this.OcultarFormulario(this.ModalVerCaja);
+    this.OcultarFormulario(this.ModalEditarCaja);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolOficina = false;
   }
 
   ActualizarVista()
@@ -63,21 +82,33 @@ export class CajasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Caja');
     datos.append("datos",info);    
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
       formulario.reset();
       this.OcultarFormulario(modal);
-      this.ActualizarVista();     
+      this.ActualizarVista();
+      this.InicializarBool();
+      this.saveSwal.show();
     });
+
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerCaja(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Caja', id:id}
+    this.http.get(this.globales.ruta+'php/cajas/detalle_caja.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
-      this.Oficina = data.Id_Oficina;
+      this.Oficina = data.Oficina;
       this.Detalles = data.Detalle;
       modal.show();
     });
@@ -107,6 +138,7 @@ export class CajasComponent implements OnInit {
    * @memberof CajasComponent
    */
   EditarCaja(id){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Caja', id:id}
     }).subscribe((data:any)=>{

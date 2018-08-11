@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -20,7 +23,9 @@ export class TercerosComponent implements OnInit {
   public Nombre : any[];
   public Direccion : any[];
   public IdDepartamento : any[];
+  public Departamento : any[];
   public IdMunicipio : any[];
+  public Municipio : any[];
   public Telefono : any[];
   public Celular : any[];
   public Correo : any[];
@@ -29,14 +34,29 @@ export class TercerosComponent implements OnInit {
   public Credito : any[];
   public Cupo : any[];
   public IdGrupo : any[];
+  public Grupo : any[];
   public Detalle : any[];
   public IdDocumento : any[];
+  public Documento : any[];
   public Barrio : any[];
+
+  public boolNombre:boolean = false;
+  public boolIdTercero:boolean = false;
+  public boolDireccion:boolean = false;
+  public boolBarrio:boolean = false;
+  public boolTelefono:boolean = false;
+  public boolCelular:boolean = false;
+  public boolCorreo:boolean = false;
+  public boolTerceroDesde:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
 
   @ViewChild('ModalTercero') ModalTercero:any;
   @ViewChild('ModalVerTercero') ModalVerTercero:any;
   @ViewChild('ModalEditarTercero') ModalEditarTercero:any;
   @ViewChild('FormTercero') FormTercero:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
@@ -56,12 +76,31 @@ export class TercerosComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormTercero.reset();
-      this.OcultarFormulario(this.ModalTercero);
-      this.OcultarFormulario(this.ModalVerTercero);
-      this.OcultarFormulario(this.ModalEditarTercero);
+      this.OcultarFormularios();
     }
   }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalTercero);
+    this.OcultarFormulario(this.ModalVerTercero);
+    this.OcultarFormulario(this.ModalEditarTercero);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolIdTercero = false;
+    this.boolDireccion = false;
+    this.boolBarrio = false;
+    this.boolTelefono = false;
+    this.boolCelular = false;
+    this.boolCorreo = false;
+    this.boolTerceroDesde = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+   }
 
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
@@ -82,22 +121,34 @@ export class TercerosComponent implements OnInit {
     datos.append("modulo",'Tercero');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
+      this.InicializarBool();
+      this.saveSwal.show();
     });
+    
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerTercero(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Tercero', id:id}
+    this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;
-      this.IdDepartamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
+      this.Departamento = data.Departamento;
+      this.Municipio = data.Municipio;
       this.Telefono = data.Telefono;
       this.Celular = data.Celular;
       this.Correo = data.Correo;
@@ -105,15 +156,15 @@ export class TercerosComponent implements OnInit {
       this.Destacado = data.Destacado;
       this.Credito = data.Credito;
       this.Cupo = data.Cupo;
-      this.IdGrupo = data.Id_Grupo;
+      this.Grupo = data.Grupo;
       this.Detalle = data.Detalle;
-      this.IdDocumento = data.Id_Documento;
       this.Barrio = data.Barrio;
       modal.show();
     });
   }
 
   EditarTercero(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tercero', id:id}
     }).subscribe((data:any)=>{   

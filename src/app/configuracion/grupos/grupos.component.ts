@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -18,10 +21,15 @@ export class GruposComponent implements OnInit {
   public Detalle : any[];
   public Padre : any[];
 
+  public boolNombre:boolean = false;
+  public boolPadre:boolean = false;
+
   @ViewChild('ModalGrupo') ModalGrupo:any;
   @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
   @ViewChild('ModalEditarGrupo') ModalEditarGrupo:any;
   @ViewChild('FormGrupo') FormGrupo:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
   constructor(private http : HttpClient,private globales : Globales) { }
@@ -32,11 +40,22 @@ export class GruposComponent implements OnInit {
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
-      this.FormGrupo.reset();
-      this.OcultarFormulario(this.ModalGrupo);
-      this.OcultarFormulario(this.ModalVerGrupo);
-      this.OcultarFormulario(this.ModalEditarGrupo);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalGrupo);
+    this.OcultarFormulario(this.ModalVerGrupo);
+    this.OcultarFormulario(this.ModalEditarGrupo);
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolPadre = false;
   }
 
   ActualizarVista(){
@@ -51,15 +70,28 @@ export class GruposComponent implements OnInit {
     datos.append("modulo",'Grupo');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-    });  
+      this.InicializarBool();
+      this.saveSwal.show();
+    });
+    
+  }
+
+  handleError(error: Response) {
+    return Observable.throw(error);
   }
 
   VerGrupo(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Grupo', id:id}
+    this.http.get(this.globales.ruta+'php/grupos/detalle_grupo.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
       this.Nombre = data.Nombre;
@@ -70,6 +102,7 @@ export class GruposComponent implements OnInit {
   }
 
   EditarGrupo(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Grupo', id:id}
     }).subscribe((data:any)=>{      
