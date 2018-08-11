@@ -7,11 +7,11 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-block">
-              <form #FormFuncionarioCrear="ngForm">  <!-- Aplicada esta linea-->
               <form-wizard style="border:0 !important;">
                   <!--INICIO INFORMACION PERSONAL-->
-                  <wizard-step [title]="'Información Personal'">
+                  <wizard-step [title]="'Información Personal'" [isValid]="" (onNext)="onStep1Next($event)">
                     <div class="content2">
+                      <form #FormFuncionarioCrear="ngForm">
                       <div>
                         <h5>Información Personal</h5><hr>
                         <div class="row" >
@@ -328,14 +328,12 @@
                           </div>
                         </div>
                       </div>
-                      <div>
-                        <button type="button" class="btn btn-primary btn-sm btn-right" nextStep>Siguiente</button>
-                      </div>
+                    </form>
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION PERSONAL-->
                   <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
-                  <wizard-step [title]="'Contacto Emergencia'" (onNext)="onStep2Next($event)">
+                  <wizard-step [title]="'Contacto Emergencia'" [isValid]="" (onNext)="onStep2Next($event)">
                     <div class="content2">
                       <div>
                           <h5>Contacto Emergecia</h5><hr>
@@ -374,35 +372,30 @@
                               </div>
                           </div>
                       </div>
-              
-                      <div>
-                        <button type="button" class="btn btn-secondary btn-sm" previousStep>Atras</button>
-                        <button type="button" class="btn btn-primary btn-sm btn-right" nextStep>Siguiente</button>
-                      </div>
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION CONTACTO EMERGENCIA-->
                   <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
-                  <wizard-step [title]="'Experiencia Laboral'" (onNext)="onStep3Next($event)">
+                  <wizard-step [title]="'Experiencia Laboral'" [isValid]="" (onNext)="onStep3Next($event)">
                     <div class="content">
                       <div>
                           <h5>Experiencia Laboral 1</h5><hr>
                           <div class="row">
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"  id="text-input" class="form-control form-control-sm"/>
+                                  <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"  id="text-input-Nombre-Empresa-0" class="form-control form-control-sm"/>
                                   <label class="floating-label" >Empresa</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" id="text-input" class="letras form-control form-control-sm"/>
+                                  <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" id="text-input-Cargo-0" class="letras form-control form-control-sm"/>
                                   <label class="floating-label" >Cargo</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" id="text-input" class="letras form-control form-control-sm"/>
+                                  <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" id="text-input-Jefe-0" class="letras form-control form-control-sm"/>
                                   <label class="floating-label" >Jefe Inmediato</label>
                                 </div>
                               </div>
@@ -422,7 +415,7 @@
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" id="text-input" class="celular form-control form-control-sm"/>
+                                  <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" id="text-input-ExpL1-Telefono-0" class="celular form-control form-control-sm"/>
                                   <label class="floating-label" >Numero de Contacto</label>
                                 </div>
                               </div>
@@ -441,19 +434,19 @@
                           <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" id="text-input" class="form-control form-control-sm"/>
+                              <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" id="text-input-Nombre-Empresa-1" class="form-control form-control-sm"/>
                               <label class="floating-label" >Empresa</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" id="text-input" class="letras form-control form-control-sm"/>
+                              <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" id="text-input-Cargo-1" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Cargo</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" id="text-input" class="letras form-control form-control-sm"/>
+                              <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" id="text-input-Jefe-1" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Jefe Inmediato</label>
                             </div>
                           </div>
@@ -473,7 +466,7 @@
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" id="text-input" class="celular form-control form-control-sm"/>
+                                <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" id="text-input-ExpL1-Telefono-1" class="celular form-control form-control-sm"/>
                                 <label class="floating-label" >Numero de Contacto</label>
                               </div>
                             </div>
@@ -487,41 +480,36 @@
                             </div>
                           </div>
                       </div>
-              
-                      <div>
-                         <button type="button" class="btn btn-secondary btn-sm" previousStep>Atras</button>
-                         <button type="button" class="btn btn-primary btn-sm btn-right" nextStep>Siguiente</button>
-                      </div>
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION EXPERIENCIA LABORAL-->
                   <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
-                  <wizard-step [title]="'Referencias Personales'" (onComplete)="onComplete($event)">
+                  <wizard-step [title]="'Referencias Personales'" [isValid]="" (onNext)="onStep4Next($event)">
                     <div class="content">
                       <div>
                           <h5>Referencia 1</h5><hr>
                           <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" id="text-input" class="letras form-control form-control-sm" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" id="text-input-Nombres-0" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" id="text-input" class="letras form-control form-control-sm" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" id="text-input-Profesion-0" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" id="text-input" class="form-control form-control-sm" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" id="text-input-Empresa-0" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" id="text-input" class="celular form-control form-control-sm" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" id="text-input-Telefono-0" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
@@ -530,46 +518,40 @@
                         <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" id="text-input" class="letras form-control form-control-sm" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" id="text-input-Nombres-1" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" id="text-input" class="letras form-control form-control-sm" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" id="text-input-Profesion-1" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" id="text-input" class="form-control form-control-sm" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" id="text-input-Empresa-1" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" id="text-input" class="celular form-control form-control-sm" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" id="text-input-Telefono-1" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
                       </div>
                       </div>
-                                
-                      <div>
-                        <button type="button" class="btn btn-secondary btn-sm" previousStep>Atras</button>
-                        <button type="button" class="btn btn-primary btn-sm btn-right" nextStep>Siguiente</button>
-                      </div>
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION REFERENCIAS PERSONALES-->
                   <!--INICIO INFORMACION PRIVILEGIOS-->
-                  <wizard-step stepTitle="Privilegios" navigationSymbol="5">
+                  <wizard-step [title]="'Privilegios'" (onComplete)="onComplete($event)">
                     <div class="content">
                       <div>
                           
                       </div>
                       <div >
-                        <button type="button" class="btn btn-secondary btn-sm" previousStep>Atras</button>
                         <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
                          (confirm)="GuardarFuncionario(FormFuncionarioCrear)"  class="btn btn-primary btn-sm btn-enviar btn-right">Guardar la Informacion</button>
                       </div>
@@ -577,7 +559,6 @@
                     </wizard-step>
                     <!--FIN INFORMACION PRIVILEGIOS-->
               </form-wizard>
-              </form>
           </div>
         </div>
       </div>

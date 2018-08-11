@@ -55,50 +55,50 @@ export class FuncionariocrearComponent implements OnInit {
       Talla_Botas : ''
     };
 
-public contacto_emergencia = 
-  {
-    Nombre : '',
-    Parentesco : '',
-    Celular : '',
-    Telefono: '',
-    Direccion : ''
-  };
+  public contacto_emergencia = 
+    {
+      Nombre : '',
+      Parentesco : '',
+      Celular : '',
+      Telefono: '',
+      Direccion : ''
+    };
 
-public experiencia = [
-  {
-    Nombre_Empresa : '',
-    Cargo : '',
-    Jefe : '',
-    Ingreso_Empresa: '',
-    Retiro_Empresa : '',
-    Telefono : '',
-    Labores : ''
-  },
-  {
-    Nombre_Empresa : '',
-    Cargo : '',
-    Jefe : '',
-    Ingreso_Empresa: '',
-    Retiro_Empresa : '',
-    Telefono : '',
-    Labores : ''
-  }
-];
+  public experiencia = [
+    {
+      Nombre_Empresa : '',
+      Cargo : '',
+      Jefe : '',
+      Ingreso_Empresa: '',
+      Retiro_Empresa : '',
+      Telefono : '',
+      Labores : ''
+    },
+    {
+      Nombre_Empresa : '',
+      Cargo : '',
+      Jefe : '',
+      Ingreso_Empresa: '',
+      Retiro_Empresa : '',
+      Telefono : '',
+      Labores : ''
+    }
+  ];
 
-public referencias = [
-  {
-    Nombres : '',
-    Profesion : '',
-    Empresa : '',
-    Telefono: ''
-  } ,
-  {
-    Nombres : '',
-    Profesion : '',
-    Empresa : '',
-    Telefono: ''
-  }
-];
+  public referencias = [
+    {
+      Nombres : '',
+      Profesion : '',
+      Empresa : '',
+      Telefono: ''
+    } ,
+    {
+      Nombres : '',
+      Profesion : '',
+      Empresa : '',
+      Telefono: ''
+    }
+  ];
 
   constructor(private http : HttpClient,private globales: Globales) { }
 
@@ -223,3 +223,4 @@ EliminarFuncionario(id){
 
   
 }
+
