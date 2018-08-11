@@ -77,13 +77,6 @@ export class DestinatariosComponent implements OnInit {
     this.boolId = false;
   }
 
-  ActualizarVista()
-  {
-    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
-      this.destinatarios= data;
-    });
-  }
-
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
    *datos.append("modulo", 'nombre de la tabla')
@@ -130,9 +123,7 @@ export class DestinatariosComponent implements OnInit {
       modal.show();
     });
   }
-
-
-
+  
   EditarDestinatario(id){
     this.InicializarBool();
     console.log(id);  
