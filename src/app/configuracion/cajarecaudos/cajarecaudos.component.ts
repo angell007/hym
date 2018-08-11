@@ -145,15 +145,14 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-  EliminarCaja(id){
-    console.log(id);  
-    let datos=new FormData();
+  EliminarCajaRecaudo(id){
+    let datos = new FormData();
     datos.append("modulo", 'Caja_Recaudos');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.ActualizarVista();
+    });
   }
   
   AutoSleccionarMunicipio(Departamento, Municipio){

@@ -32,10 +32,10 @@
                               <i class="ti-pencil"></i>
                             </button>
                             <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar esta oficina, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                            (confirm)="EliminarOficina(oficina.Id_Oficina)"
+                            [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Oficina, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
+                            (confirm)="EliminarOficina(oficina.Id_Oficina)" 
                             >
-                              <i class="ti-trash"></i>
+                            <i class="ti-trash"></i>
                             </button>
                     </td>
                   </tr>

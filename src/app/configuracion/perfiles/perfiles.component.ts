@@ -376,13 +376,13 @@ export class PerfilesComponent implements OnInit {
   
 
   EliminarPerfil(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Perfil');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.perfiles=data; 
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })     
+      this.ActualizarVista();
+    });
   }
 
   OcultarFormulario(modal)

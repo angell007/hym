@@ -195,7 +195,7 @@ export class MonedasComponent implements OnInit {
     let datos=new FormData();
     datos.append("modulo", 'Moneda');
     datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data:any)=>{
       this.ActualizarVista();
       this.deleteSwal.show();
     });    

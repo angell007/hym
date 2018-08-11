@@ -26,6 +26,9 @@ export class BancosComponent implements OnInit {
   public boolId:boolean = false;
   public boolPais:boolean = false;
 
+  rowsFilter = [];
+  tempFilter = [];
+
   @ViewChild('ModalBanco') ModalBanco:any;
   @ViewChild('ModalVerBanco') ModalVerBanco:any;
   @ViewChild('ModalEditarBanco') ModalEditarBanco:any;
@@ -109,13 +112,13 @@ export class BancosComponent implements OnInit {
   }
 
   EliminarBanco(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Banco');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })    
+      this.ActualizarVista();
+    });
   }
 
   EditarBanco(id){

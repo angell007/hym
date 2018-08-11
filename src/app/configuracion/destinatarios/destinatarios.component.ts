@@ -56,6 +56,13 @@ export class DestinatariosComponent implements OnInit {
     }
   }
 
+  ActualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
+      this.destinatarios= data;
+    });
+  }
+
   OcultarFormularios()
   {
     this.InicializarBool();
@@ -68,13 +75,6 @@ export class DestinatariosComponent implements OnInit {
   {
     this.boolNombre = false;
     this.boolId = false;
-  }
-
-  ActualizarVista()
-  {
-    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
-      this.destinatarios= data;
-    });
   }
 
   /**
@@ -123,9 +123,7 @@ export class DestinatariosComponent implements OnInit {
       modal.show();
     });
   }
-
-
-
+  
   EditarDestinatario(id){
     this.InicializarBool();
     console.log(id);  
@@ -144,13 +142,13 @@ export class DestinatariosComponent implements OnInit {
   }
 
   EliminarDestinatario(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Destinatario');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.destinatarios=data; 
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.ActualizarVista();
+    });
   }
 
   OcultarFormulario(modal)

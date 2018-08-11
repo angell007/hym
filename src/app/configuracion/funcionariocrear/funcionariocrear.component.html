@@ -8,103 +8,122 @@
         <div class="card">
           <div class="card-block">
               <form-wizard style="border:0 !important;">
-                  <wizard-step [title]="'Información Personal'">
-                      <div class="row" >
-                        <div class="col-md-4">
-                          <div class="form-group">
-                             <input type="number"  min="0" name="funcionario[Identificacion_Funcionario]" class="form-control" id="identificacion" required />
-                             <label class="floating-label" >Identificación (*)</label>
+                  <!--INICIO INFORMACION PERSONAL-->
+                  <wizard-step [title]="'Información Personal'" [isValid]="" (onNext)="onStep1Next($event)">
+                    <div class="content2">
+                      <form #FormFuncionarioCrear="ngForm">
+                      <div>
+                        <h5>Información Personal</h5><hr>
+                        <div class="row" >
+                          <div class="col-md-3">
+                              <div  style="text-align: center">
+                                <label style="display: block" for="Foto">
+                                  <img src="assets/images/user.jpg"  style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
+                                </label>
+                                <div class="col-md-6">
+                                  <input name="Foto" id="Foto" [(ngModel)]="funcionario.Foto" type="file" accept="image/png, image/jpeg" class="form-control form-control-sm text-right f-9" style="display: none;" (change)="CargaFoto($event)">
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                      <input type="number"  min="0" name="Identificacion_Funcionario" [(ngModel)]="funcionario.Identificacion_Funcionario" class="form-control form-control-sm f-9" id="identificacion" required />
+                                      <label class="floating-label" >Identificación (*)</label>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <input type="text" name="Nombres" [(ngModel)]="funcionario.Nombres" class="letras form-control form-control-sm" id="nombres" required />
+                                      <label class="floating-label" >Nombres (*)</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <input type="text"  name="Apellidos" [(ngModel)]="funcionario.Apellidos" class="letras form-control form-control-sm" id="apellidos" required />
+                                      <label class="floating-label" >Apellidos (*)</label>
+                                      </div>
+                                  </div>    
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento" [(ngModel)]="funcionario.Fecha_Nacimiento" id="fnac" required />
+                                      <label class="floating-label" for="text-input">Fecha de Nacimiento: (*)</label>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input class="form-control form-control-sm" type="text" name="Lugar_Nacimiento" [(ngModel)]="funcionario.Lugar_Nacimiento" id="lnac" required />
+                                        <label class="floating-label" >Lugar de Nacimiento (*)</label> 
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="form-group">
+                                      <select class="form-control form-control-sm" name="Tipo_Sangre" [(ngModel)]="funcionario.Tipo_Sangre" id="sangre" required >
+                                        <option value="">Seleccione</option>
+                                        <option value="O+">O+</option> 
+                                        <option value="O-">O-</option> 
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option> 
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option> 
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option> 
+                                      </select>
+                                      <label class="floating-label" >Tipo de sangre (*)</label>
+                                    </div>
+                                  </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                             <input type="text" name="funcionario[Nombres]" class="letras form-control" id="nombres" required />
-                             <label class="floating-label" >Nombres (*)</label>
+                          </div>
+                          
+                          <div class="col-md-12">
+                            
+                          </div>
+                                  
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <input  type="text" name="Telefono" [(ngModel)]="funcionario.Telefono" class="telefono form-control form-control-sm">
+                              <label class="floating-label" >Teléfono Fijo</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <input  type="text" name="Celular" [(ngModel)]="funcionario.Celular" class="celular form-control form-control-sm">
+                              <label class="floating-label" >Celular</label>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                             <input type="text"  name="funcionario[Apellidos]" class="letras form-control" id="apellidos" required />
-                             <label class="floating-label" >Apellidos (*)</label>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input  type="email" name="Correo" [(ngModel)]="funcionario.Correo" class="form-control form-control-sm">
+                              <label class="floating-label" >Correo electrónico</label>
                             </div>
-                        </div>
-                        
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <input class="form-control" type="date" name="funcionario[Fecha_Nacimiento]" id="fnac" required />
-                            <label for="text-input">Fecha de Nacimiento: (*)</label>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                             <input class="form-control" type="text" name="funcionario[Lugar_Nacimiento]"  id="lnac" required />
-                           <label class="floating-label" >Lugar de Nacimiento (*)</label> 
-                            </div>
+                        <div class="row" > 
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <input  type="text" name="Direccion_Residencia" [(ngModel)]="funcionario.Direccion_Residencia" class="form-control form-control-sm"  id="residencia" required />
+                              <label class="floating-label" >Dirección de Residencia (*)</label>
+                              </div>
+                          </div>
                         </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <select class="form-control" name="funcionario[Tipo_Sangre]"  id="sangre" required >
-                              <option value="">Seleccione</option>
-                              <option value="O+">O+</option> 
-                              <option value="O-">O-</option> 
-                              <option value="A+">A+</option>
-                              <option value="A-">A-</option> 
-                              <option value="B+">B+</option>
-                              <option value="B-">B-</option> 
-                              <option value="AB+">AB+</option>
-                              <option value="AB-">AB-</option> 
-                            </select>
-                             <label class="floating-label" >Tipo de sangre (*)</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                          
-                        </div>
-                        
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <input  type="text" name="funcionario[Telefono]" class="telefono form-control">
-                             <label class="floating-label" >Teléfono Fijo</label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <input  type="text" name="funcionario[Celular]" class="celular form-control">
-                             <label class="floating-label" >Celular</label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                             <input  type="email" name="funcionario[Correo]" class="form-control">
-                             <label class="floating-label" >Correo electrónico</label>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="row" > 
-                        <div class="col-md-12">
-                          <div class="form-group">
-                             <input  type="text" name="funcionario[Direccion_Residencia]" class="form-control"  id="residencia" required />
-                             <label class="floating-label" >Dirección de Residencia (*)</label>
-                            </div>
-                        </div>
-                      </div>
                       <div class="row">
                         <div class="col-md-2">
                           <div class="form-group">
-                             <select class="form-control" name="funcionario[Estado_Civil]"  id="civil" required> 
+                            <select class="form-control form-control-sm" name="Estado_Civil" [(ngModel)]="funcionario.Estado_Civil" id="civil" required> 
                               <option value="">Seleccione</option>
                               <option value="Soltero(a)">Soltero(a)</option>
                               <option value="Casado(a)">Casado(a)</option>
                               <option value="Divorciado(a)">Divorciado(a)</option>
                               <option value="Viudo(a)">Viudo(a)</option>
                               <option value="Union Libre">Union Libre</option>
-                           </select>
-                             <label class="floating-label" >Estado Civil (*)</label>
-                            </div>
+                            </select>
+                            <label class="floating-label" >Estado Civil (*)</label>
+                          </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                             <select class="form-control" name="funcionario[Hijos]" required  id="hijos" >
+                            <select class="form-control form-control-sm" name="Hijos" [(ngModel)]="funcionario.Hijos" required  id="hijos" >
                               <option value="">Seleccione</option>
                               <option value="0">0</option>
                               <option value="1">1</option>
@@ -118,12 +137,12 @@
                               <option value="9">9</option>
                               <option value="10">10</option>
                             </select>
-                             <label class="floating-label" >Hijos (*)</label>
-                            </div>
+                            <label class="floating-label" >Hijos (*)</label>
+                          </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                             <select class="form-control"  name="funcionario[Grado_Instruccion]"  required  id="educacion">
+                            <select class="form-control form-control-sm"  name="Grado_Instruccion" [(ngModel)]="funcionario.Grado_Instruccion" required  id="educacion">
                               <option value="">Seleccione</option>
                               <option value="Primarios">Primarios</option>
                               <option value="Secundarios">Secundarios</option>
@@ -133,13 +152,13 @@
                               <option value="Especializacion">Especialización</option>
                               <option value="Maestria">Maestría</option>
                             </select>
-                             <label class="floating-label" >Grado de instrucción (*)</label>
-                            </div>
+                            <label class="floating-label" >Grado de instrucción (*)</label>
+                          </div>
                         </div>
                         <div class="col-md-5">
                           <div class="form-group">
-                               <input type="text" name="funcionario[Titulo_Estudio]" class="letras form-control" required  id="titulo"/>
-                               <label class="floating-label" >Nombre del Título (*)</label>
+                            <input type="text" name="Titulo_Estudio" [(ngModel)]="funcionario.Titulo_Estudio" class="letras form-control form-control-sm" required  id="titulo"/>
+                            <label class="floating-label" >Nombre del Título (*)</label>
                           </div>
                         </div>
                       </div>
@@ -147,62 +166,65 @@
                       <div class="row">
                         <div class="col-md-3">
                           <div class="form-group">
-                              <select class="form-control" name="funcionario[Id_Grupo]"  required  id="grupo">
-                                <option value="">Seleccione</option>
+                              <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo" (change)="Grupo_Dependencia($event.target.value)" required  id="grupo">
+                                <option value="">Seleccione Grupo</option>
+                                <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo" >{{Grupo.Nombre}}</option>
                               </select>
-                               <label class="floating-label" >Perfil (*)</label>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                              <select class="form-control" name="funcionario[Id_Cargo]"  required  id="cargo">
-                                <option value="">Seleccione Cargo</option>
-                              </select>
-                               <label class="floating-label" >Cargo(*)</label>
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-3">
-                          <div class="form-group">
-                              <select class="form-control" name="funcionario[Id_Proceso]"  required  id="proceso">
-                                <option value="">Seleccione Proceso</option>
-                              </select>
-                               <label class="floating-label" >Proceso (*)</label>
-                            </div>
-                        </div> -->
-                        <div class="col-md-2">
-                          <div class="form-group">
-                             <input type="text" name="funcionario[Salario]"  class="dinero form-control" required  id="salario" />
-                             <label class="floating-label" >Salario (*)</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                          <div class="form-group">
-                            <input class="form-control" type="date" name="funcionario[Fecha_Ingreso]" required  id="ingreso" />
-                            <label for="text-input">Fecha de Ingreso: (*)</label>
-                            
+                              <label class="floating-label">Grupo (*)</label>
                           </div>
                         </div>
+                        
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="funcionario.Id_Dependencia" (change)="Dependencia_Cargo($event.target.value)" required  id="cargo">
+                                <option value="">Seleccione Dependencia</option>
+                                <option *ngFor="let Dependencia of Dependencias " [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
+                              </select>
+                              <label class="floating-label">Dependencia(*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                              <select class="form-control form-control-sm" name="Id_Cargo" [(ngModel)]="funcionario.Id_Cargo" required  id="cargo">
+                                <option value="">Seleccione Cargo</option>
+                                <option *ngFor="let Cargo of Cargos " [value]="Cargo.Id_Cargo">{{Cargo.Nombre}}</option>
+                              </select>
+                              <label class="floating-label" >Cargo (*)</label>
+                            </div>
+                        </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <select class="form-control" name="funcionario[Tipo_Turno]"  required  id="tipo_turno">
+                            <input type="text" name="Salario" [(ngModel)]="funcionario.Salario" class="dinero form-control form-control-sm" required  id="salario" />
+                            <label class="floating-label" >Salario (*)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Fecha_Ingreso" [(ngModel)]="funcionario.Fecha_Ingreso" required  id="ingreso" />
+                            <label for="text-input">Fecha de Ingreso: (*)</label>
+                          </div>
+                        </div>
+                        <!--<div class="col-md-2">
+                          <div class="form-group">
+                              <select class="form-control form-control-sm" name="Tipo_Turno" [(ngModel)]="funcionario.Tipo_Turno" required  id="tipo_turno">
                                 <option value="">Seleccione</option>
                                 <option>Rotativo</option>
                                 <option>Fijo</option>
                                 <option>Mixto</option>
-                                <option>Libre</option>
+                                 <option>Libre</option>
                               </select>
-                               <label class="floating-label" >Tipo Turno (*)</label>
-                            </div>
+                              <label class="floating-label" >Tipo Turno (*)</label>
+                          </div>
                         </div>
                         <div class="col-md-6" id="turno_div" style="display:none;">
-                          <div class="form-group">
-                              <select class="form-control" name="funcionario[Id_Turno]" id="turno">
+                          <div class="form-group form-control-sm">
+                              <select class="form-control" name="Id_Turno" [(ngModel)]="funcionario.Id_Turno" id="turno">
                                 <option value="0">Seleccione</option>
                               </select>
-                               <label class="floating-label" >Turno (*)</label>
-                            </div>
-                        </div>
-                        
+                              <label class="floating-label" >Turno (*)</label>
+                          </div>
+                        </div>-->
+                                  
                         <!--<div class="col-md-6" id="lider_div" style="display:none;">
                           <div class="form-group">
                               <select class="form-control" name="funcionario[Lider_Grupo]" id="lider_grupo" disabled>
@@ -211,227 +233,283 @@
                                 <option value="1099207252">Johan Manuel Guayacundo Herreño</option>
                                 <option value="1098788848">Daniel Eduardo Cabra Luna</option> 
                               </select>
-                               <label class="floating-label" >Lider de Grupo (*)</label>
+                              <label class="floating-label" >Lider de Grupo (*)</label>
                             </div>
                         </div> -->
-                        
-                      </div>
-                      <h5>Dotación</h5><hr>
-                      <div class="row">
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <select class="form-control" name="funcionario[Talla_Camisa]" required  id="camisa" >
-                              <option value="">Seleccione</option>
-                              <option value="NA">N/A</option>
-                              <option value="XS">XS</option>
-                              <option value="S">S</option>
-                              <option value="M">M</option>
-                              <option value="L">L</option>
-                              <option value="XL">XL</option>
-                              <option value="XXL">XXL</option>
-                              <option value="XXXL">XXXL</option>
-                            </select>
-                             <label class="floating-label" >Talla de Camisa (*)</label>
-                            </div>
+                                  
                         </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <select class="form-control" name="funcionario[Talla_Pantalon]" required  id="pantalon" >
-                              <option value="">Seleccione</option>
-                              <option value="NA">N/A</option>
-                            </select>
-                             <label class="floating-label" >Talla de Pantalón (*)</label>
-                            </div>
-                        </div>
-                        <!--<div class="col-md-3">
-                          <div class="form-group">
-                             <select class="form-control" name="funcionario[Talla_Bata]" required  id="bata" />
-                              <option value="">Seleccione</option>
-                              <option value="NA">N/A</option>
-                              <option value="XS">XS</option>
-                              <option value="S">S</option>
-                              <option value="M">M</option>
-                              <option value="L">L</option>
-                              <option value="XL">XL</option>
-                              <option value="XXL">XXL</option>
-                              <option value="XXXL">XXXL</option>
-                            </select>
-                             <label class="floating-label" >Talla de Bata (*)</label>
-                            </div>
-                        </div> -->
-                        <div class="col-md-3">
-                          <div class="form-group">
-                             <select class="form-control" name="funcionario[Talla_Botas]" required  id="botas" >
-                              <option value="">Seleccione</option>
-                              <option value="NA">N/A</option>
-                            </select>
-                             <label class="floating-label" >Talla de Calzado (*)</label>
-                            </div>
-                        </div>
-                      </div>
-                  </wizard-step>
-                  <wizard-step [title]="'Contacto Emergencia'" (onNext)="onStep2Next($event)">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <input type="text" name="contacto_emergencia[Nombre]" class="letras form-control" required/>
-                            <label class="floating-label" >Nombre Completo (*)</label>
+                        <h5>Dotación</h5><hr>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <select class="form-control form-control-sm" name="Talla_Camisa" [(ngModel)]="funcionario.Talla_Camisa" required  id="camisa" >
+                                <option value="">Seleccione</option>
+                                <option value="NA">N/A</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                                <option value="XXXL">XXXL</option>
+                              </select>
+                              <label class="floating-label" >Talla de Camisa (*)</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <select class="form-control form-control-sm" name="Talla_Pantalon" [(ngModel)]="funcionario.Talla_Pantalon" required  id="pantalon" >
+                                <option value="">Seleccione</option>
+                                <option value="NA">N/A</option>
+                                <option value="0">0</option>
+                                <option value="2">2</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                                <option value="12">12</option>
+                                <option value="14">14</option>
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="20">20</option>
+                                <option value="22">22</option>
+                                <option value="24">24</option>
+                                <option value="26">26</option>
+                                <option value="28">28</option>
+                                <option value="30">30</option>
+                                <option value="32">32</option>
+                                <option value="34">34</option>
+                                <option value="36">36</option>
+                                <option value="38">38</option>
+                                <option value="40">40</option>
+                                <option value="42">42</option>
+                              </select>
+                              <label class="floating-label" >Talla de Pantalón (*)</label>
                             </div>
                           </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <input type="text" name="contacto_emergencia[Parentesco]"class="letras form-control" required />
-                            <label class="floating-label" >Parentesco (*)</label>
+                                  <!--<div class="col-md-3">
+                                    <div class="form-group">
+                                      <select class="form-control" name="funcionario[Talla_Bata]" required  id="bata" />
+                                        <option value="">Seleccione</option>
+                                        <option value="NA">N/A</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                        <option value="XXXL">XXXL</option>
+                                      </select>
+                                      <label class="floating-label" >Talla de Bata (*)</label>
+                                      </div>
+                                  </div> -->
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <select class="form-control form-control-sm" name="Talla_Botas" [(ngModel)]="funcionario.Talla_Botas" required  id="botas" >
+                                  <option value="">Seleccione</option>
+                                  <option value="NA">N/A</option>
+                                  <option value="33">33</option>
+                                  <option value="34">34</option>
+                                  <option value="35">35</option>
+                                  <option value="36">36</option>
+                                  <option value="37">37</option>
+                                  <option value="38">38</option>
+                                  <option value="39">39</option>
+                                  <option value="40">40</option>
+                                  <option value="41">41</option>
+                                  <option value="42">42</option>
+                                  <option value="43">43</option>
+                                  <option value="44">44</option>
+                                  <option value="45">45</option>
+                                  <option value="46">46</option>
+                              </select>
+                              <label class="floating-label" >Talla de Calzado (*)</label>
                             </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="row" id="3">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input type="text" name="contacto_emergencia[Celular]" class="celular form-control"/>
-                            <label class="floating-label" >Celular</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input type="text" name="contacto_emergencia[Telefono]" class="telefono form-control"/>
-                            <label class="floating-label" >Teléfono Fijo</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input type="text" name="contacto_emergencia[Direccion]" class="telefono form-control"/>
-                            <label class="floating-label" >Dirección de Residencia</label>
-                            </div>
-                        </div>
-                      </div>
+                    </form>
+                    </div>
                   </wizard-step>
-                  <wizard-step [title]="'Experiencia Laboral'" (onNext)="onStep3Next($event)">
-                      
-                      <h5>Experiencia Laboral 1</h5><hr>
-                      <div class="row">
+                  <!--FIN INFORMACION PERSONAL-->
+                  <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
+                  <wizard-step [title]="'Contacto Emergencia'" [isValid]="" (onNext)="onStep2Next($event)">
+                    <div class="content2">
+                      <div>
+                          <h5>Contacto Emergecia</h5><hr>
+                          <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <input type="text" name="Nombre" [(ngModel)]="contacto_emergencia.Nombre" class="letras form-control form-control-sm" required/>
+                                  <label class="floating-label" >Nombre Completo (*)</label>
+                                  </div>
+                                </div>
+                              <div class="col-md-6">
+                              <div class="form-group">
+                                <input type="text" name="Parentesco" [(ngModel)]="contacto_emergencia.Parentesco" class="letras form-control form-control-sm" required />
+                                <label class="floating-label" >Parentesco (*)</label>
+                              </div>
+                            </div>
+                          </div>
+                            <div class="row" id="3">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Celular" [(ngModel)]="contacto_emergencia.Celular" class="celular form-control form-control-sm"/>
+                                  <label class="floating-label" >Celular</label>
+                                  </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Telefono" [(ngModel)]="contacto_emergencia.Telefono" class="telefono form-control form-control-sm"/>
+                                  <label class="floating-label" >Teléfono Fijo</label>
+                                  </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Direccion" [(ngModel)]="contacto_emergencia.Direccion" class="telefono form-control form-control-sm"/>
+                                  <label class="floating-label" >Dirección de Residencia</label>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </wizard-step>
+                  <!--FIN INFORMACION CONTACTO EMERGENCIA-->
+                  <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
+                  <wizard-step [title]="'Experiencia Laboral'" [isValid]="" (onNext)="onStep3Next($event)">
+                    <div class="content">
+                      <div>
+                          <h5>Experiencia Laboral 1</h5><hr>
+                          <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"  id="text-input-Nombre-Empresa-0" class="form-control form-control-sm"/>
+                                  <label class="floating-label" >Empresa</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" id="text-input-Cargo-0" class="letras form-control form-control-sm"/>
+                                  <label class="floating-label" >Cargo</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" id="text-input-Jefe-0" class="letras form-control form-control-sm"/>
+                                  <label class="floating-label" >Jefe Inmediato</label>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="row" id="experiencia0">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[0].Ingreso_Empresa" />
+                                  <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[0].Retiro_Empresa"/>
+                                  <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" id="text-input-ExpL1-Telefono-0" class="celular form-control form-control-sm"/>
+                                  <label class="floating-label" >Numero de Contacto</label>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-12" >
+                                <div class="form-group">
+                                  <textarea name="Labores" [(ngModel)]="experiencia[0].Labores" class="autosi form-control form-control-sm" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>
+                                  <label class="floating-label" >Tareas Realizadas</label>
+                                </div>
+                              </div>
+                          </div>
+        
+                          
+                          <h5>Experiencia Laboral 2</h5><hr>
+                          <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="experiencia[0][Nombre_Empresa]" id="text-input" class="form-control"/>
+                              <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" id="text-input-Nombre-Empresa-1" class="form-control form-control-sm"/>
                               <label class="floating-label" >Empresa</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="experiencia[0][Cargo]" id="text-input" class="letras form-control"/>
+                              <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" id="text-input-Cargo-1" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Cargo</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="experiencia[0][Jefe]" id="text-input" class="letras form-control"/>
+                              <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" id="text-input-Jefe-1" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Jefe Inmediato</label>
                             </div>
                           </div>
-                      </div>
-                      <div class="row" id="experiencia0">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <input class="form-control" type="date" name="experiencia[0][Ingreso_Empresa]"/>
-                              <label for="text-input">Fecha de ingreso:</label>
+                          </div>
+                          <div class="row" id="experiencia1">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[1].Ingreso_Empresa"/>
+                                <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[1].Retiro_Empresa"/>
+                                <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" id="text-input-ExpL1-Telefono-1" class="celular form-control form-control-sm"/>
+                                <label class="floating-label" >Numero de Contacto</label>
+                              </div>
                             </div>
                           </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <input class="form-control" type="date" name="experiencia[0][Retiro_Empresa]"/>
-                              <label for="text-input">Fecha de retiro:</label>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <input type="text" name="experiencia[0][Telefono]" id="text-input" class="celular form-control"/>
-                              <label class="floating-label" >Numero de Contacto</label>
+                          <div class="row">
+                            <div class="col-md-12" >
+                              <div class="form-group">
+                                <textarea name="Labores" [(ngModel)]="experiencia[1].Labores" class="autosi form-control form-control-sm" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>
+                                <label class="floating-label" >Tareas Realizadas</label>
+                              </div>
                             </div>
                           </div>
                       </div>
-                      <div class="row">
-                          <div class="col-md-12" >
-                            <div class="form-group">
-                              <textarea name="experiencia[0][Labores]" class="autosi form-control" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>
-                              <label class="floating-label" >Tareas Realizadas</label>
-                            </div>
-                          </div>
-                      </div>
-                      <h5>Experiencia Laboral 2</h5><hr>
-                      <div class="row">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <input type="text" name="experiencia[1][Nombre_Empresa]" id="text-input" class="form-control"/>
-                          <label class="floating-label" >Empresa</label>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <input type="text" name="experiencia[1][Cargo]" id="text-input" class="letras form-control"/>
-                          <label class="floating-label" >Cargo</label>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <input type="text" name="experiencia[1][Jefe]" id="text-input" class="letras form-control"/>
-                          <label class="floating-label" >Jefe Inmediato</label>
-                        </div>
-                      </div>
-                      </div>
-                      <div class="row" id="experiencia1">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input class="form-control" type="date" name="experiencia[1][Ingreso_Empresa]"/>
-                            <label for="text-input">Fecha de ingreso:</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input class="form-control" type="date" name="experiencia[1][Retiro_Empresa]"/>
-                            <label for="text-input">Fecha de retiro:</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <input type="text" name="experiencia[1][Telefono]" id="text-input" class="celular form-control"/>
-                            <label class="floating-label" >Numero de Contacto</label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12" >
-                          <div class="form-group">
-                            <textarea name="experiencia[1][Labores]" class="autosi form-control" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"></textarea>
-                            <label class="floating-label" >Tareas Realizadas</label>
-                          </div>
-                        </div>
-                      </div>
+                    </div>
                   </wizard-step>
-                  <wizard-step [title]="'Referencias Personales'" (onComplete)="onComplete($event)">
-                      
+                  <!--FIN INFORMACION EXPERIENCIA LABORAL-->
+                  <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
+                  <wizard-step [title]="'Referencias Personales'" [isValid]="" (onNext)="onStep4Next($event)">
+                    <div class="content">
+                      <div>
                           <h5>Referencia 1</h5><hr>
                           <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="referencias[0][Nombres]" id="text-input" class="letras form-control" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" id="text-input-Nombres-0" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="referencias[0][Profesion]" id="text-input" class="letras form-control" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" id="text-input-Profesion-0" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="referencias[0][Empresa]" id="text-input" class="form-control" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" id="text-input-Empresa-0" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="referencias[0][Telefono]" id="text-input" class="celular form-control" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" id="text-input-Telefono-0" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
@@ -440,30 +518,46 @@
                         <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="referencias[1][Nombres]" id="text-input" class="letras form-control" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" id="text-input-Nombres-1" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="referencias[1][Profesion]" id="text-input" class="letras form-control" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" id="text-input-Profesion-1" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="referencias[1][Empresa]" id="text-input" class="form-control" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" id="text-input-Empresa-1" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="referencias[1][Telefono]" id="text-input" class="celular form-control" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" id="text-input-Telefono-1" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
                       </div>
+                      </div>
+                    </div>
                   </wizard-step>
+                  <!--FIN INFORMACION REFERENCIAS PERSONALES-->
+                  <!--INICIO INFORMACION PRIVILEGIOS-->
+                  <wizard-step [title]="'Privilegios'" (onComplete)="onComplete($event)">
+                    <div class="content">
+                      <div>
+                          
+                      </div>
+                      <div >
+                        <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                         (confirm)="GuardarFuncionario(FormFuncionarioCrear)"  class="btn btn-primary btn-sm btn-enviar btn-right">Guardar la Informacion</button>
+                      </div>
+                    </div>
+                    </wizard-step>
+                    <!--FIN INFORMACION PRIVILEGIOS-->
               </form-wizard>
           </div>
         </div>
