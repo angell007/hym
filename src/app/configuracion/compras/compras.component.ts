@@ -43,23 +43,18 @@ export class ComprasComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
 
-  constructor(private http: HttpClient,private globales: Globales) { 
-    this.fetchFilterData((data) => {
-      this.tempFilter = [...data];
-      this.rowsFilter = data; 
-    });
-  }
+  constructor(private http: HttpClient,private globales: Globales) { }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Proveedor'}}).subscribe((data:any)=>{
-      this.Proveedores= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
-      this.Funcionarios= data;
-    });
-  }
+      this.ActualizarVista();
+      this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Proveedor'}}).subscribe((data:any)=>{
+        this.Proveedores= data;
+      });
+      this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
+        this.Funcionarios= data;
+      });
+    }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
@@ -86,7 +81,7 @@ export class ComprasComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.globales.ruta+'php/compras/lista.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/compras/lista_compras.php').subscribe((data:any)=>{
       this.compras= data;
     });
   }
@@ -153,15 +148,13 @@ export class ComprasComponent implements OnInit {
     datos.append("id", id); 
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-      this.fetchFilterData((data) => {
-        this.tempFilter = [...data];
-        this.rowsFilter = data; 
-      });   
+      this.ActualizarVista();
     });
   }
 
 
-    fetchFilterData(cb) {
+
+  fetchFilterData(cb) {
     const req = new XMLHttpRequest();
     req.open('GET', this.globales.ruta+'php/compras/vista_compra.php');
 
@@ -171,6 +164,8 @@ export class ComprasComponent implements OnInit {
 
     req.send();
   }
+
+
 
   OcultarFormulario(modal){
     this.Identificacion = null;

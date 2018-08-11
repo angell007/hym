@@ -33,6 +33,9 @@ export class CuentasbancariasComponent implements OnInit {
   public boolSaldoInicial:boolean = false;
   public boolFechaSaldoInicial:boolean = false;
 
+  rowsFilter = [];
+  tempFilter = [];
+
   @ViewChild('ModalEditarCuenta') ModalEditarCuenta:any;
   @ViewChild('ModalVerCuenta') ModalVerCuenta:any;
   @ViewChild('ModalCuenta') ModalCuenta:any;
@@ -123,13 +126,13 @@ OcultarFormularios()
   }
 
   EliminarCuenta(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Cuenta_Bancaria');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    });    
+      this.ActualizarVista();
+    });
   }
 
   EditarCuenta(id){
