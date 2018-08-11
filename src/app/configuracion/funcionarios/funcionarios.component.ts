@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../shared/globales/globales';
@@ -22,6 +25,8 @@ export class FuncionariosComponent implements OnInit {
   @ViewChild('ModalFuncionario') ModalFuncionario:any;
   @ViewChild('ModalVerFuncionario') ModalVerFuncionario:any;
   @ViewChild('ModalEditarFuncionario') ModalEditarFuncionario:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormFuncionarioAgregar') FormFuncionarioAgregar:any;
 
@@ -62,17 +67,24 @@ export class FuncionariosComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     this.OcultarFormulario(modal);
-
-
     datos.append("modulo",'Funcionario');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
-    this.ActualizarVista();
-    formulario.reset();
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
+      this.ActualizarVista();
+      formulario.reset();
+      this.saveSwal().show;
     });    
   }
 
-
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerFuncionario(id, modal){
     this.http.get(this.globales.ruta+'php/funcionarios/detalle_funcionario.php',{

@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -60,6 +63,7 @@ export class MonedasComponent implements OnInit {
   public boolPagarComisionDesde:boolean = false;
   public boolComisionRecaudo:boolean = false;
 
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('ModalVerMoneda') ModalVerMoneda:any;
@@ -89,6 +93,7 @@ export class MonedasComponent implements OnInit {
 
   OcultarFormularios()
   {
+    this.InicializarBool();
     this.OcultarFormulario(this.ModalMoneda);
     this.OcultarFormulario(this.ModalVerMoneda);
     this.OcultarFormulario(this.ModalEditarMoneda);
@@ -131,16 +136,26 @@ export class MonedasComponent implements OnInit {
     datos.append("datos",info);
     this.OcultarFormulario(modal);
     console.log(datos["datos"]);    
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       //console.log(data);      
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
+      this.saveSwal.show();
     });
 
-    this.saveSwal.show();
+    
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
 
   VerMoneda(id, modal){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
@@ -187,6 +202,7 @@ export class MonedasComponent implements OnInit {
   }
 
   EditarMoneda(id, modal){
+    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Moneda', id:id}
     }).subscribe((data:any)=>{   

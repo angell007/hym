@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -30,6 +33,7 @@ export class BancosComponent implements OnInit {
   @ViewChild('ModalVerBanco') ModalVerBanco:any;
   @ViewChild('ModalEditarBanco') ModalEditarBanco:any;
   @ViewChild('FormBanco') FormBanco:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
    
@@ -50,6 +54,7 @@ export class BancosComponent implements OnInit {
 
   OcultarFormularios()
   {
+    this.InicializarBool();
     this.OcultarFormulario(this.ModalBanco);
     this.OcultarFormulario(this.ModalVerBanco);
     this.OcultarFormulario(this.ModalEditarBanco);
@@ -75,13 +80,22 @@ export class BancosComponent implements OnInit {
     datos.append("modulo",'Banco');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
+      this.saveSwal.show();
     });
-    
-    this.saveSwal.show();
+  }
+
+  handleError(error: Response) {
+    return Observable.throw(error);
   }
 
   VerBanco(id, modal){
@@ -108,6 +122,7 @@ export class BancosComponent implements OnInit {
   }
 
   EditarBanco(id){
+    this.InicializarBool();
     this.http.get(this.globales.ruta +'php/genericos/detalle.php',{
       params:{modulo:'Banco', id:id}
     }).subscribe((data:any)=>{

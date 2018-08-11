@@ -105,9 +105,10 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerBanco" #ModalVerBanco>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Ver Banco</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerBanco="ngForm">
             <div class="col-md-4">
                 <div class="form-group" hidden>
@@ -143,22 +144,23 @@
                     </div>
                 </div>
             </div>            
-            <div class="app-modal-footer">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerBanco)" >Cerrar</button>
-                </div>
-            </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerBanco)" >Cerrar</button>
+            </div>
+        </div>
 </app-modal-basic>
 
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarBanco" #ModalEditarBanco>
     <div class="app-modal-header">
+            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Banco</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarBanco="ngForm">
             <div class="col-md-4">
                 <div class="form-group" hidden>
@@ -170,22 +172,28 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreBancoEd="ngModel">
+                        <div *ngIf="!nombreBancoEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="nombreBancoEd.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
+                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}" (focus)="$event.target.select()" (focusout)="boolPais = true" required #paisEd="ngModel">
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
+                        <div *ngIf="paisEd.value=='' && boolPais==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!paisEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}">
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificadorEd="ngModel">
+                        <div *ngIf="!identificadorEd.valid && boolId==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="identificadorEd.valid && boolId==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -197,17 +205,25 @@
                     </div>
                 </div>
             </div>            
-            <div class="app-modal-footer">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" type="button"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)"
-                    >Guardar</button>
-                </div>
-            </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm" type="button"
+                [disabled]="!nombreBancoEd.valid || !identificadorEd.valid || paisEd.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)"
+                >Guardar</button>
+            </div>
+        </div>
 </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
 
 <swal #saveSwal
 title="Documento guardado"

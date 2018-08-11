@@ -27,7 +27,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label>N.I.T.</label>
-                                            <input name="NIT" type="text" placeholder="" class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
+                                            <input name="NIT" type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
                                             <div *ngIf="!nit.valid && boolNit==true" style="color:red">Houston, we have a problem</div>
                                             <div *ngIf="nit.valid && boolNit==true" style="color:green">All checked!</div>
                                         </div>
@@ -35,7 +35,7 @@
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Teléfono</label>
-                                                <input name="Telefono" type="text" placeholder="" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
+                                                <input name="Telefono" type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
                                                 <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">All checked!</div>
                                             </div>
@@ -43,7 +43,7 @@
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Celular</label>
-                                                <input name="Celular" type="text" placeholder="" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
+                                                <input name="Celular" type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
                                                 <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="celular.valid && boolCelular==true" style="color:green">All checked!</div>
                                             </div>
@@ -61,7 +61,7 @@
                                     <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Correo</label>
-                                                <input name="Correo" type="email" placeholder="" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
+                                                <input name="Correo" type="email" email placeholder="" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
                                                 <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="correo.valid && boolCorreo==true" style="color:green">All checked!</div>
                                             </div>
@@ -113,7 +113,7 @@
                                     <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Salario Base</label>
-                                                <input name="Salario_Base" type="text" placeholder="" class="form-control" ngModel="{{SalarioBase}}" (focus)="$event.target.select()" (focusout)="boolSalarioBase = true" required #salarioBase="ngModel">
+                                                <input currencyMask name="Salario_Base" class="form-control" ngModel="{{SalarioBase}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSalarioBase = true" required #salarioBase="ngModel">
                                                 <div *ngIf="!salarioBase.valid && boolSalarioBase==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="salarioBase.valid && boolSalarioBase==true" style="color:green">All checked!</div>
                                             </div> 
@@ -121,7 +121,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Subsidio de transporte</label>
-                                                <input name="Subsidio_Transporte" type="text" placeholder="" class="form-control" ngModel="{{SubsidioTransporte}}" (focus)="$event.target.select()" (focusout)="boolSubsidioTransporte = true" required #subsidioTransporte="ngModel">
+                                                <input currencyMask name="Subsidio_Transporte" class="form-control" ngModel="{{SubsidioTransporte}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSubsidioTransporte = true" required #subsidioTransporte="ngModel">
                                                 <div *ngIf="!subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:green">All checked!</div>
                                             </div> 
@@ -763,6 +763,13 @@
         </mdb-accordion-item>
     </mdb-accordion>
 </div>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
 
 <swal #saveSwal
 title="Documento guardado"

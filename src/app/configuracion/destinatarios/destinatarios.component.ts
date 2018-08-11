@@ -1,3 +1,6 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -31,6 +34,7 @@ export class DestinatariosComponent implements OnInit {
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
   @ViewChild('FormDestinatario') FormDestinatario:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
@@ -61,6 +65,7 @@ export class DestinatariosComponent implements OnInit {
 
   OcultarFormularios()
   {
+    this.InicializarBool();
     this.OcultarFormulario(this.ModalDestinatario);
     this.OcultarFormulario(this.ModalVerDestinatario);
     this.OcultarFormulario(this.ModalEditarDestinatario);
@@ -70,6 +75,13 @@ export class DestinatariosComponent implements OnInit {
   {
     this.boolNombre = false;
     this.boolId = false;
+  }
+
+  ActualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
+      this.destinatarios= data;
+    });
   }
 
   /**
@@ -86,12 +98,23 @@ export class DestinatariosComponent implements OnInit {
     this.OcultarFormulario(modal);
     datos.append("modulo",'Destinatario');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{      
       this.destinatarios= data;
       formulario.reset();
       this.InicializarBool();
+      this.saveSwal.show();
     });
-    this.saveSwal.show();
+    
+  }
+
+  handleError(error: Response) {
+    return Observable.throw(error);
   }
 
   VerDestinatario(id, modal){
@@ -111,6 +134,7 @@ export class DestinatariosComponent implements OnInit {
 
 
   EditarDestinatario(id){
+    this.InicializarBool();
     console.log(id);  
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Destinatario', id:id}
