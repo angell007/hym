@@ -3,8 +3,8 @@ import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Globales } from '../../shared/globales/globales';
 import { NgForm } from '@angular/forms';
+import { Globales } from '../../shared/globales/globales';
 
 @Component({
   selector: 'app-funcionarios',
@@ -12,15 +12,72 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./funcionarios.component.css']
 })
 export class FuncionariosComponent implements OnInit {
-  public funcionarios : any[];
 
-
-
+  public funcionarios = [];
+  public grupos = [];
+  public dependencias = [];
+  public cargos = [];
 
   //variables que hacen referencia a los campos del formulario editar   
 
+  public Identificacion : any[];
+  public Codigo : any[];
+  public Suspendido : any[];
+  public Liquidado : any[];
+  public Nombres : any[];
+  public Apellidos : any[];
+  public Grupo : any[];
+  public Dependencia : any[];
+  public Cargo : any[];
+  public FechaNacimiento : any[];
+  public LugarNacimiento : any[];
+  public TipoSangre : any[];
+  public Telefono : any[];
+  public Celular : any[];
+  public Correo : any[];
+  public DireccionResidencia : any[];
+  public EstadoCivil : any[];
+  public GradoInstruccion : any[];
+  public TituloEstudio : any[];
+  public TallaPantalon : any[];
+  public TallaBata : any[];
+  public TallaBotas : any[];
+  public TallaCamisa : any[];
+  public Autorizado : any[];
+  public Salario : any[];
+  public Bonos : any[];
+  public FechaIngreso : any[];
+  public Hijos : any[];
+  public UltimaSesion : any[];
+  public FechaRegistrado : any[];
+  public PersonId : any[];
+  public PersistedFaceId : any[];
+  public TipoTurno : any[];
+  public Turno : any[];
+  public Proceso : any[];
+  public LiderGrupo : any[];
+  public FechaRetiro : any[];
+  public Sexo : any[];
+  public Jefe : any[];
+  public Salarios : any[];
+  public ReporteHE : any[];
+  public ValidacionHE : any[];
+  public ReporteHorario : any[];
+  public AsignacionHorario : any[];
+  public Funcionario : any[];
+  public Indicadores : any[];
+  public Configuracion : any[];
+  public LlegadaTarde : any[];
+  public Novedades : any[];
+  public PermisoApp : any[];
+  public Contrato : any[];
+  public Afilicaciones : any[];
+  public GcmId : any[];
+  public Estado : any[];
 
 
+
+  
 
   @ViewChild('ModalFuncionario') ModalFuncionario:any;
   @ViewChild('ModalVerFuncionario') ModalVerFuncionario:any;
@@ -35,6 +92,15 @@ export class FuncionariosComponent implements OnInit {
 
   ngOnInit() {
     this.ActualizarVista();
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
+      this.grupos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Dependencia'}}).subscribe((data:any)=>{
+      this.dependencias= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Cargo'}}).subscribe((data:any)=>{
+      this.cargos= data;
+    });
 
   }
 
@@ -90,8 +156,59 @@ export class FuncionariosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/funcionarios/detalle_funcionario.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
-
-      
+      this.Identificacion = id;
+      this.Codigo = data.Codigo;
+      this.Suspendido = data.Suspendido;
+      this.Liquidado = data.Liquidado;
+      this.Nombres = data.Nombres;
+      this.Apellidos = data.Apellidos;
+      this.Grupo = data.Id_Grupo;
+      this.Dependencia = data.Id_Dependencia;
+      this.Cargo = data.Id_Cargo;
+      this.FechaNacimiento = data.Fecha_Nacimiento;
+      this.LugarNacimiento = data.Lugar_Nacimiento;
+      this.TipoSangre = data.Tipo_Sangre;
+      this.Telefono = data.Telefono;
+      this.Celular = data.Celular;
+      this.Correo = data.Correo;
+      this.DireccionResidencia = data.Direccion_Residencia;
+      this.EstadoCivil = data.Estado_Civil;
+      this.GradoInstruccion = data.Grado_Instruccion;
+      this.TituloEstudio = data.Titulo_Estudio;
+      this.TallaPantalon = data.Talla_Pantalon;
+      this.TallaBata = data.Talla_Bata;
+      this.TallaBotas = data.Talla_Botas;
+      this.TallaCamisa = data.Talla_Camisa;
+      this.Autorizado = data.Autorizado;
+      this.Salario = data.Salario;
+      this.Bonos = data.Bonos;
+      this.FechaIngreso = data.Fecha_Ingreso;
+      this.Hijos = data.Hijos;
+      this.UltimaSesion = data.Ultima_Sesion;
+      this.FechaRegistrado = data.Fecha_Registrado;
+      this.PersonId = data.personId;
+      this.PersistedFaceId = data.persistedFaceId;
+      this.TipoTurno = data.Tipo_Turno;
+      this.Turno = data.Id_Turno;
+      this.Proceso = data.Id_Proceso;
+      this.LiderGrupo = data.Lider_Grupo;
+      this.FechaRetiro = data.Fecha_Retiro;
+      this.Sexo = data.Sexo;
+      this.Jefe = data.Jefe;
+      this.Salario = data.Salarios;
+      this.ReporteHE = data.Reporte_HE;
+      this.ValidacionHE = data.Validacion_HE;
+      this.ReporteHorario = data.Reporte_Horario;
+      this.AsignacionHorario = data.Asignacion_Horario;
+      this.Funcionario = data.Funcionarios;
+      this.Indicadores = data.Indicadores;
+      this.Configuracion = data.Configuracion;
+      this.LlegadaTarde = data.Llegada_Tarde;
+      this.Novedades = data.Novedades;
+      this.PermisoApp = data.Permiso_App;
+      this.Contrato = data.Contrato;
+      this.Afilicaciones = data.Afiliaciones;
+      this.GcmId = data.Gcm_Id;
       modal.show();
     });
   }
@@ -119,13 +236,13 @@ export class FuncionariosComponent implements OnInit {
 
   
   EliminarFuncionario(id){
-    let datos=new FormData();
+    let datos = new FormData();
     datos.append("modulo", 'Funcionario');
-    datos.append ("id",id);
-    this.http.post(this.globales.ruta+ 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
-    })
+      this.ActualizarVista();
+    });
   }
 
 

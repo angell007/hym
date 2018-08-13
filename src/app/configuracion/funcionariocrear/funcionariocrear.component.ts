@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { CommonModule } from '@angular/common';
 import { Globales } from '../../shared/globales/globales';
+import { FormWizardModule } from 'angular2-wizard/dist';
 
 @Component({
   selector: 'app-funcionariocrear',
@@ -100,6 +101,8 @@ export class FuncionariocrearComponent implements OnInit {
     }
   ];
 
+
+
   constructor(private http : HttpClient,private globales: Globales) { }
 
   CargaFoto(event){
@@ -138,24 +141,33 @@ export class FuncionariocrearComponent implements OnInit {
   this.http.get(this.globales.ruta+'php/lista_generales.php',{params: {modulo:'Cargo'}}).subscribe((data:any)=>{
   this.Cargos=data;
 })*/
-this.http.get(this.globales.ruta+'php/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
+this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
   this.Grupos= data;
 });
 }
 
-Grupo_Dependencia(Grupo){
+
+
+Dependencia_Grupo(Grupo){
   this.http.get(this.globales.ruta+'php/funcionarios/dependencias_grupo.php',{ params: { id: Grupo}}).subscribe((data:any)=>{
     this.Dependencias= data;
   });
 }
-Dependencia_Cargo(Dependencia){
+
+/*
+AutoSeleccionarDependencia(Grupo, Dependencia){
+  this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
+    this.Municipios= data;
+    this.Municipio = Municipio;
+  });
+}
+*/
+Cargo_Dependencia(Dependencia){
   this.http.get(this.globales.ruta+'php/funcionarios/cargos_dependencia.php',{ params: { id: Dependencia}}).subscribe((data:any)=>{
     this.Cargos= data;
   });
 }
 
-
- 
 GuardarFuncionario(formulario: NgForm){ 
    let info = JSON.stringify(formulario.value);
    let func = JSON.stringify(this.funcionario);
@@ -180,6 +192,9 @@ GuardarFuncionario(formulario: NgForm){
    }); 
  }
 
+ onStep4Next(a){
+   alert(a);
+ }
   /*GuardarFuncionario(formulario:NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();

@@ -7,11 +7,11 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-block">
+              <form #FormFuncionarioCrear="ngForm">
               <form-wizard style="border:0 !important;">
                   <!--INICIO INFORMACION PERSONAL-->
-                  <wizard-step [title]="'Información Personal'" [isValid]="" (onNext)="onStep1Next($event)">
+                  <wizard-step [title]="'Información Personal'" [isValid]="">
                     <div class="content2">
-                      <form #FormFuncionarioCrear="ngForm">
                       <div>
                         <h5>Información Personal</h5><hr>
                         <div class="row" >
@@ -48,7 +48,7 @@
                                   <div class="col-md-4">
                                     <div class="form-group">
                                       <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento" [(ngModel)]="funcionario.Fecha_Nacimiento" id="fnac" required />
-                                      <label class="floating-label" for="text-input">Fecha de Nacimiento: (*)</label>
+                                      <label class="floating-label" >Fecha de Nacimiento: (*)</label>
                                     </div>
                                   </div>
                                   <div class="col-md-4">
@@ -166,7 +166,7 @@
                       <div class="row">
                         <div class="col-md-3">
                           <div class="form-group">
-                              <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo" (change)="Grupo_Dependencia($event.target.value)" required  id="grupo">
+                              <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo" (change)="Dependencia_Grupo($event.target.value)" required  id="grupo">
                                 <option value="">Seleccione Grupo</option>
                                 <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo" >{{Grupo.Nombre}}</option>
                               </select>
@@ -176,11 +176,11 @@
                         
                         <div class="col-md-3">
                           <div class="form-group">
-                              <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="funcionario.Id_Dependencia" (change)="Dependencia_Cargo($event.target.value)" required  id="cargo">
+                              <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="funcionario.Id_Dependencia" (change)="Cargo_Dependencia($event.target.value)" required  id="dependencia">
                                 <option value="">Seleccione Dependencia</option>
-                                <option *ngFor="let Dependencia of Dependencias " [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
+                                <option *ngFor="let Dependencia of Dependencias" [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
                               </select>
-                              <label class="floating-label">Dependencia(*)</label>
+                              <label class="floating-label">Dependencia (*)</label>
                           </div>
                         </div>
                         <div class="col-md-3">
@@ -201,7 +201,7 @@
                         <div class="col-md-2">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Fecha_Ingreso" [(ngModel)]="funcionario.Fecha_Ingreso" required  id="ingreso" />
-                            <label for="text-input">Fecha de Ingreso: (*)</label>
+                            <label >Fecha de Ingreso: (*)</label>
                           </div>
                         </div>
                         <!--<div class="col-md-2">
@@ -328,12 +328,11 @@
                           </div>
                         </div>
                       </div>
-                    </form>
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION PERSONAL-->
                   <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
-                  <wizard-step [title]="'Contacto Emergencia'" [isValid]="" (onNext)="onStep2Next($event)">
+                  <wizard-step [title]="'Contacto Emergencia'" [isValid]="" >
                     <div class="content2">
                       <div>
                           <h5>Contacto Emergecia</h5><hr>
@@ -372,30 +371,32 @@
                               </div>
                           </div>
                       </div>
+              
+
                     </div>
                   </wizard-step>
                   <!--FIN INFORMACION CONTACTO EMERGENCIA-->
                   <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
-                  <wizard-step [title]="'Experiencia Laboral'" [isValid]="" (onNext)="onStep3Next($event)">
+                  <wizard-step [title]="'Experiencia Laboral'" [isValid]="" >
                     <div class="content">
                       <div>
                           <h5>Experiencia Laboral 1</h5><hr>
                           <div class="row">
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"  id="text-input-Nombre-Empresa-0" class="form-control form-control-sm"/>
+                                  <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"  class="form-control form-control-sm"/>
                                   <label class="floating-label" >Empresa</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" id="text-input-Cargo-0" class="letras form-control form-control-sm"/>
+                                  <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" class="letras form-control form-control-sm"/>
                                   <label class="floating-label" >Cargo</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" id="text-input-Jefe-0" class="letras form-control form-control-sm"/>
+                                  <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" class="letras form-control form-control-sm"/>
                                   <label class="floating-label" >Jefe Inmediato</label>
                                 </div>
                               </div>
@@ -404,18 +405,18 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[0].Ingreso_Empresa" />
-                                  <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                                  <label class="floating-label" >Fecha de ingreso:</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[0].Retiro_Empresa"/>
-                                  <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                                  <label class="floating-label" >Fecha de retiro:</label>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" id="text-input-ExpL1-Telefono-0" class="celular form-control form-control-sm"/>
+                                  <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" class="celular form-control form-control-sm"/>
                                   <label class="floating-label" >Numero de Contacto</label>
                                 </div>
                               </div>
@@ -434,19 +435,19 @@
                           <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" id="text-input-Nombre-Empresa-1" class="form-control form-control-sm"/>
+                              <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" class="form-control form-control-sm"/>
                               <label class="floating-label" >Empresa</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" id="text-input-Cargo-1" class="letras form-control form-control-sm"/>
+                              <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Cargo</label>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                              <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" id="text-input-Jefe-1" class="letras form-control form-control-sm"/>
+                              <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" class="letras form-control form-control-sm"/>
                               <label class="floating-label" >Jefe Inmediato</label>
                             </div>
                           </div>
@@ -455,18 +456,18 @@
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[1].Ingreso_Empresa"/>
-                                <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                                <label class="floating-label" >Fecha de ingreso:</label>
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[1].Retiro_Empresa"/>
-                                <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                                <label class="floating-label" >Fecha de retiro:</label>
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" id="text-input-ExpL1-Telefono-1" class="celular form-control form-control-sm"/>
+                                <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" class="celular form-control form-control-sm"/>
                                 <label class="floating-label" >Numero de Contacto</label>
                               </div>
                             </div>
@@ -484,32 +485,32 @@
                   </wizard-step>
                   <!--FIN INFORMACION EXPERIENCIA LABORAL-->
                   <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
-                  <wizard-step [title]="'Referencias Personales'" [isValid]="" (onNext)="onStep4Next($event)">
+                  <wizard-step [title]="'Referencias Personales'" [isValid]="">
                     <div class="content">
                       <div>
                           <h5>Referencia 1</h5><hr>
                           <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" id="text-input-Nombres-0" class="letras form-control form-control-sm" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" id="text-input-Profesion-0" class="letras form-control form-control-sm" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" id="text-input-Empresa-0" class="form-control form-control-sm" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de la empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" id="text-input-Telefono-0" class="celular form-control form-control-sm" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
@@ -518,25 +519,25 @@
                         <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" id="text-input-Nombres-1" class="letras form-control form-control-sm" />
+                              <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" id="text-input-Profesion-1" class="letras form-control form-control-sm" />
+                              <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" class="letras form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                              <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" id="text-input-Empresa-1" class="form-control form-control-sm" />
+                              <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" class="form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Nombre de empresa</label>
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                              <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" id="text-input-Telefono-1" class="celular form-control form-control-sm" />
+                              <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" class="celular form-control form-control-sm" />
                               <label class="floating-label" for="codigo">Numero de contacto</label>
                           </div>
                         </div>
@@ -546,7 +547,7 @@
                   </wizard-step>
                   <!--FIN INFORMACION REFERENCIAS PERSONALES-->
                   <!--INICIO INFORMACION PRIVILEGIOS-->
-                  <wizard-step [title]="'Privilegios'" (onComplete)="onComplete($event)">
+                  <wizard-step [title]="'Privilegios'" (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
                     <div class="content">
                       <div>
                           
@@ -559,8 +560,32 @@
                     </wizard-step>
                     <!--FIN INFORMACION PRIVILEGIOS-->
               </form-wizard>
+              </form>
           </div>
         </div>
       </div>
     </div>
 </div>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
+
+<swal #deleteSwal
+  title="Caja eliminada"
+  text="Se ha eliminado correctamente la caja"
+  type="success"
+  >
+</swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

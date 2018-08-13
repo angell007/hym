@@ -98,7 +98,7 @@ export class DestinatariosComponent implements OnInit {
       return this.handleError(error);
     })
     .subscribe((data:any)=>{      
-      this.destinatarios= data;
+      this.ActualizarVista();
       formulario.reset();
       this.InicializarBool();
       this.saveSwal.show();

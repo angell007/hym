@@ -2,9 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Globales } from '../shared/globales/globales';
-import { AngularWaitBarrier } from '../../../node_modules/blocking-proxy/built/lib/angular_wait_barrier';
-import { CustomCurrencyMaskConfig } from '../app.module';
-
 
 @Component({
   selector: 'app-pos',
@@ -445,7 +442,8 @@ export class PosComponent implements OnInit {
   }
 
   RealizarCambio(value, accion)
-  {  
+  {
+    console.log(value);    
     if(this.MonedaRecibida != this.MonedaTransferencia)
     {
       switch(accion)
@@ -458,27 +456,9 @@ export class PosComponent implements OnInit {
           this.CantidadRecibida = value/this.PrecioSugerido;
         break;
       }      
-    }        
-  }
-
-
-  //Intento de función para formatear los valores de la moneda
-  /*FormatearCantidad(target)
-  {    
-    target.value = target.value.replace(".", "");
-    let dummy = target.value.replace(".", "");
-    console.log(target.value);
-    for(let i = 0; i < dummy.length; ++i)
-    {
-      if(((i+1)%3) == 0 && (i+1) < dummy.length)
-      {
-        let part1 = dummy.substring(0, dummy.length-(i+1));
-        let part2 = dummy.substring(dummy.length-(i+1), dummy.length);
-        target.value = part1 + "." + part2;
-      }
     }
-    //target.value = "hola" + target.value;
-  }*/
+        
+  }
 
   SeleccionarTipo(tipo)
   {
