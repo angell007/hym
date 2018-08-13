@@ -90,7 +90,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificación Titular</label>
-                        <input type="text" currencyMask placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdTitular = true" required #idTitular="ngModel">
+                        <input type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Identificacion_Titular" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdTitular = true" required #idTitular="ngModel">
                         <div *ngIf="!idTitular.valid && boolIdTitular==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="idTitular.valid && boolIdTitular==true" style="color:green">All checked!</div>
                     </div>
@@ -98,7 +98,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Saldo Inicial</label>
-                        <input currencyMask class="form-control" name="Saldo_Inicial" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSaldoInicial = true" required #saldoInicial="ngModel">
+                        <input currencyMask class="form-control" name="Saldo_Inicial" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSaldoInicial = true" required #saldoInicial="ngModel">
                         <div *ngIf="!saldoInicial.valid && boolSaldoInicial==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="saldoInicial.valid && boolSaldoInicial==true" style="color:green">All checked!</div>
                     </div>
