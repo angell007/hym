@@ -22,7 +22,6 @@ export class GruposComponent implements OnInit {
   public Padre : any[];
 
   public boolNombre:boolean = false;
-  public boolPadre:boolean = false;
 
   @ViewChild('ModalGrupo') ModalGrupo:any;
   @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
@@ -55,7 +54,6 @@ export class GruposComponent implements OnInit {
   InicializarBool()
   {
     this.boolNombre = false;
-    this.boolPadre = false;
   }
 
   ActualizarVista(){
