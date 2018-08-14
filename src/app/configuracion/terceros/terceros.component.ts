@@ -36,7 +36,7 @@ export class TercerosComponent implements OnInit {
   public IdGrupo : any[];
   public Grupo : any[];
   public Detalle : any[];
-  public IdDocumento : any[];
+  public IdTipoDocumento : any[];
   public Documento : any[];
   public Barrio : any[];
 
@@ -50,6 +50,12 @@ export class TercerosComponent implements OnInit {
   public boolTerceroDesde:boolean = false;
   public boolDepartamento:boolean = false;
   public boolMunicipio:boolean = false;
+  public boolCupo:boolean = false;
+  public boolTipoDocumento:boolean = false;
+
+  public actualClienteDesde:string;
+  public year:string;
+  public month:string;
 
   @ViewChild('ModalTercero') ModalTercero:any;
   @ViewChild('ModalVerTercero') ModalVerTercero:any;
@@ -72,6 +78,12 @@ export class TercerosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
       this.Documentos = data;
     });
+    
+    this.year = new Date().getFullYear().toString().split('.').join("");
+    this.month = (new Date().getMonth() + 1).toString();
+    if (this.month.length == 1) this.actualClienteDesde = this.year.concat("-0".concat(this.month));
+    else this.actualClienteDesde = this.year.concat("-".concat(this.month));
+
   }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
@@ -100,6 +112,8 @@ export class TercerosComponent implements OnInit {
     this.boolTerceroDesde = false;
     this.boolDepartamento = false;
     this.boolMunicipio = false;
+    this.boolCupo = false;
+    this.boolTipoDocumento = false;
    }
 
   ActualizarVista(){
@@ -183,7 +197,7 @@ export class TercerosComponent implements OnInit {
       this.Cupo = data.Cupo;
       this.IdGrupo = data.Id_Grupo;
       this.Detalle = data.Detalle;
-      this.IdDocumento = data.Id_Documento;
+      this.IdTipoDocumento = data.Id_Tipo_Documento;
       this.Barrio = data.Barrio;
       modal.show();
     });
@@ -214,7 +228,7 @@ export class TercerosComponent implements OnInit {
     this.Credito = null;
     this.Cupo = null;
     this.IdGrupo = null;
-    this.IdDocumento = null;
+    this.IdTipoDocumento = null;
     this.Detalle = null;
     this.Barrio = null;
     modal.hide();

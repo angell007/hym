@@ -36,11 +36,9 @@
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra, ModalEditarCompra)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                        [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
-                                        (confirm)="EliminarCompra(compra.Id_Compra)" 
-                                        >
-                                        <i class="ti-trash"></i>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Compra, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EliminarCompra(compra.Id_Compra)">
+                                            <i class="ti-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -57,15 +55,18 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCompra" #ModalCompra>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Nueva Compra</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormCompra="ngForm">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolProveedor = true" required #proveedor="ngModel">
+                        <select class="form-control" required name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
+                            required #proveedor="ngModel">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
@@ -76,7 +77,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input currencyMask class="form-control" name="Valor" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
+                        <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
                         <div *ngIf="!valor.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="valor.valid && boolValor==true" style="color:green">All checked!</div>
                     </div>
@@ -84,7 +86,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tasa Cambio</label>
-                        <input currencyMask class="form-control" name="Tasa_Cambio" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambio="ngModel">
+                        <input currencyMask class="form-control" name="Tasa_Cambio" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambio="ngModel">
                         <div *ngIf="!tasaCambio.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="tasaCambio.valid && boolTasaCambio==true" style="color:green">All checked!</div>
                     </div>
@@ -94,7 +97,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="" (focus)="$event.target.select()" (focusout)="boolFuncionario = true" required #funcionario="ngModel">
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
+                            required #funcionario="ngModel">
                             <option value="">Seleccione un Funcionario</option>
                             <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
@@ -107,10 +111,9 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary"
-            [disabled]="!valor.valid || !tasaCambio.valid || proveedor.value=='' || funcionario.value==''"
-            [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-            (confirm)="GuardarCompra(FormCompra, ModalCompra)" >Actualizar Información</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!valor.valid || !tasaCambio.valid || proveedor.value=='' || funcionario.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCompra(FormCompra, ModalCompra)">Actualizar Información</button>
         </div>
     </div>
 </app-modal-basic>
@@ -119,9 +122,11 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCompra" #ModalVerCompra>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Ver Compra</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerCompra="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -165,21 +170,24 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCompra)">Cerrar</button>
-                </div>
-            </div>
         </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm"
+                (click)="Cerrar(ModalVerCompra)">Cerrar</button>
+        </div>
     </div>
 </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCompra" #ModalEditarCompra>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Editar Compra</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarCompra="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -191,22 +199,31 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required name="Id_Proveedor" ngModel="{{Proveedor}}">
+                        <select class="form-control" name="Id_Proveedor" ngModel="{{Proveedor}}" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
+                        required #proveedorEd="ngModel">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
+                        <div *ngIf="proveedorEd.value=='' && boolProveedor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!proveedorEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" placeholder="" class="form-control" name="Valor" ngModel="{{Valor}}">
+                        <input type="text" class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        (focus)="$event.target.select()" (focusout)="boolValor = true" required #valorEd="ngModel">
+                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tasa Cambio</label>
-                        <input type="text" placeholder="" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}">
+                        <input type="text" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambioEd="ngModel">
+                        <div *ngIf="!tasaCambioEd.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="tasaCambioEd.valid && boolTasaCambio==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -214,38 +231,31 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}">
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
+                        required #funcionarioEd="ngModel">
                             <option value="">Seleccione un Funcionario</option>
                             <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
+                        <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!funcionarioEd.value==''" style="color:green">All checked!</div>
                     </div>
-                </div>
-            </div>
-
-
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
                 </div>
             </div>
         </form>
     </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
+        </div>
+    </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
 </swal>
 
 <swal #deleteSwal title="Compra eliminada" text="Se ha Eliminado Correctamente la compra" type="success">
-    </swal>
+</swal>
