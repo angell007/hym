@@ -72,12 +72,10 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Padre</label>
-                        <select class="form-control" required name="Padre" ngModel="" (click)="boolPadre=true" required #padre="ngModel">
-                            <option value="">Seleccione un padre</option>
+                        <select class="form-control" required name="Padre" ngModel="Ninguno">
+                            <option value="Ninguno">--Ninguno--</option>
                             <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
                         </select>
-                        <div *ngIf="padre.value=='' && boolPadre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!padre.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -173,12 +171,10 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Padre</label>
-                        <select class="form-control" required name="Padre" ngModel="{{Padre}}" (click)="boolPadre=true" required #padreEd="ngModel">
-                            <option value="">Seleccione un padre</option>
+                        <select class="form-control" required name="Padre" ngModel="{{Padre}}">
+                            <option value="Ninguno">--Ninguno--</option>
                             <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
                         </select>
-                        <div *ngIf="padreEd.value=='' && boolPadre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!padreEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
