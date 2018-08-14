@@ -204,7 +204,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                 <strong><label>Nombre: </label></strong>
-                        <label>{{Nombre}}</label>
+                        <label>{{Datos.Nombre}}</label>
                     </div>
                 </div>
             </div>
@@ -212,19 +212,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                 <strong><label>Teléfono: </label></strong>
-                        <label>{{Telefono}}</label>
+                        <label>{{Datos.Telefono}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                 <strong><label>Celular: </label></strong>
-                        <label>{{Celular}}</label>
+                        <label>{{Datos.Celular}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                 <strong><label>Correo: </label></strong>
-                        <label>{{Correo}}</label>
+                        <label>{{Datos.Correo}}</label>
                     </div>
                 </div>
             </div>
@@ -232,19 +232,19 @@
                 <div class="col-md-4">
                     <div class="form-group">
                 <strong><label>Dirección: </label></strong>
-                        <label>{{Direccion}}</label>
+                        <label>{{Datos.Direccion}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <strong><label>Departamento: </label></strong>
-                                <label>{{Departamento}}</label>
+                                <label>{{Datos.Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <strong><label>Municipio: </label></strong>
-                                <label>{{Municipio}}</label>
+                                <label>{{Datos.Municipio}}</label>
                     </div>
                 </div>
             </div>
@@ -254,37 +254,37 @@
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>Comisión: </label></strong>
-                        <label>{{Comision}}</label>
+                        <label>{{Datos.Comision}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>MínCompra: </label></strong>
-                        <label>{{MinCompra}}</label>
+                        <label>{{Datos.MinCompra}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>MáxCompra: </label></strong>
-                        <label>{{MaxCompra}}</label>
+                        <label>{{Datos.MaxCompra}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>MinVenta: </label></strong>
-                        <label>{{MaxVenta}}</label>
+                        <label>{{Datos.MaxVenta}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>MáxVenta: </label></strong>
-                        <label>{{MaxVenta}}</label>
+                        <label>{{Datos.MaxVenta}}</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                 <strong><label>Valores: </label></strong>
-                        <label>{{Valores}}</label>
+                        <label>{{Datos.Valores}}</label>
                     </div>
                 </div>
             </div>
@@ -314,7 +314,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreOficinaEd="ngModel">
+                        <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="{{Datos.Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreOficinaEd="ngModel">
                         <div *ngIf="!nombreOficinaEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="nombreOficinaEd.valid && boolNombre==true" style="color:green">All checked!</div>
                     </div>
@@ -350,7 +350,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="{{Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccionEd="ngModel">
+                        <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="{{Datos.Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccionEd="ngModel">
                         <div *ngIf="!direccionEd.valid && boolDireccion==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="direccionEd.valid && boolDireccion==true" style="color:green">All checked!</div>
                     </div>
@@ -384,7 +384,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Comisión</label>
-                        <input currencyMask class="form-control" name="Comision" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Comision}}" (focus)="$event.target.select()" (focusout)="boolComision = true" required #comisionEd="ngModel">
+                        <input currencyMask class="form-control" name="Comision" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Comision}}" (focus)="$event.target.select()" (focusout)="boolComision = true" required #comisionEd="ngModel">
                         <div *ngIf="!comisionEd.valid && boolComision==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="comisionEd.valid && boolComision==true" style="color:green">All checked!</div>
                     </div>
@@ -392,7 +392,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Mín Compra</label>
-                        <input currencyMask class="form-control" name="Min_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{MinCompra}}" (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompraEd="ngModel">
+                        <input currencyMask class="form-control" name="Min_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Min_Compra}}" (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompraEd="ngModel">
                         <div *ngIf="!minCompraEd.valid && boolMinCompra==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="minCompraEd.valid && boolMinCompra==true" style="color:green">All checked!</div>
                     </div>
@@ -400,7 +400,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Compra</label>
-                        <input currencyMask class="form-control" name="Max_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{MaxCompra}}" (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompraEd="ngModel">
+                        <input currencyMask class="form-control" name="Max_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Max_Compra}}" (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompraEd="ngModel">
                         <div *ngIf="!maxCompraEd.valid && boolMaxCompra==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="maxCompraEd.valid && boolMaxCompra==true" style="color:green">All checked!</div>
                     </div>
@@ -408,7 +408,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Min Venta</label>
-                        <input currencyMask class="form-control" name="Min_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{MinVenta}}" (focus)="$event.target.select()" (focusout)="boolMinVenta = true" required #minVentaEd="ngModel">
+                        <input currencyMask class="form-control" name="Min_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Min_Venta}}" (focus)="$event.target.select()" (focusout)="boolMinVenta = true" required #minVentaEd="ngModel">
                         <div *ngIf="!minVentaEd.valid && boolMinVenta==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="minVentaEd.valid && boolMinVenta==true" style="color:green">All checked!</div>
                     </div>
@@ -416,7 +416,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Máx Venta</label>
-                        <input currencyMask class="form-control" name="Max_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{MaxVenta}}" (focus)="$event.target.select()" (focusout)="boolMaxVenta = true" required #maxVentaEd="ngModel">
+                        <input currencyMask class="form-control" name="Max_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Max_Venta}}" (focus)="$event.target.select()" (focusout)="boolMaxVenta = true" required #maxVentaEd="ngModel">
                         <div *ngIf="!maxVentaEd.valid && boolMaxVenta==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="maxVentaEd.valid && boolMaxVenta==true" style="color:green">All checked!</div>
                     </div>
@@ -424,7 +424,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Valores</label>
-                        <input currencyMask class="form-control" name="Valores" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Valores}}" (focus)="$event.target.select()" (focusout)="boolValores = true" required #valoresEd="ngModel">
+                        <input currencyMask class="form-control" name="Valores" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{Datos.Valores}}" (focus)="$event.target.select()" (focusout)="boolValores = true" required #valoresEd="ngModel">
                         <div *ngIf="!valoresEd.valid && boolValores==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="valoresEd.valid && boolValores==true" style="color:green">All checked!</div>
                     </div>
@@ -437,7 +437,7 @@
                 <button type="button" class="btn btn-primary btn-sm"
                     [disabled]="departamentoEd.value=='' || municipioEd.value=='' || !nombreOficinaEd.valid || !telefonoEd.valid || !celularEd.valid || !correoEd.valid || !direccionEd.valid || !comisionEd.valid || !minCompraEd.valid || !maxCompraEd.valid || !minVentaEd.valid || !maxVentaEd.valid || !valoresEd.valid"
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-                    (confirm)="GuardarOficina(FormEditarOficina, ModalEditarOficina)">Guardar</button>
+                    (confirm)="GuardarOficinaEditar(FormEditarOficina, ModalEditarOficina)">Guardar</button>
             </div>
         </div>
 </app-modal-basic>

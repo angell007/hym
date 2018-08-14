@@ -1,63 +1,63 @@
 <div class="container-fluid">
     <div class="page-title">
-      <h4 class="pull-left">Funcionarios</h4>
-         <a class="pull-right btn btn-info" href="/funcionariocrear"><i class="ti-plus"></i> Agregar Nuevo Funcionario</a>
+        <h4 class="pull-left">Funcionarios</h4>
+        <a class="pull-right btn btn-info" href="/funcionariocrear">
+            <i class="ti-plus"></i> Agregar Nuevo Funcionario</a>
     </div>
     <div class="clearfix"></div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-block">
-            <p>Todos los funcionarios que laboran en nuestra compañía</p>
-            <div class="table-overflow">
-              <table class="table table-hover table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th>Funcionario</th>
-                    <th style="width:170px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  
-                  <tr *ngFor="let funcionario of funcionarios">
-                    <td>
-                      <ul class="list-unstyled list-info">
-                        <li>
-                            <div class="pdd-vertical-10 pdd-horizon-20">	
-                                <img class="thumb-img img-circle" src="assets/images/user.jpg" alt="">
-                                <div class="info">
-                                  <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
-                                  <span class="sub-title">
-                                    <span>{{funcionario.Cargo}}</span>
-                                  </span>
-                                </div>
-                            </div>
-                        </li>
-                      </ul>
-                    </td>
-                    <td class="text-center" style="vertical-align: middle;">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"  (click)="VerFuncionario(funcionario.Identificacion_Funcionario , ModalVerFuncionario)">
-                            <i class="ti-search"></i>
-                        </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarFuncionario(funcionario.Identificacion_Funcionario, ModalEditarFuncionario)">
-                            <i class="ti-pencil"></i>
-                        </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                            <i class="ti-id-badge"></i>
-                        </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este Funcionario, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                        (confirm)="EliminarFuncionario(Funcionario.Identificacion_Funcionario)">
-                            <i class="ti-trash"></i>
-                        </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <p>Todos los funcionarios que laboran en nuestra compañía</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Funcionario</th>
+                                    <th style="width:170px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let funcionario of funcionarios">
+                                    <td>
+                                        <ul class="list-unstyled list-info">
+                                            <li>
+                                                <div class="pdd-vertical-10 pdd-horizon-20">
+                                                    <img class="thumb-img img-circle" src="assets/images/user.jpg" alt="">
+                                                    <div class="info">
+                                                        <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
+                                                        <span class="sub-title">
+                                                            <span>{{funcionario.Cargo}}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerFuncionario(funcionario.Identificacion_Funcionario, ModalVerFuncionario)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarFuncionario(funcionario.Identificacion_Funcionario, ModalEditarFuncionario)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                            <i class="ti-id-badge"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este Funcionario, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="EliminarFuncionario(funcionario.Identificacion_Funcionario)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>
 
@@ -66,160 +66,1000 @@
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerFuncionario" #ModalVerFuncionario>
-  <div class="app-modal-header">
-      <h4>Ver Funcionario</h4>
-  </div>
-  <div class="app-modal-body">
-      <form #FormVerFuncionario="ngForm">
+    <div class="app-modal-header">
+        <h4>Ver Funcionario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormVerFuncionario="ngForm">
+
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Codigo: </label>
+                        </strong>
+                        <label>{{Codigo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Suspendido: </label>
+                        </strong>
+                        <label>{{Suspendido}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Liquidado: </label>
+                        </strong>
+                        <label>{{Liquidado}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Nombres: </label>
+                        </strong>
+                        <label>{{Nombres}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Apellidos: </label>
+                        </strong>
+                        <label>{{Apellidos}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Grupo: </label>
+                        </strong>
+                        <label>{{Grupo}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Dependencia: </label>
+                        </strong>
+                        <label>{{Dependencia}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cargo: </label>
+                        </strong>
+                        <label>{{Cargo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha Nacimiento: </label>
+                        </strong>
+                        <label>{{FechaNacimiento}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Lugar Nacimiento: </label>
+                        </strong>
+                        <label>{{LugarNacimiento}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Tipo Sangre: </label>
+                        </strong>
+                        <label>{{TipoSangre}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Telefono: </label>
+                        </strong>
+                        <label>{{Telefono}}</label>
+                    </div>
+                </div>
+            </div>
 
 
-        
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Celular: </label>
+                        </strong>
+                        <label>{{Celular}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Correo: </label>
+                        </strong>
+                        <label>{{Correo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Direccion Residencia: </label>
+                        </strong>
+                        <label>{{DireccionResidencia}}</label>
+                    </div>
+                </div>
+            </div>
 
-        
-          <div class="modal-footer no-border">
-              <div class="text-right">
-                  <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerFuncionario)" >Cerrar</button>
-              </div>
-          </div>
-      </form>                
-  </div> 
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Estado Civil: </label>
+                        </strong>
+                        <label>{{EstadoCivil}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Grado Instruccion: </label>
+                        </strong>
+                        <label>{{GradoInstruccion}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Titulo Estudio: </label>
+                        </strong>
+                        <label>{{TituloEstudio}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Talla Pantalon: </label>
+                        </strong>
+                        <label>{{TallaPantalon}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Talla Bata: </label>
+                        </strong>
+                        <label>{{TallaBata}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Talla Botas: </label>
+                        </strong>
+                        <label>{{TallaBotas}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>TallaCamisa: </label>
+                        </strong>
+                        <label>{{TallaCamisa}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Autorizado: </label>
+                        </strong>
+                        <label>{{Autorizado}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Salario: </label>
+                        </strong>
+                        <label>{{Salario}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Bonos: </label>
+                        </strong>
+                        <label>{{Bonos}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha Ingreso: </label>
+                        </strong>
+                        <label>{{FechaIngreso}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Hijos: </label>
+                        </strong>
+                        <label>{{Hijos}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Ultima Sesion: </label>
+                        </strong>
+                        <label>{{UltimaSesion}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha Registrado: </label>
+                        </strong>
+                        <label>{{FechaRegistrado}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Person: </label>
+                        </strong>
+                        <label>{{PersonId}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>PersistedFaceId: </label>
+                        </strong>
+                        <label>{{PersistedFaceId}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Tipo Turno: </label>
+                        </strong>
+                        <label>{{TipoTurno}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Turno: </label>
+                        </strong>
+                        <label>{{Turno}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proceso: </label>
+                        </strong>
+                        <label>{{Proceso}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Lider Grupo: </label>
+                        </strong>
+                        <label>{{LiderGrupo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha Retiro: </label>
+                        </strong>
+                        <label>{{FechaRetiro}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Sexo: </label>
+                        </strong>
+                        <label>{{Sexo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Jefe: </label>
+                        </strong>
+                        <label>{{Jefe}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Salario: </label>
+                        </strong>
+                        <label>{{Salario}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>ReporteHE: </label>
+                        </strong>
+                        <label>{{ReporteHE}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>ValidacionHE: </label>
+                        </strong>
+                        <label>{{ValidacionHE}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Reporte Horario: </label>
+                        </strong>
+                        <label>{{ReporteHorario}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Asignacion Horario: </label>
+                        </strong>
+                        <label>{{AsignacionHorario}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Funcionario: </label>
+                        </strong>
+                        <label>{{Funcionario}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Indicadores: </label>
+                        </strong>
+                        <label>{{Indicadores}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Configuracion: </label>
+                        </strong>
+                        <label>{{Configuracion}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Llegada Tarde: </label>
+                        </strong>
+                        <label>{{LlegadaTarde}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Novedades: </label>
+                        </strong>
+                        <label>{{Novedades}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>PermisoApp: </label>
+                        </strong>
+                        <label>{{PermisoApp}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Contrato: </label>
+                        </strong>
+                        <label>{{Contrato}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Afilicaciones: </label>
+                        </strong>
+                        <label>{{Afilicaciones}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>GcmId: </label>
+                        </strong>
+                        <label>{{GcmId}}</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerFuncionario)">Cerrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarFuncionario" #ModalEditarFuncionario>
-  <div class="app-modal-header">
-      <h4>Editar Funcionario</h4>
-  </div>
-  <div class="app-modal-body">
-      <form #FormEditarFuncionario="ngForm">
-          <div class="row">
-              <div class="col-md-4" hidden>
-                  <div class="form-group">
-                      <label>Identificación</label>
-                      <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                  </div>
-              </div>
-              <div class="col-md-12">
-                  <div class="form-group">
-                      <label>Nombre</label>
-                      <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="{{Nombre}}">
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Teléfono</label>
-                      <input type="text" placeholder="Teléfono Oficina" class="form-control" name="Telefono" ngModel="{{Telefono}}">
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Celular</label>
-                      <input type="text" placeholder="Celular Oficina" class="form-control" name="Celular" ngModel="{{Celular}}">
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Correo</label>
-                      <input type="text" placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="{{Correo}}">
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Dirección</label>
-                      <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="{{Direccion}}">
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Departamento</label>
-                      <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
-                          <option value="">Seleccione un Departamento</option>
-                          <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                      </select>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <label>Municipio</label>
-                      <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
-                          <option value="">Seleccione un Municipio</option>
-                          <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                      </select>
-                  </div>
-              </div>
-          </div>
-          <hr>
-          <h3>Datos de Cambios</h3>
-          <div class="row">
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Comisión</label>
-                      <input type="text" currencyMask placeholder="Comisión Oficina" class="form-control" name="Comision" ngModel="{{Comision}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Mín Compra</label>
-                      <input type="text" currencyMask placeholder="Precio Mínimo Compra" class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Máx Compra</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Compra" class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Min Venta</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Min_Venta" ngModel="{{MinVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Máx Venta</label>
-                      <input type="text" currencyMask placeholder="Precio Máximo Venta" class="form-control" name="Max_Venta" ngModel="{{MaxVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-              <div class="col-md-2">
-                  <div class="form-group">
-                      <label>Valores</label>
-                      <input type="text" currencyMask placeholder="Valores" class="form-control" name="Valores" ngModel="{{Valores}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
-              </div>
-          </div>
-          <div class="modal-footer no-border">
-              <div class="text-right">
-                  <button type="button" class="btn btn-primary btn-sm"
-                      [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este funcionario' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-                      (confirm)="GuardarFuncionario(FormEditarFuncionario, ModalEditarFuncionario)">Guardar</button>
-              </div>
-          </div>
-      </form>                
-  </div> 
+    <div class="app-modal-header">
+        <h4>Editar Funcionario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarFuncionario="ngForm">
+                <div class="col-md-4" hidden>
+                        <div class="form-group">
+                            <label>Identificación</label>
+                            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Codigo: </label>
+                                </strong>
+                                <input type="text" placeholder="" class="form-control" name="Codigo" ngModel="{{Codigo}}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Suspendido: </label>
+                                </strong>
+                                <label>{{Suspendido}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Liquidado: </label>
+                                </strong>
+                                <label>{{Liquidado}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Nombres: </label>
+                                </strong>
+                                <label>{{Nombres}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Apellidos: </label>
+                                </strong>
+                                <label>{{Apellidos}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Grupo: </label>
+                                </strong>
+                                <label>{{Grupo}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Dependencia: </label>
+                                </strong>
+                                <label>{{Dependencia}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Cargo: </label>
+                                </strong>
+                                <label>{{Cargo}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Fecha Nacimiento: </label>
+                                </strong>
+                                <label>{{FechaNacimiento}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Lugar Nacimiento: </label>
+                                </strong>
+                                <label>{{LugarNacimiento}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Tipo Sangre: </label>
+                                </strong>
+                                <label>{{TipoSangre}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Telefono: </label>
+                                </strong>
+                                <label>{{Telefono}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Celular: </label>
+                                </strong>
+                                <label>{{Celular}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Correo: </label>
+                                </strong>
+                                <label>{{Correo}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Direccion Residencia: </label>
+                                </strong>
+                                <label>{{DireccionResidencia}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Estado Civil: </label>
+                                </strong>
+                                <label>{{EstadoCivil}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Grado Instruccion: </label>
+                                </strong>
+                                <label>{{GradoInstruccion}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Titulo Estudio: </label>
+                                </strong>
+                                <label>{{TituloEstudio}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Talla Pantalon: </label>
+                                </strong>
+                                <label>{{TallaPantalon}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Talla Bata: </label>
+                                </strong>
+                                <label>{{TallaBata}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Talla Botas: </label>
+                                </strong>
+                                <label>{{TallaBotas}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>TallaCamisa: </label>
+                                </strong>
+                                <label>{{TallaCamisa}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Autorizado: </label>
+                                </strong>
+                                <label>{{Autorizado}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Salario: </label>
+                                </strong>
+                                <label>{{Salario}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Bonos: </label>
+                                </strong>
+                                <label>{{Bonos}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Fecha Ingreso: </label>
+                                </strong>
+                                <label>{{FechaIngreso}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Hijos: </label>
+                                </strong>
+                                <label>{{Hijos}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Ultima Sesion: </label>
+                                </strong>
+                                <label>{{UltimaSesion}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Fecha Registrado: </label>
+                                </strong>
+                                <label>{{FechaRegistrado}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Person: </label>
+                                </strong>
+                                <label>{{PersonId}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>PersistedFaceId: </label>
+                                </strong>
+                                <label>{{PersistedFaceId}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Tipo Turno: </label>
+                                </strong>
+                                <label>{{TipoTurno}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Turno: </label>
+                                </strong>
+                                <label>{{Turno}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Proceso: </label>
+                                </strong>
+                                <label>{{Proceso}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Lider Grupo: </label>
+                                </strong>
+                                <label>{{LiderGrupo}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Fecha Retiro: </label>
+                                </strong>
+                                <label>{{FechaRetiro}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Sexo: </label>
+                                </strong>
+                                <label>{{Sexo}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Jefe: </label>
+                                </strong>
+                                <label>{{Jefe}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Salario: </label>
+                                </strong>
+                                <label>{{Salario}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>ReporteHE: </label>
+                                </strong>
+                                <label>{{ReporteHE}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>ValidacionHE: </label>
+                                </strong>
+                                <label>{{ValidacionHE}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Reporte Horario: </label>
+                                </strong>
+                                <label>{{ReporteHorario}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Asignacion Horario: </label>
+                                </strong>
+                                <label>{{AsignacionHorario}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Funcionario: </label>
+                                </strong>
+                                <label>{{Funcionario}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Indicadores: </label>
+                                </strong>
+                                <label>{{Indicadores}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Configuracion: </label>
+                                </strong>
+                                <label>{{Configuracion}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Llegada Tarde: </label>
+                                </strong>
+                                <label>{{LlegadaTarde}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Novedades: </label>
+                                </strong>
+                                <label>{{Novedades}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>PermisoApp: </label>
+                                </strong>
+                                <label>{{PermisoApp}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Contrato: </label>
+                                </strong>
+                                <label>{{Contrato}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <strong>
+                                    <label>Afilicaciones: </label>
+                                </strong>
+                                <label>{{Afilicaciones}}</label>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <strong>
+                                    <label>GcmId: </label>
+                                </strong>
+                                <label>{{GcmId}}</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este funcionario' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                        (confirm)="GuardarFuncionario(FormEditarFuncionario, ModalEditarFuncionario)">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
 </swal>
 
-<swal #deleteSwal
-title="Oficina eliminada"
-text="Se ha eliminado correctamente la oficina"
-type="success"
->
+<swal #deleteSwal title="Oficina eliminada" text="Se ha eliminado correctamente la oficina" type="success">
 </swal>
