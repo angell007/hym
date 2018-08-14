@@ -109,7 +109,42 @@
                         </li>
                     </ul>
                     <div class="mrg-top-10" style="min-height: 470px;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Moneda Origen</label>
+                                    <select class="form-control" placeholder="Origen" name="Forma_Pago">
+                                    </select>    
+                                </div>
 
+                                <div class="form-group">
+                                    <label>Destino</label>
+                                    <select class="form-control" placeholder="Destino" name="Forma_Pago">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tasa Cambio</label>
+                                    <input type="text" placeholder="Cambio" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mrg-top-40">
+                                    <label>Valor</label>
+                                    <input type="text" placeholder="V" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Vueltos</label>
+                                    <input type="text" placeholder="" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-info btn-block mrg-top-80">CAMBIAR</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <h3>Error Estableciendo Conexión con Servidor CorvusLab</h3>
                     </div>
                 </div>
             </div>
