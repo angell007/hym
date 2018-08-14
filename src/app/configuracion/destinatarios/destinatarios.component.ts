@@ -98,10 +98,11 @@ export class DestinatariosComponent implements OnInit {
       return this.handleError(error);
     })
     .subscribe((data:any)=>{      
-      this.ActualizarVista();
+      this.destinatarios= data;
       formulario.reset();
       this.InicializarBool();
       this.saveSwal.show();
+      this.ActualizarVista();
     });
     
   }

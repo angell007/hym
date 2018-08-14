@@ -100,7 +100,7 @@
                         <select class="form-control" required name="Identificacion_Funcionario" ngModel="" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
                             required #funcionario="ngModel">
                             <option value="">Seleccione un Funcionario</option>
-                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Id_Funcionario">{{Funcionario.Nombres}}</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
                         <div *ngIf="funcionario.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="!funcionario.value==''" style="color:green">All checked!</div>
@@ -234,7 +234,7 @@
                         <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
                         required #funcionarioEd="ngModel">
                             <option value="">Seleccione un Funcionario</option>
-                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Id_Funcionario">{{Funcionario.Nombres}}</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
                         <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="!funcionarioEd.value==''" style="color:green">All checked!</div>

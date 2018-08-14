@@ -64,7 +64,6 @@ export class CajasComponent implements OnInit {
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
-      console.log(data);
       this.cajas= data;
     });
   }
