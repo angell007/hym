@@ -60,8 +60,8 @@
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreCaja="ngModel">
-                        <div *ngIf="!nombreCaja.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="nombreCaja.valid && boolNombre==true" style="color:green">All checked!</div>
+                        <div *ngIf="!nombreCaja.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreCaja.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -71,8 +71,8 @@
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
-                        <div *ngIf="oficina.value=='' && boolOficina==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!oficina.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="oficina.value=='' && boolOficina==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!oficina.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -158,8 +158,8 @@
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreCajaEd="ngModel">
-                        <div *ngIf="!nombreCajaEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="nombreCajaEd.valid && boolNombre==true" style="color:green">All checked!</div>
+                        <div *ngIf="!nombreCajaEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreCajaEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -175,8 +175,8 @@
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
-                        <div *ngIf="oficinaEd.value=='' && boolOficina==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!oficinaEd.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="oficinaEd.value=='' && boolOficina==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!oficinaEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
