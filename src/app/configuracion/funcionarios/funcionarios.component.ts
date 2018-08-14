@@ -224,11 +224,62 @@ export class FuncionariosComponent implements OnInit {
    * @memberof OficinasComponent
    */
   EditarFuncionario(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+    this.http.get(this.globales.ruta+'php/funcionarios/detalle.php',{
       params:{modulo:'Funcionario', id:id}
     }).subscribe((data:any)=>{
-
-      
+      this.Identificacion = id;
+      this.Codigo = data.Codigo;
+      this.Suspendido = data.Suspendido;
+      this.Liquidado = data.Liquidado;
+      this.Nombres = data.Nombres;
+      this.Apellidos = data.Apellidos;
+      this.Grupo = data.Id_Grupo;
+      this.Dependencia = data.Id_Dependencia;
+      this.Cargo = data.Id_Cargo;
+      this.FechaNacimiento = data.Fecha_Nacimiento;
+      this.LugarNacimiento = data.Lugar_Nacimiento;
+      this.TipoSangre = data.Tipo_Sangre;
+      this.Telefono = data.Telefono;
+      this.Celular = data.Celular;
+      this.Correo = data.Correo;
+      this.DireccionResidencia = data.Direccion_Residencia;
+      this.EstadoCivil = data.Estado_Civil;
+      this.GradoInstruccion = data.Grado_Instruccion;
+      this.TituloEstudio = data.Titulo_Estudio;
+      this.TallaPantalon = data.Talla_Pantalon;
+      this.TallaBata = data.Talla_Bata;
+      this.TallaBotas = data.Talla_Botas;
+      this.TallaCamisa = data.Talla_Camisa;
+      this.Autorizado = data.Autorizado;
+      this.Salario = data.Salario;
+      this.Bonos = data.Bonos;
+      this.FechaIngreso = data.Fecha_Ingreso;
+      this.Hijos = data.Hijos;
+      this.UltimaSesion = data.Ultima_Sesion;
+      this.FechaRegistrado = data.Fecha_Registrado;
+      this.PersonId = data.personId;
+      this.PersistedFaceId = data.persistedFaceId;
+      this.TipoTurno = data.Tipo_Turno;
+      this.Turno = data.Id_Turno;
+      this.Proceso = data.Id_Proceso;
+      this.LiderGrupo = data.Lider_Grupo;
+      this.FechaRetiro = data.Fecha_Retiro;
+      this.Sexo = data.Sexo;
+      this.Jefe = data.Jefe;
+      this.Salario = data.Salarios;
+      this.ReporteHE = data.Reporte_HE;
+      this.ValidacionHE = data.Validacion_HE;
+      this.ReporteHorario = data.Reporte_Horario;
+      this.AsignacionHorario = data.Asignacion_Horario;
+      this.Funcionario = data.Funcionarios;
+      this.Indicadores = data.Indicadores;
+      this.Configuracion = data.Configuracion;
+      this.LlegadaTarde = data.Llegada_Tarde;
+      this.Novedades = data.Novedades;
+      this.PermisoApp = data.Permiso_App;
+      this.Contrato = data.Contrato;
+      this.Afilicaciones = data.Afiliaciones;
+      this.GcmId = data.Gcm_Id;      
       modal.show();
     });
   }
@@ -239,7 +290,7 @@ export class FuncionariosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Funcionario');
     datos.append("id", id);
-    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/funcionarios/anular_funcionario.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
       this.ActualizarVista();
     });
