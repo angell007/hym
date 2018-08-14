@@ -172,9 +172,10 @@
             </div>
         </form>
     </div>
-    <div class="modal-footer no-border">
+    <div class="app-modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerCompra)">Cerrar</button>
+            <button type="button" class="btn btn-primary btn-sm"
+                (click)="Cerrar(ModalVerCompra)">Cerrar</button>
         </div>
     </div>
 </app-modal-basic>
@@ -198,22 +199,31 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required name="Id_Proveedor" ngModel="{{Proveedor}}">
+                        <select class="form-control" name="Id_Proveedor" ngModel="{{Proveedor}}" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
+                        required #proveedorEd="ngModel">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
+                        <div *ngIf="proveedorEd.value=='' && boolProveedor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!proveedorEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" class="form-control" name="Valor" ngModel="{{Valor}}">
+                        <input type="text" class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        (focus)="$event.target.select()" (focusout)="boolValor = true" required #valorEd="ngModel">
+                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">All checked!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tasa Cambio</label>
-                        <input type="text" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}">
+                        <input type="text" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambioEd="ngModel">
+                        <div *ngIf="!tasaCambioEd.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="tasaCambioEd.valid && boolTasaCambio==true" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
@@ -221,16 +231,19 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}">
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
+                        required #funcionarioEd="ngModel">
                             <option value="">Seleccione un Funcionario</option>
                             <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
+                        <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
+                        <div *ngIf="!funcionarioEd.value==''" style="color:green">All checked!</div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-    <div class="modal-footer no-border">
+    <div class="app-modal-footer">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
