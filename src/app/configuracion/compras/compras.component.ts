@@ -31,6 +31,9 @@ export class ComprasComponent implements OnInit {
   public boolTasaCambio:boolean = false;
   public boolFuncionario:boolean = false;
 
+  //Valores por defecto
+  proveedorDefault: string = "";
+  funcionarioDefault: string = "";
 
   rowsFilter = [];
   tempFilter = [];
@@ -102,6 +105,8 @@ export class ComprasComponent implements OnInit {
       this.ActualizarVista();
       this.InicializarBool();
       formulario.reset();
+      this.proveedorDefault = "";
+      this.funcionarioDefault = "";
       this.saveSwal.show();
     });
 

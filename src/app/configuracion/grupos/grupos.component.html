@@ -72,7 +72,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Padre</label>
-                        <select class="form-control" required name="Padre" ngModel="Ninguno">
+                        <select class="form-control" required name="Padre" ngModel="Ninguno" [(ngModel)]="padreDefault">
                             <option value="Ninguno">--Ninguno--</option>
                             <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
                         </select>

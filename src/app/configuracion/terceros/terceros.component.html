@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tipo de documento</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="" (click)="boolTipoDoc=true" required #tipoDoc="ngModel">
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="" [(ngModel)]="tipoDocumentoDefault" (click)="boolTipoDoc=true" required #tipoDoc="ngModel">
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
@@ -106,7 +106,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)"
+                        <select class="form-control" required name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)"
                             (click)="boolDepartamento=true" required #departamento="ngModel">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
@@ -118,7 +118,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
@@ -178,10 +178,13 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Destacado</label>
-                        <select class="form-control" name="Destacado" ng-model="selected" ngModel="No">
-                            <option ng-selected="selected">No</option>
+                        <select class="form-control" name="Destacado" ng-model="selected" ngModel="No" [(ngModel)]="destacadoDefault" (click)="boolDestacado=true" required #destacado="ngModel">
+                            <option value="">---------</option>
+                            <option ng-selected="selected" value="No">No</option>
                             <option>Si</option>
                         </select>
+                        <div *ngIf="destacado.value=='' && boolDestacado==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!destacado.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -191,10 +194,13 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
-                        <select class="form-control" name="Credito" ng-model="selected" ngModel="No">
-                            <option ng-selected="selected">No</option>
+                        <select class="form-control" name="Credito" ng-model="selected" ngModel="No" [(ngModel)]="creditoDefault" (click)="boolCredito=true" required #credito="ngModel" >
+                            <option value="">---------</option>
+                            <option ng-selected="selected" value="No">No</option>
                             <option>Si</option>
                         </select>
+                        <div *ngIf="credito.value=='' && boolCredito==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!credito.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -209,7 +215,7 @@
                 <div class="col-md-7">
                     <div class="form-group">
                         <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="" (click)="boolTipoGrupo=true" required #tipoGrupo="ngModel">
+                        <select class="form-control" name="Id_Grupo" ngModel="" [(ngModel)]="tipoGrupoDefault" (click)="boolTipoGrupo=true" required #tipoGrupo="ngModel">
                             <option value="">Seleccione tipo de grupo</option>
                             <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
@@ -230,7 +236,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!idTercero.valid || !nombre.valid || !direccion.valid || !barrio.valid || !telefono.valid || !celular.valid || !correo.valid || !terceroDesde.valid || tipoDoc.value=='' || departamento.value=='' || municipio.value==''"
+            <button type="submit" class="btn btn-primary" [disabled]="!idTercero.valid || !nombre.valid || !direccion.valid || !barrio.valid || !telefono.valid || !celular.valid || !correo.valid || !terceroDesde.valid || tipoDoc.value=='' || departamento.value=='' || municipio.value=='' || tipoGrupo.value=='' || !cupo.valid || credito.value=='' || destacado.value=='' || credito.value==null || destacado.value==null"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarTercero(FormTercero, ModalTercero)">Actualizar Información</button>
         </div>
@@ -539,7 +545,7 @@
                     <div class="form-group">
                         <label>Tipo Grupo</label>
                         <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}" (click)="boolTipoGrupo=true" required #tipoGrupoEd="ngModel">
-                            <option>Seleccione tipo de grupo</option>
+                            <option value="">Seleccione tipo de grupo</option>
                             <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
                         <div *ngIf="tipoGrupoEd.value=='' && boolTipoGrupo==true" style="color:red">Campo inválido</div>
@@ -559,7 +565,9 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" data-dismiss="modal" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+            <button class="btn btn-primary btn-sm" data-dismiss="modal"
+            [disabled]="!nombreEd.valid || !direccionEd.valid || !barrioEd.valid || !telefonoEd.valid || !celularEd.valid || !correoEd.valid || !terceroDesdeEd.valid || tipoDocEd.value=='' || departamentoEd.value=='' || municipioEd.value=='' || tipoGrupoEd.value=='' || !cupoEd.valid"
+            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                 (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>
         </div>
     </div>
@@ -572,4 +580,7 @@
 </swal>
 
 <swal #deleteSwal title="Tercero eliminado" text="Se ha eliminado correctamente el Tercero" type="success">
+</swal>
+
+<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
 </swal>

@@ -34,6 +34,10 @@ export class CajarecaudosComponent implements OnInit {
   public boolDepartamento:boolean = false;
   public boolMunicipio:boolean = false;
 
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
+
 
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
@@ -99,6 +103,8 @@ export class CajarecaudosComponent implements OnInit {
       this.ActualizarVista();
       formulario.reset();
       this.InicializarBool();
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
       this.saveSwal.show();
     });
   }

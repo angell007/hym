@@ -33,6 +33,9 @@ export class CuentasbancariasComponent implements OnInit {
   public boolSaldoInicial:boolean = false;
   public boolFechaSaldoInicial:boolean = false;
 
+  //Valores por defecto
+  bancoDefault: string = "";
+
   rowsFilter = [];
   tempFilter = [];
 
@@ -100,6 +103,7 @@ OcultarFormularios()
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
+      this.bancoDefault = "";
       this.saveSwal.show();
     });
     

@@ -30,6 +30,10 @@ export class DestinatariosComponent implements OnInit {
   public boolNombre:boolean = false;
   public boolId:boolean = false;
 
+  //Valores por defecto
+  paisDefault: string = "";
+  bancoDefault: string = "";
+
   @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
@@ -101,6 +105,8 @@ export class DestinatariosComponent implements OnInit {
       this.destinatarios= data;
       formulario.reset();
       this.InicializarBool();
+      this.paisDefault = "";
+      this.bancoDefault = "";
       this.saveSwal.show();
       this.ActualizarVista();
     });

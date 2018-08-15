@@ -67,7 +67,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Oficina</label>
-                        <select class="form-control" required name="Id_Oficina" ngModel="" (click)="boolOficina=true" required #oficina="ngModel">
+                        <select class="form-control" required name="Id_Oficina" ngModel="" [(ngModel)]="oficinaDefault" (click)="boolOficina=true" required #oficina="ngModel">
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>

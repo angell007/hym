@@ -24,6 +24,9 @@ export class CajasComponent implements OnInit {
   public boolNombre:boolean = false;
   public boolOficina:boolean = false;
 
+  //Valores por defecto
+  oficinaDefault: string = "";
+
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
@@ -68,8 +71,6 @@ export class CajasComponent implements OnInit {
     });
   }
 
-
-
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
    *datos.append("modulo", 'nombre de la tabla')
@@ -93,6 +94,7 @@ export class CajasComponent implements OnInit {
       this.OcultarFormulario(modal);
       this.ActualizarVista();
       this.InicializarBool();
+      this.oficinaDefault = "";
       this.saveSwal.show();
     });
 

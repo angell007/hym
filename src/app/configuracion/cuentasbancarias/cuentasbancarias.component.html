@@ -69,7 +69,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="" (click)="boolBanco=true" required #banco="ngModel">
+                        <select class="form-control" required name="Id_Banco" ngModel="" [(ngModel)]="bancoDefault" (click)="boolBanco=true" required #banco="ngModel">
                             <option value="">Seleccione Banco</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
