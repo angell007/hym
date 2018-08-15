@@ -8,13 +8,12 @@ import { CommonModule } from '@angular/common';
 import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 
-
 @Component({
-  selector: 'app-funcionarioeditar',
-  templateUrl: './funcionarioeditar.component.html',
-  styleUrls: ['./funcionarioeditar.component.scss']
+  selector: 'app-funcionariover',
+  templateUrl: './funcionariover.component.html',
+  styleUrls: ['./funcionariover.component.scss']
 })
-export class FuncionarioeditarComponent implements OnInit {
+export class FuncionarioverComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
   public funcionario : any[] = [];
@@ -68,9 +67,9 @@ export class FuncionarioeditarComponent implements OnInit {
   public Grupos : any[] = [];
   public Dependencias : any[] = [];
   public Cargos : any[] = [];
-  public Grupo : any = null;
-  public Dependencia : any = null;
-  public Cargo : any = null;  
+  public Grupo : any = [];
+  public Dependencia : any = [];
+  public Cargo : any = [];  
 
   constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
@@ -78,11 +77,16 @@ export class FuncionarioeditarComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
       console.log(this.Grupos);      
-      this.http.get(this.globales.ruta + 'php/funcionarios/detalle_funcionario.php',{
+      this.http.get(this.globales.ruta + 'php/funcionarios/ver_funcionario.php',{
         params: { modulo: 'Funcionario', id: this.id}     
       }).subscribe((data: any) => {
         console.log(data);        
-        this.funcionario = data;
+        this.funcionario = data.Funcionario;
+        console.log(this.funcionario);
+        
+        this.Cargo=data.Cargo;
+        this.Grupo=data.Grupo;
+        this.Dependencia=data.Dependencia;
         if(data.Contacto_Emergencia)
         {
           this.ContactoEmergencia = data.Contacto_Emergencia;

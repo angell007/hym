@@ -1,0 +1,437 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Ver Funcionario</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+            <form #FormFuncionarioCrear="ngForm">
+            <form-wizard style="border:0 !important;">
+                <!--INICIO INFORMACION PERSONAL-->
+                <wizard-step [title]="'Información Personal'" [isValid]="">
+                  <form #FormFuncionario="ngForm">
+                    <div class="content2">
+                      <div>
+                        <h5>Información Personal</h5><hr>
+                        <div class="row" >
+                          <div class="col-md-4" hidden>
+                            <div class="form-group">
+                              <input type="text"  name="Username" ngModel="{{funcionario.Username}}" class="letras form-control form-control-sm"/>
+                              <label class="floating-label" >Apellidos (*)</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4" hidden>
+                            <div class="form-group">
+                              <input type="text"  name="Password" ngModel="{{funcionario.Password}}" class="letras form-control form-control-sm"/>
+                              <label class="floating-label" >Apellidos (*)</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div  style="text-align: center">
+                              <label style="display: block" for="Foto">
+                                <img *ngIf="funcionario.Imagen == ''" src="assets/images/user.jpg"  style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
+                                <img *ngIf="funcionario.Imagen != ''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">                      
+                              </label>
+                              <div class="col-md-6">
+                                <input name="Foto" id="Foto" ngModel="" type="file" accept="image/png, image/jpeg" class="form-control form-control-sm text-right f-9" style="display: none" (change)="CargaFoto($event)">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-9">
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <input type="number"  min="0" name="Identificacion_Funcionario" ngModel="{{funcionario.Identificacion_Funcionario}}" class="form-control form-control-sm f-9" readonly />
+                                  <label class="floating-label" >Identificación (*)</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="floating-label" >Nombres: {{funcionario.Nombres}}</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="floating-label" >Apellidos: {{funcionario.Apellidos}}</label>
+                                  </div>
+                              </div>    
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="floating-label" for="text-input">Fecha de Nacimiento: {{funcionario.Fecha_Nacimiento}}</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="floating-label" >Lugar de Nacimiento: {{funcionario.Lugar_Nacimiento}}</label> 
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="floating-label" >Tipo de sangre: {{funcionario.Tipo_Sangre}}</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-12">
+                            
+                          </div>
+                                  
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Teléfono Fijo: {{funcionario.Telefono}}</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Celular: {{funcionario.Celular}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="floating-label" >Correo electrónico: {{funcionario.Correo}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" > 
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="floating-label" >Dirección de Residencia: {{funcionario.Direccion_Residencia}}</label>
+                              </div>
+                          </div>
+                        </div>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <div class="form-group"> 
+                            <label class="floating-label" >Estado Civil: {{funcionario.Estado_Civil}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label class="floating-label" >Hijos: {{funcionario.Hijos}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="floating-label" >Grado de instrucción: {{funcionario.Grado_Instruccion}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <label class="floating-label" >Nombre del Título: {{funcionario.Titulo_Estudio}}</label>
+                          </div>
+                        </div>
+                      </div>
+                      <h5>Información Empresa</h5><hr>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="floating-label">Grupo: {{Grupo.Nombre}}</label>
+                          </div>
+                        </div>              
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="floating-label">Dependencia: {{Dependencia.Nombre}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Cargo: {{Cargo.Nombre}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label class="floating-label" >Salario: {{funcionario.Salario}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label for="text-input">Fecha de Ingreso: {{funcionario.Fecha_Ingreso}}</label>
+                          </div>
+                        </div>
+                                  
+                        </div>
+                        <h5>Dotación</h5><hr>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Talla de Camisa: {{funcionario.Talla_Camisa}}</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Talla de Pantalón: {{funcionario.Talla_Pantalon}}</label>
+                            </div>
+                          </div>                        
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label class="floating-label" >Talla de Calzado: {{funcionario.Talla_Botas}} </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>      
+                    </div>
+                  </form>
+                </wizard-step>
+                <!--FIN INFORMACION PERSONAL-->
+                <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
+                <wizard-step [title]="'Contacto Emergencia'" [isValid]="" >
+                  <form #FormContactoEmergencia="ngForm">
+                    <div class="content2">
+                      <div>
+                        <h5>Contacto Emergecia</h5><hr>
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <input type="text"  name="Identificacion_Funcionario_Contacto_Emergencia" ngModel="{{ContactoEmergencia.Identificacion_Funcionario_Contacto_Emergencia}}" class="letras form-control form-control-sm"/>
+                            <label class="floating-label" >Apellidos (*)</label>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label class="floating-label" >Nombre Completo: {{ContactoEmergencia.Nombre}}</label>
+                                </div>
+                              </div>
+                            <div class="col-md-6">
+                            <div class="form-group">
+                              <label class="floating-label" >Parentesco: {{ContactoEmergencia.Parentesco}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" id="3">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Celular: {{ContactoEmergencia.Celular}}</label>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Teléfono Fijo: {{ContactoEmergencia.Telefono}}</label>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Dirección de Residencia: {{ContactoEmergencia.Direccion}}</label>
+                              </div>
+                          </div>
+                        </div>
+                      </div>                     
+                    </div>
+                  </form>
+                </wizard-step>
+                <!--FIN INFORMACION CONTACTO EMERGENCIA-->
+                <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
+                <wizard-step [title]="'Experiencia Laboral'" [isValid]="" >
+                  <div class="content">
+                    <div>
+                      <h5>Experiencia Laboral 1</h5><hr>
+                      <form #FormExperiencia1="ngForm">
+                        <div class="row">
+                          <div class="col-md-4" hidden>
+                            <div class="form-group">
+                              <label class="floating-label" >Apellidos: {{Experiencia[0].id_Funcionario_Experiencia_Laboral}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Empresa: {{Experiencia[0].Nombre_Empresa}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Cargo: {{Experiencia[0].Cargo}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Jefe Inmediat: {{Experiencia[0].Jefe}}o</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="floating-label" for="text-input">Fecha de ingreso: {{Experiencia[0].Ingreso_Empresa}}</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="floating-label" for="text-input">Fecha de retiro: {{Experiencia[0].Retiro_Empresa}}</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label class="floating-label">Numero de Contacto: {{Experiencia[0].Telefono}}</label>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12" >
+                            <div class="form-group">
+                              <label class="floating-label" >Tareas Realizadas: {{Experiencia[0].Labores}}</label>
+                            </div>
+                          </div>
+                        </div>
+                      </form>  
+                      <h5>Experiencia Laboral 2</h5><hr>
+                      <form #FormExperiencia2="ngForm">
+                        <div class="row">
+                          <div class="col-md-4" hidden>
+                            <div class="form-group">
+                              <label class="floating-label" >Apellidos: {{Experiencia[1].id_Funcionario_Experiencia_Laboral}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Empresa: {{Experiencia[1].Nombre_Empresa}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Cargo: {{Experiencia[1].Cargo}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Jefe Inmediato: {{Experiencia[1].Jefe}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" for="text-input">Fecha de ingreso: {{Experiencia[1].Ingreso_Empresa}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" for="text-input">Fecha de retiro: {{Experiencia[1].Retiro_Empresa}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label class="floating-label" >Número de Contacto: {{Experiencia[1].Telefono}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12" >
+                            <div class="form-group">
+                              <label class="floating-label" >Tareas Realizadas: {{Experiencia[1].Labores}}</label>
+                            </div>
+                          </div>
+                        </div>
+                      </form>              
+                    </div>    
+                  </div>
+                </wizard-step>
+                <!--FIN INFORMACION EXPERIENCIA LABORAL-->
+                <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
+                <wizard-step [title]="'Referencias Personales'" [isValid]="">
+                  <form #FormReferencia1="ngForm">
+                    <div class="content">
+                      <h5>Referencia 1</h5><hr>
+                      <div class="row">
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <label class="floating-label" >Apellidos: {{Referencias[0].id_Funcionario_Referencias}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="floating-label" for="codigo">Nombre completo: {{Referencias[0].Nombres}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="floating-label" for="codigo">Nombre de la profesión/cargo: {{Referencias[0].Profesion}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="floating-label" for="codigo">Nombre de la empresa: {{Referencias[0].Empresa}}</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label class="floating-label" for="codigo">Numero de contacto: {{Referencias[0].Telefono}}</label>
+                          </div>
+                        </div>    
+                      </div>
+                    </div>
+                  </form>  
+                  <h5>Referencia 2</h5><hr>
+                  <form #FormReferencia2="ngForm">
+                    <div class="row">
+                      <div class="col-md-4" hidden>
+                        <div class="form-group">
+                          <label class="floating-label" >Apellidos: {{Referencias[1].id_Funcionario_Referencias}}</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="floating-label" for="codigo">Nombre completo: {{Referencias[1].Nombres}}</label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="floating-label" for="codigo">Nombre de profesión/cargo: {{Referencias[1].Profesion}}</label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="floating-label" for="codigo">Nombre de empresa: {{Referencias[1].Empresa}}</label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <label class="floating-label" for="codigo">Numero de contacto: {{Referencias[1].Telefono}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </form>          
+              
+                </wizard-step>
+                <!--FIN INFORMACION REFERENCIAS PERSONALES-->
+                <!--INICIO INFORMACION PRIVILEGIOS-->
+                <wizard-step [title]="'Finalizar Formulario'" (onComplete)="GuardarFuncionario(FormFuncionario, FormContactoEmergencia, FormExperiencia1, FormExperiencia2, FormReferencia1, FormReferencia2)">
+                  <div class="content">
+                    <div>
+                        
+                    </div>
+
+                  </div>
+                  </wizard-step>
+                  <!--FIN INFORMACION PRIVILEGIOS-->
+            </form-wizard>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
+
+<swal #deleteSwal
+title="Caja eliminada"
+text="Se ha eliminado correctamente la caja"
+type="success"
+>
+</swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

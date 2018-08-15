@@ -5,6 +5,9 @@ import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { CommonModule } from '@angular/common';
 import { Globales } from '../../shared/globales/globales';
 import { FormWizardModule } from 'angular2-wizard/dist';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-funcionariocrear',
@@ -103,7 +106,7 @@ export class FuncionariocrearComponent implements OnInit {
 
 
 
-  constructor(private http : HttpClient,private globales: Globales) { }
+  constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
   CargaFoto(event){
     let fot = document.getElementById("foto_visual") as HTMLImageElement;
@@ -189,8 +192,12 @@ GuardarFuncionario(formulario: NgForm){
     this.confirmacionSwal.show();
     this.Fotos = [];
     formulario.reset();
+    this.VerPantallaLista();
    }); 
  }
+ VerPantallaLista(){
+  this.router.navigate(['/funcionarios']);    
+}
 
  onStep4Next(a){
    alert(a);

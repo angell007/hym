@@ -547,14 +547,10 @@
                   </wizard-step>
                   <!--FIN INFORMACION REFERENCIAS PERSONALES-->
                   <!--INICIO INFORMACION PRIVILEGIOS-->
-                  <wizard-step [title]="'Privilegios'" (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
+                  <wizard-step [title]="'Finalizar Formulario'" (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
                     <div class="content">
                       <div>
                           
-                      </div>
-                      <div >
-                        <button type="button" [swal]="{ title : '¿Está Seguro?', text : 'Se Dispone a Guardar Esta Informacion' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                         (confirm)="GuardarFuncionario(FormFuncionarioCrear)"  class="btn btn-primary btn-sm btn-enviar btn-right">Guardar la Informacion</button>
                       </div>
                     </div>
                     </wizard-step>
