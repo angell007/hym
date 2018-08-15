@@ -41,6 +41,7 @@ export class DestinatariosComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('duplicateSwal') duplicateSwal:any;
 
   constructor(private http : HttpClient, private globales: Globales) { } 
 
@@ -99,6 +100,12 @@ export class DestinatariosComponent implements OnInit {
     .catch(error => { 
       console.error('An error occurred:', error.error);
       this.errorSwal.show();
+
+      var test = error.error.text;
+      if (test.indexOf('Duplicate') >= 0) {
+        this.duplicateSwal.show();
+      }
+
       return this.handleError(error);
     })
     .subscribe((data:any)=>{      

@@ -256,7 +256,7 @@
                         <div *ngIf="!bancoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Numero de Cuenta</label>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Cuentas" ngModel="{{Cuentas}}"  (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuentaEd="ngModel">
@@ -264,9 +264,9 @@
                         <div *ngIf="cuentaEd.valid && boolCuenta==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label>&nbsp;</label>
-                    <a href="" class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></a>
+                    <button class="btn btn-success btn-icon btn-rounded" ><i class="ti-plus"></i></button>
                 </div>
             </div>
         </form>        
@@ -300,3 +300,6 @@ type="success"
   type="success"
   >
   </swal>
+
+  <swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
+</swal>
