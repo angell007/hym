@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
@@ -19,6 +19,34 @@ export class PerfilesComponent implements OnInit {
   public Nombre : any[];
   public Detalle : any[];
   public TransfVer : any[];
+  public TransfEditar : any[];
+  public TransfEliminar : any[];
+  public TraslVer : any[];
+  public TraslEditar : any[];
+  public TraslEliminar : any[];
+  public CajasVer : any[];
+  public CajasEditar : any[];
+  public CajasEliminar : any[];
+  public GirosVer : any[];
+  public GirosEditar : any[];
+  public GirosEliminar : any[];
+  public CorrVer : any[];
+  public CorrEditar : any[];
+  public CorrEliminar : any[];
+  public ServVer : any[];
+  public ServEditar : any[];
+  public ServEliminar : any[];
+  public ConfVer : any[];
+  public ConfEditar : any[];
+  public ConfEliminar : any[];
+  public IndiVer : any[];
+  public IndiEditar : any[];
+  public IndiEliminar : any[];
+  public ReporVer : any[];
+  public ReporEditar : any[];
+  public ReporEliminar : any[];
+
+  //public transfVerCh : any[];
   /*
   public TraslVer : any[];
   public CajasVer : any[];
@@ -186,9 +214,12 @@ export class PerfilesComponent implements OnInit {
   public reporEliminarMod3: number;
 
   public boolNombre:boolean = false;
-  public boolTransfVer:boolean = false;
+  //public boolTransfVer:boolean = false;
   public isFocused:boolean = false;
   
+  @ViewChild('nombre') nombreVal:any;
+  @ViewChild('detalles') detallesVal:any;
+
   @ViewChild('ModalPerfil') ModalPerfil:any;
   @ViewChild('ModalVerPerfil') ModalVerPerfil:any;
   @ViewChild('ModalEditarPerfil') ModalEditarPerfil:any;
@@ -201,7 +232,6 @@ export class PerfilesComponent implements OnInit {
 
   ngOnInit() {
     this.ActualizarVista();
-
     this.transfVerMod = 0;
     this.transfVerMod3 = 0;
     this.transfEditarMod = 0;
@@ -281,7 +311,6 @@ export class PerfilesComponent implements OnInit {
   InicializarBool()
   {
     this.boolNombre = false;
-    this.boolTransfVer = false;
     this.transfVerVal = false;
     this.transfEditarVal = false;
     this.transfEliminarVal = false;
@@ -326,12 +355,20 @@ export class PerfilesComponent implements OnInit {
       return this.handleError(error);
     })
     .subscribe((data:any)=>{
-      this.ActualizarVista();
-      formulario.reset();
+      //formulario.reset();
+      this.customReset(); //Necesario para corregir ciertos bugs con los checkboxes
+      //this.transfVerMod = 0;
+      //this.transfEditarMod = 0;
+      this.perfiles= data;
       this.InicializarBool();
       this.saveSwal.show();
     });
-    
+  }
+
+  customReset()
+  {
+    this.nombreVal.reset();
+    this.detallesVal.reset();
   }
 
   handleError(error: Response) {
@@ -345,35 +382,62 @@ export class PerfilesComponent implements OnInit {
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Detalle = data.Detalle;
-      this.TransfVer = data.TransfVer;
-      /*
-      this.TraslVer = data.TraslVer;
-      this.CajasVer = data.CajasVer;
-      this.GirosVer = data.GirosVer;
-      this.CorrVer = data.CorrVer;
-      this.ServVer = data.ServVer;
-      this.ConfVer = data.ConfVer;
-      this.IndiVer = data.IndiVer;
-      this.ReporVer = data.ReporVer;
-      this.TransfEditar = data.TransfEditar;
-      this.TraslEditar = data.TraslEditar;
-      this.CajasEditar = data.CajasEditar;
-      this.GirosEditar = data.GirosEditar;
-      this.CorrEditar = data.CorrEditar;
-      this.ServEditar = data.ServEditar;
-      this.ConfEditar = data.ConfEditar;
-      this.IndiEditar = data.IndiEditar;
-      this.ReporEditar = data.ReporEditar;
-      this.TransfEliminar = data.TransfEliminar;
-      this.TraslEliminar = data.TraslEliminar;
-      this.CajasEliminar = data.CajasEliminar;
-      this.GirosEliminar = data.GirosEliminar;
-      this.CorrEliminar = data.CorrEliminar;
-      this.ServEliminar = data.ServEliminar;
-      this.ConfEliminar = data.ConfEliminar;
-      this.IndiEliminar = data.IndiEliminar;
-      this.ReporEliminar = data.ReporEliminar;
-      */
+
+      if (data.TransfVer == 0) this.transfVerVal2 = false;
+      if (data.TransfVer == 1) this.transfVerVal2 = true;
+      if (data.TransfEditar == 0) this.transfEditarVal2 = false;
+      if (data.TransfEditar == 1) this.transfEditarVal2 = true;
+      if (data.TransfEliminar == 0) this.transfEliminarVal2 = false;
+      if (data.TransfEliminar == 1) this.transfEliminarVal2 = true;
+      if (data.TraslVer == 0) this.traslVerVal2 = false;
+      if (data.TraslVer == 1) this.traslVerVal2 = true;
+      if (data.TraslEditar == 0) this.traslEditarVal2 = false;
+      if (data.TraslEditar == 1) this.traslEditarVal2 = true;
+      if (data.TraslEliminar == 0) this.traslEliminarVal2 = false;
+      if (data.TraslEliminar == 1) this.traslEliminarVal2 = true;
+      if (data.CajasVer == 0) this.cajasVerVal2 = false;
+      if (data.CajasVer == 1) this.cajasVerVal2 = true;
+      if (data.CajasEditar == 0) this.cajasEditarVal2 = false;
+      if (data.CajasEditar == 1) this.cajasEditarVal2 = true;
+      if (data.CajasEliminar == 0) this.cajasEliminarVal2 = false;
+      if (data.CajasEliminar == 1) this.cajasEliminarVal2 = true;
+      if (data.GirosVer == 0) this.girosVerVal2 = false;
+      if (data.GirosVer == 1) this.girosVerVal2 = true;
+      if (data.GirosEditar == 0) this.girosEditarVal2 = false;
+      if (data.GirosEditar == 1) this.girosEditarVal2 = true;
+      if (data.GirosEliminar == 0) this.girosEliminarVal2 = false;
+      if (data.GirosEliminar == 1) this.girosEliminarVal2 = true;
+      if (data.CorrVer == 0) this.corrVerVal2 = false;
+      if (data.CorrVer == 1) this.corrVerVal2 = true;
+      if (data.CorrEditar == 0) this.corrEditarVal2 = false;
+      if (data.CorrEditar == 1) this.corrEditarVal2 = true;
+      if (data.CorrEliminar == 0) this.corrEliminarVal2 = false;
+      if (data.CorrEliminar == 1) this.corrEliminarVal2 = true;
+      if (data.ServVer == 0) this.servVerVal2 = false;
+      if (data.ServVer == 1) this.servVerVal2 = true;
+      if (data.ServEditar == 0) this.servEditarVal2 = false;
+      if (data.ServEditar == 1) this.servEditarVal2 = true;
+      if (data.ServEliminar == 0) this.servEliminarVal2 = false;
+      if (data.ServEliminar == 1) this.servEliminarVal2 = true;
+      if (data.ConfVer == 0) this.confVerVal2 = false;
+      if (data.ConfVer == 1) this.confVerVal2 = true;
+      if (data.ConfEditar == 0) this.confEditarVal2 = false;
+      if (data.ConfEditar == 1) this.confEditarVal2 = true;
+      if (data.ConfEliminar == 0) this.confEliminarVal2 = false;
+      if (data.ConfEliminar == 1) this.confEliminarVal2 = true;
+      if (data.IndiVer == 0) this.indiVerVal2 = false;
+      if (data.IndiVer == 1) this.indiVerVal2 = true;
+      if (data.IndiEditar == 0) this.indiEditarVal2 = false;
+      if (data.IndiEditar == 1) this.indiEditarVal2 = true;
+      if (data.IndiEliminar == 0) this.indiEliminarVal2 = false;
+      if (data.IndiEliminar == 1) this.indiEliminarVal2 = true;
+      if (data.ReporVer == 0) this.reporVerVal2 = false;
+      if (data.ReporVer == 1) this.reporVerVal2 = true;
+      if (data.ReporEditar == 0) this.reporEditarVal2 = false;
+      if (data.ReporEditar == 1) this.reporEditarVal2 = true;
+      if (data.ReporEliminar == 0) this.reporEliminarVal2 = false;
+      if (data.ReporEliminar == 1) this.reporEliminarVal2 = true;
+
       modal.show();
     });
   }
@@ -386,37 +450,6 @@ export class PerfilesComponent implements OnInit {
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Detalle = data.Detalle;
-      
-      this.TransfVer = data.TransfVer;
-      /*
-      this.TraslVer = data.TraslVer;
-      this.CajasVer = data.CajasVer;
-      this.GirosVer = data.GirosVer;
-      this.CorrVer = data.CorrVer;
-      this.ServVer = data.ServVer;
-      this.ConfVer = data.ConfVer;
-      this.IndiVer = data.IndiVer;
-      this.ReporVer = data.ReporVer;
-      this.TransfEditar = data.TransfEditar;
-      this.TraslEditar = data.TraslEditar;
-      this.CajasEditar = data.CajasEditar;
-      this.GirosEditar = data.GirosEditar;
-      this.CorrEditar = data.CorrEditar;
-      this.ServEditar = data.ServEditar;
-      this.ConfEditar = data.ConfEditar;
-      this.IndiEditar = data.IndiEditar;
-      this.ReporEditar = data.ReporEditar;
-      this.TransfEliminar = data.TransfEliminar;
-      this.TraslEliminar = data.TraslEliminar;
-      this.CajasEliminar = data.CajasEliminar;
-      this.GirosEliminar = data.GirosEliminar;
-      this.CorrEliminar = data.CorrEliminar;
-      this.ServEliminar = data.ServEliminar;
-      this.ConfEliminar = data.ConfEliminar;
-      this.IndiEliminar = data.IndiEliminar;
-      this.ReporEliminar = data.ReporEliminar;
-*/
-
 
       if (data.TransfVer == 0) this.transfVerVal3 = false;
       if (data.TransfVer == 1) this.transfVerVal3 = true;
@@ -493,34 +526,32 @@ export class PerfilesComponent implements OnInit {
     this.Nombre = null;
     this.Detalle = null;
     this.TransfVer = null;
-    /*
-    this.TraslVer = null;
-    this.CajasVer = null;
-    this.GirosVer = null;
-    this.CorrVer = null;
-    this.ServVer = null;
-    this.ConfVer = null;
-    this.IndiVer = null;
-    this.ReporVer = null;
     this.TransfEditar = null;
-    this.TraslEditar = null;
-    this.CajasEditar = null;
-    this.GirosEditar = null;
-    this.CorrEditar = null;
-    this.ServEditar = null;
-    this.ConfEditar = null;
-    this.IndiEditar = null;
-    this.ReporEditar = null;
     this.TransfEliminar = null;
+    this.TraslVer = null;
+    this.TraslEditar = null;
     this.TraslEliminar = null;
+    this.CajasVer = null;
+    this.CajasEditar = null;
     this.CajasEliminar = null;
+    this.GirosVer = null;
+    this.GirosEditar = null;
     this.GirosEliminar = null;
+    this.CorrVer = null;
+    this.CorrEditar = null;
     this.CorrEliminar = null;
+    this.ServVer = null;
+    this.ServEditar = null;
     this.ServEliminar = null;
+    this.ConfVer = null;
+    this.ConfEditar = null;
     this.ConfEliminar = null;
+    this.IndiVer = null;
+    this.IndiEditar = null;
     this.IndiEliminar = null;
+    this.ReporVer = null;
+    this.ReporEditar = null;
     this.ReporEliminar = null;
-*/
     modal.hide();
   }
 
