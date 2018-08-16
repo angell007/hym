@@ -15,14 +15,13 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Comision</th>
-                                    <th>Adjunto</th>
+                                    <th style="width:130px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let servicioexterno of serviciosexternos">
                                     <td>{{servicioexterno.Nombre}}</td>
                                     <td>{{servicioexterno.Comision}}</td>
-                                    <td>{{servicioexterno.Adjunto}}</td>
                                     <td class="text-center">
                                     <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                         <i class="ti-search"></i>
@@ -49,6 +48,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicio" #ModalServicio>
         <div class="app-modal-header">
             <h4>Nuevo Servicio Externo</h4>
+            <button type="button" class="close basic-close" (click)="ModalServicio.hide()">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
         </div>
         <div class="app-modal-body">
             <form #FormServicio="ngForm">
@@ -56,31 +58,30 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <label>Nombre</label>
-                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="">
+                            <input type="text" placeholder="Nombre Servicio Externo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+                            <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                            <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                         </div>
                     </div>
                     <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comision</label>
-                                <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                                <input currencyMask class="form-control" name="Comision" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolComision = true" required #comision="ngModel">
+                                <div *ngIf="!comision.valid && boolComision==true" style="color:red">Campo inválido</div>
+                                <div *ngIf="comision.valid && boolComision==true" style="color:green">Datos correctos!</div>
                             </div>
-                    </div>
-                </div>
-                <div class="row">
-                        <div class="col-md-11">
-                            <div class="form-group">
-                                <label>Adjunto</label>
-                                <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel=""></textarea>
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" (click)="GuardarServicio(FormServicio, ModalServicio)">Guardar</button>
                     </div>
                 </div>
             </form>
-        </div>        
+        </div>
+        <div class="app-modal-footer">
+                <div class="text-right">
+                        <button type="submit" class="btn btn-primary"
+                        [disabled]="!nombre.valid || !comision.valid "
+                        [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                        (confirm)="GuardarServicio(FormServicio, ModalServicio)" >Actualizar Información</button>
+                </div>
+        </div>
     </app-modal-basic>
 
 
@@ -109,14 +110,6 @@
                                     <input type="text" currencyMask placeholder="Comision" class="form-control" name="Comision" ngModel="{{Comision}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                                 </div>
                         </div>
-                    </div>
-                    <div class="row">
-                            <div class="col-md-11">
-                                <div class="form-group">
-                                    <label>Adjunto</label>
-                                    <textarea class="form-control" placeholder="Adjunto de Servicio Externo" name="Adjunto" ngModel="{{Adjunto}}"></textarea>
-                                </div>
-                            </div>
                     </div>
                 <div class="modal-footer no-border">
                         <div class="text-right">

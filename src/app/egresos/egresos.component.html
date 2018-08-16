@@ -3,6 +3,8 @@
       <h4 class="pull-left">Egresos</h4>
       <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
           <i class="ti-plus"></i>Agregar nuevo egreso</button>
+      <button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
+          <i class="ti-plus"></i>Indicadores</button>
   </div>
   <div class="clearfix"></div>
   <div class="row">
@@ -20,6 +22,7 @@
                                   <th>Tercero</th>
                                   <th>Moneda</th>
                                   <th style="width:80px">Valor</th>
+                                  <th style="width:130px;"></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -53,9 +56,31 @@
   </div>
 </div>
 
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalIndicadores" #ModalIndicadores>
+    <div class="app-modal-header">
+      <h4>Indicadores</h4>
+      <button type="button" class="close basic-close" (click)="ModalIndicadores.hide()">
+          <span aria-hidden="true">&times;</span>
+          </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEgreso="ngForm">
+            <div class="row mrg-top-35">
+              <div class="col-md-12">
+                <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                  [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+              </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEgreso" #ModalEgreso>
   <div class="app-modal-header">
     <h4>Nuevo Egreso</h4>
+    <button type="button" class="close basic-close" (click)="ModalEgreso.hide()">
+        <span aria-hidden="true">&times;</span>
+        </button>
   </div>
   <div class="app-modal-body">
     <form #FormEgreso="ngForm">
@@ -69,34 +94,42 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Grupo</label>
-            <select class="form-control" required name="Id_Grupo" ngModel="" (change)="ListaTerceros($event.target.value)">
+            <select class="form-control" name="Id_Grupo" ngModel="" (change)="ListaTerceros($event.target.value)" [(ngModel)]="grupoDefault" (focus)="$event.target.select()" (focusout)="boolGrupo = true" required #grupo="ngModel">
               <option value="">Seleccione un grupo</option>
               <option *ngFor="let Grupo of Grupos" value="{{Grupo.Id_Grupo}}">{{Grupo.Nombre}}</option>              
             </select>
+            <div *ngIf="grupo.value=='' && boolGrupo==true" style="color:red">Campo inválido</div>
+            <div *ngIf="!grupo.value==''" style="color:green">Datos correctos!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Tercero</label>
-            <select class="form-control" required name="Id_Tercero" ngModel="">
+            <select class="form-control" name="Id_Tercero" ngModel="" [(ngModel)]="terceroDefault" (focus)="$event.target.select()" (focusout)="boolTercero = true" required #tercero="ngModel">
               <option value="">Seleccione un tercero</option>
               <option *ngFor="let Tercero of Terceros" value="{{Tercero.Id_Tercero}}">{{Tercero.Nombre}}</option>              
             </select>
+            <div *ngIf="tercero.value=='' && boolTercero==true" style="color:red">Campo inválido</div>
+            <div *ngIf="!tercero.value==''" style="color:green">Datos correctos!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Moneda</label>
-            <select class="form-control" required name="Moneda" ngModel="">
+            <select class="form-control" name="Moneda" ngModel="" [(ngModel)]="monedaDefault" (focus)="$event.target.select()" (focusout)="boolMoneda = true" required #moneda="ngModel">
               <option value="">Seleccione una moneda</option>
               <option *ngFor="let Moneda of Monedas" value="{{Moneda.Nombre}}">{{Moneda.Nombre}}</option>              
             </select>
+            <div *ngIf="moneda.value=='' && boolMoneda==true" style="color:red">Campo inválido</div>
+            <div *ngIf="!moneda.value==''" style="color:green">Datos correctos!</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Valor</label>
-            <input type="text" name="Valor" ngModel="" class="form-control" placeholder="Valor">
+            <input currencyMask name="Valor" ngModel=0 class="form-control" placeholder="Valor" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
+            <div *ngIf="!valor.valid && boolValor==true" style="color:red">Campo inválido</div>
+            <div *ngIf="valor.valid && boolValor==true" style="color:green">Datos correctos!</div>
           </div>
         </div>
       </div>
@@ -108,13 +141,16 @@
               </div>
           </div>
       </div>
-      <div class="modal-footer no-border">
-          <div class="text-right">
-              <button class="btn btn-primary btn-sm" (click)="GuardarEgreso(FormEgreso, ModalEgreso)">Guardar</button>
-          </div>
-      </div>
     </form>
-  </div>        
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button type="submit" class="btn btn-primary"
+                    [disabled]="!valor.valid || grupo.value=='' || tercero.value=='' || moneda.value==''"
+                    [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                    (confirm)="GuardarEgreso(FormEgreso, ModalEgreso)" >Actualizar Información</button>
+      </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarEgreso" #ModalEditarEgreso>
@@ -186,6 +222,20 @@
       </form>
     </div>        
   </app-modal-basic>
+
+<swal #errorSwal
+title="Error al guardar"
+text="Se ha generado un error al intentar guardar el documento"
+type="error"
+>
+</swal>
+
+<swal #saveSwal
+title="Documento guardado"
+text="Se ha guardado correctamente el documento"
+type="success"
+>
+</swal>
 
 <swal #deleteSwal
   title="Traslado eliminado"

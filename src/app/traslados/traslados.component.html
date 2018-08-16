@@ -1,15 +1,114 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Traslados</h4>
-        <button class="pull-right btn btn-info" (click)="ModalTraslado.show()">
-            <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
     </div>
     <div class="clearfix"></div>
+    <!--<div class="row" style="height:110px">-->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card bg-info">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreProveedores}}</h1>
+                            <span class="text-white">Proveedor -</span>
+                            <span class="text-white">Proveedor</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">PP</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-success">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoProveedorBanco}}</h1>
+                            <span class="text-white">Proveedor -</span>
+                            <span class="text-white">Banco</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">PB</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-warning">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreBancos}}</h1>
+                            <span class="text-white">Banco -</span>
+                            <span class="text-white">Banco</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">BB</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-danger">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreClientes}}</h1>
+                            <span class="text-white">Cliente -</span>
+                            <span class="text-white">Cliente</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CC</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="card bg-primary">
+                <div class="card-block" style="padding:10px">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoClienteProveedor}}</h1>
+                            <span class="text-white">Cliente -</span>
+                            <span class="text-white">Proveedor</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CP</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-dark">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30 text-white">{{conteoTraslados.TrasladoClienteBanco}}</h1>
+                            <span class="text-white">Cliente -</span>
+                            <span class="text-white">Banco</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CB</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="widget card">
                 <div class="card-block">
-                    <p>Traslados realizados en nuestro Sistema</p>
+                    <button class="pull-right btn btn-info" (click)="ModalTraslado.show()">
+                        <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
                     <div class="table-overflow">
                         <table class="table table-hover table-sm table-striped">
                             <thead>
@@ -34,14 +133,13 @@
                                     <td>{{traslado.Moneda}}</td>
                                     <td class="text-right">{{traslado.Valor | currency }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)">
                                             <i class="ti-search"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" 
-                                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
                                             (confirm)="EliminarTraslado(traslado.Id_Traslado)">
                                             <i class="ti-trash"></i>
                                         </button>
@@ -58,21 +156,28 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTraslado>
     <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="ModalTraslado.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <h4>Nuevo Traslado</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormTraslado="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
                     <label>Identificación</label>
-                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
+                        required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Tipo</label>
-                        <select class="form-control" required name="Tipo" ngModel="" (change)="SeleccionarTipo($event.target.value)">
+                        <strong>
+                            <label>Tipo</label>
+                        </strong>
+                        <select class="form-control" name="Tipo" ngModel="" (change)="SeleccionarTipo($event.target.value)" [(ngModel)]="tipoDefault"
+                            (focus)="$event.target.select()" (focusout)="boolTipo = true" required #tipo="ngModel">
                             <option value="">Seleccione tipo de traslado</option>
                             <option value="proveedor-proveedor">Entre proveedores</option>
                             <option value="proveedor-banco">Proveedor a cuenta bancaria</option>
@@ -81,95 +186,93 @@
                             <option value="cliente-proveedor">Cliente a proveedor</option>
                             <option value="cliente-banco">Cliente a cuenta bancaria</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Origen</label>                        
+                        <div *ngIf="tipo.value=='' && boolTipo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!tipo.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4" hidden>
                 <div class="form-group">
-                    <label>Nombre del origen</label>
+                    <strong>
+                        <label>Nombre del origen</label>
+                    </strong>
                     <input name="Origen" type="text" placeholder="Identificación" class="form-control" ngModel="{{NombreOrigen}}" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3" *ngIf="Origen==='proveedor'">
                     <div class="form-group">
-                        <label>Proveedor de origen</label>
+                        <strong>
+                            <label>Proveedor de origen</label>
+                        </strong>
                         <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'proveedor')">
                             <option value="">Seleccione proveedor de origen</option>
-                            <option value="0">Proveedor 1</option>
-                            <option value="1">Proveedor 2</option>
+                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3" *ngIf="Origen==='banco'">
                     <div class="form-group">
-                        <label>Banco de origen</label>
+                        <strong>
+                            <label>Banco de origen</label>
+                        </strong>
                         <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'banco')">
                             <option value="">Seleccione banco de origen</option>
-                            <option value="0">Banco 1</option>
-                            <option value="1">Banco 2</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3" *ngIf="Origen==='cliente'">
                     <div class="form-group">
-                        <label>Cliente de origen</label>
+                        <strong>
+                            <label>Cliente de origen</label>
+                        </strong>
                         <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'cliente')">
                             <option value="">Seleccione cliente de origen</option>
-                            <option value="0">Cliente 1</option>
-                            <option value="1">Cliente 2</option>
+                            <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Destino</label>                        
                     </div>
                 </div>
             </div>
             <div class="col-md-4" hidden>
                 <div class="form-group">
-                    <label>Nombre del destino</label>
+                    <strong>
+                        <label>Nombre del destino</label>
+                    </strong>
                     <input name="Destino" type="text" placeholder="Identificación" class="form-control" ngModel="{{NombreDestino}}" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3" *ngIf="Destino==='proveedor'">
                     <div class="form-group">
-                        <label>Proveedor de destino</label>
+                        <strong>
+                            <label>Proveedor de destino</label>
+                        </strong>
                         <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'proveedor')">
                             <option value="">Seleccione proveedor de destino</option>
-                            <option value="0">Proveedor 1</option>
-                            <option value="1">Proveedor 2</option>
+                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3" *ngIf="Destino==='banco'">
                     <div class="form-group">
-                        <label>Banco de destino</label>
-                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'destino')">
+                        <strong>
+                            <label>Banco de destino</label>
+                        </strong>
+                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'banco')">
                             <option value="">Seleccione banco de destino</option>
-                            <option value="0">Banco 1</option>
-                            <option value="1">Banco 2</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3" *ngIf="Destino==='cliente'">
                     <div class="form-group">
-                        <label>Cliente de destino</label>
+                        <strong>
+                            <label>Cliente de destino</label>
+                        </strong>
                         <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'cliente')">
                             <option value="">Seleccione cliente de destino</option>
-                            <option value="0">Cliente 1</option>
-                            <option value="1">Cliente 2</option>
+                            <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
                     </div>
                 </div>
@@ -177,45 +280,189 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Moneda</label>
-                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Moneda" ngModel="">
+                        <strong>
+                            <label>Moneda</label>
+                        </strong>
+                        <select class="form-control" name="Moneda" ngModel="" [(ngModel)]="monedaDefault" (focus)="$event.target.select()" (focusout)="boolMoneda = true"
+                            required #moneda="ngModel">
                             <option value="">Seleccione tipo de moneda</option>
                             <option value="Pesos">Pesos</option>
                             <option value="Bolivares">Bolivares</option>
                         </select>
+                        <div *ngIf="moneda.value=='' && boolMoneda==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!moneda.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Valor</label>
-                        <input type="text" currencyMask placeholder="Saldo Inicial" class="form-control" name="Valor" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <strong>
+                            <label>Valor</label>
+                        </strong>
+                        <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
+                        <div *ngIf="!valor.valid && boolValor==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="valor.valid && boolValor==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Estado</label>
-                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Estado" ngModel="">
+                        <strong>
+                            <label>Estado</label>
+                        </strong>
+                        <select class="form-control" name="Estado" ngModel="" [(ngModel)]="estadoDefault" (focus)="$event.target.select()" (focusout)="boolEstado = true"
+                            required #estado="ngModel">
                             <option value="">Seleccione estado</option>
                             <option value="Enviado">Enviado</option>
                         </select>
+                        <div *ngIf="estado.value=='' && boolEstado==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!estado.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Detalles</label>
+                        <strong>
+                            <label>Detalles</label>
+                        </strong>
                         <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel=""></textarea>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" (click)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar</button>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!valor.valid || estado.value=='' || moneda.value=='' || tipo.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarTraslado(FormTraslado, ModalTraslado)">Actualizar Información</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTraslado" #ModalVerTraslado>
+    <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Ver Traslado</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormVerTraslado="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Tipo</label>
+                        </strong>
+                        <label>{{Tipo}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" *ngIf="Origen==='proveedor'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proveedor de origen</label>
+                        </strong>
+                        <label>{{Proveedor_Origen}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="Origen==='banco'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Banco de origen</label>
+                        </strong>
+                        <label>{{Banco_Origen}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="Origen==='cliente'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cliente de origen</label>
+                        </strong>
+                        <label>{{Cliente_Origen}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <strong>
+                        <label>Nombre del destino</label>
+                    </strong>
+                    <label>{{Destino}}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" *ngIf="Destino==='proveedor'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proveedor de destino</label>
+                        </strong>
+                        <label>{{Proveedor_Destino}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="Destino==='banco'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Banco de destino</label>
+                        </strong>
+                        <label>{{Banco_Destino}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="Destino==='cliente'">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cliente de destino</label>
+                        </strong>
+                        <label>{{Cliente_Destino}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Moneda</label>
+                        </strong>
+                        <label>{{Moneda}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Valor</label>
+                        </strong>
+                        <label>{{Valor}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Estado</label>
+                        </strong>
+                        <label>{{Estado}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            <label>Detalles</label>
+                        </strong>
+                        <label>{{Detalle}}</label>
+                    </div>
                 </div>
             </div>
         </form>
-    </div>        
+    </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTraslado" #ModalEditarTraslado>
@@ -233,7 +480,8 @@
             <div class="col-md-4" hidden>
                 <div class="form-group">
                     <label>Identificación Funcionario</label>
-                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
+                        required>
                 </div>
             </div>
             <div class="row">
@@ -255,7 +503,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Origen</label>                        
+                        <label>Origen</label>
                     </div>
                 </div>
             </div>
@@ -300,7 +548,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Destino</label>                        
+                        <label>Destino</label>
                     </div>
                 </div>
             </div>
@@ -379,18 +627,19 @@
             </div>
             <div class="modal-footer no-border">
                 <div class="text-right">
-                    <button class="btn btn-primary btn-sm" 
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarTraslado(FormEditarTraslado, ModalEditarTraslado)">Guardar</button>
+                    <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarTraslado(FormEditarTraslado, ModalEditarTraslado)">Guardar</button>
                 </div>
             </div>
         </form>
-    </div>        
+    </div>
 </app-modal-basic>
 
-<swal #deleteSwal
-  title="Traslado eliminado"
-  text="Se ha Eliminado Correctamente el traslado"
-  type="success"
-  >
-  </swal>
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Traslado eliminado" text="Se ha Eliminado Correctamente el traslado" type="success">
+</swal>

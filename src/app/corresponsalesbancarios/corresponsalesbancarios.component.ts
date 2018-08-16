@@ -21,17 +21,28 @@ export class CorresponsalesbancariosComponent implements OnInit {
   public Departamento : any[];
   public Municipio : any[];
 
+  public boolCorresponsal:boolean = false;
+  public boolCupo:boolean = false;
+  public boolDepartamento:boolean = false;
+  public boolMunicipio:boolean = false;
+
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
 
   @ViewChild('ModalCorresponsal') ModalCorresponsal:any;
   @ViewChild('ModalEditarCorresponsal') ModalEditarCorresponsal:any;
   @ViewChild('FormCorresponsal') FormCorresponsal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
+
   readonly ruta = 'https://hym.corvuslab.co/'; 
 
   constructor(private http : HttpClient) { }
 
   ngOnInit() {
-    this.ActualizarVista();
+    this.ActualizarVista();  
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
     });
@@ -45,15 +56,27 @@ export class CorresponsalesbancariosComponent implements OnInit {
     }
   }
 
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    /*this.OcultarFormulario(this.ModalE);
+    this.OcultarFormulario(this.ModalEditarTraslado);*/
+  }
 
+  InicializarBool()
+  {
+    this.boolCorresponsal = false;
+    this.boolCupo = false;
+    this.boolDepartamento = false;
+    this.boolMunicipio = false;
+  }
 
   ActualizarVista()
   {
-    this.http.get(this.ruta+'php/corresponsalesbancarios/lista.php').subscribe((data:any)=>{
-      this.corresponsales= data;
+    this.http.get(this.ruta+'php/corresponsalesbancarios/lista_corresponsales.php').subscribe((data:any)=>{
+      this.corresponsales = data;
     });
   }
-
 
   Municipios_Departamento(Departamento){
     this.http.get(this.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
@@ -61,17 +84,9 @@ export class CorresponsalesbancariosComponent implements OnInit {
     });
   }
 
-
-
-
-
-
-  
   GuardarCorresponsal(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-
-
 
     datos.append("modulo",'Corresponsal_Bancario');
     datos.append("datos",info);
@@ -80,6 +95,10 @@ export class CorresponsalesbancariosComponent implements OnInit {
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
     this.ActualizarVista();
     formulario.reset();
+    this.InicializarBool();
+    this.municipioDefault = "";
+    this.departamentoDefault = "";
+    this.saveSwal.show();
     });   
   }
 

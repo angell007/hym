@@ -23,6 +23,7 @@ export class AgentesexternosComponent implements OnInit {
   agentes = [];
   conteoTransferencias = [];
   conteoTransferenciasGrafica = [];
+  
   //variables de formulario
   public Identificacion: any[];
   public Nombre: any[];

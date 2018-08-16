@@ -1,68 +1,68 @@
 <div class="container-fluid">
-    <!-- <div class="row">
-        <div class="col-md-3">
-            <div class="card bg-info">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">155</h1>
-                            <span class="text-white">Transferencias</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="ti-control-shuffle font-size-50 text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-                <div class="card bg-success">
-                    <div class="card-block" style="padding:10px;">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h1 class="no-mrg-top font-size-30">135</h1>
-                                <span class="text-white">Realizadas</span>
-                            </div>
-                            <div class="col-md-5 text-center">
-                                <i class="ti-thumb-up font-size-50 text-white"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                    <div class="card bg-warning">
-                        <div class="card-block" style="padding:10px;">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <h1 class="no-mrg-top font-size-30">5</h1>
-                                    <span class="text-white">Devueltas</span>
-                                </div>
-                                <div class="col-md-5 text-center">
-                                    <i class="ti-thumb-down font-size-50 text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                        <div class="card bg-danger">
-                            <div class="card-block" style="padding:10px;">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h1 class="no-mrg-top font-size-30">15</h1>
-                                        <span class="text-white">Anuladas</span>
-                                    </div>
-                                    <div class="col-md-5 text-center">
-                                        <i class="ti-close font-size-50 text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    </div> -->
     <div class="row">
-        <div class="col-md-14">
+      <div class="col-md-3">
+          <div class="card bg-info">
+              <div class="card-block" style="padding:10px;">
+                  <div class="row">
+                      <div class="col-md-7">
+                          <h1 class="no-mrg-top font-size-30">{{conteoGiros.TotalGiros}}</h1>
+                          <span class="text-white">Giros</span>
+                      </div>
+                      <div class="col-md-5 text-center">
+                          <i class="ti-control-shuffle font-size-50 text-white"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="card bg-success">
+              <div class="card-block" style="padding:10px;">
+                  <div class="row">
+                      <div class="col-md-7">
+                          <h1 class="no-mrg-top font-size-30">{{conteoGiros.GirosRealizados}}</h1>
+                          <span class="text-white">Realizadas</span>
+                      </div>
+                      <div class="col-md-5 text-center">
+                          <i class="ti-thumb-up font-size-50 text-white"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="card bg-warning">
+              <div class="card-block" style="padding:10px;">
+                  <div class="row">
+                      <div class="col-md-7">
+                          <h1 class="no-mrg-top font-size-30">{{conteoGiros.GirosDevueltos}}</h1>
+                          <span class="text-white">Devueltas</span>
+                      </div>
+                      <div class="col-md-5 text-center">
+                          <i class="ti-thumb-down font-size-50 text-white"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md-3">
+          <div class="card bg-danger">
+              <div class="card-block" style="padding:10px;">
+                  <div class="row">
+                      <div class="col-md-7">
+                          <h1 class="no-mrg-top font-size-30">{{conteoGiros.GirosAnulados}}</h1>
+                          <span class="text-white">Anuladas</span>
+                      </div>
+                      <div class="col-md-5 text-center">
+                          <i class="ti-close font-size-50 text-white"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="widget card">
                 <div class="card-block">
                     <p>Giros realizados en nuestro Sistema</p>

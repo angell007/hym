@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { Globales } from '../shared/globales/globales';
 
 @Component({
   selector: 'app-traslados',
@@ -24,17 +25,43 @@ export class TrasladosComponent implements OnInit {
   public Detalle : any[];
   public Estado : any[];
 
+  public Proveedores : any[];
+  public Bancos : any[];
+  public Clientes : any[];
+
+  public boolTipo:boolean = false;
+  public boolMoneda:boolean = false;
+  public boolValor:boolean = false;
+
+  //Valores por defecto
+  tipoDefault: string = "";
+  monedaDefault: string = "";
+  estadoDefault: string = "";
+
   @ViewChild('ModalTraslado') ModalTraslado:any;
   @ViewChild('ModalEditarTraslado') ModalEditarTraslado:any;
   @ViewChild('FormTraslado') FormTraslado:any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/'; 
-  public fecha = new Date(); 
+  public fecha = new Date();
+
   traslados = [];
+  conteoTraslados = [];
   
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
+    this.http.get(this.globales.ruta+'php/proveedores/lista_proveedores.php').subscribe((data:any)=>{     
+      this.Proveedores= data;        
+    });
+    this.http.get(this.globales.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{     
+      this.Bancos= data;        
+    });
+    this.http.get(this.globales.ruta+'php/terceros/lista_clientes.php').subscribe((data:any)=>{     
+      this.Clientes= data;        
+    });
     this.ActualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
   }
@@ -42,15 +69,32 @@ export class TrasladosComponent implements OnInit {
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
       this.FormTraslado.reset();
-      this.OcultarFormulario(this.ModalTraslado);
-      this.OcultarFormulario(this.ModalEditarTraslado);
+      this.OcultarFormularios();
     }
+  }
+
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    this.OcultarFormulario(this.ModalTraslado);
+    this.OcultarFormulario(this.ModalEditarTraslado);
+  }
+
+  InicializarBool()
+  {
+    this.boolTipo = false;
+    this.boolMoneda = false;
+    this.boolValor = false;
   }
 
   ActualizarVista()
   {
     this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
       this.traslados= data;
+    });
+
+    this.http.get(this.ruta+'php/traslados/conteo.php').subscribe((data:any)=>{
+      this.conteoTraslados= data[0];     
     });
   }
 
@@ -72,10 +116,34 @@ export class TrasladosComponent implements OnInit {
     this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
       this.ActualizarVista();
       formulario.reset();
+      this.InicializarBool();
+      this.tipoDefault = "";
+      this.monedaDefault = "";
+      this.estadoDefault = "";
+      this.saveSwal.show();
+    });
+  }
+
+  VerTraslado(id, modal){
+    this.http.get(this.globales.ruta+'php/traslados/detalle.php',{
+      params:{id:id}
+    }).subscribe((data:any)=>{
+      console.log(data);
+      this.Identificacion = id;
+      this.Destino = data.Destino;
+      this.Detalle = data.Detalle;
+      this.Estado = data.Estado;
+      this.IdentificacionFuncionario = data.Identificacion_Funcionario;
+      this.Moneda = data.Moneda;
+      this.Origen = data.Origen;
+      this.Tipo = data.Tipo;
+      this.Valor = data.Valor;
+      modal.show();
     });
   }
 
   EditarTraslado(id, modal){
+    this.InicializarBool();
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Traslado', id:id}
     }).subscribe((data:any)=>{
@@ -122,12 +190,46 @@ export class TrasladosComponent implements OnInit {
 
   ObtenerOrigen(IdOrigen, tabla)
   {
-    this.NombreOrigen = "dummyOrigen";
+    if (tabla == "proveedor")
+    {
+      this.Proveedores.forEach(element => {
+        this.NombreOrigen = element.Nombre;
+      }); 
+    }
+    if (tabla == "banco")
+    {
+      this.Bancos.forEach(element => {
+        this.NombreOrigen = element.Nombre;
+      }); 
+    }
+    if (tabla == "cliente")
+    {
+      this.Clientes.forEach(element => {
+        this.NombreOrigen = element.Nombre;
+      }); 
+    }
   }
 
-  ObtenerDestino(IdDestino)
+  ObtenerDestino(IdDestino, tabla)
   {
-    this.NombreDestino = "dummyDestino";
+    if (tabla == "proveedor")
+    {
+      this.Proveedores.forEach(element => {
+        this.NombreDestino = element.Nombre;
+      });
+    }
+    if (tabla == "banco")
+    {
+      this.Bancos.forEach(element => {
+        this.NombreDestino = element.Nombre;
+      });
+    }
+    if (tabla == "cliente")
+    {
+      this.Clientes.forEach(element => {
+        this.NombreDestino = element.Nombre;
+      });
+    }
   }
 
 }

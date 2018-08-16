@@ -18,32 +18,32 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label>Nombre Empresa</label>
-                                            <input name="Nombre_Empresa" type="text" placeholder="" class="form-control" ngModel="{{NombreEmpresa}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEmpresa="ngModel">
+                                            <strong><label>Nombre Empresa</label></strong>
+                                            <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{NombreEmpresa}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEmpresa="ngModel">
                                             <div *ngIf="!nombreEmpresa.valid && boolNombre==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="nombreEmpresa.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <label>N.I.T.</label>
-                                            <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
+                                            <strong><label>N.I.T.</label></strong>
+                                            <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T." class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
                                             <div *ngIf="!nit.valid && boolNit==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="nit.valid && boolNit==true" style="color:green">Datos correctos!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Teléfono</label>
-                                                <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
+                                                <strong><label>Teléfono</label></strong>
+                                                <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
                                                 <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
                                             </div>
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Celular</label>
-                                                <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
+                                                <strong><label>Celular</label></strong>
+                                                <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
                                                 <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="celular.valid && boolCelular==true" style="color:green">Datos correctos!</div>
                                             </div>
@@ -52,16 +52,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Dirección</label>
-                                            <input name="Direccion" type="text" placeholder="" class="form-control" ngModel="{{Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
+                                            <strong><label>Dirección</label></strong>
+                                            <input name="Direccion" type="text" placeholder="Dirección" class="form-control" ngModel="{{Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
                                             <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Correo</label>
-                                                <input name="Correo" type="email" email placeholder="" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
+                                                <strong><label>Correo</label></strong>
+                                                <input name="Correo" type="email" email placeholder="Correo" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
                                                 <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="correo.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
                                             </div>
@@ -70,24 +70,24 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Festivos Legales</label>
-                                            <input name="Festivos_Legales" type="text" placeholder="" class="form-control" ngModel="{{FestivosLegales}}" (focus)="$event.target.select()" (focusout)="boolFestivosLegales = true" required #festivosLegales="ngModel">
+                                            <strong><label>Festivos Legales</label></strong>
+                                            <input name="Festivos_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Festivos legales" class="form-control" ngModel="{{FestivosLegales}}" (focus)="$event.target.select()" (focusout)="boolFestivosLegales = true" required #festivosLegales="ngModel">
                                             <div *ngIf="!festivosLegales.valid && boolFestivosLegales==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="festivosLegales.valid && boolFestivosLegales==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Extras Legales</label>
-                                            <input name="Extras_Legales" type="text" placeholder="" class="form-control" ngModel="{{ExtrasLegales}}" (focus)="$event.target.select()" (focusout)="boolExtrasLegales = true" required #extrasLegales="ngModel">
+                                            <strong><label>Extras Legales</label></strong>
+                                            <input name="Extras_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Extras legales" class="form-control" ngModel="{{ExtrasLegales}}" (focus)="$event.target.select()" (focusout)="boolExtrasLegales = true" required #extrasLegales="ngModel">
                                             <div *ngIf="!extrasLegales.valid && boolExtrasLegales==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="extrasLegales.valid && boolExtrasLegales==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Llegadas tarde</label>
-                                            <input name="Llegadas_Tarde" type="text" placeholder="" class="form-control" ngModel="{{LlegadasTarde}}" (focus)="$event.target.select()" (focusout)="boolLlegadasTarde = true" required #llegadasTarde="ngModel">
+                                            <strong><label>Llegadas tarde</label></strong>
+                                            <input name="Llegadas_Tarde" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" ngModel="{{LlegadasTarde}}" (focus)="$event.target.select()" (focusout)="boolLlegadasTarde = true" required #llegadasTarde="ngModel">
                                             <div *ngIf="!llegadasTarde.valid && boolLlegadasTarde==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="llegadasTarde.valid && boolLlegadasTarde==true" style="color:green">Datos correctos!</div>
                                         </div> 
@@ -96,23 +96,23 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Inicio Dia</label>
-                                            <input name="Hora_Inicio_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioDia = true" required #horaInicioDia="ngModel">
+                                            <strong><label>Hora Inicio Dia</label></strong>
+                                            <input name="Hora_Inicio_Dia" type="time" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioDia = true" required #horaInicioDia="ngModel">
                                             <div *ngIf="!horaInicioDia.valid  && boolHoraInicioDia==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaInicioDia.valid && boolHoraInicioDia==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Fin Dia</label>
-                                            <input name="Hora_Fin_Dia" type="text" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" (focus)="$event.target.select()" (focusout)="boolHoraFinDia = true" required #horaFinDia="ngModel">
+                                            <strong><label>Hora Fin Dia</label></strong>
+                                            <input name="Hora_Fin_Dia" type="time" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" (focus)="$event.target.select()" (focusout)="boolHoraFinDia = true" required #horaFinDia="ngModel">
                                             <div *ngIf="!horaFinDia.valid && boolHoraFinDia==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaFinDia.valid && boolHoraFinDia==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Salario Base</label>
+                                                <strong><label>Salario Base</label></strong>
                                                 <input currencyMask name="Salario_Base" class="form-control" ngModel="{{SalarioBase}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSalarioBase = true" required #salarioBase="ngModel">
                                                 <div *ngIf="!salarioBase.valid && boolSalarioBase==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="salarioBase.valid && boolSalarioBase==true" style="color:green">Datos correctos!</div>
@@ -120,7 +120,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Subsidio de transporte</label>
+                                                <strong><label>Subsidio de transporte</label></strong>
                                                 <input currencyMask name="Subsidio_Transporte" class="form-control" ngModel="{{SubsidioTransporte}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSubsidioTransporte = true" required #subsidioTransporte="ngModel">
                                                 <div *ngIf="!subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:green">Datos correctos!</div>
@@ -130,32 +130,32 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Extra Diurna</label>
-                                            <input name="Hora_Extra_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDiurna = true" required #horaExtraDiurna="ngModel">
+                                            <strong><label>Hora Extra Diurna</label></strong>
+                                            <input name="Hora_Extra_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDiurna = true" required #horaExtraDiurna="ngModel">
                                             <div *ngIf="!horaExtraDiurna.valid" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaExtraDiurna.valid && boolHoraExtraDiurna==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Extra Nocturna</label>
-                                            <input name="Hora_Extra_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraNocturna = true" required #horaExtraNocturna="ngModel">
+                                            <strong><label>Hora Extra Nocturna</label></strong>
+                                            <input name="Hora_Extra_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraNocturna = true" required #horaExtraNocturna="ngModel">
                                             <div *ngIf="!horaExtraNocturna.valid" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaExtraNocturna.valid && boolHoraExtraNocturna==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Extra Domingo Diurna</label>
-                                            <input name="Hora_Extra_Domingo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoDiurna = true" required #horaExtraDomingoDiurna="ngModel">
+                                            <strong><label>Hora Extra Domingo Diurna</label></strong>
+                                            <input name="Hora_Extra_Domingo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoDiurna = true" required #horaExtraDomingoDiurna="ngModel">
                                             <div *ngIf="!horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora Extra Domingo Nocturna</label>
-                                            <input name="Hora_Extra_Domingo_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoNocturna = true" required #horaExtraDomingoNocturna="ngModel">
+                                            <strong><label>Hora Extra Domingo Nocturna</label></strong>
+                                            <input name="Hora_Extra_Domingo_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoNocturna = true" required #horaExtraDomingoNocturna="ngModel">
                                             <div *ngIf="!horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:green">Datos correctos!</div>
                                         </div> 
@@ -164,32 +164,32 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Recargo Diurna</label>
-                                                <input name="Recargo_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDiurna = true" required #recargoDiurna="ngModel">
+                                                <strong><label>Recargo Diurna</label></strong>
+                                                <input name="Recargo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDiurna = true" required #recargoDiurna="ngModel">
                                                 <div *ngIf="!recargoDiurna.valid && boolRecargoDiurna==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="recargoDiurna.valid && boolRecargoDiurna==true" style="color:green">Datos correctos!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Recargo Nocturno</label>
-                                                <input name="Recargo_Nocturno" type="text" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" (focus)="$event.target.select()" (focusout)="boolRecargoNocturno = true" required #recargoNocturno="ngModel">
+                                                <strong><label>Recargo Nocturno</label></strong>
+                                                <input name="Recargo_Nocturno" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" (focus)="$event.target.select()" (focusout)="boolRecargoNocturno = true" required #recargoNocturno="ngModel">
                                                 <div *ngIf="!recargoNocturno.valid && boolRecargoNocturno==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="recargoNocturno.valid && boolRecargoNocturno==true" style="color:green">Datos correctos!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Recargo Dominical Diurna</label>
-                                                <input name="Recargo_Dominical_Diurna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalDiurna = true" required #recargoDominicalDiurna="ngModel">
+                                                <strong><label>Recargo Dominical Diurna</label></strong>
+                                                <input name="Recargo_Dominical_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalDiurna = true" required #recargoDominicalDiurna="ngModel">
                                                 <div *ngIf="!recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:green">Datos correctos!</div>
                                             </div> 
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Recargo Dominical Nocturno</label>
-                                                <input name="Recargo_Dominical_Nocturna" type="text" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalNocturna = true" required #recargoDominicalNocturna="ngModel">
+                                                <strong><label>Recargo Dominical Nocturno</label></strong>
+                                                <input name="Recargo_Dominical_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalNocturna = true" required #recargoDominicalNocturna="ngModel">
                                                 <div *ngIf="!recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:red">Campo inválido</div>
                                                 <div *ngIf="recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:green">Datos correctos!</div>
                                             </div> 
@@ -198,44 +198,43 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora inicio de la jornada nocturna</label>
-                                            <input name="Hora_Inicio_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioNoche = true" required #horaInicioNoche="ngModel">
+                                            <strong><label>Hora inicio de la jornada nocturna</label></strong>
+                                            <input name="Hora_Inicio_Noche" type="time" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioNoche = true" required #horaInicioNoche="ngModel">
                                             <div *ngIf="!horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Hora fin de la jornada nocturna</label>
-                                            <input name="Hora_Fin_Noche" type="text" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraFinNoche = true" required #horaFinNoche="ngModel">
+                                            <strong><label>Hora fin de la jornada nocturna</label></strong>
+                                            <input name="Hora_Fin_Noche" type="time" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraFinNoche = true" required #horaFinNoche="ngModel">
                                             <div *ngIf="!horaFinNoche.valid && boolHoraFinNoche==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="horaFinNoche.valid && boolHoraFinNoche==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Festivos</label>
-                                            <input name="Festivos" type="text" placeholder="" class="form-control" ngModel="{{Festivos}}" (focus)="$event.target.select()" (focusout)="boolFestivos = true" required #festivos="ngModel">
+                                            <strong><label>Festivos</label></strong>
+                                            <input name="Festivos" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Festivos}}" (focus)="$event.target.select()" (focusout)="boolFestivos = true" required #festivos="ngModel">
                                             <div *ngIf="!festivos.valid && boolFestivos==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="festivos.valid && boolFestivos==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Libres</label>
-                                            <input name="Libres" type="text" placeholder="" class="form-control" ngModel="{{Libres}}" (focus)="$event.target.select()" (focusout)="boolLibres = true" required #libres="ngModel">
+                                            <strong><label>Libres</label></strong>
+                                            <input name="Libres" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Libres}}" (focus)="$event.target.select()" (focusout)="boolLibres = true" required #libres="ngModel">
                                             <div *ngIf="!libres.valid && boolLibres==true" style="color:red">Campo inválido</div>
                                             <div *ngIf="libres.valid && boolLibres==true" style="color:green">Datos correctos!</div>
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="row">           <!-- Actualizar   -->
+                                <div class="row">
                                     <div class="col-md-12 col-xs-6">
-                                    <!--*ngIf="nombreEmpresa.valid"-->
                                         <div class="text-right mrg-top-5">                                            
                                             <button type="submit" class="btn btn-primary"
                                             [disabled]="!nombreEmpresa.valid || !nit.valid || !telefono.valid || !celular.valid || !direccion.valid || !correo.valid || !festivosLegales.valid || !extrasLegales.valid || !llegadasTarde.valid || !horaInicioDia.valid || !horaFinDia.valid || !salarioBase.valid || !subsidioTransporte.valid || !horaExtraDiurna.valid || !horaExtraNocturna.valid || !horaExtraDomingoDiurna.valid || !horaExtraDomingoNocturna.valid || !recargoDiurna.valid || !recargoNocturno.valid || !recargoDominicalDiurna.valid || !recargoDominicalNocturna.valid || !horaInicioNoche.valid || !horaFinNoche.valid || !festivos.valid || !libres.valid"
-                                            [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                            [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
                                             (confirm)="GuardarConfiguracion(FormEditarConfiguracion)" >Actualizar Información</button>
                                         </div>
                                     </div>
