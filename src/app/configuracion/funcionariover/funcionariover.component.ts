@@ -84,8 +84,11 @@ export class FuncionarioverComponent implements OnInit {
         this.funcionario = data.Funcionario;
         console.log(this.funcionario);
         
+        
         this.Cargo=data.Cargo;
         this.Grupo=data.Grupo;
+ 
+        console.log(data.Dependencia);
         this.Dependencia=data.Dependencia;
         if(data.Contacto_Emergencia)
         {
@@ -93,8 +96,11 @@ export class FuncionarioverComponent implements OnInit {
         }
         
         for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
-        {
+        { console.log("Exp");
+          console.log(data.Experiencia_Laboral[i]);
+          
           this.Experiencia[i] = data.Experiencia_Laboral[i];
+          
         }
 
         for(let i = 0; i < data.Referencia_Personal.length; ++i)
@@ -102,8 +108,8 @@ export class FuncionarioverComponent implements OnInit {
           this.Referencias[i] = data.Referencia_Personal[i];
         }
         
-        this.Grupo = data.Id_Grupo;
-        console.log(this.Grupo);        
+        //this.Grupo = data.Id_Grupo;
+        /*console.log(this.Grupo);        
         if(data.Imagen != '')
         {
           this.ExisteFoto = false;
@@ -112,7 +118,7 @@ export class FuncionarioverComponent implements OnInit {
         {
           this.ExisteFoto = true;
         }
-        this.AutoSeleccionarDependencia(data.Id_Grupo, data.Id_Dependencia, data.Id_Cargo);
+        this.AutoSeleccionarDependencia(data.Id_Grupo, data.Id_Dependencia, data.Id_Cargo);*/
       });  
     });    
   }
@@ -158,25 +164,6 @@ export class FuncionarioverComponent implements OnInit {
     });
   }
 
-  GuardarFuncionario(funcionario:NgForm, contactoEmergencia:NgForm, experienciaLaboral1:NgForm, experienciaLaboral2:NgForm, referenciasPersonales1:NgForm, referenciasPersonales2:NgForm)
-  {
-    
-    
-    let dummyFuncionario = JSON.stringify(funcionario.value);
-    let dummyContactoEmergencia = JSON.stringify(contactoEmergencia.value);    
-    let dummyExperienciaLaboral = JSON.stringify([experienciaLaboral1.value, experienciaLaboral2.value]);
-    let dummyReferenciaPersonal = JSON.stringify([referenciasPersonales1.value, referenciasPersonales2.value]);
-    let datos = new FormData();
-    datos.append("funcionario",dummyFuncionario);
-    datos.append("contacto_emergencia",dummyContactoEmergencia);
-    datos.append("experiencia",dummyExperienciaLaboral);
-    datos.append("referencias",dummyReferenciaPersonal);
-    datos.append('Foto', this.Fotos);   
-    this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_editar.php',datos).subscribe((data:any)=>{
-      console.log(data);
-      this.VerPantallaLista();
-    });  
-  }
   VerPantallaLista(){
     this.router.navigate(['/funcionarios']);    
   }

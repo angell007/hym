@@ -72,6 +72,9 @@ export class FuncionarioeditarComponent implements OnInit {
   public Dependencia : any = null;
   public Cargo : any = null;  
 
+  @ViewChild('saveSwal') saveSwal:any;
+  @ViewChild('errorSwal') errorSwal:any;
+
   constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {        
@@ -112,6 +115,8 @@ export class FuncionarioeditarComponent implements OnInit {
       });  
     });    
   }
+
+
 
   CargaFoto(event){
     let fot = document.getElementById("foto_visual") as HTMLImageElement;   
@@ -171,11 +176,16 @@ export class FuncionarioeditarComponent implements OnInit {
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_editar.php',datos).subscribe((data:any)=>{
       console.log(data);
       this.VerPantallaLista();
+      this.saveSwal.show();
     });  
   }
   VerPantallaLista(){
     this.router.navigate(['/funcionarios']);    
   }
+
+
+
+
 
 }
 

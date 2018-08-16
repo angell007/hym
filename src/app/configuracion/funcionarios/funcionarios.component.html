@@ -25,7 +25,17 @@
                                         <ul class="list-unstyled list-info">
                                             <li>
                                                 <div class="pdd-vertical-10 pdd-horizon-20">
-                                                    <img class="thumb-img img-circle" src="assets/images/user.jpg" alt="">
+
+                                                    <div  style="text-align: center">
+                                                            <label style="display: block" for="Foto">
+                                                                <img *ngIf="funcionario.Imagen == ''" src="assets/images/user.jpg"  style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">
+                                                                <img *ngIf="funcionario.Imagen != ''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">                      
+                                                            </label>
+                                                    </div>
+                                                    
+                                                    <!-- <img class="thumb-img img-circle" src="assets/images/user.jpg" alt=""> -->
+
+
                                                     <div class="info">
                                                         <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
                                                         <span class="sub-title">
@@ -62,7 +72,11 @@
 </div>
 
 
-
-
-<swal #deleteSwal title="Oficina eliminada" text="Se ha eliminado correctamente la oficina" type="success">
+<swal #deleteSwal
+  title="Funcionario eliminado"
+  text="Se ha eliminado correctamente el funcionario"
+  type="success"
+  >
 </swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

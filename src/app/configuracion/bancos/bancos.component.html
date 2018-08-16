@@ -76,7 +76,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificador="ngModel">
+                        <input type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificador="ngModel">
                         <div *ngIf="!identificador.valid && boolId==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="identificador.valid && boolId==true" style="color:green">All checked!</div>
                     </div>
@@ -191,7 +191,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificadorEd="ngModel">
+                        <input type="number" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificadorEd="ngModel">
                         <div *ngIf="!identificadorEd.valid && boolId==true" style="color:red">Houston, we have a problem</div>
                         <div *ngIf="identificadorEd.valid && boolId==true" style="color:green">All checked!</div>
                     </div>

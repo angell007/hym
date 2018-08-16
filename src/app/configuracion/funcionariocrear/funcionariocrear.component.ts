@@ -8,7 +8,6 @@ import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-funcionariocrear',
   templateUrl: './funcionariocrear.component.html',
@@ -104,8 +103,6 @@ export class FuncionariocrearComponent implements OnInit {
     }
   ];
 
-
-
   constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
   CargaFoto(event){
@@ -127,8 +124,6 @@ export class FuncionariocrearComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
 
-
-
   ngOnInit() {
    /* this.http.get(this.globales.ruta+'php/lista_generales.php',{params: {modulo:'Funcionario'}}).subscribe((data:any)=>{
       this.funcionario=data;
@@ -148,8 +143,6 @@ this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: {
   this.Grupos= data;
 });
 }
-
-
 
 Dependencia_Grupo(Grupo){
   this.http.get(this.globales.ruta+'php/funcionarios/dependencias_grupo.php',{ params: { id: Grupo}}).subscribe((data:any)=>{
@@ -198,24 +191,11 @@ GuardarFuncionario(formulario: NgForm){
  VerPantallaLista(){
   this.router.navigate(['/funcionarios']);    
 }
-
+/*
  onStep4Next(a){
    alert(a);
  }
-  /*GuardarFuncionario(formulario:NgForm, modal){
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo",'funcionario');
-    datos.append("datos",info);
-    modal.hide();
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
-      formulario.reset();
-      this.funcionario= data;
-    });
-  }*/
-
-  
-
+*/
 EliminarFuncionario(id){    
     let datos=new FormData();
     datos.append("modulo", 'funcionario');
@@ -242,7 +222,5 @@ EliminarFuncionario(id){
       
     });
   }
-
-  
 }
 
