@@ -165,6 +165,8 @@ Cargo_Dependencia(Dependencia){
 }
 
 GuardarFuncionario(formulario: NgForm){ 
+  console.log(formulario.value);
+  
    let info = JSON.stringify(formulario.value);
    let func = JSON.stringify(this.funcionario);
    let conemer = JSON.stringify(this.contacto_emergencia);
@@ -188,6 +190,7 @@ GuardarFuncionario(formulario: NgForm){
     this.VerPantallaLista();
    }); 
  }
+ 
  VerPantallaLista(){
   this.router.navigate(['/funcionarios']);    
 }
