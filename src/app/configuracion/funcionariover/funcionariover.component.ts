@@ -8,13 +8,12 @@ import { CommonModule } from '@angular/common';
 import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 
-
 @Component({
-  selector: 'app-funcionarioeditar',
-  templateUrl: './funcionarioeditar.component.html',
-  styleUrls: ['./funcionarioeditar.component.scss']
+  selector: 'app-funcionariover',
+  templateUrl: './funcionariover.component.html',
+  styleUrls: ['./funcionariover.component.scss']
 })
-export class FuncionarioeditarComponent implements OnInit {
+export class FuncionarioverComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
   public funcionario : any[] = [];
@@ -68,12 +67,9 @@ export class FuncionarioeditarComponent implements OnInit {
   public Grupos : any[] = [];
   public Dependencias : any[] = [];
   public Cargos : any[] = [];
-  public Grupo : any = null;
-  public Dependencia : any = null;
-  public Cargo : any = null;  
-
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('errorSwal') errorSwal:any;
+  public Grupo : any = [];
+  public Dependencia : any = [];
+  public Cargo : any = [];  
 
   constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
@@ -81,19 +77,30 @@ export class FuncionarioeditarComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
       console.log(this.Grupos);      
-      this.http.get(this.globales.ruta + 'php/funcionarios/detalle_funcionario.php',{
+      this.http.get(this.globales.ruta + 'php/funcionarios/ver_funcionario.php',{
         params: { modulo: 'Funcionario', id: this.id}     
       }).subscribe((data: any) => {
         console.log(data);        
-        this.funcionario = data;
+        this.funcionario = data.Funcionario;
+        console.log(this.funcionario);
+        
+        
+        this.Cargo=data.Cargo;
+        this.Grupo=data.Grupo;
+ 
+        console.log(data.Dependencia);
+        this.Dependencia=data.Dependencia;
         if(data.Contacto_Emergencia)
         {
           this.ContactoEmergencia = data.Contacto_Emergencia;
         }
         
         for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
-        {
+        { console.log("Exp");
+          console.log(data.Experiencia_Laboral[i]);
+          
           this.Experiencia[i] = data.Experiencia_Laboral[i];
+          
         }
 
         for(let i = 0; i < data.Referencia_Personal.length; ++i)
@@ -101,8 +108,8 @@ export class FuncionarioeditarComponent implements OnInit {
           this.Referencias[i] = data.Referencia_Personal[i];
         }
         
-        this.Grupo = data.Id_Grupo;
-        console.log(this.Grupo);        
+        //this.Grupo = data.Id_Grupo;
+        /*console.log(this.Grupo);        
         if(data.Imagen != '')
         {
           this.ExisteFoto = false;
@@ -111,12 +118,10 @@ export class FuncionarioeditarComponent implements OnInit {
         {
           this.ExisteFoto = true;
         }
-        this.AutoSeleccionarDependencia(data.Id_Grupo, data.Id_Dependencia, data.Id_Cargo);
+        this.AutoSeleccionarDependencia(data.Id_Grupo, data.Id_Dependencia, data.Id_Cargo);*/
       });  
     });    
   }
-
-
 
   CargaFoto(event){
     let fot = document.getElementById("foto_visual") as HTMLImageElement;   
@@ -159,33 +164,9 @@ export class FuncionarioeditarComponent implements OnInit {
     });
   }
 
-  GuardarFuncionario(funcionario:NgForm, contactoEmergencia:NgForm, experienciaLaboral1:NgForm, experienciaLaboral2:NgForm, referenciasPersonales1:NgForm, referenciasPersonales2:NgForm)
-  {
-    
-    
-    let dummyFuncionario = JSON.stringify(funcionario.value);
-    let dummyContactoEmergencia = JSON.stringify(contactoEmergencia.value);    
-    let dummyExperienciaLaboral = JSON.stringify([experienciaLaboral1.value, experienciaLaboral2.value]);
-    let dummyReferenciaPersonal = JSON.stringify([referenciasPersonales1.value, referenciasPersonales2.value]);
-    let datos = new FormData();
-    datos.append("funcionario",dummyFuncionario);
-    datos.append("contacto_emergencia",dummyContactoEmergencia);
-    datos.append("experiencia",dummyExperienciaLaboral);
-    datos.append("referencias",dummyReferenciaPersonal);
-    datos.append('Foto', this.Fotos);   
-    this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_editar.php',datos).subscribe((data:any)=>{
-      console.log(data);
-      this.VerPantallaLista();
-      this.saveSwal.show();
-    });  
-  }
   VerPantallaLista(){
     this.router.navigate(['/funcionarios']);    
   }
-
-
-
-
 
 }
 

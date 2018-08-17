@@ -75,8 +75,25 @@ export class ServiciosexternosComponent implements OnInit {
 
     this.OcultarFormulario(modal);
     this.http.post(this.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-      this.ActualizarVista();
+      this.saveSwal.show();
       formulario.reset();
+      this.ActualizarVista();
+    });
+
+    //console.log();
+    
+  }
+
+  VerServicio(id, modal) {
+    this.http.get(this.ruta + 'php/serviciosexternos/detalle.php', {
+      params: { modulo: 'Servicio_Externo', id: id }
+    }).subscribe((data: any) => { 
+      console.log(data);
+          
+      this.Identificacion = id;
+      this.Nombre=data.Nombre;
+      this.Comision=data.Comision;
+      modal.show();
     });
   }
 

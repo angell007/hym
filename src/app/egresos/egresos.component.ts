@@ -20,9 +20,11 @@ export class EgresosComponent implements OnInit {
   public Identificacion : any[];
   public IdentificacionFuncionario : any[];
   public IdGrupo : any[];
-  public IdTercero : any[];
+  public IdTercero = "";
   public Moneda : any[];
   public Valor : any[];
+  public Grupo : any[];
+  public Tercero : any[];
   public Detalle : any[];
 
   public tEnero: Number;
@@ -180,16 +182,31 @@ export class EgresosComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
       this.Egresos= data;
     });
   }
 
+  /*ActualizarVista()
+  {
+    this.http.get(this.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
+      this.Egresos= data;
+    });
+  }*/
+
   ListaTerceros(grupo)
   {
-    console.log(grupo);    
     this.http.get(this.ruta+'php/egresos/lista_terceros.php',{ params: { id: grupo}}).subscribe((data:any)=>{
       this.Terceros= data;
+    });
+    this.terceroDefault = "";
+    this.IdTercero = "";
+  }
+
+  ListaTercerosNoGrupo()
+  {  
+    this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
+      this.Terceros= data;        
     });
   }
 
@@ -213,7 +230,7 @@ export class EgresosComponent implements OnInit {
     });
   }
 
-  EliminarEgreso(id){
+  /*EliminarEgreso(id){
     let datos=new FormData();
     datos.append("modulo", 'Egreso');
     datos.append ("id",id);
@@ -221,6 +238,38 @@ export class EgresosComponent implements OnInit {
       this.ActualizarVista();
       this.deleteSwal.show();
     });    
+  }*/
+
+  EliminarEgreso(id){
+    console.log(id);
+    
+    let datos = new FormData();
+    datos.append("modulo", 'Egreso');
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
+      this.deleteSwal.show();
+      this.ActualizarVista();
+    });
+  }
+
+  VerEgreso(id, modal){
+    this.ListaTercerosNoGrupo();
+    this.http.get(this.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Egreso', id:id}
+    }).subscribe((data:any)=>{
+      this.Identificacion = id;
+      this.Grupos.forEach(element => {
+        if (element.Id_Grupo == data.Id_Grupo) this.Grupo = element.Nombre;
+      });
+
+      this.Terceros.forEach(element => {
+        if (element.Id_Tercero == data.Id_Tercero) this.Tercero = element.Nombre;
+      });
+      this.Moneda = data.Moneda;
+      this.Valor = data.Valor;
+      this.Detalle = data.Detalle;
+      modal.show();
+    });
   }
 
   EditarEgreso(id, modal){
@@ -240,7 +289,7 @@ export class EgresosComponent implements OnInit {
 
   AutoSleccionarTercero(grupo, tercero){
     this.http.get(this.ruta+'php/egresos/lista_terceros.php',{ params: { id: grupo}}).subscribe((data:any)=>{
-      this.Terceros= data;
+      this.Terceros= data;     
       this.IdTercero = tercero;
     });
   }
@@ -254,5 +303,7 @@ export class EgresosComponent implements OnInit {
     this.Detalle = null;
     modal.hide();
   }
+
+
 
 }
