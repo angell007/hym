@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 import { Globales } from '../shared/globales/globales';
 
 @Component({
@@ -41,6 +42,7 @@ export class PosComponent implements OnInit {
   public Cajas : any[];
   public Monedas : any[];
   public Recibe : any = "Transferencia";
+  public MonedaRecibe : any = "Bolivares";
   public IdCorresponsal : number;
   public IdOficina : number;
   public IdCaja : number;
@@ -62,9 +64,23 @@ export class PosComponent implements OnInit {
   public ValorCorresponsal : number;  
   public CorresponsalBancario : number;  
   public ComisionServicioExterno : number;
+  public Comision : number = 0;
+
+  //Bool validaciones
+  public boolFormaPago:boolean = false;
+  public boolRecibePara:boolean = false;
+  public boolSeleccioneCliente:boolean = false;
+  public boolNumeroDocumento:boolean = false;
+
+  //Valores por defecto
+  formaPagoDefault: string = "Efectivo";
+  recibeParaDefault: string = "Transferencia";
+  seleccioneClienteDefault: string = "";
+  //numeroDocumentoDefault: string = "";
 
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
   @ViewChild('ModalRemitente') ModalRemitente:any;
+  @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('warnSwal') warnSwal:any;
   @ViewChild('warnTotalSwal') warnTotalSwal:any;
   @ViewChild('destinatarioCreadoSwal') destinatarioCreadoSwal:any;
@@ -76,45 +92,7 @@ export class PosComponent implements OnInit {
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
-      this.Documentos= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Corresponsal_Bancario'}}).subscribe((data:any)=>{
-      this.CorresponsalesBancarios= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Servicio_Externo'}}).subscribe((data:any)=>{
-      this.ServiciosExternos= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Caja'}}).subscribe((data:any)=>{
-      this.Cajas= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
-      this.Monedas= data;
-      this.CambiarTasa(this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")+1);  
-      this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
-      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
-      this.Funcionarios= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
-      this.TipoCuentas= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
-      this.Destinatarios= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Transferencia_Remitente'}}).subscribe((data:any)=>{
-      this.Remitentes= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
-      this.Paises= data;
-    });
-    this.http.get(this.globales.ruta+'php/pos/lista_clientes.php',{ params: { modulo: 'Tercero'}}).subscribe((data:any)=>{
-      this.Clientes= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
-      this.Bancos= data;           
-    });
+    this.actualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 1;
     this.IdCaja = 1;
@@ -131,26 +109,101 @@ export class PosComponent implements OnInit {
     }
   }
 
+  actualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
+      this.Documentos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Corresponsal_Bancario'}}).subscribe((data:any)=>{
+      this.CorresponsalesBancarios= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Servicio_Externo'}}).subscribe((data:any)=>{
+      this.ServiciosExternos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Caja'}}).subscribe((data:any)=>{
+      this.Cajas= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
+      this.Monedas= data;
+      this.CambiarTasa(this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")+1);  
+      this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
+      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
+      this.Funcionarios= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
+      this.TipoCuentas= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
+      this.Destinatarios= data;
+    });
+    console.log("Destinatarios");
+    console.log(this.Destinatarios);
+    
+    
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Transferencia_Remitente'}}).subscribe((data:any)=>{
+      this.Remitentes= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
+      this.Paises= data;
+    });
+    this.http.get(this.globales.ruta+'php/pos/lista_clientes.php',{ params: { modulo: 'Tercero'}}).subscribe((data:any)=>{
+      this.Clientes= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
+      this.Bancos= data;           
+    });
+  }
+
   OcultarFormulario(modal){
     modal.hide();
   }
 
+  handleError(error: Response) {
+    return Observable.throw(error);
+  }
+
+  InicializarBool() {
+    this.boolFormaPago = false;
+    this.boolRecibePara = false;
+    this.boolSeleccioneCliente = false;
+    this.boolNumeroDocumento = false;
+  }
+
   GuardarTransferencia(formulario: NgForm)
   {
-    formulario.value.Costo_Transferencia = 1;
-    formulario.value.Id_Caja = 1;
-    formulario.value.Estado = "Enviado" 
-    formulario.value.Id_Oficina = 1;
+    //formulario.value.Costo_Transferencia = 1;
+    formulario.value.Estado = "Pendiente";
+    formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
+    formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    console.log(formulario.value);   
+    formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
+    console.log(formulario.value);
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
     let info = JSON.stringify(formulario.value);
+    console.log("info");
+    console.log(info);
+    
     let destinatarios = JSON.stringify(this.Envios);
+    console.log("Envios");
+    console.log(this.Envios);
+    
     let datos = new FormData();
     datos.append("datos",info);
     datos.append("envios",destinatarios);
-    this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos).subscribe((data:any)=>{   
+    this.http.post(this.globales.ruta+'php/pos/transferencia.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{   
       formulario.reset();
+      this.formaPagoDefault = "Efectivo";
+      this.recibeParaDefault = "Transferencia";
+      this.seleccioneClienteDefault = "";
+      this.InicializarBool();
       this.transferenciaExitosaSwal.show();
       this.Envios = [{
         Numero_Documento_Destino:'',
@@ -160,7 +213,7 @@ export class PosComponent implements OnInit {
       }];
       this.PrecioSugerido = null;
       this.MonedaTransferencia = null;
-      this.MonedaRecibida = null;      
+      this.MonedaRecibida = null;
       console.log(data);      
     });
   }
@@ -175,17 +228,30 @@ export class PosComponent implements OnInit {
 
   GuardarMovimiento(formulario: NgForm)
   {
-    formulario.value.Costo_Transferencia = 1;
-    formulario.value.Id_Caja = 1;
-    formulario.value.Estado = "Enviado" 
-    formulario.value.Id_Oficina = 1;
+    //formulario.value.Costo_Transferencia = 1;
+    console.log(localStorage);
+    
+    formulario.value.Estado = "Pendiente";
+    formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
+    formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
+    formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
     console.log(formulario.value); 
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/pos/movimiento.php',datos).subscribe((data:any)=>{   
+    this.http.post(this.globales.ruta+'php/pos/movimiento.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{   
       formulario.reset();
+      this.formaPagoDefault = "Efectivo";
+      this.recibeParaDefault = "Transferencia";
+      this.seleccioneClienteDefault = "";
+      this.InicializarBool();
       this.movimientoExitosoSwal.show();
       console.log(data);      
     });
@@ -236,8 +302,16 @@ export class PosComponent implements OnInit {
     {       
       this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: destinatario}}).subscribe((data:any)=>{
              
+        console.log("DESTINATARIOS");
+        
+        console.log(data);
+        
         if(data.length == 0)
         {
+          console.log("Num documento");
+          console.log(this.Envios[index].Numero_Documento_Destino);
+          
+          this.Envios[index].Numero_Documento_Destino = 0;
           this.CrearDestinatario(destinatario);
         }
         else
@@ -250,18 +324,21 @@ export class PosComponent implements OnInit {
   }
 
   NuevoDestinatario()
-  {   
+  {
+    console.log("INSIDE");
+    console.log(this.Envios);
+    
     let agregar:boolean = true;
-    let totalTransferencia = 0;  
+    let totalTransferencia = 0;
     for(let i = 0; i < this.Envios.length; ++i)
     {
       if(this.Envios[i].Numero_Documento_Destino === "" || this.Envios[i].Id_Cuenta_Destino === "")
-      {        
+      {
         agregar = false;
         return;
       }
       else
-      {       
+      {
         totalTransferencia += this.Envios[i].Valor_Transferencia;
       }
     }   
@@ -285,6 +362,11 @@ export class PosComponent implements OnInit {
         this.warnTotalSwal.show();
       }        
     }    
+  }
+
+  EliminarDestinatario(index)
+  {
+    this.Envios.splice(index, 1);
   }
 
   AutoCompletarRemitente(modelo){    
@@ -365,7 +447,7 @@ export class PosComponent implements OnInit {
   }
 
   AgregarFormCuenta()
-  {
+  {  
     let agregar:boolean = true;  
     for(let i = 0; i < this.Cuentas.length; ++i)
     {
@@ -387,6 +469,11 @@ export class PosComponent implements OnInit {
     }    
   }
 
+  EliminarFormCuenta(index)
+  {
+    this.Cuentas.splice(index, 1);
+  }
+
   GuardarDestinatario(formulario:NgForm)
   { 
     for(let i = 0; i < this.Cuentas.length; ++i)
@@ -401,7 +488,13 @@ export class PosComponent implements OnInit {
     datos.append("datos",info);
     datos.append("cuentas",cuentas);
     console.log(destinatario);    
-    this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{ 
+    this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{ 
       console.log(data);           
       this.ModalDestinatario.hide();
       this.destinatarioCreadoSwal.show();
@@ -411,6 +504,7 @@ export class PosComponent implements OnInit {
       textArea.value = '';
       this.Cedula = null;
     });
+    this.actualizarVista();
   }
 
   GuardarRemitente(formulario:NgForm)
@@ -464,6 +558,11 @@ export class PosComponent implements OnInit {
   {
     this.Recibe = tipo;
     console.log(this.Recibe);    
+  }
+
+  SeleccionarMonedaRecibe(moneda)
+  {
+    this.MonedaRecibe = moneda;
   }
 
   RealizarGiro(remitente: NgForm, destinatario: NgForm, giro: NgForm)
