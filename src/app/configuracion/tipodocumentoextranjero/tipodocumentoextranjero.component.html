@@ -1,0 +1,178 @@
+<div class="container-fluid">
+  <div class="page-title">
+      <h4 class="pull-left">Tipos de documentos extranjeros</h4>
+      <button class="pull-right btn btn-info" (click)="ModalDocumento.show()">
+          <i class="ti-plus"></i> Agregar Nuevo Documento Extranjero</button>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-block">
+                  <p>Tenemos los tipos de documentos de nuestra empresa</p>
+                  <div class="table-overflow">
+                      <table class="table table-hover table-sm table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Nombre</th>
+                                  <th style="width:100px;">Código</th>
+                                  <th style="width:80px;"></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr *ngFor="let tipoDocumento of tiposDocumentosExtranjero">
+                                  <td style="vertical-align: middle;">{{tipoDocumento.Nombre}}</td>
+                                  <td style="vertical-align: middle;">{{tipoDocumento.Codigo}}</td>
+                                  <td style="vertical-align: middle;" class="text-center">
+                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDocumento(tipoDocumento.Id_Tipo_Documento_Extranjero, ModalEditarDocumento)">
+                                          <i class="ti-pencil"></i>
+                                      </button>
+                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                          (confirm)="EliminarDocumento(tipoDocumento.Id_Tipo_Documento_Extranjero)">
+                                          <i class="ti-trash"></i>
+                                      </button>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDocumento" #ModalDocumento>
+  <div class="app-modal-header">
+      <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+          (click)="OcultarFormularios()">X</button>
+      <h4>Nuevo Documento</h4>
+  </div>
+  <div class="app-modal-body" >
+      <form #FormDocumento="ngForm">
+          <div class="row">
+              <div class="col-md-8">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+                          (focusout)="boolNombre = true" required #nombre="ngModel">
+                      <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                      <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Código</label>
+                      <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="" (focus)="$event.target.select()"
+                          (focusout)="boolCodigo = true" required #codigo="ngModel">
+                      <div *ngIf="!codigo.valid && boolCodigo==true" style="color:red">Campo inválido</div>
+                      <div *ngIf="codigo.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid || !codigo.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="GuardarDocumento(FormDocumento, ModalDocumento)">Guardar</button>
+      </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDocumento" #ModalVerDocumento>
+  <div class="app-modal-header">
+      <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+          (click)="OcultarFormularios()">X</button>
+      <h4>Ver Documento</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormVerDocumento="ngForm">
+          
+          <div class="row">
+              <div class="col-md-4" hidden>
+                  <div class="form-group">
+                      <label>Identificación</label>
+                      <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                  </div>
+              </div>
+              <div class="col-md-8">
+                  <div class="form-group">
+                      <strong>
+                          <label>Nombre: </label>
+                      </strong>
+                      <label>{{Nombre}}</label>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <strong>
+                          <label>Código: </label>
+                      </strong>
+                      <label>{{Codigo}}</label>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerDocumento)">Cerrar</button>
+      </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDocumento" #ModalEditarDocumento>
+  <div class="app-modal-header">
+      <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+          (click)="OcultarFormularios()">X</button>
+      <h4>Editar Documento</h4>
+  </div>
+  <div class="app-modal-body">
+      <form #FormEditarDocumento="ngForm">
+          <div class="col-md-4" hidden>
+              <div class="form-group">
+                  <label>Identificación</label>
+                  <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-8">
+                  <div class="form-group">
+                      <label>Nombre</label>
+                      <input type="text" placeholder="Nombre del documento" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                      (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                      <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                      <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Código</label>
+                      <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="{{Codigo}}" (focus)="$event.target.select()"
+                      (focusout)="boolCodigo = true" required #codigoEd="ngModel">
+                      <div *ngIf="!codigoEd.valid && boolCodigo==true" style="color:red">Campo inválido</div>
+                      <div *ngIf="codigoEd.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button type="button" class="btn btn-primary btn-sm" [disabled]="!nombreEd.valid || !codigoEd.valid" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este documento' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+              (confirm)="GuardarDocumento(FormEditarDocumento, ModalEditarDocumento)">Guardar</button>
+      </div>
+  </div>
+</app-modal-basic>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Documento eliminado" text="Se ha eliminado correctamente el documento" type="success">
+</swal>

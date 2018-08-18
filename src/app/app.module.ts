@@ -75,6 +75,10 @@ import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentast
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 import { FuncionarioeditarComponent } from './configuracion/funcionarioeditar/funcionarioeditar.component';
 import { FuncionarioverComponent } from './configuracion/funcionariover/funcionariover.component';
+import { LiquidacionsalarioComponent } from './liquidacionsalario/liquidacionsalario.component';
+import { TipodocumentoextranjeroComponent } from './configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component';
+import { TipocuentaComponent } from './configuracion/tipocuenta/tipocuenta.component';
+
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -158,6 +162,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         InformaciongirosComponent,
         FuncionarioeditarComponent,
         FuncionarioverComponent,
+        LiquidacionsalarioComponent,
+        TipodocumentoextranjeroComponent,
+        TipocuentaComponent
     ],
     exports:[
         ModalBasicComponent

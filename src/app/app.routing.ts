@@ -40,6 +40,9 @@ import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentast
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 import { FuncionarioeditarComponent } from './configuracion/funcionarioeditar/funcionarioeditar.component';
 import { FuncionarioverComponent } from './configuracion/funcionariover/funcionariover.component';
+import { TipodocumentoextranjeroComponent } from "./configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component";
+import { TipocuentaComponent } from "./configuracion/tipocuenta/tipocuenta.component";
+import { LiquidacionsalarioComponent } from "./liquidacionsalario/liquidacionsalario.component";
 
 
 export const AppRoutes: Routes = [
@@ -182,6 +185,19 @@ export const AppRoutes: Routes = [
     { 
         path : 'informaciongiros', component : CommonLayoutComponent,
         children:[{path : '', component : InformaciongirosComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'tipodocumentoextranjero', component : CommonLayoutComponent,
+        children:[{path : '', component : TipodocumentoextranjeroComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'tipocuenta', component : CommonLayoutComponent,
+        children:[{path : '', component : TipocuentaComponent, canActivate:[AuthGuard]}]
+    },
+    
+    { 
+        path : 'liquidacionsalario', component : CommonLayoutComponent,
+        children:[{path : '', component : LiquidacionsalarioComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

@@ -14,11 +14,11 @@
                         <table class="table table-hover table-sm table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width:150px;">Nombre</th>
+                                    <th >Nombre</th>
                                     <th>Tipo</th>
                                     <th>Departamento</th>
-                                    <th style="width:80px">Municipio</th>
-                                    <th style="width:300px;"></th>
+                                    <th >Municipio</th>
+                                    <th style="width:120px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,7 +57,7 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormCaja="ngForm">
             <div class="row">
                 <div class="col-md-3">
@@ -124,7 +124,7 @@
                 <button type="submit" class="btn btn-primary"
                     [disabled]="!nombre.valid || !username.valid || !password.valid || !tipo.valid || departamento.value=='' || municipio.value==''"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarCaja(FormCaja, ModalCaja)" >Actualizar Información</button>
+                    (confirm)="GuardarCaja(FormCaja, ModalCaja)" >Guardar</button>
             </div>
         </div>
 </app-modal-basic>
@@ -135,7 +135,7 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Ver Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormVerCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -187,7 +187,7 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormEditarCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
