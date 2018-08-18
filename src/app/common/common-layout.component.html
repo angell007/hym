@@ -103,8 +103,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item dropdown" >
-                            <a class="dropdown-toggle" href="javascript:void(0);" >
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
                                     <i class="ti-bar-chart"></i>
                                 </span>
@@ -115,25 +115,25 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="" [routerLink]="['/balancegeneral']" >Balance General</a>
+                                    <a href="" [routerLink]="['/balancegeneral']">Balance General</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/flujoefectivo']" >Flujo de efectivo</a>
+                                    <a href="" [routerLink]="['/flujoefectivo']">Flujo de efectivo</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentascobrar']" >Cuentas por cobrar (Cartera)</a>
+                                    <a href="" [routerLink]="['/cuentascobrar']">Cuentas por cobrar (Cartera)</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentaspagar']" >Cuentas por pagar</a>
+                                    <a href="" [routerLink]="['/cuentaspagar']">Cuentas por pagar</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentasterceros']" >Estado de cuentas terceros</a>
+                                    <a href="" [routerLink]="['/cuentasterceros']">Estado de cuentas terceros</a>
                                 </li>
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown" >
-                            <a class="dropdown-toggle" href="javascript:void(0);" >
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
                                     <i class="ti-settings"></i>
                                 </span>
@@ -144,19 +144,22 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="" [routerLink]="['/configuraciongeneral']" >Configuración General</a>
+                                    <a href="" [routerLink]="['/configuraciongeneral']">Configuración General</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/oficinas']" >Oficinas</a>
-                                </li>   
-                                <li>
-                                    <a href="" [routerLink]="['/cajas']" >Cajas</a>
+                                    <a href="" [routerLink]="['/cargo']">Cargo</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/bancos']" >Bancos</a>
-                                </li>   
+                                    <a href="" [routerLink]="['/oficinas']">Oficinas</a>
+                                </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentasbancarias']" >Cuentas Bancarias</a>
+                                    <a href="" [routerLink]="['/cajas']">Cajas</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/bancos']">Bancos</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/cuentasbancarias']">Cuentas Bancarias</a>
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/destinatarios']">Destinatarios</a>
@@ -166,16 +169,16 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/perfiles']">Perfiles</a>
-                                </li>   
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/funcionarios']">Funcionarios</a>
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/terceros']">Terceros</a>
-                                </li>  
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/grupos']">Grupos</a>
-                                </li>   
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/tipodocumento']">Tipos de Documentos</a>
                                 </li>
@@ -187,19 +190,19 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/monedas']">Monedas</a>
-                                </li> 
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/informaciongiros']">Informacion Giros</a>
-                                </li>                                 
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/compras']">Compras</a>
-                                </li> 
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/proveedores']">Proveedores</a>
-                                </li> 
+                                </li>
                                 <li>
                                     <a href="" [routerLink]="['/log']">Log del Sistema</a>
-                                </li>             
+                                </li>
                             </ul>
                         </li>
                         <!--
@@ -253,14 +256,15 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="user-profile dropdown">           <!-- PERFIL -->
+                            <li class="user-profile dropdown">
+                                <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                                    <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">  
-                                            <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
-                                          </ng-template>    
-                                          <ng-template #loggedOut>   
-                                            <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
-                                    </ng-template>     
+                                    <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">
+                                        <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                                    </ng-template>
+                                    <ng-template #loggedOut>
+                                        <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
+                                    </ng-template>
                                     <div class="user-info">
                                         <span class="name pdd-right-5">{{user.Nombres}} {{user.Apellidos}}</span>
                                         <i class="ti-angle-down font-size-10"></i>
@@ -275,14 +279,15 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
-                                        <a (click)="salir()" href="#" >
+                                        <a (click)="salir()" href="#">
                                             <i class="ti-power-off pdd-right-10"></i>
                                             <span>Cerrar Sesión</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="notifications dropdown">     <!-- NOTIFICACIONES -->
+                            <li class="notifications dropdown">
+                                <!-- NOTIFICACIONES -->
                                 <span class="counter">2</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="ti-bell"></i>
@@ -294,14 +299,16 @@
                                     </li>
                                     <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
                                         <li *ngFor="let alerta of alertas">
-                                            <a href="">         
-                                                    <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
-                                                    <img class="thumb-img" *ngIf=" alerta.Imagen != '' "   src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
+                                            <a href="">
+                                                <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
+                                                <img class="thumb-img" *ngIf=" alerta.Imagen != '' " src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
                                                 <div class="info">
                                                     <span class="title">
-                                                        
-                                                        <span class="font-size-14 text-semibold">{{alerta.Nombre}}</span> 
-                                                        <span class="text-gray">{{alerta.Tipo}} <span class="text-dark">{{alerta.Detalles}}</span></span> 
+
+                                                        <span class="font-size-14 text-semibold">{{alerta.Nombre}}</span>
+                                                        <span class="text-gray">{{alerta.Tipo}}
+                                                            <span class="text-dark">{{alerta.Detalles}}</span>
+                                                        </span>
                                                     </span>
                                                     <span class="sub-title">{{alerta.Fecha}}</span>
                                                 </div>
@@ -363,7 +370,9 @@
                                     </ul>
                                     <li class="notice-footer">
                                         <span>
-                                            <a href="" class="text-gray">Ver Todas las Notificaciones <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
+                                            <a href="" class="text-gray">Ver Todas las Notificaciones
+                                                <i class="ei-right-chevron pdd-left-5 font-size-10"></i>
+                                            </a>
                                         </span>
                                     </li>
                                 </ul>
@@ -410,15 +419,15 @@
                             </div>
                             <div id="tab3" role="tabpanel" class="tab-pane fade">
                             </div>
-                        </div>	
+                        </div>
                     </div>
-                </div>	
+                </div>
                 <!-- Side Panel END -->
 
                 <!-- Content Wrapper START -->
                 <div class="main-content">
                     <router-outlet></router-outlet>
-                </div>    
+                </div>
                 <!-- Content Wrapper END -->
 
                 <!-- Footer START -->
@@ -433,16 +442,16 @@
                     </div>
                 </footer>
                 <!-- Footer END -->
-                
+
             </div>
             <!-- Page Container END -->
 
-         </div>
-    </div>    
+        </div>
+    </div>
 </div>
 
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>        
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>
     <div class="app-modal-header">
         <h4>Cambiar contraseña</h4>
     </div>
@@ -460,20 +469,16 @@
                 <div class="text-right">
                     <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
                 </div>
-            </div> 
-        </form>                
-    </div>       
-  </app-modal-basic>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
 
 
 
-<swal #confirmSwal
-  title="Contraseña cambiada"
-  text= "Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
-  type="success"
-  (confirm)="salir()"
-  >
-  </swal>
+<swal #confirmSwal title="Contraseña cambiada" text="Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
+    type="success" (confirm)="salir()">
+</swal>
 
 
 
@@ -485,7 +490,7 @@
 
 
 
-  <!--
+<!--
                       <li *ngFor="let alerta of alertas">
                   <div class="media">
                     <img class="d-flex align-self-center img-radius" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="{{alerta.Nombre}}">

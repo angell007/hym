@@ -78,6 +78,7 @@ import { FuncionarioverComponent } from './configuracion/funcionariover/funciona
 import { LiquidacionsalarioComponent } from './liquidacionsalario/liquidacionsalario.component';
 import { TipodocumentoextranjeroComponent } from './configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component';
 import { TipocuentaComponent } from './configuracion/tipocuenta/tipocuenta.component';
+import { CargosComponent } from './configuracion/cargos/cargos.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -164,7 +165,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         FuncionarioverComponent,
         LiquidacionsalarioComponent,
         TipodocumentoextranjeroComponent,
-        TipocuentaComponent
+        TipocuentaComponent,
+        CargosComponent
     ],
     exports:[
         ModalBasicComponent

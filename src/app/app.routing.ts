@@ -43,7 +43,7 @@ import { FuncionarioverComponent } from './configuracion/funcionariover/funciona
 import { TipodocumentoextranjeroComponent } from "./configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component";
 import { TipocuentaComponent } from "./configuracion/tipocuenta/tipocuenta.component";
 import { LiquidacionsalarioComponent } from "./liquidacionsalario/liquidacionsalario.component";
-
+import { CargosComponent } from "./configuracion/cargos/cargos.component";
 
 export const AppRoutes: Routes = [
     { 
@@ -193,11 +193,14 @@ export const AppRoutes: Routes = [
     { 
         path : 'tipocuenta', component : CommonLayoutComponent,
         children:[{path : '', component : TipocuentaComponent, canActivate:[AuthGuard]}]
-    },
-    
+    },   
     { 
         path : 'liquidacionsalario', component : CommonLayoutComponent,
         children:[{path : '', component : LiquidacionsalarioComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cargo', component : CommonLayoutComponent,
+        children:[{path : '', component : CargosComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
