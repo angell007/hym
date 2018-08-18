@@ -74,6 +74,7 @@ import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.c
 import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
 import { FuncionarioeditarComponent } from './configuracion/funcionarioeditar/funcionarioeditar.component';
+import { FuncionarioverComponent } from './configuracion/funcionariover/funcionariover.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -156,6 +157,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         InformaciongirosComponent,
         InformaciongirosComponent,
         FuncionarioeditarComponent,
+        FuncionarioverComponent,
     ],
     exports:[
         ModalBasicComponent
