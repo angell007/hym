@@ -247,8 +247,6 @@ EditarConfiguracion(){
   this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
     params:{modulo:'Configuracion', id: '1'}
   }).subscribe((data:any)=>{
-    console.log("Soy configuración:" );
-    console.log(data);
     this.Identificacion = '1';
     this.NombreEmpresa = data.Nombre_Empresa;
     this.NIT = data.NIT;

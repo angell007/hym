@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group mrg-top-40">
+                                <div class="form-group mrg-top-20">
                                     <label>Valor</label>
                                     <input type="text" placeholder="V" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
                                 </div>
@@ -140,11 +140,9 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-info btn-block mrg-top-80">CAMBIAR</button>
+                                <button class="btn btn-info">CAMBIAR</button>
                             </div>
                         </div>
-                        <hr>
-                        <h3>Error Estableciendo Conexión con Servidor CorvusLab</h3>
                     </div>
                 </div>
             </div>
@@ -262,7 +260,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Enviada" type="number" (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off" placeholder="Precio" class="form-control" [(ngModel)]="CantidadRecibida" name="Cantidad_Recibida">
+                                        <input id="Cantidad_Enviada" type="text" currencyMask (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off" placeholder="Precio" class="form-control" [(ngModel)]="CantidadRecibida" name="Cantidad_Recibida">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -270,7 +268,7 @@
                                         <label>Tasa de Cambio</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" placeholder="Pesos" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}" readonly>
+                                        <input type="text" currencyMask placeholder="Pesos" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -282,7 +280,8 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" type="number" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Total_Transferencia">
+                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')" 
+                                        currencyMask type="text" placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida" name="Total_Transferencia">
                                     </div>
                                 </div>
                             </div>

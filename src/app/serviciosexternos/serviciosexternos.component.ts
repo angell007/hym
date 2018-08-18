@@ -17,12 +17,16 @@ export class ServiciosexternosComponent implements OnInit {
   public Identificacion: any[];
   public Nombre: any[];
   public Comision: any[];
-  public Adjunto: any[];
+
+  public boolNombre:boolean = false;
+  public boolComision:boolean = false;
 
   @ViewChild('ModalServicio') ModalServicio: any;
   @ViewChild('ModalEditarServicio') ModalEditarServicio: any;
   @ViewChild('FormServicio') FormServicio: any;
   @ViewChild('deleteSwal') deleteSwal: any;
+  @ViewChild('errorSwal') errorSwal:any;
+  @ViewChild('saveSwal') saveSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/';
 
   constructor(private http: HttpClient) { }
@@ -44,6 +48,19 @@ export class ServiciosexternosComponent implements OnInit {
     }
   }
 
+  OcultarFormularios()
+  {
+    this.InicializarBool();
+    /*this.OcultarFormulario(this.ModalE);
+    this.OcultarFormulario(this.ModalEditarTraslado);*/
+  }
+
+  InicializarBool()
+  {
+    this.boolNombre = false;
+    this.boolComision = false;
+  }
+
   ActualizarVista() {
     this.http.get(this.ruta + 'php/serviciosexternos/lista.php').subscribe((data: any) => {
       this.serviciosexternos = data;
@@ -58,8 +75,25 @@ export class ServiciosexternosComponent implements OnInit {
 
     this.OcultarFormulario(modal);
     this.http.post(this.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-      this.ActualizarVista();
+      this.saveSwal.show();
       formulario.reset();
+      this.ActualizarVista();
+    });
+
+    //console.log();
+    
+  }
+
+  VerServicio(id, modal) {
+    this.http.get(this.ruta + 'php/serviciosexternos/detalle.php', {
+      params: { modulo: 'Servicio_Externo', id: id }
+    }).subscribe((data: any) => { 
+      console.log(data);
+          
+      this.Identificacion = id;
+      this.Nombre=data.Nombre;
+      this.Comision=data.Comision;
+      modal.show();
     });
   }
 
@@ -72,7 +106,6 @@ export class ServiciosexternosComponent implements OnInit {
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Comision = data.Comision;
-      this.Adjunto = data.Adjunto;
       modal.show();
     });
   }
@@ -93,7 +126,6 @@ export class ServiciosexternosComponent implements OnInit {
     this.Identificacion = null;
     this.Nombre = null;
     this.Comision = null;
-    this.Adjunto = null;
     modal.hide();
   }
 }
