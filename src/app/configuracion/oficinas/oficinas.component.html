@@ -58,7 +58,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Nombre</label>
+                        <strong><label>Nombre</label></strong>
                         <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreOficina="ngModel">
                         <div *ngIf="!nombreOficina.valid && boolNombre==true" style="color:red">Campo inválido</div>
                         <div *ngIf="nombreOficina.valid && boolNombre==true" style="color:green">Datos correctos!</div>
@@ -68,7 +68,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Teléfono</label>
+                        <strong><label>Teléfono</label></strong>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Telefono" ngModel="" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
                         <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Campo inválido</div>
                         <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Celular</label>
+                        <strong><label>Celular</label></strong>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Celular" ngModel="" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
                         <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Campo inválido</div>
                         <div *ngIf="celular.valid && boolCelular==true" style="color:green">Datos correctos!</div>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Correo</label>
+                        <strong><label>Correo</label></strong>
                         <input type="email" email placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
                         <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Campo inválido</div>
                         <div *ngIf="correo.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
@@ -94,7 +94,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Dirección</label>
+                        <strong><label>Dirección</label></strong>
                         <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
                         <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Campo inválido</div>
                         <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
@@ -102,8 +102,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
+                        <strong><label>Departamento</label></strong>
+                        <select class="form-control" required name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
                             <option [ngValue]="undefined" value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
@@ -113,8 +113,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <strong><label>Municipio</label></strong>
+                        <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
@@ -128,7 +128,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Comisión</label>
+                        <strong><label>Comisión</label></strong>
                         <input currencyMask class="form-control" name="Comision" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolComision = true" required #comision="ngModel">
                         <div *ngIf="!comision.valid && boolComision==true" style="color:red">Campo inválido</div>
                         <div *ngIf="comision.valid && boolComision==true" style="color:green">Datos correctos!</div>
@@ -136,7 +136,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Mín Compra</label>
+                        <strong><label>Mín Compra</label></strong>
                         <input currencyMask class="form-control" name="Min_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompra="ngModel">
                         <div *ngIf="!minCompra.valid && boolMinCompra==true" style="color:red">Campo inválido</div>
                         <div *ngIf="minCompra.valid && boolMinCompra==true" style="color:green">Datos correctos!</div>
@@ -144,7 +144,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Máx Compra</label>
+                        <strong><label>Máx Compra</label></strong>
                         <input currencyMask class="form-control" name="Max_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompra="ngModel">
                         <div *ngIf="!maxCompra.valid && boolMaxCompra==true" style="color:red">Campo inválido</div>
                         <div *ngIf="maxCompra.valid && boolMaxCompra==true" style="color:green">Datos correctos!</div>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Min Venta</label>
+                        <strong><label>Min Venta</label></strong>
                         <input currencyMask class="form-control" name="Min_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolMinVenta = true" required #minVenta="ngModel">
                         <div *ngIf="!minVenta.valid && boolMinVenta==true" style="color:red">Campo inválido</div>
                         <div *ngIf="minVenta.valid && boolMinVenta==true" style="color:green">Datos correctos!</div>
@@ -160,7 +160,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Máx Venta</label>
+                        <strong><label>Máx Venta</label></strong>
                         <input currencyMask class="form-control" name="Max_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolMaxVenta = true" required #maxVenta="ngModel">
                         <div *ngIf="!maxVenta.valid && boolMaxVenta==true" style="color:red">Campo inválido</div>
                         <div *ngIf="maxVenta.valid && boolMaxVenta==true" style="color:green">Datos correctos!</div>
@@ -168,7 +168,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label>Valores</label>
+                        <strong><label>Valores</label></strong>
                         <input currencyMask class="form-control" name="Valores" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0 (focus)="$event.target.select()" (focusout)="boolValores = true" required #valores="ngModel">
                         <div *ngIf="!valores.valid && boolValores==true" style="color:red">Campo inválido</div>
                         <div *ngIf="valores.valid && boolValores==true" style="color:green">Datos correctos!</div>

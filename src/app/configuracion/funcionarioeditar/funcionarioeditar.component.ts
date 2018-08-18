@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
-import { NgForm } from '../../../../node_modules/@angular/forms';
+import { NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormWizardModule } from 'angular2-wizard/dist';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-funcionarioeditar',
@@ -68,13 +72,16 @@ export class FuncionarioeditarComponent implements OnInit {
   public Dependencia : any = null;
   public Cargo : any = null;  
 
-  constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute) { }
+  @ViewChild('saveSwal') saveSwal:any;
+  @ViewChild('errorSwal') errorSwal:any;
+
+  constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {        
-    this.http.get(this.globales.ruta+'php/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
       console.log(this.Grupos);      
-      this.http.get(this.globales.ruta + 'php/funcionarios/funcionario_detalle.php',{
+      this.http.get(this.globales.ruta + 'php/funcionarios/detalle_funcionario.php',{
         params: { modulo: 'Funcionario', id: this.id}     
       }).subscribe((data: any) => {
         console.log(data);        
@@ -108,6 +115,8 @@ export class FuncionarioeditarComponent implements OnInit {
       });  
     });    
   }
+
+
 
   CargaFoto(event){
     let fot = document.getElementById("foto_visual") as HTMLImageElement;   
@@ -152,6 +161,8 @@ export class FuncionarioeditarComponent implements OnInit {
 
   GuardarFuncionario(funcionario:NgForm, contactoEmergencia:NgForm, experienciaLaboral1:NgForm, experienciaLaboral2:NgForm, referenciasPersonales1:NgForm, referenciasPersonales2:NgForm)
   {
+    
+    
     let dummyFuncionario = JSON.stringify(funcionario.value);
     let dummyContactoEmergencia = JSON.stringify(contactoEmergencia.value);    
     let dummyExperienciaLaboral = JSON.stringify([experienciaLaboral1.value, experienciaLaboral2.value]);
@@ -164,7 +175,17 @@ export class FuncionarioeditarComponent implements OnInit {
     datos.append('Foto', this.Fotos);   
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_editar.php',datos).subscribe((data:any)=>{
       console.log(data);
-    });    
+      this.VerPantallaLista();
+      this.saveSwal.show();
+    });  
+  }
+  VerPantallaLista(){
+    this.router.navigate(['/funcionarios']);    
   }
 
+
+
+
+
 }
+

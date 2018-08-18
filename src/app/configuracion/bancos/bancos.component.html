@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" required name="Id_Pais" ngModel="" (focus)="$event.target.select()" (focusout)="boolPais = true" required #pais="ngModel">
+                        <select class="form-control" name="Id_Pais" ngModel="" [(ngModel)]="paisDefault" (focus)="$event.target.select()" (focusout)="boolPais = true" required #pais="ngModel">
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
@@ -99,7 +99,7 @@
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarBanco(FormBanco, ModalBanco)" >Actualizar Información</button>
             </div>
-        </div>
+    </div>
 </app-modal-basic>
 
 

@@ -99,7 +99,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true"
+                        <select class="form-control" name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true"
                             required #departamento="ngModel">
                             <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
@@ -111,7 +111,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
@@ -153,7 +153,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Confiabilidad</label>
-                        <select class="form-control" name="Confiable" ng-model="selected">
+                        <select class="form-control" name="Confiable" ng-model="selected" [(ngModel)]="confiabilidadDefault" required>
+                            <option value="">---------</option>
                             <option ng-selected="selected">Confiable</option>
                             <option>No Confiable</option>
                         </select>
@@ -162,7 +163,8 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Régimen</label>
-                        <select class="form-control" name="Regimen" ng-model="selected">
+                        <select class="form-control" name="Regimen" ng-model="selected" [(ngModel)]="regimenDefault" required>
+                            <option value="">---------</option>
                             <option ng-selected="selected">Comun</option>
                             <option>Simplificado</option>
                         </select>
@@ -451,4 +453,7 @@
 </swal>
 
 <swal #deleteSwal title="Proveedor Eliminado" text="Se ha Eliminado correctamente el proveedor" type="success">
+</swal>
+
+<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
 </swal>

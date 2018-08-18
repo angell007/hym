@@ -1,13 +1,14 @@
 <div class="container-fluid">
-        <div class="page-title">
-         <h4 class="pull-left">Corresponsales Bancarios</h4>
-         <button class="pull-right btn btn-info" (click)="ModalCorresponsal.show()"><i class="ti-plus"></i> Agregar Nuevo Corresponsal Bancario</button>
-        </div>
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="widget card">
-                    <div class="card-block">
+    <div class="page-title">
+        <h4 class="pull-left">Corresponsales Bancarios</h4>
+        <button class="pull-right btn btn-info" (click)="ModalCorresponsal.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Corresponsal Bancario</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget card">
+                <div class="card-block">
                     <p>Corresponsales Bancarios en nuestro Sistema</p>
                     <div class="table-overflow">
                         <table class="table table-hover table-sm table-striped">
@@ -27,12 +28,12 @@
                                     <td>{{corresponsal.Departamento}}</td>
                                     <td>{{corresponsal.Municipio }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCorresponsal(corresponsal.Id_Corresponsal_Bancario, ModalVerCorresponsal)">
                                             <i class="ti-search"></i>
-                                          </button>
-                                          <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCorresponsal(corresponsal.Id_Corresponsal_Bancario, ModalEditarCorresponsal)">
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCorresponsal(corresponsal.Id_Corresponsal_Bancario, ModalEditarCorresponsal)">
                                             <i class="ti-pencil"></i>
-                                          </button>
+                                        </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Corresponsal, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
                                             (confirm)="EliminarCorresponsal(corresponsal.Id_Corresponsal_Bancario)">
                                             <i class="ti-trash"></i>
@@ -48,141 +49,203 @@
     </div>
 </div>
 
-
-
-
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCorresponsal" #ModalCorresponsal>
-        <div class="app-modal-header">
-            <h4>Nuevo Corresponsal Bancario</h4>
-        </div>
-        <div class="app-modal-body">
-            <form #FormCorresponsal="ngForm">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label>Corresponsal</label>
-                            <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Cupo</label>
-                                <input type="text" placeholder="Cupo" class="form-control" name="Cupo" ngModel="">
-                            </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Departamento</label>
-                                <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
-                                    <option value="">Seleccione un Departamento</option>
-                                    <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="col-md-5">
-                            <div class="form-group">
-                                <label>Municipio</label>
-                                <select class="form-control" required name="Id_Municipio" ngModel="">
-                                    <option value="">Seleccione un Municipio</option>
-                                    <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                                </select>
-                            </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" (click)="GuardarCorresponsal(FormCorresponsal, ModalCorresponsal)">Guardar</button>
-                    </div>
-                </div>
-            </form>
-        </div>        
-    </app-modal-basic>
-
-
-
-
-
-
-
-
-
-
-    <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCorresponsal" #ModalEditarCorresponsal>
-        <div class="app-modal-header">
-            <h4>Editar Cuenta Bancaria</h4>
-        </div>
-        <div class="app-modal-body">
-            <form #FormEditarCorresponsal="ngForm">
-                <div class="col-md-4" hidden>
+    <div class="app-modal-header">
+        <h4>Nuevo Corresponsal Bancario</h4>
+        <button type="button" class="close basic-close" (click)="ModalCorresponsal.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCorresponsal="ngForm">
+            <div class="row">
+                <div class="col-md-8">
                     <div class="form-group">
-                        <label>Identificación</label>
-                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                        <label>Corresponsal</label>
+                        <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolCorresponsal = true" required #corresponsal="ngModel">
+                        <div *ngIf="!corresponsal.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="corresponsal.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-
-
-
-
-                <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label>Corresponsal</label>
-                                <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="{{Nombre}}">
-                            </div>
-                            </div>
-                            <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Cupo</label>
-                                        <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                                    </div>
-                            </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Departamento</label>
-                                <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
-                                    <option value="">Seleccione un Departamento</option>
-                                    <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label>Municipio</label>
-                                <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}">
-                                    <option value="">Seleccione un Municipio</option>
-                                    <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-      
-                
-
-                
-                <div class="modal-footer no-border">
-                    <div class="text-right">
-                        <button class="btn btn-primary btn-sm" 
-                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                        (confirm)="GuardarCorresponsal(FormEditarCorresponsal, ModalEditarCorresponsal)"
-                        >Guardar</button>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Cupo</label>
+                        <input type="text" placeholder="Cupo" class="form-control" name="Cupo" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupo="ngModel">
+                        <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-            </form>
-        </div>        
-    </app-modal-basic>
-    
-    <swal #deleteSwal
-      title="Corresponsal eliminado"
-      text="Se ha Eliminado Correctamente el corresponsal"
-      type="success"
-      >
-    </swal>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" [(ngModel)]="departamentoDefault"
+                            (focus)="$event.target.select()" (focusout)="boolDepartamento = true" required #departamento="ngModel">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                        </select>
+                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamento.value==''" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (focus)="$event.target.select()"
+                            (focusout)="boolMunicipio = true" required #municipio="ngModel">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                        </select>
+                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipio.value==''" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!corresponsal.valid || !cupo.valid || departamento.value=='' || municipio.value==''"
+                [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarCorresponsal(FormCorresponsal, ModalCorresponsal)">Actualizar Información</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCorresponsal" #ModalVerCorresponsal>
+    <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="ModalVerCorresponsal.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Ver Corresponsal</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormVerCorresponsal="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Nombre:</label>
+                        </strong>
+                        <label>{{Nombre}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cupo:</label>
+                        </strong>
+                        <label>{{Cupo}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Departamento:</label>
+                        </strong>
+                        <label>{{Departamento}}</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Municipio:</label>
+                        </strong>
+                        <label>{{Municipio}}</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCorresponsal" #ModalEditarCorresponsal>
+    <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="ModalEditarCorresponsal.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Editar Cuenta Bancaria</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarCorresponsal="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Corresponsal</label>
+                        <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="{{Nombre}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolCorresponsal = true" required #corresponsalEd="ngModel">
+                        <div *ngIf="!corresponsalEd.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="corresponsalEd.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Cupo</label>
+                        <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                            (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupoEd="ngModel">
+                        <div *ngIf="!cupoEd.valid && boolCupo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="cupoEd.valid && boolCupo==true" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)"
+                            (focus)="$event.target.select()" (focusout)="boolDepartamento = true" required #departamentoEd="ngModel">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                        </select>
+                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamentoEd.value==''" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}" (focus)="$event.target.select()" (focusout)="boolMunicipio = true"
+                            required #municipioEd="ngModel">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                        </select>
+                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipioEd.value==''" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [disabled]="!corresponsalEd.valid || !cupoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCorresponsal(FormEditarCorresponsal, ModalEditarCorresponsal)">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Corresponsal eliminado" text="Se ha Eliminado Correctamente el corresponsal" type="success">
+</swal>

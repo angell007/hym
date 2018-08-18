@@ -1,11 +1,15 @@
 <div class="container-fluid">
+    <div class="page-title">
+        <h4 class="pull-left">Transferencias</h4>
+    </div>
+    <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-3">
             <div class="card bg-info">
                 <div class="card-block" style="padding:10px;">
                     <div class="row">
                         <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">155</h1>
+                            <h1 class="no-mrg-top font-size-30">{{conteoTransferencias.TotalTransferencias}}</h1>
                             <span class="text-white">Transferencias</span>
                         </div>
                         <div class="col-md-5 text-center">
@@ -16,56 +20,55 @@
             </div>
         </div>
         <div class="col-md-3">
-                <div class="card bg-success">
-                    <div class="card-block" style="padding:10px;">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h1 class="no-mrg-top font-size-30">135</h1>
-                                <span class="text-white">Realizadas</span>
-                            </div>
-                            <div class="col-md-5 text-center">
-                                <i class="ti-thumb-up font-size-50 text-white"></i>
-                            </div>
+            <div class="card bg-success">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTransferencias.TransferenciasRealizadas}}</h1>
+                            <span class="text-white">Realizadas</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="ti-thumb-up font-size-50 text-white"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                    <div class="card bg-warning">
-                        <div class="card-block" style="padding:10px;">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <h1 class="no-mrg-top font-size-30">5</h1>
-                                    <span class="text-white">Devueltas</span>
-                                </div>
-                                <div class="col-md-5 text-center">
-                                    <i class="ti-thumb-down font-size-50 text-white"></i>
-                                </div>
-                            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTransferencias.TransferenciasDevueltas}}</h1>
+                            <span class="text-white">Devueltas</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="ti-thumb-down font-size-50 text-white"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                        <div class="card bg-danger">
-                            <div class="card-block" style="padding:10px;">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <h1 class="no-mrg-top font-size-30">15</h1>
-                                        <span class="text-white">Anuladas</span>
-                                    </div>
-                                    <div class="col-md-5 text-center">
-                                        <i class="ti-close font-size-50 text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger">
+                <div class="card-block" style="padding:10px;">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h1 class="no-mrg-top font-size-30">{{conteoTransferencias.TransferenciasAnuladas}}</h1>
+                            <span class="text-white">Anuladas</span>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <i class="ti-close font-size-50 text-white"></i>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="widget card">
                 <div class="card-block">
-                    <p>Transferencias realizadas en nuestro Sistema</p>
                     <div class="table-overflow">
                         <table class="table table-hover table-sm table-striped">
                             <thead>
@@ -76,7 +79,7 @@
                                     <th>Cuenta Destino</th>
                                     <th># Transfe</th>
                                     <th>Recibo</th>
-                                    <th>Estado</th> 
+                                    <th>Estado</th>
                                     <th style="width:80px">Valor</th>
                                     <th style="width:130px;"></th>
                                 </tr>
@@ -92,14 +95,14 @@
                                     <td>{{transferencia.Estado}}</td>
                                     <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTransferencia(transferencia.Id_Transferencia, ModalVerTransferencia)">
                                             <i class="ti-search"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTransferencia(transferencia.Id_Transferencia, ModalEditarTransferencia)">
                                             <i class="ti-pencil"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarTransferencia(oficina.Id_Oficina)">
+                                            (confirm)="EliminarTransferencia(transferencia.Id_Transferencia)">
                                             <i class="ti-trash"></i>
                                         </button>
                                     </td>
@@ -112,3 +115,99 @@
         </div>
     </div>
 </div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTransferencia" #ModalVerTransferencia>
+    <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
+        <h4>Ver Transferencia</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormVerTransferencia="ngForm">
+
+            <!--ACA EMPIEZAN LOS CAMBIOS-->
+
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>
+                        <label>Forma de Pago:</label>
+                    </strong>
+                    <label>{{Forma_Pago}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Código:</label>
+                    </strong>
+                    <label>{{Codigo}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Fecha:</label>
+                    </strong>
+                    <label>{{Fecha}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Identificación funcionario:</label>
+                    </strong>
+                    <label>{{Identificacion_Funcionario}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Oficina:</label>
+                    </strong>
+                    <label>{{Oficina}}</label>
+                </div>
+                <div class="col-md-3">
+                        <strong>
+                            <label>Caja:</label>
+                        </strong>
+                        <label>{{Caja}}</label>
+                    </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Moneda Origen:</label>
+                    </strong>
+                    <label>{{Moneda_Origen}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Numero documento destino:</label>
+                    </strong>
+                    <label>{{Numero_Documento_Destino}}</label>
+                </div>
+                <div class="col-md-3">
+                    <strong>
+                        <label>Numero documento origen:</label>
+                    </strong>
+                    <label></label>
+                </div>
+            </div>
+
+            <!--ACA TERMINAN LOS CAMBIOS-->
+
+
+
+
+
+
+
+
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerTransferencia)">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Destinatario Eliminado" text="Se ha Eliminado Correctamente la transferencia" type="success">
+</swal>
