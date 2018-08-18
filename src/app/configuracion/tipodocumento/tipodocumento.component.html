@@ -60,7 +60,7 @@
                             <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Código</label>
                             <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="" (focus)="$event.target.select()"
@@ -69,6 +69,15 @@
                             <div *ngIf="codigo.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
                         </div>
                     </div>
+                    <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Ordén</label>
+                                <input type="text" placeholder="Orden" class="form-control" name="Orden" ngModel (focus)="$event.target.select()"
+                                    (focusout)="boolCodigo = true" required #orden="ngModel">
+                                <div *ngIf="!orden.valid && boolCodigo==true" style="color:red">Campo inválido</div>
+                                <div *ngIf="orden.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+                            </div>
+                        </div>
                 </div>
             </form>
         </div>
@@ -148,7 +157,7 @@
                             <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Código</label>
                             <input type="text" placeholder="Código del documento" class="form-control" name="Codigo" ngModel="{{Codigo}}" (focus)="$event.target.select()"
@@ -157,6 +166,15 @@
                             <div *ngIf="codigoEd.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
                         </div>
                     </div>
+                    <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Ordén</label>
+                                <input type="text" placeholder="Orden" class="form-control" name="Orden" ngModel="{{Orden}}" (focus)="$event.target.select()"
+                                    (focusout)="boolCodigo = true" required #ordenEditar="ngModel">
+                                <div *ngIf="!ordenEditar.valid && boolCodigo==true" style="color:red">Campo inválido</div>
+                                <div *ngIf="ordenEditar.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+                            </div>
+                        </div>
                 </div>
             </form>
         </div>
