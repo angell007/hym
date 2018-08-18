@@ -52,10 +52,20 @@ export class TercerosComponent implements OnInit {
   public boolMunicipio:boolean = false;
   public boolCupo:boolean = false;
   public boolTipoDocumento:boolean = false;
+  public boolDestacado:boolean = false;
+  public boolCredito:boolean = false;
 
   public actualClienteDesde:string;
   public year:string;
   public month:string;
+
+  //Valores por defecto
+  tipoDocumentoDefault: string = "";
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
+  tipoGrupoDefault: string = "";
+  destacadoDefault: string = "";
+  creditoDefault: string = "";
 
   @ViewChild('ModalTercero') ModalTercero:any;
   @ViewChild('ModalVerTercero') ModalVerTercero:any;
@@ -64,6 +74,7 @@ export class TercerosComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('duplicateSwal') duplicateSwal:any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
 
@@ -114,6 +125,8 @@ export class TercerosComponent implements OnInit {
     this.boolMunicipio = false;
     this.boolCupo = false;
     this.boolTipoDocumento = false;
+    this.boolCredito = false;
+    this.boolDestacado = false;
    }
 
   ActualizarVista(){
@@ -139,12 +152,24 @@ export class TercerosComponent implements OnInit {
     .catch(error => { 
       console.error('An error occurred:', error.error);
       this.errorSwal.show();
+
+      var test = error.error.text;
+      if (test.indexOf('Duplicate') >= 0) {
+        this.duplicateSwal.show();
+      }
+
       return this.handleError(error);
     })
     .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
+      this.destacadoDefault = "";
+      this.creditoDefault = "";
+      this.tipoDocumentoDefault = "";
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
+      this.tipoGrupoDefault = "";
       this.saveSwal.show();
     });
     

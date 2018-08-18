@@ -62,16 +62,16 @@
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormCompra="ngForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
+                        <select class="form-control" required name="Id_Proveedor" ngModel="" [(ngModel)]="proveedorDefault" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
                             required #proveedor="ngModel">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedor.value=='' && boolProveedor==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!proveedor.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="proveedor.value=='' && boolProveedor==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!proveedor.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -79,8 +79,8 @@
                         <label>Valor</label>
                         <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                             (focus)="$event.target.select()" (focusout)="boolValor = true" required #valor="ngModel">
-                        <div *ngIf="!valor.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="valor.valid && boolValor==true" style="color:green">All checked!</div>
+                        <div *ngIf="!valor.valid && boolValor==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="valor.valid && boolValor==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -88,8 +88,8 @@
                         <label>Tasa Cambio</label>
                         <input currencyMask class="form-control" name="Tasa_Cambio" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                             (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambio="ngModel">
-                        <div *ngIf="!tasaCambio.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="tasaCambio.valid && boolTasaCambio==true" style="color:green">All checked!</div>
+                        <div *ngIf="!tasaCambio.valid && boolTasaCambio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="tasaCambio.valid && boolTasaCambio==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -97,13 +97,13 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
+                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="" [(ngModel)]="funcionarioDefault" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
                             required #funcionario="ngModel">
                             <option value="">Seleccione un Funcionario</option>
-                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Id_Funcionario">{{Funcionario.Nombres}}</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
-                        <div *ngIf="funcionario.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!funcionario.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="funcionario.value=='' && boolFuncionario==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!funcionario.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -148,7 +148,7 @@
                         <strong>
                             <label>Valor: </label>
                         </strong>
-                        <label>{{Valor}}</label>
+                        <label >{{Valor | currency:undefined:'symbol':'1.0-0'}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -156,7 +156,7 @@
                         <strong>
                             <label>Tasa Cambio: </label>
                         </strong>
-                        <label>{{TasaCambio}}</label>
+                        <label>{{TasaCambio | currency:undefined:'symbol':'1.0-0'}}</label>
                     </div>
                 </div>
             </div>
@@ -196,7 +196,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Proveedor</label>
                         <select class="form-control" name="Id_Proveedor" ngModel="{{Proveedor}}" (focus)="$event.target.select()" (focusout)="boolProveedor = true"
@@ -204,26 +204,26 @@
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedorEd.value=='' && boolProveedor==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!proveedorEd.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="proveedorEd.value=='' && boolProveedor==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!proveedorEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Valor</label>
-                        <input type="text" class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        <input currencyMask class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                         (focus)="$event.target.select()" (focusout)="boolValor = true" required #valorEd="ngModel">
-                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">All checked!</div>
+                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tasa Cambio</label>
-                        <input type="text" class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        <input currencyMask class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                         (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambioEd="ngModel">
-                        <div *ngIf="!tasaCambioEd.valid && boolTasaCambio==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="tasaCambioEd.valid && boolTasaCambio==true" style="color:green">All checked!</div>
+                        <div *ngIf="!tasaCambioEd.valid && boolTasaCambio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="tasaCambioEd.valid && boolTasaCambio==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -234,10 +234,10 @@
                         <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}" (focus)="$event.target.select()" (focusout)="boolFuncionario = true"
                         required #funcionarioEd="ngModel">
                             <option value="">Seleccione un Funcionario</option>
-                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Id_Funcionario">{{Funcionario.Nombres}}</option>
+                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
                         </select>
-                        <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!funcionarioEd.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!funcionarioEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>

@@ -58,8 +58,8 @@
                                                 <label>Nombre</label>
                                                 <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
                                                         (focusout)="boolNombre = true" required #nombre="ngModel">
-                                                <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                                                <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
+                                                <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                                                <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                                         </div>
                                 </div>
                         </div>
@@ -681,8 +681,8 @@
                                         <div class="form-group">
                                                 <label>Nombre</label>
                                                 <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
-                                                <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                                                <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">All checked!</div>
+                                                <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                                                <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                                         </div>
                                 </div>
                         </div>
