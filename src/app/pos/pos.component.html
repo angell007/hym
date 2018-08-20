@@ -337,8 +337,9 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Número Documento</label>
-                                        <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off"
-                                            required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value, i)" (click)="boolNumeroDocumentoR=true" required #numeroDocumentoR="ngModel">
+                                        <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off" [(ngModel)]="NumeroDocumentoR"
+                                            required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value, i)"
+                                            (click)="boolNumeroDocumentoR=true" required #numeroDocumentoR="ngModel">
                                         <datalist id="remitentes" (select)="LlenarValoresRemitente($event.target.value)">
                                             <option *ngFor="let Remitentente of RemitentesFiltrados" [value]="Remitentente.Id_Transferencia_Remitente">{{Remitentente.Nombre}}</option>
                                         </datalist>
@@ -857,21 +858,29 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Nuevo Remitente</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormRemitente="ngForm">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}">
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}"
+                            (focusout)="boolIdR = true" required #identificacionR="ngModel">
+                        <div *ngIf="!identificacionR.valid && boolIdR==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="identificacionR.valid && boolIdR==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="" (focusout)="boolNombreR = true"
+                            required #nombreR="ngModel">
+                        <div *ngIf="!nombreR.valid && boolNombreR==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreR.valid && boolNombreR==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -879,16 +888,20 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="">
+                        <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="" (focusout)="boolTelefonoR = true"
+                            required #telefonoR="ngModel">
+                        <div *ngIf="!telefonoR.valid && boolTelefonoR==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="telefonoR.valid && boolTelefonoR==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
             <hr>
         </form>
-        <div class="modal-footer no-border" id="guardar">
-            <div class="text-right">
-                <button class="btn btn-primary btn-sm" (click)="GuardarRemitente(FormRemitente)">Guardar</button>
-            </div>
+    </div>
+    <div class="app-modal-footer" id="guardar">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [disabled]="!nombreR.valid || !identificacionR.valid || !telefonoR.valid" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarRemitente(FormRemitente)">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

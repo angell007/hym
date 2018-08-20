@@ -65,6 +65,7 @@ export class PosComponent implements OnInit {
   public CorresponsalBancario : number;  
   public ComisionServicioExterno : number;
   public Comision : number = 0;
+  public NumeroDocumentoR : number = 0;
 
   //Bool validaciones
   public boolFormaPago:boolean = false;
@@ -398,8 +399,12 @@ export class PosComponent implements OnInit {
     else
     {       
       this.http.get(this.globales.ruta+'php/genericos/detalle.php',{ params: {modulo: 'Transferencia_Remitente', id: remitente}}).subscribe((data:any)=>{                     
+        console.log("REMITENTE");
+        
+        console.log(data);
         if(data.length == 0)
         {
+          this.NumeroDocumentoR = 0;
           this.CrearRemitente(remitente);
         }
         else
@@ -513,7 +518,13 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo","Transferencia_Remitente");
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{ 
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{ 
       console.log(data);
       this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
       this.ModalRemitente.hide();

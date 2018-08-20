@@ -137,13 +137,13 @@
             </div>
         </div>
       </div>      
-      <div class="modal-footer no-border">
-          <div class="text-right">
-              <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
-          </div>
-      </div>
     </form>                
   </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+        <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
+    </div>
+</div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarAgente" #ModalEditarAgente>
@@ -192,14 +192,14 @@
             </div>
         </div>
       </div>      
-      <div class="modal-footer no-border">
-        <div class="text-right">
-          <button class="btn btn-primary btn-sm"
-          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-          (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>
-        </div>
-      </div>
     </form>                
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm"
+      [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+      (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>
+    </div>
   </div>
 </app-modal-basic>
 

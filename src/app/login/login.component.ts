@@ -28,14 +28,20 @@ export class LoginComponent implements OnInit {
     }
   }
  
-  onSubmit(Username, Password){
+  onSubmit(Username, Password, Oficina, Caja){
     this.userService.login(Username,Password).subscribe((data:any)=>{
         if(data.Error=="No"){
             this.Error=false;
             this.Exito=true;
             this.Mensaje="Usted ha iniciado sesion correctamente, esta siendo dirijido al tablero principal.";
+            
             localStorage.setItem('Token',data.Token);
             localStorage.setItem('User',JSON.stringify(data.Funcionario));
+            localStorage.setItem('Oficina',JSON.stringify(Oficina));
+            localStorage.setItem('Caja',JSON.stringify(Caja));
+            localStorage.setItem('Tipo_Oficina',"Propia"); //CAMBIAR POR UNA VALIDACIÓN EN EL LOGIN
+            console.log(localStorage);
+            
             this.router.navigate(['/tablero']);
         }else{
           this.Error=true;
