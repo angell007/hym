@@ -34,6 +34,7 @@ export class CajasComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  MAC: any;
 
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -148,6 +149,7 @@ export class CajasComponent implements OnInit {
       this.Nombre = data.Nombre;
       this.Oficina = data.Id_Oficina;
       this.Detalles = data.Detalle;
+      this.MAC = data.MAC;
       this.ModalEditarCaja.show();
     });
   }

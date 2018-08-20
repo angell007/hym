@@ -7,13 +7,13 @@ import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 
 @Component({
-  selector: 'app-tipodocumento',
-  templateUrl: './tipodocumento.component.html',
-  styleUrls: ['./tipodocumento.component.css']
+  selector: 'app-tipodocumentoextranjero',
+  templateUrl: './tipodocumentoextranjero.component.html',
+  styleUrls: ['./tipodocumentoextranjero.component.scss']
 })
-export class TipodocumentoComponent implements OnInit {
+export class TipodocumentoextranjeroComponent implements OnInit {
 
-  public tiposDocumentos : any[];
+  public tiposDocumentosExtranjero : any[];
 
   //variables de formulario
   public Identificacion : any[];
@@ -59,15 +59,15 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   ActualizarVista(){
-    this.http.get(this.globales.ruta+'php/tiposdocumentos/lista_tipos_documentos.php').subscribe((data:any)=>{
-      this.tiposDocumentos= data;          
+    this.http.get(this.globales.ruta+'php/tiposdocumentos/lista_tipos_documentos_extranjeros.php').subscribe((data:any)=>{
+      this.tiposDocumentosExtranjero= data;          
     });
   }
 
   GuardarDocumento(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();        
-    datos.append("modulo",'Tipo_Documento');
+    datos.append("modulo",'Tipo_Documento_Extranjero');
     datos.append("datos",info);
     this.OcultarFormulario(modal);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
@@ -90,7 +90,7 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   VerDocumento(id, modal){
-    this.http.get(this.globales.ruta+'php/tiposdocumentos/detalle_tipo_documento.php',{
+    this.http.get(this.globales.ruta+'php/tiposdocumentos/detalle_tipo_documento_extranjero.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
@@ -103,7 +103,7 @@ export class TipodocumentoComponent implements OnInit {
   EditarDocumento(id, modal){
     this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Tipo_Documento', id:id}
+      params:{modulo:'Tipo_Documento_Extranjero', id:id}
     }).subscribe((data:any)=>{      
       this.Identificacion = id;
       this.Nombre = data.Nombre;
@@ -115,7 +115,7 @@ export class TipodocumentoComponent implements OnInit {
 
   EliminarDocumento(id){
     let datos = new FormData();
-    datos.append("modulo", 'Tipo_Documento');
+    datos.append("modulo", 'Tipo_Documento_Extranjero');
     datos.append("id", id); 
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
