@@ -65,7 +65,6 @@ export class PosComponent implements OnInit {
   public CorresponsalBancario : number;  
   public ComisionServicioExterno : number;
   public Comision : number = 0;
-
   public NumeroDocumentoR : number = 0;
 
   //Bool validaciones
