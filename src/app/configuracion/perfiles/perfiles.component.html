@@ -1,47 +1,46 @@
 <div class="container-fluid">
-    <div class="page-title">
-      <h4 class="pull-left">Perfiles de Privilegios</h4>
-      <button class="pull-right btn btn-info" (click)="ModalPerfil.show()"><i class="ti-plus"></i> Agregar Nuevo Perfil</button>
-    </div>
-    <div class="clearfix"></div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-block">
-            <p>Todos los perfiles con privilegios dentro del sistema</p>
-            <div class="table-overflow">
-              <table class="table table-hover table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th>Nombre del Perfil</th>
-                    <th style="width:130px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let perfil of perfiles">
-                    <td>{{perfil.Nombre}}</td>
-                    <td class="text-center">
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerPerfil(perfil.Id_Perfil, ModalVerPerfil)">
-                            <i class="ti-search"></i>
-                        </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarPerfil(perfil.Id_Perfil)">
-                            <i class="ti-pencil"></i>
-                        </button>
-                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                        [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Perfil, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
-                        (confirm)="EliminarPerfil(perfil.Id_Perfil)"
-                        >
-                            <i class="ti-trash"></i>
-                        </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div class="page-title">
+                <h4 class="pull-left">Perfiles de Privilegios</h4>
+                <button class="pull-right btn btn-info" (click)="ModalPerfil.show()">
+                        <i class="ti-plus"></i> Agregar Nuevo Perfil</button>
         </div>
-      </div>
-    </div>
+        <div class="clearfix"></div>
+        <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                                <div class="card-block">
+                                        <p>Todos los perfiles con privilegios dentro del sistema</p>
+                                        <div class="table-overflow">
+                                                <table class="table table-hover table-sm table-striped">
+                                                        <thead>
+                                                                <tr>
+                                                                        <th>Nombre del Perfil</th>
+                                                                        <th style="width:130px;"></th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                                <tr *ngFor="let perfil of perfiles">
+                                                                        <td>{{perfil.Nombre}}</td>
+                                                                        <td class="text-center">
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerPerfil(perfil.Id_Perfil, ModalVerPerfil)">
+                                                                                        <i class="ti-search"></i>
+                                                                                </button>
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarPerfil(perfil.Id_Perfil)">
+                                                                                        <i class="ti-pencil"></i>
+                                                                                </button>
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Perfil, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                                                        (confirm)="EliminarPerfil(perfil.Id_Perfil)">
+                                                                                        <i class="ti-trash"></i>
+                                                                                </button>
+                                                                        </td>
+                                                                </tr>
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
 </div>
 
 
@@ -375,290 +374,289 @@
                                 </div>
                         </div>
 
-            
-        </form>    
-    </div>        
-    <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary"
-                    [disabled]="!nombre.valid"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarPerfil(FormPerfil, ModalPerfil)" >Actualizar Información</button>
-            </div>
+
+                </form>
+        </div>
+        <div class="app-modal-footer">
+                <div class="text-right">
+                        <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                (confirm)="GuardarPerfil(FormPerfil, ModalPerfil)">Actualizar Información</button>
+                </div>
         </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerPerfil" #ModalVerPerfil>
-    <div class="app-modal-header">
-            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
-        <h4>Ver Perfil de Privilegios</h4>
-    </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerPerfil="ngForm">
-                <div class="col-md-4" hidden>
-                    <div class="form-group">
-                        <label>Identificación</label>
-                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                    </div>
+        <div class="app-modal-header">
+                <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+                        (click)="OcultarFormularios()">X</button>
+                <h4>Ver Perfil de Privilegios</h4>
+        </div>
+        <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+                <form #FormVerPerfil="ngForm">
+                        <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                        <label>Identificación</label>
+                                        <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <div class="form-group">
+                                                <label>Nombre: </label>
+                                                <label>{{Nombre}}</label>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <div class="form-group">
+                                                <label>Detalles: </label>
+                                                <label>{{Detalle}}</label>
+                                        </div>
+                                </div>
+                        </div>
+                        <hr>
+                        <h4>Privilegios</h4>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Transferencias</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" [checked]=true name="" id="transfVer2" hidden />
+                                                <label for="transfVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="transfEditar2" hidden />
+                                                <label for="transfEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="transfEliminar2" hidden />
+                                                <label for="transfEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Traslados</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="traslVer2" hidden />
+                                                <label for="traslVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="traslEditar2" hidden />
+                                                <label for="traslEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="traslEliminar2" hidden />
+                                                <label for="traslEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Cajas/POS</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasVer2" hidden />
+                                                <label for="cajasVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasEditar2" hidden />
+                                                <label for="cajasEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasEliminar2" hidden />
+                                                <label for="cajasEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Giros</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="girosVer2" hidden />
+                                                <label for="girosVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="girosEditar2" hidden />
+                                                <label for="girosEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="girosEliminar2" hidden />
+                                                <label for="girosEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Corresponsales Bancarios</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="corrVer2" hidden />
+                                                <label for="corrVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="corrEditar2" hidden />
+                                                <label for="corrEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="corrEliminar2" hidden />
+                                                <label for="corrEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Servicios Externos</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="servVer2" hidden />
+                                                <label for="servVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="servEditar2" hidden />
+                                                <label for="servEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="servEliminar2" hidden />
+                                                <label for="servEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Configuración</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="confVer2" hidden />
+                                                <label for="confVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="confEditar2" hidden />
+                                                <label for="confEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="confEliminar2" hidden />
+                                                <label for="confEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center">Indicadores Gráficos</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="indiVer2" hidden />
+                                                <label for="indiVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="indiEditar2" hidden />
+                                                <label for="indiEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="indiEliminar2" hidden />
+                                                <label for="indiEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-12" align="center" style="padding: 2px 0;">Reportes</div>
+                        </div>
+                        <div class="row" style="border-style: solid; border-width:1px">
+                                <div class="col-md-4" align="center" style=" padding: 2px 0;">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="reporVer2" hidden />
+                                                <label for="reporVer2"></label>
+                                        </div>
+                                        <label>Ver</label>
+                                </div>
+                                <div class="col-md-4" align="center" style=" padding: 2px 0;">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="reporEditar2" hidden />
+                                                <label for="reporEditar2"></label>
+                                        </div>
+                                        <label>Editar</label>
+                                </div>
+                                <div class="col-md-4" align="center" style=" padding: 2px 0;">
+                                        <div class="checkboxTwo">
+                                                <input type="checkbox" ng-checked="all" name="" id="reporEliminar2" hidden />
+                                                <label for="reporEliminar2"></label>
+                                        </div>
+                                        <label>Eliminar</label>
+                                </div>
+                        </div>
+                </form>
+        </div>
+        <div class="app-modal-footer">
+                <div class="text-right">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerPerfil)">Cerrar</button>
                 </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Nombre: </label>
-                        <label>{{Nombre}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Detalles: </label>
-                        <label>{{Detalle}}</label>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <h4>Privilegios</h4>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Transferencias</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" [checked]=true name="" id="transfVer2" hidden />
-                                    <label for="transfVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="transfEditar2" hidden />
-                                    <label for="transfEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="transfEliminar2" hidden />
-                                    <label for="transfEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Traslados</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="traslVer2" hidden />
-                                    <label for="traslVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="traslEditar2" hidden />
-                                    <label for="traslEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="traslEliminar2" hidden />
-                                    <label for="traslEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Cajas/POS</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="cajasVer2" hidden />
-                                    <label for="cajasVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="cajasEditar2" hidden />
-                                    <label for="cajasEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="cajasEliminar2" hidden />
-                                    <label for="cajasEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Giros</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="girosVer2" hidden />
-                                    <label for="girosVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="girosEditar2" hidden />
-                                    <label for="girosEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="girosEliminar2" hidden />
-                                    <label for="girosEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Corresponsales Bancarios</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="corrVer2" hidden />
-                                    <label for="corrVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="corrEditar2" hidden />
-                                    <label for="corrEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="corrEliminar2" hidden />
-                                    <label for="corrEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Servicios Externos</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="servVer2" hidden />
-                                    <label for="servVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="servEditar2" hidden />
-                                    <label for="servEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="servEliminar2" hidden />
-                                    <label for="servEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Configuración</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="confVer2" hidden />
-                                    <label for="confVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="confEditar2" hidden />
-                                    <label for="confEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="confEliminar2" hidden />
-                                    <label for="confEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" >Indicadores Gráficos</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="indiVer2" hidden />
-                                    <label for="indiVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="indiEditar2" hidden />
-                                    <label for="indiEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="indiEliminar2" hidden />
-                                    <label for="indiEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                    </div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-12" align="center" style="padding: 2px 0;">Reportes</div>
-            </div>
-            <div class="row" style="border-style: solid; border-width:1px">
-                    <div class="col-md-4" align="center" style=" padding: 2px 0;">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="reporVer2" hidden />
-                                    <label for="reporVer2"></label>
-                            </div>
-                            <label>Ver</label>
-                    </div>
-                    <div class="col-md-4" align="center" style=" padding: 2px 0;">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="reporEditar2" hidden />
-                                    <label for="reporEditar2"></label>
-                            </div>
-                            <label>Editar</label>
-                    </div>
-                    <div class="col-md-4" align="center" style=" padding: 2px 0;">
-                            <div class="checkboxTwo">
-                                    <input type="checkbox" ng-checked="all" name="" id="reporEliminar2" hidden />
-                                    <label for="reporEliminar2"></label>
-                            </div>
-                            <label>Eliminar</label>
-                </div>
-            </div>
-        </form>    
-    </div>
-    <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerPerfil)" >Cerrar</button>
-            </div>
         </div>
 </app-modal-basic>
 
@@ -681,7 +679,8 @@
                                 <div class="col-md-12">
                                         <div class="form-group">
                                                 <label>Nombre</label>
-                                                <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                                                <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                                                        (focusout)="boolNombre = true" required #nombreEd="ngModel">
                                                 <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
                                                 <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">All checked!</div>
                                         </div>
@@ -996,35 +995,14 @@
                         <button class="btn btn-primary btn-sm" [disabled]="!nombreEd.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                 (confirm)="GuardarPerfil(FormEditarPerfil, ModalEditarPerfil)">Guardar</button>
                 </div>
-            </div>
-        </form>    
-    </div>
-    <div class="app-modal-footer">
-            <div class="text-right">
-                <button class="btn btn-primary btn-sm"
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarPerfil(FormEditarPerfil, ModalEditarPerfil)">Guardar</button>
-            </div>
         </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
 </swal>
 
-<swal #deleteSwal
-  title="Perfil Eliminado"
-  text="Se ha eliminado correctamente el perfil"
-  type="success"
-  >
-  </swal>
+<swal #deleteSwal title="Perfil Eliminado" text="Se ha eliminado correctamente el perfil" type="success">
+</swal>
