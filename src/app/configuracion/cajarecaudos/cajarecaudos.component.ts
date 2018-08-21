@@ -34,6 +34,10 @@ export class CajarecaudosComponent implements OnInit {
   public boolDepartamento:boolean = false;
   public boolMunicipio:boolean = false;
 
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
+
 
   @ViewChild('ModalCaja') ModalCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
@@ -83,12 +87,6 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-  Municipios_Departamento(Departamento){
-    this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
-      this.Municipios= data;
-    });
-  }
-
   GuardarCaja(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
@@ -105,6 +103,8 @@ export class CajarecaudosComponent implements OnInit {
       this.ActualizarVista();
       formulario.reset();
       this.InicializarBool();
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
       this.saveSwal.show();
     });
   }
@@ -152,6 +152,12 @@ export class CajarecaudosComponent implements OnInit {
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
       this.ActualizarVista();
+    });
+  }
+
+  Municipios_Departamento(Departamento){
+    this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
+      this.Municipios= data;
     });
   }
   

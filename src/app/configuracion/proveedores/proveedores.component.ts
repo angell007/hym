@@ -45,6 +45,12 @@ export class ProveedoresComponent implements OnInit {
   public boolMunicipio:boolean = false;
   public boolRazonSocial:boolean = false;
 
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
+  confiabilidadDefault: string = "Confiable";
+  regimenDefault: string = "Comun";
+
   @ViewChild('ModalProveedor') ModalProveedor:any;
   @ViewChild('ModalVerProveedor') ModalVerProveedor:any;
   @ViewChild('ModalEditarProveedor') ModalEditarProveedor:any;
@@ -52,7 +58,8 @@ export class ProveedoresComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
-  
+  @ViewChild('duplicateSwal') duplicateSwal:any;
+
   constructor(private http : HttpClient, private globales : Globales) { } 
 
   ngOnInit() {
@@ -114,13 +121,23 @@ export class ProveedoresComponent implements OnInit {
     .catch(error => { 
       console.error('An error occurred:', error.error);
       this.errorSwal.show();
+
+      var test = error.error.text;
+      if (test.indexOf('Duplicate') >= 0) {
+        this.duplicateSwal.show();
+      }
+
       return this.handleError(error);
     })
     .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
-      this.saveSwal.show();
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
+      this.confiabilidadDefault = "";
+      this.regimenDefault = "";
+      this.saveSwal.show()
     });
     
   }

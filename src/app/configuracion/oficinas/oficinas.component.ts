@@ -12,7 +12,9 @@ import { Globales } from '../../shared/globales/globales';
   templateUrl: './oficinas.component.html',
   styleUrls: ['./oficinas.component.css']
 })
+
 export class OficinasComponent implements OnInit {
+
   public oficinas : any[];
   public Departamentos : any[];
   public Municipios : any[];
@@ -21,19 +23,10 @@ export class OficinasComponent implements OnInit {
   public edi_visible = false;
   public edi_visibleAnimate  = false;
   public Identificacion ;
-  public Nombre : any[];
-  public Direccion : any[];
+
+  public Datos : any[] = [];
   public Departamento : any[];
   public Municipio : any[];
-  public Telefono : any[];
-  public Celular : any[];
-  public Correo : any[];
-  public Comision : any[];
-  public MinCompra : any[];
-  public MaxCompra : any[];
-  public MinVenta : any[];
-  public MaxVenta : any[];
-  public Valores : any[];
 
   public boolNombre:boolean = false;
   public boolDireccion:boolean = false;
@@ -49,8 +42,9 @@ export class OficinasComponent implements OnInit {
   public boolMaxVenta:boolean = false;
   public boolValores:boolean = false;
 
-
-
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
 
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
@@ -59,9 +53,9 @@ export class OficinasComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
-  
+
   constructor(private http: HttpClient,private globales: Globales) { }
-  
+
   ngOnInit() {
     this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
@@ -107,29 +101,36 @@ export class OficinasComponent implements OnInit {
     });
   }
 
-  /**
-   *se llama a esta función cuando se selecciona un departamento en el combo box de departamentos
-   *para hacer una consulta a la base de datos con el departamento seleccionado y llenar el combo box 
-   *de municipios con los municipios correspondientes a ese departamento
-   *
-   * @param {*} Departamento
-   * @memberof OficinasComponent
-   */
   Municipios_Departamento(Departamento){
     this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
     });
   }
 
-  /**
-   *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
-   *datos.append("modulo", 'nombre de la tabla')
-   *
-   * @param {NgForm} formulario
-   * @memberof OficinasComponent
-   */
-  
    GuardarOficina(formulario: NgForm, modal:any){
+   let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    this.OcultarFormulario(modal);
+    datos.append("modulo",'Oficina');
+    datos.append("datos",info);
+    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{  
+      formulario.reset();
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
+      this.ActualizarVista();
+      this.InicializarBool();
+      this.saveSwal.show();
+    });
+  }
+
+
+  GuardarOficinaEditar(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     this.OcultarFormulario(modal);
@@ -141,9 +142,9 @@ export class OficinasComponent implements OnInit {
       this.errorSwal.show();
       return this.handleError(error);
     })
-    .subscribe((data:any)=>{      
+    .subscribe((data:any)=>{  
+      
       this.ActualizarVista();
-      formulario.reset();
       this.InicializarBool();
       this.saveSwal.show();
     });
@@ -158,63 +159,27 @@ export class OficinasComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/oficinas/detalle_oficina.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
+      this.Datos=data;      
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Direccion = data.Direccion;
-      this.Departamento = data.Departamento;
-      this.Municipio = data.Municipio;
-      this.Telefono = data.Telefono;
-      this.Celular = data.Celular;
-      this.Correo = data.Correo;
-      this.Comision = data.Comision;
-      this.MinCompra = data.MinCompra;
-      this.MaxCompra = data.MaxCompra;
-      this.MinVenta = data.MinVenta;
-      this.MaxVenta = data.MaxVenta;
-      this.Valores = data.Valores;
       modal.show();
     });
   }
 
-
-
-  /**
-   *
-   *actualiza los datos correspondientes al id que se le pasa como primer parametro en la tabla que se especifica en
-   *params:{modulo:'nombre de la tabla', id:id}
-   * @param {*} id
-   * @param {*} modal
-   * @memberof OficinasComponent
-   */
   EditarOficina(id, modal){
     this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Oficina', id:id}
     }).subscribe((data:any)=>{
+
+      this.Datos=data;           
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Direccion = data.Direccion;
       this.Departamento = data.Id_Departamento;
       this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
-      this.Telefono = data.Telefono;
-      this.Celular = data.Celular;
-      this.Correo = data.Correo;
-      this.Comision = data.Comision;
-      this.MinCompra = data.Min_Compra;
-      this.MaxCompra = data.Max_Compra;
-      this.MinVenta = data.Min_Venta;
-      this.MaxVenta = data.Max_Venta;
-      this.Valores = data.Valores;
+      
       modal.show();
     });
   }
 
-  /**
-   *elimina la oficina correspondiente al id que se le envia
-   *
-   * @param {*} id
-   * @memberof OficinasComponent
-   */
   EliminarOficina(id){
     let datos = new FormData();
     datos.append("modulo", 'Oficina');
@@ -225,15 +190,6 @@ export class OficinasComponent implements OnInit {
     });
   }
 
-
-  /**
-   *carga los municipios correspondietes al departamento que se asigno al formulario en la consulta de la función
-   *Editar() y luego asigna el municipio correspondiente obtenido en la consulta de la función Editar.
-   *
-   * @param {*} Departamento departamento del que se obtendran los municipios
-   * @param {*} Municipio municipio que se asignara una vez se cargue la lista de municipios
-   * @memberof OficinasComponent
-   */
   AutoSleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
@@ -242,20 +198,7 @@ export class OficinasComponent implements OnInit {
   }
 
   OcultarFormulario(modal){
-    this.Identificacion = null;
-    this.Nombre = null;
-    this.Direccion = null;
-    this.Departamento = null;
-    this.Municipio = null;
-    this.Telefono = null;
-    this.Celular = null;
-    this.Correo = null;
-    this.Comision = null;
-    this.MinCompra = null;
-    this.MaxCompra = null;
-    this.MinVenta = null;
-    this.MaxVenta = null;
-    this.Valores = null;
+
     modal.hide();
   }
 

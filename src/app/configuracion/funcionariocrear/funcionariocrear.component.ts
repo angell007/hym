@@ -4,6 +4,9 @@ import { NgForm } from '@angular/forms';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { CommonModule } from '@angular/common';
 import { Globales } from '../../shared/globales/globales';
+import { FormWizardModule } from 'angular2-wizard/dist';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-funcionariocrear',
@@ -100,7 +103,7 @@ export class FuncionariocrearComponent implements OnInit {
     }
   ];
 
-  constructor(private http : HttpClient,private globales: Globales) { }
+  constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
   CargaFoto(event){
     let fot = document.getElementById("foto_visual") as HTMLImageElement;
@@ -121,8 +124,6 @@ export class FuncionariocrearComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
 
-
-
   ngOnInit() {
    /* this.http.get(this.globales.ruta+'php/lista_generales.php',{params: {modulo:'Funcionario'}}).subscribe((data:any)=>{
       this.funcionario=data;
@@ -138,25 +139,34 @@ export class FuncionariocrearComponent implements OnInit {
   this.http.get(this.globales.ruta+'php/lista_generales.php',{params: {modulo:'Cargo'}}).subscribe((data:any)=>{
   this.Cargos=data;
 })*/
-this.http.get(this.globales.ruta+'php/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
+this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
   this.Grupos= data;
 });
 }
 
-Grupo_Dependencia(Grupo){
+Dependencia_Grupo(Grupo){
   this.http.get(this.globales.ruta+'php/funcionarios/dependencias_grupo.php',{ params: { id: Grupo}}).subscribe((data:any)=>{
     this.Dependencias= data;
   });
 }
-Dependencia_Cargo(Dependencia){
+
+/*
+AutoSeleccionarDependencia(Grupo, Dependencia){
+  this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
+    this.Municipios= data;
+    this.Municipio = Municipio;
+  });
+}
+*/
+Cargo_Dependencia(Dependencia){
   this.http.get(this.globales.ruta+'php/funcionarios/cargos_dependencia.php',{ params: { id: Dependencia}}).subscribe((data:any)=>{
     this.Cargos= data;
   });
 }
 
-
- 
 GuardarFuncionario(formulario: NgForm){ 
+  console.log(formulario.value);
+  
    let info = JSON.stringify(formulario.value);
    let func = JSON.stringify(this.funcionario);
    let conemer = JSON.stringify(this.contacto_emergencia);
@@ -177,23 +187,18 @@ GuardarFuncionario(formulario: NgForm){
     this.confirmacionSwal.show();
     this.Fotos = [];
     formulario.reset();
+    this.VerPantallaLista();
    }); 
  }
-
-  /*GuardarFuncionario(formulario:NgForm, modal){
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo",'funcionario');
-    datos.append("datos",info);
-    modal.hide();
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{
-      formulario.reset();
-      this.funcionario= data;
-    });
-  }*/
-
-  
-
+ 
+ VerPantallaLista(){
+  this.router.navigate(['/funcionarios']);    
+}
+/*
+ onStep4Next(a){
+   alert(a);
+ }
+*/
 EliminarFuncionario(id){    
     let datos=new FormData();
     datos.append("modulo", 'funcionario');
@@ -220,7 +225,5 @@ EliminarFuncionario(id){
       
     });
   }
-
-  
 }
 

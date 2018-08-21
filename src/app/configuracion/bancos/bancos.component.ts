@@ -26,6 +26,9 @@ export class BancosComponent implements OnInit {
   public boolId:boolean = false;
   public boolPais:boolean = false;
 
+  //Valores por defecto
+  paisDefault: string = "";
+
   rowsFilter = [];
   tempFilter = [];
 
@@ -90,6 +93,7 @@ export class BancosComponent implements OnInit {
       formulario.reset();
       this.ActualizarVista();
       this.InicializarBool();
+      this.paisDefault = "";
       this.saveSwal.show();
     });
   }

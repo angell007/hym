@@ -38,7 +38,12 @@ import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobra
 import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
 import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
-
+import { FuncionarioeditarComponent } from './configuracion/funcionarioeditar/funcionarioeditar.component';
+import { FuncionarioverComponent } from './configuracion/funcionariover/funcionariover.component';
+import { TipodocumentoextranjeroComponent } from "./configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component";
+import { TipocuentaComponent } from "./configuracion/tipocuenta/tipocuenta.component";
+import { LiquidacionsalarioComponent } from "./liquidacionsalario/liquidacionsalario.component";
+import { CargosComponent } from "./configuracion/cargos/cargos.component";
 
 export const AppRoutes: Routes = [
     { 
@@ -168,10 +173,34 @@ export const AppRoutes: Routes = [
     { 
         path : 'cuentasterceros', component : CommonLayoutComponent,
         children:[{path : '', component : CuentastercerosComponent, canActivate:[AuthGuard]}]
-    },      
+    },
+    { 
+        path : 'funcionarioeditar/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : FuncionarioeditarComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'funcionariover/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : FuncionarioverComponent, canActivate:[AuthGuard]}]
+    },    
     { 
         path : 'informaciongiros', component : CommonLayoutComponent,
         children:[{path : '', component : InformaciongirosComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'tipodocumentoextranjero', component : CommonLayoutComponent,
+        children:[{path : '', component : TipodocumentoextranjeroComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'tipocuenta', component : CommonLayoutComponent,
+        children:[{path : '', component : TipocuentaComponent, canActivate:[AuthGuard]}]
+    },   
+    { 
+        path : 'liquidacionsalario', component : CommonLayoutComponent,
+        children:[{path : '', component : LiquidacionsalarioComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cargo', component : CommonLayoutComponent,
+        children:[{path : '', component : CargosComponent, canActivate:[AuthGuard]}]
     },
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

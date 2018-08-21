@@ -1,85 +1,88 @@
 <div class="container-fluid">
     <div class="page-title">
-      <h4 class="pull-left">Proveedores</h4>
-      <button class="pull-right btn btn-info" (click)="ModalProveedor.show()"><i class="ti-plus"></i> Agregar Nuevo Proveedor</button>
+        <h4 class="pull-left">Proveedores</h4>
+        <button class="pull-right btn btn-info" (click)="ModalProveedor.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Proveedor</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-block">
-            <p>Tenemos los proveedores de nuestra empresa</p>
-            <div class="table-overflow">
-              <table class="table table-hover table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th style="width:120px;">Identificación</th>
-                    <th>Nombre</th>
-                    <th style="width:100px">Ciudad</th>
-                    <th style="width:80px;">Confiabilidad</th>
-                    <th style="width:130px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let proveedor of proveedores">
-                    <td style="vertical-align: middle;">{{proveedor.Id_Proveedor}}</td>
-                    <td style="vertical-align: middle;">{{proveedor.Nombre}}</td>
-                    <td style="vertical-align: middle;">{{proveedor.Municipio}}</td>
-                    <td style="vertical-align: middle;" class="text-center">{{proveedor.Confiable}}</td>
-                    <td style="vertical-align: middle;" class="text-center">
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerProveedor(proveedor.Id_Proveedor, ModalVerProveedor)">
-                              <i class="ti-search"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarProveedor(proveedor.Id_Proveedor, ModalEditarProveedor)">
-                              <i class="ti-pencil"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                            [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Proveedor, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
-                            (confirm)="EliminarProveedor(proveedor.Id_Proveedor)"
-                            >
-                              <i class="ti-trash"></i>
-                            </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <p>Tenemos los proveedores de nuestra empresa</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:120px;">Identificación</th>
+                                    <th>Nombre</th>
+                                    <th style="width:100px">Ciudad</th>
+                                    <th style="width:80px;">Confiabilidad</th>
+                                    <th style="width:130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let proveedor of proveedores">
+                                    <td style="vertical-align: middle;">{{proveedor.Id_Proveedor}}</td>
+                                    <td style="vertical-align: middle;">{{proveedor.Nombre}}</td>
+                                    <td style="vertical-align: middle;">{{proveedor.Municipio}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">{{proveedor.Confiable}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerProveedor(proveedor.Id_Proveedor, ModalVerProveedor)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarProveedor(proveedor.Id_Proveedor, ModalEditarProveedor)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Proveedor, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EliminarProveedor(proveedor.Id_Proveedor)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalProveedor" #ModalProveedor>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Nuevo Proveedor</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormProveedor="ngForm">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Proveedor" class="form-control" name="Id_Proveedor" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdentificacion = true" required #identificacion="ngModel">
-                        <div *ngIf="!identificacion.valid && boolIdentificacion==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="identificacion.valid && boolIdentificacion==true" style="color:green">All checked!</div>
+                        <input type="text" placeholder="Identificación Proveedor" class="form-control" name="Id_Proveedor" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolIdentificacion = true" required #identificacion="ngModel">
+                        <div *ngIf="!identificacion.valid && boolIdentificacion==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="identificacion.valid && boolIdentificacion==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre Comercial</label>
-                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
+                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolNombre = true" required #nombre="ngModel">
+                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Razón Social</label>
-                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="" (focus)="$event.target.select()" (focusout)="boolRazonSocial = true" required #razonSocial="ngModel">
-                        <div *ngIf="!razonSocial.valid && boolRazonSocial==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="razonSocial.valid && boolRazonSocial==true" style="color:green">All checked!</div>
+                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolRazonSocial = true" required #razonSocial="ngModel">
+                        <div *ngIf="!razonSocial.valid && boolRazonSocial==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="razonSocial.valid && boolRazonSocial==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -87,39 +90,43 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
-                        <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">All checked!</div>
+                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolDireccion = true" required #direccion="ngModel">
+                        <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
-                            <option value="" >Seleccione Departamento</option>
+                        <select class="form-control" name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true"
+                            required #departamento="ngModel">
+                            <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!departamento.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamento.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!municipio.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipio.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
-                        <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">All checked!</div>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                            name="Telefono" ngModel="" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required
+                            #telefono="ngModel">
+                        <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -127,23 +134,27 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
-                        <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="celular.valid && boolCelular==true" style="color:green">All checked!</div>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                            name="Celular" ngModel="" (focus)="$event.target.select()" (focusout)="boolCelular = true" required
+                            #celular="ngModel">
+                        <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="celular.valid && boolCelular==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
-                        <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="correo.valid && boolCorreo==true" style="color:green">All checked!</div>
+                        <input type="email" email placeholder="" class="form-control" name="Correo" ngModel="" (focus)="$event.target.select()" (focusout)="boolCorreo = true"
+                            required #correo="ngModel">
+                        <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="correo.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Confiabilidad</label>
-                        <select class="form-control" name="Confiable" ng-model="selected" >
+                        <select class="form-control" name="Confiable" ng-model="selected" [(ngModel)]="confiabilidadDefault" required>
+                            <option value="">---------</option>
                             <option ng-selected="selected">Confiable</option>
                             <option>No Confiable</option>
                         </select>
@@ -152,13 +163,14 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Régimen</label>
-                        <select class="form-control" name="Regimen" ng-model="selected">
-                            <option ng-selected="selected">Común</option>
+                        <select class="form-control" name="Regimen" ng-model="selected" [(ngModel)]="regimenDefault" required>
+                            <option value="">---------</option>
+                            <option ng-selected="selected">Comun</option>
                             <option>Simplificado</option>
                         </select>
                     </div>
                 </div>
-            </div> 
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-12">
@@ -168,23 +180,24 @@
                     </div>
                 </div>
             </div>
-        </form>   
+        </form>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary"
-                [disabled]="!nombre.valid || !identificacion.valid || !direccion.valid || !telefono.valid || !celular.valid || !correo.valid || !razonSocial.valid || departamento.value=='' || municipio.value==''"
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid || !identificacion.valid || !direccion.valid || !telefono.valid || !celular.valid || !correo.valid || !razonSocial.valid || departamento.value=='' || municipio.value==''"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarProveedor(FormProveedor, ModalProveedor)" >Actualizar Información</button>
-            </div>
+                (confirm)="GuardarProveedor(FormProveedor, ModalProveedor)">Actualizar Información</button>
         </div>
+    </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerProveedor" #ModalVerProveedor>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Ver Proveedor</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerProveedor="ngForm">
             <div class="row">
                 <div class="col-md-4" hidden>
@@ -195,93 +208,117 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <strong><label>Nombre Comercial: </label></strong>
-                                <label>{{Nombre}}</label>
-                            </div>
+                        <strong>
+                            <label>Nombre Comercial: </label>
+                        </strong>
+                        <label>{{Nombre}}</label>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <strong><label>Razon Social: </label></strong>
-                                <label>{{RazonSocial}}</label>
-                            </div>
+                        <strong>
+                            <label>Razon Social: </label>
+                        </strong>
+                        <label>{{RazonSocial}}</label>
+                    </div>
                 </div>
-                </div>
-                <div class="row">
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <strong><label>Direccion: </label></strong>
-                                <label>{{Direccion}}</label>
+                        <strong>
+                            <label>Direccion: </label>
+                        </strong>
+                        <label>{{Direccion}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Departamento: </label></strong>
-                                <label>{{Departamento}}</label>
+                        <strong>
+                            <label>Departamento: </label>
+                        </strong>
+                        <label>{{Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Municipio: </label></strong>
-                                <label>{{Municipio}}</label>
+                        <strong>
+                            <label>Municipio: </label>
+                        </strong>
+                        <label>{{Municipio}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <strong><label>Telefono: </label></strong>
-                                <label>{{Telefono}}</label>
+                        <strong>
+                            <label>Telefono: </label>
+                        </strong>
+                        <label>{{Telefono}}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Celular: </label></strong>
-                                <label>{{Celular}}</label>
+                        <strong>
+                            <label>Celular: </label>
+                        </strong>
+                        <label>{{Celular}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Correo: </label></strong>
-                                <label>{{Correo}}</label>
+                        <strong>
+                            <label>Correo: </label>
+                        </strong>
+                        <label>{{Correo}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Confiabilidad: </label></strong>
-                                <label>{{Confiable}}</label>
+                        <strong>
+                            <label>Confiabilidad: </label>
+                        </strong>
+                        <label>{{Confiable}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <strong><label>Regimen: </label></strong>
-                                <label>{{Regimen}}</label>
+                        <strong>
+                            <label>Regimen: </label>
+                        </strong>
+                        <label>{{Regimen}}</label>
                     </div>
                 </div>
-            </div> 
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <strong><label>Detalles: </label></strong>
-                                <label>{{Detalle}}</label>
+                        <strong>
+                            <label>Detalles: </label>
+                        </strong>
+                        <label>{{Detalle}}</label>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerProveedor)" >Cerrar</button>
-                </div>
-            </div>
-        </form>   
-    </div>         
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerProveedor)">Cerrar</button>
+        </div>
+    </div>
 </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarProveedor" #ModalEditarProveedor>
     <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
         <h4>Editar Proveedor</h4>
     </div>
-    <div class="app-modal-body">
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarProveedor="ngForm">
             <div class="row">
                 <div class="col-md-4">
@@ -293,45 +330,62 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre Comercial</label>
-                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Comercial Proveedor" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                        (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Razón Social</label>
-                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="{{RazonSocial}}">
+                        <input type="text" placeholder="Razón Social Proveedor" class="form-control" name="Razon_Social" ngModel="{{RazonSocial}}" (focus)="$event.target.select()"
+                        (focusout)="boolRazonSocial = true" required #razonSocialEd="ngModel">
+                        <div *ngIf="!razonSocialEd.valid && boolRazonSocial==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="razonSocialEd.valid && boolRazonSocial==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                </div>
-                <div class="row">
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                        <input type="text" placeholder="Dirección del Proveedor" class="form-control" name="Direccion" ngModel="{{Direccion}}" (focus)="$event.target.select()"
+                        (focusout)="boolDireccion = true" required #direccionEd="ngModel">
+                        <div *ngIf="!direccionEd.valid && boolDireccion==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="direccionEd.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}">
+                        <select class="form-control" name="Id_Departamento" (change)="Municipios_Departamento($event.target.value)" ngModel="{{IdDepartamento}}" (click)="boolDepartamento=true"
+                        required #departamentoEd="ngModel">
                             <option>Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
+                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamentoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="{{IdMunicipio}}">
+                        <select class="form-control" name="Id_Municipio" ngModel="{{IdMunicipio}}" (click)="boolMunicipio=true" required #municipioEd="ngModel">
                             <option>Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
+                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipioEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                        <input type="text" placeholder="Teléfono del Proveedor" class="form-control" name="Telefono" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required
+                        #telefonoEd="ngModel">
+                        <div *ngIf="!telefonoEd.valid && boolTelefono==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="telefonoEd.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -339,13 +393,19 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="{{Celular}}">
+                        <input type="text" placeholder="Celular del Proveedor" class="form-control" name="Celular" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required
+                        #celularEd="ngModel">
+                        <div *ngIf="!celularEd.valid && boolCelular==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="celularEd.valid && boolCelular==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="{{Correo}}">
+                        <input type="text" placeholder="Correo del Proveedor" class="form-control" name="Correo" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true"
+                        required #correoEd="ngModel">
+                        <div *ngIf="!correoEd.valid && boolCorreo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="correoEd.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -361,12 +421,12 @@
                     <div class="form-group">
                         <label>Régimen</label>
                         <select class="form-control" name="Regimen" ngModel="{{Regimen}}">
-                            <option>Común</option>
+                            <option>Comun</option>
                             <option>Simplificado</option>
                         </select>
                     </div>
                 </div>
-            </div> 
+            </div>
             <hr>
             <div class="row">
                 <div class="col-md-12">
@@ -376,34 +436,24 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button class="btn btn-primary btn-sm" 
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este proveedor' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarProveedor(FormEditarProveedor, ModalEditarProveedor)">Guardar</button>
-                </div>
-            </div>
-        </form>   
-    </div>         
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este proveedor' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarProveedor(FormEditarProveedor, ModalEditarProveedor)">Guardar</button>
+        </div>
+    </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
 </swal>
 
-<swal #deleteSwal
-  title="Proveedor Eliminado"
-  text="Se ha Eliminado correctamente el proveedor"
-  type="success"
-  >
-  </swal>
+<swal #deleteSwal title="Proveedor Eliminado" text="Se ha Eliminado correctamente el proveedor" type="success">
+</swal>
+
+<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
+</swal>

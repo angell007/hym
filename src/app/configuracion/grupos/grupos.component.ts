@@ -22,7 +22,10 @@ export class GruposComponent implements OnInit {
   public Padre : any[];
 
   public boolNombre:boolean = false;
-  public boolPadre:boolean = false;
+
+  //Valores por defecto
+  padreDefault: string = "Ninguno";
+
 
   @ViewChild('ModalGrupo') ModalGrupo:any;
   @ViewChild('ModalVerGrupo') ModalVerGrupo:any;
@@ -55,7 +58,6 @@ export class GruposComponent implements OnInit {
   InicializarBool()
   {
     this.boolNombre = false;
-    this.boolPadre = false;
   }
 
   ActualizarVista(){
@@ -81,6 +83,7 @@ export class GruposComponent implements OnInit {
       this.ActualizarVista();
       this.InicializarBool();
       this.saveSwal.show();
+      this.padreDefault = "Ninguno";
     });
     
   }

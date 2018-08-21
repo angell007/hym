@@ -30,6 +30,7 @@ export class TipodocumentoComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormDocumento') FormDocumento:any;
+  Orden: any;
 
   constructor(private http : HttpClient, private globales: Globales) { }
 
@@ -107,6 +108,7 @@ export class TipodocumentoComponent implements OnInit {
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.Codigo = data.Codigo;
+      this.Orden = data.Orden;
       modal.show();
     });
   }
