@@ -160,7 +160,7 @@
                                 <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
-                                <b class="text-dark font-size-22">Recibo de transferencias</b>
+                                <b class="text-dark font-size-22">Transferencias</b>
                                 <p class="no-mrg-btm ">A cuentas extranjeras</p>
                             </div>
                         </li>
@@ -326,14 +326,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group text-center">
                                         <label>Moneda de Transferencia</label>
-                                        <select class="form-control" name="Moneda_Destino" ngModel="{{MonedaTransferencia}}" (change)="CambiarTasaCambio($event.target.selectedIndex)"
+                                        <select class="form-control" name="Moneda_Destino" ngModel="{{MonedaTransferencia}}" (change)="RealizarCambio($event.target.selectedIndex, 'recibir')"
                                             (click)="boolMonedaTransferencia=true" required #monedaTransferencia="ngModel">
                                             <option value="">Seleccione una Moneda</option>
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Transferida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')"
+                                        <input id="Cantidad_Transferida" (blur)="NuevoDestinatario()" autocomplete="off" 
                                             type="number" min=0 placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida"
                                             name="Total_Transferencia" (click)="boolCantidadTransferencia=true" required #cantidadTransferencia="ngModel">
                                         <div *ngIf="monedaTransferencia.value=='' && boolMonedaTransferencia==true" style="color:red">Moneda incorrecta</div>
@@ -805,7 +805,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Numero de Cuenta</label>
-                        <input type="number" (blur)="AgregarFormCuenta()" (ngModelChange)="AutoSeleccionarBanco($event, i)" placeholder="Número de Cuenta sin Espacios"
+                        <input type="number" (ngModelChange)="AutoSeleccionarBanco($event, i)" placeholder="Número de Cuenta sin Espacios"
                             step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control"
                             name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta" (focusout)="boolCuenta = true" required
                             #cuenta="ngModel">
@@ -816,37 +816,37 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo de cuenta</label>
-                        <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="Cuenta.Tipo_Cuenta">
+                        <select class="form-control" name="Id_Tipo_Cuenta{{i}}" [(ngModel)]="Cuenta.Id_Tipo_Cuenta">
                             <option value="">Seleccione un tipo de cuenta</option>
-                            <option *ngFor="let TipoCuenta of TipoCuentas" [value]="TipoCuenta.Nombre">{{TipoCuenta.Nombre}}</option>
+                            <option *ngFor="let TipoCuenta of TipoCuentas" [value]="TipoCuenta.Id_Tipo_Cuenta">{{TipoCuenta.Nombre}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Pais{{i}}" [(ngModel)]="Cuenta.Pais" (click)="boolPais=true" required #pais="ngModel">
+                        <select class="form-control" name="Id_Pais{{i}}" [(ngModel)]="Cuenta.Id_Pais" (click)="boolPais=true" required #pais="ngModel">
                             <option value="">Seleccione País</option>
-                            <option *ngFor="let Pais of Paises" [value]="Pais.Nombre">{{Pais.Nombre}}</option>
+                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
                         <div *ngIf="pais.value=='' && boolPais==true" style="color:red">Campo inválido</div>
                         <div *ngIf="!pais.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" name="Banco{{i}}" [(ngModel)]="Cuenta.Banco" (click)="boolBanco=true" required #banco="ngModel">
+                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="Cuenta.Id_Banco" (click)="boolBanco=true" required #banco="ngModel" >
                             <option value="">Seleccione Banco</option>
-                            <option *ngFor="let Banco of Bancos" [value]="Banco.Nombre">{{Banco.Nombre}}</option>
+                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
                         <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
                         <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <button (click)="AgregarFormCuenta()">AGREGAR</button>
-                    <button (click)="EliminarFormCuenta(i)">ELIMINAR</button>
+                <div class="col-md-2">
+                    <button class="btn-mini btn-info" (click)="AgregarFormCuenta()"><i class="fa fa-plus"></i></button>
+                    <button class="btn-mini btn-danger" (click)="EliminarFormCuenta(i)"><i class="fa fa-trash-o"></i></button>
                 </div>
             </div>
         </form>
@@ -861,11 +861,11 @@
     </div>
     <div class="app-modal-footer" id="guardar">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" [disabled]="!nombre.valid || !identificacion.valid" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                (click)="GuardarDestinatario(FormDestinatario)">Guardar</button>
+                <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarDestinatario(FormDestinatario)" [disabled]="!nombre.valid || !identificacion.valid" class="btn btn-primary btn-sm btn-block">Guardar</button>
         </div>
     </div>
-
+    
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
