@@ -96,13 +96,14 @@
                                 <tr>
                                     <th scope="col">País</th>
                                     <th scope="col">Banco</th>
+                                    <th scope="col">Tipo de Cuenta</th>
                                     <th scope="col">Numero de Cuenta</th>
                                     <th scope="col">Agregar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
-                                    <td width="22.5%">
+                                    <td width="20%">
                                         <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Pais" (click)="boolPais=true" required #pais="ngModel">
                                             <option value="">Seleccione País</option>
                                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
@@ -110,7 +111,7 @@
                                         <div *ngIf="pais.value=='' && boolPais==true" style="color:red">Campo inválido</div>
                                         <div *ngIf="!pais.value==''" style="color:green">Datos correctos!</div>
                                     </td>
-                                    <td width="22.5%">
+                                    <td width="20%">
                                         <select class="form-control" name="Id_Banco{{i}}"  [(ngModel)]="item.Banco" (click)="boolBanco=true" required #banco="ngModel">
                                             <option value="">Seleccione Banco</option>
                                             <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
@@ -118,12 +119,20 @@
                                         <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
                                         <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
                                     </td>
-                                    <td width="22.5%">
-                                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Cuentas{{i}}" [(ngModel)]="item.Cuenta" (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuenta="ngModel">
+                                    <td width="20%"> <!-- MODIFICANDO -->
+                                        <select class="form-control" name="Tipo_Cuenta{{i}}"  [(ngModel)]="item.Cuenta" (click)="boolBanco=true" required #banco="ngModel">
+                                            <option value="">Seleccione Cuenta</option>
+                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
+                                        </select>
+                                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
+                                        <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
+                                    </td>
+                                    <td width="20%">
+                                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Numero_Cuenta{{i}}" [(ngModel)]="item.Numero_Cuenta" (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuenta="ngModel">
                                         <div *ngIf="!cuenta.valid && boolCuenta==true" style="color:red">Campo inválido</div>
                                         <div *ngIf="cuenta.valid && boolCuenta==true" style="color:green">Datos correctos!</div>
                                     </td>
-                                    <td width="10%">
+                                    <td width="20%">
                                     <button class="btn-mini btn-info" (click)="AgregarFila()">+</button>
                                     </td>
                                 </tr>
