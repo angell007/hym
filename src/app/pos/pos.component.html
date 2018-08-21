@@ -306,7 +306,7 @@
                                     </div>
                                     <div class="form-group">
                                         <!--Revisar Id?-->
-                                        <input id="Cantidad_Enviada" type="number" min=0 (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off"
+                                        <input id="Cantidad_Recibida" type="number" min=0 (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off"
                                             placeholder="Precio" class="form-control" [(ngModel)]="CantidadRecibida" name="Cantidad_Recibida"
                                             (click)="boolCantidadRecibida=true" required #cantidadRecibida="ngModel">
                                         <div *ngIf="monedaRecibida.value=='' && boolMonedaRecibida==true" style="color:red">Moneda incorrecta</div>
@@ -328,14 +328,14 @@
                                 <div class="col-md-4">
                                     <div class="form-group text-center">
                                         <label>Moneda de Transferencia</label>
-                                        <select class="form-control" name="Moneda_Destino" ngModel="{{MonedaTransferencia}}" (change)="CambiarTasa($event.target.selectedIndex)"
+                                        <select class="form-control" name="Moneda_Destino" ngModel="{{MonedaTransferencia}}" (change)="CambiarTasaCambio($event.target.selectedIndex)"
                                             (click)="boolMonedaTransferencia=true" required #monedaTransferencia="ngModel">
                                             <option value="">Seleccione una Moneda</option>
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <input id="Cantidad_Recibida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')"
+                                        <input id="Cantidad_Transferida" (blur)="NuevoDestinatario()" autocomplete="off" (ngModelChange)="RealizarCambio($event, 'recibir')"
                                             type="number" min=0 placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida"
                                             name="Total_Transferencia" (click)="boolCantidadTransferencia=true" required #cantidadTransferencia="ngModel">
                                         <div *ngIf="monedaTransferencia.value=='' && boolMonedaTransferencia==true" style="color:red">Moneda incorrecta</div>

@@ -715,6 +715,30 @@ export class PosComponent implements OnInit {
     }*/        
   }
 
+  CambiarTasaCambio(value)
+  {
+    var precio= ((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value);
+    switch(value){
+      case "1":{
+        //bolivar
+        //console.log(origen + "/" + precio);
+        //Cantidad_Transferida
+        var operacion = parseInt(value)/parseInt(precio);
+        //(document.getElementById("Cantidad_Transferida") as HTMLInputElement).value = operacion;
+        break;
+      }
+      
+      case "2":{
+        //peso
+        //console.log(origen + "*" + precio);
+        this.vueltos = parseInt(value)*parseInt(precio);
+        break;
+      }
+
+    }
+
+  }
+
   realizarCalculo(){
 
     var origen= ((document.getElementById("Valor") as HTMLInputElement).value);
