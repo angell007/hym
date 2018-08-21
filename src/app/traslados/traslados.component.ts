@@ -29,6 +29,8 @@ export class TrasladosComponent implements OnInit {
   public Valor : any[];
   public Detalle : any[];
   public Estado : any[];
+  public Fecha : any;
+  public Id_Traslado : any;
 
   public Proveedores : any[];
   public Bancos : any[];
@@ -56,6 +58,7 @@ export class TrasladosComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('confirmacionSwal') confirmacionSwal:any;
   readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date();
 
@@ -133,7 +136,7 @@ export class TrasladosComponent implements OnInit {
 
   GuardarTraslado(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
-    console.log(info);
+    //console.log(info);
     
 
     if(info.indexOf('"Id_Origen":""') >= 0) {
@@ -150,7 +153,7 @@ export class TrasladosComponent implements OnInit {
       datos.append("datos",info);
       this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos)
       .catch(error => { 
-        console.error('An error occurred:', error.error);
+        //console.error('An error occurred:', error.error);
         this.errorSwal.text = "Se ha generado un error al intentar guardar el documento";
         this.errorSwal.show();
         return this.handleError(error);
@@ -162,6 +165,47 @@ export class TrasladosComponent implements OnInit {
         this.tipoDefault = "";
         this.monedaDefault = "";
         this.estadoDefault = "";
+        this.saveSwal.show();
+      });
+    }
+    this.ActualizarVista();
+  }
+
+  ActualizarTraslado(formulario: NgForm, modal:any){
+    let info = JSON.stringify(formulario.value);
+    
+    
+
+    if(info.indexOf('"Id_Origen":""') >= 0) {
+      this.errorSwal.text = "No ha seleccionado un origen";
+      this.errorSwal.show();
+    }
+    else if(info.indexOf('"Id_Destino":""') >= 0) {
+      this.errorSwal.text = "No ha seleccionado un destino";
+      this.errorSwal.show();
+    }
+    else {
+      let datos = new FormData();
+      datos.append("modulo",'Traslado');
+      datos.append("datos",info);
+      console.log(info);
+      this.http.post(this.ruta+'php/traslados/traslado_editar.php',datos)
+      .catch(error => { 
+       // console.error('An error occurred:', error.error);
+        this.errorSwal.text = "Se ha generado un error al intentar guardar el documento";
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data:any)=>{ 
+        this.OcultarFormulario(modal);
+        formulario.reset();     
+        this.InicializarBool();
+        this.tipoDefault = "";
+        this.monedaDefault = "";
+        this.estadoDefault = "";
+        this.confirmacionSwal.title=data.titulo;
+        this.confirmacionSwal.text= data.mensaje;
+        this.confirmacionSwal.type= data.tipo;
         this.saveSwal.show();
       });
     }
@@ -185,6 +229,7 @@ export class TrasladosComponent implements OnInit {
       this.Origen = data.Origen;
       this.Tipo = data.Tipo;
       this.Valor = data.Valor;
+      this.Fecha=data.Fecha;
       modal.show();
     });
   }
@@ -213,9 +258,8 @@ export class TrasladosComponent implements OnInit {
 
   EliminarTraslado(id){
     let datos=new FormData();
-    datos.append("modulo", 'Traslado');
     datos.append ("id",id);
-    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
+    this.http.post(this.ruta + 'php/traslados/traslado_anular.php', datos ).subscribe((data:any)=>{
       this.ActualizarVista();
       this.deleteSwal.show();
     });    
