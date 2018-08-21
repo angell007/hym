@@ -58,8 +58,8 @@
                                                 <label>Nombre</label>
                                                 <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
                                                         (focusout)="boolNombre = true" required #nombre="ngModel">
-                                                <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                                                <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
                                         </div>
                                 </div>
                         </div>
@@ -423,21 +423,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="transfVerCh2" [(ngModel)]="transfVerVal2" id="transfVer2" hidden />
+                                                <input type="checkbox" [checked]=true name="" id="transfVer2" hidden />
                                                 <label for="transfVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="transfEditarCh2" [(ngModel)]="transfEditarVal2" id="transfEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="transfEditar2" hidden />
                                                 <label for="transfEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="transfEliminarCh2" [(ngModel)]="transfEliminarVal2" id="transfEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="transfEliminar2" hidden />
                                                 <label for="transfEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -449,21 +449,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="traslVerCh2" [(ngModel)]="traslVerVal2" id="traslVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="traslVer2" hidden />
                                                 <label for="traslVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="traslEditarCh2" [(ngModel)]="traslEditarVal2" id="traslEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="traslEditar2" hidden />
                                                 <label for="traslEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="traslEliminarCh2" [(ngModel)]="traslEliminarVal2" id="traslEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="traslEliminar2" hidden />
                                                 <label for="traslEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -475,21 +475,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="cajasVerCh2" [(ngModel)]="cajasVerVal2" id="cajasVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasVer2" hidden />
                                                 <label for="cajasVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="cajasEditarCh2" [(ngModel)]="cajasEditarVal2" id="cajasEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasEditar2" hidden />
                                                 <label for="cajasEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="cajasEliminarCh2" [(ngModel)]="cajasEliminarVal2" id="cajasEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="cajasEliminar2" hidden />
                                                 <label for="cajasEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -501,21 +501,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="girosVerCh2" [(ngModel)]="girosVerVal2" id="girosVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="girosVer2" hidden />
                                                 <label for="girosVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="girosEditarCh2" [(ngModel)]="girosEditarVal2" id="girosEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="girosEditar2" hidden />
                                                 <label for="girosEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="girosEditarCh2" [(ngModel)]="girosEditarVal2" id="girosEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="girosEliminar2" hidden />
                                                 <label for="girosEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -527,21 +527,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="corrVerCh2" [(ngModel)]="corrVerVal2" id="corrVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="corrVer2" hidden />
                                                 <label for="corrVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="corrVerCh2" [(ngModel)]="corrVerVal2" id="corrEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="corrEditar2" hidden />
                                                 <label for="corrEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="corrVerCh2" [(ngModel)]="corrVerVal2" id="corrEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="corrEliminar2" hidden />
                                                 <label for="corrEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -553,21 +553,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="servVerCh2" [(ngModel)]="servVerVal2" id="servVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="servVer2" hidden />
                                                 <label for="servVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="servEditarCh2" [(ngModel)]="servEditarVal2" id="servEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="servEditar2" hidden />
                                                 <label for="servEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="servEliminarCh2" [(ngModel)]="servEliminarVal2" id="servEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="servEliminar2" hidden />
                                                 <label for="servEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -579,21 +579,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="confVerCh2" [(ngModel)]="confVerVal2" id="confVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="confVer2" hidden />
                                                 <label for="confVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="confEditarCh2" [(ngModel)]="confEditarVal2" id="confEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="confEditar2" hidden />
                                                 <label for="confEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="confEliminarCh2" [(ngModel)]="confEliminarVal2" id="confEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="confEliminar2" hidden />
                                                 <label for="confEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -605,21 +605,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="indiVerCh2" [(ngModel)]="indiVerVal2" id="indiVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="indiVer2" hidden />
                                                 <label for="indiVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="indiEditarCh2" [(ngModel)]="indiEditarVal2" id="indiEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="indiEditar2" hidden />
                                                 <label for="indiEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="indiEliminarCh2" [(ngModel)]="indiEliminarVal2" id="indiEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="indiEliminar2" hidden />
                                                 <label for="indiEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -631,21 +631,21 @@
                         <div class="row" style="border-style: solid; border-width:1px">
                                 <div class="col-md-4" align="center" style=" padding: 2px 0;">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="reporVerCh2" [(ngModel)]="reporVerVal2" id="reporVer2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="reporVer2" hidden />
                                                 <label for="reporVer2"></label>
                                         </div>
                                         <label>Ver</label>
                                 </div>
                                 <div class="col-md-4" align="center" style=" padding: 2px 0;">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="reporEditarCh2" [(ngModel)]="reporEditarVal2" id="reporEditar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="reporEditar2" hidden />
                                                 <label for="reporEditar2"></label>
                                         </div>
                                         <label>Editar</label>
                                 </div>
                                 <div class="col-md-4" align="center" style=" padding: 2px 0;">
                                         <div class="checkboxTwo">
-                                                <input type="checkbox" name="reporEliminarCh2" [(ngModel)]="reporEliminarVal2" id="reporEliminar2" hidden />
+                                                <input type="checkbox" ng-checked="all" name="" id="reporEliminar2" hidden />
                                                 <label for="reporEliminar2"></label>
                                         </div>
                                         <label>Eliminar</label>
@@ -679,9 +679,10 @@
                                 <div class="col-md-12">
                                         <div class="form-group">
                                                 <label>Nombre</label>
-                                                <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
-                                                <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                                                <input type="text" placeholder="Nombre del Perfil" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                                                        (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                                                <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
+                                                <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">All checked!</div>
                                         </div>
                                 </div>
                         </div>

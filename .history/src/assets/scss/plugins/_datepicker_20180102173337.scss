@@ -1,5 +1,9 @@
 @import '../variables'; 
 
+[_nghost-c1] {
+    border: 1px solid $border-color !important;
+    padding: 25px 20px !important;
+}
 
 .bg-light {
     background-color: $default-white !important;
