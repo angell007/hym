@@ -42,6 +42,10 @@ export class OficinasComponent implements OnInit {
   public boolMaxVenta:boolean = false;
   public boolValores:boolean = false;
 
+  //Valores por defecto
+  departamentoDefault: string = "";
+  municipioDefault: string = "";
+
   @ViewChild('ModalOficina') ModalOficina:any;
   @ViewChild('ModalVerOficina') ModalVerOficina:any;
   @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
@@ -104,7 +108,7 @@ export class OficinasComponent implements OnInit {
   }
 
    GuardarOficina(formulario: NgForm, modal:any){
-    let info = JSON.stringify(formulario.value);
+   let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     this.OcultarFormulario(modal);
     datos.append("modulo",'Oficina');
@@ -117,12 +121,14 @@ export class OficinasComponent implements OnInit {
     })
     .subscribe((data:any)=>{  
       formulario.reset();
+      this.departamentoDefault = "";
+      this.municipioDefault = "";
       this.ActualizarVista();
       this.InicializarBool();
       this.saveSwal.show();
     });
-    
   }
+
 
   GuardarOficinaEditar(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);

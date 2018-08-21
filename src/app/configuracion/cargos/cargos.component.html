@@ -1,0 +1,351 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Tipos de Cargos</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-block">
+          <button class="pull-right btn btn-xs btn-info" (click)="ModalGrupo.show()">
+            <i class="ti-plus"></i> Nueva Grupo</button>
+          <p>Grupo</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th style="width:80px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let grupo of Grupo">
+                  <td style="vertical-align: middle;">{{grupo.Nombre}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGrupo(grupo.Id_Grupo_Tercero, ModalGrupoEditar)">
+                      <i class="ti-pencil"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                      (confirm)="EliminarGrupo(grupo.Id_Grupo_Tercero)">
+                      <i class="ti-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-block">
+          <button class="pull-right btn btn-xs btn-info" (click)="ModalDependencia.show()">
+            <i class="ti-plus"></i> Nueva Dependencia</button>
+          <p>Dependencia</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th style="width:80px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dependencia of Dependencia">
+                  <td style="vertical-align: middle;">{{dependencia.Nombre}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDependencia(dependencia.Id_Dependencia, ModalEditarDependencia)">
+                      <i class="ti-pencil"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar esta Dependencia, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                      (confirm)="EliminarDependencia(dependencia.Id_Dependencia)">
+                      <i class="ti-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-block">
+          <button class="pull-right btn btn-xs btn-info" (click)="ModalCargo.show()">
+            <i class="ti-plus"></i> Nuevo Cargo</button>
+          <p>Cargo</p>
+          <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th style="width:80px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let cargo of Cargo">
+                  <td style="vertical-align: middle;">{{cargo.Nombre}}</td>
+                  <td style="vertical-align: middle;" class="text-center">
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCargo(cargo.Id_Cargo, ModalEditarCargo)">
+                      <i class="ti-pencil"></i>
+                    </button>
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                      (confirm)="EliminarCargo(cargo.Id_Cargo)">
+                      <i class="ti-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGrupo" #ModalGrupo>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Nuevo Grupo</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormGrupo="ngForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombre="ngModel">
+            <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarGrupo(FormGrupo, ModalGrupo)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGrupoEditar" #ModalGrupoEditar>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Editar Grupo</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormGrupoEditar="ngForm">
+      <div class="row">
+        <div class="col-md-4" hidden>
+          <div class="form-group">
+            <label>Identificación</label>
+            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarGrupo(FormGrupoEditar, ModalGrupoEditar)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDependencia" #ModalDependencia>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Nuevo Dependencia</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormDependencia="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <select class="form-control" name="Id_Grupo" ngModel>
+              <option> Seleccionar </option>
+              <option *ngFor="let grupo of Grupo" value="{{grupo.Id_Grupo_Tercero}}">{{grupo.Nombre}}</option>
+            </select>
+            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                  (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+                <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombre1="ngModel">
+            <div *ngIf="!nombre1.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombre1.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombre1.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarDependencia(FormDependencia, ModalDependencia)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDependencia" #ModalEditarDependencia>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Editar Dependencia</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormEditarDependencia="ngForm">
+      <div class="row">
+        <div class="col-md-4" hidden>
+          <div class="form-group">
+            <label>Identificación</label>
+            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Grupo</label>
+            <select class="form-control" name="Id_Grupo" ngModel={{IdGrupo}}>
+              <option> Seleccionar </option>
+              <option *ngFor="let grupo of Grupo" value="{{grupo.Id_Grupo_Tercero}}">{{grupo.Nombre}}</option>
+            </select>
+            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                  (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+                <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarDependencia(FormEditarDependencia, ModalEditarDependencia)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCargo" #ModalCargo>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Nuevo Cargo</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCargo="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Dependencia</label>
+            <select class="form-control" name="Id_Dependencia" ngModel>
+              <option> Seleccionar </option>
+              <option *ngFor="let dependencia of Dependencia" value="{{dependencia.Id_Dependencia}}">{{dependencia.Nombre}}</option>
+            </select>
+            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                      (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+                    <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                    <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombre2="ngModel">
+            <div *ngIf="!nombre2.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombre2.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombre2.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarCargo(FormCargo, ModalCargo)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCargo" #ModalEditarCargo>
+  <div class="app-modal-header">
+    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios()">X</button>
+    <h4>Editar Cargo</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormEditarCargo="ngForm">
+      <div class="row">
+        <div class="col-md-4" hidden>
+          <div class="form-group">
+            <label>Identificación</label>
+            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Dependencia</label>
+            <select class="form-control" name="Id_Dependencia" ngModel={{IdDependencia}}>
+              <option> Seleccionar </option>
+              <option *ngFor="let dependencia of Dependencia" value="{{dependencia.Id_Dependencia}}">{{dependencia.Nombre}}</option>
+            </select>
+            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                    (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+                  <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                  <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
+            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
+            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarCargo(FormEditarCargo, ModalEditarCargo)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>

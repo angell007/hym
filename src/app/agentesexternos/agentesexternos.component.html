@@ -8,25 +8,25 @@
             <div class="row mrg-top-30">
               <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
                 <div class="text-center pdd-vertical-10">
-                  <h2 class="font-primary no-mrg-top">1.320</h2>
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasExitosas}}</h2>
                   <p class="no-mrg-btm">Exitosas</p>
                 </div>
               </div>
               <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
                 <div class="text-center pdd-vertical-10">
-                  <h2 class="font-primary no-mrg-top">35</h2>
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasDevueltas}}</h2>
                   <p class="no-mrg-btm">Devueltas</p>
                 </div>
               </div>
               <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
                 <div class="text-center pdd-vertical-10">
-                  <h2 class="font-primary no-mrg-top">1.200</h2>
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasCobradas}}</h2>
                   <p class="no-mrg-btm">Cobradas</p>
                 </div>
               </div>
               <div class="col-md-3 col-sm-6 col-6">
                 <div class="text-center pdd-vertical-10">
-                  <h2 class="font-primary no-mrg-top">120</h2>
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasPendientes}}</h2>
                   <p class="no-mrg-btm">Pendientes</p>
                 </div>
               </div>
@@ -96,21 +96,24 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalAgente" #ModalAgente>
   <div class="app-modal-header">
+      <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
       <h4>Nuevo Agente</h4>
   </div>
-  <div class="app-modal-body">
+  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
     <form #FormAgenteAgregar="ngForm">
       <div class="row">
           <div class="col-md-12">
               <div class="form-group">
                   <label>Nombre</label>
-                  <input type="text" placeholder="Nombre Agente" class="form-control" name="Nombre" ngModel="">
+                  <input type="text" placeholder="Nombre Agente" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
+                  <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                  <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
               </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
                 <label>Documento</label>
-                <input type="text" placeholder="Documento Agente" class="form-control" name="Documento" ngModel="">
+                <input type="text" placeholder="Documento Agente" class="form-control" name="Documento" ngModel="" >
             </div>
         </div>
         <div class="col-md-4">
@@ -134,13 +137,13 @@
             </div>
         </div>
       </div>      
-      <div class="modal-footer no-border">
-          <div class="text-right">
-              <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
-          </div>
-      </div>
     </form>                
   </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+        <button class="btn btn-primary btn-sm" (click)="GuardarAgente(FormAgenteAgregar, ModalAgente)">Guardar</button>
+    </div>
+</div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarAgente" #ModalEditarAgente>
@@ -189,14 +192,14 @@
             </div>
         </div>
       </div>      
-      <div class="modal-footer no-border">
-        <div class="text-right">
-          <button class="btn btn-primary btn-sm"
-          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-          (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>
-        </div>
-      </div>
     </form>                
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm"
+      [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este agente' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+      (confirm)="GuardarAgente(FormEditarAgente, ModalEditarAgente)">Guardar</button>
+    </div>
   </div>
 </app-modal-basic>
 

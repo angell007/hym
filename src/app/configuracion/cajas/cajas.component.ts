@@ -24,6 +24,9 @@ export class CajasComponent implements OnInit {
   public boolNombre:boolean = false;
   public boolOficina:boolean = false;
 
+  //Valores por defecto
+  oficinaDefault: string = "";
+
   @ViewChild('ModalEditarCaja') ModalEditarCaja:any;
   @ViewChild('ModalVerCaja') ModalVerCaja:any;
   @ViewChild('ModalCaja') ModalCaja:any;
@@ -31,6 +34,7 @@ export class CajasComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  MAC: any;
 
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -64,12 +68,9 @@ export class CajasComponent implements OnInit {
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/cajas/lista_cajas.php').subscribe((data:any)=>{
-      console.log(data);
       this.cajas= data;
     });
   }
-
-
 
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
@@ -94,6 +95,7 @@ export class CajasComponent implements OnInit {
       this.OcultarFormulario(modal);
       this.ActualizarVista();
       this.InicializarBool();
+      this.oficinaDefault = "";
       this.saveSwal.show();
     });
 
@@ -147,6 +149,7 @@ export class CajasComponent implements OnInit {
       this.Nombre = data.Nombre;
       this.Oficina = data.Id_Oficina;
       this.Detalles = data.Detalle;
+      this.MAC = data.MAC;
       this.ModalEditarCaja.show();
     });
   }

@@ -60,7 +60,7 @@ import { TercerosComponent } from './configuracion/terceros/terceros.component';
 import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
-import {NgxMaskModule} from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask'
 import { NgxCurrencyModule } from "ngx-currency";
 import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
@@ -73,8 +73,15 @@ import { CuentascobrarComponent } from './indicadores/cuentascobrar/cuentascobra
 import { CuentaspagarComponent } from './indicadores/cuentaspagar/cuentaspagar.component';
 import { CuentastercerosComponent } from './indicadores/cuentasterceros/cuentasterceros.component';
 import { InformaciongirosComponent } from './configuracion/informaciongiros/informaciongiros.component';
+import { FuncionarioeditarComponent } from './configuracion/funcionarioeditar/funcionarioeditar.component';
+import { FuncionarioverComponent } from './configuracion/funcionariover/funcionariover.component';
+import { LiquidacionsalarioComponent } from './liquidacionsalario/liquidacionsalario.component';
+import { TipodocumentoextranjeroComponent } from './configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component';
+import { TipocuentaComponent } from './configuracion/tipocuenta/tipocuenta.component';
+import { CargosComponent } from './configuracion/cargos/cargos.component';
+
  
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
     allowNegative: false,
     allowZero: false,
@@ -153,6 +160,13 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CuentaspagarComponent,
         CuentastercerosComponent,
         InformaciongirosComponent,
+        InformaciongirosComponent,
+        FuncionarioeditarComponent,
+        FuncionarioverComponent,
+        LiquidacionsalarioComponent,
+        TipodocumentoextranjeroComponent,
+        TipocuentaComponent,
+        CargosComponent
     ],
     exports:[
         ModalBasicComponent

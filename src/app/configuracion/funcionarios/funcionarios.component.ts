@@ -117,6 +117,7 @@ export class FuncionariosComponent implements OnInit {
   {
     this.http.get(this.globales.ruta+'php/funcionarios/lista_funcionarios.php').subscribe((data:any)=>{
       this.funcionarios= data;
+      console.log(this.funcionarios);
     });
   }
 

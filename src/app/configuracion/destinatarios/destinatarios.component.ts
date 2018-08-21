@@ -26,9 +26,20 @@ export class DestinatariosComponent implements OnInit {
   public IdPais : any[];
   public Pais : any[];
   public Detalle : any[];
+  public Lista_Cuentas = [];
+  public Lista_Destinatarios:any=[{
+    Pais:'',
+    Banco: '',
+    Cuenta:''
+  }]
 
   public boolNombre:boolean = false;
   public boolId:boolean = false;
+
+  //Valores por defecto
+  paisDefault: string = "";
+  bancoDefault: string = "";
+  cuentasDefault: string = "";
 
   @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
@@ -37,6 +48,7 @@ export class DestinatariosComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('duplicateSwal') duplicateSwal:any;
 
   constructor(private http : HttpClient, private globales: Globales) { } 
 
@@ -85,24 +97,26 @@ export class DestinatariosComponent implements OnInit {
    * @memberof DestinatariosComponent
    */
   GuardarDestinatario(formulario: NgForm, modal:any){
+    console.log(formulario.value);
     let info = JSON.stringify(formulario.value);
+    let destinatario = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
     console.log(info);
     this.OcultarFormulario(modal);
     datos.append("modulo",'Destinatario');
     datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{      
-      this.ActualizarVista();
+    datos.append("destinatario",destinatario);
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{
+      this.Lista_Destinatarios = [{
+        Pais:'',
+        Banco: '',
+        Cuenta:''
+      }];
+      localStorage.removeItem("Lista_Inicial");
       formulario.reset();
-      this.InicializarBool();
-      this.saveSwal.show();
-    });
+     });
+
+    
     
   }
 
@@ -160,6 +174,20 @@ export class DestinatariosComponent implements OnInit {
     this.IdPais = null;
     this.Detalle = null;
     modal.hide();
+  }
+
+
+  AgregarFila() { 
+    
+this.Lista_Destinatarios.push([{
+  Pais:'',
+  Banco: '',
+  Cuenta:''
+}])
+  }
+  EliminarFila(i){
+    
+    this.Lista_Cuentas.splice(i,1);
   }
 
   Cerrar(modal){

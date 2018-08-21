@@ -14,11 +14,11 @@
                         <table class="table table-hover table-sm table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width:150px;">Nombre</th>
+                                    <th >Nombre</th>
                                     <th>Tipo</th>
                                     <th>Departamento</th>
-                                    <th style="width:80px">Municipio</th>
-                                    <th style="width:300px;"></th>
+                                    <th >Municipio</th>
+                                    <th style="width:120px;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,31 +57,31 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormCaja="ngForm">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">All checked!</div>
+                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="" (focus)="$event.target.select()" (focusout)="boolUsername = true" required #username="ngModel">
-                        <div *ngIf="!username.valid && boolUsername==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="username.valid && boolUsername==true" style="color:green">All checked!</div>
+                        <div *ngIf="!username.valid && boolUsername==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="username.valid && boolUsername==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="" (focus)="$event.target.select()" (focusout)="boolPassword = true" required #password="ngModel">
-                        <div *ngIf="!password.valid && boolPassword==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="password.valid && boolPassword==true" style="color:green">All checked!</div>
+                        <div *ngIf="!password.valid && boolPassword==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="password.valid && boolPassword==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -90,30 +90,30 @@
                     <div class="form-group">
                         <label>Tipo</label>
                         <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="" (focus)="$event.target.select()" (focusout)="boolTipo = true" required #tipo="ngModel">
-                        <div *ngIf="!tipo.valid && boolTipo==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="tipo.valid && boolTipo==true" style="color:green">All checked!</div>
+                        <div *ngIf="!tipo.valid && boolTipo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="tipo.valid && boolTipo==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
+                        <select class="form-control" required name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)" (click)="boolDepartamento=true" required #departamento="ngModel">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!departamento.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamento.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!municipio.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipio.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                 <button type="submit" class="btn btn-primary"
                     [disabled]="!nombre.valid || !username.valid || !password.valid || !tipo.valid || departamento.value=='' || municipio.value==''"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarCaja(FormCaja, ModalCaja)" >Actualizar Información</button>
+                    (confirm)="GuardarCaja(FormCaja, ModalCaja)" >Guardar</button>
             </div>
         </div>
 </app-modal-basic>
@@ -135,7 +135,7 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Ver Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormVerCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -187,7 +187,7 @@
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Caja Recaudo</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body" >
         <form #FormEditarCaja="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -200,8 +200,8 @@
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
-                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">All checked!</div>
+                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
 
@@ -209,16 +209,16 @@
                     <div class="form-group">
                         <label>Username</label>
                         <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}" (focus)="$event.target.select()" (focusout)="boolUsername = true" required #usernameEd="ngModel">
-                        <div *ngIf="!usernameEd.valid && boolUsername==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="usernameEd.valid && boolUsername==true" style="color:green">All checked!</div>
+                        <div *ngIf="!usernameEd.valid && boolUsername==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="usernameEd.valid && boolUsername==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}" (focus)="$event.target.select()" (focusout)="boolPassword = true" required #passwordEd="ngModel">
-                        <div *ngIf="!passwordEd.valid && boolPassword==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="passwordEd.valid && boolPassword==true" style="color:green">All checked!</div>
+                        <div *ngIf="!passwordEd.valid && boolPassword==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="passwordEd.valid && boolPassword==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -227,8 +227,8 @@
                     <div class="form-group">
                         <label>Tipo</label>
                         <input type="text" placeholder="Tipo Caja Recaudo" class="form-control" name="Tipo" ngModel="{{Tipo}}" (focus)="$event.target.select()" (focusout)="boolTipo = true" required #tipoEd="ngModel">
-                        <div *ngIf="!tipoEd.valid && boolTipo==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="tipoEd.valid && boolTipo==true" style="color:green">All checked!</div>
+                        <div *ngIf="!tipoEd.valid && boolTipo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="tipoEd.valid && boolTipo==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -238,8 +238,8 @@
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!departamentoEd.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamentoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -249,8 +249,8 @@
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Houston, we have a problem</div>
-                        <div *ngIf="!municipioEd.value==''" style="color:green">All checked!</div>
+                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipioEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>

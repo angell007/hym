@@ -21,12 +21,18 @@
                             <h2 class="inline-block no-mrg-vertical pdd-top-15">Iniciar Sesión</h2>
                           </div>
                           <p  class="mrg-btm-15 font-size-13">Por Favor Ingrese su Usuario y Clave para iniciar sesión</p>
-                          <form #FormLogin="ngForm" class="ng-pristine ng-valid" (ngSubmit)="onSubmit(Username.value,Password.value)">
+                          <form #FormLogin="ngForm" class="ng-pristine ng-valid" (ngSubmit)="onSubmit(Username.value, Password.value, Oficina.value, Caja.value)">
                             <div class="form-group">
                               <input type="number" class="form-control" name="Username" placeholder="Identificacion" #Username ngModel required>
                             </div>
                             <div class="form-group">
                               <input type="password" class="form-control" name="Password" placeholder="Contraseña" #Password ngModel required>
+                            </div>
+                            <div class="form-group">
+                              <input type="number" class="form-control" name="Oficina" placeholder="Num Oficina" #Oficina ngModel required>
+                            </div>
+                            <div class="form-group">
+                              <input type="number" class="form-control" name="Caja" placeholder="Num Caja" #Caja ngModel required>
                             </div>
                             <div class="pull-right">        <!-- Inicio   --> 
                               <a class="text-right f-w-600 text-inverse"
