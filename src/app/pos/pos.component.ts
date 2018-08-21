@@ -318,6 +318,13 @@ export class PosComponent implements OnInit {
         {
           this.Envios[index].Cuentas = data;
           this.CuentasDestinatario = data;
+          (document.getElementById("Numero_Documento_Destino"+index) as HTMLInputElement).value = data[0].Id_Destinatario;
+          this.Envios.push({
+            Numero_Documento_Destino:'',
+            Id_Cuenta_Destino:'',
+            Valor_Transferencia: '',
+            Cuentas: []
+          });
         }        
       });
     }    
@@ -366,7 +373,9 @@ export class PosComponent implements OnInit {
 
   EliminarDestinatario(index)
   {
-    this.Envios.splice(index, 1);
+    if(index > 0){
+      this.Envios.splice(index, 1);
+    }    
   }
 
   AutoCompletarRemitente(modelo){    
@@ -565,6 +574,13 @@ export class PosComponent implements OnInit {
   SeleccionarMonedaRecibe(moneda)
   {
     this.MonedaRecibe = moneda;
+    var origen= ((document.getElementById("Moneda_Origen") as HTMLInputElement).value);
+
+    if(parseInt(origen) > 0){
+    this.PrecioSugerido  = this.Monedas[(parseInt(origen)-1)].Sugerido_Venta;
+    }else{
+      this.PrecioSugerido=0;
+    }
   }
 
   RealizarGiro(remitente: NgForm, destinatario: NgForm, giro: NgForm)

@@ -238,7 +238,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Número Documento</label>
-                                                <input name="Numero_Documento_Destino{{i}}" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                <input id="Numero_Documento_Destino{{i}}" name="Numero_Documento_Destino{{i}}" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                     placeholder="Número Documento" class="form-control" [(ngModel)]="Envio.Numero_Documento_Destino"
                                                     (focusout)="boolNumeroDocumento = true" autocomplete="off" required list="browsers"
                                                     (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)"
@@ -248,7 +248,7 @@
                                                 <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
                                                     <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
                                                 </datalist>
-                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value)">
+                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value,i)">
                                                         <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Nombre">{{Destinatario.Nombre}}</option>
                                                     </datalist>
                                             </div>
@@ -261,7 +261,7 @@
                                                     (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)">
                                                 </div>
                                          </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Cuenta</label>
                                                 <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino" class="form-control" autocomplete="off" (click)="boolCuenta=true"
@@ -273,7 +273,7 @@
                                                 <div *ngIf="!cuenta.value==''" style="color:green">Datos correctos!</div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Valor</label>
                                                 <input type="number" placeholder="Valor a Transferir" (ngModelChange)="AutoCompletarDestinatario($event)" class="form-control"
@@ -283,13 +283,12 @@
                                                 <div *ngIf="!valor.value==''" style="color:green">Datos correctos!</div>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                                <p></p>
+                                                <button class="btn-danger btn-mini" (click)="EliminarDestinatario(i)"><i class="fa fa-trash"></i></button>
+                                            </div>
                                     </div>
 
-                                    <div class="row mrg-top-10">
-                                        <div class="col-md-4">
-                                            <button (click)="EliminarDestinatario(i)">ELIMINAR</button>
-                                        </div>
-                                    </div>
 
                                 </div>
                             </div>
@@ -299,10 +298,10 @@
                                 <div class="col-md-4">
                                     <div class="form-group text-center">
                                         <label>Moneda Recibida</label>
-                                        <select class="form-control" name="Moneda_Origen" ngModel="{{MonedaRecibida}}" (change)="SeleccionarMonedaRecibe($event.target.value)"
+                                        <select class="form-control" id="Moneda_Origen" name="Moneda_Origen" ngModel="{{MonedaRecibida}}" (change)="SeleccionarMonedaRecibe($event.target.value)"
                                             (click)="boolMonedaRecibida=true" required #monedaRecibida="ngModel">
                                             <option value="">Seleccione una Moneda</option>
-                                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
+                                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
