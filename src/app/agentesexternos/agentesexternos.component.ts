@@ -242,6 +242,19 @@ export class AgentesexternosComponent implements OnInit {
       modal.show();
     });
   }
+  VerAgente(id, modal) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { modulo: 'Agente_Externo', id: id }
+    }).subscribe((data: any) => {
+      this.Identificacion = data.Id_Agente_Externo;
+      this.Nombre = data.Nombre;
+      this.Documento = data.Documento;
+      this.Cupo = data.Cupo;
+      this.Username = data.Username;
+      this.Password = data.Password;
+      modal.show();
+    });
+  }
 
   OcultarFormulario(modal) {
     this.Identificacion = null;
