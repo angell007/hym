@@ -113,34 +113,38 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Moneda Origen</label>
-                                    <select class="form-control" placeholder="Origen" name="Forma_Pago">
+                                    <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen">
+                                        <option> Seleccione Moneda</option>
+                                        <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Destino</label>
-                                    <select class="form-control" placeholder="Destino" name="Forma_Pago">
+                                    <select class="form-control" placeholder="Destino"  id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
+                                            <option> Seleccione Moneda</option>
+                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Tasa Cambio</label>
-                                    <input type="text" placeholder="Cambio" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                    <input readonly type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido" name="Precio_Sugerido" ngModel="{{PrecioSugerido}}">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mrg-top-40">
                                     <label>Valor</label>
-                                    <input type="text" placeholder="V" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                    <input type="text" placeholder="Valor" class="form-control" id="Valor"  name="Valor" ngModel>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Vueltos</label>
-                                    <input type="text" placeholder="" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                                    <input readonly type="text" placeholder="Vueltos" class="form-control" name="Vueltos" ngModel="{{vueltos}}">
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-info btn-block mrg-top-80">CAMBIAR</button>
+                                <button class="btn btn-info btn-block mrg-top-80" (click)="realizarCalculo()" >CAMBIAR</button>
                             </div>
                         </div>
                         <hr>
@@ -231,7 +235,7 @@
                                 <div *ngFor="let Envio of Envios; let i= index">
 
                                     <div class="row mrg-top-10">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Número Documento</label>
                                                 <input name="Numero_Documento_Destino{{i}}" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
@@ -246,7 +250,18 @@
                                                 </datalist>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Nombre</label>
+                                                    <input name="Nombre_Destino{{i}}" type="text" 
+                                                    placeholder="Nombre" class="form-control" required list="browsers1"
+                                                    (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)">
+                                                </div>
+                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value)">
+                                                        <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
+                                                    </datalist>
+                                         </div>
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Cuenta</label>
                                                 <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino" class="form-control" autocomplete="off" (click)="boolCuenta=true"
@@ -258,7 +273,7 @@
                                                 <div *ngIf="!cuenta.value==''" style="color:green">Datos correctos!</div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Valor</label>
                                                 <input type="number" placeholder="Valor a Transferir" (ngModelChange)="AutoCompletarDestinatario($event)" class="form-control"
