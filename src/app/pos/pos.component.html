@@ -248,6 +248,9 @@
                                                 <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
                                                     <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
                                                 </datalist>
+                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value)">
+                                                        <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Nombre">{{Destinatario.Nombre}}</option>
+                                                    </datalist>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -257,9 +260,6 @@
                                                     placeholder="Nombre" class="form-control" required list="browsers1"
                                                     (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)">
                                                 </div>
-                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value)">
-                                                        <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
-                                                    </datalist>
                                          </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
