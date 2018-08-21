@@ -89,6 +89,7 @@ export class PosComponent implements OnInit {
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal:any;
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal:any;
   @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal:any;
+  vueltos: number;
   
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -125,10 +126,10 @@ export class PosComponent implements OnInit {
       this.Cajas= data;
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
-      this.Monedas= data;
+      this.Monedas= data;/*
       this.CambiarTasa(this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")+1);  
       this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
-      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
+      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;*/
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
       this.Funcionarios= data;
@@ -138,10 +139,7 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Destinatario'}}).subscribe((data:any)=>{
       this.Destinatarios= data;
-    });
-    console.log("Destinatarios");
-    console.log(this.Destinatarios);
-    
+    });   
     
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Transferencia_Remitente'}}).subscribe((data:any)=>{
       this.Remitentes= data;
@@ -180,15 +178,15 @@ export class PosComponent implements OnInit {
     formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
-    console.log(formulario.value);
+    //console.log(formulario.value);
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
     let info = JSON.stringify(formulario.value);
-    console.log("info");
-    console.log(info);
+    //console.log("info");
+    //console.log(info);
     
     let destinatarios = JSON.stringify(this.Envios);
-    console.log("Envios");
-    console.log(this.Envios);
+    //console.log("Envios");
+    //console.log(this.Envios);
     
     let datos = new FormData();
     datos.append("datos",info);
@@ -215,13 +213,13 @@ export class PosComponent implements OnInit {
       this.PrecioSugerido = null;
       this.MonedaTransferencia = null;
       this.MonedaRecibida = null;
-      console.log(data);      
+      //console.log(data);      
     });
   }
 
   ResetValues()
   {
-    console.log("resetear valores");
+    //console.log("resetear valores");
     this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
@@ -230,14 +228,14 @@ export class PosComponent implements OnInit {
   GuardarMovimiento(formulario: NgForm)
   {
     //formulario.value.Costo_Transferencia = 1;
-    console.log(localStorage);
+    //console.log(localStorage);
     
     formulario.value.Estado = "Pendiente";
     formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
     formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
-    console.log(formulario.value); 
+    //console.log(formulario.value); 
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos",info);
@@ -254,11 +252,12 @@ export class PosComponent implements OnInit {
       this.seleccioneClienteDefault = "";
       this.InicializarBool();
       this.movimientoExitosoSwal.show();
-      console.log(data);      
+      //console.log(data);      
     });
   }
 
-  AutoCompletarDestinatario(modelo){ 
+  AutoCompletarDestinatario(modelo, caso){ 
+    
     if(modelo)
     {
       if(modelo.length > 0)
@@ -297,20 +296,20 @@ export class PosComponent implements OnInit {
     if(destinatario.length < 5 && destinatario.length > 0)
     {
       this.warnSwal.show();
-      console.log("número de documento inconrrecto.");      
+      //console.log("número de documento inconrrecto.");      
     }
     else
     {       
-      this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: destinatario}}).subscribe((data:any)=>{
+      this.http.get(this.globales.ruta+'php/pos/cuentas_destinatarios.php',{ params: { id: destinatario, nombre: destinatario  }}).subscribe((data:any)=>{
              
-        console.log("DESTINATARIOS");
+        //console.log("DESTINATARIOS");
         
-        console.log(data);
+        //console.log(data);
         
         if(data.length == 0)
         {
-          console.log("Num documento");
-          console.log(this.Envios[index].Numero_Documento_Destino);
+          //console.log("Num documento");
+          //console.log(this.Envios[index].Numero_Documento_Destino);
           
           this.Envios[index].Numero_Documento_Destino = 0;
           this.CrearDestinatario(destinatario);
@@ -319,6 +318,13 @@ export class PosComponent implements OnInit {
         {
           this.Envios[index].Cuentas = data;
           this.CuentasDestinatario = data;
+          (document.getElementById("Numero_Documento_Destino"+index) as HTMLInputElement).value = data[0].Id_Destinatario;
+          this.Envios.push({
+            Numero_Documento_Destino:'',
+            Id_Cuenta_Destino:'',
+            Valor_Transferencia: '',
+            Cuentas: []
+          });
         }        
       });
     }    
@@ -326,8 +332,8 @@ export class PosComponent implements OnInit {
 
   NuevoDestinatario()
   {
-    console.log("INSIDE");
-    console.log(this.Envios);
+    //console.log("INSIDE");
+    //console.log(this.Envios);
     
     let agregar:boolean = true;
     let totalTransferencia = 0;
@@ -367,7 +373,9 @@ export class PosComponent implements OnInit {
 
   EliminarDestinatario(index)
   {
-    this.Envios.splice(index, 1);
+    if(index > 0){
+      this.Envios.splice(index, 1);
+    }    
   }
 
   AutoCompletarRemitente(modelo){    
@@ -394,14 +402,14 @@ export class PosComponent implements OnInit {
     if(remitente.length < 5 && remitente.length > 0)
     {
       this.warnSwal.show();
-      console.log("número de documento inconrrecto.");      
+      //console.log("número de documento inconrrecto.");      
     }
     else
     {       
       this.http.get(this.globales.ruta+'php/genericos/detalle.php',{ params: {modulo: 'Transferencia_Remitente', id: remitente}}).subscribe((data:any)=>{                     
-        console.log("REMITENTE");
+        //console.log("REMITENTE");
         
-        console.log(data);
+        //console.log(data);
         if(data.length == 0)
         {
           this.NumeroDocumentoR = 0;
@@ -423,7 +431,7 @@ export class PosComponent implements OnInit {
 
   ValidarTransferencia()
   { 
-    console.log("cerrar modal");    
+    //console.log("cerrar modal");    
   }
 
   CrearDestinatario(destinatario)
@@ -492,7 +500,7 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("datos",info);
     datos.append("cuentas",cuentas);
-    console.log(destinatario);    
+    //console.log(destinatario);    
     this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos)
     .catch(error => { 
       console.error('An error occurred:', error.error);
@@ -500,7 +508,7 @@ export class PosComponent implements OnInit {
       return this.handleError(error);
     })
     .subscribe((data:any)=>{ 
-      console.log(data);           
+      //console.log(data);           
       this.ModalDestinatario.hide();
       this.destinatarioCreadoSwal.show();
       this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
@@ -525,21 +533,13 @@ export class PosComponent implements OnInit {
       return this.handleError(error);
     })
     .subscribe((data:any)=>{ 
-      console.log(data);
+      //console.log(data);
       this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
       this.ModalRemitente.hide();
       this.remitenteCreadoSwal.show();
       formulario.reset();
     });
-  }
-
-  CambiarTasa(value)
-  {  
-    if(value>0)
-    {
-      this.PrecioSugerido = this.Monedas[value-1].Sugerido_Venta;
-    }        
-  }
+  } 
 
   ValidarTotalTransferencia()
   {
@@ -548,7 +548,7 @@ export class PosComponent implements OnInit {
 
   RealizarCambio(value, accion)
   {
-    console.log(value);    
+    //console.log(value);    
     if(this.MonedaRecibida != this.MonedaTransferencia)
     {
       switch(accion)
@@ -568,12 +568,19 @@ export class PosComponent implements OnInit {
   SeleccionarTipo(tipo)
   {
     this.Recibe = tipo;
-    console.log(this.Recibe);    
+    //console.log(this.Recibe);    
   }
 
   SeleccionarMonedaRecibe(moneda)
   {
     this.MonedaRecibe = moneda;
+    var origen= ((document.getElementById("Moneda_Origen") as HTMLInputElement).value);
+
+    if(parseInt(origen) > 0){
+    this.PrecioSugerido  = this.Monedas[(parseInt(origen)-1)].Sugerido_Venta;
+    }else{
+      this.PrecioSugerido=0;
+    }
   }
 
   RealizarGiro(remitente: NgForm, destinatario: NgForm, giro: NgForm)
@@ -683,6 +690,80 @@ export class PosComponent implements OnInit {
     this.ValorCorresponsal = null;
     this.DetalleCorresponsal = null;
     this.CorresponsalBancario = null;
+  }
+
+  CambiarTasa(value)
+  { 
+    var origen= ((document.getElementById("Origen") as HTMLInputElement).value);
+    //var destino= ((document.getElementById("Destino") as HTMLInputElement).value); 
+
+    switch(origen){
+      case "1":{
+        this.PrecioSugerido = this.Monedas[(parseInt(origen)-1)].Sugerido_Venta;
+        break;
+      }
+      case "2":{
+        this.PrecioSugerido = this.Monedas[(parseInt(origen)-1)].Sugerido_Venta;
+        break;
+      }
+    }
+
+    /*
+    if(value>0)
+    {
+      this.PrecioSugerido = this.Monedas[(value-1)].Sugerido_Venta;
+    }*/        
+  }
+
+  CambiarTasaCambio(value)
+  {
+    var precio= ((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value);
+    switch(value){
+      case "1":{
+        //bolivar
+        //console.log(origen + "/" + precio);
+        //Cantidad_Transferida
+        var operacion = parseInt(value)/parseInt(precio);
+        //(document.getElementById("Cantidad_Transferida") as HTMLInputElement).value = operacion;
+        break;
+      }
+      
+      case "2":{
+        //peso
+        //console.log(origen + "*" + precio);
+        this.vueltos = parseInt(value)*parseInt(precio);
+        break;
+      }
+
+    }
+
+  }
+
+  realizarCalculo(){
+
+    var origen= ((document.getElementById("Valor") as HTMLInputElement).value);
+    var destino= ((document.getElementById("Destino") as HTMLInputElement).value);
+    //Precio_Sugerido
+    var precio= ((document.getElementById("Precio_Sugerido") as HTMLInputElement).value);
+    
+    switch(destino){
+
+      case "1":{
+        //bolivar
+        //console.log(origen + "/" + precio);
+        this.vueltos = parseInt(origen)/parseInt(precio);
+        break;
+      }
+      
+      case "2":{
+        //peso
+        //console.log(origen + "*" + precio);
+        this.vueltos = parseInt(origen)*parseInt(precio);
+        break;
+      }
+
+    }
+
   }
 
 }
