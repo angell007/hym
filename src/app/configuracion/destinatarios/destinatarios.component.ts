@@ -30,7 +30,8 @@ export class DestinatariosComponent implements OnInit {
   public Lista_Destinatarios:any=[{
     Pais:'',
     Banco: '',
-    Cuenta:''
+    Cuenta:'',
+    Numero_Cuenta: ''
   }]
 
   public boolNombre:boolean = false;
@@ -53,12 +54,14 @@ export class DestinatariosComponent implements OnInit {
   constructor(private http : HttpClient, private globales: Globales) { } 
 
   ngOnInit() {
-    this.ActualizarVista();
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
+      this.Cuentas= data;
     });
   }
 
@@ -98,10 +101,10 @@ export class DestinatariosComponent implements OnInit {
    */
   GuardarDestinatario(formulario: NgForm, modal:any){
     console.log(formulario.value);
+    
     let info = JSON.stringify(formulario.value);
     let destinatario = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
-    console.log(info);
     this.OcultarFormulario(modal);
     datos.append("modulo",'Destinatario');
     datos.append("datos",info);
@@ -110,7 +113,8 @@ export class DestinatariosComponent implements OnInit {
       this.Lista_Destinatarios = [{
         Pais:'',
         Banco: '',
-        Cuenta:''
+        Cuenta:'',
+        Numero_Cuenta: ''
       }];
       localStorage.removeItem("Lista_Inicial");
       formulario.reset();
@@ -182,7 +186,8 @@ export class DestinatariosComponent implements OnInit {
 this.Lista_Destinatarios.push([{
   Pais:'',
   Banco: '',
-  Cuenta:''
+  Cuenta:'',
+  Numero_Cuenta: ''
 }])
   }
   EliminarFila(i){
