@@ -54,6 +54,7 @@ export class TrasladosComponent implements OnInit {
 
   @ViewChild('ModalTraslado') ModalTraslado:any;
   @ViewChild('ModalEditarTraslado') ModalEditarTraslado:any;
+  @ViewChild('FormEditarTraslado') FormEditarTraslado:any;
   @ViewChild('FormTraslado') FormTraslado:any;
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
@@ -171,7 +172,7 @@ export class TrasladosComponent implements OnInit {
     this.ActualizarVista();
   }
 
-  ActualizarTraslado(formulario: NgForm, modal:any){
+  /* ActualizarTraslado(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
     
     
@@ -210,7 +211,36 @@ export class TrasladosComponent implements OnInit {
       });
     }
     this.ActualizarVista();
+  }*/
+  ActualizarTraslado(formulario: NgForm){   
+    let info = JSON.stringify(formulario.value);
+
+    if(info.indexOf('"Id_Origen":""') >= 0) {
+      this.errorSwal.text = "No ha seleccionado un origen";
+      this.errorSwal.show();
+    }
+    else if(info.indexOf('"Id_Destino":""') >= 0) {
+      this.errorSwal.text = "No ha seleccionado un destino";
+      this.errorSwal.show();
+    }else{
+    let datos = new FormData();
+    datos.append("modulo", 'Traslado');
+    datos.append("datos", info);;   
+    this.http.post(this.ruta + 'php/traslados/traslado_editar.php', datos).subscribe((data: any) => { 
+      this.InicializarBool();
+      this.tipoDefault = "";
+      this.monedaDefault = "";
+      this.estadoDefault = "";
+     this.confirmacionSwal.title=data.titulo;
+     this.confirmacionSwal.text= data.mensaje;
+     this.confirmacionSwal.type= data.tipo;
+     this.confirmacionSwal.show();
+     this.ModalEditarTraslado.hide();
+     this.FormEditarTraslado.reset();
+    });
   }
+  this.ActualizarVista();
+ } 
 
   handleError(error: Response) {
     return Observable.throw(error);
@@ -230,6 +260,8 @@ export class TrasladosComponent implements OnInit {
       this.Tipo = data.Tipo;
       this.Valor = data.Valor;
       this.Fecha=data.Fecha;
+      //console.log(this.Identificacion);
+      
       modal.show();
     });
   }
@@ -239,6 +271,8 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Traslado', id:id}
     }).subscribe((data:any)=>{
+      console.log(data);
+      
       this.SeleccionarTipo(data.Tipo);
       this.Identificacion = id;
       this.IdentificacionFuncionario = data.Identificacion_Funcionario;
@@ -311,25 +345,26 @@ export class TrasladosComponent implements OnInit {
   }
 
   ObtenerDestino(IdDestino, tabla)
-  {
+  {//alert(IdDestino);
+    //alert(tabla);
    
     if (tabla == "proveedor")
     {
       this.Proveedores.forEach(element => {
         if (element.Id_Proveedor == IdDestino) this.NombreDestino = element.Nombre;
-      });
+      });//alert(this.NombreDestino);
     }
     if (tabla == "banco")
     {
       this.Bancos.forEach(element => {
         if (element.Id_Banco == IdDestino) this.NombreDestino = element.Nombre;
-      });
+      });//alert(this.NombreDestino);
     }
     if (tabla == "cliente")
     {
       this.Clientes.forEach(element => {
         if (element.Id_Tercero == IdDestino) this.NombreDestino = element.Nombre;
-      });
+      });//alert(this.NombreDestino);
     }
   }
 
