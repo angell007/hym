@@ -190,20 +190,15 @@
                         <div *ngIf="!tipo.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-4" hidden>
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre del origen</label>
-                        </strong>
-                        <input name="Origen" type="text" placeholder="Identificación" class="form-control" ngModel="{{NombreOrigen}}" required>
-                    </div>
-                </div>
+
+                    <input name="Origen" type="hidden"  ngModel="{{NombreOrigen}}">
+
                 <div class="col-md-4" *ngIf="Origen==='proveedor'">
                     <div class="form-group">
                         <strong>
                             <label>Proveedor de origen</label>
                         </strong>
-                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'proveedor')"
+                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'proveedor')"
                              (focusout)="boolProveedorOrigen = true" required #proveedorOrigen="ngModel">
                             <option value="">Seleccione proveedor de origen</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
@@ -217,7 +212,7 @@
                         <strong>
                             <label>Banco de origen</label>
                         </strong>
-                        <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'banco')"
+                        <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'banco')"
                              (focusout)="boolBancoOrigen = true" required #bancoOrigen="ngModel">
                             <option value="">Seleccione banco de origen</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
@@ -231,7 +226,7 @@
                         <strong>
                             <label>Cliente de origen</label>
                         </strong>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel="" (change)="ObtenerOrigen($event.target.value, 'cliente')"
+                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'cliente')"
                              (focusout)="boolClienteOrigen = true" required #clienteOrigen="ngModel">
                             <option value="">Seleccione cliente de origen</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
@@ -240,14 +235,9 @@
                         <div *ngIf="!clienteOrigen.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-4" hidden>
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre del destino</label>
-                        </strong>
-                        <input name="Destino" type="text" class="form-control" ngModel="{{NombreDestino}}" required>
-                    </div>
-                </div>
+
+                    <input name="Destino" type="hidden" ngModel="{{NombreDestino}}" >
+                    
                 <div class="col-md-4" *ngIf="Destino==='proveedor'">
                     <div class="form-group">
                         <strong>
@@ -339,7 +329,7 @@
                         <strong>
                             <label>Detalles</label>
                         </strong>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel=""></textarea>
+                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel></textarea>
                     </div>
                 </div>
             </div>
@@ -395,66 +385,6 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="row">
-                <div class="col-md-4" *ngIf="Origen==='proveedor'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de origen:</label>
-                        </strong>
-                        <label>{{Proveedor_Origen}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4" *ngIf="Origen==='banco'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Banco de origen:</label>
-                        </strong>
-                        <label>{{Banco_Origen}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4" *ngIf="Origen==='cliente'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de origen:</label>
-                        </strong>
-                        <label>{{Cliente_Origen}}</label>
-                    </div>
-                </div>
-            </div>-->
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <strong>
-                        <label>Nombre del destino:</label>
-                    </strong>
-                    <label>{{Destino}}</label>
-                </div>
-            </div>
-            <!--<div class="row">
-                <div class="col-md-4" *ngIf="Destino==='proveedor'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de destino:</label>
-                        </strong>
-                        <label>{{Proveedor_Destino}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4" *ngIf="Destino==='banco'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Banco de destino:</label>
-                        </strong>
-                        <label>{{Banco_Destino}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4" *ngIf="Destino==='cliente'">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de destino:</label>
-                        </strong>
-                        <label>{{Cliente_Destino}}</label>
-                    </div>
-                </div>
-            </div>-->
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -478,6 +408,24 @@
                             <label>Estado:</label>
                         </strong>
                         <label>{{Estado}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha:</label>
+                        </strong>
+                        <label>{{Fecha | date:"dd/MM/yy" }}</label>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <strong>
+                            <label>Nombre del funcionario:</label>
+                        </strong>
+                        <label>{{Nombre_Fun}}</label>
                     </div>
                 </div>
             </div>
@@ -509,24 +457,14 @@
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarTraslado="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="Id_Traslado" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group" hidden>
-                    <label>Identificación Funcionario</label>
-                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
-                        [(ngModel)]="IdentificacionFuncionario" required>
-                </div>
-            </div>
+            <input type="hidden" name="Id_Traslado" ngModel="{{Identificacion}}"> 
+            <input type="hidden"  name="Identificacion_Funcionario" [(ngModel)]="IdentificacionFuncionario">
+                
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select class="form-control" required name="Tipo" ngModel="{{Tipo}}" (change)="SeleccionarTipo($event.target.value)"
+                        <select class="form-control" required name="Tipo" [(ngModel)]="Tipo" (change)="SeleccionarTipo($event.target.value)"
                             (focusout)="boolTipo = true" required #tipoEd="ngModel">
                             <option value="">Seleccione tipo de traslado</option>
                             <option value="proveedor-proveedor">Entre proveedores</option>
@@ -540,16 +478,13 @@
                         <div *ngIf="!tipoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-4" hidden>
-                    <div class="form-group" >
-                        <label>Nombre del origen</label>
-                        <input name="Origen" type="text" class="form-control" [(ngModel)]="NombreOrigen" required>
-                    </div>
-                </div>
+                
+                    <input name="Origen" type="hidden"  [(ngModel)]="NombreOrigen" >
+                    
                 <div class="col-md-4" *ngIf="Origen==='proveedor'">
                     <div class="form-group">
                         <label>Proveedor de origen</label>
-                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel="{{IdOrigen}}" (change)="ObtenerOrigen($event.target.value, 'proveedor')"
+                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'proveedor')"
                             (focusout)="boolProveedorOrigen = true" required #proveedorOrigenEd="ngModel">
                             <option value="">Seleccione proveedor de origen</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
@@ -561,7 +496,7 @@
                 <div class="col-md-4" *ngIf="Origen==='banco'">
                     <div class="form-group">
                         <label>Banco de origen</label>
-                        <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" ngModel="{{IdOrigen}}" (change)="ObtenerOrigen($event.target.value, 'banco')"
+                        <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'banco')"
                             (focusout)="boolBancoOrigen = true" required #bancoOrigenEd="ngModel">
                             <option value="">Seleccione banco de origen</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
@@ -573,7 +508,7 @@
                 <div class="col-md-4" *ngIf="Origen==='cliente'">
                     <div class="form-group">
                         <label>Cliente de origen</label>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel="{{IdOrigen}}" (change)="ObtenerOrigen($event.target.value, 'cliente')"
+                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'cliente')"
                             (focusout)="boolClienteOrigen = true" required #clienteOrigenEd="ngModel">
                             <option value="">Seleccione cliente de origen</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
@@ -582,16 +517,13 @@
                         <div *ngIf="!clienteOrigenEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
-                <div class="col-md-4" hidden>
-                    <div class="form-group">
-                        <label>Nombre del destino</label>
-                        <input name="Destino" type="text" class="form-control" [(ngModel)]="NombreDestino" ngModel="{{NombreDestino}}" required>
-                    </div>
-                </div>
+                
+                    <input name="Destino" type="hidden" [(ngModel)]="NombreDestino"  >
+                    
                 <div class="col-md-4" *ngIf="Destino==='proveedor'">
                     <div class="form-group">
                         <label>Proveedor de destino</label>
-                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino" ngModel="{{IdDestino}}" (change)="ObtenerDestino($event.target.value, 'proveedor')"
+                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"[(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'proveedor')"
                              (focusout)="boolProveedorDestino = true" required #proveedorDestinoEd="ngModel">
                             <option value="">Seleccione proveedor de destino</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
@@ -603,7 +535,7 @@
                 <div class="col-md-4" *ngIf="Destino==='banco'">
                     <div class="form-group">
                         <label>Banco de destino</label>
-                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" ngModel="{{IdDestino}}" (change)="ObtenerDestino($event.target.value, 'destino')"
+                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" [(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'banco')"
                              (focusout)="boolBancoDestino = true" required #bancoDestinoEd="ngModel">
                             <option value="">Seleccione banco de destino</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
@@ -615,7 +547,7 @@
                 <div class="col-md-4" *ngIf="Destino==='cliente'">
                     <div class="form-group">
                         <label>Cliente de destino</label>
-                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel="{{IdDestino}}" (change)="ObtenerDestino($event.target.value, 'cliente')"
+                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" [(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'cliente')"
                              (focusout)="boolClienteDestino = true" required #clienteDestinoEd="ngModel">
                             <option value="">Seleccione cliente de destino</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
@@ -630,7 +562,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Moneda</label>
-                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Moneda" ngModel="{{Moneda}}" 
+                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Moneda" [(ngModel)]="Moneda" 
                             (focusout)="boolMoneda = true" required #monedaEd="ngModel">
                             <option value="">Seleccione tipo de moneda</option>
                             <option value="Pesos">Pesos</option>
@@ -645,7 +577,7 @@
                         <strong>
                             <label>Valor</label>
                         </strong>
-                        <input currencyMask class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                        <input currencyMask class="form-control" name="Valor" [(ngModel)]="Valor" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                              (focusout)="boolValor = true" required #valorEd="ngModel">
                         <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Campo inválido</div>
                         <div *ngIf="valorEd.valid && boolValor==true" style="color:green">Datos correctos!</div>
@@ -654,7 +586,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Estado</label>
-                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Estado" ngModel="{{Estado}}" 
+                        <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Estado" [(ngModel)]="Estado" 
                             (focusout)="boolEstado = true" required #estadoEd="ngModel">
                             <option value="">Seleccione estado</option>
                             <option value="Enviado">Enviado</option>
@@ -668,7 +600,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" [(ngModel)]="Detalle"></textarea>
                     </div>
                 </div>
             </div>
@@ -685,11 +617,11 @@
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
 
-<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+<swal #errorSwal title="Error al Guardar" text="Se ha generado un error al intentar guardar la información" type="error">
 </swal>
 
-<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+<swal #saveSwal title="Información Guardada" text="Se ha guardado correctamente la información" type="success">
 </swal>
 
-<swal #deleteSwal title="Traslado eliminado" text="Se ha Eliminado Correctamente el traslado" type="success">
+<swal #deleteSwal title="Traslado Anulado" text="Se ha anulado correctamente el traslado" type="success">
 </swal>
