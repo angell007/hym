@@ -6,25 +6,36 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-perfilcrear',
-  templateUrl: './perfilcrear.component.html',
-  styleUrls: ['./perfilcrear.component.scss']
+  selector: 'app-perfileditar',
+  templateUrl: './perfileditar.component.html',
+  styleUrls: ['./perfileditar.component.scss']
 })
-export class PerfilcrearComponent implements OnInit {
+export class PerfileditarComponent implements OnInit {
+  public Datos:any[]=[];
+  public id = this.route.snapshot.params["id"];
+ 
 
   @ViewChild('FormPerfil') FormPerfil:any;
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
-
-  constructor(private http : HttpClient, private globales : Globales, private router: Router) { }
+  constructor(private http : HttpClient, private globales : Globales, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-  }
+    
+    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+      params:{modulo:'Perfil', id:this.id}
+    }).subscribe((data:any)=>{
+     this.Datos=data;
+     console.log(this.Datos);
+     
 
+    });
+  }
   GuardarPerfil(formulario: NgForm){
     console.log(formulario.value);
     
@@ -35,7 +46,7 @@ export class PerfilcrearComponent implements OnInit {
     datos.append("datos",info);
     
     //console.log(datos);
-    this.http.post(this.globales.ruta+'php/perfiles/guardar_perfil.php',datos)
+    this.http.post(this.globales.ruta+'php/perfiles/actualizar_perfil.php',datos)
     .catch(error => { 
       console.error('An error occurred:', error.error);
       this.errorSwal.show();
@@ -62,42 +73,5 @@ export class PerfilcrearComponent implements OnInit {
   handleError(error: Response) {
     return Observable.throw(error);
   }
-  /*customReset()
-  {
-    this.nombreVal.reset();
-    this.detallesVal.reset();
-  }
-  /*InicializarBool()
-  {
-    this.boolNombre = false;
-    this.transfVerVal = false;
-    this.transfEditarVal = false;
-    this.transfEliminarVal = false;
-    this.traslVerVal = false;
-    this.traslEditarVal = false;
-    this.traslEliminarVal = false;
-    this.cajasVerVal = false;
-    this.cajasEditarVal = false;
-    this.cajasEliminarVal = false;
-    this.girosVerVal = false;
-    this.girosEditarVal = false;
-    this.girosEliminarVal = false;
-    this.corrVerVal = false;
-    this.corrEditarVal = false;
-    this.corrEliminarVal = false;
-    this.servVerVal = false;
-    this.servEditarVal = false;
-    this.servEliminarVal = false;
-    this.confVerVal = false;
-    this.confEditarVal = false;
-    this.confEliminarVal = false;
-    this.indiVerVal = false;
-    this.indiEditarVal = false;
-    this.indiEliminarVal = false;
-    this.reporVerVal = false;
-    this.reporEditarVal = false;
-    this.reporEliminarVal = false;
-  }*/
-
 
 }
