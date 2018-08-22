@@ -194,7 +194,7 @@ export class DestinatariosComponent implements OnInit {
   Numero_Cuenta: ''
 })
   }
-  EliminarFila(i){
+  EliminarFila(i){ 
     
     this.Lista_Cuentas.splice(i,1);
   }
