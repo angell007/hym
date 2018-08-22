@@ -52,8 +52,16 @@
      -->
 
                 <hr>
-                <h4>Privilegios</h4>
-                <div class="row">
+                <div class="row" style="margin-bottom: 10px">
+                  <div class="col-md-12" style="text-align: center">
+                      <h3>Privilegios</h3>
+                  </div>
+                </div>
+                
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-md-12" style="text-align: center" style="margin-bottom: 10px">
+                        <h5 style="text-align: left; margin-left: 25px ">Generales</h5>
+                    </div>
                   <div class="col-md-2 caja">
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px"> Módulo Transferencias</div>
@@ -261,19 +269,90 @@
                           </div>
                         </div>
                   </div>
-                </div>      
+                </div>  
+                <div class="row">
+                    <div class="col-md-2 caja ">
+                        <div class="row " >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Módulo Agentes Externos</div>
+                          </div>
+                          <div class="row " >
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="AgentesVerCh" [(ngModel)]="AgentesVerVal" id="AgentesVer" hidden />
+                                <label for="AgentesVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="AgentesVer" ngModel="1" *ngIf="AgentesVerVal" hidden>
+                              <input type="number" class="form-control" name="AgentesVer" [(ngModel)]="AgentesVerMod" *ngIf="!AgentesVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="AgentesEditarCh" [(ngModel)]="AgentesEditarVal" id="AgentesEditar" hidden />
+                                <label for="AgentesEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="AgentesEditar" ngModel="1" *ngIf="AgentesEditarVal" hidden>
+                              <input type="number" class="form-control" name="AgentesEditar" [(ngModel)]="AgentesEditarMod" *ngIf="!AgentesEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="AgentesEliminarCh" [(ngModel)]="AgentesEliminarVal" id="AgentesEliminar" hidden />
+                                <label for="AgentesEliminar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="AgentesEliminar" ngModel="1" *ngIf="AgentesEliminarVal" hidden>
+                              <input type="number" class="form-control" name="AgentesEliminar" [(ngModel)]="AgentesEliminarMod" *ngIf="!AgentesEliminarVal" hidden>
+                              <label>Eliminar</label>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja ">
+                        <div class="row " >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Módulo Egresos</div>
+                          </div>
+                          <div class="row " >
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="EgresosVerCh" [(ngModel)]="EgresosVerVal" id="EgresosVer" hidden />
+                                <label for="EgresosVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="EgresosVer" ngModel="1" *ngIf="EgresosVerVal" hidden>
+                              <input type="number" class="form-control" name="EgresosVer" [(ngModel)]="vVerMod" *ngIf="!EgresosVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="EgresosEditarCh" [(ngModel)]="EgresosEditarVal" id="EgresosEditar" hidden />
+                                <label for="EgresosEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="EgresosEditar" ngModel="1" *ngIf="EgresosEditarVal" hidden>
+                              <input type="number" class="form-control" name="EgresosEditar" [(ngModel)]="EgresosEditarMod" *ngIf="!EgresosEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-4" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="EgresosEliminarCh" [(ngModel)]="EgresosEliminarVal" id="EgresosEliminar" hidden />
+                                <label for="EgresosEliminar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="EgresosEliminar" ngModel="1" *ngIf="EgresosEliminarVal" hidden>
+                              <input type="number" class="form-control" name="EgresosEliminar" [(ngModel)]="EgresosEliminarMod" *ngIf="!EgresosEliminarVal" hidden>
+                              <label>Eliminar</label>
+                            </div>
+                          </div>
+                    </div>
+                </div>    
                 <hr>
                   <div class="row">
                   <div class="col-md-12" style="text-align: center" style="margin-bottom: 10px">
-                      <h5 >Módulo Configuración</h5>
+                      <h5 style="text-align: left; margin-left: 25px ">Configuración</h5>
                   </div>
                   
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                       <div class="row" >
-                          <div class="col-md-12" align="center" style="margin-bottom: 10px">Configuracion General</div>
+                          <div class="col-md-12"  style="margin-bottom: 10px; text-align: center">Configuracion General</div>
                         </div>
                         <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
                               <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
                               <label for="confVer"></label>
@@ -282,7 +361,7 @@
                             <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
                               <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
                               <label for="confEditar"></label>
@@ -291,189 +370,503 @@
                             <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
                         </div>
                   </div>
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                     
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px">Cargo</div>
                         </div>
                         <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
+                              <input type="checkbox" name="conCVerCh" [(ngModel)]="conCVerVal" id="conCVer" hidden />
                               <label for="confVer"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfVer" ngModel="1" *ngIf="confVerVal" hidden>
-                            <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
+                            <input type="number" class="form-control" name="ConCVer" ngModel="1" *ngIf="conCVerVal" hidden>
+                            <input type="number" class="form-control" name="ConCVer" [(ngModel)]="conCVerMod" *ngIf="!conCVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
-                              <label for="confEditar"></label>
+                              <input type="checkbox" name="conCEditarCh" [(ngModel)]="conCEditarVal" id="conCEditar" hidden />
+                              <label for="conCEditar"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfEditar" ngModel="1" *ngIf="confEditarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
+                            <input type="number" class="form-control" name="ConCEditar" ngModel="1" *ngIf="conCEditarVal" hidden>
+                            <input type="number" class="form-control" name="ConCEditar" [(ngModel)]="conCEditarMod" *ngIf="!conCEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
+                    
                         </div>
                   </div>
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px">Oficinas</div>
                         </div>
                         <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
+                              <input type="checkbox" name="conOVerCh" [(ngModel)]="conOVerVal" id="conOVer" hidden />
                               <label for="confVer"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfVer" ngModel="1" *ngIf="confVerVal" hidden>
-                            <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
+                            <input type="number" class="form-control" name="ConOVer" ngModel="1" *ngIf="conOVerVal" hidden>
+                            <input type="number" class="form-control" name="ConOVer" [(ngModel)]="conOVerMod" *ngIf="!conOVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
-                              <label for="confEditar"></label>
+                              <input type="checkbox" name="conOEditarCh" [(ngModel)]="conOEditarVal" id="conOEditar" hidden />
+                              <label for="conOEditar"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfEditar" ngModel="1" *ngIf="confEditarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
+                            <input type="number" class="form-control" name="ConOEditar" ngModel="1" *ngIf="conOEditarVal" hidden>
+                            <input type="number" class="form-control" name="ConOEditar" [(ngModel)]="conOEditarMod" *ngIf="!conOEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
+                          
                         </div>
                   </div>
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px">Cajas</div>
                         </div>
                         <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
-                              <label for="confVer"></label>
+                              <input type="checkbox" name="CajasVerCh" [(ngModel)]="CajasVerVal" id="CajasVer" hidden />
+                              <label for="CajasVer"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfVer" ngModel="1" *ngIf="confVerVal" hidden>
-                            <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
+                            <input type="number" class="form-control" name="CajasVer" ngModel="1" *ngIf="CajasVerVal" hidden>
+                            <input type="number" class="form-control" name="CajasVer" [(ngModel)]="CajasVerMod" *ngIf="!CajasVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
-                              <label for="confEditar"></label>
+                              <input type="checkbox" name="CajasEditarCh" [(ngModel)]="CajasEditarVal" id="CajasEditar" hidden />
+                              <label for="CajasEditar"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfEditar" ngModel="1" *ngIf="confEditarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
+                            <input type="number" class="form-control" name="CajasEditar" ngModel="1" *ngIf="CajasEditarVal" hidden>
+                            <input type="number" class="form-control" name="CajasEditar" [(ngModel)]="CajasEditarMod" *ngIf="!CajasEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
+                          
                         </div>
                   </div>
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px">Bancos</div>
                         </div>
                         <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
-                              <label for="confVer"></label>
+                              <input type="checkbox" name="BancosVerCh" [(ngModel)]="BancosVerVal" id="BancosVer" hidden />
+                              <label for="BancosVer"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfVer" ngModel="1" *ngIf="confVerVal" hidden>
-                            <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
+                            <input type="number" class="form-control" name="BancosVer" ngModel="1" *ngIf="BancosVerVal" hidden>
+                            <input type="number" class="form-control" name="BancosVer" [(ngModel)]="BancosVerMod" *ngIf="!BancosVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
-                              <label for="confEditar"></label>
+                              <input type="checkbox" name="BancosEditarCh" [(ngModel)]="BancosEditarVal" id="BancosEditar" hidden />
+                              <label for="BancosEditar"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfEditar" ngModel="1" *ngIf="confEditarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
+                            <input type="number" class="form-control" name="BancosEditar" ngModel="1" *ngIf="BancosEditarVal" hidden>
+                            <input type="number" class="form-control" name="BancosEditar" [(ngModel)]="BancosEditarMod" *ngIf="!BancosEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
+                         
                         </div>
                   </div>
-                  <div class="col-md-2 caja">
+                  <div class="col-md-2 caja" style="margin-bottom: 10px">
                       <div class="row" >
                           <div class="col-md-12" align="center" style="margin-bottom: 10px">Cuentas Bancarias</div>
                         </div>
-                        <div class="row borde" >
-                          <div class="col-md-4" align="center">
+                        <div class="row " >
+                            <div class="col-md-1"></div>
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confVerCh" [(ngModel)]="confVerVal" id="confVer" hidden />
-                              <label for="confVer"></label>
+                              <input type="checkbox" name="CuentasVerCh" [(ngModel)]="CuentasVerVal" id="CuentasVer" hidden />
+                              <label for="CuentasVer"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfVer" ngModel="1" *ngIf="confVerVal" hidden>
-                            <input type="number" class="form-control" name="ConfVer" [(ngModel)]="confVerMod" *ngIf="!confVerVal" hidden>
+                            <input type="number" class="form-control" name="CuentasVer" ngModel="1" *ngIf="CuentasVerVal" hidden>
+                            <input type="number" class="form-control" name="CuentasVer" [(ngModel)]="CuentasVerMod" *ngIf="!CuentasVerVal" hidden>
                             <label>Ver</label>
                           </div>
-                          <div class="col-md-4" align="center">
+                          <div class="col-md-5" align="center">
                             <div class="checkboxTwo">
-                              <input type="checkbox" name="confEditarCh" [(ngModel)]="confEditarVal" id="confEditar" hidden />
-                              <label for="confEditar"></label>
+                              <input type="checkbox" name="CuentasEditarCh" [(ngModel)]="CuentasEditarVal" id="CuentasEditar" hidden />
+                              <label for="CuentasEditar"></label>
                             </div>
-                            <input type="number" class="form-control" name="ConfEditar" ngModel="1" *ngIf="confEditarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEditar" [(ngModel)]="confEditarMod" *ngIf="!confEditarVal" hidden>
+                            <input type="number" class="form-control" name="CuentasEditar" ngModel="1" *ngIf="CuentasEditarVal" hidden>
+                            <input type="number" class="form-control" name="CuentasEditar" [(ngModel)]="CuentasEditarMod" *ngIf="!CuentasEditarVal" hidden>
                             <label>Editar</label>
                           </div>
-                          <div class="col-md-4" align="center">
-                            <div class="checkboxTwo">
-                              <input type="checkbox" name="confEliminarCh" [(ngModel)]="confEliminarVal" id="confEliminar" hidden />
-                              <label for="confEliminar"></label>
-                            </div>
-                            <input type="number" class="form-control" name="ConfEliminar" ngModel="1" *ngIf="confEliminarVal" hidden>
-                            <input type="number" class="form-control" name="ConfEliminar" [(ngModel)]="confEliminarMod" *ngIf="!confEliminarVal" hidden>
-                            <label>Eliminar</label>
-                          </div>
+                          <div class="col-md-1"></div>
+                          
                         </div>
                   </div>
                 </div>
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Destinatarios</div>
+                          </div>
+                          <div class="row borde" >
+                              <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="DestinatariosVerCh" [(ngModel)]="DestinatariosVerVal" id="DestinatariosVer" hidden />
+                                <label for="DestinatariosVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="DestinatariosVer" ngModel="1" *ngIf="DestinatariosVerVal" hidden>
+                              <input type="number" class="form-control" name="DestinatariosVer" [(ngModel)]="DestinatariosVerMod" *ngIf="!DestinatariosVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="DestinatariosEditarCh" [(ngModel)]="DestinatariosEditarVal" id="DestinatariosEditar" hidden />
+                                <label for="DestinatariosEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="DestinatariosEditar" ngModel="1" *ngIf="DestinatariosEditarVal" hidden>
+                              <input type="number" class="form-control" name="DestinatariosEditar" [(ngModel)]="DestinatariosEditarMod" *ngIf="!DestinatariosEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                           
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Cajas Recaudo</div>
+                          </div>
+                          <div class="row borde" >
+                              <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="CajasRVerCh" [(ngModel)]="CajasRVerVal" id="CajasRVer" hidden />
+                                <label for="confVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="CajasRVer" ngModel="1" *ngIf="CajasRVerVal" hidden>
+                              <input type="number" class="form-control" name="CajasRVer" [(ngModel)]="CajasRVerMod" *ngIf="!CajasRVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="CajasREditarCh" [(ngModel)]="CajasREditarVal" id="CajasREditar" hidden />
+                                <label for="CajasREditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="CajasREditar" ngModel="1" *ngIf="CajasREditarVal" hidden>
+                              <input type="number" class="form-control" name="CajasREditar" [(ngModel)]="CajasREditarMod" *ngIf="!CajasREditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                          
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Perfiles</div>
+                          </div>
+                          <div class="row borde" >
+                              <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="PerfilesVerCh" [(ngModel)]="PerfilesVerVal" id="PerfilesVer" hidden />
+                                <label for="confVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="PerfilesVer" ngModel="1" *ngIf="PerfilesVerVal" hidden>
+                              <input type="number" class="form-control" name="PerfilesVer" [(ngModel)]="PerfilesVerMod" *ngIf="!PerfilesVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="PerfilesEditarCh" [(ngModel)]="PerfilesEditarVal" id="PerfilesEditar" hidden />
+                                <label for="PerfilesEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="PerfilesEditar" ngModel="1" *ngIf="PerfilesEditarVal" hidden>
+                              <input type="number" class="form-control" name="PerfilesEditar" [(ngModel)]="PerfilesEditarMod" *ngIf="!PerfilesEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                           
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Funcionarios</div>
+                          </div>
+                          <div class="row borde" >
+                              <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="FuncionariosVerCh" [(ngModel)]="FuncionariosVerVal" id="FuncionariosVer" hidden />
+                                <label for="FuncionariosVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="FuncionariosVer" ngModel="1" *ngIf="FuncionariosVerVal" hidden>
+                              <input type="number" class="form-control" name="FuncionariosVer" [(ngModel)]="FuncionariosVerMod" *ngIf="!FuncionariosVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="FuncionariosEditarCh" [(ngModel)]="FuncionariosEditarVal" id="FuncionariosEditar" hidden />
+                                <label for="FuncionariosEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="FuncionariosEditar" ngModel="1" *ngIf="FuncionariosEditarVal" hidden>
+                              <input type="number" class="form-control" name="FuncionariosEditar" [(ngModel)]="FuncionariosEditarMod" *ngIf="!FuncionariosEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Terceros</div>
+                          </div>
+                          <div class="row borde" >
+                              <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="TercerosVerCh" [(ngModel)]="TercerosVerVal" id="TercerosVer" hidden />
+                                <label for="TercerosVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="TercerosVer" ngModel="1" *ngIf="TercerosVerVal" hidden>
+                              <input type="number" class="form-control" name="TercerosVer" [(ngModel)]="TercerosVerMod" *ngIf="!TercerosVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="TercerosEditarCh" [(ngModel)]="TercerosEditarVal" id="TercerosEditar" hidden />
+                                <label for="TercerosEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="TercerosEditar" ngModel="1" *ngIf="TercerosEditarVal" hidden>
+                              <input type="number" class="form-control" name="TercerosEditar" [(ngModel)]="TercerosEditarMod" *ngIf="!TercerosEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                          </div>
+                    </div>
+                    <div class="col-md-2 caja">
+                        <div class="row" >
+                            <div class="col-md-12" align="center" style="margin-bottom: 10px">Grupos</div>
+                          </div>
+                          <div class="row" >
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="GruposVerCh" [(ngModel)]="GruposVerVal" id="GruposVer" hidden />
+                                <label for="GruposVer"></label>
+                              </div>
+                              <input type="number" class="form-control" name="GruposVer" ngModel="1" *ngIf="GruposVerVal" hidden>
+                              <input type="number" class="form-control" name="GruposVer" [(ngModel)]="GruposVerMod" *ngIf="!GruposVerVal" hidden>
+                              <label>Ver</label>
+                            </div>
+                            <div class="col-md-5" align="center">
+                              <div class="checkboxTwo">
+                                <input type="checkbox" name="GruposEditarCh" [(ngModel)]="GruposEditarVal" id="GruposEditar" hidden />
+                                <label for="GruposEditar"></label>
+                              </div>
+                              <input type="number" class="form-control" name="GruposEditar" ngModel="1" *ngIf="GruposEditarVal" hidden>
+                              <input type="number" class="form-control" name="GruposEditar" [(ngModel)]="GruposEditarMod" *ngIf="!GruposEditarVal" hidden>
+                              <label>Editar</label>
+                            </div>
+                            <div class="col-md-1"></div>
+                          </div>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-bottom: 10px">
+                      <div class="col-md-2 caja">
+                          <div class="row" >
+                              <div class="col-md-12" align="center" style="margin-bottom: 10px"> Proveedores</div>
+                            </div>
+                            <div class="row " >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="ProveedoresVerCh" [(ngModel)]="ProveedoresVerVal" id="ProveedoresVer" hidden />
+                                  <label for="ProveedoresVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="ProveedoresVer" ngModel="1" *ngIf="ProveedoresVerVal" hidden>
+                                <input type="number" class="form-control" name="ProveedoresVer" [(ngModel)]="ProveedoresVerMod" *ngIf="!ProveedoresVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="ProveedoresEditarCh" [(ngModel)]="ProveedoresEditarVal" id="ProveedoresEditar" hidden />
+                                  <label for="ProveedoresEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="ProveedoresEditar" ngModel="1" *ngIf="ProveedoresEditarVal" hidden>
+                                <input type="number" class="form-control" name="ProveedoresEditar" [(ngModel)]="ProveedoresEditarMod" *ngIf="!ProveedoresEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                              
+                            </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12" style="text-align: center" style="margin-bottom: 10px">
+                          <h5 style="text-align: left; margin-left: 25px ">Indicadores</h5>
+                      </div>
+                      
+                      <div class="col-md-2 caja" style="margin-bottom: 10px">
+                          <div class="row" >
+                              <div class="col-md-12"  style="margin-bottom: 10px; text-align: center">Balance General</div>
+                            </div>
+                            <div class="row borde" >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="BalanceVerCh" [(ngModel)]="BalanceVerVal" id="BalanceVer" hidden />
+                                  <label for="BalanceVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="BalanceVer" ngModel="1" *ngIf="BalanceVerVal" hidden>
+                                <input type="number" class="form-control" name="BalanceVer" [(ngModel)]="BalanceVerMod" *ngIf="!BalanceVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="BalanceEditarCh" [(ngModel)]="BalanceEditarVal" id="BalanceEditar" hidden />
+                                  <label for="BalanceEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="BalanceEditar" ngModel="1" *ngIf="BalanceEditarVal" hidden>
+                                <input type="number" class="form-control" name="BalanceEditar" [(ngModel)]="BalanceEditarMod" *ngIf="!BalanceEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                            </div>
+                      </div>
+                      <div class="col-md-2 caja" style="margin-bottom: 10px">
+                        
+                          <div class="row" >
+                              <div class="col-md-12" align="center" style="margin-bottom: 10px">Flujo de Efectivo</div>
+                            </div>
+                            <div class="row borde" >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="FlujoVerCh" [(ngModel)]="FlujoVerVal" id="FlujoVer" hidden />
+                                  <label for="FlujoVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="FlujoVer" ngModel="1" *ngIf="FlujoVerVal" hidden>
+                                <input type="number" class="form-control" name="FlujoVer" [(ngModel)]="FlujoVerMod" *ngIf="!FlujoVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="FlujoEditarCh" [(ngModel)]="FlujoEditarVal" id="FlujoEditar" hidden />
+                                  <label for="FlujoEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="FlujoEditar" ngModel="1" *ngIf="FlujoEditarVal" hidden>
+                                <input type="number" class="form-control" name="FlujoEditar" [(ngModel)]="FlujoEditarMod" *ngIf="!FlujoEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                        
+                            </div>
+                      </div>
+                      <div class="col-md-2 caja" style="margin-bottom: 10px">
+                          <div class="row" >
+                              <div class="col-md-12" align="center" style="margin-bottom: 10px">Cuentas por Cobrar</div>
+                            </div>
+                            <div class="row borde" >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="CuentaCVerCh" [(ngModel)]="CuentaCVerVal" id="CuentaCVer" hidden />
+                                  <label for="CuentaCVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="CuentaCVer" ngModel="1" *ngIf="CuentaCVerVal" hidden>
+                                <input type="number" class="form-control" name="CuentaCVer" [(ngModel)]="CuentaCVerMod" *ngIf="!CuentaCVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="CuentaCEditarCh" [(ngModel)]="CuentaCEditarVal" id="CuentaCEditar" hidden />
+                                  <label for="CuentaCEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="CuentaCEditar" ngModel="1" *ngIf="CuentaCEditarVal" hidden>
+                                <input type="number" class="form-control" name="CuentaCEditar" [(ngModel)]="CuentaCEditarMod" *ngIf="!CuentaCEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                              
+                            </div>
+                      </div>
+                      <div class="col-md-2 caja" style="margin-bottom: 10px">
+                          <div class="row" >
+                              <div class="col-md-12" align="center" style="margin-bottom: 10px">Cuenta por Pagar</div>
+                            </div>
+                            <div class="row borde" >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="CuentaPVerCh" [(ngModel)]="CuentaPVerVal" id="CuentaPVer" hidden />
+                                  <label for="CuentaPVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="CuentaPVer" ngModel="1" *ngIf="CuentaPVerVal" hidden>
+                                <input type="number" class="form-control" name="CuentaPVer" [(ngModel)]="CuentaPVerMod" *ngIf="!CuentaPVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="CuentaPEditarCh" [(ngModel)]="CuentaPEditarVal" id="CuentaPEditar" hidden />
+                                  <label for="CuentaPEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="CuentaPEditar" ngModel="1" *ngIf="CuentaPEditarVal" hidden>
+                                <input type="number" class="form-control" name="CuentaPEditar" [(ngModel)]="CuentaPEditarMod" *ngIf="!CuentaPEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                              
+                            </div>
+                      </div>
+                      <div class="col-md-2 caja" style="margin-bottom: 10px">
+                          <div class="row" >
+                              <div class="col-md-12" align="center" style="margin-bottom: 10px">Estado de Cuentas</div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-md-1"></div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="EstadoVerCh" [(ngModel)]="EstadoVerVal" id="EstadoVer" hidden />
+                                  <label for="EstadoVer"></label>
+                                </div>
+                                <input type="number" class="form-control" name="EstadoVer" ngModel="1" *ngIf="EstadoVerVal" hidden>
+                                <input type="number" class="form-control" name="EstadoVer" [(ngModel)]="EstadoVerMod" *ngIf="!EstadoVerVal" hidden>
+                                <label>Ver</label>
+                              </div>
+                              <div class="col-md-5" align="center">
+                                <div class="checkboxTwo">
+                                  <input type="checkbox" name="EstadoEditarCh" [(ngModel)]="EstadoEditarVal" id="EstadoEditar" hidden />
+                                  <label for="EstadoEditar"></label>
+                                </div>
+                                <input type="number" class="form-control" name="EstadoEditar" ngModel="1" *ngIf="EstadoEditarVal" hidden>
+                                <input type="number" class="form-control" name="EstadoEditar" [(ngModel)]="EstadoEditarMod" *ngIf="!EstadoEditarVal" hidden>
+                                <label>Editar</label>
+                              </div>
+                              <div class="col-md-1"></div>
+                             
+                            </div>
+                      </div>
+                     
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12 col-md-offset-4">
+                          <div class="text-right">
+                              <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                      (confirm)="GuardarPerfil(FormPerfil, ModalPerfil)">Guardar Información</button>
+                      </div>
+                      </div>
+                    </div>
             
                <!-- <div class="row" style="border-style: solid; border-width:1px">
                   <div class="col-md-12" align="center">Configuración</div>
