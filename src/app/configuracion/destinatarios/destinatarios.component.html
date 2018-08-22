@@ -101,7 +101,7 @@
                             <tbody>
                                 <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
                                     <td width="20%">
-                                        <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (click)="boolPais=true" required #pais="ngModel">
+                                            <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
                                             <option value="">Seleccione País</option>
                                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                                         </select>

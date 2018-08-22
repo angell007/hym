@@ -83,6 +83,19 @@ export class DestinatariosComponent implements OnInit {
     });
   }
 
+  Bancos_Pais(Pais){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+    });
+  }
+
+  AutoSleccionarMunicipio(Pais, Banco){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+      this.Banco = Banco;
+    });
+  }
+
   OcultarFormularios()
   {
     this.InicializarBool();
