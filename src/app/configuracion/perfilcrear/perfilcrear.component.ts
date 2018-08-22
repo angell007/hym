@@ -23,8 +23,10 @@ export class PerfilcrearComponent implements OnInit {
   ngOnInit() {
   }
 
-  GuardarPerfil(formulario: NgForm, modal){
-    let info = JSON.stringify(formulario.value);
+  GuardarPerfil(formulario: NgForm){
+    console.log(formulario.value);
+    
+   let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     console.log(info);    
     datos.append("modulo",'Perfil');
