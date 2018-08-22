@@ -1,9 +1,10 @@
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener,TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../shared/globales/globales';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-traslados',
@@ -45,6 +46,11 @@ export class TrasladosComponent implements OnInit {
   public boolProveedorDestino:boolean = false;
   public boolBancoDestino:boolean = false;
   public boolClienteDestino:boolean = false;
+  public user : any;
+
+  rowsFilter = [];
+  tempFilter = [];
+  columns = [];
   
   //Valores por defecto
   tipoDefault: string = "";
@@ -59,17 +65,47 @@ export class TrasladosComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
+
   readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date();
 
   traslados = [];
   conteoTraslados = [];
   
-  constructor(private http : HttpClient, private globales : Globales) { }
+  constructor(private http : HttpClient, private globales : Globales) { 
+    this.fetchFilterData((data) => {
+      this.tempFilter = [...data];
+      this.rowsFilter = data;
+    }); 
+  }
 
   ngOnInit() {
-    this.ActualizarVista();   
+    this.ActualizarVista();  
+    this.user = JSON.parse(localStorage.User);
+    this. columns = [
+      //{  prop: '{{Fecha | date:"dd/MM/yy"}} ', name: 'Fecha', maxWidth:'120' },
+      {  prop: 'Funcionario', name: 'Funcionario' },
+      {  prop: 'Origen',  name: 'Origen', maxWidth:'260'   },
+      {  prop: 'Destino', name: 'Destino', maxWidth:'260' },
+      {  prop: 'Detalle', name: 'Detalle', maxWidth:'260' },
+      {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
+      {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
+      { cellTemplate: this.PlantillaBotones, prop:'Id_Traslado', name: 'Acciones', sortable: false, maxWidth:'110' }
+    ]; 
   }
+
+  fetchFilterData(cb) {
+    const req = new XMLHttpRequest();
+    req.open('GET', this.ruta+'php/traslados/lista.php');
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
+  } 
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
@@ -117,9 +153,9 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/terceros/lista_clientes.php').subscribe((data:any)=>{     
       this.Clientes= data;        
     });
-    this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
+    /*this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
       this.traslados= data;
-    });
+    });*/
 
     this.http.get(this.ruta+'php/traslados/conteo.php').subscribe((data:any)=>{
       this.conteoTraslados= data[0];     
@@ -252,27 +288,6 @@ export class TrasladosComponent implements OnInit {
       this.deleteSwal.show();
     });    
   }
-
-  /*OcultarFormulario(modal){
-    this.NombreOrigen = null;
-    this.NombreDestino = null;
-    this.Origen = null;
-    this.Destino = null;
-    this.Identificacion = null;
-    this.Tipo = null;
-    this.IdOrigen = null;
-    this.IdDestino = null;
-    this.Moneda = null;
-    this.Valor = null;
-    this.Estado = null;
-    this.Detalle = null;
-    modal.hide();
-  }*/
-
-  /*EventChange()
-  {
-    this.NombreOrigen = this.asd;
-  }*/
 
   ObtenerOrigen(IdOrigen, tabla)
   {

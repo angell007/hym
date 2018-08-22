@@ -102,57 +102,49 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12" >
+            <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
+                <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
+        </div>       
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="widget card">
-                <div class="card-block">
-                    <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
-                        <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
-                    <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width:150px;">Fecha</th>
-                                    <th>Funcionario</th>
-                                    <th>Origen</th>
-                                    <th>Destino</th>
-                                    <th>Detalles</th>
-                                    <th>Moneda</th>
-                                    <th style="width:80px">Valor</th>
-                                    <th style="width:130px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let traslado of traslados">
-                                    <td>{{traslado.Fecha | date:"dd/MM/yy" }}</td>
-                                    <td>{{traslado.Funcionario}}</td>
-                                    <td>{{traslado.Origen}}</td>
-                                    <td>{{traslado.Destino}}</td>
-                                    <td>{{traslado.Detalle}}</td>
-                                    <td>{{traslado.Moneda}}</td>
-                                    <td class="text-right">{{traslado.Valor | currency }}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)">
-                                            <i class="ti-search"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)">
-                                            <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarTraslado(traslado.Id_Traslado)">
-                                            <i class="ti-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card">
+                <div class="card-block ">
+                    <ngx-datatable
+                    #table
+                    class='data-table' 
+                    [columnMode]="'force'"
+                    [columns]="columns" 
+                    [loadingIndicator] ="true"
+                    [selectionType] = "'checkbox'" 
+                    [headerHeight]="30"
+                    [footerHeight]="30"
+                    [rowHeight]="undefined"
+                    [limit]="100"
+                    [messages] = "{ loadingMessage:'Cargando Información', emptyMessage:'No Hay información Disponible', totalMessage: 'Total' }"
+                    [rows]='rowsFilter'>
+                    </ngx-datatable>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #PlantillaBotones let-row="row" let-value="value">
+    <div class="text-center">
+        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTraslado(value, ModalVerTraslado)">
+            <i class="ti-search"></i>
+        </button>
+        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(value, ModalEditarTraslado)">
+             <i class="ti-pencil"></i>
+        </button>
+        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+            (confirm)="EliminarTraslado(value)">
+            <i class="ti-trash"></i>
+        </button>
+    </div>
+</ng-template>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTraslado>
     <div class="app-modal-header">
@@ -338,7 +330,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [disabled]="!valor.valid || estado.value=='' || moneda.value=='' || tipo.value=='' "
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta informacion' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar Información</button>
         </div>
     </div>
@@ -365,7 +357,7 @@
                         <strong>
                             <label>Tipo:</label>
                         </strong>
-                        <label>{{Tipo}}</label>
+                        <span>{{Tipo}}</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -373,7 +365,7 @@
                         <strong>
                             <label>Origen:</label>
                         </strong>
-                        <label>{{Origen}}</label>
+                        <span>{{Origen}}</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -381,7 +373,7 @@
                         <strong>
                             <label>Destino:</label>
                         </strong>
-                        <label>{{Destino}}</label>
+                        <span>{{Destino}}</span>
                     </div>
                 </div>
             </div>
@@ -391,7 +383,7 @@
                         <strong>
                             <label>Moneda:</label>
                         </strong>
-                        <label>{{Moneda}}</label>
+                        <span>{{Moneda}}</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -399,7 +391,7 @@
                         <strong>
                             <label>Valor:</label>
                         </strong>
-                        <label>{{Valor}}</label>
+                        <span>{{Valor}}</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -407,7 +399,7 @@
                         <strong>
                             <label>Estado:</label>
                         </strong>
-                        <label>{{Estado}}</label>
+                        <span>{{Estado}}</span>
                     </div>
                 </div>
             </div>
@@ -417,7 +409,7 @@
                         <strong>
                             <label>Fecha:</label>
                         </strong>
-                        <label>{{Fecha | date:"dd/MM/yy" }}</label>
+                        <span>{{Fecha | date:"dd/MM/yy" }}</span>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -425,7 +417,7 @@
                         <strong>
                             <label>Nombre del funcionario:</label>
                         </strong>
-                        <label>{{Nombre_Fun}}</label>
+                        <span>{{Nombre_Fun}}</span>
                     </div>
                 </div>
             </div>
@@ -435,7 +427,7 @@
                         <strong>
                             <label>Detalles:</label>
                         </strong>
-                        <label>{{Detalle}}</label>
+                        <span>{{Detalle}}</span>
                     </div>
                 </div>
             </div>
@@ -609,7 +601,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="submit"class="btn btn-primary" [disabled]="!valorEd.valid || estadoEd.value=='' || monedaEd.value=='' || tipoEd.value=='' "
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a actualizar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a actualizar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Actualizar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="ActualizarTraslado(FormEditarTraslado, ModalEditarTraslado)">Actualizar Informacion</button>
         </div>
     </div>
