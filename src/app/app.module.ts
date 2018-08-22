@@ -24,7 +24,7 @@ import { CommonLayoutComponent } from './common/common-layout.component';
 import { AuthenticationLayoutComponent } from './common/authentication-layout.component';
 
 //Directives
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDropdown} from '@ng-bootstrap/ng-bootstrap';
 import { Sidebar_Directives } from './shared/directives/side-nav.directive';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
@@ -180,6 +180,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         AuthGuard,
         ThemeConstants,
         Globales,
+        NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     ],
     bootstrap: [AppComponent]

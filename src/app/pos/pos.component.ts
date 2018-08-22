@@ -4,6 +4,9 @@ import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../shared/globales/globales';
 import { Subject } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
+import {NgbTypeaheadConfig} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -13,7 +16,7 @@ import { Subject } from 'rxjs';
 })
 export class PosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject = new Subject();
+  dtTrigger = new Subject();
 
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
@@ -37,6 +40,7 @@ export class PosComponent implements OnInit {
     Id_Tipo_Cuenta: ''
   }];
   public Envios: any[] = [{
+    Destino : '',
     Numero_Documento_Destino: '',
     Id_Cuenta_Destino: '',
     Valor_Transferencia: '',
@@ -104,10 +108,6 @@ export class PosComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       dom: 'Bfrtip',
-      buttons: [
-        /*'print',
-        'csv'*/
-      ],
       responsive: true,
       /* below is the relevant part, e.g. translated to spanish */ 
       language: {
@@ -142,6 +142,14 @@ export class PosComponent implements OnInit {
     this.Estado = "Enviado";
     this.FormaPago = "Efectivo";
   }
+
+  search_destino = (text$: Observable<string>) =>
+  text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.Destinatarios.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    );
+  formatter_destino = (x: {Nombre: string}) => x.Nombre;
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
@@ -258,6 +266,7 @@ export class PosComponent implements OnInit {
         this.InicializarBool();
         this.transferenciaExitosaSwal.show();
         this.Envios = [{
+          Destino :'',
           Numero_Documento_Destino: '',
           Id_Cuenta_Destino: '',
           Valor_Transferencia: '',
@@ -359,6 +368,7 @@ export class PosComponent implements OnInit {
           this.CuentasDestinatario = data;
           (document.getElementById("Numero_Documento_Destino" + index) as HTMLInputElement).value = data[0].Id_Destinatario;
           this.Envios.push({
+            Destino : '',
             Numero_Documento_Destino: '',
             Id_Cuenta_Destino: '',
             Valor_Transferencia: '',
@@ -390,6 +400,7 @@ export class PosComponent implements OnInit {
       }
       if (totalTransferencia <= this.CantidadTransferida) {
         this.Envios.push({
+          Destino : '',
           Numero_Documento_Destino: '',
           Id_Cuenta_Destino: '',
           Valor_Transferencia: '',

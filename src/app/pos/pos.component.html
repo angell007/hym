@@ -218,37 +218,11 @@
                     </ul>
                     <div class="mrg-top-10" style="min-height: 470px;">
                         <form #FormTransferencia="ngForm">
-                            <div class="row">
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación funcionario</label>
-                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación funcionario</label>
-                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Id_Oficina" ngModel="{{IdOficina}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación funcionario</label>
-                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Id_Caja" ngModel="{{IdCaja}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación funcionario</label>
-                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Estado" ngModel="{{Estado}}">
-                                    </div>
-                                </div>
-                                <!--<div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación funcionario</label>
-                                        <input type="text" placeholder="Valor a Transferir" class="form-control" name="Costo_Transferencia" ngModel="{{Costo}}">
-                                    </div>
-                                </div>-->
+                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
+                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Id_Oficina" ngModel="{{IdOficina}}">
+                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Id_Caja" ngModel="{{IdCaja}}">
+                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Estado" ngModel="{{Estado}}">
+                            <div class="row"> 
                                 <div class="col-md-3">
                                     <label>Forma de Pago</label>
                                     <select class="form-control" name="Forma_Pago" [(ngModel)]="formaPagoDefault" (click)="boolFormaPago=true" required #formaPago="ngModel">
@@ -257,7 +231,6 @@
                                         <option value="Consignacion">Consignación</option>
                                     </select>
                                     <div *ngIf="formaPago.value=='' && boolFormaPago==true" style="color:red">Campo inválido</div>
-                                    <div *ngIf="!formaPago.value==''" style="color:green">Datos correctos!</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Recibe Para</label>
@@ -267,7 +240,6 @@
                                         <option value="Cliente">Cliente</option>
                                     </select>
                                     <div *ngIf="recibePara.value=='' && boolRecibePara==true" style="color:red">Campo inválido</div>
-                                    <div *ngIf="!recibePara.value==''" style="color:green">Datos correctos!</div>
                                 </div>
                                 <div class="col-md-6" *ngIf="Recibe==='Cliente'">
                                     <label>Seleccione Cliente</label>
@@ -277,31 +249,37 @@
                                         <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                     </select>
                                     <div *ngIf="seleccioneCliente.value=='' && boolSeleccioneCliente==true" style="color:red">Campo inválido</div>
-                                    <div *ngIf="!seleccioneCliente.value==''" style="color:green">Datos correctos!</div>
                                 </div>
                             </div>
                             <hr class="mrg-top-10 mrg-btm-10">
                             <div *ngIf="Recibe==='Transferencia'">
                                 <h5>Destinatarios</h5>
                                 <div *ngFor="let Envio of Envios; let i= index">
-
                                     <div class="row mrg-top-10">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Número Documento</label>
-                                                <input id="Numero_Documento_Destino{{i}}" name="Numero_Documento_Destino{{i}}" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                <input type="text" class="form-control" 
+                                                    name="Destino{{i}}" 
+                                                    id="Destino{{i}}" 
+                                                    (blur)="LlenarValoresDestinatario(Envio.Destino, i)"
+                                                    [(ngModel)]="Envio.Destino" 
+                                                    [ngbTypeahead]="search_destino"
+                                                    [resultTemplate]="rt_destino" 
+                                                    [inputFormatter]="formatter_destino" 
+                                                    (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)"
+                                                    
+                                                    >
+
+                                                <!-- <input  type="text" 
                                                     placeholder="Número Documento" class="form-control" [(ngModel)]="Envio.Numero_Documento_Destino"
-                                                    (focusout)="boolNumeroDocumento = true" autocomplete="off" required list="browsers"
-                                                    (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)"
-                                                    (click)="boolNumeroDocumento=true" required #numeroDocumento="ngModel">
+                                                    list="browsers"
+                                                    
+                                                   required #numeroDocumento="ngModel"> -->
+<!--
                                                 <div *ngIf="(numeroDocumento.value=='' && boolNumeroDocumento==true) || numeroDocumento.value.length < 5" style="color:red">Campo inválido</div>
                                                 <div *ngIf="!numeroDocumento.value=='' && numeroDocumento.value.length >= 5" style="color:green">Datos correctos!</div>
-                                                <datalist id="browsers" (select)="LlenarValoresDestinatario($event.target.value)">
-                                                    <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Id_Destinatario">{{Destinatario.Nombre}}</option>
-                                                </datalist>
-                                                <datalist id="browsers1" (select)="LlenarValoresDestinatario($event.target.value,i)">
-                                                        <option *ngFor="let Destinatario of DestinatariosFiltrados" [value]="Destinatario.Nombre">{{Destinatario.Nombre}}</option>
-                                                    </datalist>
+                                                -->
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -312,7 +290,7 @@
                                                     (ngModelChange)="AutoCompletarDestinatario($event)" (blur)="LlenarValoresDestinatario($event.target.value, i)">
                                                 </div>
                                          </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Cuenta</label>
                                                 <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino" class="form-control" autocomplete="off" (click)="boolCuenta=true"
@@ -334,10 +312,10 @@
                                                 <div *ngIf="!valor.value==''" style="color:green">Datos correctos!</div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                                 <p></p>
                                                 <button class="btn-danger btn-mini" (click)="EliminarDestinatario(i)"><i class="fa fa-trash"></i></button>
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -742,7 +720,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card modulos" id="servicios" style="display: none;">
+            <div class="card modulos" id="servicios" style="display: none;"gi>
                 <div class="card-block">
                     <ul class="list-unstyled list-info">
                         <li>
@@ -814,6 +792,13 @@
         </div>
     </div>
 </div>
+
+<ng-template #rt_destino let-r="result" let-t="term">
+    <span class="f-9">{{ r.Id_Destinatario }}
+        <strong>{{r.Nombre}}</strong>
+    </span>
+</ng-template>
+
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
     <div class="app-modal-header">
