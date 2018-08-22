@@ -39,7 +39,7 @@ export class PerfileditarComponent implements OnInit {
   GuardarPerfil(formulario: NgForm){
     console.log(formulario.value);
     
-   let info = JSON.stringify(formulario.value);
+   /*let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     console.log(info);    
     datos.append("modulo",'Perfil');
@@ -65,7 +65,7 @@ export class PerfileditarComponent implements OnInit {
      this.confirmacionSwal.show();
      this.VerPantallaLista();
      formulario.reset();
-    });
+    });*/
   }
   VerPantallaLista() {
     this.router.navigate(['/perfiles']);
