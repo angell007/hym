@@ -92,7 +92,7 @@ export class TrasladosComponent implements OnInit {
       {  prop: 'Detalle', name: 'Detalle', maxWidth:'260' },
       {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
       {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
-      { cellTemplate: this.PlantillaBotones, prop:'Id_Traslado', name: 'Acciones', sortable: false, maxWidth:'110' }
+      { cellTemplate: this.PlantillaBotones, prop:'Id_Traslado', name: 'Acciones', sortable: false, maxWidth:'140' }
     ]; 
   }
 

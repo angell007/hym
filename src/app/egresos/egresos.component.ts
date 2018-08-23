@@ -134,7 +134,7 @@ export class EgresosComponent implements OnInit {
       {  prop: 'Tercero', name: 'Tercero', maxWidth:'260' },
       {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
       {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
-      { cellTemplate: this.PlantillaBotones, prop:'Id_Egreso', name: 'Acciones', sortable: false, maxWidth:'110' }
+      { cellTemplate: this.PlantillaBotones, prop:'Id_Egreso', name: 'Acciones', sortable: false, maxWidth:'200' }
     ];
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
@@ -309,7 +309,7 @@ export class EgresosComponent implements OnInit {
 
   VerEgreso(id, modal){
     this.ListaTercerosNoGrupo();
-    this.http.get(this.ruta+'php/genericos/detalle.php',{
+    this.http.get(this.ruta+'php/egresos/lista_egresos.php',{
       params:{modulo:'Egreso', id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;

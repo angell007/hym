@@ -3,12 +3,24 @@
     <h4 class="pull-left">Egresos</h4>
     <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
       <i class="ti-plus"></i> Agregar nuevo egreso</button>
-    <button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
-      <i class="fa fa-area-chart"></i> Indicadores</button>
+    <!--<button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
+      <i class="fa fa-area-chart"></i> Indicadores</button>-->
   </div>
   <div class="clearfix"></div>
   <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-4">
+          <div class="app-modal-body">
+              <form #FormEgreso="ngForm">
+                <div class="row mrg-top-35">
+                  <div class="col-md-12">
+                    <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                      [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                  </div>
+                </div>
+              </form>
+            </div>
+      </div>
+      <div class="col-md-8">
           <div class="card">
               <div class="card-block ">
                   <ngx-datatable
@@ -28,6 +40,7 @@
               </div>
           </div>
       </div>
+      
     <!--<div class="col-md-12">
       <div class="widget card">
         <div class="card-block">
@@ -75,7 +88,7 @@
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalIndicadores" #ModalIndicadores>
+<!--<app-modal-basic [dialogClass]="'modal-lg'" id="ModalIndicadores" #ModalIndicadores>
   <div class="app-modal-header">
     <h4>Indicadores</h4>
     <button type="button" class="close basic-close" (click)="ModalIndicadores.hide()">
@@ -92,7 +105,7 @@
       </div>
     </form>
   </div>
-</app-modal-basic>
+</app-modal-basic>-->
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEgreso" #ModalEgreso>
   <div class="app-modal-header">
@@ -339,7 +352,7 @@
             <i class="ti-trash"></i>
           </button>
     </div>
-</ng-template>
+</ng-template> 
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
 

@@ -153,7 +153,7 @@
         </button>
         <h4>Nuevo Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormTraslado="ngForm">
             <div class="col-md-4">
                 <div class="form-group" hidden>
@@ -341,17 +341,64 @@
         <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4>Ver Traslado</h4>
+        <h4>Detalle de Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerTraslado="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="Id_Traslado" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+    <div class="app-modal-body" >
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong>
+                            <label>Nombre del funcionario:</label>
+                        </strong>
+                        <span>{{Nombre_Fun}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Fecha:</label>
+                        </strong>
+                        <span>{{Fecha | date:"dd/MM/yy" }}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <strong>
+                            <label>Estado:</label>
+                        </strong>
+                        <span>{{Estado}}</span>
+                    </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="col-md-12">
+                <div class="widget card">
+                    <div class="card-block">
+                        <div class="table-overflow">
+                            <table class="table table-hover table-sm table-striped">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th>Tipo</th>
+                                        <th>Origen</th>
+                                        <th>Destino</th>
+                                        <th>Moneda</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr  style="text-align: center;">
+                                        <td>{{Tipo}}</td>
+                                        <td>{{Origen}}</td>
+                                        <td>{{Destino}}</td>
+                                        <td>{{Moneda}}</td>
+                                        <td>{{Valor}}</td>   
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <strong>
@@ -402,36 +449,18 @@
                         <span>{{Estado}}</span>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Fecha:</label>
-                        </strong>
-                        <span>{{Fecha | date:"dd/MM/yy" }}</span>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre del funcionario:</label>
-                        </strong>
-                        <span>{{Nombre_Fun}}</span>
-                    </div>
-                </div>
-            </div>
+            </div>-->
             <div class="row">
                 <div class="col-md-12" *ngIf="Detalle!=''">
                     <div class="form-group">
                         <strong>
                             <label>Detalles:</label>
                         </strong>
+                        <br>
                         <span>{{Detalle}}</span>
                     </div>
                 </div>
             </div>
-        </form>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
@@ -447,7 +476,7 @@
         </button>
         <h4>Editar Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormEditarTraslado="ngForm">
             <input type="hidden" name="Id_Traslado" ngModel="{{Identificacion}}"> 
             <input type="hidden"  name="Identificacion_Funcionario" [(ngModel)]="IdentificacionFuncionario">
