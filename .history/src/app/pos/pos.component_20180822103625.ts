@@ -152,15 +152,6 @@ export class PosComponent implements OnInit {
     );
   formatter_destino = (x: {Id_Destinatario: string}) => x.Id_Destinatario;
 
-  search_remitente = (text$: Observable<string>) =>
-  text$.pipe(
-      debounceTime(200),
-      map(term => term.length < 4 ? []
-        : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    );
-  formatter_remitente = (x: {Id_Transferencia_Remitente: string}) => x.Id_Transferencia_Remitente;
-  
-
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
       //this.FormOficinaAgregar.reset();
@@ -209,6 +200,7 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
       this.Destinatarios = data;
+      console.log(this.Destinatarios);
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
@@ -229,9 +221,14 @@ export class PosComponent implements OnInit {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas= modelo.Cuentas;
+    }else if(modelo.Cuentas==undefined&&modelo.length>5){
+      alert("sdsd");
     }
   }
   NuevoDestinatario() {
+    console.log("INSIDE");
+    console.log(this.Envios);
+
     let agregar: boolean = true;
     let totalTransferencia = 0;
     for (let i = 0; i < this.Envios.length; ++i) {

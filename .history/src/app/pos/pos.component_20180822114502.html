@@ -172,7 +172,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Moneda Destino</label>
+                                    <label>Destino</label>
                                     <select class="form-control" placeholder="Destino"  id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
                                             <option> Seleccione Moneda</option>
                                             <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
@@ -199,6 +199,7 @@
                                 <button class="btn btn-info btn-block mrg-top-80" (click)="realizarCalculo()" >CAMBIAR</button>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -210,7 +211,7 @@
                                 <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
-                                <b class="text-dark font-size-22">Recibos Transferencias</b>
+                                <b class="text-dark font-size-22">Transferencias</b>
                                 <p class="no-mrg-btm ">A cuentas extranjeras</p>
                             </div>
                         </li>
@@ -324,19 +325,16 @@
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
-                                    <!--
                                     <div *ngIf="monedaRecibida.value=='' && boolMonedaRecibida==true" style="color:red">Moneda incorrecta</div>
                                     <div *ngIf="!monedaRecibida.value==''" style="color:green">Moneda correcta!</div>
-                                    -->  
+                                        
                                     <div class="form-group">
                                         <!--Revisar Id?-->
                                         <input id="Cantidad_Recibida" type="number" min=0 (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off"
                                             placeholder="Precio" class="form-control" [(ngModel)]="CantidadRecibida" name="Cantidad_Recibida"
                                             (click)="boolCantidadRecibida=true" required #cantidadRecibida="ngModel">
-                                        
-                                    <!--<div *ngIf="cantidadRecibida.value=='' && boolCantidadRecibida==true" style="color:red">Cantidad recibida incorrecta</div>
+                                        <div *ngIf="cantidadRecibida.value=='' && boolCantidadRecibida==true" style="color:red">Cantidad recibida incorrecta</div>
                                         <div *ngIf="!cantidadRecibida.value==''" style="color:green">Cantidad recibida correcta!</div>
-                                    -->
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -358,18 +356,15 @@
                                             <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                                         </select>
                                     </div>
-                                    <!--
                                     <div *ngIf="monedaTransferencia.value=='' && boolMonedaTransferencia==true" style="color:red">Moneda incorrecta</div>
                                     <div *ngIf="!monedaTransferencia.value==''" style="color:green">Moneda correcta!</div>
-                                    -->   
+                                        
                                     <div class="form-group">
                                         <input id="Cantidad_Transferida" (blur)="NuevoDestinatario()" autocomplete="off" 
                                             type="number" min=0 placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida"
                                             name="Total_Transferencia" (click)="boolCantidadTransferencia=true" required #cantidadTransferencia="ngModel">
-                                        
-                                    <!--    <div *ngIf="cantidadTransferencia.value=='' && boolCantidadTransferencia==true" style="color:red">Cantidad recibida incorrecta</div>
+                                        <div *ngIf="cantidadTransferencia.value=='' && boolCantidadTransferencia==true" style="color:red">Cantidad recibida incorrecta</div>
                                         <div *ngIf="!cantidadTransferencia.value==''" style="color:green">Cantidad recibida correcta!</div>
-                                        -->
                                     </div>
                                 </div>
                             </div>
@@ -383,33 +378,33 @@
                                             placeholder="Número Documento"
                                             name="Numero_Documento_Origen" 
                                             autocomplete="off" 
-                                            [(ngModel)]="DatosRemitente" 
+                                            [(ngModel)]="Remitente" 
 
                                             [ngbTypeahead]="search_remitente"
                                             [resultTemplate]="rt_remitente" 
                                             [inputFormatter]="formatter_remitente" 
-                                            (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)"
+                                            (ngModelChange)="AutoCompletarRemitente(Remitente, i)"
           
                                         >
 
-                                        <!-- <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off" [(ngModel)]="NumeroDocumentoR"
+                                        <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off" [(ngModel)]="NumeroDocumentoR"
                                             required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value, i)"
-                                            (click)="boolNumeroDocumentoR=true" required #numeroDocumentoR="ngModel"> -->
+                                            (click)="boolNumeroDocumentoR=true" required #numeroDocumentoR="ngModel">
                                         
-                                        <!-- <div *ngIf="(numeroDocumentoR.value=='' && boolNumeroDocumentoR==true) || numeroDocumentoR.value.length < 5" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!numeroDocumentoR.value=='' && numeroDocumentoR.value.length >= 5" style="color:green">Datos correctos!</div> -->
+                                        <div *ngIf="(numeroDocumentoR.value=='' && boolNumeroDocumentoR==true) || numeroDocumentoR.value.length < 5" style="color:red">Campo inválido</div>
+                                        <div *ngIf="!numeroDocumentoR.value=='' && numeroDocumentoR.value.length >= 5" style="color:green">Datos correctos!</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" placeholder="Nombre Remitente" autocomplete="off" class="form-control" name="Persona_Envia" ngModel="{{DatosRemitente.Nombre}}">
+                                        <input type="text" placeholder="Nombre Remitente" readonly autocomplete="off" class="form-control" name="Persona_Envia" ngModel="{{DatosRemitente.Nombre}}">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Teléfono</label>
-                                        <input type="text" placeholder="Teléfono Remitente" autocomplete="off" class="form-control" name="Telefono_Envia"
+                                        <input type="text" placeholder="Teléfono Remitente" readonly autocomplete="off" class="form-control" name="Telefono_Envia"
                                             ngModel="{{DatosRemitente.Telefono}}">
                                     </div>
                                 </div>
@@ -464,16 +459,6 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Ciudad Origen</label>
-                                                <select class="form-control">
-                                                    <option value="">Seleccione Ciudad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
                                                 <label>Número de documento</label>
                                                 <input type="text" placeholder="Ejem: 1100543987" class="form-control" name="Documento_Remitente" ngModel="">
                                             </div>
@@ -501,16 +486,6 @@
                                 <form #FormGiroDestinatario="ngForm">
                                     <h4>Destinatario</h4>
                                     <hr>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Ciudad Destino</label>
-                                                <select class="form-control">
-                                                    <option value="">Seleccione Ciudad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -721,7 +696,7 @@
                                     <div class="form-group">
                                         <label>Corresponsal</label>
                                         <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="{{CorresponsalBancario}}" (change)="ConsultarCorresponsal($event.target.value)">
-                                            <option value="">Seleccione un Corresponsal</option>
+                                            <option value="">seleccione un corresponsal</option>
                                             <option *ngFor="let CorresponsalBancario of CorresponsalesBancarios" value="{{CorresponsalBancario.Id_Corresponsal_Bancario}}">{{CorresponsalBancario.Nombre}}</option>
                                         </select>
                                     </div>
@@ -729,7 +704,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valor</label>
-                                        <input name="Valor" type="text" placeholder="Saldo del día" class="form-control" ngModel="{{ValorCorresponsal}}">
+                                        <input name="Valor" type="text" placeholder="Comisión" class="form-control" ngModel="{{ValorCorresponsal}}">
                                     </div>
                                 </div>
                             </div>
@@ -737,7 +712,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Detalles</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{DetalleCorresponsal}}"></textarea>
+                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{DetalleCorresponsal}}">
+                                            </textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -768,16 +744,24 @@
                         <form #FormServicio="ngForm">
                             <h4>Datos del servicio</h4>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Servicio</label>
                                         <select name="Servicio_Externo" class="form-control" ngModel="" (change)="AsignarComisionServicioExterno($event.target.value)">
-                                            <option value="">Seleccione un Servicio</option>
+                                            <option value="">seleccione un servicio</option>
                                             <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Comisión</label>
+                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Moneda</label>
                                         <select name="Moneda" class="form-control" ngModel="">
@@ -786,17 +770,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valor</label>
                                         <input type="text" class="form-control" name="Valor" ngModel="">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Comisión</label>
-                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>
                                     </div>
                                 </div>
                             </div>

@@ -172,7 +172,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Moneda Destino</label>
+                                    <label>Destino</label>
                                     <select class="form-control" placeholder="Destino"  id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
                                             <option> Seleccione Moneda</option>
                                             <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
@@ -199,6 +199,7 @@
                                 <button class="btn btn-info btn-block mrg-top-80" (click)="realizarCalculo()" >CAMBIAR</button>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -768,16 +769,24 @@
                         <form #FormServicio="ngForm">
                             <h4>Datos del servicio</h4>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Servicio</label>
                                         <select name="Servicio_Externo" class="form-control" ngModel="" (change)="AsignarComisionServicioExterno($event.target.value)">
-                                            <option value="">Seleccione un Servicio</option>
+                                            <option value="">seleccione un servicio</option>
                                             <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Comisión</label>
+                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Moneda</label>
                                         <select name="Moneda" class="form-control" ngModel="">
@@ -786,17 +795,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valor</label>
                                         <input type="text" class="form-control" name="Valor" ngModel="">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Comisión</label>
-                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>
                                     </div>
                                 </div>
                             </div>
