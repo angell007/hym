@@ -128,7 +128,13 @@ export class DestinatariosComponent implements OnInit {
     //datos.append("modulo",'Destinatario');
     datos.append("datos",info);
     datos.append("destinatario",destinatario);
-    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       this.Lista_Destinatarios = [{
         Id_Pais:'',
         Id_Banco: '',
@@ -138,7 +144,9 @@ export class DestinatariosComponent implements OnInit {
       localStorage.removeItem("Lista_Inicial");
       formulario.reset();
       this.ActualizarVista();
+      this.saveSwal.show();
      });
+    
 
     
     
