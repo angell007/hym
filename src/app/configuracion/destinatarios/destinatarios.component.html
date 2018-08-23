@@ -266,40 +266,41 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
-                                    <td width="20%">
-                                            <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
-                                            <option value="">Seleccione País</option>
-                                            <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="pais.value=='' && boolPais==true"></div>
-                                    </td>
-                                    <td width="20%">
-                                        <select class="form-control" name="Id_Banco{{i}}"  [(ngModel)]="item.Id_Banco" (click)="boolBanco=true" required #banco="ngModel">
-                                            <option value="">Seleccione Banco</option>
-                                            <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="banco.value=='' && boolBanco==true"></div>
-                                    </td>
-                                    <td width="20%">
-                                        <select class="form-control" name="Tipo_Cuenta{{i}}"  [(ngModel)]="item.Id_Tipo_Cuenta" (click)="boolTipoCuenta=true" required #tipocuenta="ngModel">
-                                            <option value="">Seleccione Cuenta</option>
-                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="tipocuenta.value=='' && boolTipoCuenta==true"></div>
-                                    </td>
-                                    <td width="20%">
-                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [(ngModel)]="item.Numero_Cuenta"  (focusout)="boolCuenta = true" required #cuenta="ngModel">
-                                        <div *ngIf="!cuenta.valid && boolCuenta==true"></div> 
-                                    </td>
-                                    <td width="20%">
-                                        <center>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="pais.value=='' || banco.value=='' || tipocuenta.value=='' || !cuenta.valid" (click)="AgregarFila()" >
-                                        <i class="fa fa-plus"></i>
-                                        </button></center>
-                                    </td>
-                                </tr>
+                                    <tr *ngFor="let cuenta of cuentas; let i = index">
+                                        <td width="20%">
+                                            <select class="form-control" name="Id_Pais{{i}}"  ngModel="{{cuenta.Id_Pais}}" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
+                                                <option value="">Seleccione País</option>
+                                                <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                            </select>
+                                            <div *ngIf="pais.value=='' && boolPais==true"></div>
+                                        </td>
+                                        <td width="20%">
+                                            <select class="form-control" name="Id_Banco{{i}}"  ngModel="{{cuenta.Nombre_Banco}}" (click)="boolBanco=true" required #banco="ngModel">
+                                                <option value="">Seleccione Banco</option>
+                                                <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                                            </select>
+                                            <div *ngIf="banco.value=='' && boolBanco==true"></div>
+                                        </td>
+                                        <td width="20%">
+                                            <select class="form-control" name="Tipo_Cuenta{{i}}"  ngModel="{{cuenta.Nombre_Cuenta}}" (click)="boolTipoCuenta=true" required #tipocuenta="ngModel">
+                                                <option value="">Seleccione Cuenta</option>
+                                                <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
+                                            </select>
+                                            <div *ngIf="tipocuenta.value=='' && boolTipoCuenta==true"></div>
+                                        </td>
+                                        <td width="20%">
+                                            <input class="form-control" name="Numero_Cuenta{{i}}" type="text" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57" ngModel="{{cuenta.Numero_Cuenta}}"  (focusout)="boolCuenta = true" required #cuenta="ngModel">
+                                            <div *ngIf="!cuenta.valid && boolCuenta==true"></div> 
+                                        </td>
+                                        <td width="20%">
+                                            <center>
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="pais.value=='' || banco.value=='' || tipocuenta.value=='' || !cuenta.valid" (click)="AgregarFila()" >
+                                            <i class="fa fa-plus"></i>
+                                            </button></center>
+                                        </td>
+                                    </tr>
                             </tbody>
+                        
                         </table>
                     </div>
                 </div>
@@ -309,6 +310,7 @@
     <div class="app-modal-footer">
             <div class="text-right">
                 <button class="btn btn-primary btn-sm" 
+                [disabled]="!FormEditarDestinatario.valid"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarDestinatario(FormEditarDestinatario, ModalEditarDestinatario)">Guardar</button>
             </div>
