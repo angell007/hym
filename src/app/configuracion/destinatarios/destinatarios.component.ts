@@ -37,6 +37,7 @@ export class DestinatariosComponent implements OnInit {
 
   public boolNombre:boolean = false;
   public boolId:boolean = false;
+  public cuentas: any[] = [];
 
   //Valores por defecto
   paisDefault: string = "";
@@ -80,6 +81,19 @@ export class DestinatariosComponent implements OnInit {
   {
     this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
       this.destinatarios= data;
+    });
+  }
+
+  Bancos_Pais(Pais){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+    });
+  }
+
+  AutoSleccionarMunicipio(Pais, Banco){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+      this.Banco = Banco;
     });
   }
 
@@ -138,27 +152,23 @@ export class DestinatariosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
-      this.Detalle_Destinatario = data; 
+      this.Detalle_Destinatario = data;
+      this.cuentas = data.Cuentas;
+      this.Identificacion = id;
       modal.show();
     });
+   
   }
-
-
-
-
   
   EditarDestinatario(id){
     this.InicializarBool(); 
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+    this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
       params:{modulo:'Destinatario', id:id}
     }).subscribe((data:any)=>{
       console.log(data);      
+      this.Detalle_Destinatario = data;
+      this.cuentas = data.Cuentas;
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Cuentas = data.Cuentas;
-      this.IdBanco = data.Id_Banco; 
-      this.IdPais = data.Id_Pais;
-      this.Detalle = data.Detalle;
       this.ModalEditarDestinatario.show();
     });
   }

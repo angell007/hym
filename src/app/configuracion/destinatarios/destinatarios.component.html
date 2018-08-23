@@ -101,7 +101,7 @@
                             <tbody>
                                 <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
                                     <td width="20%">
-                                        <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (click)="boolPais=true" required #pais="ngModel">
+                                            <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
                                             <option value="">Seleccione País</option>
                                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                                         </select>
@@ -149,7 +149,7 @@
             </div>
     </div>
 </app-modal-basic>
-<!--
+
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDestinatario" #ModalVerDestinatario>
     <div class="app-modal-header">
             <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
@@ -157,7 +157,7 @@
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerDestinatario="ngForm">
-            <div class="row">
+                <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                 <strong><label>Identificación: </label></strong>
@@ -191,41 +191,25 @@
                                     <th scope="col">Banco</th>
                                     <th scope="col">Tipo de Cuenta</th>
                                     <th scope="col">Numero de Cuenta</th>
-                                    <th scope="col">Agregar</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
+                                <tr *ngFor="let cuenta of cuentas; let i = index">
                                     <td width="20%">
-                                <strong><label>Pais</label></strong>
-                                <label>{{Detalle_Destinatario.Pais}}</label>
+                                        <label>{{cuenta.Nombre_Pais}}</label>
                                     </td>
                                     <td width="20%">
-                                        <select class="form-control" name="Id_Banco{{i}}"  [(ngModel)]="item.Id_Banco" (click)="boolBanco=true" required #banco="ngModel">
-                                            <option value="">Seleccione Banco</option>
-                                            <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
-                                    </td>
-                                    <td width="20%"> 
-                                        <select class="form-control" name="Tipo_Cuenta{{i}}"  [(ngModel)]="item.Id_Tipo_Cuenta" (click)="boolBanco=true" required #banco="ngModel">
-                                            <option value="">Seleccione Cuenta</option>
-                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
+                                        <label>{{cuenta.Nombre_Banco}}</label>
                                     </td>
                                     <td width="20%">
-                                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Numero_Cuenta{{i}}" [(ngModel)]="item.Numero_Cuenta" (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuenta="ngModel">
-                                        <div *ngIf="!cuenta.valid && boolCuenta==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="cuenta.valid && boolCuenta==true" style="color:green">Datos correctos!</div>
+                                        <label>{{cuenta.Nombre_Cuenta}}</label>
                                     </td>
                                     <td width="20%">
-                                    <button class="btn-mini btn-info" (click)="AgregarFila()">+</button>
+                                        <label>{{cuenta.Numero_Cuenta}}</label>
                                     </td>
                                 </tr>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -238,7 +222,7 @@
             </div>
     </div>
 </app-modal-basic>
--->
+
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
@@ -252,13 +236,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                        <input type="text" placeholder="" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
+                        <input type="text" placeholder="" class="form-control" name="Nombre" ngModel="{{Detalle_Destinatario.Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEd="ngModel">
                         <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
                         <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
@@ -268,12 +252,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="" name="Detalle" ngModel="{{Detalle_Destinatario.Detalle}}"></textarea>
                     </div>
                 </div>
             </div>
-
-
             <br>
             <h3>Cuentas Asociadas</h3>
             <div class="row">
@@ -284,38 +266,29 @@
                                 <tr>
                                     <th scope="col">País</th>
                                     <th scope="col">Banco</th>
+                                    <th scope="col">Tipo de Cuenta</th>
                                     <th scope="col">Numero de Cuenta</th>
                                     <th scope="col">Agregar</th>
                                 </tr>
                             </thead>
+                            
                             <tbody>
-                                <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
-                                    <td width="22.5%">
-                                        <select class="form-control" name="Id_Pais{{i}}"  ngModel="{{item.Pais}}" (click)="boolPais=true" required #pais="ngModel">
-                                            <option value="">Seleccione País</option>
-                                            <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="pais.value=='' && boolPais==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!pais.value==''" style="color:green">Datos correctos!</div>
-                                    </td>
-                                    <td width="22.5%">
-                                        <select class="form-control" name="Id_Banco{{i}}"  ngModel="{{item.Banco}}" (click)="boolBanco=true" required #banco="ngModel">
-                                            <option value="">Seleccione Banco</option>
-                                            <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                                        </select>
-                                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
-                                    </td>
-                                    <td width="22.5%">
-                                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" name="Cuentas{{i}}" ngModel="{{item.Cuenta}}" (focus)="$event.target.select()" (focusout)="boolCuenta = true" required #cuenta="ngModel">
-                                        <div *ngIf="!cuenta.valid && boolCuenta==true" style="color:red">Campo inválido</div>
-                                        <div *ngIf="cuenta.valid && boolCuenta==true" style="color:green">Datos correctos!</div>
-                                    </td>
-                                    <td width="10%">
-                                    <button class="btn-mini btn-info" (click)="AgregarFila()">+</button>
-                                    </td>
-                                </tr>
+                                    <tr *ngFor="let cuenta of cuentas; let i = index">
+                                        <td width="20%">
+                                            <label>{{cuenta.Nombre_Pais}}</label>
+                                        </td>
+                                        <td width="20%">
+                                            <label>{{cuenta.Nombre_Banco}}</label>
+                                        </td>
+                                        <td width="20%">
+                                            <label>{{cuenta.Nombre_Cuenta}}</label>
+                                        </td>
+                                        <td width="20%">
+                                            <label>{{cuenta.Numero_Cuenta}}</label>
+                                        </td>
+                                    </tr>
                             </tbody>
+                        
                         </table>
                     </div>
                 </div>
