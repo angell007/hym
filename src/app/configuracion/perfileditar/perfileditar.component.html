@@ -1203,25 +1203,32 @@
                   </div>
                   <div class="col-md-5" align="center">
                     <div class="checkboxTwo">
-                      <input type="checkbox" *ngIf="Datos.EstadoEditar=='true'" name="EstadoEditarCh" ngModel="{{Datos.EstadoEditar}}" id="EstadoEditar" hidden />
+                      <input type="checkbox" *ngIf="Datos.EstadoEditar=='true'" name="EstadoEditarCh"  id="EstadoEditar" hidden />
                       <input type="checkbox" name="EstadoEditarCh"  id="EstadoEditar" hidden />
                       <label for="EstadoEditar"></label>
                     </div>
                     <input type="number" class="form-control" name="EstadoEditar" ngModel="true" *ngIf="EstadoEditarCh" hidden>
                     <input type="number" class="form-control" name="EstadoEditar" ngModel="false" *ngIf="!EstadoEditarVal" hidden>
                     <label>Editar</label>
-                  </div>
-                  <div class="col-md-1">
-                    <div class="form-group">  
-                      <span class="switch switch-sm">
-                        <input type="checkbox" name="swich" ngModel="" class="switch" id="switch-sm">
-                        <label for="switch-sm"> switch</label>
-                      </span>
-                    </div>
-                  </div>
+                  </div>              
 
                 </div>
               </div>
+              <div class="col-md-1">
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">  
+                            <span class="switch switch-sm">
+                              <input type="checkbox" name="Switch" id="Switch" ngModel="" [checked]="Datos.Switch == 'true' ? 'true' : 'false'"  class="switch" id="switch-sm">
+                              <label for="switch-sm"></label>
+                            </span>                              
+                          </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label style="text-align: center">Switch</label> 
+                    </div>
+                  </div>     
+                </div>
 
             </div>
 
