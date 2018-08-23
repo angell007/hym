@@ -1,0 +1,216 @@
+<div class="container-fluid">
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <div class="app-modal-header">
+            <h1>Nueva Oficina</h1>
+            <hr>
+          </div>
+          <div class="app-modal-body">
+            <form #FormOficinaAgregar="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <strong>
+                      <label>Nombre </label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Teléfono</label>
+                    </strong>
+                    <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                      name="Telefono" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Celular</label>
+                    </strong>
+                    <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                      name="Celular" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Correo</label>
+                    </strong>
+                    <input type="email" email placeholder="Correo Oficina" class="form-control" name="Correo" ngModel>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Dirección</label>
+                    </strong>
+                    <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Departamento</label>
+                    </strong>
+                    <select class="form-control" required name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)">
+                      <option [ngValue]="undefined" value="">Seleccione un Departamento</option>
+                      <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Municipio</label>
+                    </strong>
+                    <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" >
+                      <option value="">Seleccione un Municipio</option>
+                      <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+              <h3>Datos Recibo</h3>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Limite Trans/Recibo</label>
+                    </strong>
+                    <input type="number" placeholder="Nombre Oficina" class="form-control" name="Limite_Transferencia" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <strong>
+                      <label>Nombre Establecimiento</label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre_Establecimiento" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <strong>
+                      <label>Lema</label>
+                    </strong>
+                    <input type="text" placeholder="Lema" class="form-control" name="Lema" ngModel>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <strong>
+                      <label>Pie de página</label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Pie_Pagina" ngModel>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+              <h3>Máximos y Mínimos</h3>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Mín.Venta Efect.</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Minimo_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Mín. Venta/Cuenta</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Minimo_Venta_Cuenta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Precio Ventanilla</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Precio_Ventanilla" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Max.Compra</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Maximo_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <h3>Comisiones</h3>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Comisión efectivo</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Comision_efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Pagar comisión desde</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Pagar_comision_desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Mín. No cobro</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Minimo_No_cobro" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Costo Transferencia</label>
+                    </strong>
+                    <input currencyMask class="form-control" name="Costo_Transferencia" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+                      ngModel>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="app-modal-footer">
+            <div class="text-right">
+              <button type="button" class="btn btn-primary btn-sm" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                (confirm)="GuardarOficina(FormOficinaAgregar)">Guardar</button>
+            </div>
+            <!--[disabled]="departamento.value=='' || municipio.value=='' || !nombreOficina.valid || !telefono.valid || !celular.valid || !correo.valid || !direccion.valid || !comision.valid || !minCompra.valid || !maxCompra.valid || !minVenta.valid || !maxVenta.valid || !valores.valid"-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

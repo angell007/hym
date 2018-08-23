@@ -46,6 +46,9 @@ import { LiquidacionsalarioComponent } from "./liquidacionsalario/liquidacionsal
 import { CargosComponent } from "./configuracion/cargos/cargos.component";
 import { PerfilcrearComponent } from './configuracion/perfilcrear/perfilcrear.component';
 import { PerfileditarComponent } from './configuracion/perfileditar/perfileditar.component';
+import { OficinascrearComponent } from "./configuracion/oficinas/oficinascrear/oficinascrear.component";
+import { OficinaseditarComponent } from "./configuracion/oficinas/oficinaseditar/oficinaseditar.component";
+import { OficinaverComponent } from "./configuracion/oficinas/oficinaver/oficinaver.component";
 
 export const AppRoutes: Routes = [
     { 
@@ -212,6 +215,18 @@ export const AppRoutes: Routes = [
         path : 'cargo', component : CommonLayoutComponent,
         children:[{path : '', component : CargosComponent, canActivate:[AuthGuard]}]
     },
+    { 
+        path : 'oficinacrear', component : CommonLayoutComponent,
+        children:[{path : '', component : OficinascrearComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'oficinaeditar/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : OficinaseditarComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'oficinaver/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : OficinaverComponent, canActivate:[AuthGuard]}]
+    },        
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
     

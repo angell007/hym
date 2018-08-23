@@ -83,6 +83,9 @@ import { CargosComponent } from './configuracion/cargos/cargos.component';
 import { PerfilcrearComponent } from './configuracion/perfilcrear/perfilcrear.component';
 import { PerfileditarComponent } from './configuracion/perfileditar/perfileditar.component';
 import { PerfilComponent } from './configuracion/perfil/perfil.component';
+import { OficinascrearComponent } from './configuracion/oficinas/oficinascrear/oficinascrear.component';
+import { OficinaseditarComponent } from './configuracion/oficinas/oficinaseditar/oficinaseditar.component';
+import { OficinaverComponent } from './configuracion/oficinas/oficinaver/oficinaver.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -174,7 +177,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CargosComponent,
         PerfilcrearComponent,
         PerfileditarComponent,
-        PerfilComponent
+        PerfilComponent,
+        OficinascrearComponent,
+        OficinaseditarComponent,
+        OficinaverComponent
     ],
     exports:[
         ModalBasicComponent
