@@ -1,3 +1,189 @@
-<p>
-  oficinaver works!
-</p>
+<div class="container-fluid">
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+            <h1>Detalle</h1>
+            <hr>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <strong> <label>Nombre: </label> </strong> <span> {{oficina.Nombre}} </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Teléfono: </label>
+                </strong>
+                {{oficina.Telefono}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Celular:</label>
+                </strong>
+                <span> {{oficina.Celular}} </span>
+              </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <strong>
+                  <label>Correo:</label>
+                </strong>
+                <span> {{oficina.Correo}} </span>
+              </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                  <strong>
+                    <label>Dirección:</label>
+                  </strong>
+                  <span> {{oficina.Direccion}} </span>
+                </div>
+              </div>
+          </div>
+          <div class="row">
+            
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Departamento: </label>
+                </strong>
+                <span> {{oficina.Id_Departamento}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Municipio:</label>
+                </strong>
+                <span> {{oficina.Id_Municipio}} </span>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <h3>Datos Recibo</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Limite Trans/Recibo: </label>
+                </strong>
+                <span> {{oficina.Limite_Transferencia}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Nombre Establecimiento:</label>
+                </strong>
+                <span> {{oficina.Nombre_Establecimiento}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Lema: </label>
+                </strong>
+              </div>
+              <span> {{oficina.Lema}} </span>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Pie de página:</label>
+                </strong>
+                <span> {{oficina.Pie_Pagina}} </span>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <h3>Máximos y Mínimos</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Mín.Venta Efect. : </label>
+                </strong>
+                <span> {{oficina.Minimo_Venta_Efectivo}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Mín. Venta/Cuenta : </label>
+                </strong>
+                <span> {{oficina.Minimo_Venta_Cuenta}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Precio Ventanilla: </label>
+                </strong>
+                <span> {{oficina.Precio_Ventanilla}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Max.Compra: </label>
+                </strong>
+                <span> {{oficina.Maximo_Compra}} </span>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <h3>Comisiones</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Comisión efectivo: </label>
+                </strong>
+                <span> {{oficina.Comision_efectivo}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Pagar comisión desde : </label>
+                </strong>
+                <span> {{oficina.Pagar_comision_desde}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Mín. No cobro: </label>
+                </strong>
+                <span> {{oficina.Minimo_No_cobro}} </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <strong>
+                  <label>Costo Transferencia : </label>
+                </strong>
+                <span> {{oficina.Costo_Transferencia}} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
