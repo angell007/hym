@@ -172,7 +172,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Moneda Destino</label>
+                                    <label>Destino</label>
                                     <select class="form-control" placeholder="Destino"  id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
                                             <option> Seleccione Moneda</option>
                                             <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
@@ -199,6 +199,7 @@
                                 <button class="btn btn-info btn-block mrg-top-80" (click)="realizarCalculo()" >CAMBIAR</button>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
