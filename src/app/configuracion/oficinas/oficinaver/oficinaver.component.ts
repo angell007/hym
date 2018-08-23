@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class OficinaverComponent implements OnInit {
   id = this.route.snapshot.params["id"];
-  oficina: any;
+  oficina = [];
   Municipios: any;
   Departamentos: any;
 
@@ -23,12 +23,8 @@ export class OficinaverComponent implements OnInit {
 
   ngOnInit() {
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
-      this.Departamentos = data;
-    });
-
-    this.http.get(this.globales.ruta + '/php/oficinas/detalle_oficina.php', { params: { modulo: 'Oficina', id: this.id } }).subscribe((data: any) => {
-      this.Municipios_Departamento(data.Id_Departamento);
+    this.http.get(this.globales.ruta + '/php/oficinas/ver_oficina.php', { params: { id: this.id } }).subscribe((data: any) => {
+      console.log(data);
       this.oficina = data;
     });
   }
