@@ -26,11 +26,13 @@ export class DestinatariosComponent implements OnInit {
   public IdPais : any[];
   public Pais : any[];
   public Detalle : any[];
+  public disabled : boolean = true;
   public Lista_Cuentas = [];
   public Detalle_Destinatario : any[] = [];
   public Lista_Destinatarios:any=[{
     Id_Pais:'',
     Id_Banco: '',
+    Bancos : [],
     Id_Tipo_Cuenta:'',
     Numero_Cuenta: ''
   }]
@@ -38,6 +40,8 @@ export class DestinatariosComponent implements OnInit {
   public boolNombre:boolean = false;
   public boolId:boolean = false;
   public cuentas: any[] = [];
+  public datos: any[] = [];
+  public Id_Destinatario: any;
 
   //Valores por defecto
   paisDefault: string = "";
@@ -52,6 +56,7 @@ export class DestinatariosComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('duplicateSwal') duplicateSwal:any;
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
   constructor(private http : HttpClient, private globales: Globales) { } 
 
@@ -84,18 +89,14 @@ export class DestinatariosComponent implements OnInit {
     });
   }
 
-  Bancos_Pais(Pais){
+  Bancos_Pais(Pais,i){
     this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
-      this.Bancos = data;
+      this.Lista_Destinatarios[i].Bancos = data;
     });
   }
 
-  AutoSleccionarMunicipio(Pais, Banco){
-    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
-      this.Bancos = data;
-      this.Banco = Banco;
-    });
-  }
+
+
 
   OcultarFormularios()
   {
@@ -103,6 +104,23 @@ export class DestinatariosComponent implements OnInit {
     this.OcultarFormulario(this.ModalDestinatario);
     this.OcultarFormulario(this.ModalVerDestinatario);
     this.OcultarFormulario(this.ModalEditarDestinatario);
+  }
+
+  BuscarIdentificacion(id) {
+    this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
+      params:{id:id}
+    }).subscribe((data:any)=>{
+      this.datos = data.Cuentas;
+      if (this.datos.length > 0) {
+        this.confirmacionSwal.title = "Error en la Identificacion";
+        this.confirmacionSwal.text = "Esta identificacion ya se encuentra registrada, por favor verifique";
+        this.confirmacionSwal.type = "error";
+        this.confirmacionSwal.show();
+        this.Id_Destinatario = "";
+        
+      }
+    });
+    
   }
 
   InicializarBool()
@@ -138,6 +156,7 @@ export class DestinatariosComponent implements OnInit {
       this.Lista_Destinatarios = [{
         Id_Pais:'',
         Id_Banco: '',
+        Bancos : [],
         Id_Tipo_Cuenta:'',
         Numero_Cuenta: ''
       }];
@@ -146,11 +165,37 @@ export class DestinatariosComponent implements OnInit {
       this.ActualizarVista();
       this.saveSwal.show();
      });
-    
+    }
 
-    
-    
-  }
+
+
+    GuardarDestinatarioEditar(formulario: NgForm, modal:any){
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      this.OcultarFormulario(modal);
+      datos.append("modulo",'Destinatario');
+      datos.append("datos",info);
+      this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+      .catch(error => { 
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data:any)=>{ 
+        this.Lista_Destinatarios = [{
+          Id_Pais:'',
+          Id_Banco: '',
+          Bancos : [],
+          Id_Tipo_Cuenta:'',
+          Numero_Cuenta: ''
+        }];
+        
+        this.ActualizarVista();
+        this.InicializarBool();
+        this.saveSwal.show();
+      });
+      
+    }
 
   handleError(error: Response) {
     return Observable.throw(error);
@@ -170,12 +215,15 @@ export class DestinatariosComponent implements OnInit {
   
   EditarDestinatario(id){
     this.InicializarBool(); 
-    this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
-      params:{modulo:'Destinatario', id:id}
+    this.http.get(this.globales.ruta+'php/destinatarios/editar_destinatario.php',{
+      params:{id:id}
     }).subscribe((data:any)=>{
       console.log(data);      
       this.Detalle_Destinatario = data;
-      this.cuentas = data.Cuentas;
+      console.log(this.Detalle_Destinatario);
+      
+      this.Lista_Destinatarios = data;
+       //this.cuentas = data.Cuentas;
       this.Identificacion = id;
       this.ModalEditarDestinatario.show();
     });
@@ -219,6 +267,10 @@ export class DestinatariosComponent implements OnInit {
 
   Cerrar(modal){
     this.OcultarFormulario(modal)
+  }
+
+  habilitarboton(){
+    this.disabled = false;
   }
 
 }

@@ -1,57 +1,58 @@
 <div class="container-fluid">
     <div class="page-title">
-      <h4 class="pull-left">Destinatarios</h4>
-      <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()"><i class="ti-plus"></i> Agregar Nuevo Destinatario</button>
+        <h4 class="pull-left">Destinatarios</h4>
+        <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Destinatario</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-block">
-            <p>Tenemos los destinatarios a quienes les hacemos transferencias o consignaciones</p>
-            <div class="table-overflow">
-              <table class="table table-hover table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th style="width:300px;">Identificación</th>
-                    <th style="width:300px;">Nombre</th>
-                    <th style="width:300px">Detalle</th>
-                    <th style="width:130px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let destinatario of destinatarios">
-                    <td style="vertical-align: middle;">{{destinatario.Id_Destinatario}}</td>
-                    <td style="vertical-align: middle;">{{destinatario.Nombre}}</td>
-                    <td style="vertical-align: middle;">{{destinatario.Detalle}}</td>
-                    <td style="vertical-align: middle;" class="text-center">
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
-                              <i class="ti-search"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario, ModalEditarDestinatario)">
-                              <i class="ti-pencil"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                            [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Destinatario, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
-                            (confirm)="EliminarDestinatario(destinatario.Id_Destinatario)" 
-                            >
-                            <i class="ti-trash"></i>
-                            </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <p>Tenemos los destinatarios a quienes les hacemos transferencias o consignaciones</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:300px;">Identificación</th>
+                                    <th style="width:300px;">Nombre</th>
+                                    <th style="width:300px">Detalle</th>
+                                    <th style="width:130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let destinatario of destinatarios">
+                                    <td style="vertical-align: middle;">{{destinatario.Id_Destinatario}}</td>
+                                    <td style="vertical-align: middle;">{{destinatario.Nombre}}</td>
+                                    <td style="vertical-align: middle;">{{destinatario.Detalle}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario, ModalEditarDestinatario)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Destinatario, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EliminarDestinatario(destinatario.Id_Destinatario)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
     <div class="app-modal-header">
         <h4>Nuevo Destinatario</h4>
-        <button type="button" class="close basic-close" (click)="ModalDestinatario.hide()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close basic-close" (click)="ModalDestinatario.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormDestinatario="ngForm">
@@ -59,15 +60,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input class="form-control" name="Id_Destinatario" type="text" placeholder="Identificación Cliente" minlength="6" maxlength="8" onkeypress="return event.charCode >= 48 && event.charCode <= 57" ngModel (focusout)="boolId = true" required #identificacion="ngModel">
-                        <div *ngIf="!identificacion.valid && boolId==true"></div>
+                        <input class="form-control" name="Id_Destinatario" type="text" placeholder="Identificación Cliente" (blur)="BuscarIdentificacion($event.target.value)" minlength="6" maxlength="8" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [(ngModel)]="Id_Destinatario" required>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Cliente" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32" ngModel (focusout)="boolNombre = true" required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true"></div>
+                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Cliente" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32" ngModel required>
                     </div>
                 </div>
             </div>
@@ -97,35 +96,34 @@
                             <tbody>
                                 <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
                                     <td width="20%">
-                                            <select class="form-control" name="Id_Pais{{i}}"  [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
+                                        <select class="form-control" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value, i)" (click)="boolPais=true" required >
                                             <option value="">Seleccione País</option>
                                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                                         </select>
-                                        <div *ngIf="pais.value=='' && boolPais==true"></div>
                                     </td>
                                     <td width="20%">
-                                        <select class="form-control" name="Id_Banco{{i}}"  [(ngModel)]="item.Id_Banco" (click)="boolBanco=true" required #banco="ngModel">
+                                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" (click)="boolBanco=true" required>
                                             <option value="">Seleccione Banco</option>
-                                            <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
+                                            <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                                         </select>
-                                        <div *ngIf="banco.value=='' && boolBanco==true"></div>
                                     </td>
                                     <td width="20%">
-                                        <select class="form-control" name="Tipo_Cuenta{{i}}"  [(ngModel)]="item.Id_Tipo_Cuenta" (click)="boolTipoCuenta=true" required #tipocuenta="ngModel">
-                                            <option value="">Seleccione Cuenta</option>
-                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
+                                        <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" (click)="boolTipoCuenta=true" required>
+                                            <option value="">Seleccione Tipo</option>
+                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
                                         </select>
-                                        <div *ngIf="tipocuenta.value=='' && boolTipoCuenta==true"></div>
                                     </td>
                                     <td width="20%">
-                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [(ngModel)]="item.Numero_Cuenta"  (focusout)="boolCuenta = true" required #cuenta="ngModel">
-                                        <div *ngIf="!cuenta.valid && boolCuenta==true"></div> 
+                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        (focusout)="boolCuenta = true" required>
                                     </td>
                                     <td width="20%">
                                         <center>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="pais.value=='' || banco.value=='' || tipocuenta.value=='' || !cuenta.valid" (click)="AgregarFila()" >
-                                        <i class="fa fa-plus"></i>
-                                        </button></center>
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="!FormDestinatario.valid"
+                                            (click)="AgregarFila()">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </center>
                                     </td>
                                 </tr>
                             </tbody>
@@ -133,99 +131,98 @@
                     </div>
                 </div>
             </div>
-        </form>        
+        </form>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary"
-                [disabled]="!FormDestinatario.valid"
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarDestinatario(FormDestinatario, ModalDestinatario)" >Guardar Información</button>
-            </div>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Crear este Destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Crear Destinatario</button>
+        </div>
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDestinatario" #ModalVerDestinatario>
     <div class="app-modal-header">
         <h4>Ver Destinatario</h4>
-        <button type="button" class="close basic-close" (click)="ModalVerDestinatario.hide()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close basic-close" (click)="ModalVerDestinatario.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
-        <form #FormVerDestinatario="ngForm">
-                <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                <strong><label>Identificación: </label></strong>
-                        <label>{{Detalle_Destinatario.Id_Destinatario}}</label>
-                    </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table  invoice-detail-table destinatario">
+                        <tbody>
+                            <tr>
+                                <td style="width: 269px;">Identificación: {{Detalle_Destinatario.Id_Destinatario}}</td>
+                                <td>Nombre: {{Detalle_Destinatario.Nombre}}</td>
+                            </tr>
+                            <tr style="width: 100%;">
+                                <td colspan="2">
+                                    Detalle: {{Detalle_Destinatario.Detalle}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                <strong><label>Nombre: </label></strong>
-                        <label>{{Detalle_Destinatario.Nombre}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                <strong><label>Detalles: </label></strong> 
-                        <label>{{Detalle_Destinatario.Detalle}}</label>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <h3>Cuentas Asociadas</h3>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table  invoice-detail-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">País</th>
-                                    <th scope="col">Banco</th>
-                                    <th scope="col">Tipo de Cuenta</th>
-                                    <th scope="col">Numero de Cuenta</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let cuenta of cuentas; let i = index">
-                                    <td width="20%">
-                                        <label>{{cuenta.Nombre_Pais}}</label>
-                                    </td>
-                                    <td width="20%">
-                                        <label>{{cuenta.Nombre_Banco}}</label>
-                                    </td>
-                                    <td width="20%">
-                                        <label>{{cuenta.Nombre_Cuenta}}</label>
-                                    </td>
-                                    <td width="20%">
-                                        <label>{{cuenta.Numero_Cuenta}}</label>
-                                    </td>
-                                </tr>
-                            </tbody>
 
-                        </table>
-                    </div>
+            </div>
+        </div>
+
+        <br>
+        <h3>Cuentas Asociadas</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table  invoice-detail-table tabla-destinatario">
+                        <thead>
+                            <tr class="color-campos centar-datos">
+                                <th scope="col">País</th>
+                                <th scope="col">Banco</th>
+                                <th scope="col">Tipo de Cuenta</th>
+                                <th scope="col">Numero de Cuenta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: center;" *ngFor="let cuenta of cuentas; let i = index">
+                                <td width="20%">
+                                    <label>{{cuenta.Nombre_Pais}}</label>
+                                </td>
+                                <td width="20%">
+                                    <label>{{cuenta.Nombre_Banco}}</label>
+                                </td>
+                                <td width="20%">
+                                    <label>{{cuenta.Nombre_Cuenta}}</label>
+                                </td>
+                                <td width="20%">
+                                    <label>{{cuenta.Numero_Cuenta}}</label>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
                 </div>
             </div>
-        </form>        
+        </div>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerDestinatario)" >Cerrar</button>
-            </div>
+        <div class="text-right">
+            <button type="button" class="btn btn-primary" (click)="Cerrar(ModalVerDestinatario)">Cerrar</button>
+        </div>
     </div>
 </app-modal-basic>
 
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
-        <div class="app-modal-header">
-            <h4>Editar Destinatario</h4>
-            <button type="button" class="close basic-close" (click)="ModalEditarDestinatario.hide()"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="app-modal-body">
+    <div class="app-modal-header">
+        <h4>Editar Destinatario</h4>
+        <button type="button" class="close basic-close" (click)="ModalEditarDestinatario.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
         <form #FormEditarDestinatario="ngForm">
             <div class="row">
                 <div class="col-md-6">
@@ -237,8 +234,9 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input class="form-control" name="Nombre" type="text" placeholder="" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32" ngModel="{{Detalle_Destinatario.Nombre}}"  (focusout)="boolNombreEd = true" required #nombreed="ngModel">
-                        <div *ngIf="!nombreed.valid && boolNombreEd==true"></div>
+                        <input class="form-control" name="Nombre" type="text" placeholder="" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
+                            ngModel="{{Detalle_Destinatario.Nombre}}" (focusout)="boolNombreEd = true" required #nombreed="ngModel">
+
                     </div>
                 </div>
             </div>
@@ -266,77 +264,64 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                    <tr *ngFor="let cuenta of cuentas; let i = index">
-                                        <td width="20%">
-                                            <select class="form-control" name="Id_Pais{{i}}"  ngModel="{{cuenta.Id_Pais}}" (change)="Bancos_Pais($event.target.value)" (click)="boolPais=true" required #pais="ngModel">
-                                                <option value="">Seleccione País</option>
-                                                <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                            </select>
-                                            <div *ngIf="pais.value=='' && boolPais==true"></div>
-                                        </td>
-                                        <td width="20%">
-                                            <select class="form-control" name="Id_Banco{{i}}"  ngModel="{{cuenta.Nombre_Banco}}" (click)="boolBanco=true" required #banco="ngModel">
-                                                <option value="">Seleccione Banco</option>
-                                                <option *ngFor="let Banco of Bancos; let i=index" [value]="Banco.Id_Banco" >{{Banco.Nombre}}</option>
-                                            </select>
-                                            <div *ngIf="banco.value=='' && boolBanco==true"></div>
-                                        </td>
-                                        <td width="20%">
-                                            <select class="form-control" name="Tipo_Cuenta{{i}}"  ngModel="{{cuenta.Nombre_Cuenta}}" (click)="boolTipoCuenta=true" required #tipocuenta="ngModel">
-                                                <option value="">Seleccione Cuenta</option>
-                                                <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta" >{{Cuenta.Nombre}}</option>
-                                            </select>
-                                            <div *ngIf="tipocuenta.value=='' && boolTipoCuenta==true"></div>
-                                        </td>
-                                        <td width="20%">
-                                            <input class="form-control" name="Numero_Cuenta{{i}}" type="text" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57" ngModel="{{cuenta.Numero_Cuenta}}"  (focusout)="boolCuenta = true" required #cuenta="ngModel">
-                                            <div *ngIf="!cuenta.valid && boolCuenta==true"></div> 
-                                        </td>
-                                        <td width="20%">
-                                            <center>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="pais.value=='' || banco.value=='' || tipocuenta.value=='' || !cuenta.valid" (click)="AgregarFila()" >
-                                            <i class="fa fa-plus"></i>
-                                            </button></center>
-                                        </td>
-                                    </tr>
+                                <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
+                                    <td width="20%">
+                                        <select class="form-control" name="Id_Pais{{i}}" ngModel="{{item.Id_Pais}}" (change)="Bancos_Pais($event.target.value, i)" (click)="boolPais=true" required >
+                                            <option value="">Seleccione País</option>
+                                            <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                        </select>
+                                    </td>
+                                    <td width="20%">
+                                        <select class="form-control" name="Id_Banco{{i}}" ngModel="{{item.Id_Banco}}" (click)="boolBanco=true" required>
+                                            <option value="">Seleccione Banco</option>
+                                            <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                                        </select>
+                                    </td>
+                                    <td width="20%">
+                                        <select class="form-control" name="Tipo_Cuenta{{i}}" ngModel="{{item.Id_Tipo_Cuenta}}" (click)="boolTipoCuenta=true" required>
+                                            <option value="">Seleccione Tipo</option>
+                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
+                                        </select>
+                                    </td>
+                                    <td width="20%">
+                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" ngModel="{{item.Numero_Cuenta}}" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        (focusout)="boolCuenta = true" required>
+                                    </td>
+                                    <td width="20%">
+                                        <center>
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="!FormEditarDestinatario.valid"
+                                            (click)="AgregarFila()">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </center>
+                                    </td>
+                                </tr>
                             </tbody>
-                        
                         </table>
                     </div>
                 </div>
             </div>
-        </form>        
+        </form>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button class="btn btn-primary btn-sm" 
-                [disabled]="!FormEditarDestinatario.valid"
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este perfil' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarDestinatario(FormEditarDestinatario, ModalEditarDestinatario)">Guardar</button>
-            </div>
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [disabled]="!FormEditarDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarDestinatarioEditar(FormEditarDestinatario, ModalEditarDestinatario)">Actualizar Informacion</button>
         </div>
+    </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+
+<swal #errorSwal title="Error al Guardar" text="Se ha generado un error al intentar guardar el Destinatario" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
-</swal> 
-
-<swal #deleteSwal
-  title="Destinatario Eliminado"
-  text="Se ha Eliminado Correctamente el destinatario"
-  type="success"
-  >
-  </swal>
-
-  <swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
+<swal #saveSwal title="Destinatario Guardado" text="Se ha guardado Correctamente el Destinatario" type="success">
 </swal>
+
+<swal #deleteSwal title="Destinatario Anulado" text="Se ha Anulado Correctamente el Destinatario" type="success">
+</swal>
+
+<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos."
+    type="error">
+</swal>
+<swal #confirmacionSwal title="" text="" type=""></swal>
