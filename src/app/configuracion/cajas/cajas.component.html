@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Cajas</h4>
-        <button class="pull-right btn btn-info" (click)="ModalCaja.show()">
+        <button class="pull-right btn btn-primary btn-sm" (click)="ModalCaja.show()">
             <i class="ti-plus"></i> Agregar Nueva Caja</button>
     </div>
     <div class="clearfix"></div>
@@ -10,19 +10,20 @@
             <div class="card">
                 <div class="card-block">
                     <p>Tenemos registradas todas las cajas de la compañía</p>
-                    <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
+                   
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
-                                    <th style="width:220px;">Nombre Caja</th>
-                                    <th style="width:220px;">Nombre Oficina</th>
-                                    <th style="width:170px;">MAC</th>
+                                    <th>Nombre Caja</th>
+                                    <th>Nombre Oficina</th>
+                                    <th>MAC</th>
                                     <th>Detalle</th>
-                                    <th style="width:100px;"></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let caja of cajas">
+                                <tr *ngFor="let caja of cajas" class=" {{caja.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                     <td>{{caja.Nombre}}</td>
                                     <td>{{caja.Oficina}}</td>
                                     <td>{{caja.MAC}}</td>
@@ -32,14 +33,16 @@
                                             <i class="ti-pencil"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Caja, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="EliminarCaja(caja.Id_Caja)">
-                                            <i class="ti-trash"></i>
+                                            (confirm)="EstadoCaja(caja.Id_Caja, caja.Estado)">
+                                            <i class=" {{caja.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} " ></i>
                                         </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -48,8 +51,6 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja</h4>
     </div>
     <div class="app-modal-body">
@@ -60,8 +61,6 @@
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
                             (focusout)="boolNombre = true" required #nombreCaja="ngModel">
-                        <div *ngIf="!nombreCaja.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreCaja.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -72,19 +71,15 @@
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
-                        <div *ngIf="oficina.value=='' && boolOficina==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!oficina.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                        <div class="form-group">
-                            <label>MAC</label>
-                            <input type="text" placeholder="MAC" class="form-control" name="MAC" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolNombre = true" required #Mac="ngModel">
-                        <div *ngIf="!Mac.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="Mac.valid && boolNombre==true" style="color:green">Datos correctos!</div>
-                        </div>
+                    <div class="form-group">
+                        <label>MAC</label>
+                        <input type="text" placeholder="MAC" class="form-control" name="MAC" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true"
+                            required #Mac="ngModel">
                     </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -98,17 +93,15 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!nombreCaja.valid || oficina.value==''" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCaja(FormCajaAgregar, ModalCaja)">Actualizar Información</button>
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="!nombreCaja.valid || oficina.value==''" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCaja(FormCajaAgregar, ModalCaja)">Guardar Información</button>
         </div>
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
-        <h4>Editar Caja</h4>
+       <h4>Editar Caja</h4>
     </div>
     <div class="app-modal-body">
         <form #FormEditarCaja="ngForm">
@@ -124,8 +117,6 @@
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
                             (focusout)="boolNombre = true" required #nombreCajaEd="ngModel">
-                        <div *ngIf="!nombreCajaEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreCajaEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -135,19 +126,15 @@
                             <option value="">Seleccione una Oficina</option>
                             <option *ngFor="let Oficina of Oficinas" [value]="Oficina.Id_Oficina">{{Oficina.Nombre}}</option>
                         </select>
-                        <div *ngIf="oficinaEd.value=='' && boolOficina==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!oficinaEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                        <div class="form-group">
-                            <label>MAC</label>
-                            <input type="text" placeholder="MAC" class="form-control" name="MAC" ngModel="{{MAC}}" (focus)="$event.target.select()"
-                            (focusout)="boolNombre = true" required #MacEd="ngModel">
-                        <div *ngIf="!MacEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="MacEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
-                        </div>
+                    <div class="form-group">
+                        <label>MAC</label>
+                        <input type="text" placeholder="MAC" class="form-control" name="MAC" ngModel="{{MAC}}" (focus)="$event.target.select()" (focusout)="boolNombre = true"
+                            required #MacEd="ngModel">
                     </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -161,17 +148,19 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" [disabled]="!nombreCajaEd.valid || oficinaEd.value==''" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Guardar este Paciente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!nombreCajaEd.valid || oficinaEd.value==''" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a actualizar esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Actualizar</button>
         </div>
     </div>
 </app-modal-basic>
 
-<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar la caja" type="error">
 </swal>
 
-<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+<swal #saveSwal title="Caja creada" text="Se ha creado correctamente la caja" type="success">
 </swal>
 
 <swal #deleteSwal title="Caja eliminada" text="Se ha eliminado correctamente la caja" type="success">
 </swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

@@ -202,6 +202,7 @@
           </div>
           <div class="app-modal-footer">
             <div class="text-right">
+              <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/oficinas']">Volver</button>
               <button type="button" class="btn btn-primary btn-sm" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                 (confirm)="GuardarOficina(FormOficinaAgregar)">Guardar</button>
             </div>

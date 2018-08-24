@@ -2,7 +2,7 @@
     <div class="page-title">
         <h4 class="pull-left">Terceros</h4>
         <button class="pull-right btn btn-info" (click)="ModalTercero.show()">
-            <i class="ti-plus"></i> Agregar Nuevo Cliente</button>
+            <i class="ti-plus"></i> Agregar Nuevo Tercero</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
@@ -10,36 +10,29 @@
             <div class="card">
                 <div class="card-block">
                     <p>Tenemos los terceros de nuestra empresa</p>
-                    <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
-                                    <th style="width:50px"></th>
-                                    <th style="width:120px;">Identificación</th>
+                                    <th>Identificación</th>
                                     <th>Nombre</th>
-                                    <th style="width:100px">Ciudad</th>
-                                    <th style="width:80px;">Destacado</th>
-                                    <th style="width:130px;"></th>
+                                    <th>Ciudad</th>
+                                    <th>Destacado</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let tercero of terceros">
-                                    <td style="vertical-align: middle;">
-                                        <img src="assets/images/cliente.jpg" class="img img-responsive img-thumbnail" />
-                                    </td>
+                                <tr *ngFor="let tercero of terceros" class=" {{tercero.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">                                    
                                     <td style="vertical-align: middle;">{{tercero.Id_Tercero}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Nombre}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
                                     <td style="vertical-align: middle;" class="text-center">{{tercero.Destacado}}</td>
                                     <td style="vertical-align: middle;" class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTercero(tercero.Id_Tercero, ModalVerTercero)">
-                                            <i class="ti-search"></i>
-                                        </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalEditarTercero)">
                                             <i class="ti-pencil"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Tercero, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="EliminarTercero(tercero.Id_Tercero)">
+                                            (confirm)="EstadoTercero(tercero.Id_Tercero,tercero.Estado )">
                                             <i class="ti-trash"></i>
                                         </button>
                                     </td>
@@ -55,41 +48,31 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTercero" #ModalTercero>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Nuevo Tercero</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormTercero="ngForm">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tipo de documento</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="" [(ngModel)]="tipoDocumentoDefault" (click)="boolTipoDoc=true" required #tipoDoc="ngModel">
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="">
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
-                        <div *ngIf="tipoDoc.value=='' && boolTipoDoc==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipoDoc.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Cliente"
-                            class="form-control" name="Id_Tercero" ngModel="" (focus)="$event.target.select()" (focusout)="boolIdTercero = true"
-                            required #idTercero="ngModel">
-                        <div *ngIf="!idTercero.valid && boolIdTercero==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="idTercero.valid && boolIdTercero==true" style="color:green">Datos correctos!</div>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero"
+                            class="form-control" name="Id_Tercero" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolNombre = true" required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Tercero" class="form-control" name="Nombre" ngModel="">
                     </div>
                 </div>
             </div>
@@ -97,52 +80,39 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolDireccion = true" required #direccion="ngModel">
-                        <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" [(ngModel)]="departamentoDefault" (change)="Municipios_Departamento($event.target.value)"
-                            (click)="boolDepartamento=true" required #departamento="ngModel">
+                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamento.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true" required #municipio="ngModel">
+                        <select class="form-control" required name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (click)="boolMunicipio=true"
+                            required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipio.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del cliente" class="form-control" name="Barrio" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolBarrio = true" required #barrio="ngModel">
-                        <div *ngIf="!barrio.valid && boolBarrio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="barrio.valid && boolBarrio==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Cliente"
-                            class="form-control" name="Telefono" ngModel="" (focus)="$event.target.select()" (focusout)="boolTelefono = true"
-                            required #telefono="ngModel">
-                        <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Tercero"
+                            class="form-control" name="Telefono" ngModel="">
                     </div>
                 </div>
             </div>
@@ -150,43 +120,16 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Cliente"
-                            class="form-control" name="Celular" ngModel="" (focus)="$event.target.select()" (focusout)="boolCelular = true"
-                            required #celular="ngModel">
-                        <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="celular.valid && boolCelular==true" style="color:green">Datos correctos!</div>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Tercero"
+                            class="form-control" name="Celular" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="email" email placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolCorreo = true" required #correo="ngModel">
-                        <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="correo.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
+                        <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo" ngModel="">
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Cliente Desde</label>
-                        <input type="month" [(ngModel)]="actualClienteDesde" class="form-control" name="Tercero_Desde" (focus)="$event.target.select()"
-                            (focusout)="boolTerceroDesde = true" required #terceroDesde="ngModel">
-                        <div *ngIf="!terceroDesde.valid && boolTerceroDesde==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="terceroDesde.valid && boolTerceroDesde==true" style="color:green">Datos correctos!</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Destacado</label>
-                        <select class="form-control" name="Destacado" ng-model="selected" ngModel="No" [(ngModel)]="destacadoDefault" (click)="boolDestacado=true" required #destacado="ngModel">
-                            <option value="">---------</option>
-                            <option ng-selected="selected" value="No">No</option>
-                            <option>Si</option>
-                        </select>
-                        <div *ngIf="destacado.value=='' && boolDestacado==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!destacado.value==''" style="color:green">Datos correctos!</div>
-                    </div>
-                </div>
+                </div>                
             </div>
             <hr>
             <h3>Otros Datos</h3>
@@ -194,33 +137,25 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
-                        <select class="form-control" name="Credito" ng-model="selected" ngModel="No" [(ngModel)]="creditoDefault" (click)="boolCredito=true" required #credito="ngModel" >
-                            <option value="">---------</option>
+                        <select class="form-control" name="Credito" ng-model="selected" ngModel="No">
                             <option ng-selected="selected" value="No">No</option>
                             <option>Si</option>
                         </select>
-                        <div *ngIf="credito.value=='' && boolCredito==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!credito.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupo="ngModel">
-                        <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div>
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
                         <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="" [(ngModel)]="tipoGrupoDefault" (click)="boolTipoGrupo=true" required #tipoGrupo="ngModel">
+                        <select class="form-control" name="Id_Grupo" ngModel="">
                             <option value="">Seleccione tipo de grupo</option>
                             <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
-                        <div *ngIf="tipoGrupo.value=='' && boolTipoGrupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipoGrupo.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -228,7 +163,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel=""></textarea>
+                        <textarea class="form-control" placeholder="Detalles del Tercero" name="Detalle" ngModel=""></textarea>
                     </div>
                 </div>
             </div>
@@ -236,196 +171,38 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!idTercero.valid || !nombre.valid || !direccion.valid || !barrio.valid || !telefono.valid || !celular.valid || !correo.valid || !terceroDesde.valid || tipoDoc.value=='' || departamento.value=='' || municipio.value=='' || tipoGrupo.value=='' || !cupo.valid || credito.value=='' || destacado.value=='' || credito.value==null || destacado.value==null"
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarTercero(FormTercero, ModalTercero)">Actualizar Información</button>
-        </div>
-    </div>
-</app-modal-basic>
-
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTercero" #ModalVerTercero>
-    <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
-        <h4>Ver Tercero</h4>
-    </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerTercero="ngForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Identificación: </label>
-                        </strong>
-                        <label>{{Identificacion}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre: </label>
-                        </strong>
-                        <label>{{Nombre}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Dirección: </label>
-                        </strong>
-                        <label>{{Direccion}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Departamento: </label>
-                        </strong>
-                        <label>{{Departamento}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Municipio: </label>
-                        </strong>
-                        <label>{{Municipio}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Barrio: </label>
-                        </strong>
-                        <label>{{Barrio}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Teléfono: </label>
-                        </strong>
-                        <label>{{Telefono}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Celular: </label>
-                        </strong>
-                        <label>{{Celular}}</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Correo: </label>
-                        </strong>
-                        <label>{{Correo}}</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente Desde: </label>
-                        </strong>
-                        <label>{{TerceroDesde}}</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Destacado: </label>
-                        </strong>
-                        <label>{{Destacado}}</label>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <h3>Otros Datos</h3>
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <strong>
-                            <label>Crédito: </label>
-                        </strong>
-                        <label>{{Credito}}</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cupo:</label>
-                        </strong>
-                        <label>{{Cupo | currency:undefined:'symbol':'1.0-0'}}</label>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <strong>
-                            <label>Tipo Grupo: </label>
-                        </strong>
-                        <label>{{Grupo}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <strong>
-                            <label>Detalles:</label>
-                        </strong>
-                        <label>{{Detalle}}</label>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerTercero)">Cerrar</button>
         </div>
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTercero" #ModalEditarTercero>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Editar Tercero</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormEditarTercero="ngForm">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Tipo de documento</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="{{IdTipoDocumento}}" (click)="boolTipoDoc=true" required
-                            #tipoDocEd="ngModel">
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="{{IdTipoDocumento}}">
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
-                        <div *ngIf="tipoDocEd.value=='' && boolTipoDoc==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipoDocEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                        <input type="text" placeholder="Identificación Tercero" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                            (focusout)="boolNombre = true" required #nombreEd="ngModel">
-                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Tercero" class="form-control" name="Nombre" ngModel="{{Nombre}}">
                     </div>
                 </div>
             </div>
@@ -433,52 +210,37 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Cliente" class="form-control" name="Direccion" ngModel="{{Direccion}}" (focus)="$event.target.select()"
-                            (focusout)="boolDireccion = true" required #direccionEd="ngModel">
-                        <div *ngIf="!direccionEd.valid && boolDireccion==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="direccionEd.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" ngModel="{{Direccion}}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)"
-                            (click)="boolDepartamento=true" required #departamentoEd="ngModel">
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamentoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}" (click)="boolMunicipio=true" required
-                            #municipioEd="ngModel">
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipioEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del cliente" class="form-control" name="Barrio" ngModel="{{Barrio}}" (focus)="$event.target.select()"
-                            (focusout)="boolBarrio = true" required #barrioEd="ngModel">
-                        <div *ngIf="!barrioEd.valid && boolBarrio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="barrioEd.valid && boolBarrio==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="{{Barrio}}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Cliente" class="form-control" name="Telefono" ngModel="{{Telefono}}" (focus)="$event.target.select()"
-                            (focusout)="boolTelefono = true" required #telefonoEd="ngModel">
-                        <div *ngIf="!telefonoEd.valid && boolTelefono==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="telefonoEd.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Teléfono del Tercero" class="form-control" name="Telefono" ngModel="{{Telefono}}">
                     </div>
                 </div>
             </div>
@@ -486,39 +248,15 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular del Cliente" class="form-control" name="Celular" ngModel="{{Celular}}" (focus)="$event.target.select()"
-                            (focusout)="boolCelular = true" required #celularEd="ngModel">
-                        <div *ngIf="!celularEd.valid && boolCelular==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="celularEd.valid && boolCelular==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Celular del Tercero" class="form-control" name="Celular" ngModel="{{Celular}}">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo del Cliente" class="form-control" name="Correo" ngModel="{{Correo}}" (focus)="$event.target.select()"
-                            (focusout)="boolCorreo = true" required #correoEd="ngModel">
-                        <div *ngIf="!correoEd.valid && boolCorreo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="correoEd.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Correo del Tercero" class="form-control" name="Correo" ngModel="{{Correo}}">
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Cliente Desde</label>
-                        <input type="month" placeholder="Seleccione Fecha" class="form-control" name="Tercero_Desde" ngModel="{{TerceroDesde}}" (focus)="$event.target.select()"
-                            (focusout)="boolTerceroDesde = true" required #terceroDesdeEd="ngModel">
-                    </div>
-                    <div *ngIf="!terceroDesdeEd.valid && boolTerceroDesde==true" style="color:red">Campo inválido</div>
-                    <div *ngIf="terceroDesdeEd.valid && boolTerceroDesde==true" style="color:green">Datos correctos!</div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Destacado</label>
-                        <select class="form-control" name="Destacado" ngModel="{{Destacado}}">
-                            <option>No</option>
-                            <option>Si</option>
-                        </select>
-                    </div>
-                </div>
+                </div>                
             </div>
             <hr>
             <h3>Otros Datos</h3>
@@ -535,21 +273,16 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupoEd="ngModel">
-                        <div *ngIf="!cupoEd.valid && boolCupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="cupoEd.valid && boolCupo==true" style="color:green">Datos correctos!</div>
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="form-group">
                         <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}" (click)="boolTipoGrupo=true" required #tipoGrupoEd="ngModel">
+                        <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
                             <option value="">Seleccione tipo de grupo</option>
                             <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
-                        <div *ngIf="tipoGrupoEd.value=='' && boolTipoGrupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipoGrupoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -557,7 +290,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Cliente" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="Detalles del Tercero" name="Detalle" ngModel="{{Detalle}}"></textarea>
                     </div>
                 </div>
             </div>
@@ -565,22 +298,23 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" data-dismiss="modal"
-            [disabled]="!nombreEd.valid || !direccionEd.valid || !barrioEd.valid || !telefonoEd.valid || !celularEd.valid || !correoEd.valid || !terceroDesdeEd.valid || tipoDocEd.value=='' || departamentoEd.value=='' || municipioEd.value=='' || tipoGrupoEd.value=='' || !cupoEd.valid"
-            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+            <button class="btn btn-primary btn-sm" data-dismiss="modal" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                 (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
 
-<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el tercero" type="error">
 </swal>
 
-<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+<swal #saveSwal title="Tercero guardado" text="Se ha guardado correctamente el tercero" type="success">
 </swal>
 
 <swal #deleteSwal title="Tercero eliminado" text="Se ha eliminado correctamente el Tercero" type="success">
 </swal>
 
-<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos." type="error">
+<swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos."
+    type="error">
 </swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
