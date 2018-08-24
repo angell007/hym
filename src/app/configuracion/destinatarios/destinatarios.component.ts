@@ -13,7 +13,7 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class DestinatariosComponent implements OnInit {
 
-  public destinatarios : any[];
+  public destinatarios : any[]=[];
   public Paises : any[];
   public Bancos : any[];
 
@@ -27,14 +27,17 @@ export class DestinatariosComponent implements OnInit {
   public Pais : any[];
   public Detalle : any[];
   public Lista_Cuentas = [];
+  public Detalle_Destinatario : any[] = [];
   public Lista_Destinatarios:any=[{
-    Pais:'',
-    Banco: '',
-    Cuenta:''
+    Id_Pais:'',
+    Id_Banco: '',
+    Id_Tipo_Cuenta:'',
+    Numero_Cuenta: ''
   }]
 
   public boolNombre:boolean = false;
   public boolId:boolean = false;
+  public cuentas: any[] = [];
 
   //Valores por defecto
   paisDefault: string = "";
@@ -53,12 +56,18 @@ export class DestinatariosComponent implements OnInit {
   constructor(private http : HttpClient, private globales: Globales) { } 
 
   ngOnInit() {
-    this.ActualizarVista();
+    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
+      this.destinatarios= data;
+      console.log(this.destinatarios);
+    });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
     });
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
       this.Bancos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
+      this.Cuentas= data;
     });
   }
 
@@ -72,6 +81,19 @@ export class DestinatariosComponent implements OnInit {
   {
     this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
       this.destinatarios= data;
+    });
+  }
+
+  Bancos_Pais(Pais){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+    });
+  }
+
+  AutoSleccionarMunicipio(Pais, Banco){
+    this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
+      this.Bancos = data;
+      this.Banco = Banco;
     });
   }
 
@@ -97,24 +119,34 @@ export class DestinatariosComponent implements OnInit {
    * @memberof DestinatariosComponent
    */
   GuardarDestinatario(formulario: NgForm, modal:any){
-    console.log(formulario.value);
+    //console.log(formulario.value);
+    console.log(this.Lista_Destinatarios);
     let info = JSON.stringify(formulario.value);
     let destinatario = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
-    console.log(info);
     this.OcultarFormulario(modal);
-    datos.append("modulo",'Destinatario');
+    //datos.append("modulo",'Destinatario');
     datos.append("datos",info);
     datos.append("destinatario",destinatario);
-    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php',datos).subscribe((data:any)=>{
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php',datos)
+    .catch(error => { 
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    })
+    .subscribe((data:any)=>{
       this.Lista_Destinatarios = [{
-        Pais:'',
-        Banco: '',
-        Cuenta:''
+        Id_Pais:'',
+        Id_Banco: '',
+        Id_Tipo_Cuenta:'',
+        Numero_Cuenta: ''
       }];
       localStorage.removeItem("Lista_Inicial");
       formulario.reset();
+      this.ActualizarVista();
+      this.saveSwal.show();
      });
+    
 
     
     
@@ -128,29 +160,23 @@ export class DestinatariosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
+      this.Detalle_Destinatario = data;
+      this.cuentas = data.Cuentas;
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Cuentas = data.Cuentas;
-      this.Banco = data.Banco; 
-      this.Pais = data.Pais;
-      this.Detalle = data.Detalle;
       modal.show();
     });
+   
   }
   
   EditarDestinatario(id){
-    this.InicializarBool();
-    console.log(id);  
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+    this.InicializarBool(); 
+    this.http.get(this.globales.ruta+'php/destinatarios/detalle_destinatario.php',{
       params:{modulo:'Destinatario', id:id}
     }).subscribe((data:any)=>{
       console.log(data);      
+      this.Detalle_Destinatario = data;
+      this.cuentas = data.Cuentas;
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Cuentas = data.Cuentas;
-      this.IdBanco = data.Id_Banco; 
-      this.IdPais = data.Id_Pais;
-      this.Detalle = data.Detalle;
       this.ModalEditarDestinatario.show();
     });
   }
@@ -179,13 +205,14 @@ export class DestinatariosComponent implements OnInit {
 
   AgregarFila() { 
     
-this.Lista_Destinatarios.push([{
+  this.Lista_Destinatarios.push({
   Pais:'',
   Banco: '',
-  Cuenta:''
-}])
+  Cuenta:'',
+  Numero_Cuenta: ''
+})
   }
-  EliminarFila(i){
+  EliminarFila(i){ 
     
     this.Lista_Cuentas.splice(i,1);
   }

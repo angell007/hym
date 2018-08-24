@@ -17,13 +17,14 @@ import { ToastyModule } from 'ng2-toasty';
 import 'd3';
 import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
+import { DataTablesModule } from 'angular-datatables';
 
 //Layout Modules
 import { CommonLayoutComponent } from './common/common-layout.component';
 import { AuthenticationLayoutComponent } from './common/authentication-layout.component';
 
 //Directives
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDropdown} from '@ng-bootstrap/ng-bootstrap';
 import { Sidebar_Directives } from './shared/directives/side-nav.directive';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
@@ -79,6 +80,9 @@ import { LiquidacionsalarioComponent } from './liquidacionsalario/liquidacionsal
 import { TipodocumentoextranjeroComponent } from './configuracion/tipodocumentoextranjero/tipodocumentoextranjero.component';
 import { TipocuentaComponent } from './configuracion/tipocuenta/tipocuenta.component';
 import { CargosComponent } from './configuracion/cargos/cargos.component';
+import { PerfilcrearComponent } from './configuracion/perfilcrear/perfilcrear.component';
+import { PerfileditarComponent } from './configuracion/perfileditar/perfileditar.component';
+import { PerfilComponent } from './configuracion/perfil/perfil.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -104,6 +108,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ReactiveFormsModule,
         FormWizardModule,
         NgxDatatableModule,
+        DataTablesModule,
         ChartsModule,
         NvD3Module,
         StickyModule,
@@ -166,7 +171,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         LiquidacionsalarioComponent,
         TipodocumentoextranjeroComponent,
         TipocuentaComponent,
-        CargosComponent
+        CargosComponent,
+        PerfilcrearComponent,
+        PerfileditarComponent,
+        PerfilComponent
     ],
     exports:[
         ModalBasicComponent
@@ -176,6 +184,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         AuthGuard,
         ThemeConstants,
         Globales,
+        NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     ],
     bootstrap: [AppComponent]

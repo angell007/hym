@@ -44,6 +44,8 @@ import { TipodocumentoextranjeroComponent } from "./configuracion/tipodocumentoe
 import { TipocuentaComponent } from "./configuracion/tipocuenta/tipocuenta.component";
 import { LiquidacionsalarioComponent } from "./liquidacionsalario/liquidacionsalario.component";
 import { CargosComponent } from "./configuracion/cargos/cargos.component";
+import { PerfilcrearComponent } from './configuracion/perfilcrear/perfilcrear.component';
+import { PerfileditarComponent } from './configuracion/perfileditar/perfileditar.component';
 
 export const AppRoutes: Routes = [
     { 
@@ -65,7 +67,7 @@ export const AppRoutes: Routes = [
     { 
         path : 'bancos', component : CommonLayoutComponent,
         children:[{path : '', component : BancosComponent, canActivate:[AuthGuard]}]
-    },
+    }, 
     { 
         path : 'cuentasbancarias', component : CommonLayoutComponent,
         children:[{path : '', component : CuentasbancariasComponent, canActivate:[AuthGuard]}]
@@ -73,6 +75,14 @@ export const AppRoutes: Routes = [
     { 
         path : 'perfiles', component : CommonLayoutComponent,
         children:[{path : '', component : PerfilesComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'perfilcrear', component : CommonLayoutComponent,
+        children:[{path : '', component : PerfilcrearComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'perfileditar/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : PerfileditarComponent, canActivate:[AuthGuard]}]
     },
     { 
         path : 'funcionarios', component : CommonLayoutComponent,
