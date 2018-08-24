@@ -152,15 +152,6 @@ export class PosComponent implements OnInit {
     );
   formatter_destino = (x: {Id_Destinatario: string}) => x.Id_Destinatario;
 
-  search_remitente = (text$: Observable<string>) =>
-  text$.pipe(
-      debounceTime(200),
-      map(term => term.length < 4 ? []
-        : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-    );
-  formatter_remitente = (x: {Id_Transferencia_Remitente: string}) => x.Id_Transferencia_Remitente;
-  
-
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
       //this.FormOficinaAgregar.reset();

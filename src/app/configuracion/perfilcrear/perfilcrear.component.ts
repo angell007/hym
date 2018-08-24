@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, HostListener, Input } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfilcrear',
@@ -17,8 +18,9 @@ export class PerfilcrearComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
-  constructor(private http : HttpClient, private globales : Globales) { }
+  constructor(private http : HttpClient, private globales : Globales, private router: Router) { }
 
   ngOnInit() {
   }
@@ -33,7 +35,7 @@ export class PerfilcrearComponent implements OnInit {
     datos.append("datos",info);
     
     //console.log(datos);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+    this.http.post(this.globales.ruta+'php/perfiles/guardar_perfil.php',datos)
     .catch(error => { 
       console.error('An error occurred:', error.error);
       this.errorSwal.show();
@@ -45,9 +47,17 @@ export class PerfilcrearComponent implements OnInit {
       //this.transfVerMod = 0;
       //this.transfEditarMod = 0;
      // this.perfiles= data;
-     //this.InicializarBool();
-      this.saveSwal.show();
+     //this.InicializarBool();     
+     this.confirmacionSwal.title = "Perfil creado";
+     this.confirmacionSwal.text = data.mensaje;
+     this.confirmacionSwal.type = data.tipo;
+     this.confirmacionSwal.show();
+     this.VerPantallaLista();
+     formulario.reset();
     });
+  }
+  VerPantallaLista() {
+    this.router.navigate(['/perfiles']);
   }
   handleError(error: Response) {
     return Observable.throw(error);

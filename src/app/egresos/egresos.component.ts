@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import 'rxjs/add/observable/throw';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../shared/config/theme-constant';
 import { NgForm } from '../../../node_modules/@angular/forms';
 import { Globales } from '../shared/globales/globales';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-egresos',
@@ -11,7 +13,7 @@ import { Globales } from '../shared/globales/globales';
 })
 export class EgresosComponent implements OnInit {
 
-  public Egresos : any[];  
+  public Egresos : any[]=[];  
   public Grupos : any[];
   public Terceros : any[];
   public Monedas : any[];
@@ -56,6 +58,7 @@ export class EgresosComponent implements OnInit {
   public boolTercero:boolean = false;
   public boolMoneda:boolean = false;
   public boolValor:boolean = false;
+  public user : any;
 
   //Valores por defecto
   grupoDefault: string = "";
@@ -63,13 +66,27 @@ export class EgresosComponent implements OnInit {
   terceroDefault: string = "";
 
   conteoEgresosGrafica = [];
+  rowsFilter = [];
+  tempFilter = [];
+  columns = [];
 
   readonly ruta = 'https://hym.corvuslab.co/';
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
+  @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  @ViewChild('FormEgreso') FormEgreso:any;
+  @ViewChild('ModalEgreso') ModalEgreso:any;
+  @ViewChild('FormEditarEgreso') FormEditarEgreso:any;
+  @ViewChild('ModalEditarEgreso') ModalEditarEgreso:any; 
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
 
-  constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) { }
+  constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) {
+    this.fetchFilterData((data) => {
+      this.tempFilter = [...data];
+      this.rowsFilter = data;
+    });
+   }
 
   themeColors = this.colorConfig.get().colors;
   //Line Chart Config
@@ -109,6 +126,16 @@ export class EgresosComponent implements OnInit {
 
   ngOnInit() {
     this.ActualizarVista();
+    this.user = JSON.parse(localStorage.User);
+    this. columns = [
+      //{  prop: '{{Fecha | date:"dd/MM/yy"}} ', name: 'Fecha', maxWidth:'120' },
+      {  prop: 'Nombre_Funcio', name: 'Nombre_Funcio' },
+      {  prop: 'Grupo',  name: 'Grupo', maxWidth:'260'   },
+      {  prop: 'Tercero', name: 'Tercero', maxWidth:'260' },
+      {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
+      {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
+      { cellTemplate: this.PlantillaBotones, prop:'Id_Egreso', name: 'Acciones', sortable: false, maxWidth:'110' }
+    ];
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
     });
@@ -165,6 +192,17 @@ export class EgresosComponent implements OnInit {
     });
   }
 
+  fetchFilterData(cb) {
+    const req = new XMLHttpRequest();
+    req.open('GET', this.ruta+'php/egresos/lista_egresos.php');
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
+  } 
+
   OcultarFormularios()
   {
     this.InicializarBool();
@@ -182,17 +220,10 @@ export class EgresosComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.globales.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
-      this.Egresos= data;
-    });
-  }
-
-  /*ActualizarVista()
-  {
     this.http.get(this.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
       this.Egresos= data;
     });
-  }*/
+  }
 
   ListaTerceros(grupo)
   {
@@ -210,23 +241,49 @@ export class EgresosComponent implements OnInit {
     });
   }
 
-  GuardarEgreso(formulario:NgForm, modal)
-  {
+  GuardarEgreso(formulario:NgForm, modal){
+
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
-    console.log(formulario.value);    
+        
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    this.OcultarFormulario(modal);
     datos.append("modulo",'Egreso');
     datos.append("datos",info);
-    this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.ruta+'php/egresos/egresos_guardar.php',datos).subscribe((data:any)=>{      
       this.ActualizarVista();
-      formulario.reset();
       this.InicializarBool();
       this.grupoDefault = "";
       this.monedaDefault = "";
       this.terceroDefault = "";
-      this.saveSwal.show();
+      this.confirmacionSwal.title=data.titulo;
+      this.confirmacionSwal.text= data.mensaje;
+      this.confirmacionSwal.type= data.tipo;
+      this.confirmacionSwal.show();
+      this.FormEgreso.reset();
+      this.ModalEgreso.hide();
+    });
+  }
+
+  ActulizarEgreso(formulario:NgForm, modal){
+
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
+        
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo",'Egreso');
+    datos.append("datos",info);
+    this.http.post(this.ruta+'php/egresos/egresos_editar.php',datos).subscribe((data:any)=>{      
+      this.ActualizarVista();
+      this.InicializarBool();
+      this.grupoDefault = "";
+      this.monedaDefault = "";
+      this.terceroDefault = "";
+      this.confirmacionSwal.title=data.titulo;
+      this.confirmacionSwal.text= data.mensaje;
+      this.confirmacionSwal.type= data.tipo;
+      this.confirmacionSwal.show();
+      this.FormEditarEgreso.reset();
+      this.ModalEditarEgreso.hide();
     });
   }
 
@@ -241,12 +298,10 @@ export class EgresosComponent implements OnInit {
   }*/
 
   EliminarEgreso(id){
-    console.log(id);
-    
     let datos = new FormData();
     datos.append("modulo", 'Egreso');
     datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/egresos/egresos_anular.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
       this.ActualizarVista();
     });
@@ -294,7 +349,7 @@ export class EgresosComponent implements OnInit {
     });
   }
 
-  OcultarFormulario(modal){
+  /*OcultarFormulario(modal){
     this.Identificacion = null;
     this.IdGrupo = null;
     this.IdTercero = null;
@@ -302,7 +357,7 @@ export class EgresosComponent implements OnInit {
     this.Valor = null;
     this.Detalle = null;
     modal.hide();
-  }
+  }*/
 
 
 

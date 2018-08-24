@@ -1,9 +1,10 @@
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener,TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../shared/globales/globales';
+import {DatatableComponent} from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-traslados',
@@ -13,24 +14,23 @@ import { Globales } from '../shared/globales/globales';
 export class TrasladosComponent implements OnInit {
 
   //public asd = "";
-
-
   //variables de formulario
-  public Identificacion : any[];
-  public Origen : any[];
-  public Destino : any[];
+  public Identificacion : any;
+  public Origen : any;
+  public Destino : any;
   public NombreOrigen : string;
   public NombreDestino : string;
-  public IdentificacionFuncionario : any[];
-  public Tipo : any[];
-  public IdOrigen : any[];
-  public IdDestino : any[];
-  public Moneda : any[];
-  public Valor : any[];
-  public Detalle : any[];
-  public Estado : any[];
+  public IdentificacionFuncionario : any;
+  public Tipo : any;
+  public IdOrigen : any;
+  public IdDestino : any;
+  public Moneda : any;
+  public Valor : any;
+  public Detalle : any;
+  public Estado : any;
   public Fecha : any;
   public Id_Traslado : any;
+  public Nombre_Fun: any;
 
   public Proveedores : any[];
   public Bancos : any[];
@@ -46,6 +46,11 @@ export class TrasladosComponent implements OnInit {
   public boolProveedorDestino:boolean = false;
   public boolBancoDestino:boolean = false;
   public boolClienteDestino:boolean = false;
+  public user : any;
+
+  rowsFilter = [];
+  tempFilter = [];
+  columns = [];
   
   //Valores por defecto
   tipoDefault: string = "";
@@ -60,17 +65,47 @@ export class TrasladosComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  @ViewChild(DatatableComponent) table: DatatableComponent;
+  @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
+
   readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date();
 
   traslados = [];
   conteoTraslados = [];
   
-  constructor(private http : HttpClient, private globales : Globales) { }
+  constructor(private http : HttpClient, private globales : Globales) { 
+    this.fetchFilterData((data) => {
+      this.tempFilter = [...data];
+      this.rowsFilter = data;
+    }); 
+  }
 
   ngOnInit() {
-    this.ActualizarVista();   
+    this.ActualizarVista();  
+    this.user = JSON.parse(localStorage.User);
+    this. columns = [
+      //{  prop: '{{Fecha | date:"dd/MM/yy"}} ', name: 'Fecha', maxWidth:'120' },
+      {  prop: 'Funcionario', name: 'Funcionario' },
+      {  prop: 'Origen',  name: 'Origen', maxWidth:'260'   },
+      {  prop: 'Destino', name: 'Destino', maxWidth:'260' },
+      {  prop: 'Detalle', name: 'Detalle', maxWidth:'260' },
+      {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
+      {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
+      { cellTemplate: this.PlantillaBotones, prop:'Id_Traslado', name: 'Acciones', sortable: false, maxWidth:'110' }
+    ]; 
   }
+
+  fetchFilterData(cb) {
+    const req = new XMLHttpRequest();
+    req.open('GET', this.ruta+'php/traslados/lista.php');
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
+  } 
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
@@ -88,8 +123,8 @@ export class TrasladosComponent implements OnInit {
   OcultarFormularios()
   {
     this.InicializarBool();
-    this.OcultarFormulario(this.ModalTraslado);
-    this.OcultarFormulario(this.ModalEditarTraslado);
+    //this.OcultarFormulario(this.ModalTraslado);
+    //this.OcultarFormulario(this.ModalEditarTraslado);
   }
 
   InicializarBool()
@@ -118,9 +153,9 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/terceros/lista_clientes.php').subscribe((data:any)=>{     
       this.Clientes= data;        
     });
-    this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
+    /*this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
       this.traslados= data;
-    });
+    });*/
 
     this.http.get(this.ruta+'php/traslados/conteo.php').subscribe((data:any)=>{
       this.conteoTraslados= data[0];     
@@ -137,9 +172,7 @@ export class TrasladosComponent implements OnInit {
 
   GuardarTraslado(formulario: NgForm, modal:any){
     let info = JSON.stringify(formulario.value);
-    //console.log(info);
     
-
     if(info.indexOf('"Id_Origen":""') >= 0) {
       this.errorSwal.text = "No ha seleccionado un origen";
       this.errorSwal.show();
@@ -160,8 +193,8 @@ export class TrasladosComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data:any)=>{ 
-        this.OcultarFormulario(modal);
-        formulario.reset();     
+        this.ModalTraslado.hide();
+        this.FormTraslado.reset();    
         this.InicializarBool();
         this.tipoDefault = "";
         this.monedaDefault = "";
@@ -172,46 +205,6 @@ export class TrasladosComponent implements OnInit {
     this.ActualizarVista();
   }
 
-  /* ActualizarTraslado(formulario: NgForm, modal:any){
-    let info = JSON.stringify(formulario.value);
-    
-    
-
-    if(info.indexOf('"Id_Origen":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un origen";
-      this.errorSwal.show();
-    }
-    else if(info.indexOf('"Id_Destino":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un destino";
-      this.errorSwal.show();
-    }
-    else {
-      let datos = new FormData();
-      datos.append("modulo",'Traslado');
-      datos.append("datos",info);
-      console.log(info);
-      this.http.post(this.ruta+'php/traslados/traslado_editar.php',datos)
-      .catch(error => { 
-       // console.error('An error occurred:', error.error);
-        this.errorSwal.text = "Se ha generado un error al intentar guardar el documento";
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{ 
-        this.OcultarFormulario(modal);
-        formulario.reset();     
-        this.InicializarBool();
-        this.tipoDefault = "";
-        this.monedaDefault = "";
-        this.estadoDefault = "";
-        this.confirmacionSwal.title=data.titulo;
-        this.confirmacionSwal.text= data.mensaje;
-        this.confirmacionSwal.type= data.tipo;
-        this.saveSwal.show();
-      });
-    }
-    this.ActualizarVista();
-  }*/
   ActualizarTraslado(formulario: NgForm){   
     let info = JSON.stringify(formulario.value);
 
@@ -247,7 +240,7 @@ export class TrasladosComponent implements OnInit {
   }
 
   VerTraslado(id, modal){
-    this.http.get(this.globales.ruta+'php/traslados/detalle.php',{
+    this.http.get(this.globales.ruta+'php/traslados/traslado_ver.php',{
       params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
@@ -260,8 +253,7 @@ export class TrasladosComponent implements OnInit {
       this.Tipo = data.Tipo;
       this.Valor = data.Valor;
       this.Fecha=data.Fecha;
-      //console.log(this.Identificacion);
-      
+      this.Nombre_Fun=data.Nombre_Funcionario;
       modal.show();
     });
   }
@@ -271,8 +263,7 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Traslado', id:id}
     }).subscribe((data:any)=>{
-      console.log(data);
-      
+     
       this.SeleccionarTipo(data.Tipo);
       this.Identificacion = id;
       this.IdentificacionFuncionario = data.Identificacion_Funcionario;
@@ -287,7 +278,6 @@ export class TrasladosComponent implements OnInit {
       this.Detalle = data.Detalle;
       modal.show();
     });
-    
   }
 
   EliminarTraslado(id){
@@ -298,27 +288,6 @@ export class TrasladosComponent implements OnInit {
       this.deleteSwal.show();
     });    
   }
-
-  OcultarFormulario(modal){
-    this.NombreOrigen = null;
-    this.NombreDestino = null;
-    this.Origen = null;
-    this.Destino = null;
-    this.Identificacion = null;
-    this.Tipo = null;
-    this.IdOrigen = null;
-    this.IdDestino = null;
-    this.Moneda = null;
-    this.Valor = null;
-    this.Estado = null;
-    this.Detalle = null;
-    modal.hide();
-  }
-
-  /*EventChange()
-  {
-    this.NombreOrigen = this.asd;
-  }*/
 
   ObtenerOrigen(IdOrigen, tabla)
   {
@@ -345,26 +314,24 @@ export class TrasladosComponent implements OnInit {
   }
 
   ObtenerDestino(IdDestino, tabla)
-  {//alert(IdDestino);
-    //alert(tabla);
-   
+  {
     if (tabla == "proveedor")
     {
       this.Proveedores.forEach(element => {
         if (element.Id_Proveedor == IdDestino) this.NombreDestino = element.Nombre;
-      });//alert(this.NombreDestino);
+      });
     }
     if (tabla == "banco")
     {
       this.Bancos.forEach(element => {
         if (element.Id_Banco == IdDestino) this.NombreDestino = element.Nombre;
-      });//alert(this.NombreDestino);
+      });
     }
     if (tabla == "cliente")
     {
       this.Clientes.forEach(element => {
         if (element.Id_Tercero == IdDestino) this.NombreDestino = element.Nombre;
-      });//alert(this.NombreDestino);
+      });
     }
   }
 
