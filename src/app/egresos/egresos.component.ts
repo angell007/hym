@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../shared/config/theme-constant';
 import { NgForm } from '../../../node_modules/@angular/forms';
 import { Globales } from '../shared/globales/globales';
-import {DatatableComponent} from '@swimlane/ngx-datatable';
+import { Subject } from '../../../node_modules/rxjs/Subject';
 
 @Component({
   selector: 'app-egresos',
@@ -66,9 +66,9 @@ export class EgresosComponent implements OnInit {
   terceroDefault: string = "";
 
   conteoEgresosGrafica = [];
-  rowsFilter = [];
-  tempFilter = [];
-  columns = [];
+
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
 
   readonly ruta = 'https://hym.corvuslab.co/';
   @ViewChild('deleteSwal') deleteSwal:any;
@@ -78,14 +78,12 @@ export class EgresosComponent implements OnInit {
   @ViewChild('ModalEgreso') ModalEgreso:any;
   @ViewChild('FormEditarEgreso') FormEditarEgreso:any;
   @ViewChild('ModalEditarEgreso') ModalEditarEgreso:any; 
-  @ViewChild(DatatableComponent) table: DatatableComponent;
-  @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
 
   constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) {
-    this.fetchFilterData((data) => {
+   /* this.fetchFilterData((data) => {
       this.tempFilter = [...data];
       this.rowsFilter = data;
-    });
+    });*/
    }
 
   themeColors = this.colorConfig.get().colors;
@@ -127,16 +125,6 @@ export class EgresosComponent implements OnInit {
   ngOnInit() {
     this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
-    
-    this. columns = [
-      //{  prop: '{{Fecha | date:"dd/MM/yy"}} ', name: 'Fecha', maxWidth:'120' },
-      {  prop: 'Nombre_Funcio', name: 'Nombre_Funcio' },
-      {  prop: 'Grupo',  name: 'Grupo', maxWidth:'260'   },
-      {  prop: 'Tercero', name: 'Tercero', maxWidth:'260' },
-      {  prop: 'Moneda',  name: 'Moneda', maxWidth:'100' },
-      {  prop: 'Valor',   name: 'Valor', maxWidth: '100'},
-      { cellTemplate: this.PlantillaBotones, prop:'Id_Egreso', name: 'Acciones', sortable: false, maxWidth:'200' }
-    ];
     this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
     });
@@ -193,7 +181,7 @@ export class EgresosComponent implements OnInit {
     });
   }
 
-  fetchFilterData(cb) {
+  /*fetchFilterData(cb) {
     const req = new XMLHttpRequest();
     req.open('GET', this.ruta+'php/egresos/lista_egresos.php');
 
@@ -202,7 +190,7 @@ export class EgresosComponent implements OnInit {
     };
 
     req.send();
-  } 
+  } */
 
   OcultarFormularios()
   {
@@ -223,7 +211,36 @@ export class EgresosComponent implements OnInit {
   {
     this.http.get(this.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
       this.Egresos= data;
+      this.dtTrigger.next();
     });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar MENU &eacute;l&eacute;ments",
+        info: "Mostrando desde START al END de TOTAL elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado MAX elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
   }
 
   ListaTerceros(grupo)
@@ -310,7 +327,7 @@ export class EgresosComponent implements OnInit {
 
   VerEgreso(id, modal){
     this.ListaTercerosNoGrupo();
-    this.http.get(this.ruta+'php/egresos/lista_egresos.php',{
+    this.http.get(this.ruta+'php/egresos/egresos_ver.php',{
       params:{modulo:'Egreso', id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;

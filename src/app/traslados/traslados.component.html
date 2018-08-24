@@ -1,7 +1,7 @@
 <div class="container-fluid">
-    <div class="page-title">
+    <!--<div class="page-title">
         <h4 class="pull-left">Traslados</h4>
-    </div>
+    </div>-->
     <div class="clearfix"></div>
     <!--<div class="row" style="height:110px">-->
     <div class="row">
@@ -102,49 +102,62 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" >
+        <!--<div class="col-md-12" >
             <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
                 <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
-        </div>       
+        </div>-->
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block ">
-                    <ngx-datatable
-                    #table
-                    class='data-table' 
-                    [columnMode]="'force'"
-                    [columns]="columns" 
-                    [loadingIndicator] ="true"
-                    [selectionType] = "'checkbox'" 
-                    [headerHeight]="30"
-                    [footerHeight]="30"
-                    [rowHeight]="undefined"
-                    [limit]="100"
-                    [messages] = "{ loadingMessage:'Cargando Información', emptyMessage:'No Hay información Disponible', totalMessage: 'Total' }"
-                    [rows]='rowsFilter'>
-                    </ngx-datatable>
+                <div class="card-header">
+                    <h4 class="pull-left">Traslados</h4>
+                    <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
+                        <i class="ti-plus"></i>Nuevo Traslado</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Funcionario</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Moneda</th>
+                                <th>Valor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Desactivado' ? 'bg-danger text-white' : '' }} ">
+                                    <td>{{traslado.Fecha | date:"dd/MM/yy"}}</td>
+                                    <td>{{traslado.Funcionario}}</td>
+                                    <td>{{traslado.Origen}}</td>
+                                    <td>{{traslado.Destino}}</td>
+                                    <td>{{traslado.Moneda}}</td>
+                                    <td>{{traslado.Valor}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)" style="margin:0;">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)"
+                                            style="margin:0;">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="EliminarTraslado(traslado.Id_Traslado)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<ng-template #PlantillaBotones let-row="row" let-value="value">
-    <div class="text-center">
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTraslado(value, ModalVerTraslado)">
-            <i class="ti-search"></i>
-        </button>
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(value, ModalEditarTraslado)">
-             <i class="ti-pencil"></i>
-        </button>
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-            (confirm)="EliminarTraslado(value)">
-            <i class="ti-trash"></i>
-        </button>
-    </div>
-</ng-template>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTraslado>
     <div class="app-modal-header">
@@ -158,7 +171,7 @@
             <div class="col-md-4">
                 <div class="form-group" hidden>
                     <label>Identificación</label>
-                    <input name="Identificacion_Funcionario" type="text" class="form-control" ngModel="{{IdentificacionFuncionario}}" [(ngModel)]="IdentificacionFuncionario"
+                    <input name="Identificacion_Funcionario" type="text" class="form-control" [(ngModel)]="IdentificacionFuncionario"
                         required>
                 </div>
             </div>
@@ -168,7 +181,7 @@
                         <strong>
                             <label>Tipo</label>
                         </strong>
-                        <select class="form-control" name="Tipo" ngModel="" (change)="SeleccionarTipo($event.target.value)" [(ngModel)]="tipoDefault"
+                        <select class="form-control" name="Tipo" (change)="SeleccionarTipo($event.target.value)" [(ngModel)]="tipoDefault"
                              (focusout)="boolTipo = true" required #tipo="ngModel">
                             <option value="">Seleccione tipo de traslado</option>
                             <option value="proveedor-proveedor">Entre proveedores</option>
@@ -263,7 +276,7 @@
                         <strong>
                             <label>Cliente de destino</label>
                         </strong>
-                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'cliente')"
+                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel (change)="ObtenerDestino($event.target.value, 'cliente')"
                              (focusout)="boolClienteDestino = true" required #clienteDestino="ngModel">
                             <option value="">Seleccione cliente de destino</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
@@ -279,7 +292,7 @@
                         <strong>
                             <label>Moneda</label>
                         </strong>
-                        <select class="form-control" name="Moneda" ngModel="" [(ngModel)]="monedaDefault"  (focusout)="boolMoneda = true"
+                        <select class="form-control" name="Moneda"  [(ngModel)]="monedaDefault"  (focusout)="boolMoneda = true"
                             required #moneda="ngModel">
                             <option value="">Seleccione tipo de moneda</option>
                             <option value="Pesos">Pesos</option>
@@ -305,7 +318,7 @@
                         <strong>
                             <label>Estado</label>
                         </strong>
-                        <select class="form-control" name="Estado" ngModel="" [(ngModel)]="estadoDefault"  (focusout)="boolEstado = true"
+                        <select class="form-control" name="Estado"  [(ngModel)]="estadoDefault"  (focusout)="boolEstado = true"
                             required #estado="ngModel">
                             <option value="">Seleccione estado</option>
                             <option value="Enviado">Enviado</option>
@@ -341,12 +354,17 @@
         <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4>Detalle de Traslado</h4>
+        
     </div>
-    <div class="app-modal-body" >
+    <div class="app-modal-body">
+        <div class="modal-body">
             <div class="col-md-12">
                 <table class="table table-hover table-sm table-striped tabla-traslado">
                     <thead>
+                        <tr class="color-campos">
+                            <td colspan="4"><img class="img-responsive inline-block" src="assets/images/logo/logo.png" alt=" Logo HyM"></td>
+                            <td class="centar-datos" ><strong>Traslado N°:</strong> {{codigo_Formato}}</td>
+                        </tr>
                         <tr class="color-campos">
                             <td ><strong>Funcionario: </strong></td>
                             <td colspan="3">{{Nombre_Fun}}</td>
@@ -378,7 +396,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div></div>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
