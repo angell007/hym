@@ -1,3 +1,11 @@
+<!--
+     <td> Traslados </td>
+     <td> Agentes Externos </td> 
+     <td> Giros </td>
+     <td> Corresponsales Bancarios </td>
+     <td> Servicios Externos </td>
+     <td> Egresos </td>
+-->
 <div class="page-body">
   <div class="row">
     <div class="col-lg-12 col-md-12 col-md-offset-4">
@@ -11,17 +19,19 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label>Nombre</label>
+                {{Datos.Nombre}}
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label>Detalles</label>
+                {{Datos.Detalle}}
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label>Tablero</label>
-
+                {{Datos.Tablero}}
               </div>
             </div>
 
@@ -32,20 +42,229 @@
               <h3>Privilegios</h3>
             </div>
           </div>
+
           <div class="row">
-            <div class="col-md-12 text-left">
+            <div class="col-md-6 text-left">
+              <h1>Generales</h1>
               <table class="table  invoice-detail-table space">
                 <thead>
                   <tr class="thead-default">
-                    <th>Soportes</th>                
+                    <th> </th>
+                    <th><i class="fa fa-search"></i></th>
+                    <th><i class="fa fa-pencil"></i></th>
+                    <th><i class="fa fa-trash"></i></th>
+                    <th><i class="fa fa-plus"></i></th>
                   </tr>
                 </thead>
                 <tbody>
-                  
+                  <tr>
+                    <td> Transferencias </td>
+                    <td> {{Datos.TransfVer}} </td>
+                    <td> {{Datos.TransfEditar}} </td>
+                    <td> {{Datos.TransfEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Traslados </td>
+                    <td> {{Datos.TraslVer}} </td>
+                    <td> {{Datos.TraslEditar}} </td>
+                    <td> {{Datos.TraslEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Agentes Externos </td>
+                    <td> {{Datos.AgentesVerVal}} </td>
+                    <td> {{Datos.AgentesEditar}} </td>
+                    <td> {{Datos.AgentesEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Giros </td>
+                    <td> {{Datos.GirosVer}} </td>
+                    <td> {{Datos.GirosEditar}} </td>
+                    <td> {{Datos.GirosEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Corresponsales Bancarios </td>
+                    <td> {{Datos.CorrVer}} </td>
+                    <td> {{Datos.CorrEditar}} </td>
+                    <td> {{Datos.CorrEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Servicios Externos </td>
+                    <td> {{Datos.ServVer}} </td>
+                    <td> {{Datos.ServEditar}} </td>
+                    <td> {{Datos.ServEliminar}} </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Egresos </td>
+                    <td> {{Datos.EgresosVer}} </td>
+                    <td> {{Datos.EgresosEditar}} </td>
+                    <td> {{Datos.EgresosEliminar}} </td>
+                    <td> </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
+
+            <div class="col-md-6 text-left">
+              <h1>POS</h1>
+              <table class="table  invoice-detail-table space">
+                <thead>
+                  <tr class="thead-default">
+                    <th> </th>
+                    <th><i class="fa fa-search"></i></th>
+                    <th><i class="fa fa-pencil"></i></th>
+                    <th><i class="fa fa-trash"></i></th>
+                    <th><i class="fa fa-plus"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> Cambios Efectivo </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Transferencias </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Giros </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Giros </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Traslados</td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Corresponsal Bancario </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Servicios Externos </td>
+                    <td> </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-6 text-left">
+              <h1>Configuración</h1>
+              <table class="table  invoice-detail-table space">
+                <thead>
+                  <tr class="thead-default">
+                    <th> </th>
+                    <th><i class="fa fa-search"></i></th>
+                    <th><i class="fa fa-pencil"></i></th>
+                    <th><i class="fa fa-trash"></i></th>
+                    <th><i class="fa fa-plus"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> Configuracion General </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cargo </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Oficinas </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cajas </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Bancos </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cuentas Bancarias </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Destinatarios </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cajas Recaudo </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Perfiles </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Funcionarios </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Terceros </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Grupos </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Proveedores </td>
+                    <td> </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-6 text-left">
+              <h1>Indicadores</h1>
+              <table class="table  invoice-detail-table space">
+                <thead>
+                  <tr class="thead-default">
+                    <th> </th>
+                    <th><i class="fa fa-search"></i></th>
+                    <th><i class="fa fa-pencil"></i></th>
+                    <th><i class="fa fa-trash"></i></th>
+                    <th><i class="fa fa-plus"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> Balance General </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Flujo de Efectivo </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cuentas por Cobrar </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Cuenta por Pagar </td>
+                    <td> </td>
+                  </tr>
+                  <tr>
+                    <td> Estado de Cuentas</td>
+                    <td> </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
           </div>
+
+
 
         </div>
       </div>
