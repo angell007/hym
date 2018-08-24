@@ -1,28 +1,31 @@
 <div class="container-fluid">
   <div class="page-title">
-    <h4 class="pull-left">Egresos</h4>
-    <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
-      <i class="ti-plus"></i> Agregar nuevo egreso</button>
+   
     <!--<button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
       <i class="fa fa-area-chart"></i> Indicadores</button>-->
   </div>
   <div class="clearfix"></div>
   <div class="row">
       <div class="col-md-4">
-          <div class="app-modal-body">
-              <form #FormEgreso="ngForm">
+          <div class="card">
+            <div class="card-body">
                 <div class="row mrg-top-35">
-                  <div class="col-md-12">
-                    <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
-                      [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                    <div class="col-md-12">
+                      <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                    </div>
                   </div>
-                </div>
-              </form>
             </div>
+          </div>             
       </div>
       <div class="col-md-8">
-          <div class="card">
-              <div class="card-block ">
+                <div class="card">
+                  <div class="card-header">
+                      <h4 class="pull-left">Egresos</h4>
+                      <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
+                        <i class="ti-plus"></i> Agregar nuevo egreso</button>
+                  </div>
+              <!--<div class="card-block ">
                   <ngx-datatable
                   #table
                   class='data-table' 
@@ -37,7 +40,34 @@
                   [messages] = "{ loadingMessage:'Cargando Información', emptyMessage:'No Hay información Disponible', totalMessage: 'Total' }"
                   [rows]='rowsFilter'>
                   </ngx-datatable>
-              </div>
+              </div>-->
+              <div class="table-responsive">
+                  <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                  <thead>
+                  <tr>
+                  <th>Nombre Banco</th>
+                  <th>País</th>
+                  <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let banco of bancos" class=" {{banco.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                  <td>{{banco.Nombre}}</td>
+                  <td>{{banco.Pais}}</td>
+                  <td class="text-center">
+                  <button class="btn btn-default btn-xs" type="button" (click)="EditarBanco(banco.Id_Banco)" style="margin:0;">
+                  <i class="ti-pencil"></i>
+                  </button>
+                  
+                  <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Banco, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                  (confirm)="EstadoBanco(banco.Id_Banco, banco.Estado)">
+                  <i class=" {{banco.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} "></i>
+                  </button>
+                  </td>
+                  </tr>
+                  </tbody>
+                  </table>
+                  </div>
           </div>
       </div>
       

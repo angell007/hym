@@ -127,6 +127,7 @@ export class EgresosComponent implements OnInit {
   ngOnInit() {
     this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
+    
     this. columns = [
       //{  prop: '{{Fecha | date:"dd/MM/yy"}} ', name: 'Fecha', maxWidth:'120' },
       {  prop: 'Nombre_Funcio', name: 'Nombre_Funcio' },

@@ -344,122 +344,40 @@
         <h4>Detalle de Traslado</h4>
     </div>
     <div class="app-modal-body" >
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre del funcionario:</label>
-                        </strong>
-                        <span>{{Nombre_Fun}}</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Fecha:</label>
-                        </strong>
-                        <span>{{Fecha | date:"dd/MM/yy" }}</span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <strong>
-                            <label>Estado:</label>
-                        </strong>
-                        <span>{{Estado}}</span>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-12">
-                <div class="widget card">
-                    <div class="card-block">
-                        <div class="table-overflow">
-                            <table class="table table-hover table-sm table-striped">
-                                <thead>
-                                    <tr style="text-align: center;">
-                                        <th>Tipo</th>
-                                        <th>Origen</th>
-                                        <th>Destino</th>
-                                        <th>Moneda</th>
-                                        <th>Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr  style="text-align: center;">
-                                        <td>{{Tipo}}</td>
-                                        <td>{{Origen}}</td>
-                                        <td>{{Destino}}</td>
-                                        <td>{{Moneda}}</td>
-                                        <td>{{Valor}}</td>   
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--<div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Tipo:</label>
-                        </strong>
-                        <span>{{Tipo}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Origen:</label>
-                        </strong>
-                        <span>{{Origen}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Destino:</label>
-                        </strong>
-                        <span>{{Destino}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Moneda:</label>
-                        </strong>
-                        <span>{{Moneda}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Valor:</label>
-                        </strong>
-                        <span>{{Valor}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Estado:</label>
-                        </strong>
-                        <span>{{Estado}}</span>
-                    </div>
-                </div>
-            </div>-->
-            <div class="row">
-                <div class="col-md-12" *ngIf="Detalle!=''">
-                    <div class="form-group">
-                        <strong>
-                            <label>Detalles:</label>
-                        </strong>
-                        <br>
-                        <span>{{Detalle}}</span>
-                    </div>
-                </div>
+                <table class="table table-hover table-sm table-striped tabla-traslado">
+                    <thead>
+                        <tr class="color-campos">
+                            <td ><strong>Funcionario: </strong></td>
+                            <td colspan="3">{{Nombre_Fun}}</td>
+                            <td class="centar-datos" ><strong>Estado: </strong> {{Estado}}</td>
+                        </tr>
+                        <tr class="color-campos">
+                            <td><strong>Fecha: </strong></td>
+                            <td colspan="4">{{Fecha | date:"dd/MM/yy" }}</td>
+                        </tr>
+                        <tr class="centar-datos">
+                            <th>Tipo</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Moneda</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  style="text-align: center;">
+                            <td>{{Tipo}}</td>
+                            <td>{{Origen}}</td>
+                            <td>{{Destino}}</td>
+                            <td>{{Moneda}}</td>
+                            <td>${{Valor}}</td>   
+                        </tr>
+                        <tr class="color-campos" style="text-align: center;">
+                            <td><strong>Detalles: </strong></td>
+                            <td colspan="4">{{Detalle}}</td>   
+                        </tr>
+                    </tbody>
+                </table>
             </div>
     </div>
     <div class="app-modal-footer">
