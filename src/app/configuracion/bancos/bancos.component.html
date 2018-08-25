@@ -1,84 +1,73 @@
 <div class="container-fluid">
     <div class="page-title">
-      <h4 class="pull-left">Bancos</h4>
-      <button class="pull-right btn btn-info" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo Banco</button>
+        <h4 class="pull-left">Bancos</h4>
+        <button class="pull-right btn btn-primary btn-sm" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo Banco</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-block">
-            <p>Todos los bancos con los que trabajamos</p>
-            <div class="table-overflow">
-              <table class="table table-hover table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th>Nombre Banco</th>
-                    <th style="width:200px;">País</th>
-                    <th style="width:130px;"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let banco of bancos">
-                    <td>{{banco.Nombre}}</td>
-                    <td>{{banco.Pais}}</td>
-                    <td class="text-center">
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerBanco(banco.Id_Banco, ModalVerBanco)">
-                              <i class="ti-search"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" (click)="EditarBanco(banco.Id_Banco)" style="margin:0;">
-                              <i class="ti-pencil"></i>
-                            </button>
-                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                            [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Banco, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }" 
-                            (confirm)="EliminarBanco(banco.Id_Banco)" 
-                            >
-                            <i class="ti-trash"></i>
-                            </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <p>Todos los bancos con los que trabajamos</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th>Nombre Banco</th>
+                                    <th>País</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let banco of bancos" class=" {{banco.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                    <td>{{banco.Nombre}}</td>
+                                    <td>{{banco.Pais}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" (click)="EditarBanco(banco.Id_Banco)" style="margin:0;">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Banco, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EstadoBanco(banco.Id_Banco, banco.Estado)">
+                                            <i class=" {{banco.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} "></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalBanco" #ModalBanco>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Nuevo Banco</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormBanco="ngForm">
-            <div class="row">                
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Banco" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreBanco="ngModel">
-                        <div *ngIf="!nombreBanco.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreBanco.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Banco" class="form-control" name="Nombre" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Id_Pais" ngModel="" [(ngModel)]="paisDefault" (focus)="$event.target.select()" (focusout)="boolPais = true" required #pais="ngModel">
+                        <select class="form-control" name="Id_Pais" ngModel="" required>
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
-                        <div *ngIf="pais.value=='' && boolPais==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!pais.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificador="ngModel">
-                        <div *ngIf="!identificador.valid && boolId==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="identificador.valid && boolId==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" required>
                     </div>
                 </div>
             </div>
@@ -89,78 +78,23 @@
                         <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel=""></textarea>
                     </div>
                 </div>
-            </div>            
+            </div>
         </form>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary"
-                    [disabled]="!nombreBanco.valid || !identificador.valid || pais.value==''"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    (confirm)="GuardarBanco(FormBanco, ModalBanco)" >Actualizar Información</button>
-            </div>
-    </div>
-</app-modal-basic>
-
-
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerBanco" #ModalVerBanco>
-    <div class="app-modal-header">
-            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
-        <h4>Ver Banco</h4>
-    </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerBanco="ngForm">
-            <div class="col-md-4">
-                <div class="form-group" hidden>
-                    <label>Identificación</label>
-                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                <strong><label>Nombre: </label></strong>
-                        <label>{{Nombre}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong><label>Pais: </label></strong>
-                                <label>{{Pais}}</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                <strong><label>Identificador de Cuentas: </label></strong>
-                        <label>{{Identificador}}</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                <strong><label>Detalles: </label></strong>
-                        <label>{{Detalle}}</label>
-                    </div>
-                </div>
-            </div>            
-        </form>
-    </div>
-    <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerBanco)" >Cerrar</button>
-            </div>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary btn-sm"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarBanco(FormBanco, ModalBanco)">Guardar</button>
         </div>
+    </div>
 </app-modal-basic>
-
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarBanco" #ModalEditarBanco>
     <div class="app-modal-header">
-            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none" (click)="OcultarFormularios()">X</button>
         <h4>Editar Banco</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormEditarBanco="ngForm">
             <div class="col-md-4">
                 <div class="form-group" hidden>
@@ -172,28 +106,22 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreBancoEd="ngModel">
-                        <div *ngIf="!nombreBancoEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreBancoEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}" (focus)="$event.target.select()" (focusout)="boolPais = true" required #paisEd="ngModel">
+                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
-                        <div *ngIf="paisEd.value=='' && boolPais==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!paisEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}" (focus)="$event.target.select()" (focusout)="boolId = true" required #identificadorEd="ngModel">
-                        <div *ngIf="!identificadorEd.valid && boolId==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="identificadorEd.valid && boolId==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}">
                     </div>
                 </div>
             </div>
@@ -204,37 +132,25 @@
                         <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel="{{Detalle}}"></textarea>
                     </div>
                 </div>
-            </div>            
+            </div>
         </form>
     </div>
     <div class="app-modal-footer">
-            <div class="text-right">
-                <button class="btn btn-primary btn-sm" type="button"
-                [disabled]="!nombreBancoEd.valid || !identificadorEd.valid || paisEd.value==''"
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" type="button" 
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)"
-                >Guardar</button>
-            </div>
+                (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)">Guardar</button>
         </div>
+    </div>
 </app-modal-basic>
 
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el banco" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Banco guardado" text="Se ha guardado correctamente el banco" type="success">
 </swal>
 
-<swal #deleteSwal
-  title="Banco eliminado"
-  text="Se ha eliminado correctamente el banco"
-  type="success"
-  >
-  </swal>
+<swal #deleteSwal title="Banco eliminado" text="Se ha eliminado correctamente el banco" type="success">
+</swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
