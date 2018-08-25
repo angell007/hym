@@ -64,8 +64,6 @@ export class TrasladosComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
-  //@ViewChild(DatatableComponent) table: DatatableComponent;
-  //@ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
 
   readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date();
@@ -114,17 +112,6 @@ export class TrasladosComponent implements OnInit {
 
     
   }
-
- /* fetchFilterData(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', this.ruta+'php/traslados/lista.php');
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
-  } */
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {     
