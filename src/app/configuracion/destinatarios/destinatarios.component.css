@@ -1,0 +1,31 @@
+.tabla-destinatario{
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    border-collapse: initial;
+    background: #efefef;
+    width: 100%;
+    }
+
+.tabla-destinatario td{
+padding: 3px;
+/*border-bottom: 1px solid #9e9d9d; */
+}
+.color-campos{
+background-color: #fbfcfd;
+}
+.centar-datos{
+text-align: center;
+}
+
+.destinatario{
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    border-collapse: initial;
+    background: #ffffff;
+    width: 100%;
+  
+   
+}
+td{
+    border-bottom: 1px solid #fefefe !important;
+}
