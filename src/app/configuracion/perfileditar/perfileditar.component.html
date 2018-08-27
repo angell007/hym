@@ -70,6 +70,7 @@
                         <div class="form-group">
                           <span class="switch switch-sm">
                             <input type="checkbox" name="TransfVer" id="TransfVer" ngModel="{{Datos.TransfVer}}" [checked]="Datos.TransfVer == 'true' ? 'true' : 'false'"
+
                               class="switch">
                             <label for="TransfVer"></label>
                           </span>
@@ -926,6 +927,7 @@
                       <div class="col-md-12 form-group">
                         <label style="text-align: center">Editar</label>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -933,6 +935,11 @@
 
               <div class="col-md-2 caja" style="margin-bottom: 10px">
 
+            <div class="row">
+              <div class="col-md-12" align="center" style="margin-bottom: 10px">Cargo</div>
+            </div>
+            <div class="row borde">
+              <div class="col-md-6" align="center">
                 <div class="row">
                   <div class="col-md-12" align="center" style="margin-bottom: 10px">Cargo</div>
                 </div>
@@ -1404,12 +1411,11 @@
                     </div>
                   </div>
 
+
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12" style="text-align: center" style="margin-bottom: 10px">
-                <h5 style="text-align: left; margin-left: 25px ">Indicadores</h5>
+              <div class="col-md-12 form-group">
+                <label style="text-align: center">Ver</label>
               </div>
 
               <div class="col-md-2 caja" style="margin-bottom: 10px">
@@ -1449,10 +1455,14 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
-              <div class="col-md-2 caja" style="margin-bottom: 10px">
-
+              <div class="col-md-12 form-group">
+                <label style="text-align: center">Editar</label>
+              </div>
+            </div>
+      </div>
                 <div class="row">
                   <div class="col-md-12" align="center" style="margin-bottom: 10px">Flujo de Efectivo</div>
                 </div>
@@ -1488,12 +1498,25 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
-              <div class="col-md-2 caja" style="margin-bottom: 10px">
-                <div class="row">
-                  <div class="col-md-12" align="center" style="margin-bottom: 10px">Cuentas por Cobrar</div>
+              <div class="col-md-12 form-group">
+                <label style="text-align: center">Ver</label>
+              </div>
+            </div>        
+      </div>
+      <div class="col-md-6" align="center">
+          <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <span class="switch switch-sm">
+                    <input type="checkbox" name="BalanceEditar" id="BalanceEditar" ngModel="" [checked]="Datos.BalanceEditar == 'true' ? 'true' : 'false'"
+                      class="switch">
+                    <label for="BalanceEditar"></label>
+                  </span>
                 </div>
+
                 <div class="row borde">
                   <div class="col-md-6" align="center">
                     <div class="row">
@@ -1527,12 +1550,25 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
-              <div class="col-md-2 caja" style="margin-bottom: 10px">
-                <div class="row">
-                  <div class="col-md-12" align="center" style="margin-bottom: 10px">Cuenta por Pagar</div>
+              <div class="col-md-12 form-group">
+                <label style="text-align: center">Ver</label>
+              </div>
+            </div>
+      </div>
+      <div class="col-md-6" align="center">
+          <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <span class="switch switch-sm">
+                    <input type="checkbox" name="FlujoEditar" id="FlujoEditar" ngModel="" [checked]="Datos.FlujoEditar == 'true' ? 'true' : 'false'"
+                      class="switch">
+                    <label for="FlujoEditar"></label>
+                  </span>
                 </div>
+
                 <div class="row borde">
                   <div class="col-md-6" align="center">
                     <div class="row">
@@ -1566,11 +1602,23 @@
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
-              <div class="col-md-2 caja" style="margin-bottom: 10px">
-                <div class="row">
-                  <div class="col-md-12" align="center" style="margin-bottom: 10px">Estado de Cuentas</div>
+              <div class="col-md-12 form-group">
+                <label style="text-align: center">Ver</label>
+              </div>
+            </div>
+      </div>
+      <div class="col-md-6" align="center">
+          <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <span class="switch switch-sm">
+                    <input type="checkbox" name="CuentaCEditar" id="CuentaCEditar" ngModel="" [checked]="Datos.CuentaCEditar == 'true' ? 'true' : 'false'"
+                      class="switch">
+                    <label for="CuentaCEditar"></label>
+                  </span>
                 </div>
                 <div class="row">
                   <div class="col-md-6" align="center">
@@ -1621,8 +1669,42 @@
             </div>
           </div>
         </form>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-1">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <span class="switch switch-sm">
+            <input type="checkbox" name="Switch" [value]="false" id="Switch" ngModel [checked]="Datos.Switch == 'true' ? 'true' : 'false'" class="switch"
+              id="switch-sm">
+            <label for="switch-sm"></label>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12 form-group">
+        <label style="text-align: center">Switch</label>
       </div>
     </div>
   </div>
+
+</div>
+
+<div class="row">
+  <div class="col-md-12 col-md-offset-4">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarPerfil(FormPerfil)">Actualizar Información</button>
+    </div>
+  </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
 </div>
 <swal #confirmacionSwal title="" text="" type=""></swal>

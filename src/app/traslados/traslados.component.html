@@ -1,7 +1,7 @@
 <div class="container-fluid">
-    <div class="page-title">
+    <!--<div class="page-title">
         <h4 class="pull-left">Traslados</h4>
-    </div>
+    </div>-->
     <div class="clearfix"></div>
     <!--<div class="row" style="height:110px">-->
     <div class="row">
@@ -102,49 +102,61 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" >
+        <!--<div class="col-md-12" >
             <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
                 <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
-        </div>       
+        </div>-->
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block ">
-                    <ngx-datatable
-                    #table
-                    class='data-table' 
-                    [columnMode]="'force'"
-                    [columns]="columns" 
-                    [loadingIndicator] ="true"
-                    [selectionType] = "'checkbox'" 
-                    [headerHeight]="30"
-                    [footerHeight]="30"
-                    [rowHeight]="undefined"
-                    [limit]="100"
-                    [messages] = "{ loadingMessage:'Cargando Información', emptyMessage:'No Hay información Disponible', totalMessage: 'Total' }"
-                    [rows]='rowsFilter'>
-                    </ngx-datatable>
+                <div class="card-header">
+                    <h4 class="pull-left">Traslados</h4>
+                    <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
+                        <i class="ti-plus"></i>Nuevo Traslado</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Funcionario</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Moneda</th>
+                                <th>Valor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Desactivado' ? 'bg-danger text-white' : '' }} ">
+                                    <td>{{traslado.Fecha | date:"dd/MM/yy"}}</td>
+                                    <td>{{traslado.Funcionario}}</td>
+                                    <td>{{traslado.Origen}}</td>
+                                    <td>{{traslado.Destino}}</td>
+                                    <td>{{traslado.Moneda}}</td>
+                                    <td>{{traslado.Valor}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)" style="margin:0;">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)" style="margin:0;">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="EliminarTraslado(traslado.Id_Traslado)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<ng-template #PlantillaBotones let-row="row" let-value="value">
-    <div class="text-center">
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTraslado(value, ModalVerTraslado)">
-            <i class="ti-search"></i>
-        </button>
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTraslado(value, ModalEditarTraslado)">
-             <i class="ti-pencil"></i>
-        </button>
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-            (confirm)="EliminarTraslado(value)">
-            <i class="ti-trash"></i>
-        </button>
-    </div>
-</ng-template>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTraslado>
     <div class="app-modal-header">
@@ -153,23 +165,17 @@
         </button>
         <h4>Nuevo Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormTraslado="ngForm">
-            <div class="col-md-4">
-                <div class="form-group" hidden>
-                    <label>Identificación</label>
-                    <input name="Identificacion_Funcionario" type="text" class="form-control" ngModel="{{IdentificacionFuncionario}}" [(ngModel)]="IdentificacionFuncionario"
-                        required>
-                </div>
-            </div>
+                 <input name="Identificacion_Funcionario" type="hidden" [(ngModel)]="IdentificacionFuncionario">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                         <strong>
                             <label>Tipo</label>
                         </strong>
-                        <select class="form-control" name="Tipo" ngModel="" (change)="SeleccionarTipo($event.target.value)" [(ngModel)]="tipoDefault"
-                             (focusout)="boolTipo = true" required #tipo="ngModel">
+                        <select class="form-control" name="Tipo" (change)="SeleccionarTipo($event.target.value)" [(ngModel)]="tipoDefault"
+                             (focusout)="boolTipo = true" required>
                             <option value="">Seleccione tipo de traslado</option>
                             <option value="proveedor-proveedor">Entre proveedores</option>
                             <option value="proveedor-banco">Proveedor a cuenta bancaria</option>
@@ -178,8 +184,6 @@
                             <option value="cliente-proveedor">Cliente a proveedor</option>
                             <option value="cliente-banco">Cliente a cuenta bancaria</option>
                         </select>
-                        <div *ngIf="tipo.value=='' && boolTipo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipo.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
 
@@ -191,12 +195,10 @@
                             <label>Proveedor de origen</label>
                         </strong>
                         <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'proveedor')"
-                             (focusout)="boolProveedorOrigen = true" required #proveedorOrigen="ngModel">
+                             (focusout)="boolProveedorOrigen = true" required>
                             <option value="">Seleccione proveedor de origen</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedorOrigen.value=='' && boolProveedorOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!proveedorOrigen.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Origen==='banco'">
@@ -205,12 +207,10 @@
                             <label>Banco de origen</label>
                         </strong>
                         <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'banco')"
-                             (focusout)="boolBancoOrigen = true" required #bancoOrigen="ngModel">
+                             (focusout)="boolBancoOrigen = true" required >
                             <option value="">Seleccione banco de origen</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                        <div *ngIf="bancoOrigen.value=='' && boolBancoOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!bancoOrigen.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Origen==='cliente'">
@@ -219,12 +219,10 @@
                             <label>Cliente de origen</label>
                         </strong>
                         <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel (change)="ObtenerOrigen($event.target.value, 'cliente')"
-                             (focusout)="boolClienteOrigen = true" required #clienteOrigen="ngModel">
+                             (focusout)="boolClienteOrigen = true" required >
                             <option value="">Seleccione cliente de origen</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
-                        <div *ngIf="clienteOrigen.value=='' && boolClienteOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!clienteOrigen.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
 
@@ -235,13 +233,11 @@
                         <strong>
                             <label>Proveedor de destino</label>
                         </strong>
-                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'proveedor')"
-                             (focusout)="boolProveedorDestino = true" required #proveedorDestino="ngModel">
+                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino" ngModel (change)="ObtenerDestino($event.target.value, 'proveedor')"
+                             (focusout)="boolProveedorDestino = true" required>
                             <option value="">Seleccione proveedor de destino</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedorDestino.value=='' && boolProveedorDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!proveedorDestino.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Destino==='banco'">
@@ -249,13 +245,11 @@
                         <strong>
                             <label>Banco de destino</label>
                         </strong>
-                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'banco')"
-                             (focusout)="boolBancoDestino = true" required #bancoDestino="ngModel">
+                        <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" ngModel (change)="ObtenerDestino($event.target.value, 'banco')"
+                             (focusout)="boolBancoDestino = true" required>
                             <option value="">Seleccione banco de destino</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                        <div *ngIf="bancoDestino.value=='' && boolBancoDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!bancoDestino.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Destino==='cliente'">
@@ -263,13 +257,11 @@
                         <strong>
                             <label>Cliente de destino</label>
                         </strong>
-                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel="" (change)="ObtenerDestino($event.target.value, 'cliente')"
-                             (focusout)="boolClienteDestino = true" required #clienteDestino="ngModel">
+                        <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" ngModel (change)="ObtenerDestino($event.target.value, 'cliente')"
+                             (focusout)="boolClienteDestino = true" required>
                             <option value="">Seleccione cliente de destino</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
-                        <div *ngIf="clienteDestino.value=='' && boolClienteDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!clienteDestino.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -279,14 +271,12 @@
                         <strong>
                             <label>Moneda</label>
                         </strong>
-                        <select class="form-control" name="Moneda" ngModel="" [(ngModel)]="monedaDefault"  (focusout)="boolMoneda = true"
-                            required #moneda="ngModel">
+                        <select class="form-control" name="Moneda"  [(ngModel)]="monedaDefault"  (focusout)="boolMoneda = true"
+                            required>
                             <option value="">Seleccione tipo de moneda</option>
                             <option value="Pesos">Pesos</option>
                             <option value="Bolivares">Bolivares</option>
                         </select>
-                        <div *ngIf="moneda.value=='' && boolMoneda==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!moneda.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -295,9 +285,7 @@
                             <label>Valor</label>
                         </strong>
                         <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                             (focusout)="boolValor = true" required #valor="ngModel">
-                        <div *ngIf="!valor.valid && boolValor==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="valor.valid && boolValor==true" style="color:green">Datos correctos!</div>
+                             (focusout)="boolValor = true" required>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -305,13 +293,11 @@
                         <strong>
                             <label>Estado</label>
                         </strong>
-                        <select class="form-control" name="Estado" ngModel="" [(ngModel)]="estadoDefault"  (focusout)="boolEstado = true"
-                            required #estado="ngModel">
+                        <select class="form-control" name="Estado"  [(ngModel)]="estadoDefault"  (focusout)="boolEstado = true"
+                            required>
                             <option value="">Seleccione estado</option>
                             <option value="Enviado">Enviado</option>
                         </select>
-                        <div *ngIf="estado.value=='' && boolEstado==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!estado.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -329,7 +315,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!valor.valid || estado.value=='' || moneda.value=='' || tipo.value=='' "
+            <button type="submit" class="btn btn-primary" [disabled]="!FormTraslado.valid"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar Información</button>
         </div>
@@ -341,97 +327,48 @@
         <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4>Ver Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerTraslado="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="Id_Traslado" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Tipo:</label>
-                        </strong>
-                        <span>{{Tipo}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Origen:</label>
-                        </strong>
-                        <span>{{Origen}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Destino:</label>
-                        </strong>
-                        <span>{{Destino}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Moneda:</label>
-                        </strong>
-                        <span>{{Moneda}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Valor:</label>
-                        </strong>
-                        <span>{{Valor}}</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Estado:</label>
-                        </strong>
-                        <span>{{Estado}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <strong>
-                            <label>Fecha:</label>
-                        </strong>
-                        <span>{{Fecha | date:"dd/MM/yy" }}</span>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <strong>
-                            <label>Nombre del funcionario:</label>
-                        </strong>
-                        <span>{{Nombre_Fun}}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" *ngIf="Detalle!=''">
-                    <div class="form-group">
-                        <strong>
-                            <label>Detalles:</label>
-                        </strong>
-                        <span>{{Detalle}}</span>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="app-modal-body">
+        <div class="modal-body">
+            <div class="col-md-12">
+                <table class="table table-hover table-sm table-striped tabla-traslado">
+                    <thead>
+                        <tr class="color-campos">
+                            <td colspan="4"><img class="img-responsive inline-block" src="assets/images/logo/logo.png" alt=" Logo HyM"></td>
+                            <td class="centar-datos" ><strong>Traslado N°:</strong> {{codigo_Formato}}</td>
+                        </tr>
+                        <tr class="color-campos">
+                            <td ><strong>Funcionario: </strong></td>
+                            <td colspan="3">{{Nombre_Fun}}</td>
+                            <td class="centar-datos" ><strong>Estado: </strong> {{Estado}}</td>
+                        </tr>
+                        <tr class="color-campos">
+                            <td><strong>Fecha: </strong></td>
+                            <td colspan="4">{{Fecha | date:"dd/MM/yy" }}</td>
+                        </tr>
+                        <tr class="centar-datos">
+                            <th>Tipo</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Moneda</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  style="text-align: center;">
+                            <td>{{Tipo}}</td>
+                            <td>{{Origen}}</td>
+                            <td>{{Destino}}</td>
+                            <td>{{Moneda}}</td>
+                            <td>${{Valor}}</td>   
+                        </tr>
+                        <tr class="color-campos" style="text-align: center;">
+                            <td><strong>Detalles: </strong></td>
+                            <td colspan="4">{{Detalle}}</td>   
+                        </tr>
+                    </tbody>
+                </table>
+            </div></div>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
@@ -447,9 +384,9 @@
         </button>
         <h4>Editar Traslado</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormEditarTraslado="ngForm">
-            <input type="hidden" name="Id_Traslado" ngModel="{{Identificacion}}"> 
+            <input type="hidden" name="Id_Traslado" [(ngModel)]="Identificacion"> 
             <input type="hidden"  name="Identificacion_Funcionario" [(ngModel)]="IdentificacionFuncionario">
                 
             <div class="row">
@@ -457,7 +394,7 @@
                     <div class="form-group">
                         <label>Tipo</label>
                         <select class="form-control" required name="Tipo" [(ngModel)]="Tipo" (change)="SeleccionarTipo($event.target.value)"
-                            (focusout)="boolTipo = true" required #tipoEd="ngModel">
+                            (focusout)="boolTipo = true" required>
                             <option value="">Seleccione tipo de traslado</option>
                             <option value="proveedor-proveedor">Entre proveedores</option>
                             <option value="proveedor-banco">Proveedor a cuenta bancaria</option>
@@ -466,8 +403,6 @@
                             <option value="cliente-proveedor">Cliente a proveedor</option>
                             <option value="cliente-banco">Cliente a cuenta bancaria</option>
                         </select>
-                        <div *ngIf="tipoEd.value=='' && boolTipo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!tipoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 
@@ -477,36 +412,30 @@
                     <div class="form-group">
                         <label>Proveedor de origen</label>
                         <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'proveedor')"
-                            (focusout)="boolProveedorOrigen = true" required #proveedorOrigenEd="ngModel">
+                            (focusout)="boolProveedorOrigen = true" required>
                             <option value="">Seleccione proveedor de origen</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedorOrigenEd.value=='' && boolProveedorOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!proveedorOrigenEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Origen==='banco'">
                     <div class="form-group">
                         <label>Banco de origen</label>
                         <select type="text" placeholder="Banco de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'banco')"
-                            (focusout)="boolBancoOrigen = true" required #bancoOrigenEd="ngModel">
+                            (focusout)="boolBancoOrigen = true" required>
                             <option value="">Seleccione banco de origen</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                        <div *ngIf="bancoOrigenEd.value=='' && boolBancoOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!bancoOrigenEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Origen==='cliente'">
                     <div class="form-group">
                         <label>Cliente de origen</label>
                         <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" [(ngModel)]="IdOrigen" (change)="ObtenerOrigen($event.target.value, 'cliente')"
-                            (focusout)="boolClienteOrigen = true" required #clienteOrigenEd="ngModel">
+                            (focusout)="boolClienteOrigen = true" required>
                             <option value="">Seleccione cliente de origen</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
-                        <div *ngIf="clienteOrigenEd.value=='' && boolClienteOrigen==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!clienteOrigenEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 
@@ -516,36 +445,30 @@
                     <div class="form-group">
                         <label>Proveedor de destino</label>
                         <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"[(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'proveedor')"
-                             (focusout)="boolProveedorDestino = true" required #proveedorDestinoEd="ngModel">
+                             (focusout)="boolProveedorDestino = true" required >
                             <option value="">Seleccione proveedor de destino</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
                         </select>
-                        <div *ngIf="proveedorDestinoEd.value=='' && boolProveedorDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!proveedorDestinoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Destino==='banco'">
                     <div class="form-group">
                         <label>Banco de destino</label>
                         <select type="text" placeholder="Banco de destino" class="form-control" name="Id_Destino" [(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'banco')"
-                             (focusout)="boolBancoDestino = true" required #bancoDestinoEd="ngModel">
+                             (focusout)="boolBancoDestino = true" required>
                             <option value="">Seleccione banco de destino</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                        <div *ngIf="bancoDestinoEd.value=='' && boolBancoDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!bancoDestinoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4" *ngIf="Destino==='cliente'">
                     <div class="form-group">
                         <label>Cliente de destino</label>
                         <select type="text" placeholder="Cliente de destino" class="form-control" name="Id_Destino" [(ngModel)]="IdDestino" (change)="ObtenerDestino($event.target.value, 'cliente')"
-                             (focusout)="boolClienteDestino = true" required #clienteDestinoEd="ngModel">
+                             (focusout)="boolClienteDestino = true" required >
                             <option value="">Seleccione cliente de destino</option>
                             <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                         </select>
-                        <div *ngIf="clienteDestinoEd.value=='' && boolClienteDestino==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!clienteDestinoEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
             </div>
@@ -555,13 +478,11 @@
                     <div class="form-group">
                         <label>Moneda</label>
                         <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Moneda" [(ngModel)]="Moneda" 
-                            (focusout)="boolMoneda = true" required #monedaEd="ngModel">
+                            (focusout)="boolMoneda = true" required>
                             <option value="">Seleccione tipo de moneda</option>
                             <option value="Pesos">Pesos</option>
                             <option value="Bolivares">Bolivares</option>
                         </select>
-                        <div *ngIf="monedaEd.value=='' && boolMoneda==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!monedaEd.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -570,21 +491,18 @@
                             <label>Valor</label>
                         </strong>
                         <input currencyMask class="form-control" name="Valor" [(ngModel)]="Valor" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                             (focusout)="boolValor = true" required #valorEd="ngModel">
-                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">Datos correctos!</div>
+                             (focusout)="boolValor = true" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Estado</label>
                         <select type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Estado" [(ngModel)]="Estado" 
-                            (focusout)="boolEstado = true" required #estadoEd="ngModel">
+                            (focusout)="boolEstado = true" required >
                             <option value="">Seleccione estado</option>
                             <option value="Enviado">Enviado</option>
                         </select>
-                        <div *ngIf="estadoEd.value=='' && boolEstado==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!estadoEd.value==''" style="color:green">Datos correctos!</div>
+                        
                     </div>
                 </div>
             </div>
@@ -600,7 +518,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit"class="btn btn-primary" [disabled]="!valorEd.valid || estadoEd.value=='' || monedaEd.value=='' || tipoEd.value=='' "
+            <button type="submit"class="btn btn-primary" [disabled]="!FormEditarTraslado.valid"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a actualizar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Actualizar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="ActualizarTraslado(FormEditarTraslado, ModalEditarTraslado)">Actualizar Informacion</button>
         </div>
