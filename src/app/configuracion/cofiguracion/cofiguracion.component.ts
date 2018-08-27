@@ -10,7 +10,7 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-cofiguracion',
   templateUrl: './cofiguracion.component.html',
-  styleUrls: ['./cofiguracion.component.css']
+  styleUrls: ['./cofiguracion.component.scss']
 })
 
 export class CofiguracionComponent implements OnInit {
@@ -122,9 +122,15 @@ export class CofiguracionComponent implements OnInit {
   @ViewChild('FormEditarConfiguracion') FormEditarConfiguracion: any;
   @ViewChild('saveSwal') saveSwal: any;
   @ViewChild('errorSwal') errorSwal: any;
+  @ViewChild('confirmswal') confirmswal: any;
 
   public configuracionGeneral = [];
 
+  public checkados = [];
+  MonedaCampo= [];
+  MonedaValor = [];
+  public Switch:boolean;
+  
   constructor(private http: HttpClient, private globales: Globales) { }
 
 
@@ -138,6 +144,14 @@ export class CofiguracionComponent implements OnInit {
     });
     this.http.get(this.globales.ruta + 'php/configuracion/lista_monedas.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       this.Monedas = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda_Campo' } }).subscribe((data: any) => {
+      this.MonedaCampo = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda_Valor' } }).subscribe((data: any) => {
+      this.MonedaValor = data;
     });
 
     this.EditarConfiguracion();
@@ -205,19 +219,42 @@ export class CofiguracionComponent implements OnInit {
     });
   }
 
+  HabilitarFuncionario(i,j,pos){
+    var checkeado = ((document.getElementById("Diario_" + i + "_" + j) as HTMLInputElement).checked);
 
-  GuardarMoneda(formularios: NgForm[]) {
-    for (var i = 0; i < formularios.length; i++) {
-      if (formularios[i].value.Diario) {
-        let info = JSON.stringify(formularios[i].value)
-        let datos = new FormData();
-        datos.append("modulo", 'Moneda_Funcionario');
-        datos.append("datos", info);
-        this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-          console.log("guardo");
-        });
+    switch(checkeado){
+      case true:{
+       (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = false;
+       this.MonedaValor[(pos-1)].Diario = 1;
+        break;
+      }
+      case false:{
+        (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = true;
+        this.MonedaValor[(pos-1)].Identificacion_Funcionario = null;
+        this.MonedaValor[(pos-1)].Diario = 0;
+        break;
       }
     }
+  }
+
+  asignarFuncionario(id, funcionario){
+    this.MonedaValor[(id-1)].Identificacion_Funcionario = funcionario;
+    this.MonedaValor[(id-1)].Diario = 1;
+  }
+
+  GuardarMoneda(pos, moneda) {
+
+    let info = JSON.stringify(this.MonedaValor)
+    let datos = new FormData();
+    datos.append("modulo", 'Moneda_Funcionario');
+    datos.append("datos", info);
+
+    this.http.post(this.globales.ruta + '/php/configuracion/guardar_moneda.php', datos).subscribe((data: any) => {
+      this.confirmswal.title = "Configuración de monedas";
+      this.confirmswal.text = "La información ha sido guardada correctamente";
+      this.confirmswal.type = "success";
+      this.confirmswal.show();
+    });
   }
 
   EditarMoneda(id) {
