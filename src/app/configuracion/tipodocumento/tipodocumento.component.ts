@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-tipodocumento',
@@ -31,6 +32,14 @@ export class TipodocumentoComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormDocumento') FormDocumento:any;
   Orden: any;
+  tiposDocumentosExtranjero: any[];
+
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
+  
+  dtOptions1: DataTables.Settings = {};
+  dtTrigger1 = new Subject();
 
   constructor(private http : HttpClient, private globales: Globales) { }
 
@@ -59,9 +68,75 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   ActualizarVista(){
-    this.http.get(this.globales.ruta+'php/tiposdocumentos/lista_tipos_documentos.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento'}} ).subscribe((data:any)=>{
       this.tiposDocumentos= data;          
+      this.dtTrigger.next();
     });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero'}} ).subscribe((data:any)=>{
+      this.tiposDocumentosExtranjero= data;          
+      this.dtTrigger1.next();
+    });
+
+    this.dtOptions1 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
   }
 
   GuardarDocumento(formulario: NgForm, modal){
@@ -113,14 +188,19 @@ export class TipodocumentoComponent implements OnInit {
     });
   }
 
-  EliminarDocumento(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Tipo_Documento');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.ActualizarVista();
-    });
+  EliminarDocumento(id , tipo){
+
+    switch(tipo){
+      case "Extranjero":{
+        this.eliminardoc('Tipo_Documento_Extranjero',id);
+        break;
+      }
+      default:{
+        this.eliminardoc('Tipo_Documento',id);
+        break;
+      }
+    }   
+    
   }
 
   OcultarFormulario(modal)
@@ -133,6 +213,16 @@ export class TipodocumentoComponent implements OnInit {
 
   Cerrar(modal){
     this.OcultarFormulario(modal)
+  }
+
+  eliminardoc(modulo, id){
+    let datos = new FormData();
+    datos.append("modulo", modulo);
+    datos.append("id", id); 
+    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data: any) => {
+      this.deleteSwal.show();
+      this.ActualizarVista();
+    });
   }
 
 }

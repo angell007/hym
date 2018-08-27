@@ -14,51 +14,46 @@ import { Router } from '@angular/router';
 })
 export class PerfilcrearComponent implements OnInit {
 
-  @ViewChild('FormPerfil') FormPerfil:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('FormPerfil') FormPerfil: any;
+  @ViewChild('errorSwal') errorSwal: any;
+  @ViewChild('saveSwal') saveSwal: any;
+  @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
-  constructor(private http : HttpClient, private globales : Globales, private router: Router) { }
+  constructor(private http: HttpClient, private globales: Globales, private router: Router) { }
 
   ngOnInit() {
   }
 
-  GuardarPerfil(formulario: NgForm){
-    console.log(formulario.value);
-    
-   let info = JSON.stringify(formulario.value);
+  GuardarPerfil(formulario: NgForm) {
+
+    let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    console.log(info);    
-    datos.append("modulo",'Perfil');
-    datos.append("datos",info);
-    
+    console.log(info);
+    datos.append("modulo", 'Perfil');
+    datos.append("datos", info);
+
     //console.log(datos);
-    this.http.post(this.globales.ruta+'php/perfiles/guardar_perfil.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{
-      //formulario.reset();
-     // this.customReset(); //Necesario para corregir ciertos bugs con los checkboxes
-      //this.transfVerMod = 0;
-      //this.transfEditarMod = 0;
-     // this.perfiles= data;
-     //this.InicializarBool();     
-     this.confirmacionSwal.title = "Perfil creado";
-     this.confirmacionSwal.text = data.mensaje;
-     this.confirmacionSwal.type = data.tipo;
-     this.confirmacionSwal.show();
-     this.VerPantallaLista();
-     formulario.reset();
-    });
+    this.http.post(this.globales.ruta + 'php/perfiles/guardar_perfil.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        this.confirmacionSwal.title = "Perfil creado";
+        this.confirmacionSwal.text = data.mensaje;
+        this.confirmacionSwal.type = data.tipo;
+        this.confirmacionSwal.show();
+        this.VerPantallaLista();
+        formulario.reset();
+      });
   }
+
   VerPantallaLista() {
     this.router.navigate(['/perfiles']);
   }
+
   handleError(error: Response) {
     return Observable.throw(error);
   }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-informaciongiros',
@@ -10,21 +11,146 @@ import { Globales } from '../../shared/globales/globales';
 export class InformaciongirosComponent implements OnInit {
 
 
-  public GirosRemitentes : any[];
-  public GirosDestinatarios : any[];
+  public GirosRemitentes: any[];
+  public GirosDestinatarios: any[];
 
   //listas
 
-  constructor(private http : HttpClient, private globales: Globales) { }
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
+  dtOptions1: DataTables.Settings = {};
+  dtTrigger1 = new Subject();
+
+  @ViewChild('ModalEditarRemitente') ModalEditarRemitente: any;
+  @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
+  Identificacion: any;
+  GiroEditar =[];
+
+  constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    //this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Giro_Remitente'}}).subscribe((data:any)=>{
-      this.GirosRemitentes= data;
+    this.ActualizarVista();
+  }
+
+  EliminarGiro(identificacion, tipo) {
+
+    switch (tipo) {
+      case 'remitente': {
+        this.eventoEliminar('Remitente', identificacion);
+        break;
+      }
+      case 'destinatario': {
+        this.eventoEliminar('Destinatario', identificacion);
+        break;
+      }
+    }
+  }
+
+  EditarGiro(identificacion, tipo) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { modulo: tipo, id: identificacion }
+    }).subscribe((data: any) => {
+      this.Identificacion = identificacion;
+      this.GiroEditar = data;
+
+
+      switch (tipo) {
+        case 'remitente': {
+          this.ModalEditarRemitente.show();
+          break;
+        }
+        case 'destinatario': {
+          this.ModalEditarDestinatario.show();
+          break;
+        }
+      }
+      //this.ModalEditarBanco.show();
+    });
+  }
+
+  eventoEliminar(modulo, id) {
+
+    let datos = new FormData();
+    datos.append("modulo", modulo);
+    datos.append("id", id);
+
+    this.http.post(this.globales.ruta + '/php/giros/eliminar_giro.php', datos).subscribe((data: any) => {
+      /*this.deleteSwal.show();*/
+      this.ActualizarVista();
     });
 
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Giro_Destinatario'}}).subscribe((data:any)=>{
-      this.GirosDestinatarios= data;
+  }
+
+  ActualizarVista() {
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
+      this.GirosRemitentes = data;
+      this.dtTrigger.next();
+    });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
+    this.dtOptions1 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Destinatario' } }).subscribe((data: any) => {
+      this.GirosDestinatarios = data;
+      this.dtTrigger1.next();
     });
   }
 

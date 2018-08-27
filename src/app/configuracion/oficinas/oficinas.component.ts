@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { SwalComponent } from '@toverux/ngx-sweetalert2';
 import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-oficinas',
@@ -15,195 +16,85 @@ import { Globales } from '../../shared/globales/globales';
 
 export class OficinasComponent implements OnInit {
 
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
+
   public oficinas : any[];
-  public Departamentos : any[];
-  public Municipios : any[];
-
-  //variables que hacen referencia a los campos del formulario editar   
-  public edi_visible = false;
-  public edi_visibleAnimate  = false;
-  public Identificacion ;
-
-  public Datos : any[] = [];
-  public Departamento : any[];
-  public Municipio : any[];
-
-  public boolNombre:boolean = false;
-  public boolDireccion:boolean = false;
-  public boolDepartamento:boolean = false;
-  public boolMunicipio:boolean = false;
-  public boolTelefono:boolean = false;
-  public boolCelular:boolean = false;
-  public boolCorreo:boolean = false;
-  public boolComision:boolean = false;
-  public boolMinCompra:boolean = false;
-  public boolMaxCompra:boolean = false;
-  public boolMinVenta:boolean = false;
-  public boolMaxVenta:boolean = false;
-  public boolValores:boolean = false;
-
-  //Valores por defecto
-  departamentoDefault: string = "";
-  municipioDefault: string = "";
-
-  @ViewChild('ModalOficina') ModalOficina:any;
-  @ViewChild('ModalVerOficina') ModalVerOficina:any;
-  @ViewChild('ModalEditarOficina') ModalEditarOficina:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('FormOficinaAgregar') FormOficinaAgregar:any;
-
+  
   constructor(private http: HttpClient,private globales: Globales) { }
 
   ngOnInit() {
-    this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
-      this.Departamentos= data;
-    });
-  }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalOficina);
-    this.OcultarFormulario(this.ModalVerOficina);
-    this.OcultarFormulario(this.ModalEditarOficina);
-  }
-
-  InicializarBool()
-  {
-    this.boolNombre = false;
-    this.boolDireccion = false;
-    this.boolDepartamento = false;
-    this.boolMunicipio = false;
-    this.boolTelefono = false;
-    this.boolCelular = false;
-    this.boolCorreo = false;
-    this.boolComision = false;
-    this.boolMinCompra = false;
-    this.boolMaxCompra = false;
-    this.boolMinVenta = false;
-    this.boolMaxVenta = false;
-    this.boolValores = false;
-  }
-
-  ActualizarVista()
-  {
     this.http.get(this.globales.ruta+'php/oficinas/lista_oficinas.php').subscribe((data:any)=>{
       this.oficinas= data;
+      this.dtTrigger.next();
     });
+  
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };    
   }
 
-  Municipios_Departamento(Departamento){
-    this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
-      this.Municipios= data;
-    });
-  }
-
-   GuardarOficina(formulario: NgForm, modal:any){
-   let info = JSON.stringify(formulario.value);
+  EstadoOficina(value, estado){
     let datos = new FormData();
-    this.OcultarFormulario(modal);
-    datos.append("modulo",'Oficina');
-    datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{  
-      formulario.reset();
-      this.departamentoDefault = "";
-      this.municipioDefault = "";
-      this.ActualizarVista();
-      this.InicializarBool();
-      this.saveSwal.show();
-    });
-  }
-
-
-  GuardarOficinaEditar(formulario: NgForm, modal:any){
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    this.OcultarFormulario(modal);
-    datos.append("modulo",'Oficina');
-    datos.append("datos",info);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{  
-      
-      this.ActualizarVista();
-      this.InicializarBool();
-      this.saveSwal.show();
-    });
+    var titulo;
+    var texto;
+    datos.append("id", value);
+    switch(estado){
+      case "Activo":{
+        datos.append("estado", "Activo");
+        titulo = "Oficina Inactivada";
+        texto ="Se ha inactivado correctamente la oficina seleccionada";
+        break;
+      }
+      case "Inactivo":{
+        datos.append("estado", "Inactivo");
+        titulo = "Oficina Activada";
+        texto ="Se ha Activado correctamente la oficina seleccionada";
+        break;
+      }
+    }
     
-  }
-
-  handleError(error: Response) {
-    return Observable.throw(error);
-  }
-
-  VerOficina(id, modal){
-    this.http.get(this.globales.ruta+'php/oficinas/detalle_oficina.php',{
-      params:{id:id}
-    }).subscribe((data:any)=>{
-      this.Datos=data;      
-      this.Identificacion = id;
-      modal.show();
+    this.http.post(this.globales.ruta + 'php/oficinas/anular_oficina.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = titulo;
+      this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();    
+      this.oficinas= data;  
     });
   }
 
-  EditarOficina(id, modal){
-    this.InicializarBool();
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Oficina', id:id}
-    }).subscribe((data:any)=>{
-
-      this.Datos=data;           
-      this.Identificacion = id;
-      this.Departamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
-      
-      modal.show();
-    });
+  activarOficina(value){
+    alert(value);
   }
 
-  EliminarOficina(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Oficina');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.ActualizarVista();
-    });
-  }
-
-  AutoSleccionarMunicipio(Departamento, Municipio){
-    this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
-      this.Municipios= data;
-      this.Municipio = Municipio;
-    });
-  }
-
-  OcultarFormulario(modal){
-
-    modal.hide();
-  }
-
-  Cerrar(modal){
-    this.OcultarFormulario(modal)
-  }
 
 }

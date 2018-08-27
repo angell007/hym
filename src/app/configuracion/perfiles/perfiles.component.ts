@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, HostListener, Input } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-perfiles',
@@ -228,6 +229,11 @@ export class PerfilesComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
 
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
+
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
@@ -303,9 +309,43 @@ export class PerfilesComponent implements OnInit {
   }
 
   ActualizarVista(){
-    this.http.get(this.globales.ruta+'php/perfiles/lista_perfiles.php').subscribe((data:any)=>{
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
+      params: { modulo: 'Perfil' }
+    }).subscribe((data: any) => {
       this.perfiles= data;
+      this.dtTrigger.next();
     });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
   }
 
   InicializarBool()
@@ -514,7 +554,7 @@ export class PerfilesComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Perfil');
     datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
       this.ActualizarVista();
     });
@@ -557,5 +597,35 @@ export class PerfilesComponent implements OnInit {
 
   Cerrar(modal){
     this.OcultarFormulario(modal)
+  }
+
+  EstadoPerfil(value, estado){
+    let datos = new FormData();
+    var titulo;
+    var texto;
+    datos.append("modulo", "Perfil");
+    datos.append("id", value);
+    switch(estado){
+      case "Activo":{
+        datos.append("estado", "Activo");
+        titulo = "Perfil Inactivado";
+        texto ="Se ha inactivado correctamente el perfil seleccionado";
+        break;
+      }
+      case "Inactivo":{
+        datos.append("estado", "Inactivo");
+        titulo = "Perfil Activado";
+        texto ="Se ha Activado correctamente el perfil seleccionado";
+        break;
+      }
+    }
+    
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = titulo;
+      this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();    
+      this.perfiles= data;  
+    });
   }
 }

@@ -6,12 +6,12 @@
         </div>
         <div class="clearfix"></div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-block">
                         <p>Tenemos los tipos de documentos de nuestra empresa</p>
-                        <div class="table-overflow">
-                            <table class="table table-hover table-sm table-striped">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -21,14 +21,48 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let tipoDocumento of tiposDocumentos">
-                                        <td style="vertical-align: middle;">{{tipoDocumento.Nombre}}</td>
-                                        <td style="vertical-align: middle;">{{tipoDocumento.Codigo}}</td>
-                                        <td style="vertical-align: middle;" class="text-center">
+                                        <td>{{tipoDocumento.Nombre}}</td>
+                                        <td>{{tipoDocumento.Codigo}}</td>
+                                        <td>
                                             <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDocumento(tipoDocumento.Id_Tipo_Documento, ModalEditarDocumento)">
                                                 <i class="ti-pencil"></i>
                                             </button>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                                 (confirm)="EliminarDocumento(tipoDocumento.Id_Tipo_Documento)">
+                                                <i class="ti-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-block">
+                        <p>Tenemos los tipos de documentos extranjeros de nuestra empresa</p>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th style="width:100px;">Código</th>
+                                        <th style="width:80px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tipoDocumento of tiposDocumentosExtranjero">
+                                        <td>{{tipoDocumento.Nombre}}</td>
+                                        <td>{{tipoDocumento.Codigo}}</td>
+                                        <td>
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDocumento(tipoDocumento.Id_Tipo_Documento_Extranjero, ModalEditarDocumentoExtranjero)">
+                                                <i class="ti-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar este Tipo de Documento, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                                (confirm)="EliminarDocumento(tipoDocumento.Id_Tipo_Documento_Extranjero, 'Extranjero')">
                                                 <i class="ti-trash"></i>
                                             </button>
                                         </td>
@@ -85,50 +119,6 @@
             <div class="text-right">
                 <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid || !codigo.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarDocumento(FormDocumento, ModalDocumento)">Guardar</button>
-            </div>
-        </div>
-      </app-modal-basic>
-      
-      <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerDocumento" #ModalVerDocumento>
-        <div class="app-modal-header">
-            <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-                (click)="OcultarFormularios()">X</button>
-            <h4>Ver Documento</h4>
-        </div>
-        <div class="app-modal-body">
-            <form #FormVerDocumento="ngForm">
-                
-                <div class="row">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <strong>
-                                <label>Nombre: </label>
-                            </strong>
-                            <label>{{Nombre}}</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <strong>
-                                <label>Código: </label>
-                            </strong>
-                            <label>{{Codigo}}</label>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="app-modal-footer">
-            <div class="text-right">
-                <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerDocumento)">Cerrar</button>
             </div>
         </div>
       </app-modal-basic>
