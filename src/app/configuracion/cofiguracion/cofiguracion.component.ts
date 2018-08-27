@@ -135,10 +135,7 @@ export class CofiguracionComponent implements OnInit {
 
 
   ngOnInit() {
-    //this.ActualizarVista();
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Configuracion' } }).subscribe((data: any) => {
-      this.configuracion = data;
-    });
+    
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
       this.Funcionarios = data;
     });

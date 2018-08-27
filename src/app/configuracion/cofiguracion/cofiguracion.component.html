@@ -13,13 +13,13 @@
                                     <div class="col-md-4" hidden>
                                         <div class="form-group">
                                             <label>Identificación</label>
-                                            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{configuracionGeneral.Identificacion}}">
+                                            <input readonly name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{configuracionGeneral.Id_Configuracion}}">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <strong><label>Nombre Empresa</label></strong>
-                                            <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{configuracionGeneral.NombreEmpresa}}">
+                                            <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{configuracionGeneral.Nombre_Empresa}}">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -227,19 +227,19 @@
                                         <div class="form-group">
                                             <label>Compras</label>
                                             <p> Nombre Dian:
-                                                <input name="Nombre_Dian_OC" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_OC}}"
+                                                <input name="Nombre_Dian_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Compra}}"
                                                     required>
                                             </p>
                                             <p> Prefijo:
-                                                <input name="Prefijo_OC" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_OC}}"
+                                                <input name="Prefijo_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Compra}}"
                                                     required>
                                             </p>
                                             <p> Codigo:
-                                                <input name="Codigo_Formato_OC" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_OC}}"
+                                                <input name="Codigo_Formato_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Compra}}"
                                                     required>
                                             </p>
                                             <p> Consecutivo:
-                                                <input name="Orden_Compra" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Orden_Compra}}"
+                                                <input name="Compra" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Compra}}"
                                                     readonly>
                                             </p>
                                         </div>
