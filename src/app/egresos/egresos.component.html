@@ -1,33 +1,68 @@
 <div class="container-fluid">
   <div class="page-title">
-    <h4 class="pull-left">Egresos</h4>
-    <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
-      <i class="ti-plus"></i> Agregar nuevo egreso</button>
-    <button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
-      <i class="fa fa-area-chart"></i> Indicadores</button>
+   
+    <!--<button class="pull-right btn btn-info" (click)="ModalIndicadores.show()">
+      <i class="fa fa-area-chart"></i> Indicadores</button>-->
   </div>
   <div class="clearfix"></div>
   <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-4">
           <div class="card">
-              <div class="card-block ">
-                  <ngx-datatable
-                  #table
-                  class='data-table' 
-                  [columnMode]="'force'"
-                  [columns]="columns" 
-                  [loadingIndicator] ="true"
-                  [selectionType] = "'checkbox'" 
-                  [headerHeight]="30"
-                  [footerHeight]="30"
-                  [rowHeight]="undefined"
-                  [limit]="100"
-                  [messages] = "{ loadingMessage:'Cargando Información', emptyMessage:'No Hay información Disponible', totalMessage: 'Total' }"
-                  [rows]='rowsFilter'>
-                  </ngx-datatable>
+            <div class="card-body">
+                <div class="row mrg-top-35">
+                    <div class="col-md-12">
+                      <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                    </div>
+                  </div>
+            </div>
+          </div>             
+      </div>
+      <div class="col-md-8">
+        <div class="card">
+              <div class="card-header">
+                  <h4 class="pull-left">Egresos</h4>
+                  <button class="pull-right btn btn-info" (click)="ModalEgreso.show()">
+                    <i class="ti-plus"></i>Nuevo Egreso</button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover table-sm table-striped" 
+                  datatable [dtOptions]="dtOptions" 
+                  [dtTrigger]="dtTrigger">
+                    <thead>
+                      <tr>
+                        <th>Funcionario</th>
+                        <th>Grupo</th>
+                        <th>Tercero</th>
+                        <th>Moneda</th>
+                        <th>Valor</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let Egreso of Egresos" class=" {{Egreso.Estado == 'Desactivado' ? 'bg-danger text-white' : '' }} ">
+                      <td>{{Egreso.Nombre_Funcio}}</td>
+                      <td>{{Egreso.Grupo}}</td>
+                      <td>{{Egreso.Tercero}}</td>
+                      <td>{{Egreso.Moneda}}</td>
+                      <td>{{Egreso.Valor}}</td>
+                      <td class="text-center">
+                      <button class="btn btn-default btn-xs" type="button" (click)="VerEgreso(Egreso.Id_Egreso, ModalVerEgreso)" style="margin:0;">
+                      <i class="ti-search"></i>
+                      </button>
+                      
+                    <!-- <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Banco, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                      (confirm)="EstadoBanco(banco.Id_Banco, banco.Estado)">
+                      <i class=" {{banco.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} "></i>
+                      </button>-->
+                      </td>
+                      </tr>
+                    </tbody>
+                </table>
               </div>
           </div>
       </div>
+      
     <!--<div class="col-md-12">
       <div class="widget card">
         <div class="card-block">
@@ -75,7 +110,7 @@
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalIndicadores" #ModalIndicadores>
+<!--<app-modal-basic [dialogClass]="'modal-lg'" id="ModalIndicadores" #ModalIndicadores>
   <div class="app-modal-header">
     <h4>Indicadores</h4>
     <button type="button" class="close basic-close" (click)="ModalIndicadores.hide()">
@@ -92,7 +127,7 @@
       </div>
     </form>
   </div>
-</app-modal-basic>
+</app-modal-basic>-->
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEgreso" #ModalEgreso>
   <div class="app-modal-header">
@@ -326,7 +361,7 @@
   </div> 
 </app-modal-basic>
 
-<ng-template #PlantillaBotones let-row="row" let-value="value">
+<!--<ng-template #PlantillaBotones let-row="row" let-value="value">
     <div class="text-center">
         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerEgreso(value, ModalVerEgreso)">
             <i class="ti-search"></i>
@@ -339,7 +374,7 @@
             <i class="ti-trash"></i>
           </button>
     </div>
-</ng-template>
+</ng-template> -->
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
 

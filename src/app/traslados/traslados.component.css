@@ -1,0 +1,31 @@
+.tabla-traslado{
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    border-collapse: initial;
+    background: #efefef;
+    width: 100%;
+}
+.tabla-traslado td{
+    padding: 3px;
+    
+}
+.color-campos{
+    background-color: #fbfcfd;
+}
+.centar-datos{
+    text-align: center;
+}
+.btn-grande{
+    height: 80px;
+    font-size: 30px;
+    font-weight: bold;
+}
+.dataTables_wrapper .dataTables_filter input{
+    height: auto !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+}
+.modal-body{
+    margin-top: 30px !important;
+    padding: 0px !important;
+}
