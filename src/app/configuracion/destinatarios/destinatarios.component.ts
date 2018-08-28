@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-destinatarios',
@@ -58,22 +59,14 @@ export class DestinatariosComponent implements OnInit {
   @ViewChild('duplicateSwal') duplicateSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+
+
   constructor(private http : HttpClient, private globales: Globales) { } 
 
   ngOnInit() {
-    this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
-      this.destinatarios= data;
-      console.log(this.destinatarios);
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
-      this.Paises= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
-      this.Bancos= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
-      this.Cuentas= data;
-    });
+    this.ActualizarVista();
   }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
@@ -84,19 +77,66 @@ export class DestinatariosComponent implements OnInit {
 
   ActualizarVista()
   {
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
+      this.Paises= data;
+      this.Bancos_Pais(2,0);
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Banco'}}).subscribe((data:any)=>{
+      this.Bancos= data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Cuenta'}}).subscribe((data:any)=>{
+      this.Cuentas= data;
+    });
+
     this.http.get(this.globales.ruta+'php/destinatarios/lista_destinatarios.php').subscribe((data:any)=>{
       this.destinatarios= data;
+      this.dtTrigger.next();
     });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
   }
 
   Bancos_Pais(Pais,i){
     this.http.get(this.globales.ruta+'php/genericos/bancos_pais.php',{ params: { id: Pais}}).subscribe((data:any)=>{
-      this.Lista_Destinatarios[i].Bancos = data;
+      this.Lista_Destinatarios[i].Bancos = data;     
     });
   }
 
-
-
+  agregarDinamico(i){
+    var pos = parseInt(i)+1;
+      if(this.Lista_Destinatarios[pos] == undefined){
+        this.AgregarFila();
+        this.Bancos_Pais(2,pos);
+      }
+  }
 
   OcultarFormularios()
   {
@@ -254,9 +294,9 @@ export class DestinatariosComponent implements OnInit {
   AgregarFila() { 
     
   this.Lista_Destinatarios.push({
-  Pais:'',
-  Banco: '',
-  Cuenta:'',
+  Pais:'2',
+  Banco: "",
+  Cuenta:"",
   Numero_Cuenta: ''
 })
   }
