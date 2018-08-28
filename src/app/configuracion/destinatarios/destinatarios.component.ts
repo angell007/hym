@@ -277,6 +277,36 @@ export class DestinatariosComponent implements OnInit {
 
   }
 
+  EstadoDestinatario(value, estado){
+    let datos = new FormData();
+    var titulo;
+    var texto;
+    datos.append("modulo", "Destinatario");
+    datos.append("id", value);
+    switch(estado){
+      case "Activo":{
+        datos.append("estado", "Activo");
+        titulo = "Destinatario Inactivo";
+        texto ="Se ha inactivado correctamente el destinatario seleccionado";
+        break;
+      }
+      case "Inactivo":{
+        datos.append("estado", "Inactivo");
+        titulo = "Destinatario Activado";
+        texto ="Se ha Activado correctamente el destinatario seleccionado";
+        break;
+      }
+    }
+    
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = titulo;
+      this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();    
+      this.destinatarios= data;  
+    });
+  }
+
   handleError(error: Response) {
     return Observable.throw(error);
   }
