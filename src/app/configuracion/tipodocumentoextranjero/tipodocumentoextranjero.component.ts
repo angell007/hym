@@ -64,7 +64,7 @@ export class TipodocumentoextranjeroComponent implements OnInit {
     });
   }
 
-  GuardarDocumento(formulario: NgForm, modal){
+  GuardarDocumentoExtranjero(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();        
     datos.append("modulo",'Tipo_Documento_Extranjero');
@@ -100,7 +100,7 @@ export class TipodocumentoextranjeroComponent implements OnInit {
     });
   }
 
-  EditarDocumento(id, modal){
+  EditarDocumentoExtranjero(id, modal){
     this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tipo_Documento_Extranjero', id:id}
