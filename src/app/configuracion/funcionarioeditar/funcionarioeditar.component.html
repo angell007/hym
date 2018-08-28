@@ -31,8 +31,8 @@
                             <div class="col-md-3">
                               <div  style="text-align: center">
                                 <label style="display: block" for="Foto">
-                                  <img *ngIf="funcionario.Imagen == ''" src="assets/images/user.jpg"  style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
-                                  <img *ngIf="funcionario.Imagen != ''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">                      
+                                  <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg"  style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
+                                  <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">                      
                                 </label>
                                 <div class="col-md-6">
                                   <input name="Foto" id="Foto" ngModel="" type="file" accept="image/png, image/jpeg" class="form-control form-control-sm text-right f-9" style="display: none" (change)="CargaFoto($event)">
@@ -51,32 +51,27 @@
                                   <div class="form-group">
                                     <input type="text" name="Nombres" ngModel="{{funcionario.Nombres}}" class="letras form-control form-control-sm" id="nombres" (focus)="$event.target.select()" (focusout)="boolNombresIP = true" required #nombresInformacionPersonalEd="ngModel" />
                                     <label class="floating-label" >Nombres (*)</label>
-                                    <div *ngIf="!nombresInformacionPersonalEd.valid && boolNombresIP==true" style="color:red">Campo Invalido</div>
-                                    <div *ngIf="nombresInformacionPersonalEd.valid && boolNombresIP==true" style="color:green">Datos Correctos!</div>
+
                                   </div>
                                 </div>
                                 <div class="col-md-4">
                                   <div class="form-group">
                                     <input type="text"  name="Apellidos" ngModel="{{funcionario.Apellidos}}" class="letras form-control form-control-sm" id="apellidos" (focus)="$event.target.select()" (focusout)="boolApellidosIP = true" required #apellidosInformacionPersonalEd="ngModel" />
                                     <label class="floating-label" >Apellidos (*)</label>
-                                    <div *ngIf="!apellidosInformacionPersonalEd.valid && boolApellidosIP==true" style="color:red">Campo Invalido</div>
-                                    <div *ngIf="apellidosInformacionPersonalEd.valid && boolApellidosIP==true" style="color:green">Datos Correctos!</div>
+
                                     </div>
                                 </div>    
                                 <div class="col-md-4">
                                   <div class="form-group">
                                     <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento" ngModel="{{funcionario.Fecha_Nacimiento}}" id="fnac" required (focus)="$event.target.select()" (focusout)="boolNacimientoIP = true" required #nacimientoInformacionPersonalEd="ngModel"/>
                                     <label class="floating-label" for="text-input">Fecha de Nacimiento: (*)</label>
-                                    <div *ngIf="!nacimientoInformacionPersonalEd.valid  && boolNacimientoIP==true" style="color:red">Campo Invalido</div>
-                                    <div *ngIf="nacimientoInformacionPersonalEd.valid && boolNacimientoIP==true" style="color:green">Datos Correctos!</div>
-                                  </div>
+                                   </div>
                                 </div>
                                 <div class="col-md-4">
                                   <div class="form-group">
                                       <input class="form-control form-control-sm" type="text" name="Lugar_Nacimiento" ngModel="{{funcionario.Lugar_Nacimiento}}" id="lnac" (focus)="$event.target.select()" (focusout)="boolLugarNacimientoIP = true" required #lugarnacimientoInformacionPersonalEd="ngModel" />
                                       <label class="floating-label" >Lugar de Nacimiento (*)</label>
-                                      <div *ngIf="!lugarnacimientoInformacionPersonalEd.valid && boolLugarNacimientoIP==true" style="color:red">Campo Invalido</div>
-                                      <div *ngIf="lugarnacimientoInformacionPersonalEd.valid && boolLugarNacimientoIP==true" style="color:green">Datos Correctos!</div> 
+ 
                                   </div>
                                 </div>
                                 <div class="col-md-4">
@@ -93,9 +88,7 @@
                                       <option value="AB-">AB-</option> 
                                     </select>
                                     <label class="floating-label" >Tipo de sangre (*)</label>
-                                    <div *ngIf="tiposangreInformacionPersonalEd.value=='' && boolTipoSangreIP==true" style="color:red">Campo Invalido</div>
-                                    <div *ngIf="!tiposangreInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                                  </div>
+                                   </div>
                                 </div>
                               </div>
                             </div>
@@ -108,24 +101,21 @@
                               <div class="form-group">
                                 <input  type="number" name="Telefono" ngModel="{{funcionario.Telefono}}" class="telefono form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoIP = true" required #telefonoInformacionPersonalEd="ngModel">
                                 <label class="floating-label" >Teléfono Fijo</label>
-                                <div *ngIf="!telefonoInformacionPersonalEd.valid && boolTelefonoIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="telefonoInformacionPersonalEd.valid && boolTelefonoIP==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <input  type="number" name="Celular" ngModel="{{funcionario.Celular}}" class="celular form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolCelularIP = true" required #celularInformacionPersonalEd="ngModel">
                                 <label class="floating-label" >Celular</label>
-                                <div *ngIf="!celularInformacionPersonalEd.valid && boolCelularIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="celularInformacionPersonalEd.valid && boolCelularIP==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <input  type="email" name="Correo" ngModel="{{funcionario.Correo}}" class="form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolCorreoIP = true" required #correoInformacionPersonalEd="ngModel">
                                 <label class="floating-label" >Correo electrónico</label>
-                                <div *ngIf="!correoInformacionPersonalEd.valid && boolCorreoIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="correoInformacionPersonalEd.valid && boolCorreoIP==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -134,8 +124,7 @@
                               <div class="form-group">
                                 <input  type="text" name="Direccion_Residencia" ngModel="{{funcionario.Direccion_Residencia}}" class="form-control form-control-sm"  id="residencia" (focus)="$event.target.select()" (focusout)="boolDireccionIP = true" required #direccionInformacionPersonalEd="ngModel" />
                                 <label class="floating-label" >Dirección de Residencia (*)</label>
-                                <div *ngIf="!direccionInformacionPersonalEd.valid && boolDireccionIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="direccionInformacionPersonalEd.valid && boolDireccionIP==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                             </div>
                           </div>
@@ -151,9 +140,7 @@
                                 <option value="Union Libre">Union Libre</option>
                               </select>
                               <label class="floating-label" >Estado Civil (*)</label>
-                              <div *ngIf="estadocivilInformacionPersonalEd.value=='' && boolEstadoCivilIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="!estadocivilInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>
                           <div class="col-md-2">
                             <div class="form-group">
@@ -172,9 +159,7 @@
                                 <option value="10">10</option>
                               </select>
                               <label class="floating-label" >Hijos (*)</label>
-                              <div *ngIf="hijosInformacionPersonalEd.value=='' && boolHijosIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="!hijosInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
@@ -189,16 +174,13 @@
                                 <option value="Maestria">Maestría</option>
                               </select>
                               <label class="floating-label" >Grado de instrucción (*)</label>
-                              <div *ngIf="gradoInformacionPersonalEd.value=='' && boolGradoIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="!gradoInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>
                           <div class="col-md-5">
                             <div class="form-group">
                               <input type="text" name="Titulo_Estudio" ngModel="{{funcionario.Titulo_Estudio}}" class="letras form-control form-control-sm" id="titulo" (focus)="$event.target.select()" (focusout)="boolTituloIP = true" required #tituloInformacionPersonalEd="ngModel"/>
                               <label class="floating-label" >Nombre del Título (*)</label>
-                              <div *ngIf="!tituloInformacionPersonalEd.valid && boolTituloIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="tituloInformacionPersonalEd.valid && boolTituloIP==true" style="color:green">Datos Correctos!</div>
+
                             </div>
                           </div>
                         </div>
@@ -211,9 +193,7 @@
                                   <option *ngFor="let Grupo of Grupos" value="{{Grupo.Id_Grupo}}" >{{Grupo.Nombre}}</option>
                                 </select>
                                 <label class="floating-label">Grupo (*)</label>
-                                <div *ngIf="grupoInformacionPersonalEd.value=='' && boolGrupoIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!grupoInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>              
                           <div class="col-md-3">
                             <div class="form-group">
@@ -222,9 +202,7 @@
                                   <option *ngFor="let Dependencia of Dependencias " value="{{Dependencia.Id_Dependencia}}">{{Dependencia.Nombre}}</option>
                                 </select>
                                 <label class="floating-label">Dependencia(*)</label>
-                                <div *ngIf="dependenciaInformacionPersonalEd.value=='' && boolDependenciaIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!dependenciaInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>
                           <div class="col-md-3">
                               <div class="form-group">
@@ -233,25 +211,20 @@
                                   <option *ngFor="let Cargo of Cargos " value="{{Cargo.Id_Cargo}}">{{Cargo.Nombre}}</option>
                                 </select>
                                 <label class="floating-label" >Cargo (*)</label>
-                                <div *ngIf="cargoInformacionPersonalEd.value=='' && boolCargoIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!cargoInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                              </div>
+                               </div>
                           </div>
                           <div class="col-md-2">
                             <div class="form-group">
                               <input type="number" name="Salario" ngModel="{{funcionario.Salario}}" class="dinero form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolSalarioIP = true" required #salarioInformacionPersonalEd="ngModel"/>
                               <label class="floating-label" >Salario (*)</label>
-                              <div *ngIf="!salarioInformacionPersonalEd.valid && boolSalarioIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="salarioInformacionPersonalEd.valid && boolSalarioIP==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                           </div>
                           <div class="col-md-2">
                             <div class="form-group">
                               <input class="form-control form-control-sm" type="date" name="Fecha_Ingreso" ngModel="{{funcionario.Fecha_Ingreso}}" (focus)="$event.target.select()" (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel"/>
                               <label for="text-input">Fecha de Ingreso: (*)</label>
-                              <div *ngIf="!ingresoInformacionPersonalEd.valid  && boolIngresoIP==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="ingresoInformacionPersonalEd.valid && boolIngresoIP==true" style="color:green">Datos Correctos!</div>
-                            </div>
+                             </div>
                           </div>
                                     
                           </div>
@@ -271,9 +244,7 @@
                                   <option value="XXXL">XXXL</option>
                                 </select>
                                 <label class="floating-label" >Talla de Camisa (*)</label>
-                                <div *ngIf="camisaInformacionPersonalEd.value=='' && boolCamisaIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!camisaInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                                </div>
+                                 </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
@@ -304,9 +275,7 @@
                                   <option value="42">42</option>
                                 </select>
                                 <label class="floating-label" >Talla de Pantalón (*)</label>
-                                <div *ngIf="pantalonInformacionPersonalEd.value=='' && boolPantalonIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!pantalonInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                              </div>
+                               </div>
                             </div>                        
                             <div class="col-md-3">
                               <div class="form-group">
@@ -329,9 +298,7 @@
                                     <option value="46">46</option>
                                 </select>
                                 <label class="floating-label" >Talla de Calzado (*)</label>
-                                <div *ngIf="botasInformacionPersonalEd.value=='' && boolBotasIP==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="!botasInformacionPersonalEd.value==''" style="color:green">Datos Correctos!</div>
-                              </div>
+                               </div>
                             </div>
                           </div>
                         </div>      
@@ -356,16 +323,14 @@
                                 <div class="form-group">
                                   <input type="text" name="Nombre" ngModel="{{ContactoEmergencia.Nombre}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolNombreCE = true" required #nombreContactoEmergenciaEd="ngModel"/>
                                   <label class="floating-label" >Nombre Completo (*)</label>
-                                  <div *ngIf="!nombreContactoEmergenciaEd.valid && boolNombreCE==true" style="color:red">Campo Invalido</div>
-                                  <div *ngIf="nombreContactoEmergenciaEd.valid && boolNombreCE==true" style="color:green">Datos Correctos!</div>
+
                                   </div>
                                 </div>
                               <div class="col-md-6">
                               <div class="form-group">
                                 <input type="text" name="Parentesco" ngModel="{{ContactoEmergencia.Parentesco}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolParentescoCE = true" required #parentescoContactoEmergenciaEd="ngModel" />
                                 <label class="floating-label" >Parentesco (*)</label>
-                                <div *ngIf="!parentescoContactoEmergenciaEd.valid && boolParentescoCE==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="parentescoContactoEmergenciaEd.valid && boolParentescoCE==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -374,24 +339,21 @@
                               <div class="form-group">
                                 <input type="number" name="Celular" ngModel="{{ContactoEmergencia.Celular}}" class="celular form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolCelularCE = true" required #celularContactoEmergenciaEd="ngModel"/>
                                 <label class="floating-label" >Celular</label>
-                                <div *ngIf="!celularContactoEmergenciaEd.valid && boolCelularCE==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="celularContactoEmergenciaEd.valid && boolCelularCE==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="number" name="Telefono" ngModel="{{ContactoEmergencia.Telefono}}" class="telefono form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoCE = true" required #telefonoContactoEmergenciaEd="ngModel"/>
                                 <label class="floating-label" >Teléfono Fijo</label>
-                                <div *ngIf="!telefonoContactoEmergenciaEd.valid && boolTelefonoCE==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="telefonoContactoEmergenciaEd.valid && boolTelefonoCE==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Direccion" ngModel="{{ContactoEmergencia.Direccion}}" class="telefono form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolDireccionCE = true" required #direccionContactoEmergenciaEd="ngModel"/>
                                 <label class="floating-label" >Dirección de Residencia</label>
-                                <div *ngIf="!direccionContactoEmergenciaEd.valid && boolDireccionCE==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="direccionContactoEmergenciaEd.valid && boolDireccionCE==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                             </div>
                           </div>
@@ -417,24 +379,21 @@
                               <div class="form-group">
                                 <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[0].Nombre_Empresa}}" class="form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolEmpresaEL1 = true" required #empresaExperienciaLaboral1Ed="ngModel"/>
                                 <label class="floating-label" >Empresa</label>
-                                <div *ngIf="!empresaExperienciaLaboral1Ed.valid && boolEmpresaEL1==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="empresaExperienciaLaboral1Ed.valid && boolEmpresaEL1==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Cargo" ngModel="{{Experiencia[0].Cargo}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolCargoEL1 = true" required #cargoExperienciaLaboral1Ed="ngModel"/>
                                 <label class="floating-label" >Cargo</label>
-                                <div *ngIf="!cargoExperienciaLaboral1Ed.valid && boolCargoEL1==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="cargoExperienciaLaboral1Ed.valid && boolCargoEL1==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Jefe" ngModel="{{Experiencia[0].Jefe}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolJefeEL1 = true" required #jefeExperienciaLaboral1Ed="ngModel"/>
                                 <label class="floating-label" >Jefe Inmediato</label>
-                                <div *ngIf="!jefeExperienciaLaboral1Ed.valid && boolJefeEL1==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="jefeExperienciaLaboral1Ed.valid && boolJefeEL1==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -443,24 +402,21 @@
                                 <div class="form-group">
                                   <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[0].Ingreso_Empresa}}" (focusout)="boolFechaIngresoEL1 = true" required #fechaingresoExperienciaLaboral1Ed="ngModel"/>
                                   <label class="floating-label" for="text-input">Fecha de ingreso:</label>
-                                  <div *ngIf="!fechaingresoExperienciaLaboral1Ed.valid && boolFechaIngresoEL1==true" style="color:red">Campo Invalido</div>
-                                  <div *ngIf="fechaingresoExperienciaLaboral1Ed.valid && boolFechaIngresoEL1==true" style="color:green">Datos Correctos!</div> 
+ 
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[0].Retiro_Empresa}}" (focusout)="boolFechaRetiroEL1 = true" required #fecharetiroExperienciaLaboral1Ed="ngModel"/>
                                   <label class="floating-label" for="text-input">Fecha de retiro:</label>
-                                  <div *ngIf="!fecharetiroExperienciaLaboral1Ed.valid && boolFechaRetiroEL1==true" style="color:red">Campo Invalido</div>
-                                  <div *ngIf="fecharetiroExperienciaLaboral1Ed.valid && boolFechaRetiroEL1==true" style="color:green">Datos Correctos!</div> 
+ 
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <input type="text" name="Telefono" ngModel="{{Experiencia[0].Telefono}}" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoEL1 = true" required #telefonoExperienciaLaboral1Ed="ngModel"/>
                                   <label class="floating-label">Numero de Contacto</label>
-                                  <div *ngIf="!telefonoExperienciaLaboral1Ed.valid && boolTelefonoEL1==true" style="color:red">Campo Invalido</div>
-                                  <div *ngIf="telefonoExperienciaLaboral1Ed.valid && boolTelefonoEL1==true" style="color:green">Datos Correctos!</div>
+
                                 </div>
                               </div>
                           </div>
@@ -469,8 +425,7 @@
                               <div class="form-group">
                                 <textarea name="Labores" ngModel="{{Experiencia[0].Labores}}" class="autosi form-control form-control-sm" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;" (focus)="$event.target.select()" (focusout)="boolLaboresEL1 = true" required #laboresExperienciaLaboral1Ed="ngModel"></textarea>
                                 <label class="floating-label" >Tareas Realizadas</label>
-                                <div *ngIf="!laboresExperienciaLaboral1Ed.valid && boolLaboresEL1==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="laboresExperienciaLaboral1Ed.valid && boolLaboresEL1==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -488,24 +443,21 @@
                               <div class="form-group">
                                 <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[1].Nombre_Empresa}}" class="form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolEmpresaEL2 = true" required #empresaExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" >Empresa</label>
-                                <div *ngIf="!empresaExperienciaLaboral2Ed.valid && boolEmpresaEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="empresaExperienciaLaboral2Ed.valid && boolEmpresaEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Cargo" ngModel="{{Experiencia[1].Cargo}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolCargoEL2 = true" required #cargoExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" >Cargo</label>
-                                <div *ngIf="!cargoExperienciaLaboral2Ed.valid && boolCargoEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="cargoExperienciaLaboral2Ed.valid && boolCargoEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Jefe" ngModel="{{Experiencia[1].Jefe}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolJefeEL2 = true" required #jefeExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" >Jefe Inmediato</label>
-                                <div *ngIf="!jefeExperienciaLaboral2Ed.valid && boolJefeEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="jefeExperienciaLaboral2Ed.valid && boolJefeEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -514,24 +466,21 @@
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[1].Ingreso_Empresa}}" (focusout)="boolFechaIngresoEL2 = true" required #fechaingresoExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" for="text-input">Fecha de ingreso:</label>
-                                <div *ngIf="!fechaingresoExperienciaLaboral2Ed.valid && boolFechaIngresoEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="fechaingresoExperienciaLaboral2Ed.valid && boolFechaIngresoEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[1].Retiro_Empresa}}" (focusout)="boolFechaRetiroEL2 = true" required #fecharetiroExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" for="text-input">Fecha de retiro:</label>
-                                <div *ngIf="!fecharetiroExperienciaLaboral2Ed.valid && boolFechaRetiroEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="fecharetiroExperienciaLaboral2Ed.valid && boolFechaRetiroEL2==true" style="color:green">Datos Correctos!</div> 
+ 
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input type="text" name="Telefono" ngModel="{{Experiencia[1].Telefono}}" class="form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoEL2 = true" required #telefonoExperienciaLaboral2Ed="ngModel"/>
                                 <label class="floating-label" >Número de Contacto</label>
-                                <div *ngIf="!telefonoExperienciaLaboral2Ed.valid && boolTelefonoEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="telefonoExperienciaLaboral2Ed.valid && boolTelefonoEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -540,8 +489,7 @@
                               <div class="form-group">
                                 <textarea name="Labores" ngModel="{{Experiencia[1].Labores}}" class="autosi form-control form-control-sm" cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;" (focus)="$event.target.select()" (focusout)="boolLaboresEL2 = true" required #laboresExperienciaLaboral2Ed="ngModel"></textarea>
                                 <label class="floating-label" >Tareas Realizadas</label>
-                                <div *ngIf="!laboresExperienciaLaboral2Ed.valid && boolLaboresEL2==true" style="color:red">Campo Invalido</div>
-                                <div *ngIf="laboresExperienciaLaboral2Ed.valid && boolLaboresEL2==true" style="color:green">Datos Correctos!</div>
+
                               </div>
                             </div>
                           </div>
@@ -569,32 +517,28 @@
                             <div class="form-group">
                               <input type="text" name="Nombres" ngModel="{{Referencias[0].Nombres}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolNombreRP1 = true" required #nombreReferenciasPersonales1Ed="ngModel" />
                               <label class="floating-label" for="codigo">Nombre completo</label>
-                              <div *ngIf="!nombreReferenciasPersonales1Ed.valid && boolNombreRP1==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="nombreReferenciasPersonales1Ed.valid && boolNombreRP1==true" style="color:green">Datos Correctos!</div>
+
                             </div>
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
                               <input type="text" name="Profesion" ngModel="{{Referencias[0].Profesion}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolProfesionRP1 = true" required #profesionReferenciasPersonales1Ed="ngModel" />
                               <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
-                              <div *ngIf="!profesionReferenciasPersonales1Ed.valid && boolProfesionRP1==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="profesionReferenciasPersonales1Ed.valid && boolProfesionRP1==true" style="color:green">Datos Correctos!</div>
+
                             </div>
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
                               <input type="text" name="Empresa" ngModel="{{Referencias[0].Empresa}}" class="form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolEmpresaRP1 = true" required #empresaReferenciasPersonales1Ed="ngModel" />
                               <label class="floating-label" for="codigo">Nombre de la empresa</label>
-                              <div *ngIf="!empresaReferenciasPersonales1Ed.valid && boolEmpresaRP1==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="empresaReferenciasPersonales1Ed.valid && boolEmpresaRP1==true" style="color:green">Datos Correctos!</div>
+
                             </div>
                           </div>
                           <div class="col-md-2">
                             <div class="form-group">
                               <input type="text" name="Telefono" ngModel="{{Referencias[0].Telefono}}" class="celular form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoRP1 = true" required #telefonoReferenciasPersonales1Ed="ngModel"/>
                               <label class="floating-label" for="codigo">Numero de contacto</label>
-                              <div *ngIf="!telefonoReferenciasPersonales1Ed.valid && boolTelefonoRP1==true" style="color:red">Campo Invalido</div>
-                              <div *ngIf="telefonoReferenciasPersonales1Ed.valid && boolTelefonoRP1==true" style="color:green">Datos Correctos!</div>
+
                             </div>
                           </div>    
                         </div>
@@ -613,32 +557,28 @@
                           <div class="form-group">
                             <input type="text" name="Nombres" ngModel="{{Referencias[1].Nombres}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolNombreRP2 = true" required #nombreReferenciasPersonales2Ed="ngModel"/>
                             <label class="floating-label" for="codigo">Nombre completo</label>
-                            <div *ngIf="!nombreReferenciasPersonales2Ed.valid && boolNombreRP2==true" style="color:red">Campo Invalido</div>
-                            <div *ngIf="nombreReferenciasPersonales2Ed.valid && boolNombreRP2==true" style="color:green">Datos Correctos!</div>
+
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
                             <input type="text" name="Profesion" ngModel="{{Referencias[1].Profesion}}" class="letras form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolProfesionRP2 = true" required #profesionReferenciasPersonales2Ed="ngModel"/>
                             <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
-                            <div *ngIf="!profesionReferenciasPersonales2Ed.valid && boolProfesionRP2==true" style="color:red">Campo Invalido</div>
-                            <div *ngIf="profesionReferenciasPersonales2Ed.valid && boolProfesionRP2==true" style="color:green">Datos Correctos!</div>
+
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
                             <input type="text" name="Empresa" ngModel="{{Referencias[1].Empresa}}" class="form-control form-control-sm" (focus)="$event.target.select()" (focusout)="boolEmpresaRP2 = true" required #empresaReferenciasPersonales2Ed="ngModel"/>
                             <label class="floating-label" for="codigo">Nombre de empresa</label>
-                            <div *ngIf="!empresaReferenciasPersonales2Ed.valid && boolEmpresaRP2==true" style="color:red">Campo Invalido</div>
-                            <div *ngIf="empresaReferenciasPersonales2Ed.valid && boolEmpresaRP2==true" style="color:green">Datos Correctos!</div>
+
                           </div>
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
                             <input type="text" name="Telefono" ngModel="{{Referencias[1].Telefono}}" class="celular form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()" (focusout)="boolTelefonoRP2 = true" required #telefonoReferenciasPersonales2Ed="ngModel"/>
                             <label class="floating-label" for="codigo">Numero de contacto</label>
-                            <div *ngIf="!telefonoReferenciasPersonales2Ed.valid && boolTelefonoRP2==true" style="color:red">Campo Invalido</div>
-                            <div *ngIf="telefonoReferenciasPersonales2Ed.valid && boolTelefonoRP2==true" style="color:green">Datos Correctos!</div>
+
                           </div>
                         </div>
                       </div>
