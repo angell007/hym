@@ -298,12 +298,14 @@ export class DestinatariosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      console.log(data);
-      this.Detalle_Destinatario = data;
-      console.log(this.Detalle_Destinatario);
+      console.log(data.destinatario);
+      this.Detalle_Destinatario = data.destinatario;      
+      this.Lista_Destinatarios = data.DestinatarioCuenta;
 
-      this.Lista_Destinatarios = data;
-      //this.cuentas = data.Cuentas;
+      for(var i = 0 ; i < this.Lista_Destinatarios.length ; i++){
+        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais,i);
+      }
+
       this.Identificacion = id;
       this.ModalEditarDestinatario.show();
     });
@@ -340,7 +342,6 @@ export class DestinatariosComponent implements OnInit {
       Numero_Cuenta: ''
     })
 
-    console.log(this.Lista_Destinatarios)
   }
 
 
