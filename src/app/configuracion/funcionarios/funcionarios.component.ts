@@ -88,7 +88,8 @@ export class FuncionariosComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('FormFuncionarioAgregar') FormFuncionarioAgregar:any;
-
+  @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  
 
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -117,7 +118,7 @@ export class FuncionariosComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.globales.ruta+'php/funcionarios/lista_funcionarios.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Funcionario'}}).subscribe((data:any)=>{
       this.funcionarios= data;
       this.dtTrigger.next();
     });
@@ -319,14 +320,36 @@ export class FuncionariosComponent implements OnInit {
 
 
   
-  EliminarFuncionario(id){
+  EliminarFuncionario(id,estado){
     let datos = new FormData();
     datos.append("modulo", 'Funcionario');
     datos.append("id", id);
-    this.http.post(this.globales.ruta + 'php/funcionarios/anular_funcionario.php', datos ).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.ActualizarVista();
+    var titulo;
+    var texto;
+
+    switch(estado){
+      case "Activo":{
+        datos.append("estado", "Activo");
+        titulo = "Funcionario Inactivado";
+        texto ="Se ha inactivado correctamente el funcionario seleccionado";
+        break;
+      }
+      case "Inactivo":{
+        datos.append("estado", "Inactivo");
+        titulo = "Funcionario Activado";
+        texto ="Se ha Activado correctamente el funcionario seleccionado";
+        break;
+      }
+    }
+    
+    this.http.post(this.globales.ruta + 'php/funcionarios/anular_funcionario.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = titulo;
+      this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();    
+      this.funcionarios= data;  
     });
+
   }
 
 

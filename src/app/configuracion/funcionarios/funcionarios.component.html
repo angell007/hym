@@ -20,7 +20,7 @@
                             </thead>
                             <tbody>
 
-                                <tr *ngFor="let funcionario of funcionarios">
+                                <tr *ngFor="let funcionario of funcionarios" class=" {{funcionario.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                     <td>
                                         <ul class="list-unstyled list-info">
                                             <li>
@@ -56,10 +56,12 @@
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                             <i class="ti-id-badge"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Eliminar este Funcionario, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarFuncionario(funcionario.Identificacion_Funcionario)">
-                                            <i class="ti-trash"></i>
-                                        </button>
+
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a inactivar/activar de estado en este funcionario' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, inactivar/activar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="EliminarFuncionario(funcionario.Identificacion_Funcionario, funcionario.Estado)">
+                                        <i class=" {{funcionario.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} " ></i>
+                                    </button>
+
                                     </td>
                                 </tr>
                             </tbody>
@@ -78,5 +80,4 @@
   type="success"
   >
 </swal>
-
 <swal #confirmacionSwal title="" text="" type=""></swal>
