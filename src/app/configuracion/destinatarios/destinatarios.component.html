@@ -10,38 +10,38 @@
             <div class="card">
                 <div class="card-block">
                     <p>Tenemos los destinatarios a quienes les hacemos transferencias o consignaciones</p>
-               
+
                     <div class="table-responsive">
-                            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                                <thead>
-                                    <tr>
-                                        <th>Identificación</th>
-                                        <th>Nombre</th>
-                                        <th>Detalle</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <tr *ngFor="let destinatario of destinatarios">
-                                                <td>{{destinatario.Id_Destinatario}}</td>
-                                                <td>{{destinatario.Nombre}}</td>
-                                                <td>{{destinatario.Detalle}}</td>
-                                                <td class="text-center">
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
-                                                        <i class="ti-search"></i>
-                                                    </button>
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario, ModalEditarDestinatario)">
-                                                        <i class="ti-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Destinatario, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                                        (confirm)="EliminarDestinatario(destinatario.Id_Destinatario)">
-                                                        <i class="ti-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre</th>
+                                    <th>Detalle</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let destinatario of destinatarios">
+                                    <td>{{destinatario.Id_Destinatario}}</td>
+                                    <td>{{destinatario.Nombre}}</td>
+                                    <td>{{destinatario.Detalle}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarDestinatario(destinatario.Id_Destinatario, ModalEditarDestinatario)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Destinatario, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EliminarDestinatario(destinatario.Id_Destinatario)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,16 +58,31 @@
     <div class="app-modal-body">
         <form #FormDestinatario="ngForm">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Identificación</label>
-                        <input class="form-control" name="Id_Destinatario" type="text" placeholder="Identificación Cliente" (blur)="BuscarIdentificacion($event.target.value)" minlength="6" maxlength="8" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [(ngModel)]="Id_Destinatario" required>
+                        <label>Tipo Doc.</label>
+                        <select class="form-control" id="Tipo_Documento" name="Tipo_Documento" ngModel required>
+                            <option value="">Seleccione Tipo Documento</option>
+                            <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Identificación</label>
+                    <div class="form-group input-group input-group-button">
+                        <input class="form-control input-hover" name="Id_Destinatario" type="text" placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
+                            minlength="6" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [(ngModel)]="Id_Destinatario"
+                            required>
+                        <div class="input-group-append">
+                            <a href="http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp" target="_blank" class="button btn btn-primary btn-mini btn-hover">RIF</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Cliente" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32" ngModel required>
+                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Destinatario" maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
+                            ngModel required>
                     </div>
                 </div>
             </div>
@@ -79,54 +94,68 @@
                     </div>
                 </div>
             </div>
-            <br>
-            <h3>Cuentas Asociadas</h3>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table  invoice-detail-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">País</th>
-                                    <th scope="col">Banco</th>
-                                    <th scope="col">Tipo de Cuenta</th>
-                                    <th scope="col">Numero de Cuenta</th>                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
-                                    <td width="25%">
-                                        <select class="form-control" name="Id_Pais{{i}}" ngModel="2" (change)="Bancos_Pais($event.target.value, i);agregarDinamico(i)" required >
-                                            <option value="">Seleccione País</option>
-                                            <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                        </select>
-                                    </td>
-                                    <td width="25%">
-                                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required (change)="agregarDinamico(i)">
-                                            <option value="">Seleccione Banco</option>
-                                            <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                                        </select>
-                                    </td>
-                                    <td width="25%">
-                                        <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta"  (change)="agregarDinamico(i)" required>
-                                            <option value="">Seleccione Tipo</option>
-                                            <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
-                                        </select>
-                                    </td>
-                                    <td width="25%">
-                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta" (change)="agregarDinamico(i)" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
-                                    </td>                                    
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="row" *ngIf="frame">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        Visualización del CNE no disponible en este momento
+                        <!--
+                        <frameset>
+                            <frame name="indice" src="{{url}}}"></frame> 
+                        </frameset>-->
                     </div>
                 </div>
             </div>
         </form>
+        <br>
+        <h3>Cuentas Asociadas</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table  invoice-detail-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">País</th>
+                                <th scope="col">Banco</th>
+                                <th scope="col">Tipo de Cuenta</th>
+                                <th scope="col">Numero de Cuenta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
+                                <td width="25%">
+                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
+                                        required>
+                                        <option value="">Seleccione País</option>
+                                        <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="25%">
+                                    <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required (change)="codigoBanco($event.target.value , i,'check')">
+                                        <option value="">Seleccione Banco</option>
+                                        <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="25%">
+                                    <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
+                                        <option value="">Seleccione Tipo</option>
+                                        <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="25%">
+                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta" (keyup)="codigoBanco($event.target.value , i,'input')"
+                                        (change)="agregarDinamico(i)" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                        required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Crear este Destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Crear este Destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarDestinatario(FormDestinatario, ModalDestinatario)">Crear Destinatario</button>
         </div>
     </div>
@@ -257,7 +286,8 @@
                             <tbody>
                                 <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
                                     <td width="20%">
-                                        <select class="form-control" name="Id_Pais{{i}}" ngModel="{{item.Id_Pais}}" (change)="Bancos_Pais($event.target.value, i)" (click)="boolPais=true" required >
+                                        <select class="form-control" name="Id_Pais{{i}}" ngModel="{{item.Id_Pais}}" (change)="Bancos_Pais($event.target.value, i)"
+                                            (click)="boolPais=true" required>
                                             <option value="">Seleccione País</option>
                                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                                         </select>
@@ -275,13 +305,13 @@
                                         </select>
                                     </td>
                                     <td width="20%">
-                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" ngModel="{{item.Numero_Cuenta}}" minlength="9" maxlength="16" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                        (focusout)="boolCuenta = true" required>
+                                        <input class="form-control" name="Numero_Cuenta{{i}}" type="text" ngModel="{{item.Numero_Cuenta}}" minlength="9" maxlength="16"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolCuenta = true"
+                                            required>
                                     </td>
                                     <td width="20%">
                                         <center>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="!FormEditarDestinatario.valid"
-                                            (click)="AgregarFila()">
+                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [disabled]="!FormEditarDestinatario.valid" (click)="AgregarFila()">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </center>
@@ -297,7 +327,9 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [disabled]="!FormEditarDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarDestinatarioEditar(FormEditarDestinatario, ModalEditarDestinatario)">Actualizar Informacion</button>
+                (confirm)="GuardarDestinatarioEditar(FormEditarDestinatario, ModalEditarDestinatario)">Actualizar
+                Informacion
+            </button>
         </div>
     </div>
 </app-modal-basic>
