@@ -28,8 +28,8 @@
 
                                                     <div  style="text-align: center">
                                                             <label style="display: block" for="Foto">
-                                                                <img *ngIf="funcionario.Imagen == ''" src="assets/images/user.jpg"  style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">
-                                                                <img *ngIf="funcionario.Imagen != ''" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">                      
+                                                                <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg"  style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">
+                                                                <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">                      
                                                             </label>
                                                     </div>
                                                     
