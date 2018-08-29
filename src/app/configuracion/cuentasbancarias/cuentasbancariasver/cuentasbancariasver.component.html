@@ -1,0 +1,158 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Cuentas Bancaria</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-block">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm table-striped">
+              <tbody>
+                <tr>
+                  <td> <strong> Numero de Cuenta </strong></td>
+                  <td>1511121412100120</td>
+                </tr>
+                <tr>
+                  <td><strong>Banco</strong></td>
+                  <td>1</td>
+                </tr>
+                <tr>
+                  <td><strong>Nombre Titular</strong></td>
+                  <td>tester</td>
+                </tr>
+                <tr>
+                  <td><strong>Identificacion Titular</strong></td>
+                  <td>1115112141</td>
+                </tr>
+                <tr>
+                  <td><strong>Detalle</strong></td>
+                  <td>cuenta12355</td>
+                </tr>
+                <tr>
+                  <td><strong>Estado</strong></td>
+                  <td>Activo</td>
+                </tr>
+                <tr>
+                  <td><strong>Moneda</strong></td>
+                  <td>Bolivares</td>
+                </tr>
+                <tr>
+                  <td><strong>Tipo de Cuenta</strong></td>
+                  <td>Empresarial</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-block">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm table-striped">
+                <tbody>
+                    <tr>
+                      <td><strong>Saldo Actual:</strong></td>
+                      <td>{{SaldoActual | currency }}</td>
+                    </tr>    
+                  </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-12">
+              <button class="btn btn-primary btn-sm btn-block" (click)="ModalAjuste.show()"><i class="ti-plus"></i>
+                Movimiento de Ajuste
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive margin-top:10px;">
+            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Detalle</th>
+                  <th>Egreso</th>
+                  <th>Ingreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let movimiento of Movimientos">
+                  <td>{{movimiento.Fecha}}</td>
+                  <td>{{movimiento.Detalle}}</td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'">{{movimiento.Valor | currency}}</td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'">{{movimiento.Valor | currency}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAjuste" #ModalAjuste>
+  <div class="app-modal-header">
+    <h4>Ajuste de Movimiento</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCuenta="ngForm">
+      <div class="row">
+        <div class="col-md-4" hidden>
+          <div class="form-group">
+            <label>id</label>
+            <input type="tex" placeholder="" class="form-control" name="Id_Cuenta_Bancaria" ngModel="{{id}}" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label>Tipo </label>
+          <select class="form-control" name="Tipo" ngModel required>
+            <option value="">Seleccione Tipo</option>
+            <option value="Ingreso">Ingreso</option>
+            <option value="Egreso">Egreso</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="number" placeholder="Valor" class="form-control" name="Valor" ngModel required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Detalles</label>
+            <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Movimiento" name="Detalle" ngModel required></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarMovimiento(FormCuenta, ModalAjuste)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<swal #confirmacionSwal title="" text="" type="">
+</swal>

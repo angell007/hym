@@ -50,6 +50,7 @@ import { PerfileditarComponent } from './configuracion/perfileditar/perfileditar
 import { OficinascrearComponent } from "./configuracion/oficinas/oficinascrear/oficinascrear.component";
 import { OficinaseditarComponent } from "./configuracion/oficinas/oficinaseditar/oficinaseditar.component";
 import { OficinaverComponent } from "./configuracion/oficinas/oficinaver/oficinaver.component";
+import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/cuentasbancariasver/cuentasbancariasver.component';
 
 export const AppRoutes: Routes = [
     { 
@@ -231,6 +232,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'oficinaver/:id', component : CommonLayoutComponent,
         children:[{path : '', component : OficinaverComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'cuentabancariaver/:id', component : CommonLayoutComponent,
+        children:[{path : '', component : CuentasbancariasverComponent, canActivate:[AuthGuard]}]
     },        
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }

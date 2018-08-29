@@ -1,8 +1,9 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Cuentas Bancarias</h4>
-        <button class="pull-right btn btn-primary btn-sm" (click)="ModalCuenta.show()"><i class="ti-plus"></i> Agregar Nueva Cuenta
-            Bancaria</button>
+        <button class="pull-right btn btn-primary btn-sm" (click)="ModalCuenta.show()"><i class="ti-plus"></i> Agregar Nueva
+            Cuenta Bancaria
+        </button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
@@ -15,27 +16,29 @@
                         <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
+                                    <th>Tipo de Cuenta</th>
                                     <th>Numero de Cuenta</th>
                                     <th>Banco</th>
                                     <th>Titular</th>
-                                    <th>Saldo al Día</th>
+                                    <th>Moneda Cuenta</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let cuenta of cuentas" class=" {{cuenta.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                    <td>{{cuenta.Tipo_Cuenta}}</td>
                                     <td>{{cuenta.Numero_Cuenta}}</td>
                                     <td>{{cuenta.NombreBanco}}</td>
                                     <td>{{cuenta.Nombre_Titular}}</td>
-                                    <td class="text-right">{{cuenta.Saldo_Inicial}}</td>
+                                    <td>{{cuenta.Moneda}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerCuenta(cuenta.Id_Cuenta_Bancaria, ModalVerCuenta)">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"  [routerLink]="['/cuentabancariaver',cuenta.Id_Cuenta_Bancaria]" >
                                             <i class="ti-search"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCuenta(cuenta.Id_Cuenta_Bancaria)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a cambiar el estado de esta Cuenta Bancaria, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a cambiar el estado de esta Cuenta Bancaria' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Activar/Inactivar', cancelButtonText : 'No, Dejame Comprobar!' }"
                                             (confirm)="EstadoCuentaBancaria(cuenta.Id_Cuenta_Bancaria,cuenta.Estado)">
                                             <i class=" {{cuenta.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} "></i>
                                         </button>
@@ -59,54 +62,71 @@
     <div class="app-modal-body">
         <form #FormCuenta="ngForm">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-3">
+                    <label>Tipo Cuenta</label>
+                    <select class="form-control" name="Tipo_Cuenta" ngModel required>
+                        <option value="">Seleccione Tipo</option>
+                        <option value="Empresarial">Cuenta Empresarial</option>
+                        <option value="Personal">Cuenta Personal</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="" >
+                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel required>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="" >
+                        <select class="form-control" required name="Id_Banco" ngModel required>
                             <option value="">Seleccione Banco</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                   </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="">
-                   </div>
+                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel required>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificación Titular</label>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
-                            name="Identificacion_Titular" ngModel="" >
-                   </div>
+                            name="Identificacion_Titular" ngModel required>
+                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Moneda</label>
+                        <select class="form-control" required name="Moneda" ngModel required>
+                            <option value="">Seleccione Banco</option>
+                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Saldo Inicial</label>
-                        <input currencyMask class="form-control" name="Saldo_Inicial" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                  </div>
+                        <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Fecha Saldo Inicial</label>
-                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="" >
-                   </div>
+                        <label>Fecha Saldo In.</label>
+                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha" ngModel required>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel=""></textarea>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel required></textarea>
                     </div>
                 </div>
             </div>
@@ -114,17 +134,15 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm" 
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCuenta(FormCuenta, ModalCuenta)">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
 
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCuenta" #ModalEditarCuenta>
     <div class="app-modal-header">
-       <h4>Editar Cuenta Bancaria</h4>
+        <h4>Editar Cuenta Bancaria</h4>
     </div>
     <div class="app-modal-body">
         <form #FormEditarCuenta="ngForm">
@@ -135,16 +153,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-3">
+                    <label>Tipo Cuenta</label>
+                    <select class="form-control" name="Tipo_Cuenta" ngModel="{{CuentaBancaria.Tipo_Cuenta}}" required>
+                        <option value="">Seleccione Tipo</option>
+                        <option value="Empresarial">Cuenta Empresarial</option>
+                        <option value="Personal">Cuenta Personal</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="{{NumeroCuenta}}">
-                  </div>
+                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="{{CuentaBancaria.Numero_Cuenta}}"
+                            required>
+                    </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="{{IdBanco}}" >
+                        <select class="form-control" required name="Id_Banco" ngModel="{{CuentaBancaria.Id_Banco}}" required>
                             <option value="">Seleccione Banco</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
@@ -152,22 +179,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{NombreTitular}}">
-                   </div>
+                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{CuentaBancaria.Nombre_Titular}}"
+                            required>
+                    </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación Titular</label>
-                        <input type="text" placeholder="Identificación Titular Cuenta" class="form-control" name="Identificacion_Titular" ngModel="{{IdentificacionTitular}}">
-                    </div>
-                </div>                
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Fecha Saldo Inicial</label>
-                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha_Inicial" ngModel="{{FechaInicial}}">
+                        <input readonly type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder=""
+                            class="form-control" name="Identificacion_Titular" ngModel="{{CuentaBancaria.Identificacion_Titular}}"
+                            required>
                     </div>
                 </div>
             </div>
@@ -175,7 +199,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{CuentaBancaria.Detalle}}"></textarea>
                     </div>
                 </div>
             </div>
@@ -183,8 +207,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" 
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)">Guardar</button>
 
         </div>
