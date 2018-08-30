@@ -197,8 +197,7 @@ export class MonedasComponent implements OnInit {
   }
 
   agregarValor(pos,valor){
-    var valorMoneda = valor.split("$");
-    this.Campos[(pos)].Valor = valorMoneda[1];
+    this.Campos[(pos)].Valor = valor;
   }
 
   GuardarMoneda(formulario: NgForm, modal) {

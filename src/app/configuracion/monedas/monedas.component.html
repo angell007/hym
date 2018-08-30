@@ -83,7 +83,7 @@
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
-            <input currencyMask class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel=0 (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
@@ -163,8 +163,8 @@
   </div>
   <div class="app-modal-footer ">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-        (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Actualizar Información</button>
+      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
     </div>
   </div>
 </app-modal-basic>
@@ -217,7 +217,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Val. Max. Venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Max_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Max_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel="{{MaxVentaEfectivo}}" (focus)="$event.target.select()" (focusout)="boolMaxVentaEfectivo = true" required
               #maxVentaEfectivoEd="ngModel">
             <div *ngIf="!maxVentaEfectivoEd.valid && boolMaxVentaEfectivo==true" style="color:red">Campo inválido</div>
@@ -227,7 +227,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Val. Min. Venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Min_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Min_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel="{{MinVentaEfectivo}}" (focus)="$event.target.select()" (focusout)="boolMinVentaEfectivo = true" required
               #minVentaEfectivoEd="ngModel">
             <div *ngIf="!minVentaEfectivoEd.valid && boolMinVentaEfectivo==true" style="color:red">Campo inválido</div>
@@ -237,7 +237,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Val. Max. Venta por cuenta</label>
-            <input currencyMask class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolMaxVentaCuenta = true" required #maxVentaCuentaEd="ngModel">
             <div *ngIf="!maxVentaCuentaEd.valid && boolMaxVentaCuenta==true" style="color:red">Campo inválido</div>
             <div *ngIf="maxVentaCuentaEd.valid && boolMaxVentaCuenta==true" style="color:green">Datos correctos!</div>
@@ -246,7 +246,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Val. Min. Venta por cuenta</label>
-            <input currencyMask class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolMinVentaCuenta = true" required #minVentaCuentaEd="ngModel">
             <div *ngIf="!minVentaCuentaEd.valid && boolMinVentaCuenta==true" style="color:red">Campo inválido</div>
             <div *ngIf="minVentaCuentaEd.valid && boolMinVentaCuenta==true" style="color:green">Datos correctos!</div>
@@ -257,7 +257,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio Venta sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolSugeridoVenta = true" required #sugeridoVentaEd="ngModel">
             <div *ngIf="!sugeridoVentaEd.valid && boolSugeridoVenta==true" style="color:red">Campo inválido</div>
             <div *ngIf="sugeridoVentaEd.valid && boolSugeridoVenta==true" style="color:green">Datos correctos!</div>
@@ -266,7 +266,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolSugeridoCompra = true" required #sugeridoCompraEd="ngModel">
             <div *ngIf="!sugeridoCompraEd.valid && boolSugeridoCompra==true" style="color:red">Campo inválido</div>
             <div *ngIf="sugeridoCompraEd.valid && boolSugeridoCompra==true" style="color:green">Datos correctos!</div>
@@ -275,7 +275,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio por ventanilla</label>
-            <input currencyMask class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolPrecioVentanilla = true" required #precioVentanillaEd="ngModel">
             <div *ngIf="!precioVentanillaEd.valid && boolPrecioVentanilla==true" style="color:red">Campo inválido</div>
             <div *ngIf="precioVentanillaEd.valid && boolPrecioVentanilla==true" style="color:green">Datos correctos!</div>
@@ -286,7 +286,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra Max.</label>
-            <input currencyMask class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompraEd="ngModel">
             <div *ngIf="!maxCompraEd.valid && boolMaxCompra==true" style="color:red">Campo inválido</div>
             <div *ngIf="maxCompraEd.valid && boolMaxCompra==true" style="color:green">Datos correctos!</div>
@@ -295,7 +295,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio de compra Min.</label>
-            <input currencyMask class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompraEd="ngModel">
             <div *ngIf="!minCompraEd.valid && boolMinCompra==true" style="color:red">Campo inválido</div>
             <div *ngIf="minCompraEd.valid && boolMinCompra==true" style="color:green">Datos correctos!</div>
@@ -304,7 +304,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Precio Min. de no cobro</label>
-            <input currencyMask class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolMinNoCobro = true" required #minNoCobroEd="ngModel">
             <div *ngIf="!minNoCobroEd.valid && boolMinNoCobro==true" style="color:red">Campo inválido</div>
             <div *ngIf="minNoCobroEd.valid && boolMinNoCobro==true" style="color:green">Datos correctos!</div>
@@ -315,7 +315,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Redondeo a pesos en efectivo</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="{{RedondeoPesosEfectivo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="{{RedondeoPesosEfectivo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolRedondeoPesosEfectivo = true" required #redondeoPesosEfectivoEd="ngModel">
             <div *ngIf="!redondeoPesosEfectivoEd.valid && boolRedondeoPesosEfectivo==true" style="color:red">Campo inválido</div>
             <div *ngIf="redondeoPesosEfectivoEd.valid && boolRedondeoPesosEfectivo==true" style="color:green">Datos correctos!</div>
@@ -324,7 +324,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Redondeo a pesos en cuenta</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="{{RedondeoPesosCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="{{RedondeoPesosCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focus)="$event.target.select()" (focusout)="boolRedondeoPesosCuenta = true" required #redondeoPesosCuentaEd="ngModel">
             <div *ngIf="!redondeoPesosCuentaEd.valid && boolRedondeoPesosCuenta==true" style="color:red">Campo inválido</div>
             <div *ngIf="redondeoPesosCuentaEd.valid && boolRedondeoPesosCuenta==true" style="color:green">Datos correctos!</div>
@@ -336,7 +336,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Comisión efectivo</label>
-            <input currencyMask class="form-control" name="Comision_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Comision_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel={{ComisionEfectivo}} (focus)="$event.target.select()" (focusout)="boolComisionEfectivo = true" required
               #comisionEfectivoEd="ngModel">
             <div *ngIf="!comisionEfectivoEd.valid && boolComisionEfectivo==true" style="color:red">Campo inválido</div>
@@ -346,7 +346,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Pagar comisión desde</label>
-            <input currencyMask class="form-control" name="Pagar_Comision_Desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Pagar_Comision_Desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel={{PagarComisionDesde}} (focus)="$event.target.select()" (focusout)="boolPagarComisionDesde = true" required
               #pagarComisionDesdeEd="ngModel">
             <div *ngIf="!pagarComisionDesdeEd.valid && boolPagarComisionDesde==true" style="color:red">Campo inválido</div>
@@ -356,7 +356,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Comisión por recaudo</label>
-            <input currencyMask class="form-control" name="Comision_Recaudo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  class="form-control" name="Comision_Recaudo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel={{ComisionRecaudo}} (focus)="$event.target.select()" (focusout)="boolComisionRecaudo = true" required
               #comisionRecaudoEd="ngModel">
             <div *ngIf="!comisionRecaudoEd.valid && boolComisionRecaudo==true" style="color:red">Campo inválido</div>
