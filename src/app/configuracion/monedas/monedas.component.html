@@ -33,7 +33,7 @@
                     <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarMoneda(Moneda.Id_Moneda, ModalEditarMoneda)">
                       <i class="ti-pencil"></i>
                     </button>
-                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Moneda, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a eliminar esta Moneda, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
                       (confirm)="EliminarMoneda(Moneda.Id_Moneda)">
                       <i class="ti-trash"></i>
                     </button>
@@ -79,11 +79,13 @@
       <div class="row">
         <!--<div class="col-md-12">
           <h5 *ngIf="titulo(item.Titulo)"> <span class="text-info"> {{item.Titulo}} </span></h5>
-        </div>-->
+        </div>
+        [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'"
+      -->
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
-            <input  class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
+            <input  type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               ngModel=0 (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
@@ -95,7 +97,7 @@
 
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Cambio" ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Cambio" id="Cambio" ngModel class="switch">
               <label for="Cambio"></label>
             </span>
           </div>
@@ -105,7 +107,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Giro"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Giro" id="Giro" ngModel class="switch">
               <label for="Giro"></label>
             </span>
           </div>
@@ -115,7 +117,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Traslado"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Traslado" id="Traslado" ngModel class="switch">
               <label for="Traslado"></label>
             </span>
           </div>
@@ -124,7 +126,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="CorresponsalBancario"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario" ngModel class="switch">
               <label for="CorresponsalBancario"></label>
             </span>
           </div>
@@ -133,7 +135,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="ServicioExterno"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="ServicioExterno"  id="ServicioExterno"  ngModel class="switch">
               <label for="ServicioExterno"></label>
             </span>
           </div>
@@ -142,7 +144,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Gasto"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Gasto" id="Gasto" ngModel class="switch">
               <label for="Gasto"></label>
             </span>
           </div>
@@ -152,7 +154,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Transferencia"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Transferencia" id="Transferencia"  ngModel class="switch">
               <label for="Transferencia"></label>
             </span>
           </div>
@@ -161,7 +163,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Compras"  ngModel [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'" class="switch">
+              <input type="checkbox" name="Compras" id="Compras" ngModel class="switch">
               <label for="Compras"></label>
             </span>
           </div>
@@ -231,8 +233,8 @@
 
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Cambio" ngModel [checked]="Moneda.Cambio == '1' ? '1' : '0'" class="switch">
-              <label for="Cambio"></label>
+              <input [checked]="Moneda.Cambio == '1' ? '1' : '0'" type="checkbox" name="Cambio" id="Cambio_Editar" ngModel class="switch">
+              <label for="Cambio_Editar"></label>
             </span>
           </div>
 
@@ -241,8 +243,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Giro"  ngModel [checked]="Moneda.Giro == '1' ? '1' : '0'" class="switch">
-              <label for="Giro"></label>
+              <input  type="checkbox" name="Giro" id="Giro_Editar" ngModel class="switch">
+              <label for="Giro_Editar"></label>
             </span>
           </div>
 
@@ -251,8 +253,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Traslado"  ngModel [checked]="Moneda.Traslado == '1' ? '1' : '0'" class="switch">
-              <label for="Traslado"></label>
+              <input type="checkbox" name="Traslado" id="Traslado_Editar" ngModel class="switch">
+              <label for="Traslado_Editar"></label>
             </span>
           </div>
           <label>Traslado</label>
@@ -260,8 +262,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="CorresponsalBancario"  ngModel [checked]="Moneda.CorresponsalBancario == '1' ? '1' : '0'" class="switch">
-              <label for="CorresponsalBancario"></label>
+              <input type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario_Editar" ngModel class="switch">
+              <label for="CorresponsalBancario_Editar"></label>
             </span>
           </div>
           <label>Corresponsal bancario</label>
@@ -269,8 +271,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="ServicioExterno"  ngModel [checked]="Moneda.ServicioExterno == '1' ? '1' : '0'" class="switch">
-              <label for="ServicioExterno"></label>
+              <input type="checkbox" name="ServicioExterno"  id="ServicioExterno_Editar"  ngModel class="switch">
+              <label for="ServicioExterno_Editar"></label>
             </span>
           </div>
           <label>Servicio externo</label>
@@ -278,8 +280,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Gasto"  ngModel [checked]="Moneda.Gasto == '1' ? '1' : '0'" class="switch">
-              <label for="Gasto"></label>
+              <input type="checkbox" name="Gasto" id="Gasto_Editar" ngModel class="switch">
+              <label for="Gasto_Editar"></label>
             </span>
           </div>
 
@@ -288,8 +290,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Transferencia"  ngModel [checked]="Moneda.Transferencia == '1' ? '1' : '0'" class="switch">
-              <label for="Transferencia"></label>
+              <input type="checkbox" name="Transferencia" id="Transferencia_Editar"  ngModel class="switch">
+              <label for="Transferencia_Editar"></label>
             </span>
           </div>
           <label>Transferencia</label>
@@ -297,8 +299,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Compras"  ngModel [checked]="Moneda.Compras == '1' ? '1' : '0'" class="switch">
-              <label for="Compras"></label>
+              <input type="checkbox" name="Compras" id="Compras_Editar" ngModel class="switch">
+              <label for="Compras_Editar"></label>
             </span>
           </div>
           <label>Compras</label>
