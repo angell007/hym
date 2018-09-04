@@ -51,6 +51,14 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" #ModalMoneda>
   <div class="app-modal-header">
     <h4>Nueva moneda</h4>
+    <div *ngIf="Error" class="alert alert-danger">
+      <strong>ERROR</strong><br>
+      <ul>
+        <li *ngFor=" let item of Mensaje">
+          {{item}}
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="app-modal-body">
     <form #FormMoneda="ngForm">
@@ -85,8 +93,8 @@
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
-            <input  type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (blur)="agregarValor(i,$event.target.value)">
+            <input type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
+              (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
       </div>
@@ -135,7 +143,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="ServicioExterno"  id="ServicioExterno"  ngModel class="switch">
+              <input type="checkbox" name="ServicioExterno" id="ServicioExterno" ngModel class="switch">
               <label for="ServicioExterno"></label>
             </span>
           </div>
@@ -154,7 +162,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input type="checkbox" name="Transferencia" id="Transferencia"  ngModel class="switch">
+              <input type="checkbox" name="Transferencia" id="Transferencia" ngModel class="switch">
               <label for="Transferencia"></label>
             </span>
           </div>
@@ -174,7 +182,7 @@
   </div>
   <div class="app-modal-footer ">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button *ngIf="Boton" type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
     </div>
   </div>
@@ -183,10 +191,18 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarMoneda" #ModalEditarMoneda>
   <div class="app-modal-header">
     <h4>Editar moneda</h4>
+    <div *ngIf="Error" class="alert alert-danger">
+      <strong>ERROR</strong><br>
+      <ul>
+        <li *ngFor=" let item of Mensaje">
+          {{item}}
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="app-modal-body" >
+  <div class="app-modal-body">
     <form #FormEditarMoneda="ngForm">
-      <div class="col-md-4" hidden >
+      <div class="col-md-4" hidden>
         <div class="form-group">
           <label>Identificación</label>
           <input name="Id_Moneda" type="text" placeholder="Id_Moneda" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
@@ -221,8 +237,7 @@
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
-            <input  class="form-control" name="Diario_{{i}}" 
-              ngModel="{{item.Valor}}" (blur)="agregarValor(i,$event.target.value)">
+            <input class="form-control" name="Diario_{{i}}" ngModel="{{item.Valor}}" (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
       </div>
@@ -253,7 +268,7 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input [checked]="Moneda.Traslado == '1' ? '1' : '0'"  type="checkbox" name="Traslado" id="Traslado_Editar" ngModel class="switch">
+              <input [checked]="Moneda.Traslado == '1' ? '1' : '0'" type="checkbox" name="Traslado" id="Traslado_Editar" ngModel class="switch">
               <label for="Traslado_Editar"></label>
             </span>
           </div>
@@ -262,7 +277,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input [checked]="Moneda.CorresponsalBancario == '1' ? '1' : '0'" type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario_Editar" ngModel class="switch">
+              <input [checked]="Moneda.CorresponsalBancario == '1' ? '1' : '0'" type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario_Editar"
+                ngModel class="switch">
               <label for="CorresponsalBancario_Editar"></label>
             </span>
           </div>
@@ -271,7 +287,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input [checked]="Moneda.ServicioExterno == '1' ? '1' : '0'" type="checkbox" name="ServicioExterno"  id="ServicioExterno_Editar"  ngModel class="switch">
+              <input [checked]="Moneda.ServicioExterno == '1' ? '1' : '0'" type="checkbox" name="ServicioExterno" id="ServicioExterno_Editar"
+                ngModel class="switch">
               <label for="ServicioExterno_Editar"></label>
             </span>
           </div>
@@ -290,7 +307,8 @@
         <div class="col-md-3" align="center">
           <div class="form-group">
             <span class="switch switch-sm">
-              <input [checked]="Moneda.Transferencia == '1' ? '1' : '0'" type="checkbox" name="Transferencia" id="Transferencia_Editar"  ngModel class="switch">
+              <input [checked]="Moneda.Transferencia == '1' ? '1' : '0'" type="checkbox" name="Transferencia" id="Transferencia_Editar"
+                ngModel class="switch">
               <label for="Transferencia_Editar"></label>
             </span>
           </div>
@@ -310,8 +328,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button class="btn btn-primary btn-sm" 
-        [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarMoneda(FormEditarMoneda, ModalEditarMoneda)">Guardar</button>
     </div>
   </div>

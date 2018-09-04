@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { html } from 'd3';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
+import { log } from 'util';
 
 @Component({
   selector: 'app-monedas',
@@ -33,6 +34,9 @@ export class MonedasComponent implements OnInit {
   Moneda = [];
   MonedaValor = [];
   Identificacion: any;
+  Mensaje=[];
+  Error: boolean = false;
+  Boton: boolean = false;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -81,8 +85,55 @@ export class MonedasComponent implements OnInit {
   }
 
   agregarValor(pos,valor){
-    this.Campos[(pos)].Valor = valor;
-    console.log(this.Campos);
+    this.Campos[pos].Valor = valor;
+     
+    let precioVentaEfectivoMax = this.Campos[0].Valor;
+    let precioVentaEfectivoMin = this.Campos[1].Valor;
+    let precioVentaMaxCta = this.Campos[2].Valor;
+    let precioVentaMinCta = this.Campos[3].Valor;
+    let precioCompraMax = this.Campos[5].Valor;
+    let precioCompraMin = this.Campos[6].Valor;
+    // pregunto si el precio es mayor que 0 en venta
+    if(precioVentaEfectivoMax > 0 && precioVentaEfectivoMin  ){
+      // pregunto su el precio de compra es mayor que 0
+      if(precioCompraMax > 0 && precioCompraMin > 0 ){
+        //pregunto si el precio de compra está dentro del rango del precio de venta
+        this.Mensaje = [];
+
+        if( (parseFloat(precioVentaEfectivoMax) > parseFloat(precioCompraMax)) && (parseFloat(precioVentaEfectivoMin) > parseFloat(precioCompraMin)) ){
+          this.Error = false;
+          this.Boton = true;
+        }else{
+          if((precioVentaEfectivoMax > precioCompraMax) === false){
+            this.Mensaje.push("El precio de compra maxima es superior al precio de venta efectivo maximo ");
+            this.Error = true;
+          }else{}
+          
+          if((precioVentaEfectivoMin < precioCompraMin) === false){
+            this.Mensaje.push("El precio de compra minima es superior al precio de venta efectivo minimo");
+            this.Error = true;
+          }          
+        }
+
+        if((parseFloat(precioVentaMaxCta) > parseFloat(precioCompraMax)) && (parseFloat(precioVentaMinCta) > parseFloat(precioCompraMin)) ){
+          this.Error = false;
+          this.Boton = true;
+        }else{
+          if((precioVentaMaxCta > precioCompraMax) === false){
+            this.Mensaje.push("El precio de compra maxima es superior al precio de venta cuenta maximo ");
+            this.Error = true;
+          }else{
+            this.Mensaje.push("El precio de compra maxima es superior al precio de venta cuenta maximo ");
+            this.Error = true;
+          }
+        }
+
+        
+       
+      }
+      
+    }
+
   }
 
   GuardarMoneda(formulario: NgForm, modal) {
