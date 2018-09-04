@@ -17,8 +17,13 @@ export class OficinaseditarComponent implements OnInit {
   oficina = [];
   id = this.route.snapshot.params["id"];
   Departamentos: any;
+  moneda1 = true;
 
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
+  CamposMoneda =[];
+  Campos=[];
+  Monedas=[];
+  ocultar = true;
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private globales: Globales, private router: Router) { }
 
@@ -29,7 +34,14 @@ export class OficinaseditarComponent implements OnInit {
 
     this.http.get(this.globales.ruta + '/php/oficinas/detalle_oficina.php', { params: { modulo: 'Oficina', id: this.id } }).subscribe((data: any) => {
       this.Municipios_Departamento(data.Id_Departamento);
-      this.oficina = data;
+      console.log(data)
+      this.oficina = data.detalle;
+      this.CamposMoneda = data.moneda;
+      
+      if(this.Monedas.length == 0){
+        this.ocultar = false;
+      }
+
     });
 
   }
@@ -42,12 +54,14 @@ export class OficinaseditarComponent implements OnInit {
 
   GuardarOficina(formulario: NgForm) {
     let info = JSON.stringify(formulario.value);
+    let moneda = JSON.stringify(this.CamposMoneda);
 
     let datos = new FormData();
     datos.append("modulo", 'Oficina');
     datos.append("datos", info);
+    datos.append("monedas", moneda);
 
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/oficinas/guardar_oficina.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Oficina Actualizada";
       this.confirmacionSwal.text = "Se ha realizado la actualización correctamente";
       this.confirmacionSwal.type = "success";
@@ -56,6 +70,33 @@ export class OficinaseditarComponent implements OnInit {
       this.router.navigate(['oficinas']);
     });
 
+  }
+
+  agregarValor(pos1,pos, valor) {
+    this.CamposMoneda[pos1].Campos[pos].Valor = valor
+    console.log(this.CamposMoneda[pos1]);
+  }
+
+  habilitarCampo(moneda){
+    //console.log(moneda)
+    this.http.get(this.globales.ruta+'/php/configuracion/lista_moneda_campo.php').subscribe((data:any)=>{
+      this.Campos= data;
+      var datosMoneda= {
+        "Id_Moneda": moneda,
+        "Titulo" : this.Monedas[(moneda-1)].Nombre,
+        "Campos" : this.Campos
+      }
+  
+      this.CamposMoneda.push(datosMoneda);
+      this.moneda1 = false;
+
+      this.Monedas.splice((moneda-1));
+
+      if(this.Monedas.length == 0){
+        this.ocultar = false;
+      }
+
+    }); 
   }
 
 }
