@@ -107,11 +107,13 @@ export class MonedasComponent implements OnInit {
           if((precioVentaEfectivoMax > precioCompraMax) === false){
             this.Mensaje.push("El precio de compra maxima es superior al precio de venta efectivo maximo ");
             this.Error = true;
+            this.Boton = false;
           }else{}
           
           if((precioVentaEfectivoMin < precioCompraMin) === false){
             this.Mensaje.push("El precio de compra minima es superior al precio de venta efectivo minimo");
             this.Error = true;
+            this.Boton = false;
           }          
         }
 
@@ -122,9 +124,11 @@ export class MonedasComponent implements OnInit {
           if((precioVentaMaxCta > precioCompraMax) === false){
             this.Mensaje.push("El precio de compra maxima es superior al precio de venta cuenta maximo ");
             this.Error = true;
+            this.Boton = false;
           }else{
             this.Mensaje.push("El precio de compra maxima es superior al precio de venta cuenta maximo ");
             this.Error = true;
+            this.Boton = false;
           }
         }
 
