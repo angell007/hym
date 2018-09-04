@@ -34,7 +34,7 @@ export class OficinaseditarComponent implements OnInit {
 
     this.http.get(this.globales.ruta + '/php/oficinas/detalle_oficina.php', { params: { modulo: 'Oficina', id: this.id } }).subscribe((data: any) => {
       this.Municipios_Departamento(data.Id_Departamento);
-      console.log(data)
+      //console.log(data)
       this.oficina = data.detalle;
       this.CamposMoneda = data.moneda;
       
@@ -74,11 +74,11 @@ export class OficinaseditarComponent implements OnInit {
 
   agregarValor(pos1,pos, valor) {
     this.CamposMoneda[pos1].Campos[pos].Valor = valor
-    console.log(this.CamposMoneda[pos1]);
+    //console.log(this.CamposMoneda[pos1]);
   }
 
   habilitarCampo(moneda){
-    //console.log(moneda)
+    ////console.log(moneda)
     this.http.get(this.globales.ruta+'/php/configuracion/lista_moneda_campo.php').subscribe((data:any)=>{
       this.Campos= data;
       var datosMoneda= {
