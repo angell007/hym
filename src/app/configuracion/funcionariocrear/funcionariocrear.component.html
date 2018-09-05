@@ -10,7 +10,7 @@
           <form #FormFuncionarioCrear="ngForm">
             <form-wizard style="border:0 !important;">
               <!--INICIO INFORMACION PERSONAL-->
-              <wizard-step [title]="'Información Personal'" [isValid]="identificacionInformacionPersonalEd.valid && nombresInformacionPersonalEd.valid && apellidosInformacionPersonalEd.valid && nacimientoInformacionPersonalEd.valid && lugarnacimientoInformacionPersonalEd.valid && !tiposangreInformacionPersonalEd.value=='' && telefonoInformacionPersonalEd.valid && celularInformacionPersonalEd.valid && correoInformacionPersonalEd.valid && direccionInformacionPersonalEd.valid && !estadocivilInformacionPersonalEd.value=='' && !hijosInformacionPersonalEd.value=='' && !gradoInformacionPersonalEd.value=='' && tituloInformacionPersonalEd.valid && !grupoInformacionPersonalEd.value=='' && !dependenciaInformacionPersonalEd.value=='' && !cargoInformacionPersonalEd.value=='' && salarioInformacionPersonalEd.valid && ingresoInformacionPersonalEd.valid && !camisaInformacionPersonalEd.value=='' && !pantalonInformacionPersonalEd.value=='' && !botasInformacionPersonalEd.value=='' ">
+              <wizard-step [title]="'Información Personal'" >
                 <div class="content2">
                   <div>
                     <h5>Información Personal</h5>
@@ -33,7 +33,7 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <input type="number" min="0" name="Identificacion_Funcionario" [(ngModel)]="funcionario.Identificacion_Funcionario" class="form-control form-control-sm f-9"
-                                id="identificacion" (focusout)="boolIdentificacionIP = true" required #identificacionInformacionPersonalEd="ngModel" (blur)="validarIdentificacion($event.target.value)" />
+                                id="identificacion" required  (blur)="validarIdentificacion($event.target.value)" />
                               <label class="floating-label">Identificación (*)</label>
 
                             </div>
@@ -61,7 +61,7 @@
                               <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento" [(ngModel)]="funcionario.Fecha_Nacimiento"
                                 id="fnac" required  (focusout)="boolNacimientoIP = true" required
                                 #nacimientoInformacionPersonalEd="ngModel" />
-                              <label class="floating-label" for="text-input">Fecha de Nacimiento: (*)</label>
+                              <label class="floating-label" for="floating-label">Fecha de Nacimiento: (*)</label>
                              </div>
                           </div>
                           <div class="col-md-4">
@@ -188,7 +188,7 @@
                   <div class="row">
                     <div class="col-md-3">
                       <div class="form-group">
-                        <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo" (change)="Dependencia_Grupo($event.target.value)"  (focusout)="boolGrupoIP = true" required #grupoInformacionPersonalEd="ngModel">
+                        <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo" (change)="Dependencia_Grupo($event.target.value)"  (focusout)="boolGrupoIP = true" required #grupoInformacionPersonalEd="ngModel"
                           required id="grupo">
                           <option value="">Seleccione Grupo</option>
                           <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
@@ -215,17 +215,30 @@
                         <label class="floating-label">Cargo (*)</label>
                        </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                       <div class="form-group">
                         <input type="number" name="Salario" [(ngModel)]="funcionario.Salario" class="dinero form-control form-control-sm" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  (focusout)="boolSalarioIP = true" required #salarioInformacionPersonalEd="ngModel"/>
                         <label class="floating-label" >Salario (*)</label>
-
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                       <div class="form-group">
-                        <input class="form-control form-control-sm" type="date" name="Fecha_Ingreso" [(ngModel)]="funcionario.Fecha_Ingreso"  (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel"/>
-                        <label for="text-input">Fecha de Ingreso: (*)</label>
+                        <input class="form-control form-control-sm f-9"  type="date" name="Fecha_Ingreso" [(ngModel)]="funcionario.Fecha_Ingreso"  (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel"/>
+                        <label for="floating-label">Fecha de Ingreso: (*)</label>
+                       </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Peso" [(ngModel)]="funcionario.Saldo_Inicial_Peso"  (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel"/>
+                        <label for="floating-label">Saldo Inicial Peso</label>
+                       </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Bolivar" [(ngModel)]="funcionario.Saldo_Inicial_Bolivar"  (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel"/>
+                        <label for="floating-label">Saldo Inicial Bolivar</label>
                        </div>
                     </div>
                               
@@ -308,7 +321,7 @@
               </wizard-step>
               <!--FIN INFORMACION PERSONAL-->
               <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
-              <wizard-step [title]="'Contacto Emergencia'" [isValid]="nombreContactoEmergenciaEd.valid && parentescoContactoEmergenciaEd.valid && celularContactoEmergenciaEd.valid && telefonoContactoEmergenciaEd.valid && direccionContactoEmergenciaEd.valid" >
+              <wizard-step [title]="'Contacto Emergencia'" >
                 <div class="content2">
                   <div>
                     <h5>Contacto Emergecia</h5>
@@ -357,7 +370,7 @@
               </wizard-step>
               <!--FIN INFORMACION CONTACTO EMERGENCIA-->
               <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
-              <wizard-step [title]="'Experiencia Laboral'" [isValid]="empresaExperienciaLaboral1Ed.valid && cargoExperienciaLaboral1Ed.valid && jefeExperienciaLaboral1Ed.valid && fechaingresoExperienciaLaboral1Ed.valid && fecharetiroExperienciaLaboral1Ed.valid && telefonoExperienciaLaboral1Ed.valid && laboresExperienciaLaboral1Ed.valid && empresaExperienciaLaboral2Ed.valid && cargoExperienciaLaboral2Ed.valid && jefeExperienciaLaboral2Ed.valid && fechaingresoExperienciaLaboral2Ed.valid && fecharetiroExperienciaLaboral2Ed.valid && telefonoExperienciaLaboral2Ed.valid && laboresExperienciaLaboral2Ed.valid">
+              <wizard-step [title]="'Experiencia Laboral'" >
                 <div class="content">
                   <div>
                     <h5>Experiencia Laboral 1</h5>
@@ -389,14 +402,14 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[0].Ingreso_Empresa" (focusout)="boolFechaIngresoEL1 = true" required #fechaingresoExperienciaLaboral1Ed="ngModel"/>
-                            <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                            <label class="floating-label" for="floating-label">Fecha de ingreso:</label>
  
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[0].Retiro_Empresa" (focusout)="boolFechaRetiroEL1 = true" required #fecharetiroExperienciaLaboral1Ed="ngModel"/>
-                            <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                            <label class="floating-label" for="floating-label">Fecha de retiro:</label>
  
                           </div>
                         </div>
@@ -445,14 +458,14 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[1].Ingreso_Empresa" (focusout)="boolFechaIngresoEL2 = true" required #fechaingresoExperienciaLaboral2Ed="ngModel"/>
-                          <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+                          <label class="floating-label" for="floating-label">Fecha de ingreso:</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
                           <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[1].Retiro_Empresa" (focusout)="boolFechaRetiroEL2 = true" required #fecharetiroExperienciaLaboral2Ed="ngModel"/>
-                          <label class="floating-label" for="text-input">Fecha de retiro:</label>
+                          <label class="floating-label" for="floating-label">Fecha de retiro:</label>
  
                         </div>
                       </div>
@@ -479,7 +492,6 @@
               <!--FIN INFORMACION EXPERIENCIA LABORAL-->
               <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
               <wizard-step [title]="'Referencias Personales'" 
-              [isValid]="nombreReferenciasPersonales1Ed.valid && profesionReferenciasPersonales1Ed.valid && empresaReferenciasPersonales1Ed.valid && telefonoReferenciasPersonales1Ed.valid && nombreReferenciasPersonales2Ed.valid && profesionReferenciasPersonales2Ed.valid && empresaReferenciasPersonales2Ed.valid && telefonoReferenciasPersonales2Ed.valid"
               (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
                   <div class="content">
                     <h5>Referencia 1</h5><hr>

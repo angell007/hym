@@ -55,7 +55,9 @@ export class FuncionariocrearComponent implements OnInit {
       // Id_Turno : '',
       Talla_Camisa: '',
       Talla_Pantalon: '',
-      Talla_Botas: ''
+      Talla_Botas: '',
+      Saldo_Inicial_Peso : '',
+      Saldo_Inicial_Bolivar: ''
     };
 
   public contacto_emergencia =
@@ -138,8 +140,10 @@ export class FuncionariocrearComponent implements OnInit {
   }
 
   Dependencia_Grupo(Grupo) {
+    console.log(Grupo)
     this.http.get(this.globales.ruta + 'php/funcionarios/dependencias_grupo.php', { params: { id: Grupo } }).subscribe((data: any) => {
       this.Dependencias = data;
+      console.log(data)
     });
   }
 
