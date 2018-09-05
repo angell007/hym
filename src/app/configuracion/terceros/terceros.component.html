@@ -17,18 +17,20 @@
                                     <th>Identificación</th>
                                     <th>Nombre</th>
                                     <th>Ciudad</th>
-                                    <th>Destacado</th>
+                                    <th>Telefono</th>
+                                    <th>Tipo</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let tercero of terceros" class=" {{tercero.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">                                    
+                                <tr *ngFor="let tercero of terceros" class=" {{tercero.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                     <td style="vertical-align: middle;">{{tercero.Id_Tercero}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Nombre}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
-                                    <td style="vertical-align: middle;" class="text-center">{{tercero.Destacado}}</td>
+                                    <td style="vertical-align: middle;">{{tercero.Telefono}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">{{tercero.Tipo}}</td>
                                     <td style="vertical-align: middle;" class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalEditarTercero)">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalTerceroEditar)">
                                             <i class="ti-pencil"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Tercero, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
@@ -53,23 +55,23 @@
     <div class="app-modal-body">
         <form #FormTercero="ngForm">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Tipo de documento</label>
+                        <label>T. Doc</label>
                         <select class="form-control" required name="Id_Tipo_Documento" ngModel="">
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label>Identificación</label>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero"
                             class="form-control" name="Id_Tercero" ngModel="">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Tercero" class="form-control" name="Nombre" ngModel="">
@@ -77,10 +79,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Dirección</label>
                         <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" ngModel="">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -102,38 +110,52 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="">
-                    </div>
-                </div>
-                <div class="col-md-4">
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Teléfono</label>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Tercero"
                             class="form-control" name="Telefono" ngModel="">
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Celular</label>
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Tercero"
                             class="form-control" name="Celular" ngModel="">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Correo</label>
                         <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo" ngModel="">
                     </div>
-                </div>                
+                </div>
             </div>
             <hr>
             <h3>Otros Datos</h3>
             <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select class="form-control" ngModel name="Tipo">
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Propio">Propio</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Grupo Tercero</label>
+                        <select class="form-control" ngModel name="Id_Grupo_Tercero">
+                            <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
@@ -149,15 +171,7 @@
                         <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="">
-                            <option value="">Seleccione tipo de grupo</option>
-                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -177,46 +191,54 @@
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTercero" #ModalEditarTercero>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalTerceroEditar" #ModalTerceroEditar>
     <div class="app-modal-header">
         <h4>Editar Tercero</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormEditarTercero="ngForm">
+        <form #FormTercero="ngForm">
+            <input type="text" class="form-control" name="id" ngModel="{{Identificacion}}">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Tipo de documento</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="{{IdTipoDocumento}}">
+                        <label>T. Doc</label>
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="{{tercero.Id_Tipo_Documento}}">
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Tercero" class="form-control" name="id" ngModel="{{Identificacion}}" readonly>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero"
+                            class="form-control" name="Id_Tercero" ngModel="{{tercero.Id_Tercero}}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Tercero" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Tercero" class="form-control" name="Nombre" ngModel="{{tercero.Nombre}}">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" ngModel="{{Direccion}}">
+                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" ngModel="{{tercero.Direccion}}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="{{tercero.Barrio}}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{IdDepartamento}}" (change)="Municipios_Departamento($event.target.value)">
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{tercero.Id_Departamento}}" (change)="Municipios_Departamento($event.target.value)">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
@@ -225,47 +247,64 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{IdMunicipio}}">
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{tercero.Id_Municipio}}" [(ngModel)]="municipioDefault"
+                            (click)="boolMunicipio=true" required #municipio="ngModel">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" ngModel="{{Barrio}}">
-                    </div>
-                </div>
-                <div class="col-md-4">
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" placeholder="Teléfono del Tercero" class="form-control" name="Telefono" ngModel="{{Telefono}}">
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Tercero"
+                            class="form-control" name="Telefono" ngModel="{{tercero.Telefono}}">
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="text" placeholder="Celular del Tercero" class="form-control" name="Celular" ngModel="{{Celular}}">
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Tercero"
+                            class="form-control" name="Celular" ngModel="{{tercero.Celular}}">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" placeholder="Correo del Tercero" class="form-control" name="Correo" ngModel="{{Correo}}">
+                        <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo" ngModel="{{tercero.Correo}}">
                     </div>
-                </div>                
+                </div>
             </div>
             <hr>
             <h3>Otros Datos</h3>
             <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select class="form-control" ngModel="{{tercero.Tipo}}" name="Tipo">
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Propio">Propio</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Grupo Tercero</label>
+                        <select class="form-control" ngModel="{{tercero.Id_Grupo_Tercero}}" name="Id_Grupo_Tercero">
+                            <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
-                        <select class="form-control" name="Credito" ngModel="{{Credito}}">
-                            <option>No</option>
+                        <select class="form-control" name="Credito" ng-model="selected" ngModel="{{tercero.Credito}}">
+                            <option ng-selected="selected" value="No">No</option>
                             <option>Si</option>
                         </select>
                     </div>
@@ -273,24 +312,17 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{tercero.Cupo}}"
+                            [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
-                <div class="col-md-7">
-                    <div class="form-group">
-                        <label>Tipo Grupo</label>
-                        <select class="form-control" name="Id_Grupo" ngModel="{{IdGrupo}}">
-                            <option value="">Seleccione tipo de grupo</option>
-                            <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Tercero" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="Detalles del Tercero" name="Detalle" ngModel="{{tercero.Detalle}}"></textarea>
                     </div>
                 </div>
             </div>
@@ -298,11 +330,12 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" data-dismiss="modal" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este tercero' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-                (confirm)="GuardarTercero(FormEditarTercero, ModalEditarTercero)">Guardar</button>
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarTercero(FormTercero, ModalTerceroEditar)">Actualizar Información</button>
         </div>
     </div>
 </app-modal-basic>
+
 
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el tercero" type="error">
 </swal>

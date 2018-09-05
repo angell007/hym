@@ -81,21 +81,13 @@ export class TercerosComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  tercero = [];
   
   constructor(private http : HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
-      this.Departamentos= data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
-      this.Grupos = data;
-    });
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
-      this.Documentos = data;
-    });
-    
+   
     this.year = new Date().getFullYear().toString().split('.').join("");
     this.month = (new Date().getMonth() + 1).toString();
     if (this.month.length == 1) this.actualClienteDesde = this.year.concat("-0".concat(this.month));
@@ -103,38 +95,7 @@ export class TercerosComponent implements OnInit {
 
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalTercero);
-    this.OcultarFormulario(this.ModalVerTercero);
-    this.OcultarFormulario(this.ModalEditarTercero);
-  }
-
-  InicializarBool()
-  {
-    this.boolNombre = false;
-    this.boolIdTercero = false;
-    this.boolDireccion = false;
-    this.boolBarrio = false;
-    this.boolTelefono = false;
-    this.boolCelular = false;
-    this.boolCorreo = false;
-    this.boolTerceroDesde = false;
-    this.boolDepartamento = false;
-    this.boolMunicipio = false;
-    this.boolCupo = false;
-    this.boolTipoDocumento = false;
-    this.boolCredito = false;
-    this.boolDestacado = false;
-   }
-
+  
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
       this.terceros= data;
@@ -169,7 +130,17 @@ export class TercerosComponent implements OnInit {
           sortDescending: ": Activar para ordenar la tabla en orden descendente"
         }
       }
-    }; 
+    };
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
+      this.Departamentos= data;
+    });
+    this.http.get(this.globales.ruta+'php/terceros/padre_hijo.php').subscribe((data:any)=>{
+      this.Grupos = data;
+    });
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tipo_Documento'}}).subscribe((data:any)=>{
+      this.Documentos = data;
+    });
+    
   }
 
   Municipios_Departamento(Departamento){
@@ -184,37 +155,15 @@ export class TercerosComponent implements OnInit {
     console.log(info);
     datos.append("modulo",'Tercero');
     datos.append("datos",info);
-    this.OcultarFormulario(modal);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-
-      var test = error.error.text;
-      if (test.indexOf('Duplicate') >= 0) {
-        this.duplicateSwal.show();
-      }
-
-      return this.handleError(error);
-    })
     .subscribe((data:any)=>{
       formulario.reset();
-      this.ActualizarVista();
-      this.InicializarBool();
-      this.destacadoDefault = "";
-      this.creditoDefault = "";
-      this.tipoDocumentoDefault = "";
-      this.departamentoDefault = "";
-      this.municipioDefault = "";
-      this.tipoGrupoDefault = "";
+      this.ActualizarVista();  
       this.saveSwal.show();
     });
     
   }
 
-  handleError(error: Response) {
-    return Observable.throw(error);
-  }
 
   VerTercero(id, modal){
     this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
@@ -240,27 +189,13 @@ export class TercerosComponent implements OnInit {
   }
 
   EditarTercero(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tercero', id:id}
     }).subscribe((data:any)=>{   
       console.log(data);         
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Direccion = data.Direccion;
-      this.IdDepartamento = data.Id_Departamento;
-      this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
-      this.Telefono = data.Telefono;
-      this.Celular = data.Celular;
-      this.Correo = data.Correo;
-      this.TerceroDesde = data.Tercero_Desde;
-      this.Destacado = data.Destacado;
-      this.Credito = data.Credito;
-      this.Cupo = data.Cupo;
-      this.IdGrupo = data.Id_Grupo;
-      this.Detalle = data.Detalle;
-      this.IdTipoDocumento = data.Id_Tipo_Documento;
-      this.Barrio = data.Barrio;
+      this.tercero = data;
+      this.SeleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
       modal.show();
     });
   }
@@ -275,37 +210,14 @@ export class TercerosComponent implements OnInit {
     });
   }
 
-  OcultarFormulario(modal)
-  {
-    this.Identificacion = null;
-    this.Nombre = null;
-    this.Direccion = null;
-    this.IdDepartamento = null;
-    this.IdMunicipio = null;
-    this.Telefono = null;
-    this.Celular = null;
-    this.Correo = null;
-    this.TerceroDesde = null;
-    this.Destacado = null;
-    this.Credito = null;
-    this.Cupo = null;
-    this.IdGrupo = null;
-    this.IdTipoDocumento = null;
-    this.Detalle = null;
-    this.Barrio = null;
-    modal.hide();
-  }
 
-  AutoSleccionarMunicipio(Departamento, Municipio){
+  SeleccionarMunicipio(Departamento, Municipio){
     this.http.get(this.globales.ruta+'php/genericos/municipios_departamento.php',{ params: { id: Departamento}}).subscribe((data:any)=>{
       this.Municipios= data;
       this.IdMunicipio = Municipio;
     });
   }
 
-  Cerrar(modal){
-    this.OcultarFormulario(modal)
-  }
 
   ////
 
