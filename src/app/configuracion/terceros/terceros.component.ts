@@ -125,6 +125,7 @@ export class TercerosComponent implements OnInit {
       formulario.reset();
       this.ActualizarVista();  
       this.saveSwal.show();
+      modal.hide();
     });
     
   }
