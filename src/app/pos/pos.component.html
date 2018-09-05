@@ -109,7 +109,7 @@
                         </li>
                     </ul>
                     <div class="mrg-top-10" style="min-height: 470px;">
-                        <div class="row" id="cambios1">
+                        <div class="row" id="cambios1" *ngIf="Cambios1">
                             <div class="col-md-6">
                                 <button (click)="CambiarVista('Compra')" class="btn btn-info btn-block mrg-top-10 btn-grande">COMPRA</button>
                             </div>
@@ -161,9 +161,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" id="cambios2" style="display:none;">
+                        <div class="row" id="cambios2" *ngIf="Cambios2">
                             <form #FormMoneda="ngForm">
-                                <div class="col-md-4">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Moneda Origen</label>
                                         <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen" (change)="Origen($event.target.value);">
@@ -188,7 +188,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-12">
                                     <div class="form-group mrg-top-40">
                                         <label>Cambia</label>
                                         <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen" (blur)="RealizarCambioMoneda('cambia')"
@@ -218,7 +218,7 @@
 
                                 </div>
                             </form>
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <button [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra/venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}" class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}" (confirm)="guardarCambio(FormMoneda)">{{TextoBoton}}</button>
                             </div>
                         </div>

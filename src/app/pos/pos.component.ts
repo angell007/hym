@@ -108,6 +108,8 @@ export class PosComponent implements OnInit {
   MonedaOrigen: any;
   MonedaDestino: any;
   Tipo: string;
+  Cambios1 = true;
+  Cambios2 = false
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -754,8 +756,8 @@ export class PosComponent implements OnInit {
   }
 
   CambiarVista(tipo) {
-    document.getElementById("cambios1").style.display = 'none';
-    document.getElementById("cambios2").style.display = 'block';
+    this.Cambios2 = true;
+    this.Cambios1 = false;
 
     switch (tipo) {
       case "Compra": {
@@ -785,8 +787,8 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.text = "Se ha guardado correctamente la compra/venta"
       this.confirmacionSwal.type = "success"
       this.confirmacionSwal.show(); 
-      document.getElementById("cambios2").style.display = 'none';
-      document.getElementById("cambios1").style.display = 'block';
+      this.Cambios1 = true;
+      this.Cambios2 = false;
 
     });
     
