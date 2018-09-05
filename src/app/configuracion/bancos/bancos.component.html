@@ -1,7 +1,9 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Bancos</h4>
-        <button class="pull-right btn btn-primary btn-sm" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo Banco</button>
+        <button class="pull-right btn btn-primary btn-sm" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo
+            Banco
+        </button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
@@ -58,7 +60,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Id_Pais" ngModel="" required>
+                        <select class="form-control" name="Id_Pais" ngModel required (change)="SeleccionarPais($event.target.value)">
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
@@ -71,6 +73,61 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row" *ngIf="Colombia">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Comisión Cons. Nac.</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Nacional"
+                                    ngModel required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Comisión 4x1000</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Cuatro_Mil" ngModel required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Comisión Cons. Local</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Local" ngModel
+                                    required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Max. Cons. Local</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Consignacion_Local" ngModel
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="Venezuela">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Comisión Otros Bancos</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Otros_Bancos" ngModel required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Comisión Mayor Valor</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Mayor_Valor" ngModel required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Mayor Valor</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Mayor_Valor" ngModel required>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Max. Trans. Otros Bancos</label>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Transferencia_Otros_Bancos"
+                                    ngModel required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -83,7 +140,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarBanco(FormBanco, ModalBanco)">Guardar</button>
         </div>
     </div>
@@ -137,8 +194,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" type="button" 
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button class="btn btn-primary btn-sm" type="button" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a actualizar este banco' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarBanco(FormEditarBanco, ModalEditarBanco)">Guardar</button>
         </div>
     </div>

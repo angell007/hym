@@ -45,6 +45,9 @@ export class BancosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
 
+  Colombia = false;
+  Venezuela = false;
+
   constructor(private http : HttpClient, private globales : Globales) { }
 
   ngOnInit() {
@@ -219,6 +222,27 @@ export class BancosComponent implements OnInit {
     });
   }
 
+  SeleccionarPais(Pais){
+    //1 para colombia
+    //2 para venezuela
 
+    switch(Pais){
+      case "1":{
+        this.Colombia = true;
+        this.Venezuela = false;
+        break;
+      }
+      case "2":{
+        this.Colombia = false;
+        this.Venezuela = true;
+        break;
+      }
+      default:{
+        this.Colombia = false;
+        this.Venezuela = false;
+      }
+    }
+    
+  }
 
 }
