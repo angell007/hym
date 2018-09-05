@@ -4,9 +4,9 @@ import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../shared/globales/globales';
 import { Subject } from 'rxjs';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {NgbTypeahead} from '@ng-bootstrap/ng-bootstrap';
-import {NgbTypeaheadConfig} from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -40,16 +40,16 @@ export class PosComponent implements OnInit {
     Id_Tipo_Cuenta: ''
   }];
   public Envios: any[] = [{
-    Destino : '',
+    Destino: '',
     Numero_Documento_Destino: '',
-    Nombre : '',
+    Nombre: '',
     Id_Cuenta_Destino: '',
     Valor_Transferencia: '',
     Cuentas: []
   }];
   public CuentasDestinatario: any[];
   public Cajas: any[];
-  public Cambios : any [];
+  public Cambios: any[];
   public Monedas: any[];
   public Recibe: any = "Transferencia";
   public MonedaRecibe: any = "Bolivares";
@@ -100,6 +100,10 @@ export class PosComponent implements OnInit {
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal: any;
   @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;
   vueltos: number;
+  Venta = false;
+  TextoBoton = "Vender";
+  entregar: number;
+  cambiar: number;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -110,7 +114,7 @@ export class PosComponent implements OnInit {
       pageLength: 10,
       dom: 'Bfrtip',
       responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
+      /* below is the relevant part, e.g. translated to spanish */
       language: {
         processing: "Procesando...",
         search: "Buscar:",
@@ -145,21 +149,21 @@ export class PosComponent implements OnInit {
   }
 
   search_destino = (text$: Observable<string>) =>
-  text$.pipe(
+    text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
         : this.Destinatarios.filter(v => v.Id_Destinatario.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
-  formatter_destino = (x: {Id_Destinatario: string}) => x.Id_Destinatario;
+  formatter_destino = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
 
   search_remitente = (text$: Observable<string>) =>
-  text$.pipe(
+    text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
         : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
-  formatter_remitente = (x: {Id_Transferencia_Remitente: string}) => x.Id_Transferencia_Remitente;
-  
+  formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
+
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
@@ -169,14 +173,33 @@ export class PosComponent implements OnInit {
     }
   }
 
-  muestra_tabla(id){
+  muestra_tabla(id) {
     var tot = document.getElementsByClassName('modulos').length;
-    for(let i=0; i<tot; i++){
-      var id2= document.getElementsByClassName('modulos').item(i).getAttribute("id");
+    for (let i = 0; i < tot; i++) {
+      var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
       document.getElementById(id2).style.display = 'none';
     }
     document.getElementById(id).style.display = 'block';
   }
+
+  CambiarVista(tipo) {
+    document.getElementById("cambios1").style.display = 'none';
+    document.getElementById("cambios2").style.display = 'block';
+
+    switch (tipo) {
+      case "Compra": {
+        this.Venta = false;
+        this.TextoBoton = "Comprar"
+        break;
+      }
+      case "Venta": {
+        this.Venta = true;
+        this.TextoBoton = "Vender"
+        break;
+      }
+    }
+  }
+
   actualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
       this.Cambios = data;
@@ -225,10 +248,10 @@ export class PosComponent implements OnInit {
     });
   }
   AutoCompletarDestinatario(modelo, i) {
-    if(modelo.Cuentas!=undefined){
+    if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
-      this.Envios[i].Cuentas= modelo.Cuentas;
+      this.Envios[i].Cuentas = modelo.Cuentas;
     }
   }
   NuevoDestinatario() {
@@ -249,9 +272,9 @@ export class PosComponent implements OnInit {
       }
       if (totalTransferencia <= this.CantidadTransferida) {
         this.Envios.push({
-          Destino : '',
+          Destino: '',
           Numero_Documento_Destino: '',
-          Nombre : '',
+          Nombre: '',
           Id_Cuenta_Destino: '',
           Valor_Transferencia: '',
           Cuentas: []
@@ -312,9 +335,9 @@ export class PosComponent implements OnInit {
         this.InicializarBool();
         this.transferenciaExitosaSwal.show();
         this.Envios = [{
-          Destino :'',
+          Destino: '',
           Numero_Documento_Destino: '',
-          Nombre : '',
+          Nombre: '',
           Id_Cuenta_Destino: '',
           Valor_Transferencia: '',
           Cuentas: []
@@ -363,7 +386,7 @@ export class PosComponent implements OnInit {
       });
   }
 
-  
+
 
   AutoCompletarCuenta(modelo) {
     if (modelo) {
@@ -405,9 +428,9 @@ export class PosComponent implements OnInit {
           this.CuentasDestinatario = data;
           (document.getElementById("Numero_Documento_Destino" + index) as HTMLInputElement).value = data[0].Id_Destinatario;
           this.Envios.push({
-            Destino : '',
+            Destino: '',
             Numero_Documento_Destino: '',
-            Nombre : '',
+            Nombre: '',
             Id_Cuenta_Destino: '',
             Valor_Transferencia: '',
             Cuentas: []
@@ -417,7 +440,7 @@ export class PosComponent implements OnInit {
     }
   }
 
-  
+
 
   EliminarDestinatario(index) {
     if (index > 0) {
@@ -529,24 +552,24 @@ export class PosComponent implements OnInit {
     console.log(cuentas);
 
     //console.log(destinatario);
-  
-      this.http.post(this.globales.ruta+'php/destinatarios/guardar_destinatario.php',datos)
-        .catch(error => { 
-          console.error('An error occurred:', error.error);
-          this.errorSwal.show();
-          return this.handleError(error);
-        })
-        .subscribe((data:any)=>{ 
-          //console.log(data);           
-          this.ModalDestinatario.hide();
-          this.destinatarioCreadoSwal.show();
-          this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
-          formulario.reset();
-          let textArea : any = document.getElementById('detalleText');
-          textArea.value = '';
-          this.Cedula = null;
-        });
-        this.actualizarVista();
+
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        //console.log(data);           
+        this.ModalDestinatario.hide();
+        this.destinatarioCreadoSwal.show();
+        this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
+        formulario.reset();
+        let textArea: any = document.getElementById('detalleText');
+        textArea.value = '';
+        this.Cedula = null;
+      });
+    this.actualizarVista();
   }
 
   GuardarRemitente(formulario: NgForm) {
@@ -707,75 +730,36 @@ export class PosComponent implements OnInit {
   }
 
   CambiarTasa(value) {
-    var origen = ((document.getElementById("Origen") as HTMLInputElement).value);
-    //var destino= ((document.getElementById("Destino") as HTMLInputElement).value); 
+    this.BuscarTasa(value);
 
-    switch (origen) {
-      case "1": {
-        this.PrecioSugerido = this.Monedas[(parseInt(origen) - 1)].Sugerido_Venta;
+  }
+
+  BuscarTasa(moneda) {
+    this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
+      params: { id: moneda }
+    }).subscribe((data: any) => {
+      this.PrecioSugerido = data[0].Valor;
+    });
+  }
+
+  RealizarCambioMoneda(tipo) {
+    var Cambia = ((document.getElementById("Cambia") as HTMLInputElement).value);
+    var Entrega = ((document.getElementById("Entrega") as HTMLInputElement).value);
+    switch (tipo) {
+      case 'cambia': {
+        this.entregar =(parseInt(Cambia) / this.PrecioSugerido);
         break;
       }
-      case "2": {
-        this.PrecioSugerido = this.Monedas[(parseInt(origen) - 1)].Sugerido_Venta;
+      case 'entrega': {
+        this.cambiar =(parseInt(Entrega) * this.PrecioSugerido);
         break;
       }
     }
 
-    /*
-    if(value>0)
-    {
-      this.PrecioSugerido = this.Monedas[(value-1)].Sugerido_Venta;
-    }*/
   }
 
-  CambiarTasaCambio(value) {
-    var precio = ((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value);
-    switch (value) {
-      case "1": {
-        //bolivar
-        //console.log(origen + "/" + precio);
-        //Cantidad_Transferida
-        var operacion = parseInt(value) / parseInt(precio);
-        //(document.getElementById("Cantidad_Transferida") as HTMLInputElement).value = operacion;
-        break;
-      }
-
-      case "2": {
-        //peso
-        //console.log(origen + "*" + precio);
-        this.vueltos = parseInt(value) * parseInt(precio);
-        break;
-      }
-
-    }
-
-  }
-
-  realizarCalculo() {
-
-    var origen = ((document.getElementById("Valor") as HTMLInputElement).value);
-    var destino = ((document.getElementById("Destino") as HTMLInputElement).value);
-    //Precio_Sugerido
-    var precio = ((document.getElementById("Precio_Sugerido") as HTMLInputElement).value);
-
-    switch (destino) {
-
-      case "1": {
-        //bolivar
-        //console.log(origen + "/" + precio);
-        this.vueltos = parseInt(origen) / parseInt(precio);
-        break;
-      }
-
-      case "2": {
-        //peso
-        //console.log(origen + "*" + precio);
-        this.vueltos = parseInt(origen) * parseInt(precio);
-        break;
-      }
-
-    }
-
-  }
+  ObtenerVueltos(valor){
+    this.vueltos =  valor - this.cambiar ;
+   }
 
 }
