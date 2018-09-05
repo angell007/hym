@@ -163,13 +163,13 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}">
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{infoBanco.Nombre}}">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" required name="Id_Pais" ngModel="{{Pais}}">
+                        <select class="form-control" required name="Id_Pais" ngModel="{{infoBanco.Id_Pais}}">
                             <option value="">Seleccione un País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
@@ -178,15 +178,71 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{Identificador}}">
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{infoBanco.Identificador}}">
                     </div>
                 </div>
             </div>
+
+            <div class="row" *ngIf="Colombia">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Comisión Cons. Nac.</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Nacional"
+                                        ngModel="{{infoBanco.Comision_Consignacion_Nacional}}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Comisión 4x1000</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Cuatro_Mil" 
+                                    ngModel="{{infoBanco.Comision_Cuatro_Mil}}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Comisión Cons. Local</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Local"  ngModel="{{infoBanco.Comision_Consignacion_Local}}"
+                                        required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Max. Cons. Local</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Consignacion_Local" ngModel="{{infoBanco.Maximo_Consignacion_Local}}"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row" *ngIf="Venezuela">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Comisión Otros Bancos</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Otros_Bancos" ngModel="{{infoBanco.Comision_Otros_Bancos}}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Comisión Mayor Valor</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Mayor_Valor" ngModel="{{infoBanco.Comision_Mayor_Valor}}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Mayor Valor</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Mayor_Valor" ngModel="{{infoBanco.Mayor_Valor}}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Max. Trans. Otros Bancos</label>
+                                    <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Transferencia_Otros_Bancos"
+                                    ngModel="{{infoBanco.Maximo_Transferencia_Otros_Bancos}}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel="{{infoBanco.Detalle}}"></textarea>
                     </div>
                 </div>
             </div>

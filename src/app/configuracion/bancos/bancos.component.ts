@@ -18,10 +18,7 @@ export class BancosComponent implements OnInit {
 
   //variables de formulario
   public Identificacion : any[];
-  public Nombre : any[];
-  public Pais : any[];
-  public Identificador : any[];
-  public Detalle : any[];
+ 
 
   public boolNombre:boolean = false;
   public boolId:boolean = false;
@@ -47,6 +44,7 @@ export class BancosComponent implements OnInit {
 
   Colombia = false;
   Venezuela = false;
+  infoBanco = [];
 
   constructor(private http : HttpClient, private globales : Globales) { }
 
@@ -56,28 +54,7 @@ export class BancosComponent implements OnInit {
       this.Paises= data;
     });
   }
-
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalBanco);
-    this.OcultarFormulario(this.ModalVerBanco);
-    this.OcultarFormulario(this.ModalEditarBanco);
-  }
-
-  InicializarBool()
-  {
-    this.boolNombre = false;
-    this.boolId = false;
-    this.boolPais = false;
-  }
-
+ 
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{
@@ -121,7 +98,6 @@ export class BancosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo",'Banco');
     datos.append("datos",info);
-    this.OcultarFormulario(modal);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
     .catch(error => { 
       console.error('An error occurred:', error.error);
@@ -130,10 +106,12 @@ export class BancosComponent implements OnInit {
     })
     .subscribe((data:any)=>{
       formulario.reset();
-      this.ActualizarVista();
-      this.InicializarBool();
+      this.ActualizarVista();      
       this.paisDefault = "";
       this.saveSwal.show();
+      this.Colombia = false;
+      this.Venezuela = false;
+      modal.hide();
     });
   }
 
@@ -146,10 +124,6 @@ export class BancosComponent implements OnInit {
       params:{id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Pais = data.Pais;
-      this.Identificador = data.Identificador;
-      this.Detalle = data.Detalle;
       modal.show();
     });
   }
@@ -165,33 +139,17 @@ export class BancosComponent implements OnInit {
   }
 
   EditarBanco(id){
-    this.InicializarBool();
+    
     this.http.get(this.globales.ruta +'php/genericos/detalle.php',{
       params:{modulo:'Banco', id:id}
     }).subscribe((data:any)=>{
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Pais = data.Id_Pais;
-      this.Identificador = data.Identificador;
-      this.Detalle = data.Detalle;
+      this.infoBanco = data;
       this.ModalEditarBanco.show();
+      this.SeleccionarPais(data.Id_Pais)
     });
   }
-
-  OcultarFormulario(modal)
-  {
-    this.Identificacion = null;
-    this.Nombre = null;
-    this.Pais = null;
-    this.Identificador = null;
-    this.Detalle = null;
-    modal.hide();
-  }
-
-  Cerrar(modal){
-    this.OcultarFormulario(modal)
-  }
-
+ 
   EstadoBanco(value, estado){
     let datos = new FormData();
     var titulo;
