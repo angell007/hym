@@ -99,11 +99,15 @@ export class PosComponent implements OnInit {
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal: any;
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal: any;
   @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;
+  @ViewChild('confirmacionSwal') confirmacionSwal:any;
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
-  entregar: number;
+  entregar: any;
   cambiar: number;
+  MonedaOrigen: any;
+  MonedaDestino: any;
+  Tipo: string;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -181,25 +185,7 @@ export class PosComponent implements OnInit {
     }
     document.getElementById(id).style.display = 'block';
   }
-
-  CambiarVista(tipo) {
-    document.getElementById("cambios1").style.display = 'none';
-    document.getElementById("cambios2").style.display = 'block';
-
-    switch (tipo) {
-      case "Compra": {
-        this.Venta = false;
-        this.TextoBoton = "Comprar"
-        break;
-      }
-      case "Venta": {
-        this.Venta = true;
-        this.TextoBoton = "Vender"
-        break;
-      }
-    }
-  }
-
+  
   actualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
       this.Cambios = data;
@@ -219,10 +205,7 @@ export class PosComponent implements OnInit {
       this.Cajas = data;
     });
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-      this.Monedas = data;/*
-      this.CambiarTasa(this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")+1);  
-      this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
-      this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;*/
+      this.Monedas = data;
     });
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
       this.Funcionarios = data;
@@ -247,6 +230,7 @@ export class PosComponent implements OnInit {
       this.Bancos = data;
     });
   }
+
   AutoCompletarDestinatario(modelo, i) {
     if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -386,8 +370,6 @@ export class PosComponent implements OnInit {
       });
   }
 
-
-
   AutoCompletarCuenta(modelo) {
     if (modelo) {
       if (modelo.length > 0) {
@@ -439,8 +421,6 @@ export class PosComponent implements OnInit {
       });
     }
   }
-
-
 
   EliminarDestinatario(index) {
     if (index > 0) {
@@ -729,16 +709,26 @@ export class PosComponent implements OnInit {
     this.CorresponsalBancario = null;
   }
 
+// aquí ando haciendo mis metodos
+
   CambiarTasa(value) {
     this.BuscarTasa(value);
-
   }
 
   BuscarTasa(moneda) {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: moneda }
     }).subscribe((data: any) => {
-      this.PrecioSugerido = data[0].Valor;
+      this.PrecioSugerido = data.Dependencia[0].Valor;
+      this.MonedaDestino = data.Moneda[0].Nombre
+    });
+  }
+
+  Origen(moneda) {
+    this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
+      params: { id: moneda }
+    }).subscribe((data: any) => {
+      this.MonedaOrigen = data.Moneda[0].Nombre
     });
   }
 
@@ -747,19 +737,59 @@ export class PosComponent implements OnInit {
     var Entrega = ((document.getElementById("Entrega") as HTMLInputElement).value);
     switch (tipo) {
       case 'cambia': {
-        this.entregar =(parseInt(Cambia) / this.PrecioSugerido);
+        this.entregar = (parseInt(Cambia) / this.PrecioSugerido);
+        this.entregar = this.entregar.toFixed(2);
         break;
       }
       case 'entrega': {
-        this.cambiar =(parseInt(Entrega) * this.PrecioSugerido);
+        this.cambiar = (parseInt(Entrega) * this.PrecioSugerido);
         break;
       }
     }
-
   }
 
-  ObtenerVueltos(valor){
-    this.vueltos =  valor - this.cambiar ;
-   }
+  ObtenerVueltos(valor) {
+    var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
+    this.vueltos = valor - parseInt(plata);
+  }
+
+  CambiarVista(tipo) {
+    document.getElementById("cambios1").style.display = 'none';
+    document.getElementById("cambios2").style.display = 'block';
+
+    switch (tipo) {
+      case "Compra": {
+        this.Venta = false;
+        this.TextoBoton = "Comprar"
+        this.Tipo = "Compra";
+        break;
+      }
+      case "Venta": {
+        this.Venta = true;
+        this.TextoBoton = "Vender"
+        this.Tipo = "Venta";
+        break;
+      }
+    }
+  }
+
+  guardarCambio(formulario:NgForm){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo",'Cambio');
+    datos.append("datos",info);
+    
+    this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php',datos).subscribe((data:any)=>{
+      formulario.reset();
+      this.confirmacionSwal.title ="Guardado con exito";
+      this.confirmacionSwal.text = "Se ha guardado correctamente la compra/venta"
+      this.confirmacionSwal.type = "success"
+      this.confirmacionSwal.show(); 
+      document.getElementById("cambios2").style.display = 'none';
+      document.getElementById("cambios1").style.display = 'block';
+
+    });
+    
+  }
 
 }

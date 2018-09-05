@@ -162,55 +162,64 @@
                             </div>
                         </div>
                         <div class="row" id="cambios2" style="display:none;">
+                            <form #FormMoneda="ngForm">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Moneda Origen</label>
+                                        <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen" (change)="Origen($event.target.value);">
+                                            <option> Seleccione Moneda</option>
+                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                ({{ moneda.Codigo }}) </option>
+                                        </select>
+                                        <input hidden readonly name="Moneda_Origen" type="text" class="form-control" ngModel="{{MonedaOrigen}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Moneda Destino</label>
+                                        <select class="form-control" placeholder="Destino" id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
+                                            <option> Seleccione Moneda</option>
+                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                ({{ moneda.Codigo }}) </option>
+                                        </select>
+                                        <input hidden name="Moneda_Destino" readonly type="text" class="form-control" ngModel="{{MonedaDestino}}">
+                                        <input hidden name="Id_Oficina" readonly type="text" class="form-control" ngModel="5">
+                                        <input hidden name="Id_Caja" readonly type="text" class="form-control" ngModel="1">
+                                        <input hidden name="Tipo" readonly type="text" class="form-control" ngModel="{{Tipo}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group mrg-top-40">
+                                        <label>Cambia</label>
+                                        <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen" (blur)="RealizarCambioMoneda('cambia')"
+                                            id="Cambia" ngModel="{{cambiar}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Tasa Cambio</label>
+                                        <input readonly type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido" name="Tasa" ngModel="{{PrecioSugerido}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Entrega</label>
+                                        <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" (blur)="RealizarCambioMoneda('entrega')"
+                                            id="Entrega" ngModel="{{entregar}}">
+                                    </div>
+
+                                    <div *ngIf="Venta" class="form-group">
+                                        <label>Paga Con</label>
+                                        <input type="text" placeholder="Paga con" class="form-control" name="Recibido" (blur)="ObtenerVueltos($event.target.value)">
+                                    </div>
+
+                                    <div *ngIf="Venta" class="form-group">
+                                        <label>Vueltos</label>
+                                        <input readonly type="text" placeholder="Vueltos" class="form-control" name="Vueltos" ngModel="{{vueltos}}">
+                                    </div>
+
+                                </div>
+                            </form>
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Moneda Origen</label>
-                                    <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen">
-                                        <option> Seleccione Moneda</option>
-                                        <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                            ({{ moneda.Codigo }}) </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Moneda Destino</label>
-                                    <select class="form-control" placeholder="Destino" id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
-                                        <option> Seleccione Moneda</option>
-                                        <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                            ({{ moneda.Codigo }}) </option>
-                                    </select>
-                                </div>                                
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group mrg-top-40">
-                                    <label>Cambia</label>
-                                    <input type="text" placeholder="Valor" class="form-control" id="Valor" name="Valor" (blur)="RealizarCambioMoneda('cambia')" id="Cambia" ngModel="{{cambiar}}" >
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Tasa Cambio</label>
-                                    <input readonly type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido" name="Precio_Sugerido" ngModel="{{PrecioSugerido}}">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Entrega</label>
-                                    <input type="text" placeholder="Vueltos" class="form-control" (blur)="RealizarCambioMoneda('entrega')" id="Entrega" ngModel="{{entregar}}">
-                                </div>
-
-                                <div *ngIf="Venta" class="form-group">
-                                    <label>Paga Con</label>
-                                    <input type="text" placeholder="Vueltos" class="form-control"  (blur)="ObtenerVueltos($event.target.value)">
-                                </div>
-
-                                <div *ngIf="Venta" class="form-group">
-                                    <label>Vueltos</label>
-                                    <input readonly type="text" placeholder="Vueltos" class="form-control" ngModel="{{vueltos}}">
-                                </div>
-
-                            </div>
-                            <div class="col-md-4">
-                                <button class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}" >{{TextoBoton}}</button>
+                                <button [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra/venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}" class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}" (confirm)="guardarCambio(FormMoneda)">{{TextoBoton}}</button>
                             </div>
                         </div>
                     </div>
@@ -262,7 +271,8 @@
                                         <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                     </select>
                                     <div *ngIf="seleccioneCliente.value=='' && boolSeleccioneCliente==true" style="color:red">Campo
-                                        inválido</div>
+                                        inválido
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="Recibe==='Transferencia'">
@@ -422,14 +432,16 @@
                                 <div class="col-md-12">
                                     <button class="btn btn-info btn-sm btn-block" [disabled]="formaPago.value==''" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                         (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
-                                        Transferencia</button>
+                                        Transferencia
+                                    </button>
                                 </div>
                             </div>
                             <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
                                 <div class="col-md-12">
                                     <button class="btn btn-info btn-sm btn-block" [disabled]="formaPago.value==''" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                         (click)="GuardarMovimiento(FormTransferencia)">Guardar
-                                        Movimiento</button>
+                                        Movimiento
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -610,7 +622,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-sm btn-success btn-block" (click)="RealizarGiro(FormGiroRemitente, FormGiroDestinatario, FormGiro)">Hacer
-                                            giro</button>
+                                            giro
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -679,7 +692,8 @@
                                     <div class="form-group">
                                         <label>&nbsp;</label>
                                         <button type="submit" class="btn btn-sm btn-info btn-block" (click)="RealizarTraslado(FormTraslado)">Hacer
-                                            traslado</button>
+                                            traslado
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1016,3 +1030,6 @@
 
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
+
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
