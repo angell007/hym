@@ -51,6 +51,7 @@ import { OficinascrearComponent } from "./configuracion/oficinas/oficinascrear/o
 import { OficinaseditarComponent } from "./configuracion/oficinas/oficinaseditar/oficinaseditar.component";
 import { OficinaverComponent } from "./configuracion/oficinas/oficinaver/oficinaver.component";
 import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/cuentasbancariasver/cuentasbancariasver.component';
+import { RemitenteComponent } from "./configuracion/remitente/remitente.component";
 
 export const AppRoutes: Routes = [
     { 
@@ -236,6 +237,10 @@ export const AppRoutes: Routes = [
     { 
         path : 'cuentabancariaver/:id', component : CommonLayoutComponent,
         children:[{path : '', component : CuentasbancariasverComponent, canActivate:[AuthGuard]}]
+    },
+    { 
+        path : 'remitente', component : CommonLayoutComponent,
+        children:[{path : '', component : RemitenteComponent, canActivate:[AuthGuard]}]
     },        
     { path : 'login', component: LoginComponent },
     { path : '' , redirectTo:'login', pathMatch:'full' }
