@@ -88,6 +88,7 @@ import { OficinaseditarComponent } from './configuracion/oficinas/oficinaseditar
 import { OficinaverComponent } from './configuracion/oficinas/oficinaver/oficinaver.component';
 import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/cuentasbancariasver/cuentasbancariasver.component';
 import { RemitenteComponent } from './configuracion/remitente/remitente.component';
+import { TercerosverComponent } from './configuracion/terceros/tercerosver/tercerosver.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -184,7 +185,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         OficinaseditarComponent,
         OficinaverComponent,
         CuentasbancariasverComponent,
-        RemitenteComponent
+        RemitenteComponent,
+        TercerosverComponent
     ],
     exports:[
         ModalBasicComponent

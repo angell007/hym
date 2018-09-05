@@ -30,6 +30,9 @@
                                     <td style="vertical-align: middle;">{{tercero.Telefono}}</td>
                                     <td style="vertical-align: middle;" class="text-center">{{tercero.Tipo}}</td>
                                     <td style="vertical-align: middle;" class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/tercerover',tercero.Id_Tercero]">
+                                            <i class="ti-search"></i>
+                                        </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalTerceroEditar)">
                                             <i class="ti-pencil"></i>
                                         </button>

@@ -19,43 +19,6 @@ export class TercerosComponent implements OnInit {
   public Grupos : any[];
   public Documentos : any[];
 
-  //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Direccion : any[];
-  public IdDepartamento : any[];
-  public Departamento : any[];
-  public IdMunicipio : any[];
-  public Municipio : any[];
-  public Telefono : any[];
-  public Celular : any[];
-  public Correo : any[];
-  public TerceroDesde : any[];
-  public Destacado : any[];
-  public Credito : any[];
-  public Cupo : any[];
-  public IdGrupo : any[];
-  public Grupo : any[];
-  public Detalle : any[];
-  public IdTipoDocumento : any[];
-  public Documento : any[];
-  public Barrio : any[];
-
-  public boolNombre:boolean = false;
-  public boolIdTercero:boolean = false;
-  public boolDireccion:boolean = false;
-  public boolBarrio:boolean = false;
-  public boolTelefono:boolean = false;
-  public boolCelular:boolean = false;
-  public boolCorreo:boolean = false;
-  public boolTerceroDesde:boolean = false;
-  public boolDepartamento:boolean = false;
-  public boolMunicipio:boolean = false;
-  public boolCupo:boolean = false;
-  public boolTipoDocumento:boolean = false;
-  public boolDestacado:boolean = false;
-  public boolCredito:boolean = false;
-
   public actualClienteDesde:string;
   public year:string;
   public month:string;
@@ -82,6 +45,8 @@ export class TercerosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   tercero = [];
+  IdMunicipio=[];
+  Identificacion: any;
   
   constructor(private http : HttpClient, private globales: Globales) { }
 
@@ -164,29 +129,6 @@ export class TercerosComponent implements OnInit {
     
   }
 
-
-  VerTercero(id, modal){
-    this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
-      params:{id:id}
-    }).subscribe((data:any)=>{
-      this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Direccion = data.Direccion;
-      this.Departamento = data.Departamento;
-      this.Municipio = data.Municipio;
-      this.Telefono = data.Telefono;
-      this.Celular = data.Celular;
-      this.Correo = data.Correo;
-      this.TerceroDesde = data.Tercero_Desde;
-      this.Destacado = data.Destacado;
-      this.Credito = data.Credito;
-      this.Cupo = data.Cupo;
-      this.Grupo = data.Grupo;
-      this.Detalle = data.Detalle;
-      this.Barrio = data.Barrio;
-      modal.show();
-    });
-  }
 
   EditarTercero(id, modal){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
