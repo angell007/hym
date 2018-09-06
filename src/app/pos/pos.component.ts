@@ -17,6 +17,8 @@ import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 export class PosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  dtOptions1: DataTables.Settings = {};
+  dtTrigger1 = new Subject();
 
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
@@ -110,6 +112,9 @@ export class PosComponent implements OnInit {
   Tipo: string;
   Cambios1 = true;
   Cambios2 = false
+  Transferencia = [];
+  Transferencia1= true;
+  Transferencia2= false;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -232,6 +237,42 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
       this.Bancos = data;
     });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
+      this.Transferencia = data;
+      this.dtTrigger1.next();
+    });
+
+    this.dtOptions1 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
   }
 
   AutoCompletarDestinatario(modelo, i) {
@@ -771,6 +812,11 @@ export class PosComponent implements OnInit {
         this.Venta = true;
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
+        break;
+      }
+      case "Transferencia":{
+        this.Transferencia1 = false;
+        this.Transferencia2 = true;
         break;
       }
     }
