@@ -62,7 +62,7 @@ export class PosComponent implements OnInit {
   public DetalleCorresponsal: string;
   public Detalle: any[];
   public Indice: any[];
-  public MonedaTransferencia: any;
+ 
   public MonedaRecibida: any;
   public Cedula: any[];
   public IdRemitente: any[];
@@ -106,7 +106,7 @@ export class PosComponent implements OnInit {
   Venta = false;
   TextoBoton = "Vender";
   entregar: any;
-  cambiar: number;
+  cambiar: any;
   MonedaOrigen: any;
   MonedaDestino: any;
   Tipo: string;
@@ -115,6 +115,11 @@ export class PosComponent implements OnInit {
   Transferencia = [];
   Transferencia1= true;
   Transferencia2= false;
+  LimiteOficina: any;
+  public MonedaTransferencia: any;
+  MonedaTasaCambio: boolean;
+  MonedaComision: boolean;
+  ValorTransferencia: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -129,6 +134,13 @@ export class PosComponent implements OnInit {
     this.Estado = "Enviado";
     this.FormaPago = "Efectivo";
   }
+
+  ngAfterViewInit(){
+    if(this.recibeParaDefault == "Transferencia"){
+      this.CambiarTasa(1); 
+      this.MonedaTransferencia=1;           
+    }
+  } 
 
   search_destino = (text$: Observable<string>) =>
     text$.pipe(
@@ -238,6 +250,10 @@ export class PosComponent implements OnInit {
       this.Bancos = data;
     });
 
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Oficina', id : '5' } }).subscribe((data: any) => {
+      this.LimiteOficina = data.Limite_Transferencia;
+    });
+
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
       this.Transferencia = data;
       this.dtTrigger1.next();
@@ -281,38 +297,7 @@ export class PosComponent implements OnInit {
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
     }
-  }
-  NuevoDestinatario() {
-    let agregar: boolean = true;
-    let totalTransferencia = 0;
-    for (let i = 0; i < this.Envios.length; ++i) {
-      if (this.Envios[i].Numero_Documento_Destino === "" || this.Envios[i].Id_Cuenta_Destino === "") {
-        agregar = false;
-        return;
-      }
-      else {
-        totalTransferencia += this.Envios[i].Valor_Transferencia;
-      }
-    }
-    if (agregar) {
-      if (totalTransferencia == 0) {
-        return;
-      }
-      if (totalTransferencia <= this.CantidadTransferida) {
-        this.Envios.push({
-          Destino: '',
-          Numero_Documento_Destino: '',
-          Nombre: '',
-          Id_Cuenta_Destino: '',
-          Valor_Transferencia: '',
-          Cuentas: []
-        });
-      }
-      else {
-        this.warnTotalSwal.show();
-      }
-    }
-  }
+  } 
 
   OcultarFormulario(modal) {
     modal.hide();
@@ -569,11 +554,6 @@ export class PosComponent implements OnInit {
 
   }
 
-  SeleccionarTipo(tipo) {
-    this.Recibe = tipo;
-    //console.log(this.Recibe);    
-  }
-
   SeleccionarMonedaRecibe(moneda) {
     this.MonedaRecibe = moneda;
     var origen = ((document.getElementById("Moneda_Origen") as HTMLInputElement).value);
@@ -689,14 +669,11 @@ export class PosComponent implements OnInit {
 // aquí ando haciendo mis metodos
 
   CambiarTasa(value) {
-    this.BuscarTasa(value);
-  }
-
-  BuscarTasa(moneda) {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
-      params: { id: moneda }
+      params: { id: value }
     }).subscribe((data: any) => {
       this.PrecioSugerido = data.Dependencia[0].Valor;
+      this.ValorTransferencia = data.Dependencia[13].Valor;
       this.MonedaDestino = data.Moneda[0].Nombre
     });
   }
@@ -706,21 +683,55 @@ export class PosComponent implements OnInit {
       params: { id: moneda }
     }).subscribe((data: any) => {
       this.MonedaOrigen = data.Moneda[0].Nombre
+      if(moneda == 2){
+        this.MonedaTasaCambio = true;
+        this.MonedaComision = false;
+      }else{
+        this.MonedaTasaCambio = false;
+        this.MonedaComision = true;
+      }
     });
   }
 
   RealizarCambioMoneda(value,tipo) {
-    switch (tipo) {
-      case 'cambia': {
-        this.entregar = (parseInt(value) / this.PrecioSugerido);
-        this.entregar = this.entregar.toFixed(2);
-        break;
-      }
-      case 'entrega': {
-        this.cambiar = (parseInt(value) * this.PrecioSugerido);
-        break;
+
+    //console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
+    var suma=0;
+    this.Envios.forEach(element => {
+      suma+= element.Valor_Transferencia;
+    });
+
+    if(this.entregar > suma){
+      this.entregar = suma;
+    }else{
+      switch (tipo) {
+        case 'cambia': {
+           
+          var divisor = 1;
+          if(this.MonedaTasaCambio == true){
+            divisor = this.PrecioSugerido;
+          }else{
+            divisor =this.ValorTransferencia;
+          }
+            
+            this.entregar = (parseInt(value) / divisor);
+            this.entregar = this.entregar.toFixed(2);
+          break;
+        }
+        case 'entrega': {
+          var divisor = 1;
+          if(this.MonedaTasaCambio == true){
+            divisor = this.PrecioSugerido;
+          }else{
+            divisor =this.ValorTransferencia;
+          }
+          this.cambiar = (parseInt(value) * divisor);
+          break;
+        }
       }
     }
+
+    
   }
 
   ObtenerVueltos(valor) {
@@ -833,6 +844,48 @@ export class PosComponent implements OnInit {
   volverReciboTransferencia(){
     this.Transferencia1 = true;
     this.Transferencia2 = false;
+  }
+
+  NuevoDestinatario(pos) {   
+
+    var index = pos+1;   
+    var limite = parseInt(this.LimiteOficina);
+
+    var suma=0;
+    if(this.Envios.length == limite){
+      this.Envios.forEach(element => {
+        suma+= element.Valor_Transferencia;
+      });
+      this.entregar = suma;
+      this.RealizarCambioMoneda(suma,'entrega')      
+    }else{
+      if(this.Envios[index] == undefined){
+        this.Envios.push({
+          Destino: '',
+          Numero_Documento_Destino: '',
+          Nombre: '',
+          Id_Cuenta_Destino: '',
+          Valor_Transferencia: '',
+          Cuentas: []
+        });
+      } 
+    }   
+  }
+
+  SeleccionarTipo(tipo) {
+    this.Recibe = tipo;
+    switch(tipo){
+      case "Transferencia":{
+        this.MonedaTransferencia = 1;
+        this.CambiarTasa(1); 
+        break;
+      }
+      case "Cliente":{
+        this.MonedaTransferencia = 2;
+        this.CambiarTasa(2); 
+        break;
+      }
+    }   
   }
 
 }
