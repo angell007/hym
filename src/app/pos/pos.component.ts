@@ -322,61 +322,6 @@ export class PosComponent implements OnInit {
     return Observable.throw(error);
   }
 
-  InicializarBool() {
-    this.boolFormaPago = false;
-    this.boolRecibePara = false;
-    this.boolSeleccioneCliente = false;
-    this.boolNumeroDocumento = false;
-  }
-
-  GuardarTransferencia(formulario: NgForm) {
-    //formulario.value.Costo_Transferencia = 1;
-    formulario.value.Estado = "Pendiente";
-    formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
-    formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
-    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
-    //console.log(formulario.value);
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    let info = JSON.stringify(formulario.value);
-    //console.log("info");
-    //console.log(info);
-
-    let destinatarios = JSON.stringify(this.Envios);
-    //console.log("Envios");
-    //console.log(this.Envios);
-
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("envios", destinatarios);
-    this.http.post(this.globales.ruta + 'php/pos/transferencia.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        formulario.reset();
-        this.formaPagoDefault = "Efectivo";
-        this.recibeParaDefault = "Transferencia";
-        this.seleccioneClienteDefault = "";
-        this.InicializarBool();
-        this.transferenciaExitosaSwal.show();
-        this.Envios = [{
-          Destino: '',
-          Numero_Documento_Destino: '',
-          Nombre: '',
-          Id_Cuenta_Destino: '',
-          Valor_Transferencia: '',
-          Cuentas: []
-        }];
-        this.PrecioSugerido = null;
-        this.MonedaTransferencia = null;
-        this.MonedaRecibida = null;
-        //console.log(data);      
-      });
-  }
-
   ResetValues() {
     //console.log("resetear valores");
     this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
@@ -408,7 +353,6 @@ export class PosComponent implements OnInit {
         this.formaPagoDefault = "Efectivo";
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
-        this.InicializarBool();
         this.movimientoExitosoSwal.show();
         //console.log(data);      
       });
@@ -470,18 +414,7 @@ export class PosComponent implements OnInit {
     if (index > 0) {
       this.Envios.splice(index, 1);
     }
-  }
-
-  AutoCompletarRemitente(modelo) {
-    if (modelo) {
-      if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
-      }
-      else {
-        this.RemitentesFiltrados = null;
-      }
-    }
-  }
+  }  
 
   LlenarValoresRemitente(remitente) {
     this.DatosRemitente = [];
@@ -776,17 +709,15 @@ export class PosComponent implements OnInit {
     });
   }
 
-  RealizarCambioMoneda(tipo) {
-    var Cambia = ((document.getElementById("Cambia") as HTMLInputElement).value);
-    var Entrega = ((document.getElementById("Entrega") as HTMLInputElement).value);
+  RealizarCambioMoneda(value,tipo) {
     switch (tipo) {
       case 'cambia': {
-        this.entregar = (parseInt(Cambia) / this.PrecioSugerido);
+        this.entregar = (parseInt(value) / this.PrecioSugerido);
         this.entregar = this.entregar.toFixed(2);
         break;
       }
       case 'entrega': {
-        this.cambiar = (parseInt(Entrega) * this.PrecioSugerido);
+        this.cambiar = (parseInt(value) * this.PrecioSugerido);
         break;
       }
     }
@@ -798,8 +729,7 @@ export class PosComponent implements OnInit {
   }
 
   CambiarVista(tipo) {
-    this.Cambios2 = true;
-    this.Cambios1 = false;
+    
 
     switch (tipo) {
       case "Compra": {
@@ -817,6 +747,11 @@ export class PosComponent implements OnInit {
       case "Transferencia":{
         this.Transferencia1 = false;
         this.Transferencia2 = true;
+        break;
+      }
+      case "Cambio":{
+        this.Cambios2 = true;
+        this.Cambios1 = false;
         break;
       }
     }
@@ -839,6 +774,65 @@ export class PosComponent implements OnInit {
 
     });
     
+  }
+
+  AutoCompletarRemitente(modelo) {
+    if (modelo) {
+      if (modelo.length > 0) {
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
+      }
+      else {
+        this.RemitentesFiltrados = null;
+      }
+    }
+  }
+
+  GuardarTransferencia(formulario: NgForm) {
+   
+    //formulario.value.Costo_Transferencia = 1;
+    formulario.value.Id_Oficina = 5;
+    formulario.value.Id_Caja = 4;
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
+    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    let info = JSON.stringify(formulario.value);
+    let destinatarios = JSON.stringify(this.Envios);
+    let datos = new FormData();
+    datos.append("datos", info);
+    datos.append("envios", destinatarios);
+    this.http.post(this.globales.ruta + 'php/pos/transferencia.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.formaPagoDefault = "Efectivo";
+        this.recibeParaDefault = "Transferencia";
+        this.seleccioneClienteDefault = "";
+        this.transferenciaExitosaSwal.show();
+        this.Envios = [{
+          Destino: '',
+          Numero_Documento_Destino: '',
+          Nombre: '',
+          Id_Cuenta_Destino: '',
+          Valor_Transferencia: '',
+          Cuentas: []
+        }];
+        this.Transferencia1 = true; 
+        this.Transferencia2 = false;
+      });
+  }
+
+  volverCambioEfectivo(){
+    this.Cambios1 = true;
+    this.Cambios2 = false;
+  }
+
+  volverReciboTransferencia(){
+    this.Transferencia1 = true;
+    this.Transferencia2 = false;
   }
 
 }
