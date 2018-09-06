@@ -888,4 +888,13 @@ export class PosComponent implements OnInit {
     }   
   }
 
+  HistorialTransferenciaRemitente(remitente){
+    console.log(remitente.Id_Transferencia_Remitente)
+    this.http.get(this.globales.ruta + '/php/transferencias/historico_transferencia_remitente.php', { params: { modulo: 'Transferencia' , id: remitente.Id_Transferencia_Remitente } }).subscribe((data: any) => {
+        console.log(data);
+        
+    });
+    
+  }
+
 }

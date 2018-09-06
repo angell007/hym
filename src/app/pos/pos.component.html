@@ -365,7 +365,7 @@
                                                             <input type="text" class="form-control" name="Destino{{i}}"
                                                                 id="Destino{{i}}" [(ngModel)]="Envio.Destino"
                                                                 [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
-                                                                [inputFormatter]="formatter_destino" (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)">
+                                                                [inputFormatter]="formatter_destino" (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)" >
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
@@ -469,7 +469,7 @@
                                                             name="Numero_Documento_Origen" autocomplete="off"
                                                             [(ngModel)]="DatosRemitente" [ngbTypeahead]="search_remitente"
                                                             [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                            (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)">
+                                                            (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)" >
 
                                                     </div>
                                                 </div>
@@ -488,6 +488,11 @@
                                                             ngModel="{{DatosRemitente.Telefono}}">
                                                     </div>
                                                 </div>
+                                                <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <button class="btn btn-info btn-sm btn-block" (click)="HistorialTransferenciaRemitente(DatosRemitente)" > Historial </button>
+                                                        </div>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
