@@ -266,7 +266,7 @@
                     <div class="mrg-top-10" style="min-height: 470px;">
                         <div class="row" id="transferencias1" *ngIf="Transferencia1">
                             <div class="col-md-12">
-                                <button (click)="CambiarVista('Transferencia')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nueva</button>
+                                <button (click)="CambiarVista('Transferencia')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nueva Transferencia</button>
                             </div>
 
                             <div class="col-md-12">
@@ -554,7 +554,7 @@
                     <div class="mrg-top-10" style="min-height: 470px;">
                         <div class="row" id="Giros1" *ngIf="Giro1">
                             <div class="col-md-12">
-                                <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nueva</button>
+                                <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nuevo Giro</button>
                             </div>
 
                             <div class="col-md-12">
@@ -579,7 +579,7 @@
                                                 <td>{{Giro.Codigo}}</td>
                                                 <td>{{Giro.Valor_Recibido | currency}}</td>
                                                 <td>{{Giro.Valor_Entrega | currency}}</td>
-                                                <td class="text-right">{{Giro.Comision | currency }}
+                                                <td>{{Giro.Comision | currency }}
                                                 </td>
 
                                                 <td class="text-center">
@@ -607,212 +607,184 @@
 
                         <div class="row" id="Giros2" *ngIf="Giro2" style="margin-top: 10px">
                             <div class="col-md-12">
-                                <div class="mrg-top-30" style="min-height: 470px;">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <form #FormGiroRemitente="ngForm">
-                                                <button class="btn btn-sm btn-success pull-right">
-                                                    <i class="ti ti-hand-point-up"></i>
-                                                </button>
-                                                <h4>Remitente</h4>
+                                    <div class="mrg-top-30" style="min-height: 470px;">
+                                            <form #FormGiro="ngForm">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button class="btn btn-sm btn-success pull-right">
+                                                            <i class="ti ti-hand-point-up"></i>
+                                                        </button>
+                                                        <h4>Remitente</h4>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Departamento Remitente</label>
+                                                                    <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                                        <option value="">Seleccione Departamento</option>
+                                                                        <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                                                    </select>
+                                                                </div>
+                                                                <input type="text" class="form-control" name="Departamento_Remitente" [(ngModel)]="Departamento_Remitente" hidden  readonly>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Ciudad Origen</label>
+                                                                    <select class="form-control" name="Municipio" name="Municipio_Remitente" ngModel> 
+                                                                        <option value="">Seleccione Ciudad</option>
+                                                                        <option *ngFor="let municipio of Municipios_Remitente" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                    <label>Número de documento</label>
+                                                                    <input type="text" class="form-control" placeholder="Número Documento" name="Documento_Remitente" autocomplete="off" [(ngModel)]="DatosRemitenteGiro" [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);">
+                                                                <input type="text" class="form-control"  readonly name="Documento_Remitente" ngModel="{{DatosRemitenteGiro.Id_Transferencia_Remitente}}" > 
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Nombre Completo</label>
+                                                                    <input type="text" placeholder="Ejem: Pepito Perez" class="form-control" name="Nombre_Remitente" ngModel="{{DatosRemitenteGiro.Nombre}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Teléfono</label>
+                                                                    <input type="text" placeholder="Ejem: 318 3555555" class="form-control" name="Telefono_Remitente" ngModel="{{DatosRemitenteGiro.Telefono}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                        
+                                                        <h4>Destinatario</h4>
+                                                        <hr>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Departamento Destinatario</label>
+                                                                    <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                                        <option value="">Seleccione Departamento</option>
+                                                                        <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                                                    </select>
+                                                                </div>
+                                                                <input type="text" class="form-control" name="Departamento_Destinatario" [(ngModel)]="Departamento_Destinatario" hidden readonly>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Ciudad Destino</label>
+                                                                    <select class="form-control" ngModel name="Municipio_Destinatario">
+                                                                        <option value="">Seleccione Ciudad</option>
+                                                                        <option *ngFor="let municipio of Municipios_Destinatario" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Número de Documento</label>
+                                                                    <input type="text" class="form-control" placeholder="Número Documento" autocomplete="off" name="Documento_Destinatario" [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
+                                                                    <input type="text" class="form-control"  readonly name="Documento_Destinatario" ngModel="{{DatosDestinatario.Id_Transferencia_Remitente}}" > 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Nombre Completo</label>
+                                                                    <input type="text" placeholder="Ejem: Juan Sanchez" class="form-control" name="Nombre_Destinatario" ngModel="{{DatosDestinatario.Nombre}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Teléfono</label>
+                                                                    <input type="text" placeholder="Ejem: 6543424" class="form-control" name="Telefono_Destinatario" ngModel="{{DatosDestinatario.Telefono}}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                        
+                                                    </div>
+                                                </div>
                                                 <hr>
-                                                <div class="row">
-                                                    <div class="col-md-12">
+                                                <h4>Datos del giro</h4>
+                                                <div class="row" hidden>
+                                                    <div class="col-md-4" hidden>
                                                         <div class="form-group">
-                                                            <label>Departamento Destino</label>
-                                                            <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
-                                                                <option value="">Seleccione Departamento</option>
-                                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
-                                                            </select>
+                                                            <label>Identificación</label>
+                                                            <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-4" hidden>
                                                         <div class="form-group">
-                                                            <label>Ciudad Origen</label>
-                                                            <select  class="form-control" >
-                                                                <option value="">Seleccione Ciudad</option>
-                                                                <option *ngFor="let municipio of Municipios_Remitente" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
-                                                            </select>
+                                                            <label>Oficina</label>
+                                                            <input name="Id_Oficina" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdOficina}}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4" hidden>
+                                                        <div class="form-group">
+                                                            <label>Caja</label>
+                                                            <input name="Id_Caja" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdCaja}}" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mrg-top-20">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Valor a Enviar</label>
+                                                            <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel={{ValorEnviar}} (blur)="valorComision($event.target.value)">
+                                                            <!--CalcularTotal($event.target.value)-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Comisión</label>
+                                                            <input type="text" placeholder="Precio" class="form-control" name="Comision" ngModel="{{Costo}}" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <div class="form-group text-center">
+                                                            <label>Libre</label>
+                                                            <input id="libre" type="checkbox" placeholder="Precio" class="form-control" (click)="valorComision(ValorEnviar)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Total</label>
+                                                            <input type="text" placeholder="Precio" class="form-control" readonly name="Valor_Total" ngModel="{{ValorTotal}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Entregado</label>
+                                                            <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega" ngModel="{{ValorEntrega}}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label>Número de documento</label>
-                                                            <input type="text" class="form-control" placeholder="Número Documento"
-                                                            name="Documento_Remitente" autocomplete="off"
-                                                            [(ngModel)]="DatosRemitenteGiro" [ngbTypeahead]="search_remitente"
-                                                            [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                            (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro)">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Nombre Completo</label>
-                                                            <input type="text" placeholder="Ejem: Pepito Perez" class="form-control"
-                                                                name="Nombre" ngModel="{{DatosRemitenteGiro.Nombre}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Teléfono</label>
-                                                            <input type="text" placeholder="Ejem: 318 3555555" class="form-control"
-                                                                name="Telefono" ngModel="{{DatosRemitenteGiro.Telefono}}">
+                                                            <label>Observaciones</label>
+                                                            <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel>
+                                                            </textarea>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
-                                        <div class="col-md-6">
-                                            <form #FormGiroDestinatario="ngForm">
-                                                <h4>Destinatario</h4>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Departamento Destino</label>
-                                                            <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
-                                                                <option value="">Seleccione Departamento</option>
-                                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Ciudad Destino</label>
-                                                            <select class="form-control">
-                                                                <option value="">Seleccione Ciudad</option>
-                                                                <option *ngFor="let municipio of Municipios_Destinatario" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Número de Documento</label>
-                                                                <input type="text" class="form-control" placeholder="Número Documento"
-                                                            name="Documento_Destinatario" autocomplete="off"
-                                                            [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente"
-                                                            [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                            (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Nombre Completo</label>
-                                                            <input type="text" placeholder="Ejem: Juan Sanchez" class="form-control"
-                                                                name="Nombre" ngModel="{{DatosDestinatario.Nombre}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>Teléfono</label>
-                                                            <input type="text" placeholder="Ejem: 6543424" class="form-control"
-                                                                name="Telefono" ngModel="{{DatosDestinatario.Telefono}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <h4>Datos del giro</h4>
-                                    <form #FormGiro="ngForm">
-                                        <div class="row" hidden>
-                                            <div class="col-md-4" hidden>
-                                                <div class="form-group">
-                                                    <label>Identificación</label>
-                                                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación"
-                                                        class="form-control" ngModel="{{IdentificacionFuncionario}}"
-                                                        required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4" hidden>
-                                                <div class="form-group">
-                                                    <label>Oficina</label>
-                                                    <input name="Id_Oficina" type="text" placeholder="Identificación"
-                                                        class="form-control" ngModel="{{IdOficina}}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4" hidden>
-                                                <div class="form-group">
-                                                    <label>Caja</label>
-                                                    <input name="Id_Caja" type="text" placeholder="Identificación"
-                                                        class="form-control" ngModel="{{IdCaja}}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4" hidden>
-                                                <div class="form-group">
-                                                    <label>Estado</label>
-                                                    <input name="Estado" type="text" placeholder="Identificación" class="form-control"
-                                                        ngModel="{{Estado}}" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mrg-top-20">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Valor a Enviar</label>
-                                                    <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido"
-                                                        ngModel={{ValorEnviar}} (blur)="valorComision($event.target.value)">
-                                                        <!--CalcularTotal($event.target.value)-->
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Comisión</label>
-                                                    <input type="text" placeholder="Precio" class="form-control" name="Comision"
-                                                        ngModel="{{Costo}}" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <div class="form-group text-center">
-                                                    <label>Libre</label>
-                                                    <input id="libre" type="checkbox" placeholder="Precio" class="form-control" (click)="valorComision(ValorEnviar)">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label>Total</label>
-                                                    <input type="text" placeholder="Precio" class="form-control"
-                                                        readonly name="Valor_Total" ngModel="{{ValorTotal}}">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2" >
-                                                <div class="form-group">
-                                                    <label>Entregado</label>
-                                                    <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega"
-                                                        ngModel="{{ValorEntrega}}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Observaciones</label>
-                                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                                        ngModel>
-                                                    </textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                                 <div class="row mrg-top-20">
                                     <div class="col-md-10">
-                                        <button type="submit" class="btn btn-sm btn-success btn-block" (click)="RealizarGiro(FormGiroRemitente, FormGiroDestinatario, FormGiro)">Hacer
-                                            Giro
-                                        </button>
+                                            <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (confirm)="RealizarGiro(FormGiro)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            Giro</button>
                                     </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-success btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
@@ -1018,20 +990,6 @@
                                         <label>Observaciones</label>
                                         <textarea placeholder="Observaciones" class="form-control" name="Detalle"
                                             ngModel="">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                                             </textarea>
                                     </div>

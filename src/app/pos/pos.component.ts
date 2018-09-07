@@ -135,6 +135,8 @@ export class PosComponent implements OnInit {
   Municipios_Destinatario = [];
   GiroComision = [];
   ValorEnviar: any;
+  Departamento_Remitente: any;
+  Departamento_Destinatario: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -143,8 +145,8 @@ export class PosComponent implements OnInit {
     
     this.actualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    this.IdOficina = 1;
-    this.IdCaja = 1;
+    this.IdOficina = 5;
+    this.IdCaja = 4;
     //this.Costo = 1;
     this.Estado = "Enviado";
     this.FormaPago = "Efectivo";
@@ -463,43 +465,6 @@ export class PosComponent implements OnInit {
     } else {
       this.PrecioSugerido = 0;
     }
-  }
-
-  RealizarGiro(remitente: NgForm, destinatario: NgForm, giro: NgForm) {
-    let formulario = giro.value;
-    formulario['Documento_Remitente'] = remitente.value.Documento_Remitente;
-    formulario['Nombre_Remitente'] = remitente.value.Nombre + " " + remitente.value.Apellido;
-    formulario['Telefono_Remitente'] = remitente.value.Telefono + " - " + remitente.value.Celular;
-    formulario['Documento_Destinatario'] = destinatario.value.Documento_Remitente;
-    formulario['Nombre_Destinatario'] = destinatario.value.Nombre + " " + destinatario.value.Apellido;
-    formulario['Telefono_Destinatario'] = destinatario.value.Telefono + " - " + destinatario.value.Celular;
-    let info = JSON.stringify(formulario);
-    let datos = new FormData();
-    datos.append("modulo", 'Giro');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-      giro.reset();
-    });
-
-    let infoRemitente = JSON.stringify(remitente.value);
-    let datosRemitente = new FormData();
-    datosRemitente.append("modulo", 'Giro_Remitente');
-    datosRemitente.append("datos", infoRemitente);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datosRemitente).subscribe((data: any) => {
-      remitente.reset();
-    });
-
-    let infoDestinatario = JSON.stringify(destinatario.value);
-    let datosDestinatario = new FormData();
-    datosDestinatario.append("modulo", 'Giro_Destinatario');
-    datosDestinatario.append("datos", infoDestinatario);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datosDestinatario).subscribe((data: any) => {
-      destinatario.reset();
-    });
-    this.ValorTotal = null;
-    this.ValorEntrega = null;
-    this.Costo = 0;
-    this.Costo = 1;
   }
 
   CalcularTotal(value) {
@@ -838,7 +803,7 @@ actualizarVista() {
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("envios", destinatarios);
-    this.http.post(this.globales.ruta + 'php/pos/transferencia.php', datos)
+    this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
         this.errorSwal.show();
@@ -980,15 +945,16 @@ actualizarVista() {
   }
 
   Municipios_Departamento(Departamento, tipo) {
-    console.log(Departamento + " -- " + tipo)
     this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
       switch(tipo){
         case "Remitente":{
           this.Municipios_Remitente = data;
+          this.Departamento_Remitente = this.Departamentos[(Departamento)-1].Nombre;
           break;
         }
         case "Destinatario":{
           this.Municipios_Destinatario = data;
+          this.Departamento_Destinatario = this.Departamentos[(Departamento)-1].Nombre;
           break;
         }
 
@@ -996,18 +962,19 @@ actualizarVista() {
     });
   }
 
-  DatosRemitenteGiro = [{"Nombre" : "" , "Telefono":""}];
-  DatosDestinatario = [{"Nombre" : "" , "Telefono":""}]
+  DatosRemitenteGiro = [];
+  DatosDestinatario = [];
+
   AutoCompletarRemitenteGiro(modelo) {
     if (modelo) {
       if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
       }
       else {
         this.RemitentesFiltrados = null;
       }
     }
-  }
+  }  
 
   valorComision(value){
     this.ValorEnviar = value;
@@ -1030,6 +997,23 @@ actualizarVista() {
        }
      }
     });
+  }
+
+  RealizarGiro(formulario: NgForm) {
+   
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.Giro1 = true;
+      this.Giro2 = false;
+      this.confirmacionSwal.title ="Guardado con exito";
+      this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
+      this.confirmacionSwal.type = "success"
+      this.confirmacionSwal.show(); 
+      this.actualizarVista();
+    }); 
   }
 
 }
