@@ -120,6 +120,8 @@ export class PosComponent implements OnInit {
   ValorTransferencia: any;
   Historial = false;
   HistorialCliente = [];
+  Giro1 = true;
+  Giro2 = false;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -127,6 +129,12 @@ export class PosComponent implements OnInit {
   dtTrigger1 = new Subject();
   dtOptions2: DataTables.Settings = {};
   dtTrigger2 = new Subject();
+  Giros = [];
+  Departamentos = [];
+  Municipios_Remitente = [];
+  Municipios_Destinatario = [];
+  GiroComision = [];
+  ValorEnviar: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -137,7 +145,7 @@ export class PosComponent implements OnInit {
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 1;
     this.IdCaja = 1;
-    this.Costo = 1;
+    //this.Costo = 1;
     this.Estado = "Enviado";
     this.FormaPago = "Efectivo";
   }
@@ -181,123 +189,8 @@ export class PosComponent implements OnInit {
       document.getElementById(id2).style.display = 'none';
     }
     document.getElementById(id).style.display = 'block';
-  }
+  }  
   
-  actualizarVista() {
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
-      this.Cambios = data;
-      this.dtTrigger.next();
-    });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
-
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
-      this.Documentos = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
-      this.CorresponsalesBancarios = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
-      this.ServiciosExternos = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Caja' } }).subscribe((data: any) => {
-      this.Cajas = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-      this.Monedas = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
-      this.Funcionarios = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
-      this.TipoCuentas = data;
-    });
-    this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
-      this.Destinatarios = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
-      this.Remitentes = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
-      this.Paises = data;
-    });
-    this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
-      this.Clientes = data;
-    });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
-      this.Bancos = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Oficina', id : '5' } }).subscribe((data: any) => {
-      this.LimiteOficina = data.Limite_Transferencia;
-    });
-
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
-      this.Transferencia = data;
-      this.dtTrigger1.next();
-    });
-
-    this.dtOptions1 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
-
-  }
-
   AutoCompletarDestinatario(modelo, i) {
     if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -673,7 +566,141 @@ export class PosComponent implements OnInit {
     this.CorresponsalBancario = null;
   }
 
+
+// --------------------------------------------------------------------------- //  
+
 // aquí ando haciendo mis metodos
+
+
+// --------------------------------------------------------------------------- //
+
+
+actualizarVista() {
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
+    this.Cambios = data;
+    this.dtTrigger.next();
+  });
+
+  this.dtOptions = {
+    pagingType: 'full_numbers',
+    pageLength: 10,
+    dom: 'Bfrtip',
+    responsive: true,
+    /* below is the relevant part, e.g. translated to spanish */
+    language: {
+      processing: "Procesando...",
+      search: "Buscar:",
+      lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+      infoEmpty: "Mostrando ningún elemento.",
+      infoFiltered: "(filtrado _MAX_ elementos total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando registros...",
+      zeroRecords: "No se encontraron registros",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "<<",
+        previous: "<",
+        next: ">",
+        last: ">>"
+      },
+      aria: {
+        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+        sortDescending: ": Activar para ordenar la tabla en orden descendente"
+      }
+    }
+  };
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
+    this.Documentos = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
+    this.CorresponsalesBancarios = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
+    this.ServiciosExternos = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Caja' } }).subscribe((data: any) => {
+    this.Cajas = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
+    this.Monedas = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
+    this.Funcionarios = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
+    this.TipoCuentas = data;
+  });
+  this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
+    this.Destinatarios = data;
+  });
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
+    this.Remitentes = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
+    this.Paises = data;
+  });
+  this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+    this.Clientes = data;
+  });
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
+    this.Bancos = data;
+  });
+
+  this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Oficina', id : '5' } }).subscribe((data: any) => {
+    this.LimiteOficina = data.Limite_Transferencia;
+  });
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
+    this.Transferencia = data;
+    this.dtTrigger1.next();
+  });
+
+  this.dtOptions1 = {
+    pagingType: 'full_numbers',
+    pageLength: 10,
+    dom: 'Bfrtip',
+    responsive: true,
+    /* below is the relevant part, e.g. translated to spanish */
+    language: {
+      processing: "Procesando...",
+      search: "Buscar:",
+      lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+      infoEmpty: "Mostrando ningún elemento.",
+      infoFiltered: "(filtrado _MAX_ elementos total)",
+      infoPostFix: "",
+      loadingRecords: "Cargando registros...",
+      zeroRecords: "No se encontraron registros",
+      emptyTable: "No hay datos disponibles en la tabla",
+      paginate: {
+        first: "<<",
+        previous: "<",
+        next: ">",
+        last: ">>"
+      },
+      aria: {
+        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+        sortDescending: ": Activar para ordenar la tabla en orden descendente"
+      }
+    }
+  };
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro' } }).subscribe((data: any) => {
+    this.Giros = data;
+  });
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
+    this.Departamentos = data;
+  });
+
+  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Comision' } }).subscribe((data: any) => {
+    this.GiroComision = data;
+  });
+}
+
 
   CambiarTasa(value) {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
@@ -748,7 +775,6 @@ export class PosComponent implements OnInit {
 
   CambiarVista(tipo) {
     
-
     switch (tipo) {
       case "Compra": {
         this.Venta = false;
@@ -772,6 +798,11 @@ export class PosComponent implements OnInit {
         this.Cambios1 = false;
         break;
       }
+      case "Giro":{
+        this.Giro2 = true;
+        this.Giro1 = false;
+        break;
+      }
     }
   }
 
@@ -792,9 +823,7 @@ export class PosComponent implements OnInit {
 
     });
     
-  }
-
-  
+  }  
 
   GuardarTransferencia(formulario: NgForm) {
    
@@ -842,6 +871,11 @@ export class PosComponent implements OnInit {
   volverReciboTransferencia(){
     this.Transferencia1 = true;
     this.Transferencia2 = false;
+  }
+
+  volverReciboGiro(){
+    this.Giro1 = true;
+    this.Giro2 = false;
   }
 
   NuevoDestinatario(pos) {   
@@ -943,6 +977,59 @@ export class PosComponent implements OnInit {
         }
       };
     
+  }
+
+  Municipios_Departamento(Departamento, tipo) {
+    console.log(Departamento + " -- " + tipo)
+    this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
+      switch(tipo){
+        case "Remitente":{
+          this.Municipios_Remitente = data;
+          break;
+        }
+        case "Destinatario":{
+          this.Municipios_Destinatario = data;
+          break;
+        }
+
+      }
+    });
+  }
+
+  DatosRemitenteGiro = [{"Nombre" : "" , "Telefono":""}];
+  DatosDestinatario = [{"Nombre" : "" , "Telefono":""}]
+  AutoCompletarRemitenteGiro(modelo) {
+    if (modelo) {
+      if (modelo.length > 0) {
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
+      }
+      else {
+        this.RemitentesFiltrados = null;
+      }
+    }
+  }
+
+  valorComision(value){
+    this.ValorEnviar = value;
+    this.GiroComision.forEach(element => {
+     if((parseFloat(element.Valor_Minimo)  <  parseFloat(value)) && (parseFloat(value)  < parseFloat(element.Valor_Maximo))){
+      this.Costo = element.Comision;
+     }
+     
+     var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+     switch(checkeado){
+       case true:{
+         this.ValorTotal = parseFloat(value);
+         this.ValorEntrega = parseFloat(value) + parseFloat(element.Comision);
+         break;
+       }
+       case false:{
+          this.ValorTotal = parseFloat(value) - element.Comision; 
+          this.ValorEntrega = parseFloat(value);
+         break;
+       }
+     }
+    });
   }
 
 }
