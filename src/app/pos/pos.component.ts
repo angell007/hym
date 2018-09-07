@@ -15,11 +15,7 @@ import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./pos.component.css']
 })
 export class PosComponent implements OnInit {
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
-  dtOptions1: DataTables.Settings = {};
-  dtTrigger1 = new Subject();
-
+  
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
   public Remitentes: any[] = [];
@@ -41,6 +37,7 @@ export class PosComponent implements OnInit {
     Numero_Cuenta: '',
     Id_Tipo_Cuenta: ''
   }];
+  
   public Envios: any[] = [{
     Destino: '',
     Numero_Documento_Destino: '',
@@ -100,7 +97,8 @@ export class PosComponent implements OnInit {
   @ViewChild('remitenteCreadoSwal') remitenteCreadoSwal: any;
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal: any;
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal: any;
-  @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;
+  @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;  
+  @ViewChild('ModalHistorial') ModalHistorial:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
   vueltos: number;
   Venta = false;
@@ -120,6 +118,15 @@ export class PosComponent implements OnInit {
   MonedaTasaCambio: boolean;
   MonedaComision: boolean;
   ValorTransferencia: any;
+  Historial = false;
+  HistorialCliente = [];
+
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+  dtOptions1: DataTables.Settings = {};
+  dtTrigger1 = new Subject();
+  dtOptions2: DataTables.Settings = {};
+  dtTrigger2 = new Subject();
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -787,16 +794,7 @@ export class PosComponent implements OnInit {
     
   }
 
-  AutoCompletarRemitente(modelo) {
-    if (modelo) {
-      if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
-      }
-      else {
-        this.RemitentesFiltrados = null;
-      }
-    }
-  }
+  
 
   GuardarTransferencia(formulario: NgForm) {
    
@@ -888,12 +886,62 @@ export class PosComponent implements OnInit {
     }   
   }
 
+  AutoCompletarRemitente(modelo) {
+    if (modelo) {
+      if (modelo.length > 0) {
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
+      }
+      else {
+        this.RemitentesFiltrados = null;
+      }
+    }
+  }
+
   HistorialTransferenciaRemitente(remitente){
-    console.log(remitente.Id_Transferencia_Remitente)
     this.http.get(this.globales.ruta + '/php/transferencias/historico_transferencia_remitente.php', { params: { modulo: 'Transferencia' , id: remitente.Id_Transferencia_Remitente } }).subscribe((data: any) => {
-        console.log(data);
-        
-    });
+       this.HistorialCliente = data;
+       if(this.HistorialCliente.length >0){
+        //abre modal
+        this.ModalHistorial.show();
+       }else{
+         // informo que no hay registro
+         this.confirmacionSwal.title = "Número no encontrado"
+         this.confirmacionSwal.text = "El número de documento digitado no ha realizado alguna transferencia"
+         this.confirmacionSwal.type= "error"
+         this.confirmacionSwal.show();
+       }              
+       this.dtTrigger2.next();
+      });
+  
+      this.dtOptions2 = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
+        dom: 'Bfrtip',
+        responsive: true,
+        /* below is the relevant part, e.g. translated to spanish */
+        language: {
+          processing: "Procesando...",
+          search: "Buscar:",
+          lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+          info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+          infoEmpty: "Mostrando ningún elemento.",
+          infoFiltered: "(filtrado _MAX_ elementos total)",
+          infoPostFix: "",
+          loadingRecords: "Cargando registros...",
+          zeroRecords: "No se encontraron registros",
+          emptyTable: "No hay datos disponibles en la tabla",
+          paginate: {
+            first: "<<",
+            previous: "<",
+            next: ">",
+            last: ">>"
+          },
+          aria: {
+            sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+            sortDescending: ": Activar para ordenar la tabla en orden descendente"
+          }
+        }
+      };
     
   }
 
