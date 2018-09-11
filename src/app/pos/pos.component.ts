@@ -15,7 +15,7 @@ import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./pos.component.css']
 })
 export class PosComponent implements OnInit {
-  
+
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
   public Remitentes: any[] = [];
@@ -37,7 +37,7 @@ export class PosComponent implements OnInit {
     Numero_Cuenta: '',
     Id_Tipo_Cuenta: ''
   }];
-  
+
   public Envios: any[] = [{
     Destino: '',
     Numero_Documento_Destino: '',
@@ -59,7 +59,7 @@ export class PosComponent implements OnInit {
   public DetalleCorresponsal: string;
   public Detalle: any[];
   public Indice: any[];
- 
+
   public MonedaRecibida: any;
   public Cedula: any[];
   public IdRemitente: any[];
@@ -97,9 +97,10 @@ export class PosComponent implements OnInit {
   @ViewChild('remitenteCreadoSwal') remitenteCreadoSwal: any;
   @ViewChild('bancoNoIdentificadoSwal') bancoNoIdentificadoSwal: any;
   @ViewChild('transferenciaExitosaSwal') transferenciaExitosaSwal: any;
-  @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;  
-  @ViewChild('ModalHistorial') ModalHistorial:any;
-  @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  @ViewChild('movimientoExitosoSwal') movimientoExitosoSwal: any;
+  @ViewChild('ModalHistorial') ModalHistorial: any;
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
+  @ViewChild('ModalTrasladoEditar') ModalTrasladoEditar: any;
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -111,8 +112,10 @@ export class PosComponent implements OnInit {
   Cambios1 = true;
   Cambios2 = false
   Transferencia = [];
-  Transferencia1= true;
-  Transferencia2= false;
+  Transferencia1 = true;
+  Transferencia2 = false;
+  Traslado1 = true;
+  Traslado2 = false;
   LimiteOficina: any;
   public MonedaTransferencia: any;
   MonedaTasaCambio: boolean;
@@ -137,12 +140,18 @@ export class PosComponent implements OnInit {
   ValorEnviar: any;
   Departamento_Remitente: any;
   Departamento_Destinatario: any;
+  FuncionariosCaja = [];
+  Funcionario: any;
+  Traslados = [];
+  idTraslado: any;
+  Traslado=[];
+  TrasladosRecibidos=[];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
 
   ngOnInit() {
-    
+
     this.actualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 5;
@@ -152,12 +161,12 @@ export class PosComponent implements OnInit {
     this.FormaPago = "Efectivo";
   }
 
-  ngAfterViewInit(){
-    if(this.recibeParaDefault == "Transferencia"){
-      this.CambiarTasa(1); 
-      this.MonedaTransferencia=1;           
+  ngAfterViewInit() {
+    if (this.recibeParaDefault == "Transferencia") {
+      this.CambiarTasa(1);
+      this.MonedaTransferencia = 1;
     }
-  } 
+  }
 
   search_destino = (text$: Observable<string>) =>
     text$.pipe(
@@ -191,15 +200,15 @@ export class PosComponent implements OnInit {
       document.getElementById(id2).style.display = 'none';
     }
     document.getElementById(id).style.display = 'block';
-  }  
-  
+  }
+
   AutoCompletarDestinatario(modelo, i) {
     if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
     }
-  } 
+  }
 
   OcultarFormulario(modal) {
     modal.hide();
@@ -301,7 +310,7 @@ export class PosComponent implements OnInit {
     if (index > 0) {
       this.Envios.splice(index, 1);
     }
-  }  
+  }
 
   LlenarValoresRemitente(remitente) {
     this.DatosRemitente = [];
@@ -472,16 +481,6 @@ export class PosComponent implements OnInit {
     this.ValorEntrega = Number.parseInt(value) - this.Costo;
   }
 
-  RealizarTraslado(formulario: NgForm) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", 'Traslado_Caja');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-      formulario.reset();
-    });
-  }
-
   GuardarServicio(formulario: NgForm) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
@@ -532,139 +531,150 @@ export class PosComponent implements OnInit {
   }
 
 
-// --------------------------------------------------------------------------- //  
+  // --------------------------------------------------------------------------- //  
 
-// aquí ando haciendo mis metodos
-
-
-// --------------------------------------------------------------------------- //
+  // aquí ando haciendo mis metodos
 
 
-actualizarVista() {
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
-    this.Cambios = data;
-    this.dtTrigger.next();
-  });
+  // --------------------------------------------------------------------------- //
 
-  this.dtOptions = {
-    pagingType: 'full_numbers',
-    pageLength: 10,
-    dom: 'Bfrtip',
-    responsive: true,
-    /* below is the relevant part, e.g. translated to spanish */
-    language: {
-      processing: "Procesando...",
-      search: "Buscar:",
-      lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-      infoEmpty: "Mostrando ningún elemento.",
-      infoFiltered: "(filtrado _MAX_ elementos total)",
-      infoPostFix: "",
-      loadingRecords: "Cargando registros...",
-      zeroRecords: "No se encontraron registros",
-      emptyTable: "No hay datos disponibles en la tabla",
-      paginate: {
-        first: "<<",
-        previous: "<",
-        next: ">",
-        last: ">>"
-      },
-      aria: {
-        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-        sortDescending: ": Activar para ordenar la tabla en orden descendente"
+
+  actualizarVista() {
+    this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
+      this.Cambios = data;
+      this.dtTrigger.next();
+    });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
       }
-    }
-  };
+    };
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
-    this.Documentos = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
-    this.CorresponsalesBancarios = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
-    this.ServiciosExternos = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Caja' } }).subscribe((data: any) => {
-    this.Cajas = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-    this.Monedas = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
-    this.Funcionarios = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
-    this.TipoCuentas = data;
-  });
-  this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
-    this.Destinatarios = data;
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
+      this.Documentos = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
+      this.CorresponsalesBancarios = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
+      this.ServiciosExternos = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Caja' } }).subscribe((data: any) => {
+      this.Cajas = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
+      this.Monedas = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
+      this.Funcionarios = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
+      this.TipoCuentas = data;
+    });
+    this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
+      this.Destinatarios = data;
+    });
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
-    this.Remitentes = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
-    this.Paises = data;
-  });
-  this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
-    this.Clientes = data;
-  });
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
-    this.Bancos = data;
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
+      this.Remitentes = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
+      this.Paises = data;
+    });
+    this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+      this.Clientes = data;
+    });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
+      this.Bancos = data;
+    });
 
-  this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Oficina', id : '5' } }).subscribe((data: any) => {
-    this.LimiteOficina = data.Limite_Transferencia;
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Oficina', id: '5' } }).subscribe((data: any) => {
+      this.LimiteOficina = data.Limite_Transferencia;
+    });
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
-    this.Transferencia = data;
-    this.dtTrigger1.next();
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
+      this.Transferencia = data;
+      this.dtTrigger1.next();
+    });
 
-  this.dtOptions1 = {
-    pagingType: 'full_numbers',
-    pageLength: 10,
-    dom: 'Bfrtip',
-    responsive: true,
-    /* below is the relevant part, e.g. translated to spanish */
-    language: {
-      processing: "Procesando...",
-      search: "Buscar:",
-      lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-      info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-      infoEmpty: "Mostrando ningún elemento.",
-      infoFiltered: "(filtrado _MAX_ elementos total)",
-      infoPostFix: "",
-      loadingRecords: "Cargando registros...",
-      zeroRecords: "No se encontraron registros",
-      emptyTable: "No hay datos disponibles en la tabla",
-      paginate: {
-        first: "<<",
-        previous: "<",
-        next: ">",
-        last: ">>"
-      },
-      aria: {
-        sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-        sortDescending: ": Activar para ordenar la tabla en orden descendente"
+    this.dtOptions1 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
       }
-    }
-  };
+    };
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro' } }).subscribe((data: any) => {
-    this.Giros = data;
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro' } }).subscribe((data: any) => {
+      this.Giros = data;
+    });
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
-    this.Departamentos = data;
-  });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
+      this.Departamentos = data;
+    });
 
-  this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Comision' } }).subscribe((data: any) => {
-    this.GiroComision = data;
-  });
-}
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Comision' } }).subscribe((data: any) => {
+      this.GiroComision = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/pos/lista_cajeros_sistema.php').subscribe((data: any) => {
+      this.FuncionariosCaja = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
+      this.Traslados = data.origen;
+      this.TrasladosRecibidos = data.destino;
+    });
+  }
 
 
   CambiarTasa(value) {
@@ -682,47 +692,47 @@ actualizarVista() {
       params: { id: moneda }
     }).subscribe((data: any) => {
       this.MonedaOrigen = data.Moneda[0].Nombre
-      if(moneda == 2){
+      if (moneda == 2) {
         this.MonedaTasaCambio = true;
         this.MonedaComision = false;
-      }else{
+      } else {
         this.MonedaTasaCambio = false;
         this.MonedaComision = true;
       }
     });
   }
 
-  RealizarCambioMoneda(value,tipo) {
+  RealizarCambioMoneda(value, tipo) {
 
     //console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
-    var suma=0;
+    var suma = 0;
     this.Envios.forEach(element => {
-      suma+= element.Valor_Transferencia;
+      suma += element.Valor_Transferencia;
     });
 
-    if(this.entregar > suma){
+    if (this.entregar > suma) {
       this.entregar = suma;
-    }else{
+    } else {
       switch (tipo) {
         case 'cambia': {
-           
+
           var divisor = 1;
-          if(this.MonedaTasaCambio == true){
+          if (this.MonedaTasaCambio == true) {
             divisor = this.PrecioSugerido;
-          }else{
-            divisor =this.ValorTransferencia;
+          } else {
+            divisor = this.ValorTransferencia;
           }
-            
-            this.entregar = (parseInt(value) / divisor);
-            this.entregar = this.entregar.toFixed(2);
+
+          this.entregar = (parseInt(value) / divisor);
+          this.entregar = this.entregar.toFixed(2);
           break;
         }
         case 'entrega': {
           var divisor = 1;
-          if(this.MonedaTasaCambio == true){
+          if (this.MonedaTasaCambio == true) {
             divisor = this.PrecioSugerido;
-          }else{
-            divisor =this.ValorTransferencia;
+          } else {
+            divisor = this.ValorTransferencia;
           }
           this.cambiar = (parseInt(value) * divisor);
           break;
@@ -730,7 +740,7 @@ actualizarVista() {
       }
     }
 
-    
+
   }
 
   ObtenerVueltos(valor) {
@@ -739,7 +749,7 @@ actualizarVista() {
   }
 
   CambiarVista(tipo) {
-    
+
     switch (tipo) {
       case "Compra": {
         this.Venta = false;
@@ -753,45 +763,50 @@ actualizarVista() {
         this.Tipo = "Venta";
         break;
       }
-      case "Transferencia":{
+      case "Transferencia": {
         this.Transferencia1 = false;
         this.Transferencia2 = true;
         break;
       }
-      case "Cambio":{
+      case "Cambio": {
         this.Cambios2 = true;
         this.Cambios1 = false;
         break;
       }
-      case "Giro":{
+      case "Giro": {
         this.Giro2 = true;
         this.Giro1 = false;
+        break;
+      }
+      case "Traslado": {
+        this.Traslado2 = true;
+        this.Traslado1 = false;
         break;
       }
     }
   }
 
-  guardarCambio(formulario:NgForm){
+  guardarCambio(formulario: NgForm) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    datos.append("modulo",'Cambio');
-    datos.append("datos",info);
-    
-    this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php',datos).subscribe((data:any)=>{
+    datos.append("modulo", 'Cambio');
+    datos.append("datos", info);
+
+    this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
       formulario.reset();
-      this.confirmacionSwal.title ="Guardado con exito";
+      this.confirmacionSwal.title = "Guardado con exito";
       this.confirmacionSwal.text = "Se ha guardado correctamente la compra/venta"
       this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show(); 
+      this.confirmacionSwal.show();
       this.Cambios1 = true;
       this.Cambios2 = false;
 
     });
-    
-  }  
+
+  }
 
   GuardarTransferencia(formulario: NgForm) {
-   
+
     //formulario.value.Costo_Transferencia = 1;
     formulario.value.Id_Oficina = 5;
     formulario.value.Id_Caja = 4;
@@ -823,40 +838,45 @@ actualizarVista() {
           Valor_Transferencia: '',
           Cuentas: []
         }];
-        this.Transferencia1 = true; 
+        this.Transferencia1 = true;
         this.Transferencia2 = false;
       });
   }
 
-  volverCambioEfectivo(){
+  volverCambioEfectivo() {
     this.Cambios1 = true;
     this.Cambios2 = false;
   }
 
-  volverReciboTransferencia(){
+  volverReciboTransferencia() {
     this.Transferencia1 = true;
     this.Transferencia2 = false;
   }
 
-  volverReciboGiro(){
+  volverReciboGiro() {
     this.Giro1 = true;
     this.Giro2 = false;
   }
 
-  NuevoDestinatario(pos) {   
+  volverTraslado() {
+    this.Traslado1 = true;
+    this.Traslado2 = false;
+  }
 
-    var index = pos+1;   
+  NuevoDestinatario(pos) {
+
+    var index = pos + 1;
     var limite = parseInt(this.LimiteOficina);
 
-    var suma=0;
-    if(this.Envios.length == limite){
+    var suma = 0;
+    if (this.Envios.length == limite) {
       this.Envios.forEach(element => {
-        suma+= element.Valor_Transferencia;
+        suma += element.Valor_Transferencia;
       });
       this.entregar = suma;
-      this.RealizarCambioMoneda(suma,'entrega')      
-    }else{
-      if(this.Envios[index] == undefined){
+      this.RealizarCambioMoneda(suma, 'entrega')
+    } else {
+      if (this.Envios[index] == undefined) {
         this.Envios.push({
           Destino: '',
           Numero_Documento_Destino: '',
@@ -865,30 +885,30 @@ actualizarVista() {
           Valor_Transferencia: '',
           Cuentas: []
         });
-      } 
-    }   
+      }
+    }
   }
 
   SeleccionarTipo(tipo) {
     this.Recibe = tipo;
-    switch(tipo){
-      case "Transferencia":{
+    switch (tipo) {
+      case "Transferencia": {
         this.MonedaTransferencia = 1;
-        this.CambiarTasa(1); 
+        this.CambiarTasa(1);
         break;
       }
-      case "Cliente":{
+      case "Cliente": {
         this.MonedaTransferencia = 2;
-        this.CambiarTasa(2); 
+        this.CambiarTasa(2);
         break;
       }
-    }   
+    }
   }
 
   AutoCompletarRemitente(modelo) {
     if (modelo) {
       if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
       }
       else {
         this.RemitentesFiltrados = null;
@@ -896,65 +916,65 @@ actualizarVista() {
     }
   }
 
-  HistorialTransferenciaRemitente(remitente){
-    this.http.get(this.globales.ruta + '/php/transferencias/historico_transferencia_remitente.php', { params: { modulo: 'Transferencia' , id: remitente.Id_Transferencia_Remitente } }).subscribe((data: any) => {
-       this.HistorialCliente = data;
-       if(this.HistorialCliente.length >0){
+  HistorialTransferenciaRemitente(remitente) {
+    this.http.get(this.globales.ruta + '/php/transferencias/historico_transferencia_remitente.php', { params: { modulo: 'Transferencia', id: remitente.Id_Transferencia_Remitente } }).subscribe((data: any) => {
+      this.HistorialCliente = data;
+      if (this.HistorialCliente.length > 0) {
         //abre modal
         this.ModalHistorial.show();
-       }else{
-         // informo que no hay registro
-         this.confirmacionSwal.title = "Número no encontrado"
-         this.confirmacionSwal.text = "El número de documento digitado no ha realizado alguna transferencia"
-         this.confirmacionSwal.type= "error"
-         this.confirmacionSwal.show();
-       }              
-       this.dtTrigger2.next();
-      });
-  
-      this.dtOptions2 = {
-        pagingType: 'full_numbers',
-        pageLength: 10,
-        dom: 'Bfrtip',
-        responsive: true,
-        /* below is the relevant part, e.g. translated to spanish */
-        language: {
-          processing: "Procesando...",
-          search: "Buscar:",
-          lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-          info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-          infoEmpty: "Mostrando ningún elemento.",
-          infoFiltered: "(filtrado _MAX_ elementos total)",
-          infoPostFix: "",
-          loadingRecords: "Cargando registros...",
-          zeroRecords: "No se encontraron registros",
-          emptyTable: "No hay datos disponibles en la tabla",
-          paginate: {
-            first: "<<",
-            previous: "<",
-            next: ">",
-            last: ">>"
-          },
-          aria: {
-            sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-            sortDescending: ": Activar para ordenar la tabla en orden descendente"
-          }
+      } else {
+        // informo que no hay registro
+        this.confirmacionSwal.title = "Número no encontrado"
+        this.confirmacionSwal.text = "El número de documento digitado no ha realizado alguna transferencia"
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      }
+      this.dtTrigger2.next();
+    });
+
+    this.dtOptions2 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
         }
-      };
-    
+      }
+    };
+
   }
 
   Municipios_Departamento(Departamento, tipo) {
     this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
-      switch(tipo){
-        case "Remitente":{
+      switch (tipo) {
+        case "Remitente": {
           this.Municipios_Remitente = data;
-          this.Departamento_Remitente = this.Departamentos[(Departamento)-1].Nombre;
+          this.Departamento_Remitente = this.Departamentos[(Departamento) - 1].Nombre;
           break;
         }
-        case "Destinatario":{
+        case "Destinatario": {
           this.Municipios_Destinatario = data;
-          this.Departamento_Destinatario = this.Departamentos[(Departamento)-1].Nombre;
+          this.Departamento_Destinatario = this.Departamentos[(Departamento) - 1].Nombre;
           break;
         }
 
@@ -974,33 +994,33 @@ actualizarVista() {
         this.RemitentesFiltrados = null;
       }
     }
-  }  
+  }
 
-  valorComision(value){
+  valorComision(value) {
     this.ValorEnviar = value;
     this.GiroComision.forEach(element => {
-     if((parseFloat(element.Valor_Minimo)  <  parseFloat(value)) && (parseFloat(value)  < parseFloat(element.Valor_Maximo))){
-      this.Costo = element.Comision;
-     }
-     
-     var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-     switch(checkeado){
-       case true:{
-         this.ValorTotal = parseFloat(value);
-         this.ValorEntrega = parseFloat(value) + parseFloat(element.Comision);
-         break;
-       }
-       case false:{
-          this.ValorTotal = parseFloat(value) - element.Comision; 
+      if ((parseFloat(element.Valor_Minimo) < parseFloat(value)) && (parseFloat(value) < parseFloat(element.Valor_Maximo))) {
+        this.Costo = element.Comision;
+      }
+
+      var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+      switch (checkeado) {
+        case true: {
+          this.ValorTotal = parseFloat(value);
+          this.ValorEntrega = parseFloat(value) + parseFloat(element.Comision);
+          break;
+        }
+        case false: {
+          this.ValorTotal = parseFloat(value) - element.Comision;
           this.ValorEntrega = parseFloat(value);
-         break;
-       }
-     }
+          break;
+        }
+      }
     });
   }
 
   RealizarGiro(formulario: NgForm) {
-   
+
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -1008,12 +1028,100 @@ actualizarVista() {
       formulario.reset();
       this.Giro1 = true;
       this.Giro2 = false;
-      this.confirmacionSwal.title ="Guardado con exito";
+      this.confirmacionSwal.title = "Guardado con exito";
       this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
       this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show(); 
+      this.confirmacionSwal.show();
       this.actualizarVista();
-    }); 
+    });
+  }
+
+
+  RealizarTraslado(formulario: NgForm , modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo", 'Traslado_Caja');
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.volverTraslado();
+      modal.hide();
+      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
+        this.Traslados = data;
+      });
+
+    });
+  }
+
+  AnularTraslado(id, estado) {
+    let datos = new FormData();
+    datos.append("modulo", 'Traslado_Caja');
+    datos.append("id", id);
+    datos.append("estado", estado);
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
+      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
+        this.Traslados = data.origen;
+        this.TrasladosRecibidos = data.destino;
+      });
+    });
+  }
+
+  esconder(estado,valor){
+    switch(estado){
+      case "Inactivo":{
+        return false;
+      }
+      default:{
+        return this.revisionDecision(valor);
+      }
+    }    
+  }
+
+  editarTraslado(id){
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Traslado_Caja', id: id } }).subscribe((data: any) => {
+      this.idTraslado = id;
+      this.Traslado = data;
+      this.ModalTrasladoEditar.show();
+    });
+  }
+
+  decisionTraslado(id,valor){
+    let datos = new FormData();
+    datos.append("modulo", 'Traslado_Caja');
+    datos.append("id", id);
+    datos.append("estado", valor);
+
+    this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
+      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
+        this.Traslados = data.origen;
+        this.TrasladosRecibidos = data.destino;
+      });
+    });
+  }
+
+  revisionDecision(valor){
+    switch(valor){
+      case "Si":{
+        return false;
+      }
+      case "No":{
+        return false;
+      }
+      default:{
+        return true;
+      }
+    }
+  }
+
+  revisionDecisionLabel(valor){
+    switch(valor){
+      case "Si":{
+        return true;
+      }
+      case "No":{
+        return false;
+      }
+    }
   }
 
 }
