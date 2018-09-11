@@ -849,8 +849,8 @@
                             <hr>
                             <h5>Últimos Traslados Enviados del dia</h5>
                             <div class="table-responsive">
-                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
-                                    [dtTrigger]="dtTrigger1">
+                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado"
+                                    [dtTrigger]="dtTriggerTraslado">
                                     <thead>
                                         <tr>
                                             <th style="width:60px;">Hora</th>
@@ -892,8 +892,8 @@
                             <hr>
                             <h5>Últimas Traslados Recibidos del dia</h5>
                             <div class="table-responsive">
-                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
-                                    [dtTrigger]="dtTrigger1">
+                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado1"
+                                    [dtTrigger]="dtTriggerTraslado1">
                                     <thead>
                                         <tr>
                                             <th style="width:60px;">Hora</th>
@@ -940,7 +940,7 @@
                                 <form #FormTraslado="ngForm">
                                     <h4>Datos del traslado</h4>
                                     <div class="row">
-                                        <div class="col-md-6" hidden>
+                                        <div class="col-md-6" >
                                             <div class="form-group">
                                                 <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
                                                     required>
@@ -987,7 +987,7 @@
                             <div class="row mrg-top-10">
                                 <div class="col-md-10">
                                     <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                        (confirm)="RealizarTraslado(FormTraslado)" class="btn btn-primary btn-sm btn-block">Hacer
+                                        (confirm)="RealizarTraslado(FormTraslado,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Hacer
                                         Traslado</button>
                                 </div>
                                 <div class="col-md-2">
@@ -1180,7 +1180,7 @@
                                 <div class="row mrg-top-5">
                                     <div class="col-md-10">
                                         <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                            (confirm)="GuardarServicio(FormServicio)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Hacer
                                             Servicio</button>
                                     </div>
                                     <div class="col-md-2">
@@ -1396,55 +1396,53 @@
     <div class="app-modal-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="mrg-top-30" style="min-height: 470px;">
-                    <form #FormTrasladoEditar="ngForm">
-                        <h4>Datos del traslado</h4>
-                        <div class="row">
-                            <div class="col-md-4" hidden>
-                                <div class="form-group">
-                                    <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
-                                        required>
-                                    <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Cajero Destino</label>
-                                    <select name="Funcionario_Destino" class="form-control" ngModel="{{Traslado.Funcionario_Destino}}">
-                                        <option value="">seleccione una opción</option>
-                                        <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
-                                            {{Caja.Apellidos}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Moneda</label>
-                                    <select name="Id_Moneda" class="form-control" ngModel="{{Traslado.Id_Moneda}}">
-                                        <option value="">Seleccione una Opción</option>
-                                        <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Valor</label>
-                                    <input name="Valor" type="text" placeholder="$ 100.000" class="form-control"
-                                        ngModel="{{Traslado.Valor}}" required>
-                                </div>
+                <form #FormTrasladoEditar="ngForm">
+                    <h4>Datos del traslado</h4>
+                    <div class="row">
+                        <div class="col-md-4" hidden>
+                            <div class="form-group">
+                                <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
+                                    required>
+                                <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}" required>
                             </div>
                         </div>
-                        <div class="row mrg-top-20">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Observaciones</label>
-                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Traslado.Detalle}}"
-                                        style="min-height:150px !important;"></textarea>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Cajero Destino</label>
+                                <select name="Funcionario_Destino" class="form-control" ngModel="{{Traslado.Funcionario_Destino}}">
+                                    <option value="">seleccione una opción</option>
+                                    <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
+                                        {{Caja.Apellidos}}</option>
+                                </select>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Moneda</label>
+                                <select name="Id_Moneda" class="form-control" ngModel="{{Traslado.Id_Moneda}}">
+                                    <option value="">Seleccione una Opción</option>
+                                    <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control" ngModel="{{Traslado.Valor}}"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mrg-top-20">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Observaciones</label>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Traslado.Detalle}}"
+                                    style="min-height:150px !important;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1469,8 +1467,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Servicio</label>
-                                <select name="Servicio_Externo" class="form-control" ngModel="{{Servicio.Servicio_Externo}}"
-                                    >
+                                <select name="Servicio_Externo" class="form-control" ngModel="{{Servicio.Servicio_Externo}}">
                                     <option value="">Seleccione un Servicio</option>
                                     <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
                                 </select>
@@ -1497,6 +1494,7 @@
                             <div class="form-group">
                                 <label>Observaciones</label>
                                 <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}">
+
  </textarea>
                             </div>
                         </div>

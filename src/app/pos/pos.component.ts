@@ -132,6 +132,12 @@ export class PosComponent implements OnInit {
   dtTrigger = new Subject();
   dtOptions1: DataTables.Settings = {};
   dtTrigger1 = new Subject();
+
+  dtOptionsTraslado: DataTables.Settings = {};
+  dtTriggerTraslado = new Subject();
+  dtOptionsTraslado1: DataTables.Settings = {};
+  dtTriggerTraslado1 = new Subject();
+
   dtOptions2: DataTables.Settings = {};
   dtTrigger2 = new Subject();
   Giros = [];
@@ -672,6 +678,8 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
       this.Traslados = data.origen;
       this.TrasladosRecibidos = data.destino;
+      this.dtTriggerTraslado.next();
+      this.dtTriggerTraslado1.next();
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Comision' } }).subscribe((data: any) => {
@@ -682,8 +690,6 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
       this.Servicios = data;
     });
-
-
 
   }
 
@@ -878,6 +884,11 @@ export class PosComponent implements OnInit {
     this.Traslado2 = false;
   }
 
+  volverServicio(){
+    this.Servicio1 = true;
+    this.Servicio2 = false;
+  }
+
   volverReciboServicio() {
     this.Servicio1 = true;
     this.Servicio2 = false;
@@ -1062,12 +1073,13 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Traslado_Caja');
     datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/pos/guardar_pos.php', datos).subscribe((data: any) => {
       formulario.reset();
       this.volverTraslado();
       modal.hide();
       this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
-        this.Traslados = data;
+        this.Traslados = data.origen;
+        this.TrasladosRecibidos = data.destino;
       });
 
     });
@@ -1157,9 +1169,10 @@ export class PosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Servicio');
     datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/pos/guardar_pos.php', datos).subscribe((data: any) => {
       formulario.reset();
       modal.hide();
+      this.volverServicio();
       this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
         this.Servicios = data;
       });
