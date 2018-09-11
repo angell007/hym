@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../node_modules/@types/selenium-webdriver';
 import { Globales } from '../shared/globales/globales';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-transferencias',
@@ -15,6 +16,8 @@ export class TransferenciasComponent implements OnInit {
 
   transferencias = [];
   conteoTransferencias = [];
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
   
   @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
@@ -29,11 +32,43 @@ export class TransferenciasComponent implements OnInit {
   ngOnInit() {
     this.http.get(this.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
       this.transferencias= data;
+      this.dtTrigger.next();
     });
 
     this.http.get(this.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
       this.conteoTransferencias= data[0];     
     });
+
+    
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
   }
 
   ActualizarVista()

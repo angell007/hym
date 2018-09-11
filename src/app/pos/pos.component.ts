@@ -510,8 +510,7 @@ export class PosComponent implements OnInit {
     datos.append("modulo", 'Corresponsal_Diario');
     datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/corresponsaldiario/guardar_corresponsal_diario.php', datos).subscribe((data: any) => {
-      //formulario.reset();      
-      this.ResetFormulario();
+      formulario.reset();
     });
   }
 
