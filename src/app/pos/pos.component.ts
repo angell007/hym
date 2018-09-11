@@ -101,6 +101,8 @@ export class PosComponent implements OnInit {
   @ViewChild('ModalHistorial') ModalHistorial: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('ModalTrasladoEditar') ModalTrasladoEditar: any;
+  @ViewChild('ModalServicioEditar') ModalServicioEditar: any;
+  
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -144,8 +146,14 @@ export class PosComponent implements OnInit {
   Funcionario: any;
   Traslados = [];
   idTraslado: any;
-  Traslado=[];
-  TrasladosRecibidos=[];
+  Traslado = [];
+  TrasladosRecibidos = [];
+  ServicioComision = [];
+  ValorComisionServicio: any;
+  Servicio2 = false;
+  Servicio1 = true;
+  Servicios = [];
+  Servicio =[];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -481,15 +489,6 @@ export class PosComponent implements OnInit {
     this.ValorEntrega = Number.parseInt(value) - this.Costo;
   }
 
-  GuardarServicio(formulario: NgForm) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", 'Servicio');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-      formulario.reset();
-    });
-  }
 
   AsignarComisionServicioExterno(value) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
@@ -674,8 +673,19 @@ export class PosComponent implements OnInit {
       this.Traslados = data.origen;
       this.TrasladosRecibidos = data.destino;
     });
-  }
 
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Comision' } }).subscribe((data: any) => {
+      this.ServicioComision = data;
+    });
+
+    //Servicios
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
+      this.Servicios = data;
+    });
+
+
+
+  }
 
   CambiarTasa(value) {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
@@ -783,6 +793,11 @@ export class PosComponent implements OnInit {
         this.Traslado1 = false;
         break;
       }
+      case "Servicio": {
+        this.Servicio2 = true;
+        this.Servicio1 = false;
+        break;
+      }
     }
   }
 
@@ -861,6 +876,11 @@ export class PosComponent implements OnInit {
   volverTraslado() {
     this.Traslado1 = true;
     this.Traslado2 = false;
+  }
+
+  volverReciboServicio() {
+    this.Servicio1 = true;
+    this.Servicio2 = false;
   }
 
   NuevoDestinatario(pos) {
@@ -1037,7 +1057,7 @@ export class PosComponent implements OnInit {
   }
 
 
-  RealizarTraslado(formulario: NgForm , modal) {
+  RealizarTraslado(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Traslado_Caja');
@@ -1066,18 +1086,18 @@ export class PosComponent implements OnInit {
     });
   }
 
-  esconder(estado,valor){
-    switch(estado){
-      case "Inactivo":{
+  esconder(estado, valor) {
+    switch (estado) {
+      case "Inactivo": {
         return false;
       }
-      default:{
+      default: {
         return this.revisionDecision(valor);
       }
-    }    
+    }
   }
 
-  editarTraslado(id){
+  editarTraslado(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Traslado_Caja', id: id } }).subscribe((data: any) => {
       this.idTraslado = id;
       this.Traslado = data;
@@ -1085,7 +1105,7 @@ export class PosComponent implements OnInit {
     });
   }
 
-  decisionTraslado(id,valor){
+  decisionTraslado(id, valor) {
     let datos = new FormData();
     datos.append("modulo", 'Traslado_Caja');
     datos.append("id", id);
@@ -1099,29 +1119,82 @@ export class PosComponent implements OnInit {
     });
   }
 
-  revisionDecision(valor){
-    switch(valor){
-      case "Si":{
+  revisionDecision(valor) {
+    switch (valor) {
+      case "Si": {
         return false;
       }
-      case "No":{
+      case "No": {
         return false;
       }
-      default:{
+      default: {
         return true;
       }
     }
   }
 
-  revisionDecisionLabel(valor){
-    switch(valor){
-      case "Si":{
+  revisionDecisionLabel(valor) {
+    switch (valor) {
+      case "Si": {
         return true;
       }
-      case "No":{
+      case "No": {
         return false;
       }
     }
+  }
+
+  calcularComisionServicioExterno(value) {
+    this.ServicioComision.forEach(element => {
+      if ((parseFloat(element.Valor_Minimo) <= parseFloat(value)) && (parseFloat(value) < parseFloat(element.Valor_Maximo))) {
+        this.ValorComisionServicio = element.Comision;
+      }
+    });
+  }
+
+  GuardarServicio(formulario: NgForm , modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo", 'Servicio');
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      modal.hide();
+      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
+        this.Servicios = data;
+      });
+    });
+  }
+
+  AnulaServicio(id, estado) {
+    let datos = new FormData();
+    datos.append("modulo", 'Servicio');
+    datos.append("id", id);
+    datos.append("estado", estado);
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
+      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
+        this.Servicios = data;
+      });
+    });
+  }
+
+  esconderAnular(valor){
+    switch(valor){
+      case "Activo":{
+        return true;
+      }
+      case "Inactivo":{
+        return false;
+      }
+    }
+  }
+
+  editarServicio(id){
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo:"Servicio" } }).subscribe((data: any) => {
+      this.Servicio = data;
+      this.ValorComisionServicio = data.Comision;
+      this.ModalServicioEditar.show();     
+    });
   }
 
 }

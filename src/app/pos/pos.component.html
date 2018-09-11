@@ -913,8 +913,8 @@
 
                                             <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
+                                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                    (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
                                                     <i class="fa fa-check"></i>
                                                 </button>
                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
@@ -923,7 +923,7 @@
                                                     <i class="fa fa-times"></i>
                                                 </button>
                                             </td>
-                                            <td  class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
+                                            <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
                                                 <label *ngSwitchCase="true">Aprobado</label>
                                                 <label *ngSwitchCase="false">Negado</label>
                                             </td>
@@ -1048,7 +1048,7 @@
                             <div class="row mrg-top-20">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Detalles</label>
+                                        <label>Observaciones</label>
                                         <textarea placeholder="Observaciones" class="form-control" name="Detalle"
                                             ngModel="{{DetalleCorresponsal}}"></textarea>
                                     </div>
@@ -1069,7 +1069,7 @@
                     <ul class="list-unstyled list-info">
                         <li>
                             <span class="thumb-img pdd-top-10">
-                                <i class="ti-truck text-danger font-size-30"></i>
+                                <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
                                 <b class="text-dark font-size-22">Servicios Externos</b>
@@ -1077,59 +1077,118 @@
                             </div>
                         </li>
                     </ul>
-                    <div class="mrg-top-30" style="min-height: 470px;">
-                        <form #FormServicio="ngForm">
-                            <h4>Datos del servicio</h4>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Servicio</label>
-                                        <select name="Servicio_Externo" class="form-control" ngModel="" (change)="AsignarComisionServicioExterno($event.target.value)">
-                                            <option value="">Seleccione un Servicio</option>
-                                            <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
-                                        </select>
-                                    </div>
+                    <div class="mrg-top-10" style="min-height: 470px;">
+                        <div class="row" id="Servicios1" *ngIf="Servicio1">
+                            <div class="col-md-12">
+                                <button (click)="CambiarVista('Servicio')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nuevo
+                                    Servicio</button>
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr>
+                                <h5>Últimas Servicios Registrados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
+                                        [dtTrigger]="dtTrigger1">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px;">Hora</th>
+                                                <th>Código</th>
+                                                <th>Servicio</th>
+                                                <th>Valor</th>
+                                                <th>Comision</th>
+                                                <th style="width:160px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let Servicio of Servicios" class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                                <td>{{Servicio.Fecha | date:"HH:mm" }}</td>
+                                                <td>{{Servicio.Codigo}}</td>
+                                                <td>{{Servicio.Servicio_Externo }}</td>
+                                                <td>{{Servicio.Valor | currency}}</td>
+                                                <td>{{Servicio.Comision | currency }}
+                                                </td>
+
+                                                <td class="text-center">
+
+                                                    <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                                                        <i class="ti-pencil"></i>
+                                                    </button>
+                                                    <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este Servicio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                        (confirm)="AnulaServicio(Servicio.Id_Servicio,Servicio.Estado)">
+                                                        <i class="ti-close"></i>
+                                                    </button>
+
+                                                    <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Moneda</label>
-                                        <select name="Moneda" class="form-control" ngModel="">
-                                            <option value="">seleccione una opción</option>
-                                            <option *ngFor="let Moneda of Monedas" value="{{Moneda.Nombre}}">{{Moneda.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Valor</label>
-                                        <input type="text" class="form-control" name="Valor" ngModel="">
-                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="Servicios2" *ngIf="Servicio2" style="margin-top: 10px">
+                            <div class="col-md-12">
+
+                                <div class="mrg-top-30" style="min-height: 470px;">
+                                    <form #FormServicio="ngForm">
+                                        <h4>Datos del servicio</h4>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Servicio</label>
+                                                    <select name="Servicio_Externo" class="form-control" ngModel=""
+                                                        (change)="AsignarComisionServicioExterno($event.target.value)">
+                                                        <option value="">Seleccione un Servicio</option>
+                                                        <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Valor</label>
+                                                    <input type="text" class="form-control" name="Valor" ngModel
+                                                        (change)="calcularComisionServicioExterno($event.target.value)">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Comisión</label>
+                                                    <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                                                        ngModel="{{ValorComisionServicio}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mrg-top-20">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Observaciones</label>
+                                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                                                        ngModel=""> </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Comisión</label>
-                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control"
-                                            ngModel="{{ComisionServicioExterno}}" readonly>
+
+                                <div class="row mrg-top-5">
+                                    <div class="col-md-10">
+                                        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (confirm)="GuardarServicio(FormServicio)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            Servicio</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                            ngModel=""> </textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>&nbsp;</label>
-                                        <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarServicio(FormServicio)">Guardar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1345,8 +1404,7 @@
                                 <div class="form-group">
                                     <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
                                         required>
-                                    <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}"
-                                    required>
+                                    <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -1396,6 +1454,64 @@
             Traslado</button>
     </div>
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicioEditar" #ModalServicioEditar>
+    <div class="app-modal-header">
+        <h4>Editar Servicio</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form #FormServicio="ngForm">
+                    <div class="row">
+                        <input hidden name="id" type="text" class="form-control" ngModel="{{Servicio.Id_Servicio}}"
+                            required>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Servicio</label>
+                                <select name="Servicio_Externo" class="form-control" ngModel="{{Servicio.Servicio_Externo}}"
+                                    >
+                                    <option value="">Seleccione un Servicio</option>
+                                    <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input type="text" class="form-control" name="Valor" ngModel="{{Servicio.Valor}}"
+                                    (change)="calcularComisionServicioExterno($event.target.value)">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Comisión</label>
+                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ValorComisionServicio}}"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Observaciones</label>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}">
+ </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Modificar
+            Servicio</button>
+    </div>
+</app-modal-basic>
+
 
 <swal #warnSwal title="Documento invalido" text="El documento ingresado debe tener una longitud mínima de 5 números"
     type="warning">
