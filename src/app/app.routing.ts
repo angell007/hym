@@ -53,6 +53,7 @@ import { OficinaverComponent } from "./configuracion/oficinas/oficinaver/oficina
 import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/cuentasbancariasver/cuentasbancariasver.component';
 import { RemitenteComponent } from "./configuracion/remitente/remitente.component";
 import { TercerosverComponent } from './configuracion/terceros/tercerosver/tercerosver.component';
+import { TransferenciaverComponent } from "./transferencias/transferenciaver/transferenciaver.component";
 
 export const AppRoutes: Routes = [
     {
@@ -247,6 +248,10 @@ export const AppRoutes: Routes = [
         path: 'tercerover/:id', component: CommonLayoutComponent,
         children: [{ path: '', component: TercerosverComponent, canActivate: [AuthGuard] }]
     },
+    {
+        path: 'transferenciaver/:id', component: CommonLayoutComponent,
+        children: [{ path: '', component: TransferenciaverComponent, canActivate: [AuthGuard] }]
+    },    
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 

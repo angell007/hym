@@ -96,18 +96,26 @@
                                     <td>{{transferencia.Estado}}</td>
                                     <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
                                     <td class="text-center">
-                                        <button *ngIf="Bloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)" >
+                                        <button *ngIf="Bloqueado(transferencia.Bloqueo)"
+                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Bloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Bloquear', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)"
+                                        class="btn btn-default btn-xs" type="button" style="margin:0;">
                                             <i class="fa fa-lock"></i>
                                         </button>
-                                        <button *ngIf="Desbloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)" >
+                                        <button *ngIf="Desbloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" 
+                                        type="button" style="margin:0;" 
+                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Desbloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)">
                                             <i class="fa fa-unlock"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
-                                            <i class="ti-pencil"></i>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/transferenciaver',transferencia.Id_Transferencia]">
+                                            <i class="ti-receipt"></i>
+                                            
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" 
+                                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Devolver esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Devolver', cancelButtonText:'No, Dejame Comprobar!'}"
                                             (confirm)="EliminarTransferencia(transferencia.Id_Transferencia)">
-                                            <i class="ti-trash"></i>
+                                            <i class="ti-back-left"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -120,93 +128,6 @@
     </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTransferencia" #ModalVerTransferencia>
-    <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
-        <h4>Ver Transferencia</h4>
-    </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormVerTransferencia="ngForm">
-
-            <!--ACA EMPIEZAN LOS CAMBIOS-->
-
-            <div class="row">
-                <div class="col-md-3">
-                    <strong>
-                        <label>Forma de Pago:</label>
-                    </strong>
-                    <label>{{Forma_Pago}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Código:</label>
-                    </strong>
-                    <label>{{Codigo}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Fecha:</label>
-                    </strong>
-                    <label>{{Fecha}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Identificación funcionario:</label>
-                    </strong>
-                    <label>{{Identificacion_Funcionario}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Oficina:</label>
-                    </strong>
-                    <label>{{Oficina}}</label>
-                </div>
-                <div class="col-md-3">
-                        <strong>
-                            <label>Caja:</label>
-                        </strong>
-                        <label>{{Caja}}</label>
-                    </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Moneda Origen:</label>
-                    </strong>
-                    <label>{{Moneda_Origen}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Numero documento destino:</label>
-                    </strong>
-                    <label>{{Numero_Documento_Destino}}</label>
-                </div>
-                <div class="col-md-3">
-                    <strong>
-                        <label>Numero documento origen:</label>
-                    </strong>
-                    <label></label>
-                </div>
-            </div>
-
-            <!--ACA TERMINAN LOS CAMBIOS-->
-
-
-
-
-
-
-
-
-
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerTransferencia)">Cerrar</button>
-        </div>
-    </div>
-</app-modal-basic>
-
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
@@ -216,4 +137,5 @@
 <swal #deleteSwal title="Destinatario Eliminado" text="Se ha Eliminado Correctamente la transferencia" type="success">
 </swal>
 
-<swal #bloqueoSwal title="Transferencia Bloqueo/Desbloqueo" text="Se ha Bloqueado/Desbloqueado Correctamente la transferencia" type="success"></swal>
+<swal #bloqueoSwal title="Transferencia Bloqueo/Desbloqueo" text="Se ha Bloqueado/Desbloqueado Correctamente la transferencia" type="success">
+</swal>
