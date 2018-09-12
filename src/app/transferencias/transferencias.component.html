@@ -86,7 +86,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let transferencia of transferencias">
+                                <tr *ngFor="let transferencia of transferencias" class=" {{transferencia.Bloqueo == 'Si' ? 'bg-warning text-white' : '' }} ">
                                     <td>{{transferencia.Fecha | date:"dd/MM/yy" }}</td>
                                     <td>{{transferencia.Persona_Envia}}</td>
                                     <td>{{transferencia.Cuenta_Origen}}</td>
@@ -96,10 +96,13 @@
                                     <td>{{transferencia.Estado}}</td>
                                     <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerTransferencia(transferencia.Id_Transferencia, ModalVerTransferencia)">
-                                            <i class="ti-search"></i>
+                                        <button *ngIf="Bloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)" >
+                                            <i class="fa fa-lock"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTransferencia(transferencia.Id_Transferencia, ModalEditarTransferencia)">
+                                        <button *ngIf="Desbloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)" >
+                                            <i class="fa fa-unlock"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" >
                                             <i class="ti-pencil"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
@@ -212,3 +215,5 @@
 
 <swal #deleteSwal title="Destinatario Eliminado" text="Se ha Eliminado Correctamente la transferencia" type="success">
 </swal>
+
+<swal #bloqueoSwal title="Transferencia Bloqueo/Desbloqueo" text="Se ha Bloqueado/Desbloqueado Correctamente la transferencia" type="success"></swal>

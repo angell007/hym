@@ -11,9 +11,7 @@ import { Subject } from 'rxjs';
 })
 export class TransferenciasComponent implements OnInit {
 
-  readonly ruta = 'https://hym.corvuslab.co/'; 
   public fecha = new Date(); 
-
   transferencias = [];
   conteoTransferencias = [];
   dtOptions: DataTables.Settings = {};
@@ -26,16 +24,17 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;
+  @ViewChild('bloqueoSwal') bloqueoSwal:any;  
 
   constructor(private http : HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    this.http.get(this.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
       this.transferencias= data;
       this.dtTrigger.next();
     });
 
-    this.http.get(this.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
       this.conteoTransferencias= data[0];     
     });
 
@@ -73,11 +72,11 @@ export class TransferenciasComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
       this.transferencias= data;
     });
 
-    this.http.get(this.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
       this.conteoTransferencias= data[0];     
     });
   }
@@ -105,6 +104,32 @@ export class TransferenciasComponent implements OnInit {
       this.deleteSwal.show();
       this.ActualizarVista();
     });
+  }
+
+  BloquearCuenta(id, estado){
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia');
+    datos.append("id", id);
+    datos.append("estado", estado);
+    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos ).subscribe((data: any) => {
+      this.bloqueoSwal.show();
+      this.ActualizarVista();
+    });
+  }
+
+  Bloqueado(estado){
+    switch(estado){
+      case "Si":{ return false}
+      case "No":{ return true}
+    }
+  }
+
+  Desbloqueado(estado){
+    switch(estado){
+      case "Si":{ return true}
+      case "No":{ return false}
+    }
   }
 
 }
