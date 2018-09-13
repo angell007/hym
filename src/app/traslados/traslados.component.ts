@@ -1,6 +1,6 @@
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild, HostListener,TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../shared/globales/globales';
@@ -12,68 +12,41 @@ import { Subject } from 'rxjs';
   styleUrls: ['./traslados.component.css']
 })
 export class TrasladosComponent implements OnInit {
+
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  //public asd = "";
-  //variables de formulario
-  public Identificacion : any;
-  public Origen : any;
-  public Destino : any;
-  public NombreOrigen : string;
-  public NombreDestino : string;
-  public IdentificacionFuncionario : any;
-  public Tipo : any;
-  public IdOrigen : any;
-  public IdDestino : any;
-  public Moneda : any;
-  public Valor : any;
-  public Detalle : any;
-  public Estado : any;
-  public Fecha : any;
-  public Id_Traslado : any;
-  public Nombre_Fun: any;
+  user: any;
+  IdentificacionFuncionario: any;
 
-  public Proveedores : any[];
-  public Bancos : any[];
-  public Clientes : any[];
-
-  public boolTipo:boolean = false;
-  public boolMoneda:boolean = false;
-  public boolValor:boolean = false;
-  public boolEstado:boolean = false;
-  public boolProveedorOrigen:boolean = false;
-  public boolBancoOrigen:boolean = false;
-  public boolClienteOrigen:boolean = false;
-  public boolProveedorDestino:boolean = false;
-  public boolBancoDestino:boolean = false;
-  public boolClienteDestino:boolean = false;
-  public user : any;
-
-
+  @ViewChild("ModalTraslado") ModalTraslado: any;
+  @ViewChild("saveSwal") saveSwal: any;
   
-  //Valores por defecto
-  tipoDefault: string = "";
-  monedaDefault: string = "";
-  estadoDefault: string = "";
+  proveedorOrigen = false;
+  ClienteOrigen = false;
+  cuentaBancariaOrigen = false;
+  cajaOrigen = false;
 
-  @ViewChild('ModalTraslado') ModalTraslado:any;
-  @ViewChild('ModalEditarTraslado') ModalEditarTraslado:any;
-  @ViewChild('FormEditarTraslado') FormEditarTraslado:any;
-  @ViewChild('FormTraslado') FormTraslado:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('confirmacionSwal') confirmacionSwal:any;
+  proveedorDestino = false;
+  cuentaBancariaDestino = false;
+  ClienteDestino = false;
+  cajaDestino = false;
 
-  readonly ruta = 'https://hym.corvuslab.co/'; 
-  public fecha = new Date();
+  CuentaBancariaDestino=[];
+  ClientesDestino = [];
+  ProveedoresDestino=[];
+  CajaRecaudoDestino=[];
 
-  public traslados = [];
-  public conteoTraslados = [];
-  public codigo_Formato: any;
-  
-  constructor(private http : HttpClient, private globales : Globales) { 
-   
+  CajaRecaudo=[];
+  CuentaBancariaOrigen=[];
+  Proveedores = [];
+  Clientes = [];
+
+  conteoTraslados = [];
+  traslados = [];
+
+
+  constructor(private http: HttpClient, private globales: Globales) {
+
   }
 
   ngOnInit() {
@@ -82,7 +55,7 @@ export class TrasladosComponent implements OnInit {
       pageLength: 10,
       dom: 'Bfrtip',
       responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
+      /* below is the relevant part, e.g. translated to spanish */
       language: {
         processing: "Procesando...",
         search: "Buscar:",
@@ -107,241 +80,276 @@ export class TrasladosComponent implements OnInit {
       }
     };
 
-    this.ActualizarVista();  
+    this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
 
+  }
+
+  ActualizarVista() {
+    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     
-  }
-
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.FormTraslado.reset();
-      this.OcultarFormularios();
-    }
-  }
-
-  customModalTrasladoShow()
-  {
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    this.ModalTraslado.show();
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    //this.OcultarFormulario(this.ModalTraslado);
-    //this.OcultarFormulario(this.ModalEditarTraslado);
-  }
-
-  InicializarBool()
-  {
-    this.boolTipo = false;
-    this.boolMoneda = false;
-    this.boolValor = false;
-    this.boolEstado = false;
-    this.boolProveedorOrigen = false;
-    this.boolBancoOrigen = false;
-    this.boolClienteOrigen = false;
-    this.boolProveedorDestino = false;
-    this.boolBancoDestino = false;
-    this.boolClienteDestino = false;
-  }
-
-  ActualizarVista()
-  {
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    this.http.get(this.globales.ruta+'php/proveedores/lista_proveedores.php').subscribe((data:any)=>{     
-      this.Proveedores= data;        
+    //cuentas bancarias
+    this.http.get(this.globales.ruta + 'php/bancos/lista_cuentas_bancarias.php').subscribe((data: any) => {
+      this.CuentaBancariaOrigen = data;
+      this.CuentaBancariaDestino = data;
     });
-    this.http.get(this.globales.ruta+'php/bancos/lista_bancos.php').subscribe((data:any)=>{     
-      this.Bancos= data;        
+    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
+      this.Clientes = data.cliente;
+      this.Proveedores = data.proveedor;
+      this.CajaRecaudo = data.cajaRecaudo;
+      this.ClientesDestino = data.cliente;
+      this.ProveedoresDestino = data.proveedor;
+      this.CajaRecaudoDestino = data.cajaRecaudo;
     });
-    this.http.get(this.globales.ruta+'php/terceros/lista_clientes.php').subscribe((data:any)=>{     
-      this.Clientes= data;        
-    });
-    this.http.get(this.ruta+'php/traslados/conteo.php').subscribe((data:any)=>{
-      this.conteoTraslados= data[0];     
+    this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
+      this.conteoTraslados = data[0];
     });
 
-    this.http.get(this.ruta+'php/traslados/lista.php').subscribe((data:any)=>{
-      this.traslados= data;
+    this.http.get(this.globales.ruta + 'php/traslados/lista.php').subscribe((data: any) => {
+      this.traslados = data;
       this.dtTrigger.next();
     });
+
+  }
+
+  consultas(){
+    this.http.get(this.globales.ruta + 'php/bancos/lista_cuentas_bancarias.php').subscribe((data: any) => {
+      this.CuentaBancariaOrigen = data;
+      this.CuentaBancariaDestino = data;
+    });
+    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
+      this.Clientes = data.cliente;
+      this.Proveedores = data.proveedor;
+      this.CajaRecaudo = data.cajaRecaudo;
+      this.ClientesDestino = data.cliente;
+      this.ProveedoresDestino = data.proveedor;
+      this.CajaRecaudoDestino = data.cajaRecaudo;
+    });
+    this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
+      this.conteoTraslados = data[0];
+    });
+  }
+
+  CasoTraslado(valor) {
+    switch (valor) {
+      case "1": {
+        /*
+          <option value="1">Entre proveedores</option>
+        */
+        this.proveedorOrigen = true;
+        this.proveedorDestino = true;
+        this.cuentaBancariaOrigen = false;
+        this.cuentaBancariaDestino = false;
+        this.ClienteOrigen = false;
+        this.ClienteDestino = false;
+        break;
+      }
+      case "2": {
+        /*
+          <option value="2">Proveedor a cuenta bancaria</option>
+        */
+        this.proveedorOrigen = true;
+        this.cuentaBancariaOrigen = true;
+        this.proveedorDestino = false;
+        this.cuentaBancariaDestino = false;
+        this.ClienteOrigen = false;
+        this.ClienteDestino = false;
+        break;
+      }
+      case "3": {
+        /*
+          <option value="3">Entre cuentas bancarias</option>
+        */
+        this.cuentaBancariaOrigen = true;
+        this.cuentaBancariaDestino = true;
+        this.proveedorOrigen = false;
+        this.proveedorDestino = false;
+        this.ClienteOrigen = false;
+        this.ClienteDestino = false;
+        break;
+      }
+      case "4": {
+        /*
+          <option value="4">Entre clientes</option>
+        */
+        this.ClienteOrigen = true;
+        this.ClienteDestino = true;
+        this.proveedorOrigen = false;
+        this.proveedorDestino = false;
+        this.cuentaBancariaOrigen = false;
+        this.cuentaBancariaDestino = false;
+        break;
+      }
+      case "5": {
+        /*
+          <option value="5">Cliente a proveedor</option>
+        */
+        this.ClienteOrigen = true;
+        this.proveedorOrigen = true;
+        this.proveedorDestino = false;
+        this.cuentaBancariaOrigen = false;
+        this.cuentaBancariaDestino = false;
+        this.ClienteDestino = false;
+        break;
+      }
+      case "6": {
+        /*
+          <option value="6">Cliente a cuenta bancaria</option>
+        */
+        this.ClienteOrigen = true;
+        this.cuentaBancariaOrigen = true;
+        this.proveedorOrigen = false;
+        this.proveedorDestino = false;
+        this.cuentaBancariaDestino = false;
+        this.ClienteDestino = false;
+        break;
+      }
+      default: {
+        /*
+          <option value="">Seleccione tipo de traslado</option>
+        */
+        this.proveedorOrigen = false;
+        this.proveedorDestino = false;
+        this.cuentaBancariaOrigen = false;
+        this.cuentaBancariaDestino = false;
+        this.ClienteOrigen = false;
+        this.ClienteDestino = false;
+        break;
+      }
+    }
+  }
+
+  Origen(valor){
+
+    this.CajaRecaudo=[];
+    this.CuentaBancariaOrigen=[];
+    this.Proveedores = [];
+    this.Clientes = [];
+    this.consultas();
+
+    switch(valor){
+      case "Cliente":{
+        this.proveedorOrigen = false;
+        this.ClienteOrigen = true;
+        this.cuentaBancariaOrigen = false;
+        this.cajaOrigen = false;
+        break;}
+      case "Proveedor":{
+        this.proveedorOrigen = true;
+        this.ClienteOrigen = false;
+        this.cuentaBancariaOrigen = false;
+        this.cajaOrigen = false;
+        break;}
+      case "Cuenta Bancaria":{
+        this.proveedorOrigen = false;
+        this.ClienteOrigen = false;
+        this.cuentaBancariaOrigen = true;
+        this.cajaOrigen = false;
+        break;}
+      case "Caja Recaudo":{
+        this.proveedorOrigen = false;
+        this.ClienteOrigen = false;
+        this.cuentaBancariaOrigen = false;
+        this.cajaOrigen = true;
+        break;}
+      default:{
+       this.proveedorOrigen = false;
+       this.ClienteOrigen = false;
+       this.cuentaBancariaOrigen = false;
+       this.cajaOrigen = false;
+        break;
+      }
+    }
+
+  }
+
+  Destino(valor){
     
-  }
+    this.CuentaBancariaDestino=[];
+    this.ClientesDestino = [];
+    this.ProveedoresDestino=[];
+    this.CajaRecaudoDestino=[];
+    this.consultas();
 
-  SeleccionarTipo(Tipo, origen?, destino?)
-  {
-    var dummy = Tipo.split("-");
-    this.Origen = dummy[0];
-    this.Destino = dummy[1];
-   
-  }
-
-  GuardarTraslado(formulario: NgForm, modal:any){
-    let info = JSON.stringify(formulario.value);
-    
-    if(info.indexOf('"Id_Origen":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un origen";
-      this.errorSwal.show();
+    switch(valor){
+      case "Cliente":{
+        this.proveedorDestino = false;
+        this.ClienteDestino = true;
+        this.cuentaBancariaDestino = false;
+        this.cajaDestino = false;
+        break;}
+      case "Proveedor":{
+        this.proveedorDestino = true;
+        this.ClienteDestino = false;
+        this.cuentaBancariaDestino = false;
+        this.cajaDestino = false;
+        break;}
+      case "Cuenta Bancaria":{
+        this.proveedorDestino = false;
+        this.ClienteDestino = false;
+        this.cuentaBancariaDestino = true;
+        this.cajaDestino = false;
+        break;}
+      case "Caja Recaudo":{
+        this.proveedorDestino = false;
+        this.ClienteDestino = false;
+        this.cuentaBancariaDestino = false;
+        this.cajaDestino = true;
+        break;}
+      default:{
+       this.proveedorDestino = false;
+       this.ClienteDestino = false;
+       this.cuentaBancariaDestino = false;
+       this.cajaDestino = false;
+        break;
+      }
     }
-    else if(info.indexOf('"Id_Destino":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un destino";
-      this.errorSwal.show();
-    }
-    else {
-      let datos = new FormData();
-      datos.append("modulo",'Traslado');
-      datos.append("datos",info);
-      this.http.post(this.ruta+'php/genericos/guardar_generico.php',datos)
-      .catch(error => { 
-        //console.error('An error occurred:', error.error);
-        this.errorSwal.text = "Se ha generado un error al intentar guardar el documento";
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{ 
-        this.ModalTraslado.hide();
-        this.FormTraslado.reset();    
-        this.InicializarBool();
-        this.tipoDefault = "";
-        this.monedaDefault = "";
-        this.estadoDefault = "";
-        this.saveSwal.show();
-      });
-    }
-    this.ActualizarVista();
   }
 
-  ActualizarTraslado(formulario: NgForm){   
-    let info = JSON.stringify(formulario.value);
-
-    if(info.indexOf('"Id_Origen":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un origen";
-      this.errorSwal.show();
-    }
-    else if(info.indexOf('"Id_Destino":""') >= 0) {
-      this.errorSwal.text = "No ha seleccionado un destino";
-      this.errorSwal.show();
-    }else{
-    let datos = new FormData();
-    datos.append("modulo", 'Traslado');
-    datos.append("datos", info);;   
-    this.http.post(this.ruta + 'php/traslados/traslado_editar.php', datos).subscribe((data: any) => { 
-      this.InicializarBool();
-      this.tipoDefault = "";
-      this.monedaDefault = "";
-      this.estadoDefault = "";
-     this.confirmacionSwal.title=data.titulo;
-     this.confirmacionSwal.text= data.mensaje;
-     this.confirmacionSwal.type= data.tipo;
-     this.confirmacionSwal.show();
-     this.ModalEditarTraslado.hide();
-     this.FormEditarTraslado.reset();
-    });
-  }
-  this.ActualizarVista();
- } 
-
-  handleError(error: Response) {
-    return Observable.throw(error);
-  }
-
-  VerTraslado(id, modal){
-    this.http.get(this.globales.ruta+'php/traslados/traslado_ver.php',{
-      params:{id:id}
-    }).subscribe((data:any)=>{
-      this.Identificacion = id;
-      this.codigo_Formato=("0000" + this.Identificacion).slice(-4);
-      this.Destino = data.Destino;
-      this.Detalle = data.Detalle;
-      this.Estado = data.Estado;
-      this.IdentificacionFuncionario = data.Identificacion_Funcionario;
-      this.Moneda = data.Moneda;
-      this.Origen = data.Origen;
-      this.Tipo = data.Tipo;
-      this.Valor = data.Valor;
-      this.Fecha=data.Fecha;
-      this.Nombre_Fun=data.Nombre_Funcionario;
-      modal.show();
-    });
-  }
-
-  EditarTraslado(id, modal){
-    this.InicializarBool();
-    this.http.get(this.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Traslado', id:id}
-    }).subscribe((data:any)=>{
-     
-      this.SeleccionarTipo(data.Tipo);
-      this.Identificacion = id;
-      this.IdentificacionFuncionario = data.Identificacion_Funcionario;
-      this.Tipo = data.Tipo;      
-      this.IdOrigen = data.Id_Origen;
-      this.IdDestino = data.Id_Destino;
-      this.NombreOrigen = data.Origen;
-      this.NombreDestino = data.Destino;
-      this.Moneda = data.Moneda;
-      this.Valor = data.Valor;
-      this.Estado = data.Estado;
-      this.Detalle = data.Detalle;
-      modal.show();
-    });
-  }
-
-  EliminarTraslado(id){
-    let datos=new FormData();
-    datos.append ("id",id);
-    this.http.post(this.ruta + 'php/traslados/traslado_anular.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
-      this.deleteSwal.show();
+  cuentaBancariaDestinatario(pos){
+    this.http.get(this.globales.ruta + 'php/bancos/lista_cuentas_bancarias.php').subscribe((data: any) => {
+      this.CuentaBancariaDestino = data;
+      this.CuentaBancariaDestino.splice((pos-1),1);
     });    
   }
 
-  ObtenerOrigen(IdOrigen, tabla)
-  {
-    if (tabla == "proveedor")
-    {
-      this.Proveedores.forEach(element => {
-        if (element.Id_Proveedor == IdOrigen) this.NombreOrigen = element.Nombre;
-      }); 
-    }
-    if (tabla == "banco")
-    {
-      this.Bancos.forEach(element => {
-        if (element.Id_Banco == IdOrigen) this.NombreOrigen = element.Nombre;
-      }); 
-    }
-    if (tabla == "cliente")
-    {      
-      this.Clientes.forEach(element => {
-        if (element.Id_Tercero == IdOrigen) this.NombreOrigen = element.Nombre;
-          /*this.asd = element.Nombre;
-          this.EventChange();*/
-      });
-    }
+  proveedorDestinatario(pos){
+    console.log(pos)
+    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
+      this.ProveedoresDestino = data.proveedor;
+      var index = this.ProveedoresDestino.findIndex(x => x.Id_Tercero === pos);
+      this.ProveedoresDestino.splice(index,1);
+    });
   }
 
-  ObtenerDestino(IdDestino, tabla)
-  {
-    if (tabla == "proveedor")
-    {
-      this.Proveedores.forEach(element => {
-        if (element.Id_Proveedor == IdDestino) this.NombreDestino = element.Nombre;
+  CajaRecaudoDestinatario(pos){
+    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
+      this.CajaRecaudoDestino = data.cajaRecaudo;
+      this.CajaRecaudoDestino.splice((pos-1),1);
+    });
+  }
+
+  ClienteDestinatario(pos){
+    console.log(pos);
+    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
+      this.ClientesDestino = data.cliente;
+      var index = this.ClientesDestino.findIndex(x => x.Id_Tercero === pos);      
+      this.ClientesDestino.splice(index,1);
+    });    
+  }
+
+  GuardarTraslado(formulario: NgForm, modal){
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      datos.append("modulo",'Traslado');
+      datos.append("datos",info);
+      this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
+      .subscribe((data:any)=>{
+        formulario.reset();
+        this.ActualizarVista();  
+        this.saveSwal.show();
+        modal.hide();
       });
-    }
-    if (tabla == "banco")
-    {
-      this.Bancos.forEach(element => {
-        if (element.Id_Banco == IdDestino) this.NombreDestino = element.Nombre;
-      });
-    }
-    if (tabla == "cliente")
-    {
-      this.Clientes.forEach(element => {
-        if (element.Id_Tercero == IdDestino) this.NombreDestino = element.Nombre;
-      });
-    }
   }
 
 }
