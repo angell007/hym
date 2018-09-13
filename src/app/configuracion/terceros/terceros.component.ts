@@ -179,7 +179,7 @@ export class TercerosComponent implements OnInit {
       }
       case "Inactivo":{
         datos.append("estado", "Inactivo");
-        titulo = "Perfil Activado";
+        titulo = "Tercero Activado";
         texto ="Se ha Activado correctamente el tercero seleccionado";
         break;
       }

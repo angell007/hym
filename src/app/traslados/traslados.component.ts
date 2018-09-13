@@ -20,6 +20,7 @@ export class TrasladosComponent implements OnInit {
 
   @ViewChild("ModalTraslado") ModalTraslado: any;
   @ViewChild("saveSwal") saveSwal: any;
+  @ViewChild("confirmacionSwal") confirmacionSwal: any;
   
   proveedorOrigen = false;
   ClienteOrigen = false;
@@ -88,22 +89,7 @@ export class TrasladosComponent implements OnInit {
   ActualizarVista() {
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     
-    //cuentas bancarias
-    this.http.get(this.globales.ruta + 'php/bancos/lista_cuentas_bancarias.php').subscribe((data: any) => {
-      this.CuentaBancariaOrigen = data;
-      this.CuentaBancariaDestino = data;
-    });
-    this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
-      this.Clientes = data.cliente;
-      this.Proveedores = data.proveedor;
-      this.CajaRecaudo = data.cajaRecaudo;
-      this.ClientesDestino = data.cliente;
-      this.ProveedoresDestino = data.proveedor;
-      this.CajaRecaudoDestino = data.cajaRecaudo;
-    });
-    this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
-      this.conteoTraslados = data[0];
-    });
+    this.consultas();
 
     this.http.get(this.globales.ruta + 'php/traslados/lista.php').subscribe((data: any) => {
       this.traslados = data;
@@ -350,6 +336,36 @@ export class TrasladosComponent implements OnInit {
         this.saveSwal.show();
         modal.hide();
       });
+  }
+
+  EstadoTraslado(value, estado){
+    let datos = new FormData();
+    var titulo;
+    var texto;
+    datos.append("modulo", "Traslado");
+    datos.append("id", value);
+    switch(estado){
+      case "Activo":{
+        datos.append("estado", "Activo");
+        titulo = "Traslado Inactivado";
+        texto ="Se ha inactivado correctamente el traslado seleccionado";
+        break;
+      }
+      case "Inactivo":{
+        datos.append("estado", "Inactivo");
+        titulo = "Traslado Activado";
+        texto ="Se ha Activado correctamente el traslado seleccionado";
+        break;
+      }
+    }
+    
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = titulo;
+      this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();    
+      this.ActualizarVista();
+    });
   }
 
 }
