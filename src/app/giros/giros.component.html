@@ -62,12 +62,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="col-md-12 card min-heigth">
+                <div>
+                    <div id="chartdiv" style="height: 800px;font-size: 11px;width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
             <div class="widget card">
                 <div class="card-block">
                     <p>Giros realizados en nuestro Sistema</p>
                     <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                            [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
                                     <th style="width:150px;">Fecha</th>
@@ -121,7 +129,8 @@
             <div class="col-md-4" hidden>
                 <div class="form-group">
                     <label>Identificación</label>
-                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}"
+                        required>
                 </div>
             </div>
             <div class="row">
@@ -235,17 +244,18 @@
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormEditarGiro="ngForm">
-            <div class="col-md-4" >
+            <div class="col-md-4">
                 <div class="form-group" hidden>
                     <label>Identificación</label>
-                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}"
+                        required>
                 </div>
             </div>
-            <div class="col-md-4" >
+            <div class="col-md-4">
                 <div class="form-group" hidden>
                     <label>Identificación</label>
-                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
-                        required>
+                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control"
+                        ngModel="{{IdentificacionFuncionario}}" required>
                 </div>
             </div>
             <!--<div class="row">

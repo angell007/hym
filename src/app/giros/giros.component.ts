@@ -1,5 +1,15 @@
+import '../../assets/charts/amchart/amcharts.js';
+import '../../assets/charts/amchart/gauge.js';
+import '../../assets/charts/amchart/pie.js';
+import '../../assets/charts/amchart/serial.js';
+import '../../assets/charts/amchart/light.js';
+import '../../assets/charts/amchart/ammap.js';
+import '../../assets/charts/amchart/worldLow.js';
+import '../../assets/charts/amchart/continentsLow.js';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { Globales } from '../shared/globales/globales';
 
 @Component({
   selector: 'app-giros',
@@ -8,7 +18,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class GirosComponent implements OnInit {
 
-  readonly ruta = 'https://hym.corvuslab.co/';
   public fecha = new Date();
   public giros = [];
 
@@ -43,21 +52,24 @@ export class GirosComponent implements OnInit {
 
   conteoGiros = [];
 
-  constructor(private http: HttpClient) { }
+  dtOptions: DataTables.Settings = {};
+  dtTrigger = new Subject();
+  
+  constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    this.http.get(this.ruta + 'php/giros/lista.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/giros/lista.php').subscribe((data: any) => {
       this.giros = data;
     });
 
-    this.http.get(this.ruta + 'php/giros/conteo.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/giros/conteo.php').subscribe((data: any) => {
       this.conteoGiros = data[0];
     });
     this.ActualizarVista();
   }
 
   VerGiro(id, modal) {
-    this.http.get(this.ruta + 'php/giros/detalle.php', {
+    this.http.get(this.globales.ruta + 'php/giros/detalle.php', {
       params: { modulo: 'Giro', id: id }
     }).subscribe((data: any) => {
       this.Giro = data;
@@ -100,14 +112,11 @@ export class GirosComponent implements OnInit {
 
   EditarGiro(id, modal) {
     this.InicializarBool();
-    this.http.get(this.ruta + 'php/giros/detalle.php', {
+    this.http.get(this.globales.ruta + 'php/giros/detalle.php', {
       params: { modulo: 'Giro', id: id }
     }).subscribe((data: any) => {
       this.Giro = data;
       this.Identificacion = id;
-
-      console.log(this.Giro);
-      console.log(data.Identificacion_Funcionario);
 
       //this.Datos=data;
       this.Origen=data.Origen;
@@ -131,16 +140,87 @@ export class GirosComponent implements OnInit {
 
   ActualizarVista()
   {
-    this.http.get(this.ruta+'php/giros/lista.php').subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/giros/lista.php').subscribe((data:any)=>{
       this.giros= data;
+      this.dtTrigger.next();
     });
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
+
+    this.http.get(this.globales.ruta+'/php/giros/fecha_giro.php').subscribe((data:any)=>{
+      var chart = AmCharts.makeChart("chartdiv", {
+        "theme": "light",
+        "type": "serial",
+        "dataProvider": data,
+        "categoryField": "Mes",
+        "depth3D": 20,
+        "angle": 30,
+
+        "categoryAxis": {
+          "labelRotation": 90,
+          "gridPosition": "start"
+        },
+
+        "valueAxes": [{
+          "title": "Realizado"
+        }],
+
+        "graphs": [{
+          "valueField": "Conteo",
+          "colorField": "color",
+          "type": "column",
+          "lineAlpha": 0.1,
+          "fillAlphas": 1
+        }],
+
+        "chartCursor": {
+          "cursorAlpha": 0,
+          "zoomable": false,
+          "categoryBalloonEnabled": false
+        },
+
+        "export": {
+          "enabled": true
+        }
+      });
+
+    });   
+
   }
 
   EliminarGiro(id){
     let datos = new FormData();
     datos.append("modulo", 'Giro');
     datos.append("id", id); 
-    this.http.post(this.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos ).subscribe((data: any) => {
       this.deleteSwal.show();
       this.ActualizarVista();
     });

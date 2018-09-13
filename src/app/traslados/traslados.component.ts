@@ -11,8 +11,8 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, ViewChild, HostListener, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { Globales } from '../shared/globales/globales';
 import { Subject } from 'rxjs';
+import { Globales } from '../shared/globales/globales';
 
 @Component({
   selector: 'app-traslados',
@@ -109,6 +109,36 @@ export class TrasladosComponent implements OnInit {
       this.dtTrigger.next();
     });
 
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */ 
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
+
   }
 
   consultas() {
@@ -126,44 +156,7 @@ export class TrasladosComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
-      //this.conteoTraslados = data;
-
-      /*var chart = AmCharts.makeChart("chartdiv", {
-        "theme": "light",
-        "type": "serial",
-        "dataProvider": data,
-        "categoryField": "Nombre",
-        "depth3D": 20,
-        "angle": 30,
-
-        "categoryAxis": {
-          "labelRotation": 90,
-          "gridPosition": "start"
-        },
-
-        "valueAxes": [{
-          "title": "Realizado"
-        }],
-
-        "graphs": [{
-          "valueField": "Conteo",
-          "colorField": "color",
-          "type": "column",
-          "lineAlpha": 0.1,
-          "fillAlphas": 1
-        }],
-
-        "chartCursor": {
-          "cursorAlpha": 0,
-          "zoomable": false,
-          "categoryBalloonEnabled": false
-        },
-
-        "export": {
-          "enabled": true
-        }
-      });*/
-
+     
       var chart = AmCharts.makeChart( "chartdiv1", {
         "type": "pie",
         "theme": "light",
