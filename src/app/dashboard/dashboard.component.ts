@@ -59,6 +59,7 @@ export class DashboardComponent {
 
     this.http.get(this.globales.ruta + '/php/dashboard/graficas_barras.php').subscribe((data: any) => {
 
+      /*
       var chartData = [ {
         "country": "USA",
         "visits": 4025,
@@ -128,7 +129,7 @@ export class DashboardComponent {
         "visits": 328,
         "color": "#000000"
       } ];
-      
+      */
       
       var chart = AmCharts.makeChart( "chartdiv1", {
         "theme": "light",

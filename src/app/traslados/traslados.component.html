@@ -1,161 +1,66 @@
 <div class="container-fluid">
-    <!--<div class="page-title">
-        <h4 class="pull-left">Traslados</h4>
-    </div>-->
     <div class="clearfix"></div>
-    <!--<div class="row" style="height:110px">-->
     <div class="row">
-        <div class="col-md-2">
-            <div class="card bg-info">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreProveedores}}</h1>
-                            <span class="text-white">Proveedor -</span>
-                            <span class="text-white">Proveedor</span>
+
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" style="height: 500px">
+                        <div class="card-header">
+                            <h4 class="pull-left">Traslados</h4>
+                            <button class="pull-right btn btn-info" (click)="ModalTraslado.show();">
+                                <i class="ti-plus"></i>Nuevo Traslado</button>
                         </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">PP</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card bg-success">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoProveedorBanco}}</h1>
-                            <span class="text-white">Proveedor -</span>
-                            <span class="text-white">Banco</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">PB</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card bg-warning">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreBancos}}</h1>
-                            <span class="text-white">Banco -</span>
-                            <span class="text-white">Banco</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">BB</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card bg-danger">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoEntreClientes}}</h1>
-                            <span class="text-white">Cliente -</span>
-                            <span class="text-white">Cliente</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CC</i>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                                    [dtTrigger]="dtTrigger">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Codigo</th>
+                                            <th>Funcionario</th>
+                                            <th>Moneda</th>
+                                            <th>Valor</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                            <td>{{traslado.Fecha | date:"dd/MM/yy"}}</td>
+                                            <td>{{traslado.Codigo}}</td>
+                                            <td>{{traslado.Funcionario}}</td>
+                                            <td>{{traslado.Moneda}}</td>
+                                            <td>{{traslado.Valor | currency }}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)"
+                                                    style="margin:0;">
+                                                    <i class="ti-search"></i>
+                                                </button>
+                                                <button class="btn btn-default btn-xs" type="button" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)"
+                                                    style="margin:0;">
+                                                    <i class="ti-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                    (confirm)="EstadoTraslado(traslado.Id_Traslado,traslado.Estado )">
+                                                    <i class="ti-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-2">
-            <div class="card bg-primary">
-                <div class="card-block" style="padding:10px">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTraslados.TrasladoClienteProveedor}}</h1>
-                            <span class="text-white">Cliente -</span>
-                            <span class="text-white">Proveedor</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CP</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card bg-dark">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30 text-white">{{conteoTraslados.TrasladoClienteBanco}}</h1>
-                            <span class="text-white">Cliente -</span>
-                            <span class="text-white">Banco</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="font-size-30 text-white" style="font-style: italic; font-family: Verdana">CB</i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--<div class="col-md-12" >
-            <button class="pull-right btn btn-info" (click)="customModalTrasladoShow()">
-                <i class="ti-plus"></i> Realizar Nuevo Traslado</button>
-        </div>-->
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="pull-left">Traslados</h4>
-                    <button class="pull-right btn btn-info" (click)="ModalTraslado.show();">
-                        <i class="ti-plus"></i>Nuevo Traslado</button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
-                            [dtTrigger]="dtTrigger">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Funcionario</th>
-                                    <th>Origen</th>
-                                    <th>Destino</th>
-                                    <th>Moneda</th>
-                                    <th>Valor</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                    <td>{{traslado.Fecha | date:"dd/MM/yy"}}</td>
-                                    <td>{{traslado.Funcionario}}</td>
-                                    <td>{{traslado.Origen}}</td>
-                                    <td>{{traslado.Destino}}</td>
-                                    <td>{{traslado.Moneda}}</td>
-                                    <td>{{traslado.Valor | currency }}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)"
-                                            style="margin:0;">
-                                            <i class="ti-search"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)"
-                                            style="margin:0;">
-                                            <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EstadoTraslado(traslado.Id_Traslado,traslado.Estado )">
-                                            <i class="ti-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="col-md-4">
+            <div class="col-md-12 card min-heigth">
+                <div>
+                    <div id="chartdiv1" style="height: 800px;font-size: 11px;width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -376,15 +281,14 @@
                         </tr>
                         <tr class="color-campos">
                             <td><strong>Funcionario: </strong></td>
-                            <td colspan="3">{{Nombre_Fun}}</td>
-                            <td class="centar-datos"><strong>Estado: </strong> {{Estado}}</td>
+                            <td colspan="3">{{verTraslado.Nombre_Funcionario}}</td>
+                            <td class="centar-datos"><strong>Estado: </strong> {{verTraslado.Estado}}</td>
                         </tr>
                         <tr class="color-campos">
                             <td><strong>Fecha: </strong></td>
-                            <td colspan="4">{{Fecha | date:"dd/MM/yy" }}</td>
+                            <td colspan="4">{{verTraslado.Fecha | date:"dd/MM/yy" }}</td>
                         </tr>
                         <tr class="centar-datos">
-                            <th>Tipo</th>
                             <th>Origen</th>
                             <th>Destino</th>
                             <th>Moneda</th>
@@ -393,15 +297,14 @@
                     </thead>
                     <tbody>
                         <tr style="text-align: center;">
-                            <td>{{Tipo}}</td>
-                            <td>{{Origen}}</td>
-                            <td>{{Destino}}</td>
-                            <td>{{Moneda}}</td>
-                            <td>${{Valor}}</td>
+                            <td>{{verTraslado.Origen}}</td>
+                            <td>{{verTraslado.Destino}}</td>
+                            <td>{{verTraslado.Moneda}}</td>
+                            <td colspan="2">{{verTraslado.Valor | currency}}</td>
                         </tr>
                         <tr class="color-campos" style="text-align: center;">
                             <td><strong>Detalles: </strong></td>
-                            <td colspan="4">{{Detalle}}</td>
+                            <td colspan="4">{{verTraslado.Detalle}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -411,6 +314,207 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="button" class="btn btn-primary btn-sm" (click)="ModalVerTraslado.hide()">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTraslado" #ModalEditarTraslado>
+    <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="ModalTraslado.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Editar Traslado</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormTrasladoEditar="ngForm">
+            <input name="id" type="text" hidden [(ngModel)]="Identificacion">
+            <input name="Identificacion_Funcionario" type="text" hidden [(ngModel)]="IdentificacionFuncionario">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong>
+                            <label>Origen</label>
+                        </strong>
+                        <select class="form-control" name="Origen" (change)="Origen($event.target.value)" ngModel="{{edicionTraslado.Origen}}"
+                            required>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+                            <option value="Caja Recaudo">Caja Recaudo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong>
+                            <label>Destino</label>
+                        </strong>
+                        <select class="form-control" name="Destino" (change)="Destino($event.target.value)" ngModel="{{edicionTraslado.Destino}}"
+                            required>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+                            <option value="Caja Recaudo">Caja Recaudo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6" *ngIf="ClienteOrigen">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cliente de origen</label>
+                        </strong>
+                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen"
+                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="ClienteDestinatario($event.target.value)"
+                            required>
+                            <option value="">Seleccione cliente de origen</option>
+                            <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="proveedorOrigen">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proveedor de origen</label>
+                        </strong>
+                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen"
+                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="proveedorDestinatario($event.target.value)"
+                            required>
+                            <option value="">Seleccione proveedor de origen</option>
+                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="cuentaBancariaOrigen">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cuenta Bancaria Origen</label>
+                        </strong>
+                        <select type="text" placeholder="Cuenta Bancaria de origen" class="form-control" name="Id_Origen"
+                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="cuentaBancariaDestinatario($event.target.value)"
+                            required>
+                            <option value="">Seleccione banco de origen</option>
+                            <option *ngFor="let Banco of CuentaBancariaOrigen" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="cajaOrigen">
+                    <div class="form-group">
+                        <strong>
+                            <label>Caja Recaudo Origen</label>
+                        </strong>
+                        <select type="text" placeholder="Caja Recaudo de origen" class="form-control" name="Id_Origen"
+                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="CajaRecaudoDestinatario($event.target.value)"
+                            required>
+                            <option value="">Seleccione Caja Recaudo de origen</option>
+                            <option *ngFor="let Caja of CajaRecaudo" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="proveedorDestino">
+                    <div class="form-group">
+                        <strong>
+                            <label>Proveedor de destino</label>
+                        </strong>
+                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"
+                            ngModel="{{edicionTraslado.Id_Destino}}" required>
+                            <option value="">Seleccione proveedor de destino</option>
+                            <option *ngFor="let Proveedor of ProveedoresDestino" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="cuentaBancariaDestino">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cuenta Bancaria Destino</label>
+                        </strong>
+                        <select type="text" placeholder="Cuenta Bancaria de destino" class="form-control" name="Id_Destino"
+                            ngModel="{{edicionTraslado.Id_Destino}}" (change)="ObtenerOrigen($event.target.value, 'banco')"
+                            required>
+                            <option value="">Seleccione banco de Destino</option>
+                            <option *ngFor="let Banco of CuentaBancariaDestino" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="ClienteDestino">
+                    <div class="form-group">
+                        <strong>
+                            <label>Cliente de destino</label>
+                        </strong>
+                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Destino"
+                            ngModel="{{edicionTraslado.Id_Destino}}" required>
+                            <option value="">Seleccione cliente de Destino</option>
+                            <option *ngFor="let Cliente of ClientesDestino" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6" *ngIf="cajaDestino">
+                    <div class="form-group">
+                        <strong>
+                            <label>Caja Recaudo Destino</label>
+                        </strong>
+                        <select type="text" placeholder="Caja Recaudo de Destino" class="form-control" name="Id_Destino"
+                            ngModel="{{edicionTraslado.Id_Destino}}" required>
+                            <option value="">Seleccione Caja Recaudo de Destino</option>
+                            <option *ngFor="let Caja of CajaRecaudoDestino" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong>
+                            <label>Moneda</label>
+                        </strong>
+                        <select class="form-control" name="Moneda" ngModel="{{edicionTraslado.Moneda}}" required>
+                            <option value="">Seleccione tipo de moneda</option>
+                            <option value="Pesos">Pesos</option>
+                            <option value="Bolivares">Bolivares</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <strong>
+                            <label>Valor</label>
+                        </strong>
+                        <input currencyMask class="form-control" name="Valor" ngModel="{{edicionTraslado.Valor}}"
+                            [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            <label>Detalles</label>
+                        </strong>
+                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{edicionTraslado.Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormTrasladoEditar.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarTraslado(FormTrasladoEditar, ModalEditarTraslado)">Guardar Información</button>
         </div>
     </div>
 </app-modal-basic>
@@ -425,4 +529,3 @@
 
 <swal #deleteSwal title="Traslado Anulado" text="Se ha anulado correctamente el traslado" type="success">
 </swal>
-
