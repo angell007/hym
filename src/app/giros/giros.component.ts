@@ -226,4 +226,19 @@ export class GirosComponent implements OnInit {
     });
   }
 
+  AnularGiro(id){
+    let datos = new FormData();
+    datos.append("modulo", 'Giro');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/giros/anular_giro.php', datos).subscribe((data: any) => {
+    });
+  }
+
+  anulado(estado){
+    switch(estado){
+      case "Anulada" :{ return false}
+      default: {return true}
+    }
+  }
+
 }

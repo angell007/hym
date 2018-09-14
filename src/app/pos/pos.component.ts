@@ -102,6 +102,7 @@ export class PosComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('ModalTrasladoEditar') ModalTrasladoEditar: any;
   @ViewChild('ModalServicioEditar') ModalServicioEditar: any;
+  @ViewChild('ModalGiroEditar') ModalGiroEditar: any;  
   
   vueltos: number;
   Venta = false;
@@ -132,6 +133,7 @@ export class PosComponent implements OnInit {
   dtTrigger = new Subject();
   dtOptions1: DataTables.Settings = {};
   dtTrigger1 = new Subject();
+  
 
   dtOptionsTraslado: DataTables.Settings = {};
   dtTriggerTraslado = new Subject();
@@ -140,6 +142,9 @@ export class PosComponent implements OnInit {
 
   dtOptions2: DataTables.Settings = {};
   dtTrigger2 = new Subject();
+  dtOptions3: DataTables.Settings = {};
+  dtTrigger3 = new Subject();
+
   Giros = [];
   Departamentos = [];
   Municipios_Remitente = [];
@@ -160,6 +165,10 @@ export class PosComponent implements OnInit {
   Servicio1 = true;
   Servicios = [];
   Servicio =[];
+  Giro = [];
+  idGiro: any;
+  Remitente = [];
+  Destinatario= [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -660,7 +669,38 @@ export class PosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro' } }).subscribe((data: any) => {
       this.Giros = data;
+      this.dtTrigger3.next();
     });
+
+    this.dtOptions3 = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
       this.Departamentos = data;
@@ -1011,9 +1051,7 @@ export class PosComponent implements OnInit {
       }
     });
   }
-
-  DatosRemitenteGiro = [];
-  DatosDestinatario = [];
+  
 
   AutoCompletarRemitenteGiro(modelo) {
     if (modelo) {
@@ -1050,7 +1088,6 @@ export class PosComponent implements OnInit {
   }
 
   RealizarGiro(formulario: NgForm) {
-
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -1064,6 +1101,23 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.show();
       this.actualizarVista();
     });
+  }
+
+  RealizarEdicionGiro(formulario: NgForm , modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
+      modal.hide();
+      this.confirmacionSwal.title = "Guardado con exito";
+      this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
+      this.confirmacionSwal.type = "success"
+      this.confirmacionSwal.show();      
+      this.actualizarVista();
+    });
+
+    //formulario.reset();
+
   }
 
 
@@ -1206,6 +1260,44 @@ export class PosComponent implements OnInit {
       this.Servicio = data;
       this.ValorComisionServicio = data.Comision;
       this.ModalServicioEditar.show();     
+    });
+  }
+
+  AnularGiro(id){
+    let datos = new FormData();
+    datos.append("modulo", 'Giro');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/giros/anular_giro.php', datos).subscribe((data: any) => {
+    });
+  }
+
+  anulado(estado){
+    switch(estado){
+      case "Anulada" :{ return false}
+      default: {return true}
+    }
+  }
+
+  DatosRemitenteEditarGiro=[];
+  DatosDestinatario = [];
+  DatosDestinatarioEditarGiro = [];
+
+  EditarGiro(id){
+    
+    this.http.get(this.globales.ruta + '/php/pos/detalle_giro.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
+      this.idGiro = id;
+      this.Giro = data.giro;
+      this.Remitente = data.remitente;
+      this.Destinatario = data.destinatario;
+      this.ModalGiroEditar.show();
+      this.ValorEnviar = data.giro.ValorEnviar;
+      this.valorComision(data.giro.Valor_Total);
+      this.Municipios_Departamento(data.remitente.Id_Departamento, 'Remitente');
+      this.Municipios_Departamento(data.destinatario.Id_Departamento, 'Destinatario');
+      this.Departamento_Remitente = this.Departamentos[data.remitente.Id_Departamento].Nombre;
+      this.Departamento_Destinatario = this.Departamentos[data.destinatario.Id_Departamento].Nombre;
+      this.DatosRemitenteEditarGiro = data.remitente.DatosRemitenteEditarGiro;
+      this.DatosDestinatarioEditarGiro = data.destinatario.DatosDestinatarioEditarGiro;
     });
   }
 
