@@ -1,3 +1,11 @@
+import '../../assets/charts/amchart/amcharts.js';
+import '../../assets/charts/amchart/gauge.js';
+import '../../assets/charts/amchart/pie.js';
+import '../../assets/charts/amchart/serial.js';
+import '../../assets/charts/amchart/light.js';
+import '../../assets/charts/amchart/ammap.js';
+import '../../assets/charts/amchart/worldLow.js';
+import '../../assets/charts/amchart/continentsLow.js';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../node_modules/@types/selenium-webdriver';
@@ -33,6 +41,10 @@ export class TransferenciasComponent implements OnInit {
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
+    this.ActualizarVista();
+  }
+
+  ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
       this.transferencias = data;
       this.dtTrigger.next();
@@ -42,61 +54,40 @@ export class TransferenciasComponent implements OnInit {
       this.conteoTransferencias = data[0];
     });
 
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
+    this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
+      var chart = AmCharts.makeChart( "chartdiv", {
+        "type": "serial",
+        "theme": "light",
+        "dataProvider": data ,
+        "gridAboveGraphs": true,
+        "startDuration": 1,
+        "graphs": [ {
+          "balloonText": "[[Funcionario]]: <b>[[Conteo]]</b>",
+          "fillAlphas": 0.8,
+          "lineAlpha": 0.2,
+          "type": "column",
+          "valueField": "Conteo"
+        } ],
+        "chartCursor": {
+          "categoryBalloonEnabled": false,
+          "cursorAlpha": 0,
+          "zoomable": false
         },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        "categoryField": "Funcionario",
+        "categoryAxis": {
+          "gridPosition": "start",
+          "gridAlpha": 0,
+          "tickPosition": "start",
+          "tickLength": 20
+        },
+        "export": {
+          "enabled": true
         }
-      }
-    };
-  }
-
-  ActualizarVista() {
-    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      this.transferencias = data;
+      
+      } );
     });
 
-    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data[0];
-    });
-  }
-
-  VerDestinatario(id, modal) {
-    this.http.get(this.globales.ruta + 'php/transferencias/detalle.php', {
-      params: { id: id }
-    }).subscribe((data: any) => {
-      /*ARREGLAR
-      this.Identificacion = id;
-      this.Nombre = data.Nombre;
-      this.Cuentas = data.Cuentas;
-      this.Banco = data.Banco; 
-      this.Pais = data.Pais;
-      this.Detalle = data.Detalle;*/
-      modal.show();
-    });
+    
   }
 
 
@@ -122,12 +113,12 @@ export class TransferenciasComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
-    datos.append("datos",info);
+    datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/transferencias/reactivar_transferencia.php', datos).subscribe((data: any) => {
       formulario.reset();
       this.mensajeSwal.title = "Transferencia Activada"
       this.mensajeSwal.text = "Se ha activado la transferencia"
-      this.mensajeSwal.type="success"
+      this.mensajeSwal.type = "success"
       this.mensajeSwal.show();
       this.ActualizarVista();
       modal.hide();
@@ -138,19 +129,19 @@ export class TransferenciasComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
-    datos.append("datos",info);
+    datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/transferencias/devolucion_transferencia.php', datos).subscribe((data: any) => {
       formulario.reset();
       this.mensajeSwal.title = "Transferencia devuelta"
       this.mensajeSwal.text = "Se ha devuelto la transferencia"
-      this.mensajeSwal.type="success"
+      this.mensajeSwal.type = "success"
       this.mensajeSwal.show();
       this.ActualizarVista();
       modal.hide();
     });
   }
 
-  BloquearCuenta(id, estado) {
+  BloquearTransferencia(id, estado) {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
     datos.append("id", id);
@@ -169,12 +160,43 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  Devuelto(estado){
-    switch(estado){
-      case "Devuelta":{ return false }
-      default:{ return true }
+  Devuelto(estado) {
+    switch (estado) {
+      case "Devuelta": { return false }
+      default: { return true }
     }
 
   }
+
+  MarcarTransferencia(id) {
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia');
+    datos.append("id", id);
+    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    this.http.post(this.globales.ruta + 'php/transferencias/transferencia_marcada.php', datos).subscribe((data: any) => {
+      this.mensajeSwal.title = "Transferencia Realizada"
+      this.mensajeSwal.text = "Se ha marcado la transferencia como realizada"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      this.ActualizarVista();
+    });
+  }
+
+  Marcado(estado) {
+    switch (estado) {
+      case "Pendiente": {
+        return true;
+      }
+      case "Devuelta": {
+        return false;
+      }
+      case "Realizada": {
+        return false;
+      }
+
+    }
+  }
+
+  
 
 }
