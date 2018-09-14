@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../node_modules/@types/selenium-webdriver';
 import { Globales } from '../shared/globales/globales';
 import { Subject } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-transferencias',
@@ -11,34 +12,37 @@ import { Subject } from 'rxjs';
 })
 export class TransferenciasComponent implements OnInit {
 
-  public fecha = new Date(); 
+  public fecha = new Date();
   transferencias = [];
   conteoTransferencias = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  
-  @ViewChild('ModalVerDestinatario') ModalVerDestinatario:any;
-  @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario:any;
-  @ViewChild('ModalDestinatario') ModalDestinatario:any;
-  @ViewChild('FormDestinatario') FormDestinatario:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('bloqueoSwal') bloqueoSwal:any;  
 
-  constructor(private http : HttpClient, private globales: Globales) { }
+  @ViewChild('ModalVerDestinatario') ModalVerDestinatario: any;
+  @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
+  @ViewChild('ModalDestinatario') ModalDestinatario: any;
+  @ViewChild('FormDestinatario') FormDestinatario: any;
+  @ViewChild('errorSwal') errorSwal: any;
+  @ViewChild('saveSwal') saveSwal: any;
+  @ViewChild('deleteSwal') deleteSwal: any;
+  @ViewChild('bloqueoSwal') bloqueoSwal: any;
+  @ViewChild('mensajeSwal') mensajeSwal: any;
+  @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
+  Identificacion: any;
+
+  constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    this.http.get(this.globales.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
-      this.transferencias= data;
+    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
+      this.transferencias = data;
       this.dtTrigger.next();
     });
 
-    this.http.get(this.globales.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
-      this.conteoTransferencias= data[0];     
+    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
+      this.conteoTransferencias = data[0];
     });
 
-    
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -70,21 +74,20 @@ export class TransferenciasComponent implements OnInit {
     };
   }
 
-  ActualizarVista()
-  {
-    this.http.get(this.globales.ruta+'php/transferencias/lista.php').subscribe((data:any)=>{
-      this.transferencias= data;
+  ActualizarVista() {
+    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
+      this.transferencias = data;
     });
 
-    this.http.get(this.globales.ruta+'php/transferencias/conteo.php').subscribe((data:any)=>{
-      this.conteoTransferencias= data[0];     
+    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
+      this.conteoTransferencias = data[0];
     });
   }
 
-  VerDestinatario(id, modal){
-    this.http.get(this.globales.ruta+'php/transferencias/detalle.php',{
-      params:{id:id}
-    }).subscribe((data:any)=>{
+  VerDestinatario(id, modal) {
+    this.http.get(this.globales.ruta + 'php/transferencias/detalle.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
       /*ARREGLAR
       this.Identificacion = id;
       this.Nombre = data.Nombre;
@@ -96,40 +99,82 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  EliminarTransferencia(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/transferencias/anular.php', datos ).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.ActualizarVista();
+
+  DevolucionTransferencia(id, modal) {
+    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+      params: { id: id, modulo: "Transferencia" }
+    }).subscribe((data: any) => {
+      this.Identificacion = data.Id_Transferencia;
+      modal.show();
     });
   }
 
-  BloquearCuenta(id, estado){
+  ReactivarTransferencia(id, modal) {
+    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+      params: { id: id, modulo: "Transferencia" }
+    }).subscribe((data: any) => {
+      this.Identificacion = data.Id_Transferencia;
+      modal.show();
+    });
+  }
+
+  RealizarReactivacion(formulario: NgForm, modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia');
+    datos.append("datos",info);
+    this.http.post(this.globales.ruta + 'php/transferencias/reactivar_transferencia.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Transferencia Activada"
+      this.mensajeSwal.text = "Se ha activado la transferencia"
+      this.mensajeSwal.type="success"
+      this.mensajeSwal.show();
+      this.ActualizarVista();
+      modal.hide();
+    });
+  }
+
+  RealizarDevolucion(formulario: NgForm, modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia');
+    datos.append("datos",info);
+    this.http.post(this.globales.ruta + 'php/transferencias/devolucion_transferencia.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Transferencia devuelta"
+      this.mensajeSwal.text = "Se ha devuelto la transferencia"
+      this.mensajeSwal.type="success"
+      this.mensajeSwal.show();
+      this.ActualizarVista();
+      modal.hide();
+    });
+  }
+
+  BloquearCuenta(id, estado) {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
     datos.append("id", id);
     datos.append("estado", estado);
     datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
       this.bloqueoSwal.show();
       this.ActualizarVista();
     });
   }
 
-  Bloqueado(estado){
-    switch(estado){
-      case "Si":{ return false}
-      case "No":{ return true}
+  Bloqueado(estado) {
+    switch (estado) {
+      case "Si": { return false }
+      case "No": { return true }
     }
   }
 
-  Desbloqueado(estado){
+  Devuelto(estado){
     switch(estado){
-      case "Si":{ return true}
-      case "No":{ return false}
+      case "Devuelta":{ return false }
+      default:{ return true }
     }
+
   }
 
 }

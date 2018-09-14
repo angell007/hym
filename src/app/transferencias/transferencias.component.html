@@ -71,7 +71,7 @@
                 <div class="card-block">
                     <div class="table-overflow">
                         <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
-                        [dtTrigger]="dtTrigger">
+                            [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
                                     <th style="width:150px;">Fecha</th>
@@ -86,7 +86,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let transferencia of transferencias" class=" {{transferencia.Bloqueo == 'Si' ? 'bg-warning text-white' : '' }} ">
+                                <tr *ngFor="let transferencia of transferencias" class=" {{transferencia.Bloqueo == 'Si' ? 'bg-warning text-white' : '' }} {{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }}">
                                     <td>{{transferencia.Fecha | date:"dd/MM/yy" }}</td>
                                     <td>{{transferencia.Persona_Envia}}</td>
                                     <td>{{transferencia.Cuenta_Origen}}</td>
@@ -96,27 +96,33 @@
                                     <td>{{transferencia.Estado}}</td>
                                     <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
                                     <td class="text-center">
-                                        <button *ngIf="Bloqueado(transferencia.Bloqueo)"
-                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Bloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Bloquear', cancelButtonText:'No, Dejame Comprobar!'}"
-                                        (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)"
-                                        class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                        <button *ngIf="Bloqueado(transferencia.Bloqueo)" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Bloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Bloquear', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)"
+                                            class="btn btn-default btn-xs" type="button" style="margin:0;">
                                             <i class="fa fa-lock"></i>
                                         </button>
-                                        <button *ngIf="Desbloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" 
-                                        type="button" style="margin:0;" 
-                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Desbloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
-                                        (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)">
+                                        
+                                        <button *ngIf="!Bloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs"
+                                            type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Desbloquear esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="BloquearCuenta(transferencia.Id_Transferencia,transferencia.Bloqueo)">
                                             <i class="fa fa-unlock"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/transferenciaver',transferencia.Id_Transferencia]">
+
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                            [routerLink]="['/transferenciaver',transferencia.Id_Transferencia]">
                                             <i class="ti-receipt"></i>
-                                            
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" 
-                                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Devolver esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Devolver', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarTransferencia(transferencia.Id_Transferencia)">
-                                            <i class="ti-back-left"></i>
+
+                                        <button *ngIf="Devuelto(transferencia.Estado)" class="btn btn-default btn-xs"
+                                            type="button" style="margin:0;" (click)="DevolucionTransferencia(transferencia.Id_Transferencia,ModalDevolucionTransferencia)">
+                                            <i class="fa fa-undo"></i>
                                         </button>
+
+                                        <button *ngIf="!Devuelto(transferencia.Estado)" class="btn btn-default btn-xs"
+                                            type="button" style="margin:0;" (click)="ReactivarTransferencia(transferencia.Id_Transferencia,ModalReactivarTransferencia)">
+                                            <i class="fa fa-repeat" ></i>
+                                        </button>
+
                                     </td>
                                 </tr>
                             </tbody>
@@ -137,5 +143,62 @@
 <swal #deleteSwal title="Destinatario Eliminado" text="Se ha Eliminado Correctamente la transferencia" type="success">
 </swal>
 
-<swal #bloqueoSwal title="Transferencia Bloqueo/Desbloqueo" text="Se ha Bloqueado/Desbloqueado Correctamente la transferencia" type="success">
+<swal #bloqueoSwal title="Transferencia Bloqueo/Desbloqueo" text="Se ha Bloqueado/Desbloqueado Correctamente la transferencia"
+    type="success">
 </swal>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDevolucionTransferencia" #ModalDevolucionTransferencia>
+    <div class="app-modal-header">
+        <h4>Devolución Transferencia</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormDevolucionTransferencia="ngForm">
+            <input hidden name="Id_Transferencia" type="text" [(ngModel)]="Identificacion">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Motivo Devolución</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles del Banco" name="Motivo_Devolucion"
+                            ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormDevolucionTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="RealizarDevolucion(FormDevolucionTransferencia, ModalDevolucionTransferencia)">Guardar
+                Información</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalReactivarTransferencia" #ModalReactivarTransferencia>
+    <div class="app-modal-header">
+        <h4>Reactivar Transferencia</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormReactivarTransferencia="ngForm">
+            <input hidden name="Id_Transferencia" type="text" [(ngModel)]="Identificacion">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Motivo Reactivar</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles del Banco" name="Motivo_Reactivar"
+                            ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormReactivarTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a reactivar esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="RealizarReactivacion(FormReactivarTransferencia, ModalReactivarTransferencia)">Reactivar</button>
+        </div>
+    </div>
+</app-modal-basic>
