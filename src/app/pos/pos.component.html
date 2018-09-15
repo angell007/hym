@@ -293,9 +293,7 @@
                                                 <td>{{transferencia.Codigo}}</td>
                                                 <td>{{transferencia.Moneda_Origen}}</td>
                                                 <td>{{transferencia.Moneda_Destino}}</td>
-                                                <td class="text-right">{{transferencia.Valor_Transferencia | currency
-                                                    }}
-                                                </td>
+                                                <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
                                                 <td class="text-right">{{transferencia.Tasa_Cambio}}</td>
 
                                                 <td class="text-center">
@@ -330,8 +328,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label>Forma de Pago</label>
-                                            <select class="form-control" name="Forma_Pago" [(ngModel)]="formaPagoDefault"
-                                                (click)="boolFormaPago=true" required #formaPago="ngModel">
+                                            <select (change)="TipoPagoTransferencia($event.target.value)" class="form-control" name="Forma_Pago" [(ngModel)]="formaPagoDefault" required >
                                                 <option value="Efectivo">Efectivo</option>
                                                 <option value="Credito">Credito</option>
                                                 <option value="Consignacion">Consignación</option>
@@ -511,6 +508,14 @@
                                                     name="Detalle" ngModel></textarea>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                            <div class="col-md-4">
+                                                    <select class="form-control" name="Id_Tercero" ngModel >
+                                                            <option value="">Seleccione Tercero</option>
+                                                            <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
+                                                        </select>
+                                            </div>
                                     </div>
                                 </form>
 

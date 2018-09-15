@@ -169,6 +169,7 @@ export class PosComponent implements OnInit {
   idGiro: any;
   Remitente = [];
   Destinatario= [];
+  Tercero = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -704,9 +705,12 @@ export class PosComponent implements OnInit {
       this.ServicioComision = data;
     });
 
-    //Servicios
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
       this.Servicios = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+      this.Tercero = data;
     });
 
   }
@@ -1283,6 +1287,17 @@ export class PosComponent implements OnInit {
       this.DatosRemitenteEditarGiro = data.remitente.DatosRemitenteEditarGiro;
       this.DatosDestinatarioEditarGiro = data.destinatario.DatosDestinatarioEditarGiro;
     });
+  }
+
+  TipoPagoTransferencia(value){
+    switch(value){
+      case "Credito" : {
+        break;}
+      case "Consignacion" : {
+        break;}
+      case "Efectivo" : {
+        break;}
+    }
   }
 
 }
