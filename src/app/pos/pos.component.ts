@@ -249,15 +249,12 @@ export class PosComponent implements OnInit {
   }
 
   GuardarMovimiento(formulario: NgForm) {
-    //formulario.value.Costo_Transferencia = 1;
-    //console.log(localStorage);
 
     formulario.value.Estado = "Pendiente";
     formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
     formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
-    //console.log(formulario.value); 
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -296,19 +293,11 @@ export class PosComponent implements OnInit {
     }
     if (destinatario.length < 5 && destinatario.length > 0) {
       this.warnSwal.show();
-      //console.log("número de documento inconrrecto.");      
     }
     else {
       this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: destinatario, nombre: destinatario } }).subscribe((data: any) => {
 
-        //console.log("DESTINATARIOS");
-
-        //console.log(data);
-
         if (data.length == 0) {
-          //console.log("Num documento");
-          //console.log(this.Envios[index].Numero_Documento_Destino);
-
           this.Envios[index].Numero_Documento_Destino = 0;
           this.CrearDestinatario(destinatario);
         }
@@ -365,9 +354,6 @@ export class PosComponent implements OnInit {
     this.IdRemitente = remitente;
   }
 
-  ValidarTransferencia() {
-    //console.log("cerrar modal");    
-  }
 
   CrearDestinatario(destinatario) {
     this.Cuentas = [{
@@ -534,13 +520,6 @@ export class PosComponent implements OnInit {
       this.ValorCorresponsal = data.Valor;
       this.DetalleCorresponsal = data.Detalle;
     });
-  }
-
-  ResetFormulario() {
-    this.IdCorresponsal = null;
-    this.ValorCorresponsal = null;
-    this.DetalleCorresponsal = null;
-    this.CorresponsalBancario = null;
   }
 
 
@@ -1268,6 +1247,11 @@ export class PosComponent implements OnInit {
     datos.append("modulo", 'Giro');
     datos.append("id", id);
     this.http.post(this.globales.ruta + 'php/giros/anular_giro.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = "Amulado con Exito";
+      this.confirmacionSwal.text = "Se ha anulado correctamente el giro"
+      this.confirmacionSwal.type = "success"
+      this.confirmacionSwal.show();
+      this.actualizarVista();
     });
   }
 

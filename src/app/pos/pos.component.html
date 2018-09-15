@@ -588,7 +588,7 @@
                                                     <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                         <i class="ti-printer"></i>
                                                     </button>
-                                                    <button (click)="EditarGiro(Giro.Id_Giro)" class="btn btn-default btn-xs"
+                                                    <button *ngIf="anulado(Giro.Estado)" (click)="EditarGiro(Giro.Id_Giro)" class="btn btn-default btn-xs"
                                                         type="button" style="margin:0;">
                                                         <i class="ti-pencil"></i>
                                                     </button>
@@ -1737,7 +1737,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Observaciones</label>
-                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel></textarea>
+                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Giro.Detalle}}"></textarea>
                                 </div>
                             </div>
                         </div>
