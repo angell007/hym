@@ -60,17 +60,11 @@ export class EgresosComponent implements OnInit {
   public boolValor:boolean = false;
   public user : any;
 
-  //Valores por defecto
-  grupoDefault: string = "";
-  monedaDefault: string = "";
-  terceroDefault: string = "";
-
   conteoEgresosGrafica = [];
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
 
-  readonly ruta = 'https://hym.corvuslab.co/';
   @ViewChild('deleteSwal') deleteSwal:any;
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('confirmacionSwal') confirmacionSwal:any;
@@ -78,13 +72,11 @@ export class EgresosComponent implements OnInit {
   @ViewChild('ModalEgreso') ModalEgreso:any;
   @ViewChild('FormEditarEgreso') FormEditarEgreso:any;
   @ViewChild('ModalEditarEgreso') ModalEditarEgreso:any; 
-
-  constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) {
-   /* this.fetchFilterData((data) => {
-      this.tempFilter = [...data];
-      this.rowsFilter = data;
-    });*/
-   }
+  @ViewChild('ModalEgresoEditar') ModalEgresoEditar:any; 
+  EgresoEditar = [];
+  IdEgreso: any;
+  
+  constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) { }
 
   themeColors = this.colorConfig.get().colors;
   //Line Chart Config
@@ -125,13 +117,55 @@ export class EgresosComponent implements OnInit {
   ngOnInit() {
     this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
-    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
       this.Grupos= data;
     });
-    this.http.get(this.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Moneda'}}).subscribe((data:any)=>{
       this.Monedas= data;
     });
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;   
+  }
+
+
+  ActualizarVista()
+  {
+    this.http.get(this.globales.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
+      this.Egresos= data;
+      this.dtTrigger.next();
+    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar MENU &eacute;l&eacute;ments",
+        info: "Mostrando desde START al END de TOTAL elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado MAX elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    }; 
+
+    //Terceros
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tercero'}}).subscribe((data:any)=>{
+      this.Terceros= data;
+    });
 
     this.http.get(this.globales.ruta + 'php/egresos/conteo_grafica.php').subscribe((data: any) => {
       this.conteoEgresosGrafica = data[0];
@@ -181,202 +215,38 @@ export class EgresosComponent implements OnInit {
     });
   }
 
-  /*fetchFilterData(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', this.ruta+'php/egresos/lista_egresos.php');
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
-  } */
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    /*this.OcultarFormulario(this.ModalE);
-    this.OcultarFormulario(this.ModalEditarTraslado);*/
-  }
-
-  InicializarBool()
-  {
-    this.boolGrupo = false;
-    this.boolTercero = false;
-    this.boolMoneda = false;
-    this.boolValor = false;
-  }
-
-  ActualizarVista()
-  {
-    this.http.get(this.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
-      this.Egresos= data;
-      this.dtTrigger.next();
-    });
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar MENU &eacute;l&eacute;ments",
-        info: "Mostrando desde START al END de TOTAL elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado MAX elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    }; 
-  }
-
-  ListaTerceros(grupo)
-  {
-    this.http.get(this.ruta+'php/egresos/lista_terceros.php',{ params: { id: grupo}}).subscribe((data:any)=>{
-      this.Terceros= data;
-    });
-    this.terceroDefault = "";
-    this.IdTercero = "";
-  }
-
-  ListaTercerosNoGrupo()
-  {  
-    this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
-      this.Terceros= data;        
-    });
-  }
-
-  GuardarEgreso(formulario:NgForm, modal){
-
-    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
-        
+  GuardarEgreso(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo",'Egreso');
     datos.append("datos",info);
-    this.http.post(this.ruta+'php/egresos/egresos_guardar.php',datos).subscribe((data:any)=>{      
+    this.http.post(this.globales.ruta+'/php/egresos/egresos_guardar.php',datos)
+    .subscribe((data:any)=>{
+      modal.hide();
       this.ActualizarVista();
-      this.InicializarBool();
-      this.grupoDefault = "";
-      this.monedaDefault = "";
-      this.terceroDefault = "";
-      this.confirmacionSwal.title=data.titulo;
-      this.confirmacionSwal.text= data.mensaje;
-      this.confirmacionSwal.type= data.tipo;
-      this.confirmacionSwal.show();
-      this.FormEgreso.reset();
-      this.ModalEgreso.hide();
+      formulario.reset();
     });
   }
 
-  ActulizarEgreso(formulario:NgForm, modal){
+  EditarEgreso(id){
+    //IdEgreso
+    this.http.get(this.globales.ruta +'php/genericos/detalle.php',{
+      params:{modulo:'Egreso', id:id}
+    }).subscribe((data:any)=>{
+      this.IdEgreso = id;
+      this.EgresoEditar = data;
+      this.ModalEgresoEditar.show();    
+    });
+  }
 
-    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario; 
-        
-    let info = JSON.stringify(formulario.value);
+  AnularEgreso(id,estado){
     let datos = new FormData();
     datos.append("modulo",'Egreso');
-    datos.append("datos",info);
-    this.http.post(this.ruta+'php/egresos/egresos_editar.php',datos).subscribe((data:any)=>{      
-      this.ActualizarVista();
-      this.InicializarBool();
-      this.grupoDefault = "";
-      this.monedaDefault = "";
-      this.terceroDefault = "";
-      this.confirmacionSwal.title=data.titulo;
-      this.confirmacionSwal.text= data.mensaje;
-      this.confirmacionSwal.type= data.tipo;
-      this.confirmacionSwal.show();
-      this.FormEditarEgreso.reset();
-      this.ModalEditarEgreso.hide();
+    datos.append("id",id);
+    datos.append("estado",estado);
+    this.http.post(this.globales.ruta+'/php/genericos/anular_generico.php',datos)
+    .subscribe((data:any)=>{
+      this.ActualizarVista();      
     });
   }
-
-  /*EliminarEgreso(id){
-    let datos=new FormData();
-    datos.append("modulo", 'Egreso');
-    datos.append ("id",id);
-    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos ).subscribe((data:any)=>{
-      this.ActualizarVista();
-      this.deleteSwal.show();
-    });    
-  }*/
-
-  EliminarEgreso(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Egreso');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/egresos/egresos_anular.php', datos ).subscribe((data: any) => {
-      this.deleteSwal.show();
-      this.ActualizarVista();
-    });
-  }
-
-  VerEgreso(id, modal){
-    this.ListaTercerosNoGrupo();
-    this.http.get(this.ruta+'php/egresos/egresos_ver.php',{
-      params:{modulo:'Egreso', id:id}
-    }).subscribe((data:any)=>{
-      this.Identificacion = id;
-      this.Grupos.forEach(element => {
-        if (element.Id_Grupo == data.Id_Grupo) this.Grupo = element.Nombre;
-      });
-
-      this.Terceros.forEach(element => {
-        if (element.Id_Tercero == data.Id_Tercero) this.Tercero = element.Nombre;
-      });
-      this.Moneda = data.Moneda;
-      this.Valor = data.Valor;
-      this.Detalle = data.Detalle;
-      modal.show();
-    });
-  }
-
-  EditarEgreso(id, modal){
-    this.InicializarBool();
-    this.http.get(this.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Egreso', id:id}
-    }).subscribe((data:any)=>{
-      this.Identificacion = id;
-      this.IdGrupo = data.Id_Grupo;
-      this.AutoSleccionarTercero(this.IdGrupo, data.Id_Tercero);
-      this.Moneda = data.Moneda;
-      this.Valor = data.Valor;
-      this.Detalle = data.Detalle;
-      modal.show();
-    });
-  }
-
-  AutoSleccionarTercero(grupo, tercero){
-    this.http.get(this.ruta+'php/egresos/lista_terceros.php',{ params: { id: grupo}}).subscribe((data:any)=>{
-      this.Terceros= data;     
-      this.IdTercero = tercero;
-    });
-  }
-
-  /*OcultarFormulario(modal){
-    this.Identificacion = null;
-    this.IdGrupo = null;
-    this.IdTercero = null;
-    this.Moneda = null;
-    this.Valor = null;
-    this.Detalle = null;
-    modal.hide();
-  }*/
-
-
-
 }
