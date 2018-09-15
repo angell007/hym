@@ -509,11 +509,21 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Para Credito-->
                                     <div class="row">
                                             <div class="col-md-4">
                                                     <select class="form-control" name="Id_Tercero" ngModel >
                                                             <option value="">Seleccione Tercero</option>
                                                             <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
+                                                        </select>
+                                            </div>
+                                    </div>
+                                    <!-- Para Consignacion-->
+                                    <div class="row">
+                                            <div class="col-md-4">
+                                                    <select class="form-control" name="Id_Cuenta_Bancaria" ngModel >
+                                                            <option value="">Seleccione Cuenta Bancaria</option>
+                                                            <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Id_Cuenta_Bancaria">{{cuenta.Numero_Cuenta}}</option>
                                                         </select>
                                             </div>
                                     </div>

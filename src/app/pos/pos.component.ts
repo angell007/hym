@@ -170,6 +170,7 @@ export class PosComponent implements OnInit {
   Remitente = [];
   Destinatario= [];
   Tercero = [];
+  CuentaBancaria = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -711,6 +712,10 @@ export class PosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       this.Tercero = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
+      this.CuentaBancaria = data;
     });
 
   }
