@@ -50,8 +50,6 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Nueva Caja Recaudo</h4>
     </div>
     <div class="app-modal-body">
@@ -60,19 +58,19 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="" >
-                   </div>
+                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="">
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="" >
+                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="" >
+                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="">
                     </div>
                 </div>
             </div>
@@ -80,7 +78,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" >
+                        <select class="form-control" required name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
@@ -89,7 +87,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="" >
+                        <select class="form-control" required name="Id_Municipio" ngModel="">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
@@ -100,8 +98,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary btn-sm" 
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCaja(FormCaja, ModalCaja)">Guardar</button>
         </div>
     </div>
@@ -109,8 +106,6 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Editar Caja Recaudo</h4>
     </div>
     <div class="app-modal-body">
@@ -122,23 +117,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-8">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Nombre}}" >
-                     </div>
+                        <input type="text" placeholder="Nombre Caja Recaudo" class="form-control" name="Nombre" ngModel="{{Caja.Nombre}}">
+                    </div>
                 </div>
-
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Username}}" >
-                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" placeholder="Password Caja Recaudo" class="form-control" name="Password" ngModel="{{Password}}" >
+                        <input type="text" placeholder="Username Caja Recaudo" class="form-control" name="Username" ngModel="{{Caja.Username}}">
                     </div>
                 </div>
             </div>
@@ -146,28 +134,27 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}" (change)="Municipios_Departamento($event.target.value)">
+                        <select class="form-control" required name="Id_Departamento" ngModel="{{Caja.Id_Departamento}}" (change)="Municipios_Departamento($event.target.value)">
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}" >
+                        <select class="form-control" required name="Id_Municipio" ngModel="{{Caja.Id_Municipio}}">
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                   </div>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" 
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja de recaudo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta caja de recaudo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCaja(FormEditarCaja, ModalEditarCaja)">Guardar</button>
         </div>
     </div>

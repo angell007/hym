@@ -1,7 +1,10 @@
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs/Subject';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-informaciongiros',
@@ -14,15 +17,15 @@ export class InformaciongirosComponent implements OnInit {
   public GirosRemitentes: any[];
   public GirosDestinatarios: any[];
 
-  //listas
-
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
 
   dtOptions1: DataTables.Settings = {};
   dtTrigger1 = new Subject();
-
+    
+  @ViewChild('ModalRemitente') ModalRemitente: any;
   @ViewChild('ModalEditarRemitente') ModalEditarRemitente: any;
+  @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
   Identificacion: any;
   GiroEditar =[];
@@ -33,34 +36,34 @@ export class InformaciongirosComponent implements OnInit {
     this.ActualizarVista();
   }
 
-  EliminarGiro(identificacion, tipo) {
+  EliminarGiro(identificacion, tipo,estado) {
 
     switch (tipo) {
       case 'remitente': {
-        this.eventoEliminar('Remitente', identificacion);
+        this.eventoEliminar(identificacion,'Giro_Remitente',estado,'Remitente');
         break;
       }
       case 'destinatario': {
-        this.eventoEliminar('Destinatario', identificacion);
+        this.eventoEliminar(identificacion,'Giro_Destinatario',estado,'Destinatario');
         break;
       }
     }
   }
 
   EditarGiro(identificacion, tipo) {
-    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+    this.http.get(this.globales.ruta + 'php/giros/detalle_giro.php', {
       params: { modulo: tipo, id: identificacion }
     }).subscribe((data: any) => {
       this.Identificacion = identificacion;
       this.GiroEditar = data;
-
+      console.log(data);
 
       switch (tipo) {
-        case 'remitente': {
+        case 'Remitente': {
           this.ModalEditarRemitente.show();
           break;
         }
-        case 'destinatario': {
+        case 'Destinatario': {
           this.ModalEditarDestinatario.show();
           break;
         }
@@ -69,13 +72,15 @@ export class InformaciongirosComponent implements OnInit {
     });
   }
 
-  eventoEliminar(modulo, id) {
+  eventoEliminar(id,modulo,estado,tipo) {
 
     let datos = new FormData();
-    datos.append("modulo", modulo);
-    datos.append("id", id);
-
-    this.http.post(this.globales.ruta + '/php/giros/eliminar_giro.php', datos).subscribe((data: any) => {
+    datos.append("modulo",modulo);
+    datos.append("estado",estado);
+    datos.append("id",id);
+    datos.append("tipo",tipo);
+    
+    this.http.post(this.globales.ruta + 'php/giros/eliminar_giro.php', datos).subscribe((data: any) => {
       /*this.deleteSwal.show();*/
       this.ActualizarVista();
     });
@@ -118,6 +123,11 @@ export class InformaciongirosComponent implements OnInit {
       }
     };
 
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Destinatario' } }).subscribe((data: any) => {
+      this.GirosDestinatarios = data;
+      this.dtTrigger1.next();
+    });
+
     this.dtOptions1 = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -147,10 +157,22 @@ export class InformaciongirosComponent implements OnInit {
         }
       }
     };
+    
+  }
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Destinatario' } }).subscribe((data: any) => {
-      this.GirosDestinatarios = data;
-      this.dtTrigger1.next();
+  GuardarGiro(formulario: NgForm, modal,tabla,tipo){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("modulo",tabla);
+    datos.append("datos",info);
+    datos.append("tipo",tipo);
+    this.http.post(this.globales.ruta+'php/giros/guardar_giro.php',datos)
+    .subscribe((data:any)=>{
+      formulario.reset();
+      modal.hide();
+      this.ActualizarVista();
+      /*this.paisDefault = "";
+      this.saveSwal.show();*/      
     });
   }
 

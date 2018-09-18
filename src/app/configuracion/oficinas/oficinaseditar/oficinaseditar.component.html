@@ -13,7 +13,7 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input hidden readonly type="text" name="Id_Oficina" ngModel="{{id}}">
+                    <input hidden readonly type="text" name="id" ngModel="{{id}}">
                     <strong>
                       <label>Nombre </label>
                     </strong>
@@ -121,85 +121,26 @@
               </div>
 
               <hr>
-              <h3>Máximos y Mínimos</h3>
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Mín.Venta Efect.</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Minimo_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Minimo_Venta_Efectivo}}">
+              
+                <div class="row" style="margin-top: 10px; margin-bottom: 10px" *ngFor="let item of CamposMoneda; let i = index">
+                  <div class="col-md-12">
+                    <h5 > <span > {{item.Nombre}} </span></h5>
+                    <hr>
+                  </div>
+                  <div class="col-md-4" *ngFor="let item1 of item.Campos; let j = index">
+                    <div class="form-group">
+                      <label>{{item1.Campo_Visual}}</label>
+                      <input type="number" class="form-control" name="Diario_{{j}}" ngModel="{{item1.Valor}}" (blur)="agregarValor(i,j,$event.target.value)"> 
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <select *ngIf="ocultar" class="form-control" required name="Id_Moneda" ngModel (change)="habilitarCampo($event.target.value)">
+                      <option value="">Seleccione una Moneda</option>
+                      <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}</option>
+                    </select>
                   </div>
                 </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Mín. Venta/Cuenta</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Minimo_Venta_Cuenta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Minimo_Venta_Cuenta}}">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Precio Ventanilla</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Precio_Ventanilla" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Precio_Ventanilla}}">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Max.Compra</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Maximo_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Maximo_Compra}}">
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <h3>Comisiones</h3>
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Comisión efectivo</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Comision_efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Comision_efectivo}}">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Pagar comisión desde</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Pagar_comision_desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Pagar_comision_desde}}">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Mín. No cobro</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Minimo_No_cobro" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Minimo_No_cobro}}">
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <strong>
-                      <label>Costo Transferencia</label>
-                    </strong>
-                    <input currencyMask class="form-control" name="Costo_Transferencia" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                      ngModel="{{oficina.Costo_Transferencia}}">
-                  </div>
-                </div>
-              </div>
+
             </form>
           </div>
           <div class="app-modal-footer">

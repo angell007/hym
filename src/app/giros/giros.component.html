@@ -62,12 +62,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="col-md-12 card min-heigth">
+                <div>
+                    <div id="chartdiv" style="height: 500px;font-size: 11px;width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
             <div class="widget card">
                 <div class="card-block">
                     <p>Giros realizados en nuestro Sistema</p>
                     <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                            [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
                                     <th style="width:150px;">Fecha</th>
@@ -80,7 +88,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let giro of giros">
+                                <tr *ngFor="let giro of giros" class="{{giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
                                     <td>{{giro.Fecha | date:"dd/MM/yy" }}</td>
                                     <td>{{giro.Origen}}</td>
                                     <td>{{giro.Nombre_Remitente}}</td>
@@ -91,11 +99,17 @@
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerGiro(giro.Id_Giro, ModalVerGiro)">
                                             <i class="ti-search"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGiro(giro.Id_Giro, ModalEditarGiro)">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="RealizarGiro(giro.Id_Giro)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="DevolverGiro(giro.Id_Giro)">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                        <button *ngIf="anulado(giro.Estado)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGiro(giro.Id_Giro, ModalEditarGiro)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                            (confirm)="EliminarGiro(giro.Id_Giro)">
+                                        <button *ngIf="anulado(giro.Estado)" class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Giro, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="AnularGiro(giro.Id_Giro)">
                                             <i class="ti-trash"></i>
                                         </button>
                                     </td>
@@ -121,7 +135,8 @@
             <div class="col-md-4" hidden>
                 <div class="form-group">
                     <label>Identificación</label>
-                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}"
+                        required>
                 </div>
             </div>
             <div class="row">
@@ -226,45 +241,246 @@
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarGiro" #ModalEditarGiro>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGiroEditar" #ModalGiroEditar>
     <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalEditarGiro.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
         <h4>Editar Giro</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-        <form #FormEditarGiro="ngForm">
-            <div class="col-md-4" >
-                <div class="form-group" hidden>
-                    <label>Identificación</label>
-                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mrg-top-30" style="min-height: 470px;">
+                    <form #FormEditarGiro="ngForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-sm btn-success pull-right">
+                                    <i class="ti ti-hand-point-up"></i>
+                                </button>
+                                <h4>Remitente</h4>
+                                <hr>
+                                <div class="row">
+                                    <input type="text" ngModel="{{idGiro}}" name="Id_Giro" hidden >
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Departamento Remitente</label>
+                                            <select name="Departamento" ngModel="{{Remitente.Id_Departamento}}" class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                <option value="">Seleccione Departamento</option>
+                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" name="Departamento_Remitente"
+                                            [(ngModel)]="Departamento_Remitente" hidden readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ciudad Origen</label>
+                                            <select class="form-control" name="Municipio" name="Municipio_Remitente"
+                                                ngModel="{{Remitente.Nombre}}">
+                                                <option value="">Seleccione Ciudad</option>
+                                                <option *ngFor="let municipio of Municipios_Remitente" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Número de documento</label>
+                                        <input type="text" class="form-control" placeholder="Número Documento" name="Documento_Remitente"
+                                            autocomplete="off" [(ngModel)]="DatosRemitenteEditarGiro" [ngbTypeahead]="search_remitente"
+                                            [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                            (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteEditarGiro);">
+                                        <input id="Documento_Remitente" type="text" class="form-control" readonly name="Documento_Remitente"
+                                            ngModel="{{DatosRemitenteEditarGiro.Id_Giro_Remitente}}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Nombre Completo</label>
+                                            <input id="Nombre_Remitente" type="text" placeholder="Ejem: Pepito Perez" class="form-control"
+                                                name="Nombre_Remitente" ngModel="{{DatosRemitenteEditarGiro.Nombre}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input id="Telefono_Remitente" type="text" placeholder="Ejem: 318 3555555" class="form-control"
+                                                name="Telefono_Remitente" ngModel="{{DatosRemitenteEditarGiro.Telefono}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <h4>Destinatario</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Departamento Destinatario</label>
+                                            <select name="departamento_destino" ngModel="{{Destinatario.Id_Departamento}}" class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                <option value="">Seleccione Departamento</option>
+                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" name="Departamento_Destinatario"
+                                            [(ngModel)]="Departamento_Destinatario" hidden readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ciudad Destino</label>
+                                            <select class="form-control" ngModel="{{Destinatario.Nombre}}"  name="Municipio_Destinatario">
+                                                <option value="">Seleccione Ciudad</option>
+                                                <option *ngFor="let municipio of Municipios_Destinatario" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Número de Documento</label>
+                                            <input type="text" class="form-control" placeholder="Número Documento"
+                                                autocomplete="off" name="Documento_Destinatario" [(ngModel)]="DatosDestinatarioEditarGiro"
+                                                [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatarioEditarGiro)">
+                                            <input id="Documento_Destinatario" type="text" class="form-control" readonly name="Documento_Destinatario"
+                                                ngModel="{{DatosDestinatarioEditarGiro.Id_Giro_Remitente}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Nombre Completo</label>
+                                            <input id="Nombre_Destinatario" type="text" placeholder="Ejem: Juan Sanchez" class="form-control"
+                                                name="Nombre_Destinatario" ngModel="{{DatosDestinatarioEditarGiro.Nombre}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input id="Telefono_Destinatario" type="text" placeholder="Ejem: 6543424" class="form-control" name="Telefono_Destinatario"
+                                                ngModel="{{DatosDestinatarioEditarGiro.Telefono}}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <h4>Datos del giro</h4>
+                        <div class="row" hidden>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Identificación</label>
+                                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación"
+                                        class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Oficina</label>
+                                    <input name="Id_Oficina" type="text" placeholder="Identificación" class="form-control"
+                                        ngModel="{{IdOficina}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Caja</label>
+                                    <input name="Id_Caja" type="text" placeholder="Identificación" class="form-control"
+                                        ngModel="{{IdCaja}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mrg-top-20">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Valor a Enviar</label>
+                                    <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido"
+                                        ngModel={{ValorEnviar}} (blur)="valorComision($event.target.value)">
+                                    <!--CalcularTotal($event.target.value)-->
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Comisión</label>
+                                    <input type="text" placeholder="Precio" class="form-control" name="Comision"
+                                        ngModel="{{Costo}}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group text-center">
+                                    <label>Libre</label>
+                                    <input id="libre" type="checkbox" placeholder="Precio" class="form-control" (click)="valorComision(ValorEnviar)">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Total</label>
+                                    <input type="text" placeholder="Precio" class="form-control" readonly name="Valor_Total"
+                                        ngModel="{{ValorTotal}}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Entregado</label>
+                                    <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega"
+                                        ngModel="{{ValorEntrega}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Observaciones</label>                                     
+                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-md-4" >
-                <div class="form-group" hidden>
-                    <label>Identificación</label>
-                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
-                        required>
-                </div>
-            </div>
-            <!--<div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Grupo</label>
-                        <select class="form-control" required name="Id_Grupo" ngModel="{{IdGrupo}}" (change)="ListaTerceros($event.target.value)"
-                            (focus)="$event.target.select()" (focusout)="boolGrupo = true" required #grupoEd="ngModel">
-                            <option value="">Seleccione un grupo</option>
-                            <option *ngFor="let Grupo of Grupos" value="{{Grupo.Id_Grupo}}">{{Grupo.Nombre}}</option>
-                        </select>
-                        <div *ngIf="grupoEd.value=='' && boolGrupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!grupoEd.value==''" style="color:green">Datos correctos!</div>
-                    </div>
-                </div>
-            </div>-->
-        </form>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            (confirm)="RealizarEdicionGiro(FormEditarGiro,ModalGiroEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+            Giro</button>
     </div>
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDevolucionGiro" #ModalDevolucionGiro>
+        <div class="app-modal-header">
+            <h4>Devolución Giro</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormDevolucionGiro="ngForm">
+                <input hidden name="Id_Giro" type="text" [(ngModel)]="IdentificacionGiro">
+                <input hidden name="Identificacion_Funcionario" type="text" [(ngModel)]="IdentificacionFuncionario">
+                <input hidden name="Id_Oficina" type="text" [(ngModel)]="IdOficina">
+                <input hidden name="Id_Caja" type="text" [(ngModel)]="IdCaja">                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Motivo Devolución</label>
+                            <textarea rows="4" cols="50" class="form-control" placeholder="Detalles del Banco" name="Motivo_Devolucion"
+                                ngModel></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="app-modal-footer">
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary" [disabled]="!FormDevolucionGiro.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                    (confirm)="RealizarDevolucionGiro(FormDevolucionGiro, ModalDevolucionGiro)">Devolver</button>
+            </div>
+        </div>
+    </app-modal-basic>
 
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
@@ -274,3 +490,5 @@
 
 <swal #deleteSwal title="Traslado eliminado" text="Se ha Eliminado Correctamente el traslado" type="success">
 </swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

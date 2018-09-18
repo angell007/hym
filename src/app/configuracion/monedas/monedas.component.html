@@ -10,8 +10,8 @@
       <div class="card">
         <div class="card-block">
           <p>Tenemos los tipos de monedas de nuestra empresa</p>
-          <div class="table-overflow">
-            <table class="table table-hover table-sm table-striped">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
               <thead>
                 <tr>
                   <th style="width:50px"></th>
@@ -33,7 +33,7 @@
                     <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarMoneda(Moneda.Id_Moneda, ModalEditarMoneda)">
                       <i class="ti-pencil"></i>
                     </button>
-                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Moneda, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a eliminar esta Moneda, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
                       (confirm)="EliminarMoneda(Moneda.Id_Moneda)">
                       <i class="ti-trash"></i>
                     </button>
@@ -48,774 +48,287 @@
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" style="background-color:black; overflow-y: auto;" #ModalMoneda>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalMoneda" #ModalMoneda>
   <div class="app-modal-header">
-    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-      (click)="OcultarFormularios()">X</button>
     <h4>Nueva moneda</h4>
+    <div *ngIf="Error" class="alert alert-danger">
+      <strong>ERROR</strong><br>
+      <ul>
+        <li *ngFor=" let item of Mensaje">
+          {{item}}
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+  <div class="app-modal-body">
     <form #FormMoneda="ngForm">
       <div class="row">
+
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombre="ngModel">
-            <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Código</label>
-            <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="" (focus)="$event.target.select()"
-              (focusout)="boolCodigo = true" required #codigo="ngModel">
-            <div *ngIf="!codigo.valid && boolCodigo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="codigo.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Orden</label>
             <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
-              name="Orden" ngModel=0 (focus)="$event.target.select()" (focusout)="boolOrden = true" required #orden="ngModel">
-            <div *ngIf="!orden.valid && boolOrden==true" style="color:red">Campo inválido</div>
-            <div *ngIf="orden.valid && boolOrden==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <h3>Datos de Cambios</h3>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor máximo de venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Max_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolMaxVentaEfectivo = true" required #maxVentaEfectivo="ngModel">
-            <div *ngIf="!maxVentaEfectivo.valid && boolMaxVentaEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxVentaEfectivo.valid && boolMaxVentaEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor mínimo de venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Min_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolMinVentaEfectivo = true" required #minVentaEfectivo="ngModel">
-            <div *ngIf="!minVentaEfectivo.valid && boolMinVentaEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minVentaEfectivo.valid && boolMinVentaEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor maximo de venta por cuenta</label>
-            <input currencyMask class="form-control" name="Max_Venta_Cuenta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolMaxVentaCuenta = true" required #maxVentaCuenta="ngModel">
-            <div *ngIf="!maxVentaCuenta.valid && boolMaxVentaCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxVentaCuenta.valid && boolMaxVentaCuenta==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor mínimo de venta por cuenta</label>
-            <input currencyMask class="form-control" name="Min_Venta_Cuenta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolMinVentaCuenta = true" required #minVentaCuenta="ngModel">
-            <div *ngIf="!minVentaCuenta.valid && boolMinVentaCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minVentaCuenta.valid && boolMinVentaCuenta==true" style="color:green">Datos correctos!</div>
+              name="Orden" ngModel=0>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de venta sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Venta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolSugeridoVenta = true" required #sugeridoVenta="ngModel">
-            <div *ngIf="!sugeridoVenta.valid && boolSugeridoVenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="sugeridoVenta.valid && boolSugeridoVenta==true" style="color:green">Datos correctos!</div>
-          </div>
+        <!--<div class="col-md-12">
+          <h5 *ngIf="titulo(item.Titulo)"> <span class="text-info"> {{item.Titulo}} </span></h5>
         </div>
-        <div class="col-md-4">
+        [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'"
+      -->
+        <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
-            <label>Precio de compra sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolSugeridoCompra = true" required #sugeridoCompra="ngModel">
-            <div *ngIf="!sugeridoCompra.valid && boolSugeridoCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="sugeridoCompra.valid && boolSugeridoCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio por ventanilla</label>
-            <input currencyMask class="form-control" name="Precio_Ventanilla" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolPrecioVentanilla = true" required #precioVentanilla="ngModel">
-            <div *ngIf="!precioVentanilla.valid && boolPrecioVentanilla==true" style="color:red">Campo inválido</div>
-            <div *ngIf="precioVentanilla.valid && boolPrecioVentanilla==true" style="color:green">Datos correctos!</div>
+            <label>{{item.Campo_Visual}}</label>
+            <input type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
+              (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de compra maximo</label>
-            <input currencyMask class="form-control" name="Max_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
-              (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompra="ngModel">
-            <div *ngIf="!maxCompra.valid && boolMaxCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxCompra.valid && boolMaxCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de compra mínimo</label>
-            <input currencyMask class="form-control" name="Min_Compra" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
-              (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompra="ngModel">
-            <div *ngIf="!minCompra.valid && boolMinCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minCompra.valid && boolMinCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio mínimo de no cobro</label>
-            <input currencyMask class="form-control" name="Min_No_Cobro" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
-              (focus)="$event.target.select()" (focusout)="boolMinNoCobro = true" required #minNoCobro="ngModel">
-            <div *ngIf="!minNoCobro.valid && boolMinNoCobro==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minNoCobro.valid && boolMinNoCobro==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Redondeo a pesos en efectivo</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolRedondeoPesosEfectivo = true" required #redondeoPesosEfectivo="ngModel">
-            <div *ngIf="!redondeoPesosEfectivo.valid && boolRedondeoPesosEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="redondeoPesosEfectivo.valid && boolRedondeoPesosEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Redondeo a pesos en cuenta</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Cuenta" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolRedondeoPesosCuenta = true" required #redondeoPesosCuenta="ngModel">
-            <div *ngIf="!redondeoPesosCuenta.valid && boolRedondeoPesosCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="redondeoPesosCuenta.valid && boolRedondeoPesosCuenta==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <h3>Comisiones</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Comisión efectivo</label>
-            <input currencyMask class="form-control" name="Comision_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolComisionEfectivo = true" required #comisionEfectivo="ngModel">
-            <div *ngIf="!comisionEfectivo.valid && boolComisionEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="comisionEfectivo.valid && boolComisionEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Pagar comisión desde</label>
-            <input currencyMask class="form-control" name="Pagar_Comision_Desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolPagarComisionDesde = true" required #pagarComisionDesde="ngModel">
-            <div *ngIf="!pagarComisionDesde.valid && boolPagarComisionDesde==true" style="color:red">Campo inválido</div>
-            <div *ngIf="pagarComisionDesde.valid && boolPagarComisionDesde==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Comisión por recaudo</label>
-            <input currencyMask class="form-control" name="Comision_Recaudo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel=0 (focus)="$event.target.select()" (focusout)="boolComisionRecaudo = true" required #comisionRecaudo="ngModel">
-            <div *ngIf="!comisionRecaudo.valid && boolComisionRecaudo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="comisionRecaudo.valid && boolComisionRecaudo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
+
       <h3>Modulos</h3>
       <div class="row">
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="cambioCh" [(ngModel)]="cambioVal" id="cambio" hidden />
-            <label for="cambio"></label>
+        <div class="col-md-3" align="center">
+
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Cambio" id="Cambio" ngModel class="switch">
+              <label for="Cambio"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Cambio" ngModel="1" *ngIf="cambioVal" hidden>
-          <input type="number" class="form-control" name="Cambio" [(ngModel)]="cambioMod" *ngIf="!cambioVal" hidden>
+
           <label>Cambio</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="giroCh" [(ngModel)]="giroVal" id="giro" hidden />
-            <label for="giro"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Giro" id="Giro" ngModel class="switch">
+              <label for="Giro"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Giro" ngModel="1" *ngIf="giroVal" hidden>
-          <input type="number" class="form-control" name="Giro" [(ngModel)]="giroMod" *ngIf="!giroVal" hidden>
+
           <label>Giro</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="trasladoCh" [(ngModel)]="trasladoVal" id="traslado" hidden />
-            <label for="traslado"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Traslado" id="Traslado" ngModel class="switch">
+              <label for="Traslado"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Traslado" ngModel="1" *ngIf="trasladoVal" hidden>
-          <input type="number" class="form-control" name="Traslado" [(ngModel)]="trasladoMod" *ngIf="!trasladoVal" hidden>
           <label>Traslado</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="corresponsalBancarioCh" [(ngModel)]="corresponsalBancarioVal" id="corresponsalBancario" hidden
-            />
-            <label for="corresponsalBancario"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario" ngModel class="switch">
+              <label for="CorresponsalBancario"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Corresponsal_Bancario" ngModel="1" *ngIf="corresponsalBancarioVal" hidden>
-          <input type="number" class="form-control" name="Corresponsal_Bancario" [(ngModel)]="corresponsalBancarioMod" *ngIf="!corresponsalBancarioVal"
-            hidden>
           <label>Corresponsal bancario</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="servicioExternoCh" [(ngModel)]="servicioExternoVal" id="servicioExterno" hidden />
-            <label for="servicioExterno"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="ServicioExterno" id="ServicioExterno" ngModel class="switch">
+              <label for="ServicioExterno"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Servicio_Externo" ngModel="1" *ngIf="servicioExternoVal" hidden>
-          <input type="number" class="form-control" name="Servicio_Externo" [(ngModel)]="servicioExternoMod" *ngIf="!servicioExternoVal"
-            hidden>
           <label>Servicio externo</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="gastoCh" [(ngModel)]="gastoVal" id="gasto" hidden />
-            <label for="gasto"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Gasto" id="Gasto" ngModel class="switch">
+              <label for="Gasto"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Gasto" ngModel="1" *ngIf="gastoVal" hidden>
-          <input type="number" class="form-control" name="Gasto" [(ngModel)]="gastoMod" *ngIf="!gastoVal" hidden>
+
           <label>Gastos</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="transferenciaCh" [(ngModel)]="transferenciaVal" id="transferencia" hidden />
-            <label for="transferencia"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Transferencia" id="Transferencia" ngModel class="switch">
+              <label for="Transferencia"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Transferencia" ngModel="1" *ngIf="transferenciaVal" hidden>
-          <input type="number" class="form-control" name="Transferencia" [(ngModel)]="transferenciaMod" *ngIf="!transferenciaVal" hidden>
           <label>Transferencia</label>
+        </div>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input type="checkbox" name="Compras" id="Compras" ngModel class="switch">
+              <label for="Compras"></label>
+            </span>
+          </div>
+          <label>Compras</label>
         </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer ">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid || !codigo.valid || !orden.valid || !maxVentaEfectivo.valid || !minVentaEfectivo.valid || !maxVentaCuenta.valid || !minVentaCuenta.valid || !sugeridoVenta.valid || !sugeridoCompra.valid || !precioVentanilla.valid || !maxCompra.valid || !minCompra.valid || !minNoCobro.valid || !redondeoPesosEfectivo.valid || !redondeoPesosCuenta.valid || !comisionEfectivo.valid || !pagarComisionDesde.valid || !comisionRecaudo.valid"
-        [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-        (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Actualizar Información</button>
-    </div>
-  </div>
-</app-modal-basic>
-
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerMoneda" #ModalVerMoneda>
-  <div class="app-modal-header">
-    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-      (click)="OcultarFormularios()">X</button>
-    <h4>Ver Moneda</h4>
-  </div>
-  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
-    <form #FormVerMoneda="ngForm">
-      <div class="col-md-4" hidden>
-        <div class="form-group">
-          <strong>
-            <label>Identificación</label>
-          </strong>
-          <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Nombre: </label>
-            </strong>
-            <label>{{Nombre}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Código: </label>
-            </strong>
-            <label>{{Codigo}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Orden: </label>
-            </strong>
-            <label>{{Orden}}</label>
-          </div>
-        </div>
-      </div>
-      <h3>Datos de Cambios</h3>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <strong>
-              <label>Valor maximo de venta en Efectivo: </label>
-            </strong>
-            <label>{{MaxVentaEfectivo}}</label>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <strong>
-              <label>Valor mínimo de venta en Efectivo: </label>
-            </strong>
-            <label>{{MinVentaEfectivo}}</label>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <strong>
-              <label>Valor maximo de venta por cuenta: </label>
-            </strong>
-            <label>{{MaxVentaCuenta}}</label>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <strong>
-              <label>Valor mínimo de venta por cuenta: </label>
-            </strong>
-            <label>{{MinVentaCuenta}}</label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio de venta sugerido: </label>
-            </strong>
-            <label>{{SugeridoVenta}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio de compra sugerido: </label>
-            </strong>
-            <label>{{SugeridoCompra}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio por ventanilla: </label>
-            </strong>
-            <label>{{PrecioVentanilla}}</label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio de compra maximo: </label>
-            </strong>
-            <label>{{MaxCompra}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio de compra mínimo: </label>
-            </strong>
-            <label>{{MinCompra}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Precio mínimo de no cobro: </label>
-            </strong>
-            <label>{{MinNoCobro}}</label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <strong>
-              <label>Redondeo a pesos en efectivo: </label>
-            </strong>
-            <label>{{RedondeoPesosEfectivo}}</label>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <strong>
-              <label>Redondeo a pesos en cuenta: </label>
-            </strong>
-            <label>{{RedondeoPesosCuenta}}</label>
-          </div>
-        </div>
-      </div>
-      <h3>Comisiones</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Comisión efectivo: </label>
-            </strong>
-            <label>{{ComisionEfectivo}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Pagar comisión desde: </label>
-            </strong>
-            <label>{{PagarComisionDesde}}</label>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <strong>
-              <label>Comisión por recaudo</label>
-            </strong>
-            <label>{{ComisionRecaudo}}</label>
-          </div>
-        </div>
-      </div>
-      <h3>Modulos</h3>
-      <div class="row">
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="cambioCh2" [(ngModel)]="cambioVal2" id="cambio2" hidden readonly />
-            <label for="cambio2"></label>
-          </div>
-          <label>Cambio</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="giroCh2" [(ngModel)]="giroVal2" id="giro2" hidden />
-            <label for="giro2"></label>
-          </div>
-          <label>Giro</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="trasladoCh2" [(ngModel)]="trasladoVal2" id="traslado2" hidden />
-            <label for="traslado2"></label>
-          </div>
-          <label>Traslado</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="corresponsalBancarioCh2" [(ngModel)]="corresponsalBancarioVal2" id="corresponsalBancario2" hidden
-            />
-            <label for="corresponsalBancario2"></label>
-          </div>
-          <label>Corresponsal bancario</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="servicioExternoCh2" [(ngModel)]="servicioExternoVal2" id="servicioExterno2" hidden />
-            <label for="servicioExterno2"></label>
-          </div>
-          <label>Servicio externo</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="gastoCh2" [(ngModel)]="gastoVal2" id="gasto2" hidden />
-            <label for="gasto2"></label>
-          </div>
-          <label>Gastos</label>
-        </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="transferenciaCh2" [(ngModel)]="transferenciaVal2" id="transferencia2" hidden />
-            <label for="transferencia2"></label>
-          </div>
-          <label>Transferencia</label>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="app-modal-footer">
-    <div class="text-right">
-      <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerMoneda)">Cerrar</button>
+      <button *ngIf="Boton" type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
     </div>
   </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarMoneda" #ModalEditarMoneda>
   <div class="app-modal-header">
-    <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-      (click)="OcultarFormularios()">X</button>
     <h4>Editar moneda</h4>
+    <div *ngIf="Error" class="alert alert-danger">
+      <strong>ERROR</strong><br>
+      <ul>
+        <li *ngFor=" let item of Mensaje">
+          {{item}}
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+  <div class="app-modal-body">
     <form #FormEditarMoneda="ngForm">
       <div class="col-md-4" hidden>
         <div class="form-group">
           <label>Identificación</label>
-          <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+          <input name="Id_Moneda" type="text" placeholder="Id_Moneda" class="form-control" ngModel="{{Moneda.Id_Moneda}}" required>
         </div>
       </div>
       <div class="row">
+
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombreEd="ngModel">
-            <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Nombre de la moneda" class="form-control" name="Nombre" ngModel="{{Moneda.Nombre}}">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Código</label>
-            <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="{{Codigo}}" (focus)="$event.target.select()"
-              (focusout)="boolCodigo = true" required #codigoEd="ngModel">
-            <div *ngIf="!codigoEd.valid && boolCodigo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="codigoEd.valid && boolCodigo==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Código de la moneda" class="form-control" name="Codigo" ngModel="{{Moneda.Codigo}}">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Orden</label>
             <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
-              name="Orden" ngModel="{{Orden}}" (focus)="$event.target.select()" (focusout)="boolOrden = true" required #ordenEd="ngModel">
-            <div *ngIf="!ordenEd.valid && boolOrden==true" style="color:red">Campo inválido</div>
-            <div *ngIf="ordenEd.valid && boolOrden==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <h3>Datos de Cambios</h3>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor maximo de venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Max_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel="{{MaxVentaEfectivo}}" (focus)="$event.target.select()" (focusout)="boolMaxVentaEfectivo = true" required
-              #maxVentaEfectivoEd="ngModel">
-            <div *ngIf="!maxVentaEfectivoEd.valid && boolMaxVentaEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxVentaEfectivoEd.valid && boolMaxVentaEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor mínimo de venta en Efectivo</label>
-            <input currencyMask class="form-control" name="Min_Venta_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel="{{MinVentaEfectivo}}" (focus)="$event.target.select()" (focusout)="boolMinVentaEfectivo = true" required
-              #minVentaEfectivoEd="ngModel">
-            <div *ngIf="!minVentaEfectivoEd.valid && boolMinVentaEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minVentaEfectivoEd.valid && boolMinVentaEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor maximo de venta por cuenta</label>
-            <input currencyMask class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolMaxVentaCuenta = true" required #maxVentaCuentaEd="ngModel">
-            <div *ngIf="!maxVentaCuentaEd.valid && boolMaxVentaCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxVentaCuentaEd.valid && boolMaxVentaCuenta==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor mínimo de venta por cuenta</label>
-            <input currencyMask class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolMinVentaCuenta = true" required #minVentaCuentaEd="ngModel">
-            <div *ngIf="!minVentaCuentaEd.valid && boolMinVentaCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minVentaCuentaEd.valid && boolMinVentaCuenta==true" style="color:green">Datos correctos!</div>
+              name="Orden" ngModel={{Moneda.Orden}}>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <!--<div class="col-md-12">
+          <h5 *ngIf="titulo(item.Titulo)"> <span class="text-info"> {{item.Titulo}} </span></h5>
+        </div>-->
+        <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
-            <label>Precio de venta sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolSugeridoVenta = true" required #sugeridoVentaEd="ngModel">
-            <div *ngIf="!sugeridoVentaEd.valid && boolSugeridoVenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="sugeridoVentaEd.valid && boolSugeridoVenta==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de compra sugerido</label>
-            <input currencyMask class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolSugeridoCompra = true" required #sugeridoCompraEd="ngModel">
-            <div *ngIf="!sugeridoCompraEd.valid && boolSugeridoCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="sugeridoCompraEd.valid && boolSugeridoCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio por ventanilla</label>
-            <input currencyMask class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolPrecioVentanilla = true" required #precioVentanillaEd="ngModel">
-            <div *ngIf="!precioVentanillaEd.valid && boolPrecioVentanilla==true" style="color:red">Campo inválido</div>
-            <div *ngIf="precioVentanillaEd.valid && boolPrecioVentanilla==true" style="color:green">Datos correctos!</div>
+            <label>{{item.Campo_Visual}}</label>
+            <input class="form-control" name="Diario_{{i}}" ngModel="{{item.Valor}}" (blur)="agregarValor(i,$event.target.value)">
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de compra maximo</label>
-            <input currencyMask class="form-control" name="Max_Compra" ngModel="{{MaxCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolMaxCompra = true" required #maxCompraEd="ngModel">
-            <div *ngIf="!maxCompraEd.valid && boolMaxCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="maxCompraEd.valid && boolMaxCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio de compra mínimo</label>
-            <input currencyMask class="form-control" name="Min_Compra" ngModel="{{MinCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolMinCompra = true" required #minCompraEd="ngModel">
-            <div *ngIf="!minCompraEd.valid && boolMinCompra==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minCompraEd.valid && boolMinCompra==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Precio mínimo de no cobro</label>
-            <input currencyMask class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolMinNoCobro = true" required #minNoCobroEd="ngModel">
-            <div *ngIf="!minNoCobroEd.valid && boolMinNoCobro==true" style="color:red">Campo inválido</div>
-            <div *ngIf="minNoCobroEd.valid && boolMinNoCobro==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Redondeo a pesos en efectivo</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Efectivo" ngModel="{{RedondeoPesosEfectivo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolRedondeoPesosEfectivo = true" required #redondeoPesosEfectivoEd="ngModel">
-            <div *ngIf="!redondeoPesosEfectivoEd.valid && boolRedondeoPesosEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="redondeoPesosEfectivoEd.valid && boolRedondeoPesosEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Redondeo a pesos en cuenta</label>
-            <input currencyMask class="form-control" name="Redondeo_Pesos_Cuenta" ngModel="{{RedondeoPesosCuenta}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolRedondeoPesosCuenta = true" required #redondeoPesosCuentaEd="ngModel">
-            <div *ngIf="!redondeoPesosCuentaEd.valid && boolRedondeoPesosCuenta==true" style="color:red">Campo inválido</div>
-            <div *ngIf="redondeoPesosCuentaEd.valid && boolRedondeoPesosCuenta==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
-      <h3>Comisiones</h3>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Comisión efectivo</label>
-            <input currencyMask class="form-control" name="Comision_Efectivo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel={{ComisionEfectivo}} (focus)="$event.target.select()" (focusout)="boolComisionEfectivo = true" required #comisionEfectivoEd="ngModel">
-            <div *ngIf="!comisionEfectivoEd.valid && boolComisionEfectivo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="comisionEfectivoEd.valid && boolComisionEfectivo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Pagar comisión desde</label>
-            <input currencyMask class="form-control" name="Pagar_Comision_Desde" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel={{PagarComisionDesde}} (focus)="$event.target.select()" (focusout)="boolPagarComisionDesde = true" required #pagarComisionDesdeEd="ngModel">
-            <div *ngIf="!pagarComisionDesdeEd.valid && boolPagarComisionDesde==true" style="color:red">Campo inválido</div>
-            <div *ngIf="pagarComisionDesdeEd.valid && boolPagarComisionDesde==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label>Comisión por recaudo</label>
-            <input currencyMask class="form-control" name="Comision_Recaudo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              ngModel={{ComisionRecaudo}} (focus)="$event.target.select()" (focusout)="boolComisionRecaudo = true" required #comisionRecaudoEd="ngModel">
-            <div *ngIf="!comisionRecaudoEd.valid && boolComisionRecaudo==true" style="color:red">Campo inválido</div>
-            <div *ngIf="comisionRecaudoEd.valid && boolComisionRecaudo==true" style="color:green">Datos correctos!</div>
-          </div>
-        </div>
-      </div>
+
       <h3>Modulos</h3>
       <div class="row">
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="cambioCh3" [(ngModel)]="cambioVal3" id="cambio3" hidden />
-            <label for="cambio3"></label>
+        <div class="col-md-3" align="center">
+
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Cambio == '1' ? '1' : '0'" type="checkbox" name="Cambio" id="Cambio_Editar" ngModel class="switch">
+              <label for="Cambio_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Cambio" ngModel="1" *ngIf="cambioVal3" hidden>
-          <input type="number" class="form-control" name="Cambio" [(ngModel)]="cambioMod3" *ngIf="!cambioVal3" hidden>
+
           <label>Cambio</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="giroCh3" [(ngModel)]="giroVal3" id="giro3" hidden />
-            <label for="giro3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Giro == '1' ? '1' : '0'" type="checkbox" name="Giro" id="Giro_Editar" ngModel class="switch">
+              <label for="Giro_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Giro" ngModel="1" *ngIf="giroVal3" hidden>
-          <input type="number" class="form-control" name="Giro" [(ngModel)]="giroMod3" *ngIf="!giroVal3" hidden>
+
           <label>Giro</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="trasladoCh3" [(ngModel)]="trasladoVal3" id="traslado3" hidden />
-            <label for="traslado3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Traslado == '1' ? '1' : '0'" type="checkbox" name="Traslado" id="Traslado_Editar" ngModel class="switch">
+              <label for="Traslado_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Traslado" ngModel="1" *ngIf="trasladoVal3" hidden>
-          <input type="number" class="form-control" name="Traslado" [(ngModel)]="trasladoMod3" *ngIf="!trasladoVal3" hidden>
           <label>Traslado</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="corresponsalBancarioCh3" [(ngModel)]="corresponsalBancarioVal3" id="corresponsalBancario3" hidden
-            />
-            <label for="corresponsalBancario3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.CorresponsalBancario == '1' ? '1' : '0'" type="checkbox" name="CorresponsalBancario" id="CorresponsalBancario_Editar"
+                ngModel class="switch">
+              <label for="CorresponsalBancario_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Corresponsal_Bancario" ngModel="1" *ngIf="corresponsalBancarioVal3" hidden>
-          <input type="number" class="form-control" name="Corresponsal_Bancario" [(ngModel)]="corresponsalBancarioMod3" *ngIf="!corresponsalBancarioVal3"
-            hidden>
           <label>Corresponsal bancario</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="servicioExternoCh3" [(ngModel)]="servicioExternoVal3" id="servicioExterno3" hidden />
-            <label for="servicioExterno3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.ServicioExterno == '1' ? '1' : '0'" type="checkbox" name="ServicioExterno" id="ServicioExterno_Editar"
+                ngModel class="switch">
+              <label for="ServicioExterno_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Servicio_Externo" ngModel="1" *ngIf="servicioExternoVal3" hidden>
-          <input type="number" class="form-control" name="Servicio_Externo" [(ngModel)]="servicioExternoMod3" *ngIf="!servicioExternoVal3"
-            hidden>
           <label>Servicio externo</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="gastoCh3" [(ngModel)]="gastoVal3" id="gasto3" hidden />
-            <label for="gasto3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Gasto == '1' ? '1' : '0'" type="checkbox" name="Gasto" id="Gasto_Editar" ngModel class="switch">
+              <label for="Gasto_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Gasto" ngModel="1" *ngIf="gastoVal3" hidden>
-          <input type="number" class="form-control" name="Gasto" [(ngModel)]="gastoMod3" *ngIf="!gastoVal3" hidden>
+
           <label>Gastos</label>
         </div>
-        <div class="col-md-4" align="center">
-          <div class="checkboxTwo">
-            <input type="checkbox" name="transferenciaCh3" [(ngModel)]="transferenciaVal3" id="transferencia3" hidden />
-            <label for="transferencia3"></label>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Transferencia == '1' ? '1' : '0'" type="checkbox" name="Transferencia" id="Transferencia_Editar"
+                ngModel class="switch">
+              <label for="Transferencia_Editar"></label>
+            </span>
           </div>
-          <input type="number" class="form-control" name="Transferencia" ngModel="1" *ngIf="transferenciaVal3" hidden>
-          <input type="number" class="form-control" name="Transferencia" [(ngModel)]="transferenciaMod3" *ngIf="!transferenciaVal3"
-            hidden>
           <label>Transferencia</label>
+        </div>
+        <div class="col-md-3" align="center">
+          <div class="form-group">
+            <span class="switch switch-sm">
+              <input [checked]="Moneda.Compras == '1' ? '1' : '0'" type="checkbox" name="Compras" id="Compras_Editar" ngModel class="switch">
+              <label for="Compras_Editar"></label>
+            </span>
+          </div>
+          <label>Compras</label>
         </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button class="btn btn-primary btn-sm" [disabled]="!nombreEd.valid || !codigoEd.valid || !ordenEd.valid || !maxVentaEfectivoEd.valid || !minVentaEfectivoEd.valid || !maxVentaCuentaEd.valid || !minVentaCuentaEd.valid || !sugeridoVentaEd.valid || !sugeridoCompraEd.valid || !precioVentanillaEd.valid || !maxCompraEd.valid || !minCompraEd.valid || !minNoCobroEd.valid || !redondeoPesosEfectivoEd.valid || !redondeoPesosCuentaEd.valid || !comisionEfectivoEd.valid || !pagarComisionDesdeEd.valid || !comisionRecaudoEd.valid"
-      [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarMoneda(FormEditarMoneda, ModalEditarMoneda)">Guardar</button>
     </div>
   </div>

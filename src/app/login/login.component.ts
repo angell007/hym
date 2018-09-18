@@ -13,7 +13,6 @@ import { FuncionarioService } from '../shared/funcionario/funcionario.service';
 })
 export class LoginComponent implements OnInit {
 
-  readonly ruta = 'https://sigespro.corvuslab.co/'; 
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
   Error: boolean = false;

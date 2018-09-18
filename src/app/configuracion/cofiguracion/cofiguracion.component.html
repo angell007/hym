@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="page-title">
-      <h4>Configuración General</h4>
+        <h4>Configuración General</h4>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -11,231 +11,365 @@
                             <form name="myForm" #FormEditarConfiguracion="ngForm">
                                 <div class="row">
                                     <div class="col-md-4" hidden>
-                                            <div class="form-group">
-                                                <label>Identificación</label>
-                                                <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" >
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Identificación</label>
+                                            <input readonly name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{configuracionGeneral.Id_Configuracion}}">
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <strong><label>Nombre Empresa</label></strong>
-                                            <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{NombreEmpresa}}" (focus)="$event.target.select()" (focusout)="boolNombre = true" required #nombreEmpresa="ngModel">
-                                            <div *ngIf="!nombreEmpresa.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="nombreEmpresa.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                                            <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{configuracionGeneral.Nombre_Empresa}}">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <strong><label>N.I.T.</label></strong>
-                                            <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T." class="form-control" ngModel="{{NIT}}" (focus)="$event.target.select()" (focusout)="boolNit = true" required #nit="ngModel">
-                                            <div *ngIf="!nit.valid && boolNit==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="nit.valid && boolNit==true" style="color:green">Datos correctos!</div>
+                                            <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T."
+                                                class="form-control" ngModel="{{configuracionGeneral.NIT}}">
+
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Teléfono</label></strong>
-                                                <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono" class="form-control" ngModel="{{Telefono}}" (focus)="$event.target.select()" (focusout)="boolTelefono = true" required #telefono="ngModel">
-                                                <div *ngIf="!telefono.valid && boolTelefono==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="telefono.valid && boolTelefono==true" style="color:green">Datos correctos!</div>
-                                            </div>
+                                        <div class="form-group">
+                                            <strong><label>Teléfono</label></strong>
+                                            <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono"
+                                                class="form-control" ngModel="{{configuracionGeneral.Telefono}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Celular</label></strong>
-                                                <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular" class="form-control" ngModel="{{Celular}}" (focus)="$event.target.select()" (focusout)="boolCelular = true" required #celular="ngModel">
-                                                <div *ngIf="!celular.valid && boolCelular==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="celular.valid && boolCelular==true" style="color:green">Datos correctos!</div>
-                                            </div>
+                                        <div class="form-group">
+                                            <strong><label>Celular</label></strong>
+                                            <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular"
+                                                class="form-control" ngModel="{{configuracionGeneral.Celular}}">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <strong><label>Dirección</label></strong>
-                                            <input name="Direccion" type="text" placeholder="Dirección" class="form-control" ngModel="{{Direccion}}" (focus)="$event.target.select()" (focusout)="boolDireccion = true" required #direccion="ngModel">
-                                            <div *ngIf="!direccion.valid && boolDireccion==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="direccion.valid && boolDireccion==true" style="color:green">Datos correctos!</div>
+                                            <input name="Direccion" type="text" placeholder="Dirección" class="form-control" ngModel="{{configuracionGeneral.Direccion}}">
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                            <div class="form-group">
-                                                <strong><label>Correo</label></strong>
-                                                <input name="Correo" type="email" email placeholder="Correo" class="form-control" ngModel="{{Correo}}" (focus)="$event.target.select()" (focusout)="boolCorreo = true" required #correo="ngModel">
-                                                <div *ngIf="!correo.valid && boolCorreo==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="correo.valid && boolCorreo==true" style="color:green">Datos correctos!</div>
-                                            </div>
+                                        <div class="form-group">
+                                            <strong><label>Correo</label></strong>
+                                            <input name="Correo" type="email" email placeholder="Correo" class="form-control" ngModel="{{configuracionGeneral.Correo}}">
+
+                                        </div>
                                     </div>
-                                </div>	
+                                </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Festivos Legales</label></strong>
-                                            <input name="Festivos_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Festivos legales" class="form-control" ngModel="{{FestivosLegales}}" (focus)="$event.target.select()" (focusout)="boolFestivosLegales = true" required #festivosLegales="ngModel">
-                                            <div *ngIf="!festivosLegales.valid && boolFestivosLegales==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="festivosLegales.valid && boolFestivosLegales==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Festivos_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="Festivos legales" class="form-control" ngModel="{{configuracionGeneral.Festivos_Legales}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Extras Legales</label></strong>
-                                            <input name="Extras_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Extras legales" class="form-control" ngModel="{{ExtrasLegales}}" (focus)="$event.target.select()" (focusout)="boolExtrasLegales = true" required #extrasLegales="ngModel">
-                                            <div *ngIf="!extrasLegales.valid && boolExtrasLegales==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="extrasLegales.valid && boolExtrasLegales==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Extras_Legales" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="Extras legales" class="form-control" ngModel="{{configuracionGeneral.Extras_Legales}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <strong><label>Llegadas tarde</label></strong>
-                                            <input name="Llegadas_Tarde" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" ngModel="{{LlegadasTarde}}" (focus)="$event.target.select()" (focusout)="boolLlegadasTarde = true" required #llegadasTarde="ngModel">
-                                            <div *ngIf="!llegadasTarde.valid && boolLlegadasTarde==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="llegadasTarde.valid && boolLlegadasTarde==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Llegadas_Tarde" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                class="form-control" ngModel="{{configuracionGeneral.Llegadas_Tarde}}">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Hora Inicio Dia</label></strong>
-                                            <input name="Hora_Inicio_Dia" type="time" placeholder="" class="form-control" ngModel="{{HoraInicioDia}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioDia = true" required #horaInicioDia="ngModel">
-                                            <div *ngIf="!horaInicioDia.valid  && boolHoraInicioDia==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaInicioDia.valid && boolHoraInicioDia==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Hora_Inicio_Dia" type="time" placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Inicio_Dia}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Hora Fin Dia</label></strong>
-                                            <input name="Hora_Fin_Dia" type="time" placeholder="" class="form-control" ngModel="{{HoraFinDia}}" (focus)="$event.target.select()" (focusout)="boolHoraFinDia = true" required #horaFinDia="ngModel">
-                                            <div *ngIf="!horaFinDia.valid && boolHoraFinDia==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaFinDia.valid && boolHoraFinDia==true" style="color:green">Datos correctos!</div>
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Salario Base</label></strong>
-                                                <input currencyMask name="Salario_Base" class="form-control" ngModel="{{SalarioBase}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSalarioBase = true" required #salarioBase="ngModel">
-                                                <div *ngIf="!salarioBase.valid && boolSalarioBase==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="salarioBase.valid && boolSalarioBase==true" style="color:green">Datos correctos!</div>
-                                            </div> 
+                                            <input name="Hora_Fin_Dia" type="time" placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Fin_Dia}}">
+
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Subsidio de transporte</label></strong>
-                                                <input currencyMask name="Subsidio_Transporte" class="form-control" ngModel="{{SubsidioTransporte}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()" (focusout)="boolSubsidioTransporte = true" required #subsidioTransporte="ngModel">
-                                                <div *ngIf="!subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="subsidioTransporte.valid && boolSubsidioTransporte==true" style="color:green">Datos correctos!</div>
-                                            </div> 
-                                    </div>
-                                </div>	
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <strong><label>Hora Extra Diurna</label></strong>
-                                            <input name="Hora_Extra_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDiurna = true" required #horaExtraDiurna="ngModel">
-                                            <div *ngIf="!horaExtraDiurna.valid" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaExtraDiurna.valid && boolHoraExtraDiurna==true" style="color:green">Datos correctos!</div>
-                                        </div> 
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <strong><label>Hora Extra Nocturna</label></strong>
-                                            <input name="Hora_Extra_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraNocturna = true" required #horaExtraNocturna="ngModel">
-                                            <div *ngIf="!horaExtraNocturna.valid" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaExtraNocturna.valid && boolHoraExtraNocturna==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <strong><label>Salario Base</label></strong>
+                                            <input currencyMask name="Salario_Base" class="form-control" ngModel="{{configuracionGeneral.Salario_Base}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <strong><label>Hora Extra Domingo Diurna</label></strong>
-                                            <input name="Hora_Extra_Domingo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoDiurna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoDiurna = true" required #horaExtraDomingoDiurna="ngModel">
-                                            <div *ngIf="!horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaExtraDomingoDiurna.valid && boolHoraExtraDomingoDiurna==true" style="color:green">Datos correctos!</div>
-                                        </div> 
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <strong><label>Hora Extra Domingo Nocturna</label></strong>
-                                            <input name="Hora_Extra_Domingo_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{HoraExtraDomingoNocturna}}" (focus)="$event.target.select()" (focusout)="boolHoraExtraDomingoNocturna = true" required #horaExtraDomingoNocturna="ngModel">
-                                            <div *ngIf="!horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaExtraDomingoNocturna.valid && boolHoraExtraDomingoNocturna==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <strong><label>Subsidio de transporte</label></strong>
+                                            <input currencyMask name="Subsidio_Transporte" class="form-control" ngModel="{{configuracionGeneral.Subsidio_Transporte}}"
+                                                [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Recargo Diurna</label></strong>
-                                                <input name="Recargo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDiurna = true" required #recargoDiurna="ngModel">
-                                                <div *ngIf="!recargoDiurna.valid && boolRecargoDiurna==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="recargoDiurna.valid && boolRecargoDiurna==true" style="color:green">Datos correctos!</div>
-                                            </div> 
+                                        <div class="form-group">
+                                            <strong><label>Hora Extra Diurna</label></strong>
+                                            <input name="Hora_Extra_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Extra_Diurna}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Recargo Nocturno</label></strong>
-                                                <input name="Recargo_Nocturno" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoNocturno}}" (focus)="$event.target.select()" (focusout)="boolRecargoNocturno = true" required #recargoNocturno="ngModel">
-                                                <div *ngIf="!recargoNocturno.valid && boolRecargoNocturno==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="recargoNocturno.valid && boolRecargoNocturno==true" style="color:green">Datos correctos!</div>
-                                            </div> 
+                                        <div class="form-group">
+                                            <strong><label>Hora Extra Nocturna</label></strong>
+                                            <input name="Hora_Extra_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Extra_Nocturna}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Recargo Dominical Diurna</label></strong>
-                                                <input name="Recargo_Dominical_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDominicalDiurna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalDiurna = true" required #recargoDominicalDiurna="ngModel">
-                                                <div *ngIf="!recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="recargoDominicalDiurna.valid && boolRecargoDominicalDiurna==true" style="color:green">Datos correctos!</div>
-                                            </div> 
+                                        <div class="form-group">
+                                            <strong><label>Hora Extra Domingo Diurna</label></strong>
+                                            <input name="Hora_Extra_Domingo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Extra_Domingo_Diurna}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
-                                            <div class="form-group">
-                                                <strong><label>Recargo Dominical Nocturno</label></strong>
-                                                <input name="Recargo_Dominical_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{RecargoDominicalNocturna}}" (focus)="$event.target.select()" (focusout)="boolRecargoDominicalNocturna = true" required #recargoDominicalNocturna="ngModel">
-                                                <div *ngIf="!recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="recargoDominicalNocturna.valid && boolRecargoDominicalNocturna==true" style="color:green">Datos correctos!</div>
-                                            </div> 
+                                        <div class="form-group">
+                                            <strong><label>Hora Extra Domingo Nocturna</label></strong>
+                                            <input name="Hora_Extra_Domingo_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Extra_Domingo_Nocturna}}">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <strong><label>Recargo Diurna</label></strong>
+                                            <input name="Recargo_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Recargo_Diurna}}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <strong><label>Recargo Nocturno</label></strong>
+                                            <input name="Recargo_Nocturno" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Recargo_Nocturno}}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <strong><label>Recargo Dominical Diurna</label></strong>
+                                            <input name="Recargo_Dominical_Diurna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Recargo_Dominical_Diurna}}">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <strong><label>Recargo Dominical Nocturno</label></strong>
+                                            <input name="Recargo_Dominical_Nocturna" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                                placeholder="" class="form-control" ngModel="{{configuracionGeneral.Recargo_Dominical_Nocturna}}">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Hora inicio de la jornada nocturna</label></strong>
-                                            <input name="Hora_Inicio_Noche" type="time" placeholder="" class="form-control" ngModel="{{HoraInicioNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraInicioNoche = true" required #horaInicioNoche="ngModel">
-                                            <div *ngIf="!horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaInicioNoche.valid && boolHoraInicioNoche==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Hora_Inicio_Noche" type="time" placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Inicio_Noche}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Hora fin de la jornada nocturna</label></strong>
-                                            <input name="Hora_Fin_Noche" type="time" placeholder="" class="form-control" ngModel="{{HoraFinNoche}}" (focus)="$event.target.select()" (focusout)="boolHoraFinNoche = true" required #horaFinNoche="ngModel">
-                                            <div *ngIf="!horaFinNoche.valid && boolHoraFinNoche==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="horaFinNoche.valid && boolHoraFinNoche==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Hora_Fin_Noche" type="time" placeholder="" class="form-control" ngModel="{{configuracionGeneral.Hora_Fin_Noche}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Festivos</label></strong>
-                                            <input name="Festivos" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Festivos}}" (focus)="$event.target.select()" (focusout)="boolFestivos = true" required #festivos="ngModel">
-                                            <div *ngIf="!festivos.valid && boolFestivos==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="festivos.valid && boolFestivos==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Festivos" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder=""
+                                                class="form-control" ngModel="{{configuracionGeneral.Festivos}}">
+
+                                        </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <strong><label>Libres</label></strong>
-                                            <input name="Libres" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control" ngModel="{{Libres}}" (focus)="$event.target.select()" (focusout)="boolLibres = true" required #libres="ngModel">
-                                            <div *ngIf="!libres.valid && boolLibres==true" style="color:red">Campo inválido</div>
-                                            <div *ngIf="libres.valid && boolLibres==true" style="color:green">Datos correctos!</div>
-                                        </div> 
+                                            <input name="Libres" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder=""
+                                                class="form-control" ngModel="{{configuracionGeneral.Libres}}">
+                                        </div>
                                     </div>
                                 </div>
+
+                                <hr>
+                                <h5>Consecutivos</h5>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Compras</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Compra}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Compra}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Compra" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Compra}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+                                                <input name="Compra" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Compra}}"
+                                                    readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Servicios Externos</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Servicio_Externo" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Servicio_Externo}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Servicio_Externo" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Servicio_Externo}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Servicio_Externo" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Servicio_Externo}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+
+                                                <input name="Servicio_Externo" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Servicio_Externo}}"
+                                                    required readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Giros</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Giro" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Giro}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Giro" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Giro}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Giro" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Giro}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+
+                                                <input name="Giro" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Giro}}"
+                                                    required readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Egresos</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Egresos" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Egresos}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Egresos" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Egresos}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Egresos" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Egresos}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+
+                                                <input name="Egreso" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Egresos}}"
+                                                    required readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Traslados</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Traslado" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Traslado}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Traslado" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Traslado}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Traslado" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Traslado}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+
+                                                <input name="Traslado" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Traslado}}"
+                                                    required readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Transferencias</label>
+                                            <p> Nombre Dian:
+                                                <input name="Nombre_Dian_Transferencia" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Nombre_Dian_Transferencia}}"
+                                                    required>
+                                            </p>
+                                            <p> Prefijo:
+                                                <input name="Prefijo_Transferencia" type="text" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Prefijo_Transferencia}}"
+                                                    required>
+                                            </p>
+                                            <p> Codigo:
+                                                <input name="Codigo_Formato_Transferencia" type="text" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Codigo_Formato_Transferencia}}"
+                                                    required>
+                                            </p>
+                                            <p> Consecutivo:
+
+                                                <input name="Transferencia" type="number" min="0" placeholder="Ejem: 1345" class="form-control" ngModel="{{configuracionGeneral.Transferencia}}"
+                                                    required readonly>
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+
+
                                 <div class="row">
                                     <div class="col-md-12 col-xs-6">
-                                        <div class="text-right mrg-top-5">                                            
-                                            <button type="submit" class="btn btn-primary"
-                                            [disabled]="!nombreEmpresa.valid || !nit.valid || !telefono.valid || !celular.valid || !direccion.valid || !correo.valid || !festivosLegales.valid || !extrasLegales.valid || !llegadasTarde.valid || !horaInicioDia.valid || !horaFinDia.valid || !salarioBase.valid || !subsidioTransporte.valid || !horaExtraDiurna.valid || !horaExtraNocturna.valid || !horaExtraDomingoDiurna.valid || !horaExtraDomingoNocturna.valid || !recargoDiurna.valid || !recargoNocturno.valid || !recargoDominicalDiurna.valid || !recargoDominicalNocturna.valid || !horaInicioNoche.valid || !horaFinNoche.valid || !festivos.valid || !libres.valid"
-                                            [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
-                                            (confirm)="GuardarConfiguracion(FormEditarConfiguracion)" >Actualizar Información</button>
+                                        <div class="text-right mrg-top-5">
+                                            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
+                                                (confirm)="GuardarConfiguracion(FormEditarConfiguracion)">Actualizar
+                                                Información
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -245,534 +379,95 @@
                 </div>
             </div>
         </div>
-    </div>  
+        <div class="col-md-12">
+            <h4>Monedas</h4>
+            <div class="card">
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--Accordion wrapper-->
+                            <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+                                <!-- Accordion card -->
+                                <div class="card" *ngFor="let Moneda of Monedas; let i = index">
+
+                                    <!-- Card header -->
+                                    <div class="card-header" role="tab" id="headingOne1">
+                                        <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}" aria-expanded="true" aria-controls="collapseOne{{i}}">
+                                            <h5 class="mb-0"> {{ Moneda.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
+                                            </h5>
+                                        </a>
+                                    </div>
+
+                                    <!-- Card body -->
+                                    <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}" data-parent="#accordionEx">
+                                        <div class="card-body">
+                                            <form #FormPermisosMoneda="ngForm">
+                                                
+                                                <div class="col-md-4" hidden>
+                                                    <div class="form-group">
+                                                        <label>Identificación</label>
+                                                        <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" readonly required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" *ngFor="let Item of Moneda.Campos; let j = index">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                                <label>{{Item.Campo_Visual}}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <span class="switch switch-sm">
+                                                                    <input type="checkbox" name="Diario_{{i}}_{{j}}" id="Diario_{{i}}_{{j}}"  [checked]="Item.Diario == '1' ? 'false' : ''"
+                                                                      class="switch">
+                                                                    <label for="Diario_{{i}}_{{j}}"></label>
+                                                                  </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Funcionarios</label>
+                                                            <select id="Identificacion_funcionario_{{i}}_{{j}}"  class="form-control"  required name="Identificacion_funcionario_{{i}}_{{j}}" [(ngModel)]="Item.Identificacion_Funcionario"  (change)="asignarFuncionario(Item.Id_Moneda_Valor, $event.target.value)">
+                                                                <option value="">Seleccione un funcionario</option>
+                                                                <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}
+                                                                    {{Funcionario.Apellidos}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </form>
+                                            <div class="row">
+                                                <div class="col-md-6 col-xs-6">
+                                                    <div class="text-right mrg-top-5">
+                                                        <button type="submit" class="btn btn-primary" (click)="GuardarMoneda(i,Moneda.Id_Moneda)">Actualizar
+                                                            datos de moneda</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Accordion card -->
+
+
+                            </div>
+                            <!-- Accordion wrapper -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
  
-    <!-- SECCION NUEVA -->
-    <h4>Monedas</h4>                    
-    <mdb-accordion (multiple)="false" aria-multiselectable="false" #acordeon>
-        <mdb-accordion-item  (collapsed)="false" *ngFor="let Moneda of Monedas" #acordeon>
-            <mdb-accordion-item-head (click)="test.toggle()"> {{ Moneda.Nombre }} </mdb-accordion-item-head>
-            <mdb-accordion-item-body class="form-group" (showBsCollapse)="EditarMoneda(Moneda.Id_Moneda)" [mdbCollapse]="isCollapsed" #test="bs-collapse">
-                <h4>Máximos y Mínimos</h4>
-                <form #FormPermisosMoneda1="ngForm"> 
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Efectivo" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>    
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>                
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Maximo Venta Efectivo</label>
-                                <input type="text" placeholder="" class="form-control" name="Max_Venta_Efectivo" ngModel="{{MaxVentaEfectivo | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{Moneda.Campos}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Max_Venta_Efectivo]}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda2="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Efectivo" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Mínimo Venta Efectivo</label>
-                                <input type="text" placeholder="" class="form-control" name="Min_Venta_Efectivo" ngModel="{{MinVentaEfectivo | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{Moneda.Campos}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{Moneda.Campos[Min_Venta_Efectivo]}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda3="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Venta_Cuenta" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Máximo Venta Bolivar por Cuenta</label>
-                                <input type="text" placeholder="" class="form-control" name="Max_Venta_Cuenta" ngModel="{{MaxVentaCuenta | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{MaxVentaCuentaCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MaxVentaCuentaFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda4="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Venta_Cuenta" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Mínimo Venta Bolivar por Cuenta</label>
-                                <input type="text" placeholder="Nombre del documento" class="form-control" name="Min_Venta_Cuenta" ngModel="{{MinVentaCuenta | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{MinVentaCuentaCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinVentaCuentaFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda5="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Max_Compra" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Máximo Compra Bolivar</label>
-                                <input type="text" placeholder="" class="form-control" name="Max_Compra" ngModel="{{MaxCompra | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{MaxCompraCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MaxCompraFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda6="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_Compra" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor Mínimo Compra Bolivar</label>
-                                <input type="text" placeholder="" class="form-control" name="Min_Compra" ngModel="{{MinCompra | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{MinCompraCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinCompraFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda7="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Venta" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor sugerido de venta</label>
-                                <input type="text" placeholder="" class="form-control" name="Sugerido_Venta" ngModel="{{SugeridoVenta | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{SugeridoVentaCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{SugeridoVentaFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda8="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Sugerido_Compra" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Valor sugerido de compra</label>
-                                <input type="text" placeholder="" class="form-control" name="Sugerido_Compra" ngModel="{{SugeridoCompra | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{SugeridoCompraCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{SugeridoCompraFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda9="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Precio_Ventanilla" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Precio Por Ventanilla</label>
-                                <input type="text" placeholder="" class="form-control" name="Precio_Ventanilla" ngModel="{{PrecioVentanilla | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{PrecioVentanillaCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{PrecioVentanillaFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda10="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Min_No_Cobro" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Minimo Para No Cobrar Transferencia</label>
-                                <input type="text" placeholder="" class="form-control" name="Min_No_Cobro" ngModel="{{MinNoCobro | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{MinNoCobroCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{MinNoCobroFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <h4>Comisiones</h4>
-                <form #FormPermisosMoneda11="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Efectivo" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Comisión Efectivo</label>
-                                <input type="text" placeholder="" class="form-control" name="Comision_Efectivo" ngModel="{{ComisionEfectivo | currency: ' ': ' '}}"readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{ComisionEfectivoCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{ComisionEfectivoFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda12="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Comision_Recaudo" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Comisión por Recaudo</label>
-                                <input type="text" placeholder="" class="form-control" name="Comision_Recaudo" ngModel="{{ComisionRecaudo | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{ComisionRecaudoCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{ComisionRecaudoFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <form #FormPermisosMoneda13="ngForm">
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Campo" type="text" placeholder="" class="form-control" ngModel="Pagar_Comision_Desde" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4" hidden>
-                        <div class="form-group">
-                            <label>Identificación</label>
-                            <input name="Id_Moneda" type="text" placeholder="" class="form-control" ngModel="{{Moneda.Id_Moneda}}" (focusout)="boolNombre = true" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Pagar Comisión Desde</label>
-                                <input type="text" placeholder="" class="form-control" name="Pagar_Comision_Desde" ngModel="{{PagarComisionDesde | currency: ' ': ' '}}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-check">
-                                <input type="hidden" value="no" name="Diario" ngModel="">
-                                <input type="checkbox" value="si" name="Diario" class="form-check" ngModel="{{PagarComisionDesdeCheck}}">
-                                <label for="form-4-1">Diario</label>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Funcionarios</label>
-                                <select class="form-control" (focusout)="boolNombre = true" required name="Identificacion_Funcionario" ngModel="{{PagarComisionDesdeFuncionario}}" >
-                                    <option value="">Seleccione un funcionario</option>
-                                    <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}} {{Funcionario.Apellidos}}</option>
-                                </select>
-                            </div>                        
-                        </div>
-                    </div>
-                </form>
-                <div class="row">
-                    <div class="col-md-6 col-xs-6">
-                        <div class="text-right mrg-top-5">
-                            <button type="submit" class="btn btn-primary" (click)="GuardarMoneda([FormPermisosMoneda1, FormPermisosMoneda2, FormPermisosMoneda3,
-                            FormPermisosMoneda4, FormPermisosMoneda5, FormPermisosMoneda6, FormPermisosMoneda7, FormPermisosMoneda8, FormPermisosMoneda9, 
-                            FormPermisosMoneda10, FormPermisosMoneda11, FormPermisosMoneda12, FormPermisosMoneda13])">Actualizar datos de moneda</button>
-                        </div>
-                    </div>
-                </div>                                                         
-            </mdb-accordion-item-body>
-        </mdb-accordion-item>
-    </mdb-accordion>
-</div>
-
-<swal #errorSwal
-title="Error al guardar"
-text="Se ha generado un error al intentar guardar el documento"
-type="error"
->
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
-<swal #saveSwal
-title="Documento guardado"
-text="Se ha guardado correctamente el documento"
-type="success"
->
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
 </swal>
+
+<swal #confirmswal title="" text="" type=""></swal>

@@ -9,8 +9,7 @@ import { Globales } from '../../shared/globales/globales';
 
 @Injectable()
 export class FuncionarioService {
-  public ruta = 'https://hym.corvuslab.co/';
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private globales: Globales) { }
 
   registro(funcionario: Funcionario){
     const body : Funcionario = {
@@ -20,16 +19,16 @@ export class FuncionarioService {
       Password : funcionario.Password,
       Correo: funcionario.Correo
     }
-    return this.http.post(this.ruta+'php/funcionarios/registro.php',body);
+    return this.http.post(this.globales.ruta+'php/funcionarios/registro.php',body);
   } 
   login(Username, Password){
     //var data = "username="+Username+"&password="+Password;
     let data = new FormData();
     data.append('username', Username);
     data.append('password', Password);
-    return this.http.post(this.ruta+'php/sesion/validate.php',data) 
+    return this.http.post(this.globales.ruta+'php/sesion/validate.php',data) 
   }
   getDetalles(){
-      return this.http.get(this.ruta+'php/funcionarios/datos.php',{headers:new HttpHeaders({'Token':localStorage.getItem('Token')})})
+      return this.http.get(this.globales.ruta+'php/funcionarios/datos.php',{headers:new HttpHeaders({'Token':localStorage.getItem('Token')})})
   }
 }

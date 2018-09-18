@@ -52,6 +52,7 @@ export class CajarecaudosComponent implements OnInit {
   
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
+  Caja = [];
 
   constructor(private http : HttpClient,private globales : Globales) { }
 
@@ -62,29 +63,6 @@ export class CajarecaudosComponent implements OnInit {
     });
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalCaja);
-    this.OcultarFormulario(this.ModalVerCaja);
-    this.OcultarFormulario(this.ModalEditarCaja); 
-  }
-
-  InicializarBool()
-  {
-    this.boolNombre = false;
-    this.boolUsername = false;
-    this.boolPassword = false;
-    this.boolTipo = false;
-    this.boolDepartamento = false;
-    this.boolMunicipio = false;
-  }
 
   ActualizarVista()
   {
@@ -139,7 +117,6 @@ export class CajarecaudosComponent implements OnInit {
     .subscribe((data:any)=>{      
       this.ActualizarVista();
       formulario.reset();
-      this.InicializarBool();
       this.departamentoDefault = "";
       this.municipioDefault = "";
       this.saveSwal.show();
@@ -166,17 +143,16 @@ export class CajarecaudosComponent implements OnInit {
   }
 
   EditarCaja(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Caja_Recaudos', id:id}
     }).subscribe((data:any)=>{
-  console.log(id);
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
+      /*this.Nombre = data.Nombre;
       this.Username = data.Username;
       this.Password = data.Password;
       this.Tipo = data.Tipo;
-      this.Departamento = data.Id_Departamento;
+      this.Departamento = data.Id_Departamento;*/
+      this.Caja = data;
       this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
       modal.show();
     });

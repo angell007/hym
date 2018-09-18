@@ -86,7 +86,17 @@ import { PerfilComponent } from './configuracion/perfil/perfil.component';
 import { OficinascrearComponent } from './configuracion/oficinas/oficinascrear/oficinascrear.component';
 import { OficinaseditarComponent } from './configuracion/oficinas/oficinaseditar/oficinaseditar.component';
 import { OficinaverComponent } from './configuracion/oficinas/oficinaver/oficinaver.component';
-
+import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/cuentasbancariasver/cuentasbancariasver.component';
+import { RemitenteComponent } from './configuracion/remitente/remitente.component';
+import { TercerosverComponent } from './configuracion/terceros/tercerosver/tercerosver.component';
+import { TransferenciaverComponent } from './transferencias/transferenciaver/transferenciaver.component';
+import { TableroComponent } from './tablero/tablero.component';
+import { TablerocajeroComponent } from './tableros/tablerocajero/tablerocajero.component';
+import { TablerocajeroprincipalComponent } from './tableros/tablerocajeroprincipal/tablerocajeroprincipal.component';
+import { TableroconsultorComponent } from './tableros/tableroconsultor/tableroconsultor.component';
+import { TableroauditoriaComponent } from './tableros/tableroauditoria/tableroauditoria.component';
+import { TablerogerenciaComponent } from './tableros/tablerogerencia/tablerogerencia.component';
+import { TableroDirective } from "./tablero/tablero.directive";
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -130,6 +140,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
+        
         AppComponent,
         CommonLayoutComponent,
         AuthenticationLayoutComponent,
@@ -180,7 +191,18 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         PerfilComponent,
         OficinascrearComponent,
         OficinaseditarComponent,
-        OficinaverComponent
+        OficinaverComponent,
+        CuentasbancariasverComponent,
+        RemitenteComponent,
+        TercerosverComponent,
+        TransferenciaverComponent,
+        TableroComponent,
+        TablerocajeroComponent,
+        TablerocajeroprincipalComponent,
+        TableroconsultorComponent,
+        TableroauditoriaComponent,
+        TablerogerenciaComponent,
+        TableroDirective
     ],
     exports:[
         ModalBasicComponent
@@ -193,7 +215,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
 })
 
 

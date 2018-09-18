@@ -69,58 +69,34 @@ export class FuncionarioverComponent implements OnInit {
   public Cargos : any[] = [];
   public Grupo : any = [];
   public Dependencia : any = [];
-  public Cargo : any = [];  
+  public Cargo : any = [];    
 
   constructor(private http : HttpClient,private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
-  ngOnInit() {        
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Grupo'}}).subscribe((data:any)=>{
-      this.Grupos= data;
-      console.log(this.Grupos);      
-      this.http.get(this.globales.ruta + 'php/funcionarios/ver_funcionario.php',{
-        params: { modulo: 'Funcionario', id: this.id}     
-      }).subscribe((data: any) => {
-        console.log(data);        
-        this.funcionario = data.Funcionario;
-        console.log(this.funcionario);
+  ngOnInit() { 
+    this.http.get(this.globales.ruta + 'php/funcionarios/ver_funcionario.php',{
+      params: { modulo: 'Funcionario', id: this.id}     
+    }).subscribe((data: any) => {
+      
+      this.funcionario = data.Funcionario;
+      this.Cargo=data.Cargo;
+      this.Grupo=data.Grupo;
+      this.Dependencia=data.Dependencia;
+      this.ContactoEmergencia = data.Contacto_Emergencia;
+      for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
+      {               
+        this.Experiencia[i] = data.Experiencia_Laboral[i];
         
-        
-        this.Cargo=data.Cargo;
-        this.Grupo=data.Grupo;
- 
-        console.log(data.Dependencia);
-        this.Dependencia=data.Dependencia;
-        if(data.Contacto_Emergencia)
-        {
-          this.ContactoEmergencia = data.Contacto_Emergencia;
-        }
-        
-        for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
-        { console.log("Exp");
-          console.log(data.Experiencia_Laboral[i]);
-          
-          this.Experiencia[i] = data.Experiencia_Laboral[i];
-          
-        }
+      }
 
-        for(let i = 0; i < data.Referencia_Personal.length; ++i)
-        {
-          this.Referencias[i] = data.Referencia_Personal[i];
-        }
-        
-        //this.Grupo = data.Id_Grupo;
-        /*console.log(this.Grupo);        
-        if(data.Imagen != '')
-        {
-          this.ExisteFoto = false;
-        }
-        else
-        {
-          this.ExisteFoto = true;
-        }
-        this.AutoSeleccionarDependencia(data.Id_Grupo, data.Id_Dependencia, data.Id_Cargo);*/
-      });  
-    });    
+      for(let i = 0; i < data.Referencia_Personal.length; ++i)
+      {
+        this.Referencias[i] = data.Referencia_Personal[i];
+      }
+      
+    
+    });
+
   }
 
   CargaFoto(event){
@@ -151,10 +127,10 @@ export class FuncionarioverComponent implements OnInit {
   }
 
   GrupoDependencia(grupo){
-    console.log("id grupo funcionario");    
-    console.log(grupo);    
+      
+      
     this.http.get(this.globales.ruta+'php/funcionarios/dependencias_grupo.php',{ params: { id: grupo}}).subscribe((data:any)=>{
-      console.log(data);      
+      
       this.Dependencias= data;
     });
   }

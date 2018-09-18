@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-3">
             <sticky [sticky-offset-top]="95">
-                <a href="#cambios" scrollTo class="card mrg-btm-15 scroll-to" (click)="muestra_tabla('cambios')" >
+                <a href="#cambios" scrollTo class="card mrg-btm-15 scroll-to" (click)="muestra_tabla('cambios')">
                     <div class="card-block padding-10">
                         <ul class="list-unstyled list-info">
                             <li>
@@ -109,94 +109,142 @@
                         </li>
                     </ul>
                     <div class="mrg-top-10" style="min-height: 470px;">
-                        <div class="row" id="cambios1">
+                        <div class="row" id="cambios1" *ngIf="Cambios1">
                             <div class="col-md-6">
-                                <button class="btn btn-info btn-block mrg-top-10 btn-grande" >COMPRA</button>
+                                <button (click)="CambiarVista('Cambio');CambiarVista('Compra')" class="btn btn-info btn-block mrg-top-10 btn-grande">COMPRA</button>
                             </div>
                             <div class="col-md-6">
-                                <button class="btn btn-success btn-block mrg-top-10 btn-grande" >VENTA</button>
+                                <button (click)="CambiarVista('Cambio');CambiarVista('Venta')" class="btn btn-success btn-block mrg-top-10 btn-grande">VENTA</button>
                             </div>
-                            
+
                             <div class="col-md-12">
                                 <hr>
                                 <h5>Últimos Cambios Registrados</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                                        [dtTrigger]="dtTrigger">
                                         <thead>
-                                        <tr>
-                                            <th style="width:60px;">Hora</th>
-                                            <th>Código</th>
-                                            <th>Tipo</th>
-                                            <th>Valor</th>
-                                            <th style="width:80px">Tasa</th>
-                                            <th style="width:160px;"></th>
-                                        </tr>
+                                            <tr>
+                                                <th style="width:60px;">Hora</th>
+                                                <th>Código</th>
+                                                <th>Tipo</th>
+                                                <th>Valor</th>
+                                                <th style="width:80px">Tasa</th>
+                                                <th style="width:160px;"></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr *ngFor="let cambio of Cambios">
-                                            <td>{{cambio.Fecha | date:"HH:mm" }}</td>
-                                            <td>{{cambio.Codigo}}</td>
-                                            <td>{{cambio.Tipo}}</td>
-                                            <td class="text-right">{{cambio.Valor_Origen | currency }}</td>
-                                            <td class="text-right">{{cambio.Tasa}}</td>
-                                            
-                                            <td class="text-center">
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerEgreso(Egreso.Id_Egreso, ModalVerEgreso)">
-                                                <i class="ti-printer"></i>
-                                            </button>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                <i class="ti-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                    <i class="ti-reload"></i>
-                                                </button>
-                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                (confirm)="AnulaCambio(cambio.Id_Cambio)">
-                                                <i class="ti-close"></i>
-                                            </button>
-                                            </td>
-                                        </tr>
+                                            <tr *ngFor="let cambio of Cambios">
+                                                <td>{{cambio.Fecha | date:"HH:mm" }}</td>
+                                                <td>{{cambio.Codigo}}</td>
+                                                <td>{{cambio.Tipo}}</td>
+                                                <td class="text-right">{{cambio.Valor_Origen | currency }}</td>
+                                                <td class="text-right">{{cambio.Tasa}}</td>
+
+                                                <td class="text-center">
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="VerEgreso(Egreso.Id_Egreso, ModalVerEgreso)">
+                                                        <i class="ti-printer"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                        <i class="ti-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                        <i class="ti-reload"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                        (confirm)="AnulaCambio(cambio.Id_Cambio)">
+                                                        <i class="ti-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row" id="cambios2" style="display:none;">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Moneda Origen</label>
-                                    <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen">
-                                        <option> Seleccione Moneda</option>
-                                        <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
-                                    </select>
-                                </div>
+                        <div class="row" id="cambios2" *ngIf="Cambios2" style="margin-top: 50px">
+                            <div class="col-md-12">
+                                <form #FormMoneda="ngForm">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Moneda Orgien</label>
+                                            <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen"
+                                                (change)="Origen($event.target.value);">
+                                                <option> Seleccione Moneda</option>
+                                                <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                    ({{ moneda.Codigo }}) </option>
+                                            </select>
+                                            <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
+                                                ngModel="{{MonedaOrigen}}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Moneda Destino</label>
+                                            <select class="form-control" placeholder="Destino" id="Destino" name="Destino"
+                                                ngModel (change)="CambiarTasa($event.target.value);">
+                                                <option> Seleccione Moneda</option>
+                                                <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                    ({{ moneda.Codigo }}) </option>
+                                            </select>
+                                            <input hidden name="Moneda_Destino" readonly type="text" class="form-control"
+                                                ngModel="{{MonedaDestino}}">
+                                            <input hidden name="Id_Oficina" readonly type="text" class="form-control"
+                                                ngModel="5">
+                                            <input hidden name="Id_Caja" readonly type="text" class="form-control"
+                                                ngModel="1">
+                                            <input hidden name="Tipo" readonly type="text" class="form-control" ngModel="{{Tipo}}">
+                                        </div>
 
-                                <div class="form-group">
-                                    <label>Moneda Destino</label>
-                                    <select class="form-control" placeholder="Destino"  id="Destino" name="Destino" ngModel (change)="CambiarTasa($event.target.value);">
-                                            <option> Seleccione Moneda</option>
-                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}} ({{ moneda.Codigo }}) </option>
-                                    </select>
-                                </div>
+                                        <div class="col-md-4">
+                                            <label>Cambia</label>
+                                            <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
+                                                (blur)="RealizarCambioMoneda($event.target.value,'cambia')" id="Cambia"
+                                                ngModel="{{cambiar}}">
+                                        </div>
 
-                                <div class="form-group">
-                                    <label>Tasa Cambio</label>
-                                    <input readonly type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido" name="Precio_Sugerido" ngModel="{{PrecioSugerido}}">
-                                </div>
+                                        <div class="col-md-4">
+                                            <label>Tasa Cambio</label>
+                                            <input readonly type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido"
+                                                name="Tasa" ngModel="{{PrecioSugerido}}">
+
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label>Entrega</label>
+                                            <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
+                                                (blur)="RealizarCambioMoneda($event.target.value,'entrega')" id="Entrega"
+                                                ngModel="{{entregar}}">
+                                        </div>
+
+                                        <div *ngIf="Venta" class="col-md-6">
+                                            <label>Paga Con</label>
+                                            <input type="text" placeholder="Paga con" class="form-control" name="Recibido"
+                                                (blur)="ObtenerVueltos($event.target.value)">
+                                        </div>
+
+                                        <div *ngIf="Venta" class="col-md-6">
+                                            <label>Vueltos</label>
+                                            <input readonly type="text" placeholder="Vueltos" class="form-control" name="Vueltos"
+                                                ngModel="{{vueltos}}">
+
+                                        </div>
+
+                                    </div>
+
+                                </form>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mrg-top-40">
-                                    <label>Valor</label>
-                                    <input type="text" placeholder="Valor" class="form-control" id="Valor"  name="Valor" ngModel>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Vueltos</label>
-                                    <input readonly type="text" placeholder="Vueltos" class="form-control" name="Vueltos" ngModel="{{vueltos}}">
-                                </div>
-                            </div> 
-                            <div class="col-md-4">
-                                <button class="btn btn-info btn-block mrg-top-80" (click)="realizarCalculo()" >CAMBIAR</button>
+                            <div class="col-md-10" style="margin-top: 50px">
+                                <button [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra/venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                    class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+                                    (confirm)="guardarCambio(FormMoneda)">{{TextoBoton}}</button>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 50px">
+                                <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
+                                    Volver
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -216,226 +264,293 @@
                         </li>
                     </ul>
                     <div class="mrg-top-10" style="min-height: 470px;">
-                        <form #FormTransferencia="ngForm">
-                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Identificacion_Funcionario" ngModel="{{IdentificacionFuncionario}}">
-                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Id_Oficina" ngModel="{{IdOficina}}">
-                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Id_Caja" ngModel="{{IdCaja}}">
-                            <input type="text" hidden placeholder="Valor a Transferir" class="form-control" name="Estado" ngModel="{{Estado}}">
-                            <div class="row"> 
-                                <div class="col-md-3">
-                                    <label>Forma de Pago</label>
-                                    <select class="form-control" name="Forma_Pago" [(ngModel)]="formaPagoDefault" (click)="boolFormaPago=true" required #formaPago="ngModel">
-                                        <option value="Efectivo">Efectivo</option>
-                                        <option value="Credito">Credito</option>
-                                        <option value="Consignacion">Consignación</option>
-                                    </select>
-                                    <div *ngIf="formaPago.value=='' && boolFormaPago==true" style="color:red">Campo inválido</div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Recibe Para</label>
-                                    <select class="form-control" (change)="SeleccionarTipo($event.target.value)" name="Recibe_Para" [(ngModel)]="recibeParaDefault"
-                                        (click)="boolRecibePara=true" required #recibePara="ngModel">
-                                        <option value="Transferencia">Transferencia</option>
-                                        <option value="Cliente">Cliente</option>
-                                    </select>
-                                    <div *ngIf="recibePara.value=='' && boolRecibePara==true" style="color:red">Campo inválido</div>
-                                </div>
-                                <div class="col-md-6" *ngIf="Recibe==='Cliente'">
-                                    <label>Seleccione Cliente</label>
-                                    <select class="form-control" name="Id_Tercero" [(ngModel)]="seleccioneClienteDefault" (click)="boolSeleccioneCliente=true"
-                                        required #seleccioneCliente="ngModel">
-                                        <option value="">Seleccione un cliente</option>
-                                        <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
-                                    </select>
-                                    <div *ngIf="seleccioneCliente.value=='' && boolSeleccioneCliente==true" style="color:red">Campo inválido</div>
+                        <div class="row" id="transferencias1" *ngIf="Transferencia1">
+                            <div class="col-md-12">
+                                <button (click)="CambiarVista('Transferencia')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nueva
+                                    Transferencia</button>
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr>
+                                <h5>Últimas transferencias Registrados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
+                                        [dtTrigger]="dtTrigger1">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px;">Hora</th>
+                                                <th>Código</th>
+                                                <th>Moneda Origen</th>
+                                                <th>Moneda Destino</th>
+                                                <th>Valor</th>
+                                                <th style="width:80px">Tasa</th>
+                                                <th style="width:160px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let transferencia of Transferencia">
+                                                <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
+                                                <td>{{transferencia.Codigo}}</td>
+                                                <td>{{transferencia.Moneda_Origen}}</td>
+                                                <td>{{transferencia.Moneda_Destino}}</td>
+                                                <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
+                                                <td class="text-right">{{transferencia.Tasa_Cambio}}</td>
+
+                                                <td class="text-center">
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="VerEgreso(Egreso.Id_Egreso, ModalVerEgreso)">
+                                                        <i class="ti-printer"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                        <i class="ti-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                        <i class="ti-reload"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                        (confirm)="AnulaCambio(cambio.Id_Cambio)">
+                                                        <i class="ti-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div *ngIf="Recibe==='Transferencia'">
-                                <hr class="mrg-top-10 mrg-btm-10">
-                                <h5>Destinatarios</h5>
-                                <div *ngFor="let Envio of Envios; let i= index">
+                        </div>
+
+                        <div class="row" id="transferencias2" *ngIf="Transferencia2" style="margin-top: 50px">
+                            <div class="col-md-12">
+                                <form #FormTransferencia="ngForm">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Número Documento</label>
-                                                <input type="text" class="form-control" 
-                                                    name="Destino{{i}}" 
-                                                    id="Destino{{i}}" 
-                                                    [(ngModel)]="Envio.Destino" 
-                                                    [ngbTypeahead]="search_destino"
-                                                    [resultTemplate]="rt_destino" 
-                                                    [inputFormatter]="formatter_destino" 
-                                                    (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)"
-                                                    
-                                                    >
+                                            <label>Forma de Pago</label>
+                                            <select (change)="TipoPagoTransferencia($event.target.value)" class="form-control" name="Forma_Pago" [(ngModel)]="formaPagoDefault" required >
+                                                <option value="Efectivo">Efectivo</option>
+                                                <option value="Credito">Credito</option>
+                                                <option value="Consignacion">Consignación</option>
+                                            </select>
 
-                                                <!-- <input  type="text" 
-                                                    placeholder="Número Documento" class="form-control" [(ngModel)]="Envio.Numero_Documento_Destino"
-                                                    list="browsers"
-                                                    
-                                                   required #numeroDocumento="ngModel"> -->
-<!--
-                                                <div *ngIf="(numeroDocumento.value=='' && boolNumeroDocumento==true) || numeroDocumento.value.length < 5" style="color:red">Campo inválido</div>
-                                                <div *ngIf="!numeroDocumento.value=='' && numeroDocumento.value.length >= 5" style="color:green">Datos correctos!</div>
-                                                -->
-                                            </div>
                                         </div>
                                         <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Nombre</label>
-                                                    <input name="Nombre_Destino{{i}}" [(ngModel)]="Envio.Nombre" type="text" 
-                                                    placeholder="Nombre" class="form-control" readonly >
+                                            <label>Recibe Para</label>
+                                            <select class="form-control" (change)="SeleccionarTipo($event.target.value)"
+                                                name="Recibe_Para" [(ngModel)]="recibeParaDefault" required>
+                                                <option value="Transferencia">Transferencia</option>
+                                                <option value="Cliente">Cliente</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-md-6" *ngIf="Recibe==='Cliente'">
+                                            <label>Seleccione Cliente</label>
+                                            <select class="form-control" name="Id_Tercero" [(ngModel)]="seleccioneClienteDefault"
+                                                (click)="boolSeleccioneCliente=true" required #seleccioneCliente="ngModel">
+                                                <option value="">Seleccione un cliente</option>
+                                                <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div *ngIf="Recibe==='Transferencia'" class="col-md-12">
+                                            <hr class="mrg-top-10 mrg-btm-10">
+                                            <h5>Destinatarios</h5>
+                                            <div *ngFor="let Envio of Envios; let i= index">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Número Documento</label>
+                                                            <input type="text" class="form-control" name="Destino{{i}}"
+                                                                id="Destino{{i}}" [(ngModel)]="Envio.Destino"
+                                                                [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
+                                                                [inputFormatter]="formatter_destino" (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Nombre</label>
+                                                            <input name="Nombre_Destino{{i}}" [(ngModel)]="Envio.Nombre"
+                                                                type="text" placeholder="Nombre" class="form-control"
+                                                                readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Cuenta</label>
+                                                            <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino"
+                                                                class="form-control" autocomplete="off" (click)="boolCuenta=true"
+                                                                required>
+                                                                <option value="">Seleccione una Cuenta</option>
+                                                                <option *ngFor="let Cuenta of Envio.Cuentas" [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Valor</label>
+                                                            <input type="number" placeholder="Valor a Transferir" class="form-control"
+                                                                name="Valor_Transferencia{{i}}" [(ngModel)]="Envio.Valor_Transferencia"
+                                                                (blur)=NuevoDestinatario(i) (click)="boolValor=true"
+                                                                required #valor="ngModel">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Cuenta</label>
-                                                <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino" class="form-control" autocomplete="off" (click)="boolCuenta=true"
-                                                    required >
-                                                    <option value="">Seleccione una Cuenta</option>
-                                                    <option *ngFor="let Cuenta of Envio.Cuentas" [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
-                                                </select>
-                                                <!-- <div *ngIf="cuenta.value=='' && boolCuenta==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="!cuenta.value==''" style="color:green">Datos correctos!</div> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <label>Valor</label>
-                                                <input type="number" placeholder="Valor a Transferir" class="form-control"
-                                                    name="Valor_Transferencia{{i}}" [(ngModel)]="Envio.Valor_Transferencia" (blur)=NuevoDestinatario()
-                                                    (click)="boolValor=true" required #valor="ngModel">
-                                                <!-- <div *ngIf="valor.value=='' && boolValor==true" style="color:red">Campo inválido</div>
-                                                <div *ngIf="!valor.value==''" style="color:green">Datos correctos!</div> -->
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <hr class="mrg-top-10 mrg-btm-10">
-                            <h5>Datos del Cambio</h5>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-4">
-                                    <div class="form-group text-center">
-                                        <label>Moneda Recibida</label>
-                                        <select class="form-control" id="Moneda_Origen" name="Moneda_Origen" ngModel="{{MonedaRecibida}}" (change)="SeleccionarMonedaRecibe($event.target.value)"
-                                            (click)="boolMonedaRecibida=true" required #monedaRecibida="ngModel">
-                                            <option value="">Seleccione una Moneda</option>
-                                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <hr class="mrg-top-10 mrg-btm-10">
+                                            <h5>Datos del Cambio</h5>
+                                            <div class="row mrg-top-20">
+                                                <div class="col-md-4">
+                                                    <div class="form-group text-center">
+                                                        <label>Moneda Recibida</label>
+                                                        <select class="form-control" placeholder="Moneda Recibida"
+                                                            ngModel (change)="Origen($event.target.value)">
+                                                            <option> Seleccione Moneda</option>
+                                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                                ({{ moneda.Codigo }}) </option>
+                                                        </select>
+                                                        <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
+                                                            ngModel="{{MonedaOrigen}}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input id="Cantidad_Recibida" type="number" min=0 (blur)="RealizarCambioMoneda($event.target.value,'cambia')"
+                                                            autocomplete="off" placeholder="Precio Recibido" class="form-control"
+                                                            [(ngModel)]="cambiar" name="Cantidad_Recibida" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group text-center" *ngIf="MonedaTasaCambio">
+                                                        <label>Tasa de Cambio</label>
+                                                        <input type="text" class="form-control" name="Tasa_Cambio"
+                                                            ngModel="{{PrecioSugerido}}" readonly>
+                                                    </div>
+                                                    <div class="form-group text-center" *ngIf="MonedaComision">
+                                                        <label>Comisión</label>
+                                                        <input readonly type="number" class="form-control" name="Costo_Transferencia"
+                                                            ngModel="{{ValorTransferencia}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group text-center">
+                                                        <label>Moneda de Transferencia </label>
+                                                        <select name="MonedaTransferencia" class="form-control"
+                                                            placeholder="Moneda de transferencia" ngModel="{{MonedaTransferencia}}"
+                                                            (change)="CambiarTasa($event.target.value);">
+                                                            <option> Seleccione Moneda</option>
+                                                            <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                                ({{ moneda.Codigo }}) </option>
+                                                        </select>
+                                                        <input hidden name="Moneda_Destino" readonly type="text" class="form-control"
+                                                            ngModel="{{MonedaDestino}}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input id="Cantidad_Transferida" (blur)="RealizarCambioMoneda($event.target.value,'entrega')"
+                                                            type="number" min=0 placeholder="Precio Transferencia"
+                                                            class="form-control" [(ngModel)]="entregar" name="Total_Transferencia"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!--
-                                    <div *ngIf="monedaRecibida.value=='' && boolMonedaRecibida==true" style="color:red">Moneda incorrecta</div>
-                                    <div *ngIf="!monedaRecibida.value==''" style="color:green">Moneda correcta!</div>
-                                    -->  
-                                    <div class="form-group">
-                                        <!--Revisar Id?-->
-                                        <input id="Cantidad_Recibida" type="number" min=0 (ngModelChange)="RealizarCambio($event, 'transferir')" autocomplete="off"
-                                            placeholder="Precio" class="form-control" [(ngModel)]="CantidadRecibida" name="Cantidad_Recibida"
-                                            (click)="boolCantidadRecibida=true" required #cantidadRecibida="ngModel">
-                                        
-                                    <!--<div *ngIf="cantidadRecibida.value=='' && boolCantidadRecibida==true" style="color:red">Cantidad recibida incorrecta</div>
-                                        <div *ngIf="!cantidadRecibida.value==''" style="color:green">Cantidad recibida correcta!</div>
-                                    -->
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group text-center">
-                                        <label>Tasa de Cambio</label>
-                                        <input type="text" autocomplete="off" class="form-control" name="Tasa_Cambio" ngModel="{{PrecioSugerido}}" readonly>
-                                    </div>
-                                    <div class="form-group text-center" *ngIf="MonedaRecibe==='Pesos'">
-                                        <label>Comisión</label>
-                                        <input type="number" class="form-control" name="Costo_Transferencia" ngModel="{{Costo}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group text-center">
-                                        <label>Moneda de Transferencia</label>
-                                        <select class="form-control" name="Moneda_Destino" ngModel="{{MonedaTransferencia}}" (change)="RealizarCambio($event.target.selectedIndex, 'recibir')"
-                                            (click)="boolMonedaTransferencia=true" required #monedaTransferencia="ngModel">
-                                            <option value="">Seleccione una Moneda</option>
-                                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                    <!--
-                                    <div *ngIf="monedaTransferencia.value=='' && boolMonedaTransferencia==true" style="color:red">Moneda incorrecta</div>
-                                    <div *ngIf="!monedaTransferencia.value==''" style="color:green">Moneda correcta!</div>
-                                    -->   
-                                    <div class="form-group">
-                                        <input id="Cantidad_Transferida" (blur)="NuevoDestinatario()" autocomplete="off" 
-                                            type="number" min=0 placeholder="Precio" class="form-control" [(ngModel)]="CantidadTransferida"
-                                            name="Total_Transferencia" (click)="boolCantidadTransferencia=true" required #cantidadTransferencia="ngModel">
-                                        
-                                    <!--    <div *ngIf="cantidadTransferencia.value=='' && boolCantidadTransferencia==true" style="color:red">Cantidad recibida incorrecta</div>
-                                        <div *ngIf="!cantidadTransferencia.value==''" style="color:green">Cantidad recibida correcta!</div>
-                                        -->
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="mrg-top-10 mrg-btm-10">
-                            <h5>Datos del Remitente</h5>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Número Documento</label>
-                                        <input type="text" class="form-control" 
-                                            placeholder="Número Documento"
-                                            name="Numero_Documento_Origen" 
-                                            autocomplete="off" 
-                                            [(ngModel)]="DatosRemitente" 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <hr class="mrg-top-10 mrg-btm-10">
+                                            <h5>Datos del Remitente</h5>
+                                            <div class="row mrg-top-20">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Número Documento</label>
+                                                        <input type="text" class="form-control" placeholder="Número Documento"
+                                                            name="Numero_Documento_Origen" autocomplete="off"
+                                                            [(ngModel)]="DatosRemitente" [ngbTypeahead]="search_remitente"
+                                                            [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                                            (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)">
 
-                                            [ngbTypeahead]="search_remitente"
-                                            [resultTemplate]="rt_remitente" 
-                                            [inputFormatter]="formatter_remitente" 
-                                            (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)"
-          
-                                        >
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Nombre</label>
+                                                        <input type="text" placeholder="Nombre Remitente" autocomplete="off"
+                                                            class="form-control" name="Persona_Envia" ngModel="{{DatosRemitente.Nombre}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Teléfono</label>
+                                                        <input type="text" placeholder="Teléfono Remitente"
+                                                            autocomplete="off" class="form-control" name="Telefono_Envia"
+                                                            ngModel="{{DatosRemitente.Telefono}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-info btn-sm btn-block" (click)="HistorialTransferenciaRemitente(DatosRemitente)">
+                                                            Historial
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" autocomplete="off"
+                                                    name="Detalle" ngModel></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Para Credito-->
+                                    <div class="row">
+                                            <div class="col-md-4">
+                                                    <select class="form-control" name="Id_Tercero" ngModel >
+                                                            <option value="">Seleccione Tercero</option>
+                                                            <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
+                                                        </select>
+                                            </div>
+                                    </div>
+                                    <!-- Para Consignacion-->
+                                    <div class="row">
+                                            <div class="col-md-4">
+                                                    <select class="form-control" name="Id_Cuenta_Bancaria" ngModel >
+                                                            <option value="">Seleccione Cuenta Bancaria</option>
+                                                            <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Id_Cuenta_Bancaria">{{cuenta.Numero_Cuenta}}</option>
+                                                        </select>
+                                            </div>
+                                    </div>
+                                </form>
 
-                                        <!-- <input type="text" placeholder="Número Documento" class="form-control" name="Numero_Documento_Origen" ngModel autocomplete="off" [(ngModel)]="NumeroDocumentoR"
-                                            required list="remitentes" (ngModelChange)="AutoCompletarRemitente($event)" (blur)="LlenarValoresRemitente($event.target.value, i)"
-                                            (click)="boolNumeroDocumentoR=true" required #numeroDocumentoR="ngModel"> -->
-                                        
-                                        <!-- <div *ngIf="(numeroDocumentoR.value=='' && boolNumeroDocumentoR==true) || numeroDocumentoR.value.length < 5" style="color:red">Campo inválido</div>
-                                        <div *ngIf="!numeroDocumentoR.value=='' && numeroDocumentoR.value.length >= 5" style="color:green">Datos correctos!</div> -->
+                                <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
+                                    <div class="col-md-10">
+                                        <button class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (confirm)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia()">Volver</button>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Nombre</label>
-                                        <input type="text" placeholder="Nombre Remitente" autocomplete="off" class="form-control" name="Persona_Envia" ngModel="{{DatosRemitente.Nombre}}">
+                                <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
+                                    <div class="col-md-10">
+                                        <button class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Teléfono</label>
-                                        <input type="text" placeholder="Teléfono Remitente" autocomplete="off" class="form-control" name="Telefono_Envia"
-                                            ngModel="{{DatosRemitente.Telefono}}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" autocomplete="off" name="Detalle" ngModel>
-                                        </textarea>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia()">Volver</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
-                                <div class="col-md-12">
-                                    <button class="btn btn-info btn-sm btn-block" [disabled]="formaPago.value==''" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                        (confirm)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia</button>
-                                </div>
-                            </div>
-                            <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
-                                <div class="col-md-12">
-                                    <button class="btn btn-info btn-sm btn-block" [disabled]="formaPago.value==''" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                        (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento</button>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -444,179 +559,286 @@
                     <ul class="list-unstyled list-info">
                         <li>
                             <span class="thumb-img pdd-top-10">
-                                <i class="ti-wallet text-success font-size-30"></i>
+                                <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
                                 <b class="text-dark font-size-22">Giros</b>
-                                <p class="no-mrg-btm">Envío/Recepción Dinero</p>
+                                <p class="no-mrg-btm ">Envío/Recepción Dinero</p>
                             </div>
                         </li>
                     </ul>
-                    <div class="mrg-top-30" style="min-height: 470px;">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <form #FormGiroRemitente="ngForm">
-                                    <button class="btn btn-sm btn-success pull-right">
-                                        <i class="ti ti-hand-point-up"></i>
-                                    </button>
-                                    <h4>Remitente</h4>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Ciudad Origen</label>
-                                                <select class="form-control">
-                                                    <option value="">Seleccione Ciudad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Número de documento</label>
-                                                <input type="text" placeholder="Ejem: 1100543987" class="form-control" name="Documento_Remitente" ngModel="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Nombre Completo</label>
-                                                <input type="text" placeholder="Ejem: Pepito Perez" class="form-control" name="Nombre" ngModel="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Teléfono</label>
-                                                <input type="text" placeholder="Ejem: 318 3555555" class="form-control" name="Telefono" ngModel="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                    <div class="mrg-top-10" style="min-height: 470px;">
+                        <div class="row" id="Giros1" *ngIf="Giro1">
+                            <div class="col-md-12">
+                                <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nuevo
+                                    Giro</button>
                             </div>
-                            <div class="col-md-6">
-                                <form #FormGiroDestinatario="ngForm">
-                                    <h4>Destinatario</h4>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Ciudad Destino</label>
-                                                <select class="form-control">
-                                                    <option value="">Seleccione Ciudad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Número de Documento</label>
-                                                <input type="text" placeholder="Ejem: 93567876" class="form-control" name="Documento_Destinatario" ngModel>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Nombre Completo</label>
-                                                <input type="text" placeholder="Ejem: Juan Sanchez" class="form-control" name="Nombre" ngModel="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label>Teléfono</label>
-                                                <input type="text" placeholder="Ejem: 6543424" class="form-control" name="Telefono" ngModel="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+
+                            <div class="col-md-12">
+                                <hr>
+                                <h5>Últimas Giros Registrados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions3"
+                                        [dtTrigger]="dtTrigger3">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px;">Hora</th>
+                                                <th>Código</th>
+                                                <th>Valor Recibido</th>
+                                                <th>Valor Entrega</th>
+                                                <th>Comision</th>
+                                                <th style="width:160px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let Giro of Giros" class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
+                                                <td>{{Giro.Fecha | date:"HH:mm" }}</td>
+                                                <td>{{Giro.Codigo}}</td>
+                                                <td>{{Giro.Valor_Recibido | currency}}</td>
+                                                <td>{{Giro.Valor_Entrega | currency}}</td>
+                                                <td>{{Giro.Comision | currency }}
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                        <i class="ti-printer"></i>
+                                                    </button>
+                                                    <button *ngIf="anulado(Giro.Estado)" (click)="EditarGiro(Giro.Id_Giro)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;">
+                                                        <i class="ti-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                        <i class="ti-reload"></i>
+                                                    </button>
+                                                    <button *ngIf="anulado(Giro.Estado)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                        (confirm)="AnularGiro(Giro.Id_Giro)">
+                                                        <i class="ti-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <h4>Datos del giro</h4>
-                        <form #FormGiro="ngForm">
-                            <div class="row" hidden>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Identificación</label>
-                                        <input name="Identificacion_Funcionario" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdentificacionFuncionario}}"
-                                            required>
-                                    </div>
+
+                        <div class="row" id="Giros2" *ngIf="Giro2" style="margin-top: 10px">
+                            <div class="col-md-12">
+                                <div class="mrg-top-30" style="min-height: 470px;">
+                                    <form #FormGiro="ngForm">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-sm btn-success pull-right">
+                                                    <i class="ti ti-hand-point-up"></i>
+                                                </button>
+                                                <h4>Remitente</h4>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Departamento Remitente</label>
+                                                            <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                                <option value="">Seleccione Departamento</option>
+                                                                <option *ngFor="let departamento of Departamentos"
+                                                                    [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="Departamento_Remitente"
+                                                            [(ngModel)]="Departamento_Remitente" hidden readonly>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Ciudad Origen</label>
+                                                            <select class="form-control" name="Municipio" name="Municipio_Remitente"
+                                                                ngModel>
+                                                                <option value="">Seleccione Ciudad</option>
+                                                                <option *ngFor="let municipio of Municipios_Remitente"
+                                                                    [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label>Número de documento</label>
+                                                        <input type="text" class="form-control" placeholder="Número Documento"
+                                                            name="Documento_Remitente" autocomplete="off" [(ngModel)]="DatosRemitenteGiro"
+                                                            [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                            [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);">
+                                                        <input type="text" class="form-control" readonly name="Documento_Remitente"
+                                                            ngModel="{{DatosRemitenteGiro.Id_Transferencia_Remitente}}">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Nombre Completo</label>
+                                                            <input type="text" placeholder="Ejem: Pepito Perez" class="form-control"
+                                                                name="Nombre_Remitente" ngModel="{{DatosRemitenteGiro.Nombre}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Teléfono</label>
+                                                            <input type="text" placeholder="Ejem: 318 3555555" class="form-control"
+                                                                name="Telefono_Remitente" ngModel="{{DatosRemitenteGiro.Telefono}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <h4>Destinatario</h4>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Departamento Destinatario</label>
+                                                            <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                                <option value="">Seleccione Departamento</option>
+                                                                <option *ngFor="let departamento of Departamentos"
+                                                                    [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="Departamento_Destinatario"
+                                                            [(ngModel)]="Departamento_Destinatario" hidden readonly>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Ciudad Destino</label>
+                                                            <select class="form-control" ngModel name="Municipio_Destinatario">
+                                                                <option value="">Seleccione Ciudad</option>
+                                                                <option *ngFor="let municipio of Municipios_Destinatario"
+                                                                    [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Número de Documento</label>
+                                                            <input type="text" class="form-control" placeholder="Número Documento"
+                                                                autocomplete="off" name="Documento_Destinatario"
+                                                                [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente"
+                                                                [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                                                (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
+                                                            <input type="text" class="form-control" readonly name="Documento_Destinatario"
+                                                                ngModel="{{DatosDestinatario.Id_Transferencia_Remitente}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Nombre Completo</label>
+                                                            <input type="text" placeholder="Ejem: Juan Sanchez" class="form-control"
+                                                                name="Nombre_Destinatario" ngModel="{{DatosDestinatario.Nombre}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Teléfono</label>
+                                                            <input type="text" placeholder="Ejem: 6543424" class="form-control"
+                                                                name="Telefono_Destinatario" ngModel="{{DatosDestinatario.Telefono}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h4>Datos del giro</h4>
+                                        <div class="row" hidden>
+                                            <div class="col-md-4" hidden>
+                                                <div class="form-group">
+                                                    <label>Identificación</label>
+                                                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación"
+                                                        class="form-control" ngModel="{{IdentificacionFuncionario}}"
+                                                        required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" hidden>
+                                                <div class="form-group">
+                                                    <label>Oficina</label>
+                                                    <input name="Id_Oficina" type="text" placeholder="Identificación"
+                                                        class="form-control" ngModel="{{IdOficina}}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" hidden>
+                                                <div class="form-group">
+                                                    <label>Caja</label>
+                                                    <input name="Id_Caja" type="text" placeholder="Identificación"
+                                                        class="form-control" ngModel="{{IdCaja}}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mrg-top-20">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Valor a Enviar</label>
+                                                    <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido"
+                                                        ngModel={{ValorEnviar}} (blur)="valorComision($event.target.value)">
+                                                    <!--CalcularTotal($event.target.value)-->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Comisión</label>
+                                                    <input type="text" placeholder="Precio" class="form-control" name="Comision"
+                                                        ngModel="{{Costo}}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group text-center">
+                                                    <label>Libre</label>
+                                                    <input id="libre" type="checkbox" placeholder="Precio" class="form-control"
+                                                        (click)="valorComision(ValorEnviar)">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Total</label>
+                                                    <input type="text" placeholder="Precio" class="form-control"
+                                                        readonly name="Valor_Total" ngModel="{{ValorTotal}}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label>Entregado</label>
+                                                    <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega"
+                                                        ngModel="{{ValorEntrega}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Observaciones</label>
+                                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                                                        ngModel></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Oficina</label>
-                                        <input name="Id_Oficina" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdOficina}}" required>
+                                <div class="row mrg-top-20">
+                                    <div class="col-md-10">
+                                        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (confirm)="RealizarGiro(FormGiro)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            Giro</button>
                                     </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Caja</label>
-                                        <input name="Id_Caja" type="text" placeholder="Identificación" class="form-control" ngModel="{{IdCaja}}" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Estado</label>
-                                        <input name="Estado" type="text" placeholder="Identificación" class="form-control" ngModel="{{Estado}}" required>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Valor a Enviar</label>
-                                        <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido" ngModel="" (blur)="CalcularTotal($event.target.value)">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Comisión</label>
-                                        <input type="text" placeholder="Precio" class="form-control" name="Comision" ngModel="{{Costo}}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <div class="form-group text-center">
-                                        <label>Libre</label>
-                                        <input type="checkbox" placeholder="Precio" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Total</label>
-                                        <input type="text" placeholder="Precio" class="form-control" readonly name="Valor_Total" ngModel="{{ValorTotal}}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4" hidden>
-                                    <div class="form-group">
-                                        <label>Entregado</label>
-                                        <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega" ngModel="{{ValorEntrega}}" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel>
-                                            </textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-sm btn-success btn-block" (click)="RealizarGiro(FormGiroRemitente, FormGiroDestinatario, FormGiro)">Hacer giro</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -633,58 +855,162 @@
                             </div>
                         </li>
                     </ul>
-                    <div class="mrg-top-30" style="min-height: 470px;">
-                        <form #FormTraslado="ngForm">
-                            <h4>Datos del traslado</h4>
-                            <div class="col-md-4" hidden>
-                                <div class="form-group">
-                                    <label>Cajero Origen</label>
-                                    <select name="Id_Cajero_Origen" class="form-control" name="Id_Cajero_Origen" ngModel="{{IdCaja}}">
-                                        <option value="">seleccione una opción</option>
-                                    </select>
+                    <div class="row" id="Traslados1" *ngIf="Traslado1">
+                        <div class="col-md-12">
+                            <button (click)="CambiarVista('Traslado')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nuevo
+                                Traslado</button>
+                        </div>
+
+                        <div class="col-md-6">
+                            <hr>
+                            <h5>Últimos Traslados Enviados del dia</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado"
+                                    [dtTrigger]="dtTriggerTraslado">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:60px;">Hora</th>
+                                            <th>Código</th>
+                                            <th>Valor</th>
+                                            <th>Moneda</th>
+                                            <th style="width:160px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let Traslado of Traslados" class=" {{Traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                            <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
+                                            <td>{{Traslado.Codigo}}</td>
+                                            <td>{{Traslado.Valor | currency}}</td>
+                                            <td>{{Traslado.Moneda }}
+                                            </td>
+
+                                            <td class="text-center" *ngIf="esconder(Traslado.Estado,Traslado.Aprobado)">
+                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                    (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
+                                                    <i class="ti-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                    (confirm)="AnularTraslado(Traslado.Id_Traslado_Caja,Traslado.Estado)">
+                                                    <i class="ti-close"></i>
+                                                </button>
+                                            </td>
+                                            <td *ngIf="!esconder(Traslado.Estado,Traslado.Aprobado)">
+                                                Este traslado fue anulado o aprobado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <hr>
+                            <h5>Últimas Traslados Recibidos del dia</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado1"
+                                    [dtTrigger]="dtTriggerTraslado1">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:60px;">Hora</th>
+                                            <th>Código</th>
+                                            <th>Valor</th>
+                                            <th>Moneda</th>
+                                            <th style="width:160px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let Traslado of TrasladosRecibidos" class=" {{Traslado.Aprobado == 'No' ? 'bg-danger text-white' : '' }} ">
+                                            <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
+                                            <td>{{Traslado.Codigo}}</td>
+                                            <td>{{Traslado.Valor | currency}}</td>
+                                            <td>{{Traslado.Moneda }}
+                                            </td>
+
+                                            <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
+                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                    (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                    (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'No')">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
+                                                <label *ngSwitchCase="true">Aprobado</label>
+                                                <label *ngSwitchCase="false">Negado</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="Traslados2" *ngIf="Traslado2" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="mrg-top-30" style="min-height: 470px;">
+                                <form #FormTraslado="ngForm">
+                                    <h4>Datos del traslado</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Cajero Destino</label>
+                                                <select name="Funcionario_Destino" class="form-control" ngModel>
+                                                    <option value="">seleccione una opción</option>
+                                                    <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
+                                                        {{Caja.Apellidos}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Moneda</label>
+                                                <select name="Id_Moneda" class="form-control" ngModel="">
+                                                    <option value="">Seleccione una Opción</option>
+                                                    <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Valor</label>
+                                                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control"
+                                                    ngModel="" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mrg-top-20">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Observaciones</label>
+                                                <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                                                    ngModel="" style="min-height:150px !important;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row mrg-top-10">
+                                <div class="col-md-10">
+                                    <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                        (confirm)="RealizarTraslado(FormTraslado,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+                                        Traslado</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-success btn-sm btn-block" (click)="volverTraslado()">Volver</button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Cajero de destino</label>
-                                        <select name="Id_Cajero_Destino" class="form-control" ngModel="">
-                                            <option value="">seleccione una opción</option>
-                                            <option *ngFor="let Caja of Cajas" value="{{Caja.Id_Caja}}">{{Caja.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Moneda</label>
-                                        <select name="Id_Moneda" class="form-control" ngModel="">
-                                            <option value="">Seleccione una Opción</option>
-                                            <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Valor</label>
-                                        <input name="Valor" type="text" placeholder="$ 100.000" class="form-control" ngModel="" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="" style="min-height:150px !important;"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>&nbsp;</label>
-                                        <button type="submit" class="btn btn-sm btn-info btn-block" (click)="RealizarTraslado(FormTraslado)">Hacer traslado</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -720,7 +1046,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Corresponsal</label>
-                                        <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="{{CorresponsalBancario}}" (change)="ConsultarCorresponsal($event.target.value)">
+                                        <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="{{CorresponsalBancario}}"
+                                            (change)="ConsultarCorresponsal($event.target.value)">
                                             <option value="">Seleccione un Corresponsal</option>
                                             <option *ngFor="let CorresponsalBancario of CorresponsalesBancarios" value="{{CorresponsalBancario.Id_Corresponsal_Bancario}}">{{CorresponsalBancario.Nombre}}</option>
                                         </select>
@@ -729,15 +1056,17 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Valor</label>
-                                        <input name="Valor" type="text" placeholder="Saldo del día" class="form-control" ngModel="{{ValorCorresponsal}}">
+                                        <input name="Valor" type="text" placeholder="Saldo del día" class="form-control"
+                                            ngModel="{{ValorCorresponsal}}">
                                     </div>
                                 </div>
                             </div>
                             <div class="row mrg-top-20">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Detalles</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{DetalleCorresponsal}}"></textarea>
+                                        <label>Observaciones</label>
+                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                                            ngModel="{{DetalleCorresponsal}}"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -751,12 +1080,12 @@
                     </div>
                 </div>
             </div>
-            <div class="card modulos" id="servicios" style="display: none;"gi>
+            <div class="card modulos" id="servicios" style="display: none;">
                 <div class="card-block">
                     <ul class="list-unstyled list-info">
                         <li>
                             <span class="thumb-img pdd-top-10">
-                                <i class="ti-truck text-danger font-size-30"></i>
+                                <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
                                 <b class="text-dark font-size-22">Servicios Externos</b>
@@ -764,58 +1093,118 @@
                             </div>
                         </li>
                     </ul>
-                    <div class="mrg-top-30" style="min-height: 470px;">
-                        <form #FormServicio="ngForm">
-                            <h4>Datos del servicio</h4>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Servicio</label>
-                                        <select name="Servicio_Externo" class="form-control" ngModel="" (change)="AsignarComisionServicioExterno($event.target.value)">
-                                            <option value="">Seleccione un Servicio</option>
-                                            <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
-                                        </select>
-                                    </div>
+                    <div class="mrg-top-10" style="min-height: 470px;">
+                        <div class="row" id="Servicios1" *ngIf="Servicio1">
+                            <div class="col-md-12">
+                                <button (click)="CambiarVista('Servicio')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nuevo
+                                    Servicio</button>
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr>
+                                <h5>Últimas Servicios Registrados</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
+                                        [dtTrigger]="dtTrigger1">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px;">Hora</th>
+                                                <th>Código</th>
+                                                <th>Servicio</th>
+                                                <th>Valor</th>
+                                                <th>Comision</th>
+                                                <th style="width:160px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let Servicio of Servicios" class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                                <td>{{Servicio.Fecha | date:"HH:mm" }}</td>
+                                                <td>{{Servicio.Codigo}}</td>
+                                                <td>{{Servicio.Servicio_Externo }}</td>
+                                                <td>{{Servicio.Valor | currency}}</td>
+                                                <td>{{Servicio.Comision | currency }}
+                                                </td>
+
+                                                <td class="text-center">
+
+                                                    <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                                                        <i class="ti-pencil"></i>
+                                                    </button>
+                                                    <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                                        type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este Servicio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                        (confirm)="AnulaServicio(Servicio.Id_Servicio,Servicio.Estado)">
+                                                        <i class="ti-close"></i>
+                                                    </button>
+
+                                                    <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Moneda</label>
-                                        <select name="Moneda" class="form-control" ngModel="">
-                                            <option value="">seleccione una opción</option>
-                                            <option *ngFor="let Moneda of Monedas" value="{{Moneda.Nombre}}">{{Moneda.Nombre}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Valor</label>
-                                        <input type="text" class="form-control" name="Valor" ngModel="">
-                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="Servicios2" *ngIf="Servicio2" style="margin-top: 10px">
+                            <div class="col-md-12">
+
+                                <div class="mrg-top-30" style="min-height: 470px;">
+                                    <form #FormServicio="ngForm">
+                                        <h4>Datos del servicio</h4>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Servicio</label>
+                                                    <select name="Servicio_Externo" class="form-control" ngModel=""
+                                                        (change)="AsignarComisionServicioExterno($event.target.value)">
+                                                        <option value="">Seleccione un Servicio</option>
+                                                        <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Valor</label>
+                                                    <input type="text" class="form-control" name="Valor" ngModel
+                                                        (change)="calcularComisionServicioExterno($event.target.value)">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Comisión</label>
+                                                    <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                                                        ngModel="{{ValorComisionServicio}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mrg-top-20">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Observaciones</label>
+                                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                                                        ngModel=""> </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Comisión</label>
-                                        <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ComisionServicioExterno}}" readonly>
+
+                                <div class="row mrg-top-5">
+                                    <div class="col-md-10">
+                                        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            Servicio</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mrg-top-20">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Observaciones</label>
-                                        <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="">
-                                            </textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>&nbsp;</label>
-                                        <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarServicio(FormServicio)">Guardar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -834,7 +1223,6 @@
     </span>
 </ng-template>
 
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
     <div class="app-modal-header">
         <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
@@ -847,25 +1235,22 @@
                 <div class="col-md-6" hidden>
                     <div class="form-group">
                         <label>indice</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="{{Cedula}}">
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario"
+                            ngModel="{{Cedula}}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario" ngModel="{{Cedula}}"
-                            (focusout)="boolId = true" required #identificacion="ngModel">
-                        <div *ngIf="!identificacion.valid && boolId==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="identificacion.valid && boolId==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Destinatario"
+                            ngModel="{{Cedula}}" (focusout)="boolId = true" required #identificacion="ngModel">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="" (focusout)="boolNombre = true"
-                            required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel=""
+                            (focusout)="boolNombre = true" required #nombre="ngModel">
                     </div>
                 </div>
             </div>
@@ -878,10 +1263,8 @@
                         <label>Numero de Cuenta</label>
                         <input type="number" (ngModelChange)="AutoSeleccionarBanco($event, i)" placeholder="Número de Cuenta sin Espacios"
                             step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control"
-                            name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta" (focusout)="boolCuenta = true" required
-                            #cuenta="ngModel">
-                        <div *ngIf="!cuenta.valid && boolCuenta==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="cuenta.valid && boolCuenta==true" style="color:green">Datos correctos!</div>
+                            name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta" (focusout)="boolCuenta = true"
+                            required #cuenta="ngModel">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -896,23 +1279,21 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Id_Pais{{i}}" [(ngModel)]="Cuenta.Id_Pais" (click)="boolPais=true" required #pais="ngModel">
+                        <select class="form-control" name="Id_Pais{{i}}" [(ngModel)]="Cuenta.Id_Pais" (click)="boolPais=true"
+                            required #pais="ngModel">
                             <option value="">Seleccione País</option>
                             <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
-                        <div *ngIf="pais.value=='' && boolPais==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!pais.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Banco</label>
-                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="Cuenta.Id_Banco" (click)="boolBanco=true" required #banco="ngModel" >
+                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="Cuenta.Id_Banco" (click)="boolBanco=true"
+                            required #banco="ngModel">
                             <option value="">Seleccione Banco</option>
                             <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                         </select>
-                        <div *ngIf="banco.value=='' && boolBanco==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!banco.value==''" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -925,18 +1306,19 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Detalles</label>
-                    <textarea class="form-control" id="detalleText" placeholder="Detalles del Destinatario" name="Detalle" [(ngModel)]="Detalle"></textarea>
+                    <textarea class="form-control" id="detalleText" placeholder="Detalles del Destinatario" name="Detalle"
+                        [(ngModel)]="Detalle"></textarea>
                 </div>
             </div>
         </div>
     </div>
     <div class="app-modal-footer" id="guardar">
         <div class="text-right">
-                <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                (confirm)="GuardarDestinatario(FormDestinatario)" [disabled]="!nombre.valid || !identificacion.valid" class="btn btn-primary btn-sm btn-block">Guardar</button>
+            <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarDestinatario(FormDestinatario)" class="btn btn-primary btn-sm btn-block">Guardar</button>
         </div>
     </div>
-    
+
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
@@ -951,19 +1333,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente" ngModel="{{IdRemitente}}"
-                            (focusout)="boolIdR = true" required #identificacionR="ngModel">
-                        <div *ngIf="!identificacionR.valid && boolIdR==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="identificacionR.valid && boolIdR==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente"
+                            ngModel="{{IdRemitente}}" (focusout)="boolIdR = true" required #identificacionR="ngModel">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel="" (focusout)="boolNombreR = true"
-                            required #nombreR="ngModel">
-                        <div *ngIf="!nombreR.valid && boolNombreR==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreR.valid && boolNombreR==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel=""
+                            (focusout)="boolNombreR = true" required #nombreR="ngModel">
                     </div>
                 </div>
             </div>
@@ -971,10 +1349,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel="" (focusout)="boolTelefonoR = true"
-                            required #telefonoR="ngModel">
-                        <div *ngIf="!telefonoR.valid && boolTelefonoR==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="telefonoR.valid && boolTelefonoR==true" style="color:green">Datos correctos!</div>
+                        <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono"
+                            ngModel="" (focusout)="boolTelefonoR = true" required #telefonoR="ngModel">
                     </div>
                 </div>
             </div>
@@ -983,13 +1359,417 @@
     </div>
     <div class="app-modal-footer" id="guardar">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" [disabled]="!nombreR.valid || !identificacionR.valid || !telefonoR.valid" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                 (confirm)="GuardarRemitente(FormRemitente)">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
 
-<swal #warnSwal title="Documento invalido" text="El documento ingresado debe tener una longitud mínima de 5 números" type="warning">
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalHistorial" #ModalHistorial>
+    <div class="app-modal-header">
+        <h4>Historial Remitente</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+                <h5>Últimos Movimientos del remitente</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions2"
+                        [dtTrigger]="dtTrigger2">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">Hora</th>
+                                <th>Código</th>
+                                <th>Moneda Origen</th>
+                                <th>Tasa de cambio</th>
+                                <th>Moneda Destino</th>
+                                <th>Valor transferencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let Historial of HistorialCliente">
+                                <td>{{Historial.Fecha }}</td>
+                                <td>{{Historial.Codigo }}</td>
+                                <td>{{Historial.Moneda_Origen }}</td>
+                                <td>{{Historial.Tasa_Cambio }}</td>
+                                <td>{{Historial.Moneda_Destino }}</td>
+                                <td>{{Historial.Valor_Transferencia }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalTrasladoEditar" #ModalTrasladoEditar>
+    <div class="app-modal-header">
+        <h4>Editar traslado</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form #FormTrasladoEditar="ngForm">
+                    <h4>Datos del traslado</h4>
+                    <div class="row">
+                        <div class="col-md-4" hidden>
+                            <div class="form-group">
+                                <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
+                                    required>
+                                <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Cajero Destino</label>
+                                <select name="Funcionario_Destino" class="form-control" ngModel="{{Traslado.Funcionario_Destino}}">
+                                    <option value="">seleccione una opción</option>
+                                    <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
+                                        {{Caja.Apellidos}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Moneda</label>
+                                <select name="Id_Moneda" class="form-control" ngModel="{{Traslado.Id_Moneda}}">
+                                    <option value="">Seleccione una Opción</option>
+                                    <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control" ngModel="{{Traslado.Valor}}"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mrg-top-20">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Observaciones</label>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Traslado.Detalle}}"
+                                    style="min-height:150px !important;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            (confirm)="RealizarTraslado(FormTrasladoEditar,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+            Traslado</button>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicioEditar" #ModalServicioEditar>
+    <div class="app-modal-header">
+        <h4>Editar Servicio</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form #FormServicio="ngForm">
+                    <div class="row">
+                        <input hidden name="id" type="text" class="form-control" ngModel="{{Servicio.Id_Servicio}}"
+                            required>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Servicio</label>
+                                <select name="Servicio_Externo" class="form-control" ngModel="{{Servicio.Servicio_Externo}}">
+                                    <option value="">Seleccione un Servicio</option>
+                                    <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input type="text" class="form-control" name="Valor" ngModel="{{Servicio.Valor}}"
+                                    (change)="calcularComisionServicioExterno($event.target.value)">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Comisión</label>
+                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ValorComisionServicio}}"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Observaciones</label>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Modificar
+            Servicio</button>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGiroEditar" #ModalGiroEditar>
+    <div class="app-modal-header">
+        <h4>Editar Giro</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mrg-top-30" style="min-height: 470px;">
+                    <form #FormEditarGiro="ngForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-sm btn-success pull-right">
+                                    <i class="ti ti-hand-point-up"></i>
+                                </button>
+                                <h4>Remitente</h4>
+                                <hr>
+                                <div class="row">
+                                    <input type="text" ngModel="{{idGiro}}" name="Id_Giro" hidden >
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Departamento Remitente</label>
+                                            <select name="Departamento" ngModel="{{Remitente.Id_Departamento}}" class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                <option value="">Seleccione Departamento</option>
+                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" name="Departamento_Remitente"
+                                            [(ngModel)]="Departamento_Remitente" hidden readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ciudad Origen</label>
+                                            <select class="form-control" name="Municipio" name="Municipio_Remitente"
+                                                ngModel="{{Remitente.Nombre}}">
+                                                <option value="">Seleccione Ciudad</option>
+                                                <option *ngFor="let municipio of Municipios_Remitente" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Número de documento</label>
+                                        <input type="text" class="form-control" placeholder="Número Documento" name="Documento_Remitente"
+                                            autocomplete="off" [(ngModel)]="DatosRemitenteEditarGiro" [ngbTypeahead]="search_remitente"
+                                            [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                            (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteEditarGiro);">
+                                        <input id="Documento_Remitente" type="text" class="form-control" readonly name="Documento_Remitente"
+                                            ngModel="{{DatosRemitenteEditarGiro.Id_Transferencia_Remitente}}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Nombre Completo</label>
+                                            <input id="Nombre_Remitente" type="text" placeholder="Ejem: Pepito Perez" class="form-control"
+                                                name="Nombre_Remitente" ngModel="{{DatosRemitenteEditarGiro.Nombre}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input id="Telefono_Remitente" type="text" placeholder="Ejem: 318 3555555" class="form-control"
+                                                name="Telefono_Remitente" ngModel="{{DatosRemitenteEditarGiro.Telefono}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <h4>Destinatario</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Departamento Destinatario</label>
+                                            <select name="departamento_destino" ngModel="{{Destinatario.Id_Departamento}}" class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                <option value="">Seleccione Departamento</option>
+                                                <option *ngFor="let departamento of Departamentos" [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                        <input type="text" class="form-control" name="Departamento_Destinatario"
+                                            [(ngModel)]="Departamento_Destinatario" hidden readonly>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ciudad Destino</label>
+                                            <select class="form-control" ngModel="{{Destinatario.Nombre}}"  name="Municipio_Destinatario">
+                                                <option value="">Seleccione Ciudad</option>
+                                                <option *ngFor="let municipio of Municipios_Destinatario" [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Número de Documento</label>
+                                            <input type="text" class="form-control" placeholder="Número Documento"
+                                                autocomplete="off" name="Documento_Destinatario" [(ngModel)]="DatosDestinatarioEditarGiro"
+                                                [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatarioEditarGiro)">
+                                            <input id="Documento_Destinatario" type="text" class="form-control" readonly name="Documento_Destinatario"
+                                                ngModel="{{DatosDestinatarioEditarGiro.Id_Transferencia_Remitente}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Nombre Completo</label>
+                                            <input id="Nombre_Destinatario" type="text" placeholder="Ejem: Juan Sanchez" class="form-control"
+                                                name="Nombre_Destinatario" ngModel="{{DatosDestinatarioEditarGiro.Nombre}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input id="Telefono_Destinatario" type="text" placeholder="Ejem: 6543424" class="form-control" name="Telefono_Destinatario"
+                                                ngModel="{{DatosDestinatarioEditarGiro.Telefono}}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr>
+                        <h4>Datos del giro</h4>
+                        <div class="row" hidden>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Identificación</label>
+                                    <input name="Identificacion_Funcionario" type="text" placeholder="Identificación"
+                                        class="form-control" ngModel="{{IdentificacionFuncionario}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Oficina</label>
+                                    <input name="Id_Oficina" type="text" placeholder="Identificación" class="form-control"
+                                        ngModel="{{IdOficina}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4" hidden>
+                                <div class="form-group">
+                                    <label>Caja</label>
+                                    <input name="Id_Caja" type="text" placeholder="Identificación" class="form-control"
+                                        ngModel="{{IdCaja}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mrg-top-20">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Valor a Enviar</label>
+                                    <input type="text" placeholder="Precio" class="form-control" name="Valor_Recibido"
+                                        ngModel={{ValorEnviar}} (blur)="valorComision($event.target.value)">
+                                    <!--CalcularTotal($event.target.value)-->
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Comisión</label>
+                                    <input type="text" placeholder="Precio" class="form-control" name="Comision"
+                                        ngModel="{{Costo}}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group text-center">
+                                    <label>Libre</label>
+                                    <input id="libre" type="checkbox" placeholder="Precio" class="form-control" (click)="valorComision(ValorEnviar)">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Total</label>
+                                    <input type="text" placeholder="Precio" class="form-control" readonly name="Valor_Total"
+                                        ngModel="{{ValorTotal}}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Entregado</label>
+                                    <input type="text" placeholder="valor" class="form-control" name="Valor_Entrega"
+                                        ngModel="{{ValorEntrega}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Observaciones</label>
+                                    <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Giro.Detalle}}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+            (confirm)="RealizarEdicionGiro(FormEditarGiro,ModalGiroEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+            Giro</button>
+    </div>
+</app-modal-basic>
+
+<swal #warnSwal title="Documento invalido" text="El documento ingresado debe tener una longitud mínima de 5 números"
+    type="warning">
 </swal>
 
 <swal #warnTotalSwal title="Valor invalido" text="El valor total de la transferencia no es suficiente para realizar las transferencias individuales."
@@ -1018,3 +1798,5 @@
 
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>
