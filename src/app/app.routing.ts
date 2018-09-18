@@ -54,11 +54,12 @@ import { CuentasbancariasverComponent } from './configuracion/cuentasbancarias/c
 import { RemitenteComponent } from "./configuracion/remitente/remitente.component";
 import { TercerosverComponent } from './configuracion/terceros/tercerosver/tercerosver.component';
 import { TransferenciaverComponent } from "./transferencias/transferenciaver/transferenciaver.component";
+import { TableroComponent } from './tablero/tablero.component';
 
 export const AppRoutes: Routes = [
-    {
+    {        
         path: 'tablero', component: CommonLayoutComponent,
-        children: [{ path: '', loadChildren: './dashboard/dashboard.module#DashboardModule', canActivate: [AuthGuard] }]
+        children: [{ path: '', component: TableroComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'configuraciongeneral', component: CommonLayoutComponent,

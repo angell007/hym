@@ -8,7 +8,7 @@
 
         <div [ngClass]="sidenavSelected">
             <!-- Side Nav START -->
-            <div class="side-nav" sideBar>
+            <div class="side-nav" sideBar *ngIf="cajero">
                 <div class="side-nav-inner">
                     <div class="side-nav-logo">
                         <a href="" [routerLink]="['/dashboard']">
@@ -240,15 +240,26 @@
             <!-- Side Nav END -->
 
             <!-- Page Container START -->
-            <div class="page-container">
+            <div class="cajero ? 'page-container' : 'casocajero'">
 
                 <!-- Top Nav START -->
-                <div class="header navbar">
+
+                <div class="header navbar contenido">
                     <div class="header-container">
-                        <ul class="nav-left">
+                        <ul class="nav-left" *ngIf="cajero">
                             <li>
                                 <a class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                                     <i class="fa fa-bars"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav-left">
+                            <li class="user-profile dropdown">
+                                <!-- PERFIL -->
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                    <div class="user-info">
+                                        <span class="name pdd-right-5">{{ myDate | date:'medium' }}</span>
+                                    </div>
                                 </a>
                             </li>
                         </ul>
@@ -284,58 +295,58 @@
                                             </a>
                                         </li>
                                         <!--<li>
-                                                    <a href="">
-                                                        <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
-                                                        <div class="info">
-                                                            <span class="title">
-                                                                <span class="font-size-14 text-semibold">Samuel Field</span> 
-                                                                <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                            </span>
-                                                            <span class="sub-title">8 hours ago</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <span class="thumb-img bg-primary">
-                                                                <span class="text-white">M</span>
-                                                            </span>
-                                                        <div class="info">
-                                                            <span class="title">
-                                                                <span class="font-size-14 text-semibold">Michael Birch</span> 
-                                                                <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                            </span>
-                                                            <span class="sub-title">5 hours ago</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <span class="thumb-img bg-success">
-                                                            <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
-                                                        </span>
-                                                        <div class="info">
-                                                            <span class="title">
-                                                                <span class="font-size-14 text-semibold">Message sent</span>
-                                                            </span>
-                                                            <span class="sub-title">8 hours ago</span>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="">
-                                                        <span class="thumb-img bg-info">
-                                                            <span class="text-white"><i class="ti-user"></i></span>
-                                                        </span>
-                                                        <div class="info">
-                                                            <span class="title">
-                                                                <span class="font-size-14 text-semibold">Admin</span> 
-                                                                <span class="text-gray">Welcome on board</span> 
-                                                            </span>
-                                                            <span class="sub-title">8 hours ago</span>
-                                                        </div>
-                                                    </a>
-                                                </li> -->
+                                                                <a href="">
+                                                                    <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
+                                                                    <div class="info">
+                                                                        <span class="title">
+                                                                            <span class="font-size-14 text-semibold">Samuel Field</span> 
+                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
+                                                                        </span>
+                                                                        <span class="sub-title">8 hours ago</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">
+                                                                    <span class="thumb-img bg-primary">
+                                                                            <span class="text-white">M</span>
+                                                                        </span>
+                                                                    <div class="info">
+                                                                        <span class="title">
+                                                                            <span class="font-size-14 text-semibold">Michael Birch</span> 
+                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
+                                                                        </span>
+                                                                        <span class="sub-title">5 hours ago</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">
+                                                                    <span class="thumb-img bg-success">
+                                                                        <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
+                                                                    </span>
+                                                                    <div class="info">
+                                                                        <span class="title">
+                                                                            <span class="font-size-14 text-semibold">Message sent</span>
+                                                                        </span>
+                                                                        <span class="sub-title">8 hours ago</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="">
+                                                                    <span class="thumb-img bg-info">
+                                                                        <span class="text-white"><i class="ti-user"></i></span>
+                                                                    </span>
+                                                                    <div class="info">
+                                                                        <span class="title">
+                                                                            <span class="font-size-14 text-semibold">Admin</span> 
+                                                                            <span class="text-gray">Welcome on board</span> 
+                                                                        </span>
+                                                                        <span class="sub-title">8 hours ago</span>
+                                                                    </div>
+                                                                </a>
+                                                            </li> -->
                                     </ul>
                                     <li class="notice-footer">
                                         <span>
@@ -370,6 +381,13 @@
                                     </li>
                                     <li role="separator" class="divider"></li>
                                     <li>
+                                        <a (click)="CierreCaja.show()">
+                                            <!--<i class="ti-power-off pdd-right-10"></i> -->
+                                            <span>Cierre de caja</span>
+                                        </a>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
                                         <a (click)="salir()">
                                             <i class="ti-power-off pdd-right-10"></i>
                                             <span>Cerrar Sesión</span>
@@ -380,6 +398,9 @@
                         </ul>
                     </div>
                 </div>
+
+
+
                 <!-- Top Nav END -->
 
                 <!-- Side Panel START -->
@@ -470,7 +491,266 @@
     </div>
 </app-modal-basic>
 
+<app-modal-basic [dialogClass]="'modal-xl'" id="CierreCaja" #CierreCaja>
+    <div class="app-modal-header">
+        <h4>Cierre de caja</h4>
+    </div>
+    <div class="app-modal-body" >
+        <form #FormCierreCaja="ngForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <table class="table table-bordered data-table" style="clear:none;">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
+                                    <td style="width:160px;">Cambios Efectivo</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
+                                    <td style="width:160px;">Cambios Efectivo</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Recibo Transferencia</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;"></td>
+                                    <td style="width:160px;"></td>
+                                    <td style="width:150px;text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Giros</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;">Giros</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Traslados</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;">Traslados</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Corresponsal Bancario</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;">Gastos</td>
+                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Servicios Externos</td>
+                                    <td style="text-align:center;">$ 0</td>
+                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
+                                    <td style="text-align:center;"><strong>$ 0</strong></td>
+                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
+                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
+                                    <td style="text-align:center;"><strong>$ 0</strong></td>
+                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
+                                </tr>
 
+                            </tbody>
+                        </table>
+                        <table style="width:250px;clear:none;float:left" class="table table-bordered data-table">
+                            <tr>
+                                <td>Ch. Cambiados</td>
+                                <td style="text-align:right;">$ 0</td>
+                                <td style="text-align:right;">BsS. 0</td>
+                            </tr>
+                            <tr>
+                                <td>Base Caja</td>
+                                <td style="text-align:right;">$ 0</td>
+                                <td style="text-align:right;">BsS. 0</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#9BFFAC;">Efectivo</td>
+                                <td style="text-align:right;background:#9BFFAC;">+$ 0</td>
+                                <td style="text-align:right;background:#9BFFAC;">+BsS. 0</td>
+ 
+                            </tr>
+                            <tr>
+                                <td style="background:#FF9B9B;">Egresos</td>
+                                <td style="text-align:right;background:#FF9B9B;">-$ 0</td>
+                                <td style="text-align:right;background:#FF9B9B;">-BsS. 0</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega">$0</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">BsS. 0</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Entregado</td>
+                                <td style="text-align:right;" id="mon_rec_cuadre">$ 0</td>
+                                <td style="text-align:right;" id="mon_rec_cuadreBsS">BsS. 0</td>
+
+                            </tr>
+                            <tr>
+                                <td>Diferencia</td>
+                                <td style="text-align:right;" id="diferencia"></td>
+                            </tr>
+                            <tr id="requerido" style="display:none;">
+                                <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                    observaciones del día</td>
+                            </tr>
+                        </table>
+
+                        <form id="cierre" method="POST"> 
+                            <div class="detalles" id="mnd" style="width:auto;padding:5px;margin-left: 20px;">
+                                <div class="moneda" style="width:25%;">
+                                    <center>
+                                        <h6 style="margin:0;">Fajo Entero (x100)</h6>
+                                    </center>
+                                    <div class="linea2">
+                                        <label>$ 50.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" id="5000000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 20.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F20]" value="0"
+                                            class="nume2" id="2000000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 10.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F10]" value="0"
+                                            class="nume2" id="1000000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;5.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F5]" value="0"
+                                            class="nume2" id="500000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;2.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F2]" value="0"
+                                            class="nume2" id="200000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;1.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F1]" value="0"
+                                            class="nume2" id="100000" onClick="this.select()" />
+                                    </div>
+                                </div>
+
+                                <div class="moneda" style="width:25%;">
+                                    <center>
+                                        <h6 style="margin:0;">Medio Fajo (x50)</h6>
+                                    </center>
+                                    <div class="linea2">
+                                        <label>$ 50.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF50]" value="0"
+                                            class="nume2" id="2500000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 20.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF20]" value="0"
+                                            class="nume2 1000000" id="1000000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 10.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF10]" value="0"
+                                            class="nume2 500000" id="500000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;5.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF5]" value="0"
+                                            class="nume2" id="250000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;2.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF2]" value="0"
+                                            class="nume2 100000" id="100000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;1.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF1]" value="0"
+                                            class="nume2 50000" id="50000" onClick="this.select()" />
+                                    </div>
+                                </div>
+
+                                <div class="moneda" style="width:25%;">
+                                    <center>
+                                        <h6 style="margin:0;">Billetes Sueltos</h6>
+                                    </center>
+                                    <div class="linea2">
+                                        <label>$ 50.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B50]" value="0"
+                                            class="nume2" id="50000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 20.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B20]" value="0"
+                                            class="nume2" id="20000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ 10.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
+                                            class="nume2" id="10000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;5.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B5]" value="0"
+                                            class="nume2" id="5000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;2.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B2]" value="0"
+                                            class="nume2" id="2000" onClick="this.select()" />
+                                    </div>
+                                    <div class="linea2">
+                                        <label>$ &nbsp;1.000: </label>
+                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
+                                            class="nume2" id="1000" onClick="this.select()" />
+                                    </div>
+                                </div>
+
+                                <div class="moneda" style="width:25%;">
+                                    <center>
+                                        <h6 style="margin:0;">Monedas</h6>
+                                    </center>
+                                    <div class="linea2">
+                                        <input style="width:97%;" type="number" min="0" step="1" pattern="\d+" name="datos[M1]"
+                                            value="0" class="nume2 1000" id="1" onClick="this.select()" />
+                                    </div>
+                                    <a nohref class="button erase" onclick="limpiar_num_cuadre();" style="margin:3px;">Limpiar
+                                        (c)</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 style="margin:0;">Observaciones</h6>
+                                <textarea class="normal" id="obser" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
+                                <input type="hidden" name="id" >
+                                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer no-border">
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja(FormCierreCaja,CierreCaja)">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</app-modal-basic>
 
 <swal #confirmSwal title="Contraseña cambiada" text="Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
     type="success" (confirm)="salir()">
