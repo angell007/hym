@@ -41,7 +41,7 @@ export class TablerocajeroComponent implements OnInit {
     Destino: '',
     Numero_Documento_Destino: '',
     Nombre: '',
-    Id_Cuenta_Destino: '',
+    Id_Destinatario_Cuenta: '',
     Valor_Transferencia_Bolivar: '',
     Valor_Transferencia_Peso: '',
     Cuentas: []
@@ -104,7 +104,8 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('ModalServicioEditar') ModalServicioEditar: any;
   @ViewChild('ModalGiroEditar') ModalGiroEditar: any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
-
+  @ViewChild('ModalCrearDestinatarioTransferencia') ModalCrearDestinatarioTransferencia: any;
+  
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -188,6 +189,12 @@ export class TablerocajeroComponent implements OnInit {
   Identificacion: any;
   TipoDocumentoExtranjero = [];
   posiciontemporal: any;
+  credito = false;
+  consignacion = false;
+  efectivo = true;
+  Id_Destinatario: any;
+  frame = false;
+  urlCne: string;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -203,6 +210,7 @@ export class TablerocajeroComponent implements OnInit {
     this.FormaPago = "Efectivo";
     this.MonedaRecibidaTransferencia = 2;
     this.Bancos_Pais(2, 0);
+    this.Origen(2);
     
   }
 
@@ -212,6 +220,7 @@ export class TablerocajeroComponent implements OnInit {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
+    
   }
 
   search_destino = (text$: Observable<string>) =>
@@ -256,6 +265,31 @@ export class TablerocajeroComponent implements OnInit {
       this.ActivarEdicion = true;
     }else{
       this.ActivarEdicion = false;
+      //this.ModalDestinatario.show();
+    }
+  }
+
+  CrearDestinatrioModal(value){
+    switch(this.ActivarEdicion){
+      case false:{        
+        this.ModalCrearDestinatarioTransferencia.show();
+        this.Id_Destinatario = value;
+      }
+    }
+  }
+
+  BuscarCNE(valor){
+    switch(valor){
+      case "V":{
+        this.frame= true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula="+valor;
+        break;
+      }
+      case "E":{
+        this.frame= true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula="+valor;
+        break;
+      }
     }
   }
 
@@ -342,7 +376,7 @@ export class TablerocajeroComponent implements OnInit {
             Destino: '',
             Numero_Documento_Destino: '',
             Nombre: '',
-            Id_Cuenta_Destino: '',
+            Id_Destinatario_Cuenta: '',
             Valor_Transferencia_Bolivar: 0,
             Valor_Transferencia_Peso: 0,
             Cuentas: []
@@ -1006,18 +1040,11 @@ export class TablerocajeroComponent implements OnInit {
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.transferenciaExitosaSwal.show();
-        this.Envios = [{
-          Destino: '',
-          Numero_Documento_Destino: '',
-          Nombre: '',
-          Id_Cuenta_Destino: '',
-          Valor_Transferencia_Bolivar: '',
-          Valor_Transferencia_Peso: '',
-          Cuentas: []
-        }];
+        this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
       });
+
   }
 
 
@@ -1161,9 +1188,13 @@ export class TablerocajeroComponent implements OnInit {
     this.Cambios2 = false;
   }
 
-  volverReciboTransferencia() {
+  volverReciboTransferencia(formulario) {
     this.Transferencia1 = true;
     this.Transferencia2 = false;
+    /*formulario.reset();
+    this.TipoPagoTransferencia("Efectivo");
+    this.recibeParaDefault == "Transferencia"
+    this.Recibe='Transferencia';*/
   }
 
   volverReciboGiro() {
@@ -1213,7 +1244,7 @@ export class TablerocajeroComponent implements OnInit {
               Destino: '',
               Numero_Documento_Destino: '',
               Nombre: '',
-              Id_Cuenta_Destino: '',
+              Id_Destinatario_Cuenta: '',
               Valor_Transferencia_Bolivar: 0,
               Valor_Transferencia_Peso: 0,
               Cuentas: []
@@ -1262,7 +1293,7 @@ export class TablerocajeroComponent implements OnInit {
               Destino: '',
               Numero_Documento_Destino: '',
               Nombre: '',
-              Id_Cuenta_Destino: '',
+              Id_Destinatario_Cuenta: '',
               Valor_Transferencia_Bolivar: 0,
               Valor_Transferencia_Peso: 0,
               Cuentas: []
@@ -1662,12 +1693,21 @@ export class TablerocajeroComponent implements OnInit {
   TipoPagoTransferencia(value) {
     switch (value) {
       case "Credito": {
+        this.credito = true;
+        this.consignacion = false;
+        this.efectivo = false;
         break;
       }
       case "Consignacion": {
+        this.credito = false;
+        this.consignacion = true;
+        this.efectivo = false;
         break;
       }
       case "Efectivo": {
+        this.efectivo = true;
+        this.consignacion = false;
+        this.credito = false;
         break;
       }
     }

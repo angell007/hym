@@ -405,7 +405,7 @@
                                             <div class="col-md-3">
                                                 <label>Recibe Para</label>
                                                 <select class="form-control" (change)="SeleccionarTipo($event.target.value)"
-                                                    name="Recibe_Para" [(ngModel)]="recibeParaDefault" required>
+                                                    name="Tipo_Transferencia" [(ngModel)]="recibeParaDefault" required>
                                                     <option value="Transferencia">Transferencia</option>
                                                     <option value="Cliente">Cliente</option>
                                                 </select>
@@ -421,7 +421,32 @@
 
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <!-- Para Credito-->
+                                        <div class="row" *ngIf="credito">
+                                            <div class="col-md-4">
+                                                <hr class="mrg-top-10 mrg-btm-10">
+                                                <h5>Crédito</h5>
+                                                <select class="form-control" name="Id_Tercero" ngModel>
+                                                    <option value="">Seleccione Tercero</option>
+                                                    <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Para Consignacion-->
+                                        <div class="row" *ngIf="consignacion">
+                                            <div class="col-md-4">
+                                                <hr class="mrg-top-10 mrg-btm-10">
+                                                <h5>Consignación</h5>
+                                                <select class="form-control" name="Id_Cuenta_Bancaria" ngModel>
+                                                    <option value="">Seleccione Cuenta Bancaria</option>
+                                                    <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Numero_Cuenta">{{cuenta.Numero_Cuenta}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- efectivo -->
+
+                                        <div class="row" *ngIf="efectivo">
                                             <div *ngIf="Recibe==='Transferencia'" class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Destinatarios</h5>
@@ -434,7 +459,8 @@
                                                                     id="Destino{{i}}" [(ngModel)]="Envio.Destino"
                                                                     [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
                                                                     [inputFormatter]="formatter_destino"
-                                                                    (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)">
+                                                                    (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)"
+                                                                    (blur)="CrearDestinatrioModal(Envio.Destino)">
                                                                 <button *ngIf="ActivarEdicion" class="btn btn-default btn-xs"
                                                                     type="button" style="margin:0;" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)">
                                                                     <i class="ti-pencil"></i>
@@ -453,7 +479,7 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label>Cuenta</label>
-                                                                <select name="Id_Cuenta_Destino{{i}}" [(ngModel)]="Envio.Id_Cuenta_Destino"
+                                                                <select name="Id_Destinatario_Cuenta{{i}}" [(ngModel)]="Envio.Id_Destinatario_Cuenta"
                                                                     class="form-control" autocomplete="off" (click)="boolCuenta=true"
                                                                     required>
                                                                     <option value="">Seleccione una Cuenta</option>
@@ -543,68 +569,6 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
-                                                        <hr>
-                                                        <h4>Información Tasas de cambio</h4>
-                                                        <div class="card">
-                                                            <div class="card-block">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <!--Accordion wrapper-->
-                                                                        <div class="accordion md-accordion" id="accordionEx"
-                                                                            role="tablist" aria-multiselectable="true">
-
-                                                                            <!-- Accordion card -->
-                                                                            <div class="card">
-
-                                                                                <!-- Card header -->
-                                                                                <div class="card-header" role="tab" id="headingOne1">
-                                                                                    <a data-toggle="collapse"
-                                                                                        data-parent="#accordionEx" href="#collapseOne"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="collapseOne">
-                                                                                        <h5 class="mb-0"> Tasa
-                                                                                            Autorizada Para
-                                                                                            Transferencia <i class="fa fa-angle-down rotate-icon"></i>
-                                                                                        </h5>
-                                                                                    </a>
-                                                                                </div>
-
-                                                                                <!-- Card body -->
-                                                                                <div id="collapseOne" class="collapse "
-                                                                                    role="tabpanel" aria-labelledby="headingOne"
-                                                                                    data-parent="#accordionEx">
-                                                                                    <div class="card-body">
-                                                                                        <div class="table-responsive">
-                                                                                            <table class="table table-hover table-sm table-striped">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th>Maximo </th>
-                                                                                                        <th>Minimo</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td>{{maximoTransferencia}}</td>
-                                                                                                        <td>{{minimoTransferencia}}</td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                            </div>
-                                                                            <!-- Accordion card -->
-
-
-                                                                        </div>
-                                                                        <!-- Accordion wrapper -->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -622,6 +586,13 @@
                                                                 [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
                                                                 (ngModelChange)="AutoCompletarRemitente(DatosRemitente, i)">
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2" hidden>
+                                                        <div class="form-group">
+                                                            <input type="text" placeholder="Nombre Remitente"
+                                                                autocomplete="off" class="form-control" name="Documento_Origen"
+                                                                ngModel="{{DatosRemitente.Id_Transferencia_Remitente}}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -655,26 +626,8 @@
                                                 <div class="form-group">
                                                     <label>Observaciones</label>
                                                     <textarea placeholder="Observaciones" class="form-control"
-                                                        autocomplete="off" name="Detalle" ngModel></textarea>
+                                                        autocomplete="off" name="Observacion_Transferencia" ngModel></textarea>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- Para Credito-->
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <select class="form-control" name="Id_Tercero" ngModel>
-                                                    <option value="">Seleccione Tercero</option>
-                                                    <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <!-- Para Consignacion-->
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <select class="form-control" name="Id_Cuenta_Bancaria" ngModel>
-                                                    <option value="">Seleccione Cuenta Bancaria</option>
-                                                    <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Id_Cuenta_Bancaria">{{cuenta.Numero_Cuenta}}</option>
-                                                </select>
                                             </div>
                                         </div>
                                     </form>
@@ -687,7 +640,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia()">Volver</button>
+                                            <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                                         </div>
                                     </div>
                                     <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
@@ -697,7 +650,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia()">Volver</button>
+                                            <button class="btn btn-info btn-sm btn-block" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1412,61 +1365,74 @@
                             (focusout)="boolNombre = true" required #nombre="ngModel">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detalles</label>
+                            <textarea class="form-control" id="detalleText" placeholder="Detalles del Destinatario"
+                                name="Detalle" [(ngModel)]="Detalle"></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
         <h3>Cuentas Asociadas</h3>
-        <form #FormCuenta="ngForm">
-            <div class="row" *ngFor="let Cuenta of Cuentas; let i= index">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Numero de Cuenta</label>
-                        <input type="number" (ngModelChange)="AutoSeleccionarBanco($event, i)" placeholder="Número de Cuenta sin Espacios"
-                            step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control"
-                            name="Numero_Cuenta{{i}}" [(ngModel)]="Cuenta.Numero_Cuenta" (focusout)="boolCuenta = true"
-                            required #cuenta="ngModel">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Tipo de cuenta</label>
-                        <select class="form-control" name="Id_Tipo_Cuenta{{i}}" [(ngModel)]="Cuenta.Id_Tipo_Cuenta">
-                            <option value="">Seleccione un tipo de cuenta</option>
-                            <option *ngFor="let TipoCuenta of TipoCuentas" [value]="TipoCuenta.Id_Tipo_Cuenta">{{TipoCuenta.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>País</label>
-                        <select class="form-control" name="Id_Pais{{i}}" [(ngModel)]="Cuenta.Id_Pais" (click)="boolPais=true"
-                            required #pais="ngModel">
-                            <option value="">Seleccione País</option>
-                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Banco</label>
-                        <select class="form-control" name="Id_Banco{{i}}" [(ngModel)]="Cuenta.Id_Banco" (click)="boolBanco=true"
-                            required #banco="ngModel">
-                            <option value="">Seleccione Banco</option>
-                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn-mini btn-info" (click)="AgregarFormCuenta()"><i class="fa fa-plus"></i></button>
-                    <button class="btn-mini btn-danger" (click)="EliminarFormCuenta(i)"><i class="fa fa-trash-o"></i></button>
-                </div>
-            </div>
-        </form>
         <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Detalles</label>
-                    <textarea class="form-control" id="detalleText" placeholder="Detalles del Destinatario" name="Detalle"
-                        [(ngModel)]="Detalle"></textarea>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table  invoice-detail-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">País</th>
+                                <th scope="col">Numero de Cuenta</th>
+                                <th scope="col">Tipo de Cuenta</th>
+                                <th scope="col"></th>
+                                <th scope="col">Otra Cuenta</th>
+                                <th scope="col">Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
+                                <td width="20%">
+                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
+                                        (change)="Bancos_Pais($event.target.value, i);" required>
+                                        <option value="">Seleccione País</option>
+                                        <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="20%">
+                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
+                                        (keyup)="codigoBanco($event.target.value , i,'input')" (change)="agregarDinamico(i)"
+                                        minlength="20" maxlength="20" required>
+
+                                    <select disabled class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco"
+                                        required (change)="codigoBanco($event.target.value , i,'check')">
+                                        <option value="">Seleccione Banco</option>
+                                        <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="15%">
+                                    <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta"
+                                        required>
+                                        <option value="">Seleccione Tipo</option>
+                                        <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
+                                    </select>
+                                </td>
+
+                                <td width="5%">
+                                    <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
+                                </td>
+                                <td width="15%">
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}"
+                                        [(ngModel)]="item.Otra_Cuenta">
+                                </td>
+                                <td width="15%">
+                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}"
+                                        [(ngModel)]="item.Observacion">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1669,6 +1635,12 @@
                             <div class="form-group">
                                 <label>Observaciones</label>
                                 <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}">
+
+
+
+
+
+
 
 </textarea>
                             </div>
@@ -1962,8 +1934,9 @@
                 <div class="col-md-4">
                     <label>Identificación</label>
                     <div class="form-group input-group input-group-button">
-                        <input readonly class="form-control input-hover"  id="Id_Destinatario"  name="Id_Destinatario" type="text" placeholder="Identificación Destinatario"
-                            (blur)="BuscarIdentificacion($event.target.value)" minlength="6" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        <input readonly class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
+                            type="text" placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
+                            minlength="6" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                             ngModel="{{Detalle_Destinatario.Id_Destinatario}}" required>
                         <div class="input-group-append">
                             <a href="http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp" target="_blank" class="button btn btn-primary btn-mini btn-hover">RIF</a>
@@ -2048,10 +2021,141 @@
                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}" [(ngModel)]="item.Otra_Cuenta">
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}"
+                                        [(ngModel)]="item.Otra_Cuenta">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}" [(ngModel)]="item.Observacion">
+                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}"
+                                        [(ngModel)]="item.Observacion">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" [disabled]="!FormEditarDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarDestinatarioEditar(FormEditarDestinatario, ModalEditarDestinatario)">Actualizar
+                Informacion
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearDestinatarioTransferencia"
+    #ModalCrearDestinatarioTransferencia>
+    <div class="app-modal-header">
+        <h4>Crear Destinatario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormEditarDestinatario="ngForm">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Tipo Doc.</label>
+                        <select class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)">
+                            <option value="">Seleccione Tipo Documento</option>
+                            <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Identificación</label>
+                    <div class="form-group input-group input-group-button">
+                        <input readonly class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
+                            type="text" placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
+                            ngModel={{Id_Destinatario}} required>
+                        <div class="input-group-append">
+                            <a href="http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp" target="_blank" class="button btn btn-primary btn-mini btn-hover">RIF</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Destinatario"
+                            maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
+                            ngModel required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{Detalle_Destinatario.Detalle}}
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="frame" style="height: 150px">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <!--Visualización del CNE no disponible en este momento-->
+                        <frameset>
+                            <frame name="indice" src="{{urlCne}}}"></frame>
+                        </frameset>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+        <h3>Cuentas Asociadas</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table  invoice-detail-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">País</th>
+                                <th scope="col">Numero de Cuenta</th>
+                                <th scope="col">Tipo de Cuenta</th>
+                                <th scope="col"></th>
+                                <th scope="col">Otra Cuenta</th>
+                                <th scope="col">Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
+                                <td width="20%">
+                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
+                                        (change)="Bancos_Pais($event.target.value, i);" required>
+                                        <option value="">Seleccione País</option>
+                                        <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="20%">
+                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
+                                        (keyup)="codigoBanco($event.target.value , i,'input')" (change)="agregarDinamico(i)"
+                                        minlength="20" maxlength="20" required>
+
+                                    <select disabled class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco"
+                                        required (change)="codigoBanco($event.target.value , i,'check')">
+                                        <option value="">Seleccione Banco</option>
+                                        <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                                    </select>
+                                </td>
+                                <td width="15%">
+                                    <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta"
+                                        required>
+                                        <option value="">Seleccione Tipo</option>
+                                        <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
+                                    </select>
+                                </td>
+
+                                <td width="5%">
+                                    <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
+                                </td>
+                                <td width="15%">
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}"
+                                        [(ngModel)]="item.Otra_Cuenta">
+                                </td>
+                                <td width="15%">
+                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}"
+                                        [(ngModel)]="item.Observacion">
                                 </td>
                             </tr>
                         </tbody>

@@ -100,10 +100,10 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let transferencia of transferencias" class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}">
-                                            <td>{{transferencia.Fecha | date:"dd/MM/yy" }}</td>
+                                            <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.Persona_Envia}}</td>
                                             <td>{{transferencia.Cuenta_Origen}}</td>
-                                            <td>{{transferencia.Cuenta_Destino}}</td>
+                                            <td>{{transferencia.Numero_Cuenta}}</td>
                                             <td>{{transferencia.Codigo}}</td>
                                             <td>{{transferencia.Recibo}}</td>
                                             <td>{{transferencia.Estado}}</td>
