@@ -36,7 +36,16 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('bloqueoSwal') bloqueoSwal: any;
   @ViewChild('mensajeSwal') mensajeSwal: any;
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
+  @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
+  @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
+
   Identificacion: any;
+  CuentaDestino: any;
+  Recibe: any;
+  CedulaDestino: any;
+  Monto: any;
+  BancosEmpresa = [];
+  idTransferencia: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -51,23 +60,30 @@ export class TransferenciasComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data[0];
+      this.conteoTransferencias = data;
+    });
+
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
+      params: { modulo: "Cuenta_Empresarial" }
+    }).subscribe((data: any) => {
+      this.BancosEmpresa = data;
     });
 
     this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
-      var chart = AmCharts.makeChart( "chartdiv", {
+      var chart = AmCharts.makeChart("chartdiv", {
         "type": "serial",
         "theme": "light",
-        "dataProvider": data ,
+        "dataProvider": data,
         "gridAboveGraphs": true,
         "startDuration": 1,
-        "graphs": [ {
+        "graphs": [{
           "balloonText": "[[Funcionario]]: <b>[[Conteo]]</b>",
           "fillAlphas": 0.8,
           "lineAlpha": 0.2,
           "type": "column",
           "valueField": "Conteo"
-        } ],
+        }],
         "chartCursor": {
           "categoryBalloonEnabled": false,
           "cursorAlpha": 0,
@@ -83,11 +99,11 @@ export class TransferenciasComponent implements OnInit {
         "export": {
           "enabled": true
         }
-      
-      } );
+
+      });
     });
 
-    
+
   }
 
 
@@ -148,8 +164,8 @@ export class TransferenciasComponent implements OnInit {
     datos.append("estado", estado);
     datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
-      this.bloqueoSwal.show();
-      this.ActualizarVista();
+      /*this.bloqueoSwal.show();
+      this.ActualizarVista();*/
     });
   }
 
@@ -182,6 +198,42 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
+  RealizarTransferencia(id) {
+ 
+    this.BloquearTransferencia(id, "No");
+
+    this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+      var cuenta = data.Numero_Cuenta;
+
+      this.idTransferencia = id;
+      this.CuentaDestino = data.Numero_Cuenta
+      this.Recibe = data.Persona_Envia
+      this.CedulaDestino = data.Numero_Documento_Origen
+      this.Monto = data.Valor_Transferencia;
+
+      if (cuenta.substring(0, 4) == "0134") {
+        this.ModalCrearTransferenciaBanesco.show();
+      } else {
+        this.ModalCrearTransferenciaOtroBanco.show();
+      }
+    });
+  }
+
+  verificarBloqueo(id){
+    this.http.get(this.globales.ruta + 'php/transferencias/verificar_bloqueo.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+
+      switch(data.Bloqueo){
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia está bloqueada"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+        case "No": { this.RealizarTransferencia(id); break; }
+      }
+
+    });
+  }
+
   Marcado(estado) {
     switch (estado) {
       case "Pendiente": {
@@ -197,6 +249,18 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  
-
+  CrearTransferencia(formulario: NgForm, modal){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Transferencia realizada"
+      this.mensajeSwal.text = "Se ha guardado correctamente la información"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      this.ActualizarVista();
+      modal.hide();
+    });
+  }
 }

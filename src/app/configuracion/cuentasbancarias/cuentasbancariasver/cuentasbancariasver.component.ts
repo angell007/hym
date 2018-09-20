@@ -20,12 +20,22 @@ export class CuentasbancariasverComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   SaldoActual: any;
+  DatosBanco = [];
 
   constructor(private route: ActivatedRoute,private http : HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
     this.calcularSaldoActual();
+    this.datosCuentaBancaria();
+  }
+
+  datosCuentaBancaria(){
+    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+      params: { id: this.id, modulo: 'Cuenta_Bancaria' }
+    }).subscribe((data: any) => {
+      this.DatosBanco = data;
+    });
   }
 
   ActualizarVista(){
