@@ -460,7 +460,8 @@
                                                                     [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
                                                                     [inputFormatter]="formatter_destino"
                                                                     (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)"
-                                                                    (blur)="CrearDestinatrioModal(Envio.Destino)">
+                                                                    (change)="AutoCompletarDestinatario(Envio.Destino, i)"
+                                                                    (blur)="CrearDestinatrioModal(Envio.Destino,i)">
                                                                 <button *ngIf="ActivarEdicion" class="btn btn-default btn-xs"
                                                                     type="button" style="margin:0;" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)">
                                                                     <i class="ti-pencil"></i>
@@ -611,13 +612,14 @@
                                                                 ngModel="{{DatosRemitente.Telefono}}">
                                                         </div>
                                                     </div>
+                                                    <!--
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <button class="btn btn-info btn-sm btn-block" (click)="HistorialTransferenciaRemitente(DatosRemitente)">
                                                                 Historial
                                                             </button>
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -2051,12 +2053,12 @@
         <h4>Crear Destinatario</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormEditarDestinatario="ngForm">
+        <form #FormCrearDestinatarioTransferencia="ngForm">
             <div class="row">
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <select class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)">
+                        <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)">
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2091,16 +2093,19 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="frame" style="height: 150px">
+            <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
                         <!--Visualización del CNE no disponible en este momento-->
-                        <frameset>
+                        <!--<frameset>
                             <frame name="indice" src="{{urlCne}}}"></frame>
-                        </frameset>
+                        </frameset> -->
+                        <iframe  class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
+                        <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>                        
                     </div>
                 </div>
             </div>
+            <br>
         </form>
         <br>
         <h3>Cuentas Asociadas</h3>
@@ -2166,9 +2171,8 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" [disabled]="!FormEditarDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarDestinatarioEditar(FormEditarDestinatario, ModalEditarDestinatario)">Actualizar
-                Informacion
+            <button class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
             </button>
         </div>
     </div>

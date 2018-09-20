@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -196,7 +197,7 @@ export class TablerocajeroComponent implements OnInit {
   frame = false;
   urlCne: string;
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales,public sanitizer: DomSanitizer) { }
 
 
   ngOnInit() {
@@ -269,12 +270,23 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  CrearDestinatrioModal(value){
+  CrearDestinatrioModal(value , pos){
+    this.posiciontemporal = pos;
     switch(this.ActivarEdicion){
       case false:{        
         this.ModalCrearDestinatarioTransferencia.show();
         this.Id_Destinatario = value;
+        this.Lista_Destinatarios = [{
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta : '',
+          Observacion : ''
+        }];
       }
+      this.Bancos_Pais(2, 0);
     }
   }
 
@@ -282,13 +294,15 @@ export class TablerocajeroComponent implements OnInit {
     switch(valor){
       case "V":{
         this.frame= true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula="+valor;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula="+valor;
         break;
       }
       case "E":{
         this.frame= true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula="+valor;
-        break;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula="+valor;        break;
+      }
+      default:{
+        this.frame = false;
       }
     }
   }
@@ -467,14 +481,14 @@ export class TablerocajeroComponent implements OnInit {
     this.Cuentas.splice(index, 1);
   }
 
-  GuardarDestinatario(formulario: NgForm) {
+  GuardarDestinatario(formulario: NgForm , modal) {
     for (let i = 0; i < this.Cuentas.length; ++i) {
       this.Cuentas[i].Id_Destinatario = formulario.value.Id_Destinatario;
     }
     let destinatario = formulario.value;
     destinatario['Detalle'] = this.Detalle;
     let info = JSON.stringify(destinatario);
-    let cuentas = JSON.stringify(this.Cuentas);
+    let cuentas = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("destinatario", cuentas);
@@ -491,13 +505,15 @@ export class TablerocajeroComponent implements OnInit {
       })
       .subscribe((data: any) => {
         //console.log(data);           
-        this.ModalDestinatario.hide();
         this.destinatarioCreadoSwal.show();
         this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
         formulario.reset();
         let textArea: any = document.getElementById('detalleText');
         textArea.value = '';
         this.Cedula = null;
+        modal.hide();
+        this.AutoCompletarDestinatario(this.Id_Destinatario,this.posiciontemporal);
+        (document.getElementById("Destino"+this.posiciontemporal) as HTMLInputElement).value =this.Id_Destinatario ;
       });
     this.actualizarVista();
   }
