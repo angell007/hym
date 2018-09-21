@@ -345,9 +345,10 @@
                                                 <tr>
                                                     <th style="width:160px;">Hora</th>
                                                     <th>Código</th>
-                                                    <th>Moneda Origen</th>
-                                                    <th>Moneda Destino</th>
-                                                    <th>Valor</th><!--
+                                                    <th>Valor Pesos</th>
+                                                    <th>Valor Bolivares</th>
+                                                    <th>Tasa</th>
+                                                    <th></th><!--
                                                     <th style="width:80px">Tasa</th>
                                                     <th style="width:160px;"></th>-->
                                                 </tr>
@@ -356,8 +357,10 @@
                                                 <tr *ngFor="let transferencia of Transferencia">
                                                     <td>{{transferencia.Fecha |  date:"short" }}</td>
                                                     <td>{{transferencia.Codigo}}</td>
-                                                    <td>{{transferencia.Moneda_Origen}}</td>
-                                                    <td>{{transferencia.Moneda_Destino}}</td><!--
+                                                    <td>{{transferencia.Cantidad_Recibida | currency}}</td>
+                                                    <td>{{transferencia.Cantidad_Transferida | currency:"BsS."}}</td>
+                                                    <td>{{transferencia.Tasa_Cambio }}</td>
+                                                    <!--
                                                     <td class="text-right">{{transferencia.Valor_Transferencia |
                                                         currency}}</td>
                                                     <td class="text-right">{{transferencia.Tasa_Cambio}}</td> -->
@@ -376,10 +379,15 @@
                                                             <i class="ti-reload"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                            (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia)">
+                                                            <i class="ti-close"></i>
+                                                        </button>
+                                                        <!--ModalAnularTransferencia.show();
+                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                             [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                                             (confirm)="AnularTransferencia(transferencia.Id_Transferencia)">
                                                             <i class="ti-close"></i>
-                                                        </button>
+                                                        </button> -->
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -565,7 +573,7 @@
                                                         <div class="form-group">
                                                             <input id="Cantidad_Transferida" (blur)="RealizarCambioMonedaTransferencia($event.target.value,'entrega')"
                                                                 type="number" min=0 placeholder="Precio Transferencia"
-                                                                class="form-control" [(ngModel)]="entregar" name="Total_Transferencia"
+                                                                class="form-control" [(ngModel)]="entregar" name="Cantidad_Transferida"
                                                                 required>
                                                         </div>
                                                     </div>
@@ -1636,15 +1644,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Observaciones</label>
-                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}">
-
-
-
-
-
-
-
-</textarea>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}"></textarea>
                             </div>
                         </div>
                     </div>
@@ -2023,11 +2023,11 @@
                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}"
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Editar_Destinatario{{i}}" name="Otra_Cuenta_Editar_Destinatario{{i}}"
                                         [(ngModel)]="item.Otra_Cuenta">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}"
+                                    <input disabled class="form-control" type="text" id="Observacion_Editar_Destinatario{{i}}" name="Observacion_Editar_Destinatario{{i}}"
                                         [(ngModel)]="item.Observacion">
                                 </td>
                             </tr>
@@ -2083,16 +2083,7 @@
                             ngModel required>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {{Detalle_Destinatario.Detalle}}
-                    <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel></textarea>
-                    </div>
-                </div>
-            </div>
+            </div>            
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -2126,7 +2117,7 @@
                         <tbody>
                             <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
                                 <td width="20%">
-                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
+                                    <select class="form-control" id="Id_Pais_Destinatario{{i}}" name="Id_Pais_Destinatario{{i}}" [(ngModel)]="item.Id_Pais"
                                         (change)="Bancos_Pais($event.target.value, i);" required>
                                         <option value="">Seleccione País</option>
                                         <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
@@ -2155,11 +2146,11 @@
                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Otra_Cuenta{{i}}" name="Otra_Cuenta{{i}}"
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Destinatario{{i}}" name="Otra_Cuenta_Destinatario{{i}}"
                                         [(ngModel)]="item.Otra_Cuenta">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Observacion{{i}}" name="Observacion{{i}}"
+                                    <input disabled class="form-control" type="text" id="Observacion_Destinatario{{i}}" name="Observacion_Destinatario{{i}}"
                                         [(ngModel)]="item.Observacion">
                                 </td>
                             </tr>
@@ -2168,11 +2159,50 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" hidden>
+                <div class="col-md-12">
+                    {{Detalle_Destinatario.Detalle}}
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia"
+    #ModalAnularTransferencia>
+    <div class="app-modal-header">
+        <h4>Crear Destinatario</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCrearDestinatarioTransferencia="ngForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
+                    <div class="form-group">
+                        <label>Tipo Doc.</label>
+                        <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion"
+                        ngModel></textarea>
+                    </div>
+                </div>               
+            </div>                       
+            <br>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormCrearDestinatarioTransferencia)" >Guardar
             </button>
         </div>
     </div>

@@ -88,25 +88,26 @@
                                     <thead>
                                         <tr>
                                             <th style="width:150px;">Fecha</th>
-                                            <th>Persona Transfiere</th>
+                                            <th>Destinatario</th>
                                             <th>Cuenta Origen</th>
                                             <th>Cuenta Destino</th>
-                                            <th># Transfe</th>
                                             <th>Recibo</th>
                                             <th>Estado</th>
+                                            <th>Bloqueada</th>
                                             <th style="width:80px">Valor</th>
                                             <th style="width:160px;"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}">
+                                        <!--class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}"-->
+                                        <tr *ngFor="let transferencia of transferencias" >
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
-                                            <td>{{transferencia.Persona_Envia}}</td>
+                                            <td>{{transferencia.DestinatarioNombre}}</td>
                                             <td>{{transferencia.Cuenta_Origen}}</td>
                                             <td>{{transferencia.Numero_Cuenta}}</td>
-                                            <td>{{transferencia.Codigo}}</td>
-                                            <td>{{transferencia.Recibo}}</td>
+                                            <td>{{transferencia.ReciboCodigo}}</td>
                                             <td>{{transferencia.Estado}}</td>
+                                            <td>{{transferencia.Bloqueo}}</td>
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar | currency:"BsS."}}</td>
                                             <td class="text-center">
                                                 
@@ -297,6 +298,7 @@
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaBanesco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a reactivar esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="CrearTransferencia(FormCrearTransferenciaBanesco, ModalCrearTransferenciaBanesco)">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia)" > Volver</button>  
         </div>
     </div>
 </app-modal-basic>
@@ -357,6 +359,7 @@
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaOtroBanco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a reactivar esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="CrearTransferencia(FormCrearTransferenciaOtroBanco, ModalCrearTransferenciaOtroBanco)">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia)" > Volver</button>    
         </div>
     </div>
 </app-modal-basic>

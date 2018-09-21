@@ -60,7 +60,7 @@ export class TransferenciasComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data;
+      this.conteoTransferencias = data[0];
     });
 
 
@@ -168,6 +168,18 @@ export class TransferenciasComponent implements OnInit {
       this.ActualizarVista();*/
     });
   }
+  
+  BloquearTransferenciaDestinatario(id, estado) {
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia_Destinatario');
+    datos.append("id", id);
+    datos.append("estado", estado);
+    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
+      /*this.bloqueoSwal.show();
+      this.ActualizarVista();*/
+    });
+  }
 
   Bloqueado(estado) {
     switch (estado) {
@@ -222,14 +234,13 @@ export class TransferenciasComponent implements OnInit {
   }
 
   verificarBloqueo(id){
-    this.http.get(this.globales.ruta + 'php/transferencias/verificar_bloqueo.php', {
+    this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia está bloqueada"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.RealizarTransferencia(id); break; }
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
       }
-
     });
   }
 

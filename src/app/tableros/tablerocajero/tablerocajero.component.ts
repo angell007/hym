@@ -106,7 +106,8 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('ModalGiroEditar') ModalGiroEditar: any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
   @ViewChild('ModalCrearDestinatarioTransferencia') ModalCrearDestinatarioTransferencia: any;
-  
+  @ViewChild('ModalAnularTransferencia') ModalAnularTransferencia: any;
+
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -184,9 +185,9 @@ export class TablerocajeroComponent implements OnInit {
   MonedaRecibidaTransferencia: number;
   maximoTransferencia: any;
   minimoTransferencia: any;
-  ActivarEdicion= false;
+  ActivarEdicion = false;
   Detalle_Destinatario = [];
-  Lista_Destinatarios =[];
+  Lista_Destinatarios = [];
   Identificacion: any;
   TipoDocumentoExtranjero = [];
   posiciontemporal: any;
@@ -197,8 +198,9 @@ export class TablerocajeroComponent implements OnInit {
   frame = false;
   urlCne: string;
   botonDestinatario = false;
+  idTransferencia: any;
 
-  constructor(private http: HttpClient, private globales: Globales,public sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
 
   ngOnInit() {
@@ -213,7 +215,7 @@ export class TablerocajeroComponent implements OnInit {
     this.MonedaRecibidaTransferencia = 2;
     this.Bancos_Pais(2, 0);
     this.Origen(2);
-    
+
   }
 
 
@@ -222,7 +224,7 @@ export class TablerocajeroComponent implements OnInit {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
-    
+
   }
 
   search_destino = (text$: Observable<string>) =>
@@ -265,54 +267,62 @@ export class TablerocajeroComponent implements OnInit {
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
       this.ActivarEdicion = true;
-    }else{
+    } else {
       this.ActivarEdicion = false;
       //this.ModalDestinatario.show();
     }
   }
 
-  CrearDestinatrioModal(value , pos){
+  CrearDestinatrioModal(value, pos) {
     this.posiciontemporal = pos;
-    switch(this.ActivarEdicion){
-      case false:{        
-        this.ModalCrearDestinatarioTransferencia.show();
-        this.Id_Destinatario = value;
-        this.Lista_Destinatarios = [{
-          Id_Pais: '2',
-          Id_Banco: '',
-          Bancos: [],
-          Id_Tipo_Cuenta: '',
-          Numero_Cuenta: '',
-          Otra_Cuenta : '',
-          Observacion : ''
-        }];
+    switch (this.ActivarEdicion) {
+      case false: {
+        var longitud = this.LongitudCarateres(value)
+        if (longitud > 6) {
+          this.ModalCrearDestinatarioTransferencia.show();
+          this.Id_Destinatario = value;
+          this.Lista_Destinatarios = [{
+            Id_Pais: '2',
+            Id_Banco: '',
+            Bancos: [],
+            Id_Tipo_Cuenta: '',
+            Numero_Cuenta: '',
+            Otra_Cuenta: '',
+            Observacion: ''
+          }];
+        }
+        this.Bancos_Pais(2, 0);
+
       }
-      this.Bancos_Pais(2, 0);
     }
   }
 
-  BuscarCNE(valor){
-    switch(valor){
-      case "V":{
-        this.frame= true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula="+valor;
+  LongitudCarateres(i) {
+    return parseInt(i.length);
+  }
+
+  BuscarCNE(valor) {
+    switch (valor) {
+      case "V": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula=" + valor;
         break;
       }
-      case "E":{
-        this.frame= true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula="+valor;        break;
+      case "E": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula=" + valor; break;
       }
-      default:{
+      default: {
         this.frame = false;
       }
     }
   }
 
-  recargarBancos(i,id){
-      this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: id } }).subscribe((data: any) => {
-        this.Envios[i].Cuentas = data.Numero_Cuenta;
-        this.ActivarEdicion = true;        
-      });
+  recargarBancos(i, id) {
+    this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: id } }).subscribe((data: any) => {
+      this.Envios[i].Cuentas = data.Numero_Cuenta;
+      this.ActivarEdicion = true;
+    });
   }
 
   OcultarFormulario(modal) {
@@ -482,7 +492,7 @@ export class TablerocajeroComponent implements OnInit {
     this.Cuentas.splice(index, 1);
   }
 
-  GuardarDestinatario(formulario: NgForm , modal) {
+  GuardarDestinatario(formulario: NgForm, modal) {
     for (let i = 0; i < this.Cuentas.length; ++i) {
       this.Cuentas[i].Id_Destinatario = formulario.value.Id_Destinatario;
     }
@@ -513,8 +523,8 @@ export class TablerocajeroComponent implements OnInit {
         textArea.value = '';
         this.Cedula = null;
         modal.hide();
-        this.AutoCompletarDestinatario(this.Id_Destinatario,this.posiciontemporal);
-        (document.getElementById("Destino"+this.posiciontemporal) as HTMLInputElement).value =this.Id_Destinatario ;
+        this.AutoCompletarDestinatario(this.Id_Destinatario, this.posiciontemporal);
+        (document.getElementById("Destino" + this.posiciontemporal) as HTMLInputElement).value = this.Id_Destinatario;
       });
     this.actualizarVista();
   }
@@ -704,7 +714,7 @@ export class TablerocajeroComponent implements OnInit {
       this.LimiteOficina = data.Limite_Transferencia;
     });
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
       this.Transferencia = data;
       this.dtTrigger1.next();
     });
@@ -1065,16 +1075,16 @@ export class TablerocajeroComponent implements OnInit {
   }
 
 
-  EditarDestinatario(id,pos) {
+  EditarDestinatario(id, pos) {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       console.log(data.destinatario);
-      this.Detalle_Destinatario = data.destinatario;      
+      this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 
-      for(var i = 0 ; i < this.Lista_Destinatarios.length ; i++){
-        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais,i);
+      for (var i = 0; i < this.Lista_Destinatarios.length; i++) {
+        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais, i);
       }
 
       this.Identificacion = id;
@@ -1086,32 +1096,31 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   agregarDinamico(i, valor) {
-    var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value)
-    switch(idpais){
-      case "2":{        
-        var longitud = valor.length;
-        console.log(longitud);        
-        if(parseInt(longitud) === 20){
-          var pos = parseInt(i) + 1;
-          if (this.Lista_Destinatarios[pos] == undefined) {
-            this.AgregarFila();
-            this.Bancos_Pais(2, pos);
-            this.botonDestinatario = true;
-          }
-        }else{
-          this.botonDestinatario = false;
-        }
-      }
-      default:{
+    var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
+
+    if (parseInt(idpais) == 2) {
+      var longitud = this.LongitudCarateres(valor);
+      if (longitud == 20) {
         var pos = parseInt(i) + 1;
         if (this.Lista_Destinatarios[pos] == undefined) {
           this.AgregarFila();
           this.Bancos_Pais(2, pos);
+          this.botonDestinatario = true;
         }
-        break;
+      } else {
+        this.botonDestinatario = false;
+        this.confirmacionSwal.title = "Banco no valido";
+        this.confirmacionSwal.text = "Digite correctamente el número del banco";
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      }
+    } else {
+      var pos = parseInt(i) + 1;
+      if (this.Lista_Destinatarios[pos] == undefined) {
+        this.AgregarFila();
+        this.Bancos_Pais(2, pos);
       }
     }
-    
   }
 
   AgregarFila() {
@@ -1122,8 +1131,8 @@ export class TablerocajeroComponent implements OnInit {
       Bancos: [],
       Id_Tipo_Cuenta: '',
       Numero_Cuenta: '',
-      Otra_Cuenta : '',
-      Observacion : ''
+      Otra_Cuenta: '',
+      Observacion: ''
     })
   }
 
@@ -1133,22 +1142,22 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
-  verificarChequeo(pos){
+  verificarChequeo(pos) {
     var checkeo = ((document.getElementById("checkeo_" + pos) as HTMLInputElement).checked)
-    
-    switch(checkeo){
-      case true:{        
+
+    switch (checkeo) {
+      case true: {
         ((document.getElementById("Observacion" + pos) as HTMLInputElement).disabled) = false;
         ((document.getElementById("Otra_Cuenta" + pos) as HTMLInputElement).disabled) = false;
         break;
       }
-      case false:{
+      case false: {
         ((document.getElementById("Observacion" + pos) as HTMLInputElement).disabled) = true;
         ((document.getElementById("Otra_Cuenta" + pos) as HTMLInputElement).disabled) = true;
         break;
       }
     }
-   
+
   }
 
   GuardarDestinatarioEditar(formulario: NgForm, modal: any) {
@@ -1173,16 +1182,16 @@ export class TablerocajeroComponent implements OnInit {
           Bancos: [],
           Id_Tipo_Cuenta: '',
           Numero_Cuenta: '',
-          Otra_Cuenta : '',
-          Observacion : ''
+          Otra_Cuenta: '',
+          Observacion: ''
         }];
 
         this.actualizarVista();
-        this.AutoCompletarDestinatario(identificacion,this.posiciontemporal)
+        this.AutoCompletarDestinatario(identificacion, this.posiciontemporal)
         //this.recargarBancos(this.posiciontemporal,identificacion)
-        this.confirmacionSwal.title="Actualización exitosa" 
-        this.confirmacionSwal.text="Se ha actualizado correctamente el destinatario" 
-        this.confirmacionSwal.type="success"
+        this.confirmacionSwal.title = "Actualización exitosa"
+        this.confirmacionSwal.text = "Se ha actualizado correctamente el destinatario"
+        this.confirmacionSwal.type = "success"
         this.confirmacionSwal.show();
         // this.posicionTemporal= pos
 
@@ -1202,15 +1211,15 @@ export class TablerocajeroComponent implements OnInit {
           break;
         }
         case "input": {
-          if(seleccion.length == 4){
+          if (seleccion.length == 4) {
             var buscarBanco = this.Bancos.findIndex(x => x.Identificador === seleccion)
-            if(buscarBanco > -1){
+            if (buscarBanco > -1) {
               this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
-            }else{
+            } else {
               this.Lista_Destinatarios[posicion].Id_Banco = '';
             }
-          }else{
-            if(seleccion.length < 4 && seleccion.length > 0){
+          } else {
+            if (seleccion.length < 4 && seleccion.length > 0) {
               this.Lista_Destinatarios[posicion].Id_Banco = '';
             }
           }
@@ -1274,7 +1283,7 @@ export class TablerocajeroComponent implements OnInit {
               this.confirmacionSwal.text = "la suma de los valores supera al del valor convertido"
               this.confirmacionSwal.type = "error"
               this.confirmacionSwal.show();
-            }             
+            }
           }
 
           if (this.Envios[index] == undefined) {
@@ -1288,7 +1297,7 @@ export class TablerocajeroComponent implements OnInit {
               Cuentas: []
             });
           }
-          
+
         } else {
           this.Envios.forEach((element, index) => {
             suma += parseInt(element.Valor_Transferencia_Bolivar);
@@ -1751,29 +1760,40 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  AnularTransferencia(id){
+  AnularTransferencia(id, formulario: NgForm) {
+    let datos = new FormData();
+    let info = JSON.stringify(formulario.value);
+    datos.append("id", id);
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.ModalAnularTransferencia.hide();
+        this.confirmacionSwal.title = "Anulado"
+        this.confirmacionSwal.text = "Esta transferencia se anuló"
+        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.show();
+        this.actualizarVista();
+      });
+
+  }
+
+  AnularTransferenciaModal(id, modal) {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
-      if(parseInt(conteo) > 0){         
-        this.confirmacionSwal.title="Bloqueada" 
-        this.confirmacionSwal.text="Esta transferencia esta bloqueada" 
-        this.confirmacionSwal.type="error"
+      if (parseInt(conteo) > 0) {
+        this.confirmacionSwal.title = "Bloqueada"
+        this.confirmacionSwal.text = "Esta transferencia esta bloqueada"
+        this.confirmacionSwal.type = "error"
         this.confirmacionSwal.show();
-      }else{
-        let datos = new FormData();
-        datos.append("id", id);    
-        this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
-        .catch(error => {
-          console.error('An error occurred:', error.error);
-          this.errorSwal.show();
-          return this.handleError(error);
-        })
-        .subscribe((data: any) => {
-          this.confirmacionSwal.title="Anulado" 
-          this.confirmacionSwal.text="Esta transferencia se anuló" 
-          this.confirmacionSwal.type="success"
-          this.confirmacionSwal.show();
-        });
+      } else {
+        this.idTransferencia = id;
+        modal.show();
       }
     });
   }
