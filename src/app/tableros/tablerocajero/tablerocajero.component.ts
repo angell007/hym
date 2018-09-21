@@ -196,6 +196,7 @@ export class TablerocajeroComponent implements OnInit {
   Id_Destinatario: any;
   frame = false;
   urlCne: string;
+  botonDestinatario = false;
 
   constructor(private http: HttpClient, private globales: Globales,public sanitizer: DomSanitizer) { }
 
@@ -1084,12 +1085,33 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
-  agregarDinamico(i) {
-    var pos = parseInt(i) + 1;
-    if (this.Lista_Destinatarios[pos] == undefined) {
-      this.AgregarFila();
-      this.Bancos_Pais(2, pos);
+  agregarDinamico(i, valor) {
+    var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value)
+    switch(idpais){
+      case "2":{        
+        var longitud = valor.length;
+        console.log(longitud);        
+        if(parseInt(longitud) === 20){
+          var pos = parseInt(i) + 1;
+          if (this.Lista_Destinatarios[pos] == undefined) {
+            this.AgregarFila();
+            this.Bancos_Pais(2, pos);
+            this.botonDestinatario = true;
+          }
+        }else{
+          this.botonDestinatario = false;
+        }
+      }
+      default:{
+        var pos = parseInt(i) + 1;
+        if (this.Lista_Destinatarios[pos] == undefined) {
+          this.AgregarFila();
+          this.Bancos_Pais(2, pos);
+        }
+        break;
+      }
     }
+    
   }
 
   AgregarFila() {
@@ -1727,5 +1749,32 @@ export class TablerocajeroComponent implements OnInit {
         break;
       }
     }
+  }
+
+  AnularTransferencia(id){
+    this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
+      var conteo = data[0].conteo;
+      if(parseInt(conteo) > 0){         
+        this.confirmacionSwal.title="Bloqueada" 
+        this.confirmacionSwal.text="Esta transferencia esta bloqueada" 
+        this.confirmacionSwal.type="error"
+        this.confirmacionSwal.show();
+      }else{
+        let datos = new FormData();
+        datos.append("id", id);    
+        this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
+        .catch(error => {
+          console.error('An error occurred:', error.error);
+          this.errorSwal.show();
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          this.confirmacionSwal.title="Anulado" 
+          this.confirmacionSwal.text="Esta transferencia se anuló" 
+          this.confirmacionSwal.type="success"
+          this.confirmacionSwal.show();
+        });
+      }
+    });
   }
 }

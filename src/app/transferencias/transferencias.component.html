@@ -107,16 +107,16 @@
                                             <td>{{transferencia.Codigo}}</td>
                                             <td>{{transferencia.Recibo}}</td>
                                             <td>{{transferencia.Estado}}</td>
-                                            <td class="text-right">{{transferencia.Valor_Transferencia | currency}}</td>
+                                            <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar | currency:"BsS."}}</td>
                                             <td class="text-center">
-
-                                                <button (click)="verificarBloqueo(transferencia.Id_Transferencia)"
+                                                
+                                                <button (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario)"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                     <i class="fa fa-check"></i>
                                                 </button>
 
                                                 <button class="btn btn-default btn-xs"
-                                                    type="button" style="margin:0;" (click)="DevolucionTransferencia(transferencia.Id_Transferencia,ModalDevolucionTransferencia)">
+                                                    type="button" style="margin:0;" (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destinatario,ModalDevolucionTransferencia)">
                                                     <i class="fa fa-undo"></i>
                                                 </button>
 
