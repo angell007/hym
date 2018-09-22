@@ -454,7 +454,7 @@
 
                                         <!-- efectivo -->
 
-                                        <div class="row" *ngIf="efectivo">
+                                        <div class="row">
                                             <div *ngIf="Recibe==='Transferencia'" class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Destinatarios</h5>
@@ -581,7 +581,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" *ngIf="efectivo">
                                             <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Datos del Remitente</h5>

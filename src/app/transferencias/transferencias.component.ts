@@ -38,6 +38,7 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
   @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
   @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
+  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;  
 
   Identificacion: any;
   CuentaDestino: any;
@@ -59,14 +60,43 @@ export class TransferenciasComponent implements OnInit {
       this.dtTrigger.next();
     });
 
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
       this.conteoTransferencias = data[0];
     });
 
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
-      params: { modulo: "Cuenta_Empresarial" }
-    }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
+    .subscribe((data: any) => {
       this.BancosEmpresa = data;
     });
 
@@ -159,14 +189,24 @@ export class TransferenciasComponent implements OnInit {
 
   BloquearTransferencia(id, estado) {
     let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
+    datos.append("modulo", 'Transferencia_Destinatario');
     datos.append("id", id);
-    datos.append("estado", estado);
-    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    datos.append("estado", estado); 
+    datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
-      /*this.bloqueoSwal.show();
-      this.ActualizarVista();*/
+      //this.bloqueoSwal.show();
+      this.ActualizarVista();
     });
+  }
+
+  alertaDesbloqueo(usuario){
+    this.desbloqueoSwal.title = "Desbloqueo"
+    this.desbloqueoSwal.text ='Está transferencia fue bloqueada por '+usuario+' ¿ Está seguro que desea desbloquearla ?' , 
+    this.desbloqueoSwal.type='warning', 
+    this.desbloqueoSwal.showCancelButton= true, 
+    this.desbloqueoSwal.confirmButtonText= 'Si, Desbloquear', 
+    this.desbloqueoSwal.cancelButtonText='No, Dejame Comprobar!'
+    this.desbloqueoSwal.show();
   }
   
   BloquearTransferenciaDestinatario(id, estado) {
@@ -237,9 +277,10 @@ export class TransferenciasComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      switch(data[0].Bloqueo){
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ;
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
         case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
       }
     });
   }
@@ -273,4 +314,10 @@ export class TransferenciasComponent implements OnInit {
       modal.hide();
     });
   }
+
+  /*
+  CancelarBloqueo(id,modal){
+    this.BloquearTransferenciaDestinatario(id,"Si");
+    modal.hide();
+  }*/
 }
