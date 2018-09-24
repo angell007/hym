@@ -47,6 +47,7 @@ export class TransferenciasComponent implements OnInit {
   Monto: any;
   BancosEmpresa = [];
   idTransferencia: any;
+  transferenciasRealizadas =[];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -56,7 +57,8 @@ export class TransferenciasComponent implements OnInit {
 
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      this.transferencias = data;
+      this.transferencias = data.pendientes;
+      this.transferenciasRealizadas = data.realizadas;
       this.dtTrigger.next();
     });
 
@@ -250,22 +252,20 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id) {
-    this.BloquearTransferencia(id, "No");
-
+  RealizarTransferencia(id,numeroCuenta) {
+    //this.BloquearTransferencia(id, "No");
+   
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
-      params: { id: id }
+      params: { id: id , cuentaBancaria : numeroCuenta }
     }).subscribe((data: any) => {
       
-      var cuenta = data.cuenta;
-
       this.idTransferencia = id;
-      this.CuentaDestino = data.Cedula
+      this.CuentaDestino = data.cuenta
       this.Recibe = data.NombreDestinatario
-      this.CedulaDestino = data.cuenta
+      this.CedulaDestino = data.Cedula
       this.Monto = data.ValorTransferencia;
 
-      if (cuenta.substring(0, 4) == "0134") {
+      if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
       } else {
         this.ModalCrearTransferenciaOtroBanco.show();
@@ -273,14 +273,14 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  verificarBloqueo(id){
+  verificarBloqueo(id, numeroCuenta){
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ;
         case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
+        case "No": { /*this.BloquearTransferenciaDestinatario(id,"No");*/ this.RealizarTransferencia(id,numeroCuenta); break; }
+        default: { /*this.BloquearTransferenciaDestinatario(id,"No");*/ this.RealizarTransferencia(id,numeroCuenta); break; }
       }
     });
   }
