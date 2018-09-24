@@ -411,6 +411,33 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
+  AutoSumaBolivares(pos,valor){
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    console.log("Bolivares = "+  valor + " --- " + divisor);
+    this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));    
+   
+  }
+
+  AutoSumaPeso(pos,valor){
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    console.log("Peso " +valor + " --- " + divisor);
+    this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor)).toFixed(2);
+  }
+
+  AutoSuma(){
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    var sumapeso = 0;
+    var sumabolivar = 0;
+    this.Envios.forEach((element, index) => {
+      sumapeso += element.Valor_Transferencia_Peso;      
+      sumabolivar += element.Valor_Transferencia_Bolivar;           
+    });    
+    this.cambiar = sumapeso;
+    this.entregar = sumabolivar;
+     /*this.Envios[index].Valor_Transferencia_Peso = (parseInt(element.Valor_Transferencia_Bolivar) * parseInt(divisor));
+      this.Envios[index].Valor_Transferencia_Bolivar = (parseInt(element.Valor_Transferencia_Peso) / parseInt(divisor));*/
+  }
+
   EliminarDestinatario(index) {
     if (index > 0) {
       this.Envios.splice(index, 1);
@@ -1275,7 +1302,7 @@ export class TablerocajeroComponent implements OnInit {
         var suma = 0;
         var totalBolivar = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
         if (this.Envios.length != limite) {
-          for (var i = 0; i < ((this.Envios.length) - 1); i++) {
+          /*for (var i = 0; i < ((this.Envios.length) - 1); i++) {
             suma += parseInt(this.Envios[i].Valor_Transferencia_Bolivar);
             if (suma > parseInt(totalBolivar)) {
               this.Envios[i].Valor_Transferencia_Bolivar = 0;
@@ -1284,7 +1311,7 @@ export class TablerocajeroComponent implements OnInit {
               this.confirmacionSwal.type = "error"
               this.confirmacionSwal.show();
             }
-          }
+          }*/
 
           if (this.Envios[index] == undefined) {
             this.Envios.push({
@@ -1298,7 +1325,7 @@ export class TablerocajeroComponent implements OnInit {
             });
           }
 
-        } else {
+        } /*else {
           this.Envios.forEach((element, index) => {
             suma += parseInt(element.Valor_Transferencia_Bolivar);
             if (suma > parseInt(totalBolivar)) {
@@ -1309,7 +1336,7 @@ export class TablerocajeroComponent implements OnInit {
               this.confirmacionSwal.show();
             }
           });
-        }
+        }*/
 
 
         /*this.entregar = suma;
@@ -1324,7 +1351,7 @@ export class TablerocajeroComponent implements OnInit {
         var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
 
         if (this.Envios.length != limite) {
-          for (var i = 0; i < ((this.Envios.length) - 1); i++) {
+          /*for (var i = 0; i < ((this.Envios.length) - 1); i++) {
             suma += parseInt(this.Envios[i].Valor_Transferencia_Peso);
             if (suma > parseInt(totalBolivar)) {
               this.Envios[i].Valor_Transferencia_Peso = 0;
@@ -1333,7 +1360,7 @@ export class TablerocajeroComponent implements OnInit {
               this.confirmacionSwal.type = "error"
               this.confirmacionSwal.show();
             }
-          }
+          }*/
 
           if (this.Envios[index] == undefined) {
             this.Envios.push({
@@ -1347,7 +1374,7 @@ export class TablerocajeroComponent implements OnInit {
             });
 
           }
-        } else {
+        } /*else {
           this.Envios.forEach((element, index) => {
             suma += parseInt(element.Valor_Transferencia_Peso);
             if (suma > parseInt(totalBolivar)) {
@@ -1358,7 +1385,7 @@ export class TablerocajeroComponent implements OnInit {
               this.confirmacionSwal.show();
             }
           });
-        }
+        }*/
 
         /*this.Envios.forEach(element => {
           suma += element.Valor_Transferencia_Peso;

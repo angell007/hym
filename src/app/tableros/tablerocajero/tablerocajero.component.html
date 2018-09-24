@@ -503,7 +503,8 @@
                                                                 <input id="Valor_Transferencia_Bolivar{{i}}" type="number"
                                                                     placeholder="Valor a Transferir en Bolivares" class="form-control"
                                                                     name="Valor_Transferencia_Bolivar{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
-                                                                    (blur)="NuevoDestinatario(i,'Bolivar')" required
+                                                                    (blur)="NuevoDestinatario(i,'Bolivar');AutoSuma(i,$event.target.value);AutoSumaBolivares(i,$event.target.value)"
+                                                                    required
                                                                     #valorPeso="ngModel">
                                                             </div>
                                                         </div>
@@ -513,7 +514,7 @@
                                                                 <input type="number" placeholder="Valor a Transferir en pesos"
                                                                     class="form-control" id="Valor_Transferencia_Peso{{i}}"
                                                                     name="Valor_Transferencia_Peso{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Peso"
-                                                                    (blur)="NuevoDestinatario(i,'Peso')" required
+                                                                    (blur)="NuevoDestinatario(i,'Peso');AutoSuma(i,$event.target.value);AutoSumaPeso(i,$event.target.value)" required
                                                                     #valorBolivar="ngModel">
                                                             </div>
                                                         </div>
