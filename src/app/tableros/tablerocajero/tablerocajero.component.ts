@@ -199,6 +199,8 @@ export class TablerocajeroComponent implements OnInit {
   urlCne: string;
   botonDestinatario = false;
   idTransferencia: any;
+  frameRiff = false;
+  urlRiff: string;
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
@@ -310,12 +312,17 @@ export class TablerocajeroComponent implements OnInit {
       }
       case "E": {
         this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula=" + valor; break;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=E&cedula=" + valor; break;
       }
       default: {
         this.frame = false;
       }
     }
+  }
+
+  buscarRiff(){
+    this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
+    this.frameRiff = true;
   }
 
   recargarBancos(i, id) {
@@ -1187,18 +1194,22 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
-  verificarChequeo(pos) {
-    var checkeo = ((document.getElementById("checkeo_" + pos) as HTMLInputElement).checked)
+  verificarChequeo(pos, check) {
+    var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
+    /*console.log("checkeo_" + pos);
+    console.log(check)    
+    console.log(pos);
+    console.log(checkeo);*/
 
-    switch (checkeo) {
+    switch (check) {
       case true: {
-        ((document.getElementById("Observacion" + pos) as HTMLInputElement).disabled) = false;
-        ((document.getElementById("Otra_Cuenta" + pos) as HTMLInputElement).disabled) = false;
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = false;
         break;
       }
       case false: {
-        ((document.getElementById("Observacion" + pos) as HTMLInputElement).disabled) = true;
-        ((document.getElementById("Otra_Cuenta" + pos) as HTMLInputElement).disabled) = true;
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = true;
         break;
       }
     }

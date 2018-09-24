@@ -348,14 +348,15 @@
                                                     <th>Valor Pesos</th>
                                                     <th>Valor Bolivares</th>
                                                     <th>Tasa</th>
-                                                    <th></th><!--
+                                                    <th></th>
+                                                    <!--
                                                     <th style="width:80px">Tasa</th>
                                                     <th style="width:160px;"></th>-->
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let transferencia of Transferencia">
-                                                    <td>{{transferencia.Fecha |  date:"short" }}</td>
+                                                    <td>{{transferencia.Fecha | date:"short" }}</td>
                                                     <td>{{transferencia.CodigoRecibo}}</td>
                                                     <td>{{transferencia.Cantidad_Recibida | currency}}</td>
                                                     <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
@@ -504,9 +505,7 @@
                                                                     placeholder="Valor a Transferir en Bolivares" class="form-control"
                                                                     name="Valor_Transferencia_Bolivar{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
                                                                     (blur)="NuevoDestinatario(i,'Bolivar');AutoSuma(i,$event.target.value);AutoSumaBolivares(i,$event.target.value)"
-                                                                    required
-                                                                    #valorPeso="ngModel"
-                                                                    step="0.01">
+                                                                    required #valorPeso="ngModel" step="0.01">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -515,8 +514,8 @@
                                                                 <input type="number" placeholder="Valor a Transferir en pesos"
                                                                     class="form-control" id="Valor_Transferencia_Peso{{i}}"
                                                                     name="Valor_Transferencia_Peso{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Peso"
-                                                                    (blur)="NuevoDestinatario(i,'Peso');AutoSuma(i,$event.target.value);AutoSumaPeso(i,$event.target.value)" required
-                                                                    #valorBolivar="ngModel">
+                                                                    (blur)="NuevoDestinatario(i,'Peso');AutoSuma(i,$event.target.value);AutoSumaPeso(i,$event.target.value)"
+                                                                    required #valorBolivar="ngModel">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2025,12 +2024,12 @@
                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Editar_Destinatario{{i}}" name="Otra_Cuenta_Editar_Destinatario{{i}}"
-                                        [(ngModel)]="item.Otra_Cuenta">
+                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Editar_Destinatario{{i}}"
+                                        name="Otra_Cuenta_Editar_Destinatario{{i}}" [(ngModel)]="item.Otra_Cuenta">
                                 </td>
                                 <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Observacion_Editar_Destinatario{{i}}" name="Observacion_Editar_Destinatario{{i}}"
-                                        [(ngModel)]="item.Observacion">
+                                    <input disabled class="form-control" type="text" id="Observacion_Editar_Destinatario{{i}}"
+                                        name="Observacion_Editar_Destinatario{{i}}" [(ngModel)]="item.Observacion">
                                 </td>
                             </tr>
                         </tbody>
@@ -2060,7 +2059,8 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)">
+                        <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
+                            (change)="BuscarCNE($event.target.value)">
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2072,9 +2072,10 @@
                         <input readonly class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
                             type="text" placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
                             ngModel={{Id_Destinatario}} required>
-                        <div class="input-group-append">
-                            <a href="http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp" target="_blank" class="button btn btn-primary btn-mini btn-hover">RIF</a>
-                        </div>
+                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
+                            Riff
+                        </button>
+
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -2085,7 +2086,7 @@
                             ngModel required>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -2093,8 +2094,16 @@
                         <!--<frameset>
                             <frame name="indice" src="{{urlCne}}}"></frame>
                         </frameset> -->
-                        <iframe  class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
-                        <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>                        
+                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
+                        <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="frameRiff" style="width:640px;height:390px">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlRiff)"></iframe>
+                        <button class="btn btn-primary btn-sm" (click)="frameRiff = !frameRiff"> Ocultar página</button>
                     </div>
                 </div>
             </div>
@@ -2106,7 +2115,7 @@
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table  invoice-detail-table">
-                        <thead>
+                        <!-- <thead>
                             <tr>
                                 <th scope="col">País</th>
                                 <th scope="col">Numero de Cuenta</th>
@@ -2115,45 +2124,66 @@
                                 <th scope="col">Otra Cuenta</th>
                                 <th scope="col">Observación</th>
                             </tr>
-                        </thead>
+                        </thead> -->
                         <tbody>
                             <tr *ngFor="let item of Lista_Destinatarios; let i = index" id="fila{{i}}">
-                                <td width="20%">
-                                    <select class="form-control" id="Id_Pais_Destinatario{{i}}" name="Id_Pais_Destinatario{{i}}" [(ngModel)]="item.Id_Pais"
-                                        (change)="Bancos_Pais($event.target.value, i);" required>
-                                        <option value="">Seleccione País</option>
-                                        <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                    </select>
-                                </td>
-                                <td width="20%">
-                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
-                                        (keyup)="codigoBanco($event.target.value , i,'input')" (change)="agregarDinamico(i,$event.target.value)"
-                                        minlength="20" maxlength="20" required>
+                                <td>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">País</th>
+                                                <th scope="col">Numero de Cuenta</th>
+                                                <th scope="col">Tipo de Cuenta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td width="20%">
+                                                    <select class="form-control" id="Id_Pais_Destinatario{{i}}" name="Id_Pais_Destinatario{{i}}"
+                                                        [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
+                                                        required>
+                                                        <option value="">Seleccione País</option>
+                                                        <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                                    </select>
+                                                </td>
+                                                <td width="20%">
+                                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
+                                                        [(ngModel)]="item.Numero_Cuenta" (keyup)="codigoBanco($event.target.value , i,'input')"
+                                                        (change)="agregarDinamico(i,$event.target.value)" minlength="20"
+                                                        maxlength="20" required>
 
-                                    <select disabled class="form-control" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco"
-                                        required (change)="codigoBanco($event.target.value , i,'check')">
-                                        <option value="">Seleccione Banco</option>
-                                        <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
-                                    </select>
-                                </td>
-                                <td width="15%">
-                                    <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta"
-                                        required>
-                                        <option value="">Seleccione Tipo</option>
-                                        <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
-                                    </select>
-                                </td>
+                                                    <select disabled class="form-control" name="Id_Banco{{i}}"
+                                                        [(ngModel)]="item.Id_Banco" required (change)="codigoBanco($event.target.value , i,'check')">
+                                                        <option value="">Seleccione Banco</option>
+                                                        <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                                                    </select>
+                                                </td>
+                                                <td width="15%">
+                                                    <select class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta"
+                                                        required>
+                                                        <option value="">Seleccione Tipo</option>
+                                                        <option *ngFor="let Cuenta of Cuentas; let i=index" [value]="Cuenta.Id_Tipo_Cuenta">{{Cuenta.Nombre}}</option>
+                                                    </select>
+                                                </td>
 
-                                <td width="5%">
-                                    <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}" (change)="verificarChequeo(i)">
-                                </td>
-                                <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Destinatario{{i}}" name="Otra_Cuenta_Destinatario{{i}}"
-                                        [(ngModel)]="item.Otra_Cuenta">
-                                </td>
-                                <td width="15%">
-                                    <input disabled class="form-control" type="text" id="Observacion_Destinatario{{i}}" name="Observacion_Destinatario{{i}}"
-                                        [(ngModel)]="item.Observacion">
+                                            </tr>
+                                            <tr>
+                                                <td width="5%">
+                                                    <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}"
+                                                        (change)="verificarChequeo(i,$event.target.checked)">
+                                                </td>
+                                                <td width="15%">
+                                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Destinatario{{i}}"
+                                                        name="Otra_Cuenta_Destinatario{{i}}" [(ngModel)]="item.Otra_Cuenta">
+                                                </td>
+                                                <td width="15%">
+                                                    <input disabled class="form-control" type="text" id="Observacion_Destinatario{{i}}"
+                                                        name="Observacion_Destinatario{{i}}" [(ngModel)]="item.Observacion">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
                                 </td>
                             </tr>
                         </tbody>
@@ -2163,27 +2193,26 @@
         </div>
 
         <div class="row" hidden>
-                <div class="col-md-12">
-                    {{Detalle_Destinatario.Detalle}}
-                    <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel></textarea>
-                    </div>
+            <div class="col-md-12">
+                {{Detalle_Destinatario.Detalle}}
+                <div class="form-group">
+                    <label>Detalles</label>
+                    <textarea class="form-control" placeholder="Detalles del Destinatario" name="Detalle" ngModel></textarea>
                 </div>
             </div>
+        </div>
 
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-               (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
+                (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
             </button>
         </div>
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia"
-    #ModalAnularTransferencia>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
     <div class="app-modal-header">
         <h4>Crear Destinatario</h4>
     </div>
@@ -2194,17 +2223,16 @@
                     <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion"
-                        ngModel></textarea>
+                        <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion" ngModel></textarea>
                     </div>
-                </div>               
-            </div>                       
+                </div>
+            </div>
             <br>
         </form>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)" >Guardar
+            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)">Guardar
             </button>
         </div>
     </div>
