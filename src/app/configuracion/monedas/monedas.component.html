@@ -94,7 +94,7 @@
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
             <input type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
-              (blur)="agregarValor(i,$event.target.value)">
+             >
           </div>
         </div>
       </div>
@@ -237,7 +237,7 @@
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
-            <input class="form-control" name="Diario_{{i}}" ngModel="{{item.Valor}}" (blur)="agregarValor(i,$event.target.value)">
+            <input class="form-control" name="Diario_{{i}}" ngModel="{{item.Valor}}" >
           </div>
         </div>
       </div>
