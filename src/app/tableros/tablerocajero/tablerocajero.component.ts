@@ -325,6 +325,12 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
+  recargarDestinatario(){
+    this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
+      this.Destinatarios = data;
+    });
+  }
+
   OcultarFormulario(modal) {
     modal.hide();
   }
@@ -334,7 +340,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   ResetValues() {
-    //console.log("resetear valores");
+    ////console.log("resetear valores");
     this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
@@ -362,7 +368,16 @@ export class TablerocajeroComponent implements OnInit {
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
-        //console.log(data);      
+        ////console.log(data);
+        this.TipoPagoTransferencia("Efectivo");
+        this.Transferencia1 = true;
+        this.Transferencia2 = false;
+        
+        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+          this.Transferencia = data;
+          this.dtTrigger1.next();
+        });
+
       });
   }
 
@@ -413,14 +428,14 @@ export class TablerocajeroComponent implements OnInit {
 
   AutoSumaBolivares(pos,valor){
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    console.log("Bolivares = "+  valor + " --- " + divisor);
+    //console.log("Bolivares = "+  valor + " --- " + divisor);
     this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));    
    
   }
 
   AutoSumaPeso(pos,valor){
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    console.log("Peso " +valor + " --- " + divisor);
+    //console.log("Peso " +valor + " --- " + divisor);
     this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor)).toFixed(2);
   }
 
@@ -451,13 +466,13 @@ export class TablerocajeroComponent implements OnInit {
     }
     if (remitente.length < 5 && remitente.length > 0) {
       this.warnSwal.show();
-      //console.log("número de documento inconrrecto.");      
+      ////console.log("número de documento inconrrecto.");      
     }
     else {
       this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Transferencia_Remitente', id: remitente } }).subscribe((data: any) => {
-        //console.log("REMITENTE");
+        ////console.log("REMITENTE");
 
-        //console.log(data);
+        ////console.log(data);
         if (data.length == 0) {
           this.NumeroDocumentoR = 0;
           this.CrearRemitente(remitente);
@@ -520,20 +535,12 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   GuardarDestinatario(formulario: NgForm, modal) {
-    for (let i = 0; i < this.Cuentas.length; ++i) {
-      this.Cuentas[i].Id_Destinatario = formulario.value.Id_Destinatario;
-    }
-    let destinatario = formulario.value;
-    destinatario['Detalle'] = this.Detalle;
-    let info = JSON.stringify(destinatario);
+
+    let info = JSON.stringify(formulario.value);
     let cuentas = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("destinatario", cuentas);
-
-    console.log(cuentas);
-
-    //console.log(destinatario);
 
     this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
       .catch(error => {
@@ -542,18 +549,22 @@ export class TablerocajeroComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //console.log(data);           
         this.destinatarioCreadoSwal.show();
-        this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
         formulario.reset();
-        let textArea: any = document.getElementById('detalleText');
-        textArea.value = '';
-        this.Cedula = null;
         modal.hide();
-        this.AutoCompletarDestinatario(this.Id_Destinatario, this.posiciontemporal);
-        (document.getElementById("Destino" + this.posiciontemporal) as HTMLInputElement).value = this.Id_Destinatario;
+        this.recargarDestinatario();
+        this.Lista_Destinatarios = [{
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        }];
+
       });
-    this.actualizarVista();
+    //this.actualizarVista();
   }
 
   GuardarRemitente(formulario: NgForm) {
@@ -568,7 +579,7 @@ export class TablerocajeroComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //console.log(data);
+        ////console.log(data);
         this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
         this.ModalRemitente.hide();
         this.remitenteCreadoSwal.show();
@@ -581,7 +592,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   RealizarCambio(value, accion) {
-    //console.log(value);    
+    ////console.log(value);    
     if (this.MonedaRecibida != this.MonedaTransferencia) {
       switch (accion) {
         case "transferir":
@@ -910,7 +921,7 @@ export class TablerocajeroComponent implements OnInit {
 
   RealizarCambioMoneda(value, tipo) {
 
-    //console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
+    ////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
     switch (tipo) {
       case 'cambia': {
 
@@ -966,7 +977,7 @@ export class TablerocajeroComponent implements OnInit {
               suma += element.Valor_Transferencia_Peso;
             });
             if (suma == 0) {
-              console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
+              //console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
               this.Envios[0].Valor_Transferencia_Peso = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
               this.NuevoDestinatario(0, 'Peso')
             }
@@ -1097,6 +1108,13 @@ export class TablerocajeroComponent implements OnInit {
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
+        
+        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+          this.Transferencia = data;
+          //this.dtTrigger1.next();
+        });
+
+
       });
 
   }
@@ -1106,7 +1124,7 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      console.log(data.destinatario);
+      //console.log(data.destinatario);
       this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 

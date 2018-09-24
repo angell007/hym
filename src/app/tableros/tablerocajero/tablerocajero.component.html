@@ -356,9 +356,9 @@
                                             <tbody>
                                                 <tr *ngFor="let transferencia of Transferencia">
                                                     <td>{{transferencia.Fecha |  date:"short" }}</td>
-                                                    <td>{{transferencia.Codigo}}</td>
+                                                    <td>{{transferencia.CodigoRecibo}}</td>
                                                     <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                    <td>{{transferencia.Cantidad_Transferida | currency:"BsS."}}</td>
+                                                    <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
                                                     <td>{{transferencia.Tasa_Cambio }}</td>
                                                     <!--
                                                     <td class="text-right">{{transferencia.Valor_Transferencia |
@@ -505,7 +505,8 @@
                                                                     name="Valor_Transferencia_Bolivar{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
                                                                     (blur)="NuevoDestinatario(i,'Bolivar');AutoSuma(i,$event.target.value);AutoSumaBolivares(i,$event.target.value)"
                                                                     required
-                                                                    #valorPeso="ngModel">
+                                                                    #valorPeso="ngModel"
+                                                                    step="0.01">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -1882,7 +1883,7 @@
     type="warning">
 </swal>
 
-<swal #destinatarioCreadoSwal title="El destinatario a sido creado" text="Ahora podra ingresar el documento del destinatario para una nueva transferencia."
+<swal #destinatarioCreadoSwal title="El destinatario ha sido creado" text="Ahora podra ingresar el documento del destinatario para una nueva transferencia."
     type="success">
 </swal>
 
@@ -2187,7 +2188,7 @@
         <h4>Crear Destinatario</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormCrearDestinatarioTransferencia="ngForm">
+        <form #FormAnularTransferencia="ngForm">
             <div class="row">
                 <div class="col-md-12">
                     <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
@@ -2203,7 +2204,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormCrearDestinatarioTransferencia)" >Guardar
+            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)" >Guardar
             </button>
         </div>
     </div>

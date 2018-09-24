@@ -88,12 +88,9 @@
                                     <thead>
                                         <tr>
                                             <th style="width:150px;">Fecha</th>
-                                            <th>Destinatario</th>
                                             <th>Recibo</th>
-                                            <th>Cuenta Origen</th>
+                                            <th>Cajero</th>
                                             <th>Cuenta Destino</th>
-                                            <th>Estado</th>
-                                            <th>Bloqueada</th>
                                             <th style="width:80px">Valor</th>
                                             <th style="width:160px;"></th>
                                         </tr>
@@ -103,11 +100,8 @@
                                         <tr *ngFor="let transferencia of transferencias">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.ReciboCodigo}}</td>
-                                            <td>{{transferencia.DestinatarioNombre}}</td>
-                                            <td>{{transferencia.Cuenta_Origen}}</td>
+                                            <td>{{transferencia.NombreCajero}}</td>
                                             <td>{{transferencia.Numero_Cuenta}}</td>
-                                            <td>{{transferencia.EstadoTransferencia}}</td>
-                                            <td>{{transferencia.Bloqueo}}</td>
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
                                             <td class="text-center">
@@ -185,6 +179,7 @@
             </div>
         </div>
 
+        <!--
         <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
@@ -207,7 +202,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!--class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}"-->
+                                            <!--class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}"
                                             <tr *ngFor="let transferencia of transferencias">
                                                 <td>{{transferencia.Fecha | date:"short" }}</td>
                                                 <td>{{transferencia.ReciboCodigo}}</td>
@@ -249,6 +244,8 @@
                     </div>
                 </div>
             </div>
+
+        -->
 
     </div>
 
