@@ -36,7 +36,17 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('bloqueoSwal') bloqueoSwal: any;
   @ViewChild('mensajeSwal') mensajeSwal: any;
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
+  @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
+  @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
+  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;  
+
   Identificacion: any;
+  CuentaDestino: any;
+  Recibe: any;
+  CedulaDestino: any;
+  Monto: any;
+  BancosEmpresa = [];
+  idTransferencia: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -50,24 +60,60 @@ export class TransferenciasComponent implements OnInit {
       this.dtTrigger.next();
     });
 
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      dom: 'Bfrtip',
+      responsive: true,
+      /* below is the relevant part, e.g. translated to spanish */
+      language: {
+        processing: "Procesando...",
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
+        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
+        infoEmpty: "Mostrando ningún elemento.",
+        infoFiltered: "(filtrado _MAX_ elementos total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando registros...",
+        zeroRecords: "No se encontraron registros",
+        emptyTable: "No hay datos disponibles en la tabla",
+        paginate: {
+          first: "<<",
+          previous: "<",
+          next: ">",
+          last: ">>"
+        },
+        aria: {
+          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
+          sortDescending: ": Activar para ordenar la tabla en orden descendente"
+        }
+      }
+    };
+
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
       this.conteoTransferencias = data[0];
     });
 
+
+    this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
+    .subscribe((data: any) => {
+      this.BancosEmpresa = data;
+    });
+
     this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
-      var chart = AmCharts.makeChart( "chartdiv", {
+      var chart = AmCharts.makeChart("chartdiv", {
         "type": "serial",
         "theme": "light",
-        "dataProvider": data ,
+        "dataProvider": data,
         "gridAboveGraphs": true,
         "startDuration": 1,
-        "graphs": [ {
+        "graphs": [{
           "balloonText": "[[Funcionario]]: <b>[[Conteo]]</b>",
           "fillAlphas": 0.8,
           "lineAlpha": 0.2,
           "type": "column",
           "valueField": "Conteo"
-        } ],
+        }],
         "chartCursor": {
           "categoryBalloonEnabled": false,
           "cursorAlpha": 0,
@@ -83,11 +129,11 @@ export class TransferenciasComponent implements OnInit {
         "export": {
           "enabled": true
         }
-      
-      } );
+
+      });
     });
 
-    
+
   }
 
 
@@ -143,13 +189,35 @@ export class TransferenciasComponent implements OnInit {
 
   BloquearTransferencia(id, estado) {
     let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
+    datos.append("modulo", 'Transferencia_Destinatario');
+    datos.append("id", id);
+    datos.append("estado", estado); 
+    datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
+    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
+      //this.bloqueoSwal.show();
+      this.ActualizarVista();
+    });
+  }
+
+  alertaDesbloqueo(usuario){
+    this.desbloqueoSwal.title = "Desbloqueo"
+    this.desbloqueoSwal.text ='Está transferencia fue bloqueada por '+usuario+' ¿ Está seguro que desea desbloquearla ?' , 
+    this.desbloqueoSwal.type='warning', 
+    this.desbloqueoSwal.showCancelButton= true, 
+    this.desbloqueoSwal.confirmButtonText= 'Si, Desbloquear', 
+    this.desbloqueoSwal.cancelButtonText='No, Dejame Comprobar!'
+    this.desbloqueoSwal.show();
+  }
+  
+  BloquearTransferenciaDestinatario(id, estado) {
+    let datos = new FormData();
+    datos.append("modulo", 'Transferencia_Destinatario');
     datos.append("id", id);
     datos.append("estado", estado);
     datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
-      this.bloqueoSwal.show();
-      this.ActualizarVista();
+      /*this.bloqueoSwal.show();
+      this.ActualizarVista();*/
     });
   }
 
@@ -182,6 +250,41 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
+  RealizarTransferencia(id) {
+    this.BloquearTransferencia(id, "No");
+
+    this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+      
+      var cuenta = data.cuenta;
+
+      this.idTransferencia = id;
+      this.CuentaDestino = data.Cedula
+      this.Recibe = data.NombreDestinatario
+      this.CedulaDestino = data.cuenta
+      this.Monto = data.ValorTransferencia;
+
+      if (cuenta.substring(0, 4) == "0134") {
+        this.ModalCrearTransferenciaBanesco.show();
+      } else {
+        this.ModalCrearTransferenciaOtroBanco.show();
+      }
+    });
+  }
+
+  verificarBloqueo(id){
+    this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ;
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id); break; }
+      }
+    });
+  }
+
   Marcado(estado) {
     switch (estado) {
       case "Pendiente": {
@@ -197,6 +300,24 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  
+  CrearTransferencia(formulario: NgForm, modal){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Transferencia realizada"
+      this.mensajeSwal.text = "Se ha guardado correctamente la información"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      this.ActualizarVista();
+      modal.hide();
+    });
+  }
 
+  /*
+  CancelarBloqueo(id,modal){
+    this.BloquearTransferenciaDestinatario(id,"Si");
+    modal.hide();
+  }*/
 }

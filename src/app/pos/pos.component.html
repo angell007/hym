@@ -171,7 +171,7 @@
                                 <form #FormMoneda="ngForm">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>Moneda Orgien</label>
+                                            <label>Moneda que recibe</label>
                                             <select class="form-control" placeholder="Origen" ngModel id="Origen" name="Origen"
                                                 (change)="Origen($event.target.value);">
                                                 <option> Seleccione Moneda</option>
@@ -182,7 +182,7 @@
                                                 ngModel="{{MonedaOrigen}}">
                                         </div>
                                         <div class="col-md-6">
-                                            <label>Moneda Destino</label>
+                                            <label>Moneda que entrego</label>
                                             <select class="form-control" placeholder="Destino" id="Destino" name="Destino"
                                                 ngModel (change)="CambiarTasa($event.target.value);">
                                                 <option> Seleccione Moneda</option>
