@@ -455,17 +455,17 @@ export class TablerocajeroComponent implements OnInit {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
     this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));
     this.Envios[pos].Valor_Transferencia_Bolivar = (this.Envios[pos].Valor_Transferencia_Peso / parseInt(divisor));
-    this.AutoSuma();
+    this.AutoSuma(pos);
   }
 
   AutoSumaPeso(pos, valor) {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
     this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor));
     this.Envios[pos].Valor_Transferencia_Peso = (this.Envios[pos].Valor_Transferencia_Bolivar * parseInt(divisor));
-    this.AutoSuma();
+    this.AutoSuma(pos);
   }
 
-  AutoSuma() {
+  AutoSuma(pos) {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
     var sumapeso = 0;
     var sumabolivar = 0;
@@ -476,8 +476,8 @@ export class TablerocajeroComponent implements OnInit {
 
     this.cambiar = sumapeso;
     this.entregar = sumabolivar.toFixed(2);
-    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
-    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
+    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia', pos);
+    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega', pos);
   }
 
   EliminarDestinatario(index) {
@@ -990,7 +990,7 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  RealizarCambioMonedaTransferencia(value, tipo) {
+  RealizarCambioMonedaTransferencia(value, tipo, pos = "") {
     switch (tipo) {
       case 'cambia': {
         var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
@@ -1009,17 +1009,47 @@ export class TablerocajeroComponent implements OnInit {
               this.NuevoDestinatario(0, 'Peso')
             }
 
-            if (suma == parseInt(value)) {
-              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
-              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
-            } else {
-              this.confirmacionSwal.title = "Valores no coinciden";
-              this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+            /*if(pos != ""){
+              var valor = (document.getElementById("Id_Destinatario_Cuenta"+pos) as HTMLInputElement).value;
+              console.log(valor)
+            }*/
+            var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
+
+            if (valor == "") {
+              
+              this.confirmacionSwal.title = "Valores vacios";
+              this.confirmacionSwal.text = "Por favor digite los valores del destinatario para poder continuar";
               this.confirmacionSwal.type = "error";
               this.confirmacionSwal.show();
-              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+              } else {
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+              }
+            } else {
+              if (suma == parseInt(value)) {
+
+                if (this.Recibe == 'Cliente') {
+                  (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+                } else {
+                  (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+                }
+
+              } else {
+                this.confirmacionSwal.title = "Valores no coinciden";
+                this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+                this.confirmacionSwal.type = "error";
+                this.confirmacionSwal.show();
+                if (this.Recibe == 'Cliente') {
+                  (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+                } else {
+                  (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+                }
+              }
             }
+
+
 
           }
         }
@@ -1179,7 +1209,7 @@ export class TablerocajeroComponent implements OnInit {
       this.posiciontemporal = pos;
     });
   }
-  
+
 
   /*agregarDinamico(i, valor) {
     var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
@@ -1221,14 +1251,14 @@ export class TablerocajeroComponent implements OnInit {
         this.confirmacionSwal.type = "error"
         this.confirmacionSwal.show();
       }
-    } 
+    }
   }
 
-  AgregarFila(i,valor) {
-    
+  AgregarFila(i, valor) {
+
     var idpais = ((document.getElementById("Id_Banco" + i) as HTMLInputElement).value)
 
-    if(valor != "" && idpais !=""){
+    if (valor != "" && idpais != "") {
       var pos = parseInt(i) + 1;
       if (this.Lista_Destinatarios[pos] == undefined) {
         this.Lista_Destinatarios.push({
@@ -1244,7 +1274,7 @@ export class TablerocajeroComponent implements OnInit {
         this.Bancos_Pais(2, pos);
       }
     }
-    
+
   }
 
   Bancos_Pais(Pais, i) {
@@ -1316,9 +1346,9 @@ export class TablerocajeroComponent implements OnInit {
 
   codigoBanco(seleccion, posicion, texto) {
 
-    console.log(seleccion +" , "+ posicion +" , "+ texto);
+    console.log(seleccion + " , " + posicion + " , " + texto);
     var pais = ((document.getElementById("Id_Pais" + posicion) as HTMLInputElement).value);
-    console.log("pais = " +2);
+    console.log("pais = " + 2);
 
     if (pais == "2") {
       switch (texto) {
@@ -1329,14 +1359,14 @@ export class TablerocajeroComponent implements OnInit {
         }
         case "input": {
           console.log("soy input");
-          
-          var cadena = seleccion.substring(0,4);
+
+          var cadena = seleccion.substring(0, 4);
           var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
-            if (buscarBanco > -1) {
-              this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
-            } else {
-              this.Lista_Destinatarios[posicion].Id_Banco = '';
-            }
+          if (buscarBanco > -1) {
+            this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
+          } else {
+            this.Lista_Destinatarios[posicion].Id_Banco = '';
+          }
           break;
         }
       }
@@ -1390,7 +1420,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   NuevoDestinatario(pos, moneda) {
-   
+
     var index = pos + 1;
     var limite = parseInt(this.LimiteOficina);
 
@@ -1411,12 +1441,14 @@ export class TablerocajeroComponent implements OnInit {
               Valor_Transferencia_Peso: 0,
               Cuentas: []
             });
-            (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
-            (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+
+            if (this.Recibe == 'Cliente') {
+              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+            } else {
+              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+            }
           }
-
         }
-
         break;
       }
 

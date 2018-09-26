@@ -489,8 +489,8 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label>Cuenta</label>
-                                                                <select name="Id_Destinatario_Cuenta{{i}}" [(ngModel)]="Envio.Id_Destinatario_Cuenta"
-                                                                    class="form-control" autocomplete="off" (click)="boolCuenta=true"
+                                                                <select id="Id_Destinatario_Cuenta{{i}}" name="Id_Destinatario_Cuenta{{i}}" [(ngModel)]="Envio.Id_Destinatario_Cuenta"
+                                                                    class="form-control" autocomplete="off"
                                                                     required>
                                                                     <option value="">Seleccione una Cuenta</option>
                                                                     <option *ngFor="let Cuenta of Envio.Cuentas"
