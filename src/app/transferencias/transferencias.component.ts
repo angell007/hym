@@ -55,6 +55,7 @@ export class TransferenciasComponent implements OnInit {
   ngOnInit() {
     this.ActualizarVista();
   }
+  
 
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
