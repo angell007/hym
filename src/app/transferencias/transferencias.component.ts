@@ -48,6 +48,7 @@ export class TransferenciasComponent implements OnInit {
   BancosEmpresa = [];
   idTransferencia: any;
   transferenciasRealizadas =[];
+  valorDevolverTransferencia: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -139,12 +140,13 @@ export class TransferenciasComponent implements OnInit {
   }
 
 
-  DevolucionTransferencia(id, modal) {
+  DevolucionTransferencia(id, modal, valorDevolver) {
     this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
       params: { id: id, modulo: "Transferencia" }
     }).subscribe((data: any) => {
       this.Identificacion = data.Id_Transferencia;
       modal.show();
+      this.valorDevolverTransferencia = valorDevolver;
     });
   }
 

@@ -307,12 +307,13 @@ export class TablerocajeroComponent implements OnInit {
     switch (valor) {
       case "V": {
         this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=V&cedula=" + valor;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + this.Id_Destinatario;
         break;
       }
       case "E": {
         this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php/embed/nacionalidad=E&cedula=" + valor; break;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + this.Id_Destinatario; 
+        break;
       }
       default: {
         this.frame = false;
@@ -322,7 +323,7 @@ export class TablerocajeroComponent implements OnInit {
 
   buscarRiff(){
     this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
-    this.frameRiff = true;
+    this.frameRiff = !this.frameRiff;
   }
 
   recargarBancos(i, id) {
