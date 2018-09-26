@@ -10,6 +10,13 @@
     width: 430px !important ;
 }*/
 
-.modal-lg {
+/*.modal-lg {
     max-width: 1200px !important;
 }
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+modal-dialog modal-lg*/
