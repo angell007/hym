@@ -436,15 +436,16 @@ export class TablerocajeroComponent implements OnInit {
 
   AutoSumaBolivares(pos,valor){
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    //console.log("Bolivares = "+  valor + " --- " + divisor);
-    this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));    
-   
+    this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Bolivar = (this.Envios[pos].Valor_Transferencia_Peso / parseInt(divisor)); 
+    this.AutoSuma();   
   }
 
   AutoSumaPeso(pos,valor){
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    //console.log("Peso " +valor + " --- " + divisor);
-    this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor)).toFixed(2);
+    this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Peso = (this.Envios[pos].Valor_Transferencia_Bolivar * parseInt(divisor));
+    this.AutoSuma();
   }
 
   AutoSuma(){
@@ -454,11 +455,12 @@ export class TablerocajeroComponent implements OnInit {
     this.Envios.forEach((element, index) => {
       sumapeso += element.Valor_Transferencia_Peso;      
       sumabolivar += element.Valor_Transferencia_Bolivar;           
-    });    
+    });
+
     this.cambiar = sumapeso;
-    this.entregar = sumabolivar;
-     /*this.Envios[index].Valor_Transferencia_Peso = (parseInt(element.Valor_Transferencia_Bolivar) * parseInt(divisor));
-      this.Envios[index].Valor_Transferencia_Bolivar = (parseInt(element.Valor_Transferencia_Peso) / parseInt(divisor));*/
+    this.entregar = sumabolivar.toFixed(2);
+    this.RealizarCambioMonedaTransferencia(sumapeso,'cambia');
+    this.RealizarCambioMonedaTransferencia(sumabolivar,'entrega');
   }
 
   EliminarDestinatario(index) {
@@ -942,7 +944,7 @@ export class TablerocajeroComponent implements OnInit {
           }
 
           this.entregar = (parseInt(value) / divisor);
-          this.entregar = this.entregar.toFixed(2);
+          this.entregar = this.entregar;
           (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
         } else {
           if (this.entregar == 0 || this.entregar == "" || this.entregar == undefined) {
@@ -977,7 +979,7 @@ export class TablerocajeroComponent implements OnInit {
         var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
         if (parseInt(value) > 0) {
           this.entregar = (parseInt(value) / parseInt(divisor));
-          this.entregar = this.entregar.toFixed(2);
+          this.entregar = this.entregar;
           if (this.Envios.length > 0) {
             //reviso si hay valores para realizar la suma
             var suma = 0;
@@ -1440,7 +1442,7 @@ export class TablerocajeroComponent implements OnInit {
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
-      this.entregar = this.entregar.toFixed(2);
+      this.entregar = this.entregar;
       this.cambiar = (parseInt(monedaDestino) * parseInt(value));
 
     }
