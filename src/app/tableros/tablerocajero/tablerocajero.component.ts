@@ -321,15 +321,21 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   BuscarCNE(valor) {
+
+    var cedula = this.Id_Destinatario;
+    if(cedula == undefined){      
+      cedula = (document.getElementById("idDestinatario" ) as HTMLInputElement).value;
+    }
+
     switch (valor) {
       case "V": {
         this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + this.Id_Destinatario;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
         break;
       }
       case "E": {
         this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + this.Id_Destinatario;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
         break;
       }
       default: {
