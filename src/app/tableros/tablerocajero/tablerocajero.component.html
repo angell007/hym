@@ -645,7 +645,7 @@
 
                                     <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
                                         <div class="col-md-10">
-                                            <button class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            <button id="BotonTransferencia" class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                 (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
                                                 Transferencia
                                             </button>
@@ -656,7 +656,7 @@
                                     </div>
                                     <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
                                         <div class="col-md-10">
-                                            <button class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            <button id="BotonMovimiento" class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                 (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
                                             </button>
                                         </div>

@@ -944,7 +944,7 @@ export class TablerocajeroComponent implements OnInit {
           }
 
           this.entregar = (parseInt(value) / divisor);
-          this.entregar = this.entregar;
+          this.entregar = this.entregar.toFixed.toFixed(2);
           (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
         } else {
           if (this.entregar == 0 || this.entregar == "" || this.entregar == undefined) {
@@ -979,7 +979,7 @@ export class TablerocajeroComponent implements OnInit {
         var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
         if (parseInt(value) > 0) {
           this.entregar = (parseInt(value) / parseInt(divisor));
-          this.entregar = this.entregar;
+          this.entregar = this.entregar.toFixed(2);
           if (this.Envios.length > 0) {
             //reviso si hay valores para realizar la suma
             var suma = 0;
@@ -991,6 +991,21 @@ export class TablerocajeroComponent implements OnInit {
               this.Envios[0].Valor_Transferencia_Peso = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
               this.NuevoDestinatario(0, 'Peso')
             }
+
+            console.log(suma +" == "+ parseInt(value));
+            console.log(suma == parseInt(value));
+            if(suma == parseInt(value)){
+              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+            }else{
+              this.confirmacionSwal.title="Valores no coinciden"; 
+              this.confirmacionSwal.text="Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios" ;
+              this.confirmacionSwal.type="error";
+              this.confirmacionSwal.show();
+              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;              
+            }
+
           }
         }
         break;
@@ -1442,9 +1457,10 @@ export class TablerocajeroComponent implements OnInit {
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
-      this.entregar = this.entregar;
+      this.entregar = this.entregar.toFixed(2);
       this.cambiar = (parseInt(monedaDestino) * parseInt(value));
-
+      this.RealizarCambioMonedaTransferencia(this.entregar,'cambia');
+      this.RealizarCambioMonedaTransferencia(this.cambiar,'entrega');
     }
 
   }
