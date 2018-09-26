@@ -489,8 +489,8 @@ export class TablerocajeroComponent implements OnInit {
 
     this.cambiar = sumapeso;
     this.entregar = sumabolivar.toFixed(2);
-    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia', pos);
-    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega', pos);
+    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
+    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
   }
 
   EliminarDestinatario(index) {
@@ -1003,7 +1003,7 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  RealizarCambioMonedaTransferencia(value, tipo, pos = "") {
+  RealizarCambioMonedaTransferencia(value, tipo) {
     switch (tipo) {
       case 'cambia': {
         var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
@@ -1022,12 +1022,12 @@ export class TablerocajeroComponent implements OnInit {
               this.NuevoDestinatario(0, 'Peso')
             }
 
-            /*if(pos != ""){
-              var valor = (document.getElementById("Id_Destinatario_Cuenta"+pos) as HTMLInputElement).value;
-              //console.log(valor)
-            }*/
+             /*
+            console.log("Id_Destinatario_Cuenta" + pos);
+            
             var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
-
+            
+           
             if (valor == "") {
               
               this.confirmacionSwal.title = "Valores vacios";
@@ -1040,25 +1040,25 @@ export class TablerocajeroComponent implements OnInit {
               } else {
                 (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
               }
-            } else {
-              if (suma == parseInt(value)) {
+            }*/
+            
+            if (suma == parseInt(value)) {
 
-                if (this.Recibe == 'Cliente') {
-                  (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
-                } else {
-                  (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
-                }
-
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
               } else {
-                this.confirmacionSwal.title = "Valores no coinciden";
-                this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
-                this.confirmacionSwal.type = "error";
-                this.confirmacionSwal.show();
-                if (this.Recibe == 'Cliente') {
-                  (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-                } else {
-                  (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-                }
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+              }
+
+            } else {
+              this.confirmacionSwal.title = "Valores no coinciden";
+              this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+              this.confirmacionSwal.type = "error";
+              this.confirmacionSwal.show();
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+              } else {
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
               }
             }
 
@@ -1509,12 +1509,37 @@ export class TablerocajeroComponent implements OnInit {
     } else {
       var monedaOrigen = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+      this.RealizarCambioMonedaTransferencia(monedaOrigen, 'cambia');
+      this.RealizarCambioMonedaTransferencia(monedaDestino, 'entrega');
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
       this.entregar = (parseInt(monedaOrigen) / parseInt(value));
       this.entregar = this.entregar.toFixed(2);
       this.cambiar = (parseInt(monedaDestino) * parseInt(value));
-      /*this.RealizarCambioMonedaTransferencia(this.entregar, 'cambia');
-      this.RealizarCambioMonedaTransferencia(this.cambiar, 'entrega');*/
+
+      var sumaPeso=0;
+      var sumaBolivar =0;
+      this.Envios.forEach(element => {
+          sumaPeso += element.Valor_Transferencia_Peso;
+          sumaBolivar += element.Valor_Transferencia_Bolivar;
+      });
+
+      if((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso) ){
+        this.confirmacionSwal.title = "Valores no coinciden";
+        this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+        this.confirmacionSwal.type = "error";
+        this.confirmacionSwal.show();
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+        }        
+      }else{
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+        }
+      }
     }
 
   }
