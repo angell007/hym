@@ -38,7 +38,7 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
   @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
   @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
-  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;  
+  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
 
   Identificacion: any;
   CuentaDestino: any;
@@ -47,15 +47,16 @@ export class TransferenciasComponent implements OnInit {
   Monto: any;
   BancosEmpresa = [];
   idTransferencia: any;
-  transferenciasRealizadas =[];
+  transferenciasRealizadas = [];
   valorDevolverTransferencia: any;
+  NumeroTransferencia = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
   }
-  
+
 
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
@@ -100,9 +101,9 @@ export class TransferenciasComponent implements OnInit {
 
 
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
-    .subscribe((data: any) => {
-      this.BancosEmpresa = data;
-    });
+      .subscribe((data: any) => {
+        this.BancosEmpresa = data;
+      });
 
     this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
       var chart = AmCharts.makeChart("chartdiv", {
@@ -137,10 +138,15 @@ export class TransferenciasComponent implements OnInit {
       });
     });
 
+    this.http.get(this.globales.ruta + '/php/transferencias/numero_cuenta_transferencia.php')
+    .subscribe((data: any) => {
+      this.NumeroTransferencia = data;
+    });
+
 
   }
 
-  refrescarVistaPrincipalConsultor(){
+  refrescarVistaPrincipalConsultor() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
       this.transferencias = data.pendientes;
       this.transferenciasRealizadas = data.realizadas;
@@ -203,7 +209,7 @@ export class TransferenciasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia_Destinatario');
     datos.append("id", id);
-    datos.append("estado", estado); 
+    datos.append("estado", estado);
     datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
       //this.bloqueoSwal.show();
@@ -227,7 +233,7 @@ export class TransferenciasComponent implements OnInit {
     });
    
   }*/
-  
+
   BloquearTransferenciaDestinatario(id, estado) {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia_Destinatario');
@@ -240,17 +246,17 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado,funcionario) {
-    
-    if(funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario){
+  Bloqueado(estado, funcionario) {
+
+    if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
       switch (estado) {
         case "Si": { return false }
         case "No": { return true }
-      }      
-    }else{
+      }
+    } else {
       return true
     }
-    
+
   }
 
   Devuelto(estado) {
@@ -275,13 +281,13 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id,numeroCuenta,valor) {
+  RealizarTransferencia(id, numeroCuenta, valor) {
     //this.BloquearTransferencia(id, "No");
-   
+
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
-      params: { id: id , cuentaBancaria : numeroCuenta }
+      params: { id: id, cuentaBancaria: numeroCuenta }
     }).subscribe((data: any) => {
-      
+
       this.idTransferencia = id;
       this.CuentaDestino = data.cuenta
       this.Recibe = data.NombreDestinatario
@@ -293,20 +299,20 @@ export class TransferenciasComponent implements OnInit {
       } else {
         this.ModalCrearTransferenciaOtroBanco.show();
       }
-      
+
       this.refrescarVistaPrincipalConsultor();
 
     });
   }
 
-  verificarBloqueo(id, numeroCuenta, valorActual){
+  verificarBloqueo(id, numeroCuenta, valorActual) {
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
+      switch (data[0].Bloqueo) {//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
+        case "Si": { this.mensajeSwal.title = "Estado transferencia"; this.mensajeSwal.text = "Esta transferencia fue bloqueda por " + data[0].nombreFuncionario; this.mensajeSwal.type = "error"; this.mensajeSwal.show(); break; }
+        case "No": { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual); break; }
+        default: { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual); break; }
       }
       this.refrescarVistaPrincipalConsultor();
     });
@@ -327,7 +333,7 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  CrearTransferencia(formulario: NgForm, modal){
+  CrearTransferencia(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -342,11 +348,70 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  
-  CancelarBloqueo(id,modal,formulario){
-    this.BloquearTransferenciaDestinatario(id,"Si");
+
+  CancelarBloqueo(id, modal, formulario) {
+    this.BloquearTransferenciaDestinatario(id, "Si");
     this.refrescarVistaPrincipalConsultor();
     formulario.reset();
-    modal.hide();    
+    modal.hide();
+  }
+
+  ValidarMonto(valor, caso) {
+    if ((parseInt(valor) > this.Monto)) {
+      this.mensajeSwal.title = "Monto no permitido"
+      this.mensajeSwal.text = "El monto no debe superar el valor de BsS." + this.Monto
+      this.mensajeSwal.type = "error"
+      this.mensajeSwal.show();
+
+      if (caso == 1) {
+        ((document.getElementById("bancoBanesco") as HTMLInputElement).disabled) = true;
+      } else {
+        ((document.getElementById("otrobanco") as HTMLInputElement).disabled) = true;
+      }
+
+    } else {
+      if ((parseInt(valor) > 1)) {
+        if (caso == 1) {
+          ((document.getElementById("bancoBanesco") as HTMLInputElement).disabled) = false;
+        } else {
+          ((document.getElementById("otrobanco") as HTMLInputElement).disabled) = false;
+        }
+      } else {
+        if (caso == 1) {
+          ((document.getElementById("bancoBanesco") as HTMLInputElement).disabled) = true;
+        } else {
+          ((document.getElementById("otrobanco") as HTMLInputElement).disabled) = true;
+        }
+        this.mensajeSwal.title = "Monto no permitido"
+        this.mensajeSwal.text = "El monto no puede ser negativo";
+        this.mensajeSwal.type = "error"
+        this.mensajeSwal.show();
+      }
+    }
+  }
+
+  validarNumeroTransferencia(valor, caso){
+    var index = this.NumeroTransferencia.findIndex(num => num.Numero_Transferencia === valor);
+    
+    if(index > -1){
+      if (caso == 1) {
+        ((document.getElementById("bancoBanesco") as HTMLInputElement).disabled) = true;
+      } else {
+        ((document.getElementById("otrobanco") as HTMLInputElement).disabled) = true;
+      }
+
+      this.mensajeSwal.title = "Número no permitido"
+        this.mensajeSwal.text = "El número de transferencia digitado ya se encuentra en uso, por favor digite otro para poder continuar";
+        this.mensajeSwal.type = "error"
+        this.mensajeSwal.show();
+    }else{
+      if (caso == 1) {
+        ((document.getElementById("bancoBanesco") as HTMLInputElement).disabled) = false;
+      } else {
+        ((document.getElementById("otrobanco") as HTMLInputElement).disabled) = false;
+      }
+
+      
+    }
   }
 }

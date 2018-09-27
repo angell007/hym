@@ -489,9 +489,9 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label>Cuenta</label>
-                                                                <select id="Id_Destinatario_Cuenta{{i}}" name="Id_Destinatario_Cuenta{{i}}" [(ngModel)]="Envio.Id_Destinatario_Cuenta"
-                                                                    class="form-control" autocomplete="off"
-                                                                    required>
+                                                                <select id="Id_Destinatario_Cuenta{{i}}" name="Id_Destinatario_Cuenta{{i}}"
+                                                                    [(ngModel)]="Envio.Id_Destinatario_Cuenta" class="form-control"
+                                                                    autocomplete="off" required>
                                                                     <option value="">Seleccione una Cuenta</option>
                                                                     <option *ngFor="let Cuenta of Envio.Cuentas"
                                                                         [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
@@ -645,7 +645,8 @@
 
                                     <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
                                         <div class="col-md-10">
-                                            <button id="BotonTransferencia" class="btn btn-info btn-sm btn-block" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                            <button id="BotonTransferencia" class="btn btn-info btn-sm btn-block"
+                                                [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                 (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
                                                 Transferencia
                                             </button>
@@ -1907,15 +1908,14 @@
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario"
-    #ModalEditarDestinatario>
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
     <div class="app-modal-header">
         <h4>Editar Destinatario</h4>
     </div>
     <div class="app-modal-body">
         <form #FormEditarDestinatario="ngForm">
             <div class="row">
-			<div class="col-md-6" hidden>
+                <div class="col-md-6" hidden>
                     <div class="form-group">
                         <label>Identificación</label>
                         <input type="text" placeholder="" class="form-control" id="idDestinatario" name="id" ngModel="{{Detalle_Destinatario.Id_Destinatario}}"
@@ -1925,8 +1925,8 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <select ngModel="{{Detalle_Destinatario.Tipo_Documento}}" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                            (change)="BuscarCNE($event.target.value)">
+                        <select ngModel="{{Detalle_Destinatario.Tipo_Documento}}" class="form-control" id="Tipo_Documento"
+                            name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)">
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2005,7 +2005,7 @@
                                                         maxlength="20" required>
 
                                                     <select disabled class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
-                                                        [(ngModel)]="item.Id_Banco" required >
+                                                        [(ngModel)]="item.Id_Banco" required>
                                                         <option value="">Seleccione Banco</option>
                                                         <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                                                     </select>
@@ -2019,17 +2019,17 @@
                                                 </td>
 
                                             </tr>
-                                            </tbody>
-                                            </table>
-                                            <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col"></th>
-                                                            <th scope="col">Otra Cuenta</th>
-                                                            <th scope="col">Observación</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                        </tbody>
+                                    </table>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Otra Cuenta</th>
+                                                <th scope="col">Observación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <tr>
                                                 <td width="5%">
                                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}"
@@ -2166,7 +2166,7 @@
                                                         maxlength="20" required>
 
                                                     <select disabled class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
-                                                        [(ngModel)]="item.Id_Banco" required >
+                                                        [(ngModel)]="item.Id_Banco" required>
                                                         <option value="">Seleccione Banco</option>
                                                         <option *ngFor="let Banco of item.Bancos; let i=index" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                                                     </select>
@@ -2180,17 +2180,17 @@
                                                 </td>
 
                                             </tr>
-                                            </tbody>
-                                            </table>
-                                            <table>
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col"></th>
-                                                            <th scope="col">Otra Cuenta</th>
-                                                            <th scope="col">Observación</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                        </tbody>
+                                    </table>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Otra Cuenta</th>
+                                                <th scope="col">Observación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <tr>
                                                 <td width="5%">
                                                     <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}"
@@ -2229,7 +2229,8 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button id="BotonGuardarDestinatarioTransferencia" class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button id="BotonGuardarDestinatarioTransferencia" class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
             </button>
         </div>

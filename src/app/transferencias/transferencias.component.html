@@ -119,8 +119,8 @@
                                                     <i class="fa fa-undo"></i>
                                                 </button>
 
-                                                <button *ngIf="!Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)" class="btn btn-default btn-xs"
-                                                    [swal]="{title:'¿ Está seguro que desea desbloquearla ?' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                <button *ngIf="!Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
+                                                    class="btn btn-default btn-xs" [swal]="{title:'¿ Está seguro que desea desbloquearla ?' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
                                                     type="button" style="margin:0;" (confirm)="BloquearTransferencia(transferencia.Id_Transferencia_Destinatario,transferencia.Bloqueo);bloqueoSwal.show();">
                                                     <i class="fa fa-unlock"></i>
                                                 </button>
@@ -311,14 +311,13 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Monto</label>
-                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}"
-                            required>
+                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}" required (blur)="ValidarMonto($event.target.value,1)">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Numero Transferencia</label>
-                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
+                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required (blur)="validarNumeroTransferencia($event.target.value,1)">
                     </div>
                 </div>
             </div>
@@ -326,9 +325,10 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaBanesco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button id="bancoBanesco" type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaBanesco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="CrearTransferencia(FormCrearTransferenciaBanesco, ModalCrearTransferenciaBanesco)">Guardar</button>
-            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaBanesco,FormCrearTransferenciaBanesco)"> Volver</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaBanesco,FormCrearTransferenciaBanesco)">
+                Volver</button>
         </div>
     </div>
 </app-modal-basic>
@@ -374,14 +374,13 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Monto</label>
-                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}"
-                            required>
+                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}" required (blur)="ValidarMonto($event.target.value,2)">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Numero Transferencia</label>
-                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
+                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required (blur)="validarNumeroTransferencia($event.target.value,2)" >
                     </div>
                 </div>
             </div>
@@ -389,9 +388,10 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaOtroBanco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button id="otrobanco" type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaOtroBanco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="CrearTransferencia(FormCrearTransferenciaOtroBanco, ModalCrearTransferenciaOtroBanco)">Guardar</button>
-            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaOtroBanco,FormCrearTransferenciaOtroBanco)"> Volver</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaOtroBanco,FormCrearTransferenciaOtroBanco)">
+                Volver</button>
         </div>
     </div>
 </app-modal-basic>
