@@ -99,7 +99,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Devuelta' ? 'bg-danger text-white' : '' }}">
+                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Si' ? 'bg-danger text-white' : '' }}">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.ReciboCodigo}}</td>
                                             <td>{{transferencia.NombreCajero}}</td>
@@ -109,7 +109,7 @@
                                             <td>{{transferencia.nombreFuncionario}}</td>
                                             <td class="text-center">
                                                 <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
-                                                    (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta)"
+                                                    (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar)"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                     <i class="fa fa-check"></i>
                                                 </button>
@@ -311,7 +311,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Monto</label>
-                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto | currency:'BsS.'}}"
+                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}"
                             required>
                     </div>
                 </div>
@@ -374,7 +374,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Monto</label>
-                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto | currency:'BsS.'}}"
+                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}"
                             required>
                     </div>
                 </div>

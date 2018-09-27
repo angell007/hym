@@ -275,7 +275,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id,numeroCuenta) {
+  RealizarTransferencia(id,numeroCuenta,valor) {
     //this.BloquearTransferencia(id, "No");
    
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
@@ -286,7 +286,7 @@ export class TransferenciasComponent implements OnInit {
       this.CuentaDestino = data.cuenta
       this.Recibe = data.NombreDestinatario
       this.CedulaDestino = data.Cedula
-      this.Monto = data.ValorTransferencia;
+      this.Monto = valor;
 
       if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
@@ -299,14 +299,14 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  verificarBloqueo(id, numeroCuenta){
+  verificarBloqueo(id, numeroCuenta, valorActual){
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
         case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
       }
       this.refrescarVistaPrincipalConsultor();
     });

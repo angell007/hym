@@ -44,7 +44,7 @@ export class CuentasbancariasverComponent implements OnInit {
       params: { id:this.id }
     }).subscribe((data: any) => {
       console.log(data)
-      this.Movimientos = data;
+      this.Movimientos = data.lista;
       this.dtTrigger.next();
     });
 
@@ -98,11 +98,11 @@ export class CuentasbancariasverComponent implements OnInit {
 
   }
   calcularSaldoActual(){
-    this.http.get(this.globales.ruta + '/php/cuentasbancarias/saldo_actual_cuenta.php', {
+    this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
       params: { id: this.id }
     }).subscribe((data: any) => {
-      if(data > 0){
-        this.SaldoActual = data;
+      if(data.total > 0){
+        this.SaldoActual = data.total;
       }else{
         this.SaldoActual = 0;
       }
