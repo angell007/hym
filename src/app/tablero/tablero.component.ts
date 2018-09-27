@@ -35,6 +35,9 @@ export class TableroComponent implements OnInit {
         case '3':
           vari = TablerocajeroComponent
           break;
+        case '5':
+          vari = TableroconsultorComponent
+          break;
       }
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(vari);
       let viewContainerRef = this.tableroDinamico.viewContainerRef;

@@ -8,7 +8,7 @@
 
         <div [ngClass]="sidenavSelected">
             <!-- Side Nav START -->
-            <div class="side-nav" sideBar *ngIf="cajero">
+            <div class="side-nav" sideBar>
                 <div class="side-nav-inner">
                     <div class="side-nav-logo">
                         <a href="" [routerLink]="['/dashboard']">
@@ -240,13 +240,13 @@
             <!-- Side Nav END -->
 
             <!-- Page Container START -->
-            <div class="cajero ? 'page-container' : 'casocajero'">
+            <div class='page-container'>
 
                 <!-- Top Nav START -->
 
                 <div class="header navbar contenido">
                     <div class="header-container">
-                        <ul class="nav-left" *ngIf="cajero">
+                        <ul class="nav-left">
                             <li>
                                 <a class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                                     <i class="fa fa-bars"></i>

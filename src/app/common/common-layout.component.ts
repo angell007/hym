@@ -77,14 +77,15 @@ export class CommonLayoutComponent implements OnInit {
 
     ngOnInit() {
         this.user = JSON.parse(localStorage.User);
-        console.log(window.location.host)
 
         switch (this.user.Id_Cargo) {
             case "3": {
                 this.cajero = false;
+                break;
             }
-            case "4": {
-                this.cajero = false;
+            default:{
+                this.cajero = true;
+                break;
             }
         }
         this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
