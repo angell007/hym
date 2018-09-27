@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card bg-warning">
+            <div class="card card bg-danger">
                 <div class="card-block" style="padding:10px;">
                     <div class="row">
                         <div class="col-md-7">
@@ -50,7 +50,7 @@
             </div>
         </div>
         <!-- <div class="col-md-3">
-            <div class="card bg-danger">
+            <div class="card bg-warning">
                 <div class="card-block" style="padding:10px;">
                     <div class="row">
                         <div class="col-md-7">
@@ -98,7 +98,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : '' }} {{transferencia.Estado == 'Realizada' ? 'bg-success text-white' : '' }}">
+                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Devuelta' ? 'bg-danger text-white' : '' }}">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.ReciboCodigo}}</td>
                                             <td>{{transferencia.NombreCajero}}</td>
@@ -106,7 +106,6 @@
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
                                             <td class="text-center">
-
                                                 <button *ngIf="Bloqueado(transferencia.Bloqueo)" (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta)"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                     <i class="fa fa-check"></i>
@@ -202,7 +201,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <tr *ngFor="let transferencia of transferenciasRealizadas" class="{{transferencia.Estado == 'Devuelta' ? 'bg-danger text-white' : 'bg-success text-white' }}">
+                                        <tr *ngFor="let transferencia of transferenciasRealizadas" class="bg-success text-white">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.ReciboCodigo}}</td>
                                             <td>{{transferencia.NombreCajero}}</td>
@@ -210,8 +209,6 @@
                                             <td class="text-right">{{transferencia.ValorBancario |
                                                 currency:"BsS."}}</td>
                                             <td class="text-center">
-
-
                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                     (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destinatario,ModalDevolucionTransferencia, transferencia.ValorBancario)">
                                                     <i class="fa fa-undo"></i>

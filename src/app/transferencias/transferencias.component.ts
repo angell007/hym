@@ -280,10 +280,10 @@ export class TransferenciasComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombre ;
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda"; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { /*this.BloquearTransferenciaDestinatario(id,"No");*/ this.RealizarTransferencia(id,numeroCuenta); break; }
-        default: { /*this.BloquearTransferenciaDestinatario(id,"No");*/ this.RealizarTransferencia(id,numeroCuenta); break; }
+      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
       }
     });
   }
