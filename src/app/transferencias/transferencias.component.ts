@@ -140,6 +140,13 @@ export class TransferenciasComponent implements OnInit {
 
   }
 
+  refrescarVistaPrincipalConsultor(){
+    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
+      this.transferencias = data.pendientes;
+      this.transferenciasRealizadas = data.realizadas;
+    });
+  }
+
 
   DevolucionTransferencia(id, modal, valorDevolver) {
     this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
@@ -200,19 +207,26 @@ export class TransferenciasComponent implements OnInit {
     datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
       //this.bloqueoSwal.show();
-      this.ActualizarVista();
+      this.refrescarVistaPrincipalConsultor();
     });
   }
 
+  /*
   alertaDesbloqueo(usuario){
-    this.desbloqueoSwal.title = "Desbloqueo"
-    this.desbloqueoSwal.text ='Está transferencia fue bloqueada por '+usuario+' ¿ Está seguro que desea desbloquearla ?' , 
-    this.desbloqueoSwal.type='warning', 
-    this.desbloqueoSwal.showCancelButton= true, 
-    this.desbloqueoSwal.confirmButtonText= 'Si, Desbloquear', 
-    this.desbloqueoSwal.cancelButtonText='No, Dejame Comprobar!'
-    this.desbloqueoSwal.show();
-  }
+
+    this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
+      params: { id: usuario }
+    }).subscribe((data: any) => {
+      this.desbloqueoSwal.title = "Desbloqueo"
+      this.desbloqueoSwal.text ='Está transferencia fue bloqueada por '+data[0].nombreFuncionario+' ¿ Está seguro que desea desbloquearla ?' , 
+      this.desbloqueoSwal.type='warning', 
+      this.desbloqueoSwal.showCancelButton= true, 
+      this.desbloqueoSwal.confirmButtonText= 'Si, Desbloquear', 
+      this.desbloqueoSwal.cancelButtonText='No, Dejame Comprobar!'
+      this.desbloqueoSwal.show();      
+    });
+   
+  }*/
   
   BloquearTransferenciaDestinatario(id, estado) {
     let datos = new FormData();
@@ -226,11 +240,17 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado) {
-    switch (estado) {
-      case "Si": { return false }
-      case "No": { return true }
+  Bloqueado(estado,funcionario) {
+    
+    if(funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario){
+      switch (estado) {
+        case "Si": { return false }
+        case "No": { return true }
+      }      
+    }else{
+      return true
     }
+    
   }
 
   Devuelto(estado) {
@@ -273,6 +293,9 @@ export class TransferenciasComponent implements OnInit {
       } else {
         this.ModalCrearTransferenciaOtroBanco.show();
       }
+      
+      this.refrescarVistaPrincipalConsultor();
+
     });
   }
 
@@ -281,10 +304,11 @@ export class TransferenciasComponent implements OnInit {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
+        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
         case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
         default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta); break; }
       }
+      this.refrescarVistaPrincipalConsultor();
     });
   }
 
@@ -318,9 +342,11 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  /*
-  CancelarBloqueo(id,modal){
+  
+  CancelarBloqueo(id,modal,formulario){
     this.BloquearTransferenciaDestinatario(id,"Si");
-    modal.hide();
-  }*/
+    this.refrescarVistaPrincipalConsultor();
+    formulario.reset();
+    modal.hide();    
+  }
 }
