@@ -54,7 +54,7 @@
                 <tbody>
                     <tr>
                       <td><strong>Saldo Actual:</strong></td>
-                      <td>{{SaldoActual | currency }}</td>
+                      <td>{{SaldoActual | currency:"BsS." }}</td>
                     </tr>    
                   </tbody>
             </table>
@@ -74,23 +74,26 @@
           </div>
 
           <div class="table-responsive margin-top:10px;">
-            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <!--datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"-->
+            <table class="table table-hover table-sm table-striped" >
               <thead>
                 <tr>
                   <th>Fecha</th>
                   <th>Detalle</th>
                   <th>Egreso</th>
                   <th>Ingreso</th>
+                  <th>Saldo</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let movimiento of Movimientos">
-                  <td>{{movimiento.Fecha}}</td>
+                  <td>{{movimiento.Fecha_Creacion | date:"short" }}</td>
                   <td>{{movimiento.Detalle}}</td>
-                  <td *ngIf="movimiento.Tipo==='Egreso'">{{movimiento.Valor | currency}}</td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'">{{movimiento.Valor | currency:"BsS."}}</td>
                   <td *ngIf="movimiento.Tipo==='Egreso'"></td>
                   <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
-                  <td *ngIf="movimiento.Tipo==='Ingreso'">{{movimiento.Valor | currency}}</td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'">{{movimiento.Valor | currency:"BsS."}}</td>
+                  <td>{{movimiento.Saldo | currency:"BsS."}}</td>
                 </tr>
 
               </tbody>

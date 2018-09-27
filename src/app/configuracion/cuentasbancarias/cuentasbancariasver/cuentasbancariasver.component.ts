@@ -40,9 +40,10 @@ export class CuentasbancariasverComponent implements OnInit {
 
   ActualizarVista(){
     this.id = this.route.snapshot.params["id"];
-    this.http.get(this.globales.ruta + '/php/genericos/lista_generales.php', {
-      params: { modulo: ' Movimiento_Cuenta_Bancaria' }
+    this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+      params: { id:this.id }
     }).subscribe((data: any) => {
+      console.log(data)
       this.Movimientos = data;
       this.dtTrigger.next();
     });

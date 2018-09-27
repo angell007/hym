@@ -150,7 +150,7 @@ export class TransferenciasComponent implements OnInit {
 
   DevolucionTransferencia(id, modal, valorDevolver) {
     this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
-      params: { id: id, modulo: "Transferencia" }
+      params: { id: id, modulo: "Transferencia_Destinatario" }
     }).subscribe((data: any) => {
       this.Identificacion = data.Id_Transferencia;
       modal.show();
