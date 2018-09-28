@@ -51,13 +51,13 @@
     <div class="app-modal-body">
         <form #FormBanco="ngForm">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Banco" class="form-control" name="Nombre" ngModel="">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>País</label>
                         <select class="form-control" name="Id_Pais" ngModel required (change)="SeleccionarPais($event.target.value)">
@@ -66,10 +66,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
                         <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Apodo</label>
+                        <input type="text" placeholder="Apodo" class="form-control" name="Apodo" ngModel="" required>
                     </div>
                 </div>
             </div>
@@ -153,20 +159,20 @@
     </div>
     <div class="app-modal-body">
         <form #FormEditarBanco="ngForm">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group" hidden>
                     <label>Identificación</label>
                     <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{infoBanco.Nombre}}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>País</label>
                         <select class="form-control" required name="Id_Pais" ngModel="{{infoBanco.Id_Pais}}">
@@ -175,10 +181,16 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
                         <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="{{infoBanco.Identificador}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Apodo</label>
+                        <input type="text" placeholder="Apodo" class="form-control" name="Apodo" ngModel="{{infoBanco.Apodo}}" required>
                     </div>
                 </div>
             </div>

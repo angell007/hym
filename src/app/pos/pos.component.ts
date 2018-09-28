@@ -442,7 +442,7 @@ export class PosComponent implements OnInit {
     }
     else {
       this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: destinatario, nombre: destinatario } }).subscribe((data: any) => {
-
+          
         if (data.length == 0) {
           this.Envios[index].Numero_Documento_Destino = 0;
           this.CrearDestinatario(destinatario);
