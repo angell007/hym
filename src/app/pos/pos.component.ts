@@ -66,7 +66,7 @@ export class PosComponent implements OnInit {
   public IdRemitente: any[];
   public FormaPago: string;
   public Costo: number;
-  public PrecioSugerido: number;
+  public PrecioSugeridoEfectivo: number;
   public CantidadRecibida: number;
   public CantidadTransferida: number;
   public ValorTotal: number;
@@ -136,7 +136,7 @@ export class PosComponent implements OnInit {
   public MonedaTransferencia: any;
   MonedaTasaCambio: boolean;
   MonedaComision: boolean;
-  ValorTransferencia: any;
+  PrecioSugeridoTransferencia: any;
   Historial = false;
   HistorialCliente = [];
   Giro1 = true;
@@ -190,7 +190,7 @@ export class PosComponent implements OnInit {
   MinEfectivo: any;
   MaxCompra: any;
   MinCompra: any;
-  PrecioSugerido1: any;
+  PrecioSugeridoEfectivo1: any;
   MonedaRecibidaTransferencia: number;
   maximoTransferencia: any;
   minimoTransferencia: any;
@@ -211,6 +211,7 @@ export class PosComponent implements OnInit {
   frameRiff = false;
   urlRiff: string;
   DestinatarioCuenta =[];
+  PrecioSugeridoCompra: any;
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
@@ -379,7 +380,7 @@ export class PosComponent implements OnInit {
 
   ResetValues() {
     //////console.log("resetear valores");
-    this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
+    this.PrecioSugeridoEfectivo = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
   }
@@ -636,11 +637,11 @@ export class PosComponent implements OnInit {
     if (this.MonedaRecibida != this.MonedaTransferencia) {
       switch (accion) {
         case "transferir":
-          this.CantidadTransferida = value * this.PrecioSugerido;
+          this.CantidadTransferida = value * this.PrecioSugeridoEfectivo;
           break;
 
         case "recibir":
-          this.CantidadRecibida = value / this.PrecioSugerido;
+          this.CantidadRecibida = value / this.PrecioSugeridoEfectivo;
           break;
       }
     }
@@ -652,9 +653,9 @@ export class PosComponent implements OnInit {
     var origen = ((document.getElementById("Moneda_Origen") as HTMLInputElement).value);
 
     if (parseInt(origen) > 0) {
-      this.PrecioSugerido = this.Monedas[(parseInt(origen) - 1)].Sugerido_Venta;
+      this.PrecioSugeridoEfectivo = this.Monedas[(parseInt(origen) - 1)].Sugerido_Venta;
     } else {
-      this.PrecioSugerido = 0;
+      this.PrecioSugeridoEfectivo = 0;
     }
   }
 
@@ -904,16 +905,21 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: value }
     }).subscribe((data: any) => {
-      this.PrecioSugerido = data.Dependencia[4].Valor;
-      this.ValorTransferencia = data.Dependencia[13].Valor;
-      this.MonedaDestino = data.Moneda[0].Nombre
       this.MaxEfectivo = data.Dependencia[0].Valor;
       this.MinEfectivo = data.Dependencia[1].Valor;
-      this.MaxCompra = data.Dependencia[5].Valor;
-      this.MinCompra = data.Dependencia[6].Valor;
-      this.PrecioSugerido1 = data.Dependencia[4].Valor;
-      this.minimoTransferencia = data.Dependencia[2].Valor;
-      this.maximoTransferencia = data.Dependencia[3].Valor;
+      this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
+      this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
+
+      this.MaxCompra = data.Dependencia[3].Valor;
+      this.MinCompra = data.Dependencia[4].Valor;
+      this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+      
+      this.maximoTransferencia = data.Dependencia[6].Valor;
+      this.minimoTransferencia = data.Dependencia[7].Valor;      
+      this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+      this.MonedaDestino = data.Moneda[0].Nombre
+
+
     });
   }
 
@@ -922,7 +928,7 @@ export class PosComponent implements OnInit {
     switch (this.Venta) {
       case true: { //vendo
         if (parseInt(this.MaxEfectivo) < parseInt(valor)) {
-          this.PrecioSugerido = this.PrecioSugerido1;
+          this.PrecioSugeridoEfectivo = this.PrecioSugeridoEfectivo1;
           this.confirmacionSwal.title = "Error"
           this.confirmacionSwal.text = "El precio sugerido supera el máximo de efectivo"
           this.confirmacionSwal.type = "error"
@@ -933,7 +939,7 @@ export class PosComponent implements OnInit {
       case false: {
         //compro
         if (parseInt(this.MaxCompra) < parseInt(valor)) {
-          this.PrecioSugerido = this.PrecioSugerido1;
+          this.PrecioSugeridoEfectivo = this.PrecioSugeridoEfectivo1;
           this.confirmacionSwal.title = "Error"
           this.confirmacionSwal.text = "El precio sugerido supera el máximo de compra"
           this.confirmacionSwal.type = "error"
@@ -968,9 +974,9 @@ export class PosComponent implements OnInit {
         var divisor = 1;
         if (parseInt(value) > 0) {
           if (this.MonedaTasaCambio == true) {
-            divisor = this.PrecioSugerido;
+            divisor = this.PrecioSugeridoEfectivo;
           } else {
-            divisor = this.ValorTransferencia;
+            divisor = this.PrecioSugeridoTransferencia;
           }
 
           this.entregar = (parseInt(value) / divisor);
@@ -987,9 +993,9 @@ export class PosComponent implements OnInit {
         var divisor = 1;
         if (parseInt(value) > 0) {
           if (this.MonedaTasaCambio == true) {
-            divisor = this.PrecioSugerido;
+            divisor = this.PrecioSugeridoEfectivo;
           } else {
-            divisor = this.ValorTransferencia;
+            divisor = this.PrecioSugeridoTransferencia;
           }
           this.cambiar = (parseInt(value) * divisor);
           (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
@@ -1501,11 +1507,17 @@ export class PosComponent implements OnInit {
 
   ValidarTransferencia(value) {
     if (parseInt(value) > this.maximoTransferencia) {
-      this.PrecioSugerido = this.PrecioSugerido1;
+      this.PrecioSugeridoEfectivo = this.PrecioSugeridoEfectivo1;
       this.confirmacionSwal.title = "Error";
       this.confirmacionSwal.text = "La tasa de cambio supera el permitido"
       this.confirmacionSwal.type = "error"
       this.confirmacionSwal.show();
+      if (this.Recibe == 'Cliente') {
+        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+      } else {
+        (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+      }       
+      
     } else {
       var monedaOrigen = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;

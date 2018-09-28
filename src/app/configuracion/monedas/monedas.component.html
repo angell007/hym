@@ -90,7 +90,7 @@
         </div>
         [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'"
       -->
-        <div class="col-md-4" *ngFor="let item of Campos; let i = index">
+        <div *ngFor="let item of Campos; let i = index" class="{{item.Columna}} {{item.Color}}">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
             <input type="number" class="form-control" name="Diario" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel=0
@@ -182,7 +182,7 @@
   </div>
   <div class="app-modal-footer ">
     <div class="text-right">
-      <button *ngIf="Boton" type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarMoneda(FormMoneda, ModalMoneda)">Guardar</button>
     </div>
   </div>
@@ -230,17 +230,34 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <!--<div class="col-md-12">
+      <!--<div class="row">
+        <div class="col-md-12">
           <h5 *ngIf="titulo(item.Titulo)"> <span class="text-info"> {{item.Titulo}} </span></h5>
-        </div>-->
+        </div>
         <div class="col-md-4" *ngFor="let item of Campos; let i = index">
           <div class="form-group">
             <label>{{item.Campo_Visual}}</label>
             <input class="form-control" name="Diario_{{i}}" ngModel="{{item.Valor}}" >
           </div>
         </div>
-      </div>
+
+        
+      </div>-->
+
+      <div class="row">
+          <!--<div class="col-md-12">
+            <h5 *ngIf="titulo(item.Titulo)"> <span class="text-info"> {{item.Titulo}} </span></h5>
+          </div>
+          [checked]="Moneda.TransfEliminar == '1' ? '1' : '0'"
+        -->
+          <div *ngFor="let item of Campos; let i = index" class="{{item.Columna}} {{item.Color}}">
+            <div class="form-group">
+              <label>{{item.Campo_Visual}}</label>
+              <input type="number" class="form-control" name="Diario_{{i}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" ngModel="{{item.Valor}}"
+               >
+            </div>
+          </div>
+        </div>
 
       <h3>Modulos</h3>
       <div class="row">

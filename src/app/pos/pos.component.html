@@ -210,9 +210,13 @@
     
                                                 <div class="col-md-4">
                                                     <label class="{{ Venta === false ? 'text-info' : 'text-success' }}" >Tasa Cambio</label>
-                                                    <input type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido"
+                                                    <input *ngIf="Venta" type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido"
                                                         (change)="validarPrecioSugerido($event.target.value)" name="Tasa"
-                                                        [(ngModel)]="PrecioSugerido">
+                                                        [(ngModel)]="PrecioSugeridoEfectivo">
+                                                        <!--PrecioSugeridoCompra : PrecioSugeridoEfectivo -->
+                                                    <input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" id="Precio_Sugerido"
+                                                        (change)="validarPrecioSugerido($event.target.value)" name="Tasa"
+                                                        [(ngModel)]="PrecioSugeridoCompra">
                                                 </div>
     
                                                 <div class="col-md-4">
@@ -550,7 +554,7 @@
                                                             <div class="form-group text-center">
                                                                 <label class="transferencia">Tasa de Cambio</label>
                                                                 <input id="Tasa_Cambio_Transferencia" type="text" class="form-control"
-                                                                    name="Tasa_Cambio" [(ngModel)]="PrecioSugerido" (blur)="ValidarTransferencia($event.target.value)">
+                                                                    name="Tasa_Cambio" [(ngModel)]="PrecioSugeridoTransferencia" (blur)="ValidarTransferencia($event.target.value)">
                                                             </div>
                                                             <div class="form-group text-center" *ngIf="MonedaComision">
                                                                 <label>Comisión</label>
@@ -645,24 +649,24 @@
     
                                         <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
                                             <div class="col-md-10">
-                                                <button id="BotonTransferencia" class="btn btn-primary btn-sm"
+                                                <button id="BotonTransferencia" class="btn btn-primary btn-sm btn-block mrg-top-10"
                                                     [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                     (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
                                                     Transferencia
                                                 </button>
                                             </div>
                                             <div class="col-md-2">
-                                                <button class="btn btn-primary btn-sm" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                                <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                                             </div>
                                         </div>
                                         <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
                                             <div class="col-md-10">
-                                                <button id="BotonMovimiento" class="btn btn-primary btn-sm" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                                <button id="BotonMovimiento" class="btn btn-primary btn-sm btn-block mrg-top-10"  [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                     (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
                                                 </button>
                                             </div>
                                             <div class="col-md-2">
-                                                <button class="btn btn-primary btn-sm" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                                <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                                             </div>
                                         </div>
                                     </div>
