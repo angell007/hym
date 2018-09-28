@@ -12,7 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-pos',
   templateUrl: './pos.component.html',
-  styleUrls: ['./pos.component.css']
+  styleUrls: ['./pos.component.scss']
 })
 export class PosComponent implements OnInit {
   
