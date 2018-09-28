@@ -140,6 +140,10 @@ export class MonedasComponent implements OnInit {
 
   }
 
+  CambiarValoresCampos(pos,valor){
+    this.Campos[pos].Valor = valor;
+  }
+
   GuardarMoneda(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let valor = JSON.stringify(this.Campos);
