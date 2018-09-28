@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
-
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pos',
@@ -15,7 +15,7 @@ import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./pos.component.css']
 })
 export class PosComponent implements OnInit {
-
+  
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
   public Remitentes: any[] = [];
@@ -42,8 +42,9 @@ export class PosComponent implements OnInit {
     Destino: '',
     Numero_Documento_Destino: '',
     Nombre: '',
-    Id_Cuenta_Destino: '',
-    Valor_Transferencia: '',
+    Id_Destinatario_Cuenta: '',
+    Valor_Transferencia_Bolivar: '',
+    Valor_Transferencia_Peso: '',
     Cuentas: []
   }];
   public CuentasDestinatario: any[];
@@ -102,8 +103,20 @@ export class PosComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('ModalTrasladoEditar') ModalTrasladoEditar: any;
   @ViewChild('ModalServicioEditar') ModalServicioEditar: any;
-  @ViewChild('ModalGiroEditar') ModalGiroEditar: any;  
-  
+  @ViewChild('ModalGiroEditar') ModalGiroEditar: any;
+  @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
+  @ViewChild('ModalCrearDestinatarioTransferencia') ModalCrearDestinatarioTransferencia: any;
+  @ViewChild('ModalAnularTransferencia') ModalAnularTransferencia: any;
+
+  @ViewChild('FormMoneda') FormMoneda: any;
+  @ViewChild('FormTransferencia') FormTransferencia: any;
+  @ViewChild('FormGiro') FormGiro: any;
+  @ViewChild('FormTraslado') FormTraslado: any;
+  @ViewChild('FormCorresponsal') FormCorresponsal: any;
+  @ViewChild('FormServicio') FormServicio: any;
+
+
+
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -133,7 +146,7 @@ export class PosComponent implements OnInit {
   dtTrigger = new Subject();
   dtOptions1: DataTables.Settings = {};
   dtTrigger1 = new Subject();
-  
+
 
   dtOptionsTraslado: DataTables.Settings = {};
   dtTriggerTraslado = new Subject();
@@ -164,33 +177,72 @@ export class PosComponent implements OnInit {
   Servicio2 = false;
   Servicio1 = true;
   Servicios = [];
-  Servicio =[];
+  Servicio = [];
   Giro = [];
   idGiro: any;
   Remitente = [];
-  Destinatario= [];
+  Destinatario = [];
   Tercero = [];
   CuentaBancaria = [];
+  defectoDestino: string;
+  defectoOrigen: string;
+  MaxEfectivo: any;
+  MinEfectivo: any;
+  MaxCompra: any;
+  MinCompra: any;
+  PrecioSugerido1: any;
+  MonedaRecibidaTransferencia: number;
+  maximoTransferencia: any;
+  minimoTransferencia: any;
+  ActivarEdicion = false;
+  Detalle_Destinatario = [];
+  Lista_Destinatarios = [];
+  Identificacion: any;
+  TipoDocumentoExtranjero = [];
+  posiciontemporal: any;
+  credito = false;
+  consignacion = false;
+  efectivo = true;
+  Id_Destinatario: any;
+  frame = false;
+  urlCne: string;
+  botonDestinatario = false;
+  idTransferencia: any;
+  frameRiff = false;
+  urlRiff: string;
+  DestinatarioCuenta =[];
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
 
   ngOnInit() {
 
     this.actualizarVista();
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    this.IdOficina = 5;
-    this.IdCaja = 4;
+    this.IdOficina = JSON.parse(localStorage['Oficina']);
+    this.IdCaja = JSON.parse(localStorage['Caja']);
     //this.Costo = 1;
     this.Estado = "Enviado";
     this.FormaPago = "Efectivo";
+    this.MonedaRecibidaTransferencia = 2;
+    this.Bancos_Pais(2, 0);
+    this.Origen(2);
+    this.bancosDestinatarios();
   }
+
+  bancosDestinatarios(){
+    this.http.get(this.globales.ruta + '/php/destinatarios/cuenta_bancaria_destinatario.php').subscribe((data: any) => {
+      this.DestinatarioCuenta = data;
+    });
+  }
+
 
   ngAfterViewInit() {
     if (this.recibeParaDefault == "Transferencia") {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
+
   }
 
   search_destino = (text$: Observable<string>) =>
@@ -223,6 +275,14 @@ export class PosComponent implements OnInit {
     for (let i = 0; i < tot; i++) {
       var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
       document.getElementById(id2).style.display = 'none';
+
+      this.volverCambioEfectivo();
+      this.volverReciboTransferencia();
+      this.volverReciboGiro();
+      this.volverTraslado();
+      this.volverServicio();
+      this.volverReciboServicio();
+
     }
     document.getElementById(id).style.display = 'block';
   }
@@ -232,7 +292,81 @@ export class PosComponent implements OnInit {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
+      this.ActivarEdicion = true;
+    } else {
+      this.ActivarEdicion = false;
+      //this.ModalDestinatario.show();
     }
+  }
+
+  CrearDestinatrioModal(value, pos) {
+    this.posiciontemporal = pos;
+    switch (this.ActivarEdicion) {
+      case false: {
+        var longitud = this.LongitudCarateres(value)
+        if (longitud > 6) {
+          this.ModalCrearDestinatarioTransferencia.show();
+          this.Id_Destinatario = value;
+          this.Lista_Destinatarios = [{
+            Id_Pais: '2',
+            Id_Banco: '',
+            Bancos: [],
+            Id_Tipo_Cuenta: '',
+            Numero_Cuenta: '',
+            Otra_Cuenta: '',
+            Observacion: ''
+          }];
+        }
+        this.Bancos_Pais(2, 0);
+
+      }
+    }
+  }
+
+  LongitudCarateres(i) {
+    return parseInt(i.length);
+  }
+
+  BuscarCNE(valor) {
+
+    var cedula = this.Id_Destinatario;
+    if(cedula == undefined){      
+      cedula = (document.getElementById("idDestinatario" ) as HTMLInputElement).value;
+    }
+
+    switch (valor) {
+      case "V": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
+        break;
+      }
+      case "E": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
+        break;
+      }
+      default: {
+        this.frame = false;
+      }
+    }
+  }
+
+  buscarRiff() {
+    this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
+    this.frameRiff = !this.frameRiff;
+  }
+
+  recargarBancos(i, id) {
+    this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: id } }).subscribe((data: any) => {
+      this.Envios[i].Cuentas = data.Numero_Cuenta;
+      this.ActivarEdicion = true;
+    });
+  }
+
+  recargarDestinatario() {
+    this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
+      this.Destinatarios = data;
+    });
   }
 
   OcultarFormulario(modal) {
@@ -244,7 +378,7 @@ export class PosComponent implements OnInit {
   }
 
   ResetValues() {
-    //console.log("resetear valores");
+    //////console.log("resetear valores");
     this.PrecioSugerido = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
@@ -272,7 +406,16 @@ export class PosComponent implements OnInit {
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
-        //console.log(data);      
+        //////console.log(data);
+        this.TipoPagoTransferencia("Efectivo");
+        this.Transferencia1 = true;
+        this.Transferencia2 = false;
+
+        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+          this.Transferencia = data;
+          this.dtTrigger1.next();
+        });
+
       });
   }
 
@@ -311,13 +454,43 @@ export class PosComponent implements OnInit {
             Destino: '',
             Numero_Documento_Destino: '',
             Nombre: '',
-            Id_Cuenta_Destino: '',
-            Valor_Transferencia: '',
+            Id_Destinatario_Cuenta: '',
+            Valor_Transferencia_Bolivar: 0,
+            Valor_Transferencia_Peso: 0,
             Cuentas: []
           });
         }
       });
     }
+  }
+
+  AutoSumaBolivares(pos, valor) {
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Bolivar = (this.Envios[pos].Valor_Transferencia_Peso / parseInt(divisor));
+    this.AutoSuma(pos);
+  }
+
+  AutoSumaPeso(pos, valor) {
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Peso = (this.Envios[pos].Valor_Transferencia_Bolivar * parseInt(divisor));
+    this.AutoSuma(pos);
+  }
+
+  AutoSuma(pos) {
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    var sumapeso = 0;
+    var sumabolivar = 0;
+    this.Envios.forEach((element, index) => {
+      sumapeso += element.Valor_Transferencia_Peso;
+      sumabolivar += element.Valor_Transferencia_Bolivar;
+    });
+
+    this.cambiar = sumapeso;
+    this.entregar = sumabolivar.toFixed(2);
+    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
+    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
   }
 
   EliminarDestinatario(index) {
@@ -333,13 +506,13 @@ export class PosComponent implements OnInit {
     }
     if (remitente.length < 5 && remitente.length > 0) {
       this.warnSwal.show();
-      //console.log("número de documento inconrrecto.");      
+      //////console.log("número de documento inconrrecto.");      
     }
     else {
       this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Transferencia_Remitente', id: remitente } }).subscribe((data: any) => {
-        //console.log("REMITENTE");
+        //////console.log("REMITENTE");
 
-        //console.log(data);
+        //////console.log(data);
         if (data.length == 0) {
           this.NumeroDocumentoR = 0;
           this.CrearRemitente(remitente);
@@ -401,21 +574,13 @@ export class PosComponent implements OnInit {
     this.Cuentas.splice(index, 1);
   }
 
-  GuardarDestinatario(formulario: NgForm) {
-    for (let i = 0; i < this.Cuentas.length; ++i) {
-      this.Cuentas[i].Id_Destinatario = formulario.value.Id_Destinatario;
-    }
-    let destinatario = formulario.value;
-    destinatario['Detalle'] = this.Detalle;
-    let info = JSON.stringify(destinatario);
-    let cuentas = JSON.stringify(this.Cuentas);
+  GuardarDestinatario(formulario: NgForm, modal) {
+
+    let info = JSON.stringify(formulario.value);
+    let cuentas = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("destinatario", cuentas);
-
-    console.log(cuentas);
-
-    //console.log(destinatario);
 
     this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
       .catch(error => {
@@ -424,16 +589,22 @@ export class PosComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //console.log(data);           
-        this.ModalDestinatario.hide();
         this.destinatarioCreadoSwal.show();
-        this.LlenarValoresDestinatario(formulario.value.Id_Destinatario, this.Indice);
         formulario.reset();
-        let textArea: any = document.getElementById('detalleText');
-        textArea.value = '';
-        this.Cedula = null;
+        modal.hide();
+        this.recargarDestinatario();
+        this.Lista_Destinatarios = [{
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        }];
+
       });
-    this.actualizarVista();
+    //this.actualizarVista();
   }
 
   GuardarRemitente(formulario: NgForm) {
@@ -448,7 +619,7 @@ export class PosComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //console.log(data);
+        //////console.log(data);
         this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
         this.ModalRemitente.hide();
         this.remitenteCreadoSwal.show();
@@ -461,7 +632,7 @@ export class PosComponent implements OnInit {
   }
 
   RealizarCambio(value, accion) {
-    //console.log(value);    
+    //////console.log(value);    
     if (this.MonedaRecibida != this.MonedaTransferencia) {
       switch (accion) {
         case "transferir":
@@ -541,6 +712,14 @@ export class PosComponent implements OnInit {
       this.dtTrigger.next();
     });
 
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
+      this.TipoDocumentoExtranjero = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
+      this.Cuentas = data;
+    });
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -613,7 +792,7 @@ export class PosComponent implements OnInit {
       this.LimiteOficina = data.Limite_Transferencia;
     });
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
       this.Transferencia = data;
       this.dtTrigger1.next();
     });
@@ -718,16 +897,51 @@ export class PosComponent implements OnInit {
       this.CuentaBancaria = data;
     });
 
+
   }
 
   CambiarTasa(value) {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: value }
     }).subscribe((data: any) => {
-      this.PrecioSugerido = data.Dependencia[0].Valor;
+      this.PrecioSugerido = data.Dependencia[4].Valor;
       this.ValorTransferencia = data.Dependencia[13].Valor;
       this.MonedaDestino = data.Moneda[0].Nombre
+      this.MaxEfectivo = data.Dependencia[0].Valor;
+      this.MinEfectivo = data.Dependencia[1].Valor;
+      this.MaxCompra = data.Dependencia[5].Valor;
+      this.MinCompra = data.Dependencia[6].Valor;
+      this.PrecioSugerido1 = data.Dependencia[4].Valor;
+      this.minimoTransferencia = data.Dependencia[2].Valor;
+      this.maximoTransferencia = data.Dependencia[3].Valor;
     });
+  }
+
+  validarPrecioSugerido(valor) {
+
+    switch (this.Venta) {
+      case true: { //vendo
+        if (parseInt(this.MaxEfectivo) < parseInt(valor)) {
+          this.PrecioSugerido = this.PrecioSugerido1;
+          this.confirmacionSwal.title = "Error"
+          this.confirmacionSwal.text = "El precio sugerido supera el máximo de efectivo"
+          this.confirmacionSwal.type = "error"
+          this.confirmacionSwal.show();
+        }
+        break;
+      }
+      case false: {
+        //compro
+        if (parseInt(this.MaxCompra) < parseInt(valor)) {
+          this.PrecioSugerido = this.PrecioSugerido1;
+          this.confirmacionSwal.title = "Error"
+          this.confirmacionSwal.text = "El precio sugerido supera el máximo de compra"
+          this.confirmacionSwal.type = "error"
+          this.confirmacionSwal.show();
+        }
+        break;
+      }
+    }
   }
 
   Origen(moneda) {
@@ -747,19 +961,12 @@ export class PosComponent implements OnInit {
 
   RealizarCambioMoneda(value, tipo) {
 
-    //console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
-    var suma = 0;
-    this.Envios.forEach(element => {
-      suma += element.Valor_Transferencia;
-    });
+    //////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
+    switch (tipo) {
+      case 'cambia': {
 
-    if (this.entregar > suma) {
-      this.entregar = suma;
-    } else {
-      switch (tipo) {
-        case 'cambia': {
-
-          var divisor = 1;
+        var divisor = 1;
+        if (parseInt(value) > 0) {
           if (this.MonedaTasaCambio == true) {
             divisor = this.PrecioSugerido;
           } else {
@@ -767,28 +974,127 @@ export class PosComponent implements OnInit {
           }
 
           this.entregar = (parseInt(value) / divisor);
-          this.entregar = this.entregar.toFixed(2);
-          break;
+          this.entregar = this.entregar.toFixed.toFixed(2);
+          (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+        } else {
+          if (this.entregar == 0 || this.entregar == "" || this.entregar == undefined) {
+            (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
+          }
         }
-        case 'entrega': {
-          var divisor = 1;
+        break;
+      }
+      case 'entrega': {
+        var divisor = 1;
+        if (parseInt(value) > 0) {
           if (this.MonedaTasaCambio == true) {
             divisor = this.PrecioSugerido;
           } else {
             divisor = this.ValorTransferencia;
           }
           this.cambiar = (parseInt(value) * divisor);
-          break;
+          (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+        } else {
+          if (this.cambiar == 0 || this.cambiar == "" || this.cambiar == undefined) {
+            (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
+          }
         }
+        break;
       }
     }
+  }
+
+  RealizarCambioMonedaTransferencia(value, tipo) {
+    switch (tipo) {
+      case 'cambia': {
+        var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+        if (parseInt(value) > 0) {
+          this.entregar = (parseInt(value) / parseInt(divisor));
+          this.entregar = this.entregar.toFixed(2);
+          if (this.Envios.length > 0) {
+            //reviso si hay valores para realizar la suma
+            var suma = 0;
+            this.Envios.forEach((element, index) => {
+              suma += element.Valor_Transferencia_Peso;
+            });
+            if (suma == 0) {
+              ////console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
+              this.Envios[0].Valor_Transferencia_Peso = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
+              this.NuevoDestinatario(0, 'Peso')
+            }
+
+             /*
+            console.log("Id_Destinatario_Cuenta" + pos);
+            
+            var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
+            
+           
+            if (valor == "") {
+              
+              this.confirmacionSwal.title = "Valores vacios";
+              this.confirmacionSwal.text = "Por favor digite los valores del destinatario para poder continuar";
+              this.confirmacionSwal.type = "error";
+              this.confirmacionSwal.show();
+
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+              } else {
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+              }
+            }*/
+            
+            if (suma == parseInt(value)) {
+
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+              } else {
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+              }
+
+            } else {
+              this.confirmacionSwal.title = "Valores no coinciden";
+              this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+              this.confirmacionSwal.type = "error";
+              this.confirmacionSwal.show();
+              if (this.Recibe == 'Cliente') {
+                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+              } else {
+                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+              }
+            }
 
 
+
+          }
+        }
+        break;
+      }
+      case 'entrega': {
+        var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+        if (parseInt(value) > 0) {
+          this.cambiar = (parseInt(value) * parseInt(divisor));
+          if (this.Envios.length > 0) {
+            //reviso si hay valores para realizar la suma
+            var suma = 0;
+            this.Envios.forEach((element, index) => {
+              suma += element.Valor_Transferencia_Bolivar;
+            });
+            if (suma == 0) {
+              this.Envios[0].Valor_Transferencia_Bolivar = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+              this.NuevoDestinatario(0, 'Bolivar')
+            }
+          }
+        }
+        break;
+      }
+    }
   }
 
   ObtenerVueltos(valor) {
-    var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
-    this.vueltos = valor - parseInt(plata);
+    if (parseInt(valor) > 0) {
+      (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+      var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
+      this.vueltos = valor - parseInt(plata);
+    }
   }
 
   CambiarVista(tipo) {
@@ -798,12 +1104,16 @@ export class PosComponent implements OnInit {
         this.Venta = false;
         this.TextoBoton = "Comprar"
         this.Tipo = "Compra";
+        this.defectoDestino = "2";
+        this.defectoOrigen = ""
         break;
       }
       case "Venta": {
         this.Venta = true;
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
+        this.defectoDestino = "";
+        this.defectoOrigen = "2"
         break;
       }
       case "Transferencia": {
@@ -878,73 +1188,360 @@ export class PosComponent implements OnInit {
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.transferenciaExitosaSwal.show();
-        this.Envios = [{
-          Destino: '',
-          Numero_Documento_Destino: '',
-          Nombre: '',
-          Id_Cuenta_Destino: '',
-          Valor_Transferencia: '',
-          Cuentas: []
-        }];
+        this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
+
+        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+          this.Transferencia = data;
+          //this.dtTrigger1.next();
+        });
+
+
       });
+
+  }
+
+
+  EditarDestinatario(id, pos) {
+    this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+      ////console.log(data.destinatario);
+      this.Detalle_Destinatario = data.destinatario;
+      this.Lista_Destinatarios = data.DestinatarioCuenta;
+
+      for (var i = 0; i < this.Lista_Destinatarios.length; i++) {
+        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais, i);
+      }
+
+      this.Identificacion = id;
+      //this.AgregarFila();
+      this.Bancos_Pais(2, 1);
+      this.ModalEditarDestinatario.show();
+      this.posiciontemporal = pos;
+    });
+  }
+
+
+  /*agregarDinamico(i, valor) {
+    var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
+
+    if (parseInt(idpais) == 2) {
+      var longitud = this.LongitudCarateres(valor);
+      if (longitud == 20) {
+        var pos = parseInt(i) + 1;
+        if (this.Lista_Destinatarios[pos] == undefined) {
+          this.AgregarFila();
+          this.Bancos_Pais(2, pos);
+          this.botonDestinatario = true;
+        }
+      } else {
+        this.botonDestinatario = false;
+        this.confirmacionSwal.title = "Banco no valido";
+        this.confirmacionSwal.text = "Digite correctamente el número del banco";
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      }
+    } else {
+      var pos = parseInt(i) + 1;
+      if (this.Lista_Destinatarios[pos] == undefined) {
+        this.AgregarFila();
+        this.Bancos_Pais(2, pos);
+      }
+    }
+  } */
+
+  validarBanco(i, valor) {
+    var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
+
+    if (parseInt(idpais) == 2) {
+      var longitud = this.LongitudCarateres(valor);
+      if (longitud != 20) {
+        this.botonDestinatario = false;
+        this.confirmacionSwal.title = "Banco no valido";
+        this.confirmacionSwal.text = "Digite correctamente el número del banco";
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      }
+
+      var indice = this.DestinatarioCuenta.findIndex(x => x.Numero_Cuenta === valor);
+      if(indice > -1){
+        this.confirmacionSwal.title = "Cuenta Repetida";
+        this.confirmacionSwal.text = "Esta cuenta fue creada anteriormente y le pertenece a " + this.DestinatarioCuenta[indice].Nombre;
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+        ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = true;
+      }else{
+        ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = false;
+      }
+    }
+  }
+
+  AgregarFila(i, valor) {
+
+    var idpais = ((document.getElementById("Id_Banco" + i) as HTMLInputElement).value)
+
+    if (valor != "" && idpais != "") {
+      var pos = parseInt(i) + 1;
+      if (this.Lista_Destinatarios[pos] == undefined) {
+        this.Lista_Destinatarios.push({
+          Id_Pais: 2,
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        })
+
+        this.Bancos_Pais(2, pos);
+      }
+    }
+
+  }
+
+  Bancos_Pais(Pais, i) {
+    this.http.get(this.globales.ruta + 'php/genericos/bancos_pais.php', { params: { id: Pais } }).subscribe((data: any) => {
+      this.Lista_Destinatarios[i].Bancos = data;
+    });
+  }
+
+  verificarChequeo(pos, check) {
+    var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
+    /*//console.log("checkeo_" + pos);
+    //console.log(check)    
+    //console.log(pos);
+    //console.log(checkeo);*/
+
+    switch (check) {
+      case true: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        break;
+      }
+      case false: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        break;
+      }
+    }
+
+  }
+
+  GuardarDestinatarioEditar(formulario: NgForm, modal: any) {
+    var identificacion = ((document.getElementById("Id_Destinatario") as HTMLInputElement).value);
+    let info = JSON.stringify(formulario.value);
+    let bancos = JSON.stringify(this.Lista_Destinatarios);
+    let datos = new FormData();
+    this.OcultarFormulario(modal);
+    datos.append("modulo", 'Destinatario');
+    datos.append("datos", info);
+    datos.append("destinatario", bancos);
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        this.Lista_Destinatarios = [{
+          Id_Pais: '',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        }];
+
+        this.actualizarVista();
+        this.AutoCompletarDestinatario(identificacion, this.posiciontemporal)
+        //this.recargarBancos(this.posiciontemporal,identificacion)
+        this.confirmacionSwal.title = "Actualización exitosa"
+        this.confirmacionSwal.text = "Se ha actualizado correctamente el destinatario"
+        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.show();
+        // this.posicionTemporal= pos
+
+      });
+
+  }
+
+  codigoBanco(seleccion, posicion, texto) {
+
+    //console.log(seleccion + " , " + posicion + " , " + texto);
+    var pais = ((document.getElementById("Id_Pais" + posicion) as HTMLInputElement).value);
+    //console.log("pais = " + 2);
+
+    if (pais == "2") {
+      switch (texto) {
+        case "check": {
+          var buscarBanco = this.Bancos.findIndex(x => x.Id_Banco === seleccion)
+          this.Lista_Destinatarios[posicion].Numero_Cuenta = this.Bancos[buscarBanco].Identificador;
+          break;
+        }
+        case "input": {
+          //console.log("soy input");
+
+          var cadena = seleccion.substring(0, 4);
+          var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
+          if (buscarBanco > -1) {
+            this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
+          } else {
+            this.Lista_Destinatarios[posicion].Id_Banco = '';
+          }
+          break;
+        }
+      }
+    }
+
+  }
+
+  limpiarFormularios() {
+    this.FormMoneda.reset();
+    this.FormTransferencia.reset();
+    this.FormGiro.reset();
+    this.FormTraslado.reset();
+    this.FormCorresponsal.reset();
+    this.FormServicio.reset();
   }
 
   volverCambioEfectivo() {
     this.Cambios1 = true;
     this.Cambios2 = false;
+    //this.limpiarFormularios();
   }
 
   volverReciboTransferencia() {
     this.Transferencia1 = true;
     this.Transferencia2 = false;
+    //this.limpiarFormularios();   
   }
 
   volverReciboGiro() {
     this.Giro1 = true;
     this.Giro2 = false;
+    //this.limpiarFormularios();
   }
 
   volverTraslado() {
     this.Traslado1 = true;
     this.Traslado2 = false;
+    //this.limpiarFormularios();
   }
 
-  volverServicio(){
+  volverServicio() {
     this.Servicio1 = true;
     this.Servicio2 = false;
+    //this.limpiarFormularios();
   }
 
   volverReciboServicio() {
     this.Servicio1 = true;
     this.Servicio2 = false;
+    //this.limpiarFormularios();
   }
 
-  NuevoDestinatario(pos) {
+  NuevoDestinatario(pos, moneda) {
 
     var index = pos + 1;
     var limite = parseInt(this.LimiteOficina);
 
-    var suma = 0;
-    if (this.Envios.length == limite) {
-      this.Envios.forEach(element => {
-        suma += element.Valor_Transferencia;
-      });
-      this.entregar = suma;
-      this.RealizarCambioMoneda(suma, 'entrega')
-    } else {
-      if (this.Envios[index] == undefined) {
-        this.Envios.push({
-          Destino: '',
-          Numero_Documento_Destino: '',
-          Nombre: '',
-          Id_Cuenta_Destino: '',
-          Valor_Transferencia: '',
-          Cuentas: []
-        });
+    switch (moneda) {
+
+      case 'Bolivar': {
+        var suma = 0;
+        var totalBolivar = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+        if (this.Envios.length != limite) {
+
+          if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Valor_Transferencia_Peso > 0 && this.Envios[pos].Valor_Transferencia_Bolivar > 0)) {
+            this.Envios.push({
+              Destino: '',
+              Numero_Documento_Destino: '',
+              Nombre: '',
+              Id_Destinatario_Cuenta: '',
+              Valor_Transferencia_Bolivar: 0,
+              Valor_Transferencia_Peso: 0,
+              Cuentas: []
+            });
+
+            if (this.Recibe == 'Cliente') {
+              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+            } else {
+              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+            }
+          }
+        }
+        break;
+      }
+
+      case 'Peso': {
+        var suma = 0;
+        var totalBolivar = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
+        var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+
+        if (this.Envios.length != limite) {
+          if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Valor_Transferencia_Peso > 0 && this.Envios[pos].Valor_Transferencia_Bolivar > 0)) {
+            this.Envios.push({
+              Destino: '',
+              Numero_Documento_Destino: '',
+              Nombre: '',
+              Id_Destinatario_Cuenta: '',
+              Valor_Transferencia_Bolivar: 0,
+              Valor_Transferencia_Peso: 0,
+              Cuentas: []
+            });
+          }
+        }
+        break;
       }
     }
+  }
+
+  ValidarTransferencia(value) {
+    if (parseInt(value) > this.maximoTransferencia) {
+      this.PrecioSugerido = this.PrecioSugerido1;
+      this.confirmacionSwal.title = "Error";
+      this.confirmacionSwal.text = "La tasa de cambio supera el permitido"
+      this.confirmacionSwal.type = "error"
+      this.confirmacionSwal.show();
+    } else {
+      var monedaOrigen = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
+      var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+      this.RealizarCambioMonedaTransferencia(monedaOrigen, 'cambia');
+      this.RealizarCambioMonedaTransferencia(monedaDestino, 'entrega');
+      this.entregar = (parseInt(monedaOrigen) / parseInt(value));
+      this.entregar = (parseInt(monedaOrigen) / parseInt(value));
+      this.entregar = this.entregar.toFixed(2);
+      this.cambiar = (parseInt(monedaDestino) * parseInt(value));
+
+      var sumaPeso=0;
+      var sumaBolivar =0;
+      this.Envios.forEach(element => {
+          sumaPeso += element.Valor_Transferencia_Peso;
+          sumaBolivar += element.Valor_Transferencia_Bolivar;
+      });
+
+      if((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso) ){
+        this.confirmacionSwal.title = "Valores no coinciden";
+        this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+        this.confirmacionSwal.type = "error";
+        this.confirmacionSwal.show();
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+        }        
+      }else{
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+        }
+      }
+    }
+
   }
 
   SeleccionarTipo(tipo) {
@@ -1039,7 +1636,7 @@ export class PosComponent implements OnInit {
       }
     });
   }
-  
+
 
   AutoCompletarRemitenteGiro(modelo) {
     if (modelo) {
@@ -1091,7 +1688,7 @@ export class PosComponent implements OnInit {
     });
   }
 
-  RealizarEdicionGiro(formulario: NgForm , modal) {
+  RealizarEdicionGiro(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -1100,7 +1697,7 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.title = "Guardado con exito";
       this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
       this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show();      
+      this.confirmacionSwal.show();
       this.actualizarVista();
     });
 
@@ -1205,7 +1802,7 @@ export class PosComponent implements OnInit {
     });
   }
 
-  GuardarServicio(formulario: NgForm , modal) {
+  GuardarServicio(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Servicio');
@@ -1232,26 +1829,26 @@ export class PosComponent implements OnInit {
     });
   }
 
-  esconderAnular(valor){
-    switch(valor){
-      case "Activo":{
+  esconderAnular(valor) {
+    switch (valor) {
+      case "Activo": {
         return true;
       }
-      case "Inactivo":{
+      case "Inactivo": {
         return false;
       }
     }
   }
 
-  editarServicio(id){
-    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo:"Servicio" } }).subscribe((data: any) => {
+  editarServicio(id) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo: "Servicio" } }).subscribe((data: any) => {
       this.Servicio = data;
       this.ValorComisionServicio = data.Comision;
-      this.ModalServicioEditar.show();     
+      this.ModalServicioEditar.show();
     });
   }
 
-  AnularGiro(id){
+  AnularGiro(id) {
     let datos = new FormData();
     datos.append("modulo", 'Giro');
     datos.append("id", id);
@@ -1264,19 +1861,19 @@ export class PosComponent implements OnInit {
     });
   }
 
-  anulado(estado){
-    switch(estado){
-      case "Anulada" :{ return false}
-      default: {return true}
+  anulado(estado) {
+    switch (estado) {
+      case "Anulada": { return false }
+      default: { return true }
     }
   }
 
-  DatosRemitenteEditarGiro=[];
+  DatosRemitenteEditarGiro = [];
   DatosDestinatario = [];
   DatosDestinatarioEditarGiro = [];
 
-  EditarGiro(id){
-    
+  EditarGiro(id) {
+
     this.http.get(this.globales.ruta + '/php/pos/detalle_giro.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.idGiro = id;
       this.Giro = data.giro;
@@ -1294,15 +1891,65 @@ export class PosComponent implements OnInit {
     });
   }
 
-  TipoPagoTransferencia(value){
-    switch(value){
-      case "Credito" : {
-        break;}
-      case "Consignacion" : {
-        break;}
-      case "Efectivo" : {
-        break;}
+  TipoPagoTransferencia(value) {
+    switch (value) {
+      case "Credito": {
+        this.credito = true;
+        this.consignacion = false;
+        this.efectivo = false;
+        break;
+      }
+      case "Consignacion": {
+        this.credito = false;
+        this.consignacion = true;
+        this.efectivo = false;
+        break;
+      }
+      case "Efectivo": {
+        this.efectivo = true;
+        this.consignacion = false;
+        this.credito = false;
+        break;
+      }
     }
+  }
+
+  AnularTransferencia(id, formulario: NgForm) {
+    let datos = new FormData();
+    let info = JSON.stringify(formulario.value);
+    datos.append("id", id);
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.ModalAnularTransferencia.hide();
+        this.confirmacionSwal.title = "Anulado"
+        this.confirmacionSwal.text = "Esta transferencia se anuló"
+        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.show();
+        this.actualizarVista();
+      });
+
+  }
+
+  AnularTransferenciaModal(id, modal) {
+    this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
+      var conteo = data[0].conteo;
+      if (parseInt(conteo) > 0) {
+        this.confirmacionSwal.title = "Bloqueada"
+        this.confirmacionSwal.text = "Esta transferencia esta bloqueada"
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      } else {
+        this.idTransferencia = id;
+        modal.show();
+      }
+    });
   }
 
 }
