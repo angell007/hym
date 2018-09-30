@@ -114,19 +114,11 @@
                                                     <i class="fa fa-check"></i>
                                                 </button>
 
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                    (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destinatario,ModalDevolucionTransferencia)">
-                                                    <i class="fa fa-undo"></i>
-                                                </button>
-
                                                 <button *ngIf="!Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)" class="btn btn-default btn-xs"
                                                     [swal]="{title:'¿ Está seguro que desea desbloquearla ?' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
                                                     type="button" style="margin:0;" (confirm)="BloquearTransferencia(transferencia.Id_Transferencia_Destinatario,transferencia.Bloqueo);bloqueoSwal.show();">
                                                     <i class="fa fa-unlock"></i>
                                                 </button>
-
-
-
                                             </td>
                                         </tr>
                                     </tbody>
@@ -283,7 +275,7 @@
                     <div class="form-group">
                         <label>Id Cuenta Origen</label>
                         <select class="form-control" name="Id_Cuenta_Bancaria" ngModel required>
-                            <option value="">Seleccione Cuenta Origen</option>
+                            <option [value]="">Seleccione Cuenta Origen</option>
                             <option *ngFor="let banco of BancosEmpresa" [value]="banco.Id_Cuenta_Bancaria">{{banco.Numero_Cuenta}}</option>
                         </select>
                     </div>
@@ -311,7 +303,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Monto</label>
-                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}"
+                        <input class="form-control" name="Valor" type="text" [(ngModel)]="Monto"
                             required>
                     </div>
                 </div>

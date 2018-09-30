@@ -141,13 +141,9 @@ export class TableroconsultorComponent implements OnInit {
 
 
   DevolucionTransferencia(id, modal, valorDevolver) {
-    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
-      params: { id: id, modulo: "Transferencia_Destinatario" }
-    }).subscribe((data: any) => {
-      this.Identificacion = data.Id_Transferencia;
-      modal.show();
-      this.valorDevolverTransferencia = valorDevolver;
-    });
+    this.Identificacion = id;
+    modal.show();
+    this.valorDevolverTransferencia = valorDevolver;
   }
 
   ReactivarTransferencia(id, modal) {
