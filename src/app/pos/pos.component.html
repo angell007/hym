@@ -474,7 +474,8 @@
                                                                         [inputFormatter]="formatter_destino"
                                                                         (ngModelChange)="AutoCompletarDestinatario(Envio.Destino, i)"
                                                                         (change)="AutoCompletarDestinatario(Envio.Destino, i)"
-                                                                        (blur)="CrearDestinatrioModal(Envio.Destino,i)">
+                                                                        (blur)="CrearDestinatrioModal(Envio.Destino,i)"
+                                                                        (foucs)="CrearDestinatrioModal(Envio.Destino,i)">
                                                                     <button *ngIf="ActivarEdicion" class="btn btn-default btn-xs"
                                                                         type="button" style="margin:0;" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)">
                                                                         <i class="ti-pencil"></i>

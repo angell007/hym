@@ -114,18 +114,11 @@
                                                     <i class="fa fa-check"></i>
                                                 </button>
 
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                    (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destinatario,ModalDevolucionTransferencia)">
-                                                    <i class="fa fa-undo"></i>
-                                                </button>
-
                                                 <button *ngIf="!Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
                                                     class="btn btn-default btn-xs" [swal]="{title:'¿ Está seguro que desea desbloquearla ?' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Desbloquear', cancelButtonText:'No, Dejame Comprobar!'}"
                                                     type="button" style="margin:0;" (confirm)="BloquearTransferencia(transferencia.Id_Transferencia_Destinatario,transferencia.Bloqueo);bloqueoSwal.show();">
                                                     <i class="fa fa-unlock"></i>
                                                 </button>
-
-
 
                                             </td>
                                         </tr>

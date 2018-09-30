@@ -212,6 +212,7 @@ export class PosComponent implements OnInit {
   urlRiff: string;
   DestinatarioCuenta =[];
   PrecioSugeridoCompra: any;
+  IdentificacionCrearDestinatario: any;
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
@@ -236,7 +237,6 @@ export class PosComponent implements OnInit {
       this.DestinatarioCuenta = data;
     });
   }
-
 
   ngAfterViewInit() {
     if (this.recibeParaDefault == "Transferencia") {
@@ -296,16 +296,17 @@ export class PosComponent implements OnInit {
       this.ActivarEdicion = true;
     } else {
       this.ActivarEdicion = false;
-      //this.ModalDestinatario.show();
     }
   }
 
   CrearDestinatrioModal(value, pos) {
-    this.posiciontemporal = pos;
-    switch (this.ActivarEdicion) {
-      case false: {
-        var longitud = this.LongitudCarateres(value)
+    this.posiciontemporal = pos;    
+    var encontrar = this.Destinatarios.findIndex(x=> x.Id_Destinatario === value);
+    
+    if(encontrar == -1){
+      var longitud = this.LongitudCarateres(value)
         if (longitud > 6) {
+          this.IdentificacionCrearDestinatario = value;
           this.ModalCrearDestinatarioTransferencia.show();
           this.Id_Destinatario = value;
           this.Lista_Destinatarios = [{
@@ -319,8 +320,6 @@ export class PosComponent implements OnInit {
           }];
         }
         this.Bancos_Pais(2, 0);
-
-      }
     }
   }
 
@@ -507,13 +506,9 @@ export class PosComponent implements OnInit {
     }
     if (remitente.length < 5 && remitente.length > 0) {
       this.warnSwal.show();
-      //////console.log("número de documento inconrrecto.");      
     }
     else {
       this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Transferencia_Remitente', id: remitente } }).subscribe((data: any) => {
-        //////console.log("REMITENTE");
-
-        //////console.log(data);
         if (data.length == 0) {
           this.NumeroDocumentoR = 0;
           this.CrearRemitente(remitente);
@@ -575,6 +570,14 @@ export class PosComponent implements OnInit {
     this.Cuentas.splice(index, 1);
   }
 
+  recargarVistaDestinatario(identificador,i){
+    this.http.get(this.globales.ruta + 'php/pos/detalle_lista_destinatario.php', { params: { id: identificador } }).subscribe((data: any) => {
+      this.Envios[i].Cuentas = data[0].Cuentas;
+      this.Envios[i].Numero_Documento_Destino = data[0].Id_Destinatario;
+      this.Envios[i].Nombre = data[0].Nombre;
+    });
+  }
+
   GuardarDestinatario(formulario: NgForm, modal) {
 
     let info = JSON.stringify(formulario.value);
@@ -590,6 +593,10 @@ export class PosComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
+        //autocompletar destinatario
+        var i = this.posiciontemporal
+        this.recargarVistaDestinatario(this.IdentificacionCrearDestinatario , i);        
+
         this.destinatarioCreadoSwal.show();
         formulario.reset();
         modal.hide();
@@ -628,10 +635,6 @@ export class PosComponent implements OnInit {
       });
   }
 
-  ValidarTotalTransferencia() {
-
-  }
-
   RealizarCambio(value, accion) {
     //////console.log(value);    
     if (this.MonedaRecibida != this.MonedaTransferencia) {
@@ -645,7 +648,6 @@ export class PosComponent implements OnInit {
           break;
       }
     }
-
   }
 
   SeleccionarMonedaRecibe(moneda) {
@@ -1197,6 +1199,7 @@ export class PosComponent implements OnInit {
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
+        this.recargarDestinatario();
 
         this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
           this.Transferencia = data;
