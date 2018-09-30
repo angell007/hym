@@ -226,7 +226,7 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
                                                     (blur)="RealizarCambioMoneda($event.target.value,'entrega')" id="Entrega"
-                                                    ngModel="{{entregar}}">
+                                                    ngModel="{{entregar }}"  >
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">

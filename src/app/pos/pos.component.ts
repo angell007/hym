@@ -1005,7 +1005,7 @@ export class PosComponent implements OnInit {
           }
 
           this.entregar = (parseInt(value) / divisor);
-          this.entregar = this.entregar.toFixed.toFixed(2);
+          this.entregar = this.entregar.toFixed(2);
           (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
         } else {
           if (this.entregar == 0 || this.entregar == "" || this.entregar == undefined) {
