@@ -19,7 +19,6 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./transferencias.component.css']
 })
 export class TransferenciasComponent implements OnInit {
-
   public fecha = new Date();
   transferencias = [];
   conteoTransferencias = [];
@@ -49,9 +48,6 @@ export class TransferenciasComponent implements OnInit {
   idTransferencia: any;
   transferenciasRealizadas =[];
   valorDevolverTransferencia: any;
-  Cajero: any;
-  Recibo: any;
-  PagoTransferencia: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -151,11 +147,10 @@ export class TransferenciasComponent implements OnInit {
   }
 
 
-  DevolucionTransferencia(id, modal, valorDevolver, idPagoTransferencia) {
+  DevolucionTransferencia(id, modal, valorDevolver) {
     this.Identificacion = id;
     modal.show();
     this.valorDevolverTransferencia = valorDevolver;
-    this.PagoTransferencia = idPagoTransferencia;
   }
 
   ReactivarTransferencia(id, modal) {
@@ -275,7 +270,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id,numeroCuenta,valor, cajero , recibo) {
+  RealizarTransferencia(id,numeroCuenta,valor) {
     //this.BloquearTransferencia(id, "No");
    
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
@@ -287,8 +282,6 @@ export class TransferenciasComponent implements OnInit {
       this.Recibe = data.NombreDestinatario
       this.CedulaDestino = data.Cedula
       this.Monto = valor;
-      this.Recibo = recibo;
-      this.Cajero = cajero;
 
       if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
@@ -301,14 +294,14 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  verificarBloqueo(id, numeroCuenta, valorActual, cajero , recibo){
+  verificarBloqueo(id, numeroCuenta, valorActual){
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
         case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual, cajero , recibo); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual, cajero , recibo); break; }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
       }
       this.refrescarVistaPrincipalConsultor();
     });

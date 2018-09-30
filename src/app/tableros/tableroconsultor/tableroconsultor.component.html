@@ -48,35 +48,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- <div class="col-md-3">
-            <div class="card bg-warning">
-                <div class="card-block" style="padding:10px;">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <h1 class="no-mrg-top font-size-30">{{conteoTransferencias.TransferenciasAnuladas}}</h1>
-                            <span class="text-white">Anuladas</span>
-                        </div>
-                        <div class="col-md-5 text-center">
-                            <i class="ti-close font-size-50 text-white"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+        </div>          
     </div>
 
     <div class="row">
-        <!--<div class="col-md-4">
-            <div class="row">
-                <div class="col-md-12 card min-heigth">
-                    <div>
-                        <div id="chartdiv" style="height: 500px;font-size: 11px;width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
+   
         <!-- Pendientes -->
         <div class="col-md-12">
             <div class="row">
@@ -99,7 +75,7 @@
                                     </thead>
                                     <tbody>
 
-                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Si' ? 'bg-danger text-white' : '' }}">
+                                        <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Si' ? 'bg-danger text-white' : '' }}" >
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td>{{transferencia.ReciboCodigo}}</td>
                                             <td>{{transferencia.NombreCajero}}</td>
@@ -109,7 +85,7 @@
                                             <td>{{transferencia.nombreFuncionario}}</td>
                                             <td class="text-center">
                                                 <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
-                                                    (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar)"
+                                                    (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar , transferencia.NombreCajero , transferencia.ReciboCodigo )"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                     <i class="fa fa-check"></i>
                                                 </button>
@@ -154,23 +130,17 @@
 
                                         <tr *ngFor="let transferencia of transferenciasRealizadas" class="bg-success text-white">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
-                                            <td>{{transferencia.ReciboCodigo}}</td>
-                                            <td>{{transferencia.NombreCajero}}</td>
-                                            <td>{{transferencia.Numero_Cuenta}}</td>
-                                            <td class="text-right">{{transferencia.ValorBancario |
+                                            <td>{{transferencia.Recibo}}</td>
+                                            <td>{{transferencia.Cajero}}</td>
+                                            <td>{{transferencia.Cuenta_Destino}}</td>
+                                            <td class="text-right">{{transferencia.Valor |
                                                 currency:"BsS."}}</td>
                                             <td class="text-center">
                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                    (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destinatario,ModalDevolucionTransferencia, transferencia.ValorBancario)">
+                                                    (click)="DevolucionTransferencia(transferencia.Id_Transferencia_Destino,ModalDevolucionTransferencia, transferencia.Valor, transferencia.Id_Pago_Transfenecia)">
                                                     <i class="fa fa-undo"></i>
                                                 </button>
-
-                                                <!--
-                                                <button *ngIf="!Bloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs" [swal]="{title:'Está transferencia fue bloqueada por transferencia.Bloqueo_Funcionario ¿ Está seguro que desea desbloquearla ?' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Bloquear', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                    type="button" style="margin:0;" (confirm)="BloquearTransferencia(transferencia.Id_Transferencia_Destinatario,transferencia.Bloqueo);bloqueoSwal.show();">
-                                                    <i class="fa fa-unlock"></i>
-                                                </button> -->
-
+    
                                                 <button *ngIf="!Bloqueado(transferencia.Bloqueo)" class="btn btn-default btn-xs"
                                                     (click)="alertaDesbloqueo(transferencia.Bloqueo_Funcionario)" type="button"
                                                     style="margin:0;">
@@ -217,6 +187,7 @@
         <form #FormDevolucionTransferencia="ngForm">
             <input hidden name="Id_Transferencia_Destino" type="text" [(ngModel)]="Identificacion">
             <input hidden name="Valor" type="text" [(ngModel)]="valorDevolverTransferencia">
+            <input hidden name="Id_Pago_Transfenecia" type="text" [(ngModel)]="PagoTransferencia">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -313,6 +284,18 @@
                         <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
                     </div>
                 </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Recibo</label>
+                        <input class="form-control" name="Recibo" type="text" [(ngModel)]="Recibo" required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Cajero</label>
+                        <input class="form-control" name="Cajero" type="text" [(ngModel)]="Cajero" required>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -374,6 +357,18 @@
                     <div class="form-group">
                         <label>Numero Transferencia</label>
                         <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Recibo</label>
+                        <input class="form-control" name="Recibo" type="text" [(ngModel)]="Recibo" required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Cajero</label>
+                        <input class="form-control" name="Cajero" type="text" [(ngModel)]="Cajero" required>
                     </div>
                 </div>
             </div>
