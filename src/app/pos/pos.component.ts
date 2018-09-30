@@ -115,8 +115,7 @@ export class PosComponent implements OnInit {
   @ViewChild('FormTraslado') FormTraslado: any;
   @ViewChild('FormCorresponsal') FormCorresponsal: any;
   @ViewChild('FormServicio') FormServicio: any;
-
-
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
 
   vueltos: number;
   Venta = false;
@@ -214,6 +213,8 @@ export class PosComponent implements OnInit {
   DestinatarioCuenta = [];
   PrecioSugeridoCompra: any;
   IdentificacionCrearDestinatario: any;
+  EncabezadoRecibo = [];
+  DestinatarioRecibo =[];
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
@@ -2028,6 +2029,16 @@ export class PosComponent implements OnInit {
         modal.show();
       }
     });
+  }
+
+  verRecibo(valor){
+    this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
+      params: { id: valor }
+    }).subscribe((data: any) => {
+      this.EncabezadoRecibo = data.encabezado;
+      this.DestinatarioRecibo = data.destinatario;
+      this.ModalVerRecibo.show();           
+    });    
   }
 
 }

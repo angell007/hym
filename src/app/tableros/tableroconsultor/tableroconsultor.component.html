@@ -404,17 +404,17 @@
                     </tr>
 
                     <tr *ngIf="filaRecibo">
-                            <td colspan="6"> </td>
-                        </tr>
-                        <tr *ngIf="filaRecibo">
-                            <td colspan="6" style="text-align: center;font-weight: bold;"> Devolución recibos </td>
-                        </tr>
-                        <tr *ngFor="let item3 of DevolucionesRecibo" >
-                            <td colspan="2">{{item3.Nombre}}</td>
-                            <td colspan="2">{{item3.Motivo_Devolucion}}</td>
-                            <td>{{item3.Numero_Cuenta}}</td>
-                            <td>{{item3.Valor | currency: "BsS." }}</td>
-                        </tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr *ngIf="filaRecibo">
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Devolución recibos </td>
+                    </tr>
+                    <tr *ngFor="let item3 of DevolucionesRecibo">
+                        <td colspan="2">{{item3.Nombre}}</td>
+                        <td colspan="2">{{item3.Motivo_Devolucion}}</td>
+                        <td>{{item3.Numero_Cuenta}}</td>
+                        <td>{{item3.Valor | currency: "BsS." }}</td>
+                    </tr>
 
                 </tbody>
             </table>

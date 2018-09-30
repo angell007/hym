@@ -226,7 +226,7 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
                                                     (blur)="RealizarCambioMoneda($event.target.value,'entrega')" id="Entrega"
-                                                    ngModel="{{entregar }}"  >
+                                                    ngModel="{{entregar }}">
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">
@@ -376,15 +376,15 @@
 
                                                     <td class="text-center">
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="VerEgreso(Egreso.Id_Egreso, ModalVerEgreso)">
+                                                            (click)="verRecibo(transferencia.Id_Recibo)">
                                                             <i class="ti-printer"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                            >
                                                             <i class="ti-pencil"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
+                                                            >
                                                             <i class="ti-reload"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
@@ -651,8 +651,8 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="transferencia">Observaciones</label>
-                                                    <textarea placeholder="Observaciones" class="form-control"
-                                                        name="Observacion_Transferencia" ngModel (input)="HabilitarGuardar($event.target.value)" ></textarea>
+                                                    <textarea placeholder="Observaciones" class="form-control" name="Observacion_Transferencia"
+                                                        ngModel (input)="HabilitarGuardar($event.target.value)"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -2255,7 +2255,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
     <div class="app-modal-header">
-        <h4>Crear Destinatario</h4>
+        <h4>Anular Transferencia</h4>
     </div>
     <div class="app-modal-body">
         <form #FormAnularTransferencia="ngForm">
@@ -2275,6 +2275,65 @@
         <div class="text-right">
             <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)">Guardar
             </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
+    <div class="app-modal-header">
+        <h4>Recibo {{EncabezadoRecibo[0].CodigoRecibo}}</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Fecha</td>
+                        <td>{{ item.Fecha }}</td>
+                        <td>Tipo Transferencia </td>
+                        <td colspan="3" style="text-align: center;">{{ item.Tipo_Transferencia }}</td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Total Pesos</td>
+                        <td>{{ item.Cantidad_Recibida | currency }}</td>
+                        <td>Total Bolivar</td>
+                        <td>{{item.Cantidad_Transferida | currency: "BsS."}}</td>
+                        <td>Al Cambio</td>
+                        <td>{{ item.Tasa_Cambio}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
+                    </tr>
+                    <tr *ngFor="let item1 of DestinatarioRecibo">
+                        <td colspan="2">{{ item1.Nombre }}</td>
+                        <td colspan="2">{{ item1.Numero_Cuenta }}</td>
+                        <td colspan="2">{{ item1.Valor_Transferencia_Bolivar | currency: "BsS." }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Observaciones del recibo </td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td colspan="6">{{item.Observacion_Transferencia}}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+
         </div>
     </div>
 </app-modal-basic>
