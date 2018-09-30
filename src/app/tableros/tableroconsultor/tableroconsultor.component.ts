@@ -30,7 +30,8 @@ export class TableroconsultorComponent implements OnInit {
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
   @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
   @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
-  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;  
+  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;   
 
   Identificacion: any;
   CuentaDestino: any;
@@ -44,6 +45,10 @@ export class TableroconsultorComponent implements OnInit {
   PagoTransferencia: any;
   Recibo: any;
   Cajero: any;
+  EncabezadoRecibo = [];
+  DestinatarioRecibo = [];
+  DevolucionesRecibo = [];
+  filaRecibo = false;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -355,5 +360,23 @@ export class TableroconsultorComponent implements OnInit {
     this.refrescarVistaPrincipalConsultor();
     formulario.reset();
     modal.hide();    
+  }
+
+  verRecibo(valor){
+    this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
+      params: { id: valor }
+    }).subscribe((data: any) => {
+      this.EncabezadoRecibo = data.encabezado;
+      this.DestinatarioRecibo = data.destinatario;
+      this.DevolucionesRecibo = data.devoluciones;
+
+      if(this.DevolucionesRecibo.length > 0){
+        this.filaRecibo = true;
+      }else{
+        this.filaRecibo = false;
+      }
+
+      this.ModalVerRecibo.show();      
+    });    
   }
 }
