@@ -15,7 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./pos.component.scss']
 })
 export class PosComponent implements OnInit {
-  
+
   public IdentificacionFuncionario: any[];
   public Destinatarios: any[] = [];
   public Remitentes: any[] = [];
@@ -45,7 +45,8 @@ export class PosComponent implements OnInit {
     Id_Destinatario_Cuenta: '',
     Valor_Transferencia_Bolivar: '',
     Valor_Transferencia_Peso: '',
-    Cuentas: []
+    Cuentas: [],
+    esconder: false
   }];
   public CuentasDestinatario: any[];
   public Cajas: any[];
@@ -210,7 +211,7 @@ export class PosComponent implements OnInit {
   idTransferencia: any;
   frameRiff = false;
   urlRiff: string;
-  DestinatarioCuenta =[];
+  DestinatarioCuenta = [];
   PrecioSugeridoCompra: any;
   IdentificacionCrearDestinatario: any;
 
@@ -230,9 +231,30 @@ export class PosComponent implements OnInit {
     this.Bancos_Pais(2, 0);
     this.Origen(2);
     this.bancosDestinatarios();
+   
+
   }
 
-  bancosDestinatarios(){
+  
+  
+  HabilitarGuardar(valor){
+    if(valor.length > 0){
+      if (this.Recibe == 'Cliente') {
+        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+      } else {
+        (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+      } 
+    }else{
+      if (this.Recibe == 'Cliente') {
+        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+      } else {
+        (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+      }
+    }
+    
+  }
+
+  bancosDestinatarios() {
     this.http.get(this.globales.ruta + '/php/destinatarios/cuenta_bancaria_destinatario.php').subscribe((data: any) => {
       this.DestinatarioCuenta = data;
     });
@@ -243,7 +265,6 @@ export class PosComponent implements OnInit {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
-
   }
 
   search_destino = (text$: Observable<string>) =>
@@ -293,33 +314,33 @@ export class PosComponent implements OnInit {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
-      this.ActivarEdicion = true;
+      this.Envios[i].esconder = true;
     } else {
-      this.ActivarEdicion = false;
+      this.Envios[i].esconder = false;
     }
   }
 
   CrearDestinatrioModal(value, pos) {
-    this.posiciontemporal = pos;    
-    var encontrar = this.Destinatarios.findIndex(x=> x.Id_Destinatario === value);
-    
-    if(encontrar == -1){
+    this.posiciontemporal = pos;
+    var encontrar = this.Destinatarios.findIndex(x => x.Id_Destinatario === value);
+
+    if (encontrar == -1) {
       var longitud = this.LongitudCarateres(value)
-        if (longitud > 6) {
-          this.IdentificacionCrearDestinatario = value;
-          this.ModalCrearDestinatarioTransferencia.show();
-          this.Id_Destinatario = value;
-          this.Lista_Destinatarios = [{
-            Id_Pais: '2',
-            Id_Banco: '',
-            Bancos: [],
-            Id_Tipo_Cuenta: '',
-            Numero_Cuenta: '',
-            Otra_Cuenta: '',
-            Observacion: ''
-          }];
-        }
-        this.Bancos_Pais(2, 0);
+      if (longitud > 6) {
+        this.IdentificacionCrearDestinatario = value;
+        this.ModalCrearDestinatarioTransferencia.show();
+        this.Id_Destinatario = value;
+        this.Lista_Destinatarios = [{
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        }];
+      }
+      this.Bancos_Pais(2, 0);
     }
   }
 
@@ -330,8 +351,8 @@ export class PosComponent implements OnInit {
   BuscarCNE(valor) {
 
     var cedula = this.Id_Destinatario;
-    if(cedula == undefined){      
-      cedula = (document.getElementById("idDestinatario" ) as HTMLInputElement).value;
+    if (cedula == undefined) {
+      cedula = (document.getElementById("idDestinatario") as HTMLInputElement).value;
     }
 
     switch (valor) {
@@ -441,7 +462,7 @@ export class PosComponent implements OnInit {
     }
     else {
       this.http.get(this.globales.ruta + 'php/pos/cuentas_destinatarios.php', { params: { id: destinatario, nombre: destinatario } }).subscribe((data: any) => {
-          
+
         if (data.length == 0) {
           this.Envios[index].Numero_Documento_Destino = 0;
           this.CrearDestinatario(destinatario);
@@ -457,7 +478,8 @@ export class PosComponent implements OnInit {
             Id_Destinatario_Cuenta: '',
             Valor_Transferencia_Bolivar: 0,
             Valor_Transferencia_Peso: 0,
-            Cuentas: []
+            Cuentas: [],
+            esconder: false
           });
         }
       });
@@ -570,11 +592,12 @@ export class PosComponent implements OnInit {
     this.Cuentas.splice(index, 1);
   }
 
-  recargarVistaDestinatario(identificador,i){
+  recargarVistaDestinatario(identificador, i) {
     this.http.get(this.globales.ruta + 'php/pos/detalle_lista_destinatario.php', { params: { id: identificador } }).subscribe((data: any) => {
       this.Envios[i].Cuentas = data[0].Cuentas;
       this.Envios[i].Numero_Documento_Destino = data[0].Id_Destinatario;
       this.Envios[i].Nombre = data[0].Nombre;
+      this.Envios[i].esconder = true;
     });
   }
 
@@ -595,7 +618,7 @@ export class PosComponent implements OnInit {
       .subscribe((data: any) => {
         //autocompletar destinatario
         var i = this.posiciontemporal
-        this.recargarVistaDestinatario(this.IdentificacionCrearDestinatario , i);        
+        this.recargarVistaDestinatario(this.IdentificacionCrearDestinatario, i);
 
         this.destinatarioCreadoSwal.show();
         formulario.reset();
@@ -915,9 +938,9 @@ export class PosComponent implements OnInit {
       this.MaxCompra = data.Dependencia[3].Valor;
       this.MinCompra = data.Dependencia[4].Valor;
       this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
-      
+
       this.maximoTransferencia = data.Dependencia[6].Valor;
-      this.minimoTransferencia = data.Dependencia[7].Valor;      
+      this.minimoTransferencia = data.Dependencia[7].Valor;
       this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
       this.MonedaDestino = data.Moneda[0].Nombre
 
@@ -1030,26 +1053,26 @@ export class PosComponent implements OnInit {
               this.NuevoDestinatario(0, 'Peso')
             }
 
-             /*
-            console.log("Id_Destinatario_Cuenta" + pos);
-            
-            var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
-            
+            /*
+           console.log("Id_Destinatario_Cuenta" + pos);
            
-            if (valor == "") {
-              
-              this.confirmacionSwal.title = "Valores vacios";
-              this.confirmacionSwal.text = "Por favor digite los valores del destinatario para poder continuar";
-              this.confirmacionSwal.type = "error";
-              this.confirmacionSwal.show();
+           var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
+           
+          
+           if (valor == "") {
+             
+             this.confirmacionSwal.title = "Valores vacios";
+             this.confirmacionSwal.text = "Por favor digite los valores del destinatario para poder continuar";
+             this.confirmacionSwal.type = "error";
+             this.confirmacionSwal.show();
 
-              if (this.Recibe == 'Cliente') {
-                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-              } else {
-                (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-              }
-            }*/
-            
+             if (this.Recibe == 'Cliente') {
+               (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+             } else {
+               (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+             }
+           }*/
+
             if (suma == parseInt(value)) {
 
               if (this.Recibe == 'Cliente') {
@@ -1275,13 +1298,13 @@ export class PosComponent implements OnInit {
       }
 
       var indice = this.DestinatarioCuenta.findIndex(x => x.Numero_Cuenta === valor);
-      if(indice > -1){
+      if (indice > -1) {
         this.confirmacionSwal.title = "Cuenta Repetida";
         this.confirmacionSwal.text = "Esta cuenta fue creada anteriormente y le pertenece a " + this.DestinatarioCuenta[indice].Nombre;
         this.confirmacionSwal.type = "error"
         this.confirmacionSwal.show();
         ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = true;
-      }else{
+      } else {
         ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = false;
       }
     }
@@ -1452,6 +1475,44 @@ export class PosComponent implements OnInit {
     //this.limpiarFormularios();
   }
 
+  NuevaHileraDestinatario(pos) {
+    var limite = parseInt(this.LimiteOficina);
+    if (this.Envios.length != limite) {
+      var index = pos + 1;
+      if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Valor_Transferencia_Peso > 0 && this.Envios[pos].Valor_Transferencia_Bolivar > 0)) {
+        this.Envios.push({
+          Destino: '',
+          Numero_Documento_Destino: '',
+          Nombre: '',
+          Id_Destinatario_Cuenta: '',
+          Valor_Transferencia_Bolivar: 0,
+          Valor_Transferencia_Peso: 0,
+          Cuentas: [],
+          esconder: false
+        });
+
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
+        }
+      } else {
+        this.confirmacionSwal.title="Información Vacia"; 
+        this.confirmacionSwal.text="Hay campos vacios que deben ser digitados para poder continuar" ;
+        this.confirmacionSwal.type="error";
+        this.confirmacionSwal.show();
+        
+        if (this.Recibe == 'Cliente') {
+          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        } else {
+          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+        }
+
+      }
+    }
+  }
+
+
   NuevoDestinatario(pos, moneda) {
 
     var index = pos + 1;
@@ -1472,7 +1533,8 @@ export class PosComponent implements OnInit {
               Id_Destinatario_Cuenta: '',
               Valor_Transferencia_Bolivar: 0,
               Valor_Transferencia_Peso: 0,
-              Cuentas: []
+              Cuentas: [],
+              esconder: false
             });
 
             if (this.Recibe == 'Cliente') {
@@ -1499,7 +1561,8 @@ export class PosComponent implements OnInit {
               Id_Destinatario_Cuenta: '',
               Valor_Transferencia_Bolivar: 0,
               Valor_Transferencia_Peso: 0,
-              Cuentas: []
+              Cuentas: [],
+              esconder: false
             });
           }
         }
@@ -1519,8 +1582,8 @@ export class PosComponent implements OnInit {
         (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
       } else {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-      }       
-      
+      }
+
     } else {
       var monedaOrigen = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
@@ -1531,14 +1594,14 @@ export class PosComponent implements OnInit {
       this.entregar = this.entregar.toFixed(2);
       this.cambiar = (parseInt(monedaDestino) * parseInt(value));
 
-      var sumaPeso=0;
-      var sumaBolivar =0;
+      var sumaPeso = 0;
+      var sumaBolivar = 0;
       this.Envios.forEach(element => {
-          sumaPeso += element.Valor_Transferencia_Peso;
-          sumaBolivar += element.Valor_Transferencia_Bolivar;
+        sumaPeso += element.Valor_Transferencia_Peso;
+        sumaBolivar += element.Valor_Transferencia_Bolivar;
       });
 
-      if((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso) ){
+      if ((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso)) {
         this.confirmacionSwal.title = "Valores no coinciden";
         this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
         this.confirmacionSwal.type = "error";
@@ -1547,8 +1610,8 @@ export class PosComponent implements OnInit {
           (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
         } else {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-        }        
-      }else{
+        }
+      } else {
         if (this.Recibe == 'Cliente') {
           (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
         } else {
