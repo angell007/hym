@@ -48,19 +48,25 @@ export class TransferenciasComponent implements OnInit {
   idTransferencia: any;
   transferenciasRealizadas =[];
   valorDevolverTransferencia: any;
+  PagoTransferencia: any;
+  Recibo: any;
+  Cajero: any;
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
-  }
-  
 
-  ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      this.transferencias = data.pendientes;
+      
+      data.pendientes.forEach(element => {
+        if(element.Valor_Transferencia_Bolivar !== 0){
+          this.transferencias.push(element);
+        }        
+      });
       this.transferenciasRealizadas = data.realizadas;
       this.dtTrigger.next();
+      
     });
 
     this.dtOptions = {
@@ -92,6 +98,10 @@ export class TransferenciasComponent implements OnInit {
         }
       }
     };
+  }
+  
+
+  ActualizarVista() {    
 
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
       this.conteoTransferencias = data[0];
@@ -138,19 +148,27 @@ export class TransferenciasComponent implements OnInit {
 
 
   }
-
+  
   refrescarVistaPrincipalConsultor(){
+    this.transferencias =[];
+    this.transferenciasRealizadas =[];
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      this.transferencias = data.pendientes;
-      this.transferenciasRealizadas = data.realizadas;
+      
+      data.pendientes.forEach(element => {
+        if(element.Valor_Transferencia_Bolivar !== 0){
+          this.transferencias.push(element);
+        }        
+      });
+      this.transferenciasRealizadas = data.realizadas;      
     });
   }
 
 
-  DevolucionTransferencia(id, modal, valorDevolver) {
+  DevolucionTransferencia(id, modal, valorDevolver, idPagoTransferencia) {
     this.Identificacion = id;
     modal.show();
     this.valorDevolverTransferencia = valorDevolver;
+    this.PagoTransferencia = idPagoTransferencia;
   }
 
   ReactivarTransferencia(id, modal) {
@@ -189,7 +207,7 @@ export class TransferenciasComponent implements OnInit {
       this.mensajeSwal.text = "Se ha devuelto la transferencia"
       this.mensajeSwal.type = "success"
       this.mensajeSwal.show();
-      this.ActualizarVista();
+      this.refrescarVistaPrincipalConsultor();
       modal.hide();
     });
   }
@@ -270,7 +288,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id,numeroCuenta,valor) {
+  RealizarTransferencia(id,numeroCuenta,valor,cajero,codigo) {
     //this.BloquearTransferencia(id, "No");
    
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
@@ -282,6 +300,8 @@ export class TransferenciasComponent implements OnInit {
       this.Recibe = data.NombreDestinatario
       this.CedulaDestino = data.Cedula
       this.Monto = valor;
+      this.Cajero = cajero
+      this.Recibo = codigo
 
       if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
@@ -294,16 +314,15 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  verificarBloqueo(id, numeroCuenta, valorActual){
+  verificarBloqueo(id, numeroCuenta, valorActual,cajero,codigo){
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
       switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
         case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual); break; }
+        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual,cajero,codigo); break; }
+        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual,cajero,codigo); break; }
       }
-      this.refrescarVistaPrincipalConsultor();
     });
   }
 
@@ -332,7 +351,7 @@ export class TransferenciasComponent implements OnInit {
       this.mensajeSwal.text = "Se ha guardado correctamente la información"
       this.mensajeSwal.type = "success"
       this.mensajeSwal.show();
-      this.ActualizarVista();
+      this.refrescarVistaPrincipalConsultor();
       modal.hide();
     });
   }

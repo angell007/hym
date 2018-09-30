@@ -207,32 +207,6 @@
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalReactivarTransferencia" #ModalReactivarTransferencia>
-    <div class="app-modal-header">
-        <h4>Reactivar Transferencia</h4>
-    </div>
-    <div class="app-modal-body">
-        <form #FormReactivarTransferencia="ngForm">
-            <input hidden name="Id_Transferencia" type="text" [(ngModel)]="Identificacion">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Motivo Reactivar</label>
-                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles del Banco" name="Motivo_Reactivar"
-                            ngModel></textarea>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormReactivarTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a reactivar esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="RealizarReactivacion(FormReactivarTransferencia, ModalReactivarTransferencia)">Reactivar</button>
-        </div>
-    </div>
-</app-modal-basic>
-
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearTransferenciaBanesco" #ModalCrearTransferenciaBanesco>
     <div class="app-modal-header">
         <h4>Crear Transferencia</h4>
