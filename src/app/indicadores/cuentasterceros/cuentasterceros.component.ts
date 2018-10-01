@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Globales } from '../../shared/globales/globales';
+import { Subject } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-cuentasterceros',
@@ -6,10 +10,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cuentasterceros.component.scss']
 })
 export class CuentastercerosComponent implements OnInit {
-
-  constructor() { }
+  Tercero = [];
+ 
+  constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
+    this.http.get(this.globales.ruta + 'php/movimientos/movimiento_tercero.php').subscribe((data: any) => {
+     this.Tercero = data;    
+    });
   }
 
 }
