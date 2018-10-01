@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs/Subject';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-destinatarios',
@@ -65,8 +66,11 @@ export class DestinatariosComponent implements OnInit {
   public frame = false;
   TipoDocumentoExtranjero = [];
   url: string;
+  frameRiff = false;
+  urlCne: string;
+  urlRiff: string;
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.ActualizarVista();
@@ -137,13 +141,7 @@ export class DestinatariosComponent implements OnInit {
     });
   }
 
-  agregarDinamico(i) {
-    var pos = parseInt(i) + 1;
-    if (this.Lista_Destinatarios[pos] == undefined) {
-      this.AgregarFila();
-      this.Bancos_Pais(2, pos);
-    }
-  }
+
 
   OcultarFormularios() {
     this.InicializarBool();
@@ -362,19 +360,6 @@ export class DestinatariosComponent implements OnInit {
   }
 
 
-  AgregarFila() {
-
-    this.Lista_Destinatarios.push({
-      Id_Pais: 2,
-      Id_Banco: '',
-      Bancos: [],
-      Id_Tipo_Cuenta: '',
-      Numero_Cuenta: ''
-    })
-
-  }
-
-
   EliminarFila(i) {
 
     this.Lista_Cuentas.splice(i, 1);
@@ -386,6 +371,76 @@ export class DestinatariosComponent implements OnInit {
 
   habilitarboton() {
     this.disabled = false;
+  }
+
+  verificarChequeo(pos, check) {
+    var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
+
+    switch (check) {
+      case true: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        break;
+      }
+      case false: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        break;
+      }
+    }
+
+  }
+
+  AgregarFila(i, valor) {
+
+    var idpais = ((document.getElementById("Id_Banco" + i) as HTMLInputElement).value)
+
+    if (valor != "" && idpais != "") {
+      var pos = parseInt(i) + 1;
+      if (this.Lista_Destinatarios[pos] == undefined) {
+        this.Lista_Destinatarios.push({
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        });
+
+        this.Bancos_Pais(2, pos);
+      }
+    }
+
+  }
+
+  BuscarCNE(valor) {
+
+    var cedula = this.Id_Destinatario;
+    if (cedula == undefined) {
+      cedula = (document.getElementById("idDestinatario") as HTMLInputElement).value;
+    }
+
+    switch (valor) {
+      case "V": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
+        break;
+      }
+      case "E": {
+        this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
+        break;
+      }
+      default: {
+        this.frame = false;
+      }
+    }
+  }
+
+  buscarRiff() {
+    this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
+    this.frameRiff = !this.frameRiff;
   }
 
 }

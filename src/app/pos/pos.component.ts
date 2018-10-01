@@ -196,7 +196,15 @@ export class PosComponent implements OnInit {
   minimoTransferencia: any;
   ActivarEdicion = false;
   Detalle_Destinatario = [];
-  Lista_Destinatarios = [];
+  Lista_Destinatarios = [{
+    Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+  }];
   Identificacion: any;
   TipoDocumentoExtranjero = [];
   posiciontemporal: any;
@@ -370,7 +378,13 @@ export class PosComponent implements OnInit {
       default: {
         this.frame = false;
       }
+       /*if (window.frames['myframe'] && !userSet){
+          this.setAttribute('data-userset', 'true');
+          frames['myframe'].location.href='http://test.com/hello?uname='+getUserName();
+      }*/
     }
+
+    
   }
 
   buscarRiff() {
@@ -1225,6 +1239,17 @@ export class PosComponent implements OnInit {
         this.Transferencia2 = false;
         this.recargarDestinatario();
 
+        this.Envios = [{
+          Destino: '',
+          Numero_Documento_Destino: '',
+          Nombre: '',
+          Id_Destinatario_Cuenta: '',
+          Valor_Transferencia_Bolivar: '',
+          Valor_Transferencia_Peso: '',
+          Cuentas: [],
+          esconder: false
+        }];
+
         this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
           this.Transferencia = data;
           //this.dtTrigger1.next();
@@ -1319,14 +1344,14 @@ export class PosComponent implements OnInit {
       var pos = parseInt(i) + 1;
       if (this.Lista_Destinatarios[pos] == undefined) {
         this.Lista_Destinatarios.push({
-          Id_Pais: 2,
+          Id_Pais: '2',
           Id_Banco: '',
           Bancos: [],
           Id_Tipo_Cuenta: '',
           Numero_Cuenta: '',
           Otra_Cuenta: '',
           Observacion: ''
-        })
+        });
 
         this.Bancos_Pais(2, pos);
       }
@@ -1342,10 +1367,6 @@ export class PosComponent implements OnInit {
 
   verificarChequeo(pos, check) {
     var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
-    /*//console.log("checkeo_" + pos);
-    //console.log(check)    
-    //console.log(pos);
-    //console.log(checkeo);*/
 
     switch (check) {
       case true: {
@@ -1449,7 +1470,16 @@ export class PosComponent implements OnInit {
   volverReciboTransferencia() {
     this.Transferencia1 = true;
     this.Transferencia2 = false;
-    //this.limpiarFormularios();   
+    this.Envios = [{
+      Destino: '',
+      Numero_Documento_Destino: '',
+      Nombre: '',
+      Id_Destinatario_Cuenta: '',
+      Valor_Transferencia_Bolivar: '',
+      Valor_Transferencia_Peso: '',
+      Cuentas: [],
+      esconder: false
+    }];   
   }
 
   volverReciboGiro() {

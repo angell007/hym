@@ -431,7 +431,7 @@
                                             <div class="col-md-6" *ngIf="Recibe==='Cliente'">
                                                 <label class="transferencia">Seleccione Cliente</label>
                                                 <select class="form-control" name="Id_Tercero" [(ngModel)]="seleccioneClienteDefault"
-                                                    (click)="boolSeleccioneCliente=true" required #seleccioneCliente="ngModel">
+                                                    required >
                                                     <option value="">Seleccione un cliente</option>
                                                     <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                                 </select>
@@ -635,15 +635,7 @@
                                                                 autocomplete="off" class="form-control" name="Telefono_Envia"
                                                                 ngModel="{{DatosRemitente.Telefono}}">
                                                         </div>
-                                                    </div>
-                                                    <!--
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <button class="btn btn-info btn-sm btn-block" (click)="HistorialTransferenciaRemitente(DatosRemitente)">
-                                                                    Historial
-                                                                </button>
-                                                            </div>
-                                                        </div> -->
+                                                    </div>                                                  
                                                 </div>
                                             </div>
                                         </div>
@@ -2133,7 +2125,7 @@
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
+                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"  ></iframe>
                         <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>
                     </div>
                 </div>
@@ -2282,7 +2274,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
     <div class="app-modal-header">
-        <h4>Recibo {{EncabezadoRecibo[0].CodigoRecibo}}</h4>
+        <h4>Recibo </h4>
     </div>
     <div class="app-modal-body">
         <div class="table-overflow">
