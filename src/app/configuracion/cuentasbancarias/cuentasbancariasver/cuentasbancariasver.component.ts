@@ -15,12 +15,17 @@ export class CuentasbancariasverComponent implements OnInit {
 
 
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;   
   Movimientos=[];
   id = this.route.snapshot.params["id"];
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   SaldoActual: any;
   DatosBanco = [];
+  EncabezadoRecibo = [];
+  DestinatarioRecibo= [];
+  DevolucionesRecibo= [];
+  filaRecibo = false;
 
   constructor(private route: ActivatedRoute,private http : HttpClient, private globales: Globales) { }
 
@@ -108,6 +113,24 @@ export class CuentasbancariasverComponent implements OnInit {
       }
 
     });
+  }
+
+  verRecibo(valor){
+    this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
+      params: { id: valor }
+    }).subscribe((data: any) => {
+      this.EncabezadoRecibo = data.encabezado;
+      this.DestinatarioRecibo = data.destinatario;
+      this.DevolucionesRecibo = data.devoluciones;
+
+      if(this.DevolucionesRecibo.length > 0){
+        this.filaRecibo = true;
+      }else{
+        this.filaRecibo = false;
+      }
+
+      this.ModalVerRecibo.show();      
+    });    
   }
 
 }

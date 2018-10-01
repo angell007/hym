@@ -79,6 +79,7 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
+                  <th>Recibo</th>
                   <th>Detalle</th>
                   <th>Egreso</th>
                   <th>Ingreso</th>
@@ -88,6 +89,7 @@
               <tbody>
                 <tr *ngFor="let movimiento of Movimientos">
                   <td>{{movimiento.Fecha_Creacion | date:"short" }}</td>
+                  <td><a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)">{{movimiento.Codigo }}</a></td>
                   <td>{{movimiento.Detalle}}</td>
                   <td *ngIf="movimiento.Tipo==='Egreso'">{{movimiento.Valor | currency:"BsS."}}</td>
                   <td *ngIf="movimiento.Tipo==='Egreso'"></td>
@@ -159,3 +161,74 @@
 
 <swal #confirmacionSwal title="" text="" type="">
 </swal>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
+    <div class="app-modal-header">
+        <h4>Recibo {{EncabezadoRecibo[0].CodigoRecibo}}</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Fecha</td>
+                        <td>{{ item.Fecha }}</td>
+                        <td>Tipo Transferencia </td>
+                        <td colspan="3" style="text-align: center;">{{ item.Tipo_Transferencia }}</td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Total Pesos</td>
+                        <td>{{ item.Cantidad_Recibida | currency }}</td>
+                        <td>Total Bolivar</td>
+                        <td>{{item.Cantidad_Transferida | currency: "BsS."}}</td>
+                        <td>Al Cambio</td>
+                        <td>{{ item.Tasa_Cambio}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
+                    </tr>
+                    <tr *ngFor="let item1 of DestinatarioRecibo">
+                        <td colspan="2">{{ item1.Nombre }}</td>
+                        <td colspan="2">{{ item1.Numero_Cuenta }}</td>
+                        <td colspan="2">{{ item1.Valor_Transferencia_Bolivar | currency: "BsS." }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Observaciones del recibo </td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td colspan="6">{{item.Observacion_Transferencia}}</td>
+                    </tr>
+
+                    <tr *ngIf="filaRecibo">
+                            <td colspan="6"> </td>
+                        </tr>
+                        <tr *ngIf="filaRecibo">
+                            <td colspan="6" style="text-align: center;font-weight: bold;"> Devolución recibos </td>
+                        </tr>
+                        <tr *ngFor="let item3 of DevolucionesRecibo" >
+                            <td colspan="2">{{item3.Nombre}}</td>
+                            <td colspan="2">{{item3.Motivo_Devolucion}}</td>
+                            <td>{{item3.Numero_Cuenta}}</td>
+                            <td>{{item3.Valor | currency: "BsS." }}</td>
+                        </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+
+        </div>
+    </div>
+</app-modal-basic>
