@@ -366,13 +366,15 @@ export class PosComponent implements OnInit {
 
     switch (valor) {
       case "V": {
-        this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
+        //this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;         
+        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula, '_blank');
         break;
       }
       case "E": {
-        this.frame = true;
+        //this.frame = true;
         this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
+        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula, '_blank');
         break;
       }
       default: {
@@ -389,7 +391,8 @@ export class PosComponent implements OnInit {
 
   buscarRiff() {
     this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
-    this.frameRiff = !this.frameRiff;
+    //this.frameRiff = !this.frameRiff;
+    window.open("http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp",'_blank');
   }
 
   recargarBancos(i, id) {

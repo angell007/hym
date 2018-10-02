@@ -2095,7 +2095,7 @@
                     <div class="form-group">
                         <label>Tipo Doc.</label>
                         <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                            (change)="BuscarCNE($event.target.value)">
+                        (change)="BuscarCNE($event.target.value)"> <!--(change)="BuscarCNE($event.target.value)"-->
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2109,7 +2109,7 @@
                             ngModel={{Id_Destinatario}} required>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
                             Riff
-                        </button>
+                        </button> 
 
                     </div>
                 </div>
@@ -2120,7 +2120,8 @@
                             maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
                             ngModel required>
                     </div>
-                </div>
+                </div>               
+
             </div>
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
