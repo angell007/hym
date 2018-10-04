@@ -100,6 +100,9 @@ export class ComprasComponent implements OnInit {
         this.Caso1 = false;
         break;
       }
+      default:{
+        this.Caso1 = false;
+      }
     }
 
   }
