@@ -43,9 +43,9 @@ export class CuentasbancariasComponent implements OnInit {
 
   ngOnInit() {
     this.ActualizarVista();
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
+    /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
       this.Bancos = data;
-    });
+    });*/
   }
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
@@ -61,10 +61,15 @@ export class CuentasbancariasComponent implements OnInit {
   }
 
 
+  Paises =[];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/cuentasbancarias/lista_cuentas.php').subscribe((data: any) => {
       this.cuentas = data;
       this.dtTrigger.next();
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
+      this.Paises = data;
     });
 
     this.dtOptions = {
@@ -101,6 +106,12 @@ export class CuentasbancariasComponent implements OnInit {
       params: { modulo: 'Moneda' }
     }).subscribe((data: any) => {
       this.Monedas = data;
+    });
+  }
+
+  Bancos_Pais(Pais) {
+    this.http.get(this.globales.ruta + 'php/genericos/bancos_pais.php', { params: { id: Pais } }).subscribe((data: any) => {
+      this.Bancos = data;
     });
   }
 
@@ -155,6 +166,7 @@ export class CuentasbancariasComponent implements OnInit {
     }).subscribe((data: any) => {
       this.Identificacion = id;
       this.CuentaBancaria = data;
+      this.Bancos_Pais(data.Id_Pais);
       this.ModalEditarCuenta.show();
     });
   }
