@@ -107,6 +107,17 @@ export class ComprasComponent implements OnInit {
 
   }
 
+  CrearCompra(){
+    this.Lista_Destinatarios_Compra = [
+      {
+        Id_Cuenta_Bancaria: "",
+        Valor: 0
+  
+      }]
+      this.ModalCompra.show();
+  }
+
+
   agregarfila(pos) {
     var cuenta = this.Lista_Destinatarios_Compra[pos].Id_Cuenta_Bancaria;
     var valor = this.Lista_Destinatarios_Compra[pos].Valor;
@@ -180,6 +191,7 @@ export class ComprasComponent implements OnInit {
   }
 
   EdicionCompra=[];
+  AprobarCompra =false;
   EditarCompra(id, modal) {
     this.http.get(this.globales.ruta + 'php/compras/detalle_compra.php', {
       params: { modulo: 'Compra', id: id }
@@ -187,7 +199,22 @@ export class ComprasComponent implements OnInit {
       this.Identificacion = id;
       this.EdicionCompra = data.Compras[0];
       this.verificarTipoCompra(data.Compras[0].Tipo_Compra)
-      this.Lista_Destinatarios_Compra =data.CuentaCompra;     
+      this.Lista_Destinatarios_Compra =data.CuentaCompra;
+      var suma = 0;
+      this.Lista_Destinatarios_Compra.forEach(element => {
+        suma += element.Valor;
+      });     
+      console.log(suma);
+      
+      var resultado = parseInt(data.Compras[0].Abono) - suma;
+      console.log(resultado);
+      if(resultado == 0){
+        this.AprobarCompra = true;
+      }else{
+        this.AprobarCompra = false;
+      }
+      
+
       modal.show();
     });
   }
@@ -215,5 +242,32 @@ export class ComprasComponent implements OnInit {
     };
 
     req.send();
+  }
+
+  MarcarRealizada(formulario: NgForm, modal: any){    
+
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/compras/cambiar_estado.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {        
+        formulario.reset();
+        this.saveSwal.show();
+        modal.hide();
+        this.Lista_Destinatarios_Compra = [
+          {
+            Id_Cuenta_Bancaria: "",
+            Valor: 0
+          }
+        ]
+        this.EdicionCompra=[];
+        this.Identificacion ="";
+        this.ActualizarVista();
+      });
   }
 }

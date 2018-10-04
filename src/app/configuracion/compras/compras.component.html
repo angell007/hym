@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Compras en nuestro Sistema</h4>
-        <button class="pull-right btn btn-info" (click)="ModalCompra.show()">
+        <button class="pull-right btn btn-info" (click)="CrearCompra()">
             <i class="ti-plus"></i> Agregar Nueva Compra</button>
     </div>
     <div class="clearfix"></div>
@@ -93,7 +93,7 @@
 
                 <div class="col-md-4" *ngIf="Caso1">
                     <div class="form-group">
-                        <label>Valor Abono</label>
+                        <label>Valor Compra</label>
                         <input required class="form-control" name="Abono" ngModel [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
@@ -163,8 +163,6 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCompra" #ModalVerCompra>
     <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
         <h4>Ver Compra</h4>
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
@@ -279,7 +277,7 @@
     
                     <div class="col-md-4" *ngIf="Caso1">
                         <div class="form-group">
-                            <label>Valor Abono</label>
+                            <label>Valor Compra</label>
                             <input required class="form-control" name="Abono" ngModel="{{EdicionCompra.Abono}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                         </div>
                     </div>
@@ -345,6 +343,8 @@
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
+            <button class="btn btn-primary btn-sm" *ngIf="AprobarCompra" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a marcar esta compra como realizada' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="MarcarRealizada(FormEditarCompra, ModalEditarCompra)">Aprobar</button>
         </div>
     </div>
 </app-modal-basic>
