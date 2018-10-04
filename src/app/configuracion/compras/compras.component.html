@@ -314,8 +314,12 @@
                                                     </select>
                                                 </td>
                                                 <td>
+                                                    <label>{{ item.Valor | currency:"BsS." }}</label>
+        
+                                                    </td>
+                                                <td>
                                                     <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
-                                                        [(ngModel)]="item.Valor" required (input)="agregarfila(i)">
+                                                        [(ngModel)]="item.Sumatoria" required (input)="CambiarValores(i,$event.target.value)">
     
                                                 </td>
                                             </tr>

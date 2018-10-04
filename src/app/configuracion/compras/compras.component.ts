@@ -191,6 +191,10 @@ export class ComprasComponent implements OnInit {
     });
   }
 
+  CambiarValores(i,value){
+    this.Lista_Destinatarios_Compra[i].Valor = value;
+  }
+
   EliminarCompra(id) {
     let datos = new FormData();
     datos.append("modulo", 'Compra');
