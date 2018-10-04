@@ -143,8 +143,7 @@ export class ComprasComponent implements OnInit {
         this.errorSwal.show();
         return this.handleError(error);
       })
-      .subscribe((data: any) => {
-        this.ActualizarVista();
+      .subscribe((data: any) => {        
         formulario.reset();
         this.saveSwal.show();
         modal.hide();
@@ -152,9 +151,10 @@ export class ComprasComponent implements OnInit {
           {
             Id_Cuenta_Bancaria: "",
             Valor: 0
-
           }
         ]
+        this.EdicionCompra=[];
+        this.ActualizarVista();
       });
   }
 
@@ -180,13 +180,10 @@ export class ComprasComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/compras/detalle_compra.php', {
       params: { modulo: 'Compra', id: id }
     }).subscribe((data: any) => {
-      console.log(id);
       this.Identificacion = id;
-      console.log(data)
       this.EdicionCompra = data.Compras[0];
       this.verificarTipoCompra(data.Compras[0].Tipo_Compra)
-      this.Lista_Destinatarios_Compra =data.CuentaCompra;
-      
+      this.Lista_Destinatarios_Compra =data.CuentaCompra;     
       modal.show();
     });
   }
