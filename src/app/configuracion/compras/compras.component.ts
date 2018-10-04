@@ -175,16 +175,18 @@ export class ComprasComponent implements OnInit {
     });
   }
 
+  EdicionCompra=[];
   EditarCompra(id, modal) {
-    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+    this.http.get(this.globales.ruta + 'php/compras/detalle_compra.php', {
       params: { modulo: 'Compra', id: id }
     }).subscribe((data: any) => {
       console.log(id);
       this.Identificacion = id;
-      this.Proveedor = data.Id_Proveedor;
-      this.Valor = data.Valor;
-      this.TasaCambio = data.Tasa_Cambio;
-      this.Funcionario = data.Identificacion_Funcionario;
+      console.log(data)
+      this.EdicionCompra = data.Compras[0];
+      this.verificarTipoCompra(data.Compras[0].Tipo_Compra)
+      this.Lista_Destinatarios_Compra =data.CuentaCompra;
+      
       modal.show();
     });
   }

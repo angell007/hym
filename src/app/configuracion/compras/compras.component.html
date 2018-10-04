@@ -229,12 +229,10 @@
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCompra" #ModalEditarCompra>
-    <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
+    <div class="app-modal-header">        
         <h4>Editar Compra</h4>
     </div>
-    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <div class="app-modal-body">
         <form #FormEditarCompra="ngForm">
             <div class="col-md-4" hidden>
                 <div class="form-group">
@@ -244,52 +242,103 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Proveedor</label>
-                        <select class="form-control" name="Id_Proveedor" ngModel="{{Proveedor}}" (focus)="$event.target.select()"
-                            (focusout)="boolProveedor = true" required #proveedorEd="ngModel">
-                            <option value="">Seleccione un Proveedor</option>
-                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Proveedor">{{Proveedor.Nombre}}</option>
-                        </select>
-                        <div *ngIf="proveedorEd.value=='' && boolProveedor==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!proveedorEd.value==''" style="color:green">Datos correctos!</div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Proveedor</label>
+                            <select class="form-control" required name="Id_Tercero" ngModel="{{EdicionCompra.Id_Tercero}}">
+                                <option value="">Seleccione un Proveedor</option>
+                                <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Valor</label>
-                        <input currencyMask class="form-control" name="Valor" ngModel="{{Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            (focus)="$event.target.select()" (focusout)="boolValor = true" required #valorEd="ngModel">
-                        <div *ngIf="!valorEd.valid && boolValor==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="valorEd.valid && boolValor==true" style="color:green">Datos correctos!</div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>País</label>
+                            <select class="form-control" required name="Id_Pais" ngModel="{{EdicionCompra.Id_Pais}}">
+                                <option value="">Seleccione un País</option>
+                                <option *ngFor="let pais of Pais" [value]="pais.Id_Pais">{{pais.Nombre}}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Tasa Cambio</label>
-                        <input currencyMask class="form-control" name="Tasa_Cambio" ngModel="{{TasaCambio}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            (focus)="$event.target.select()" (focusout)="boolTasaCambio = true" required #tasaCambioEd="ngModel">
-                        <div *ngIf="!tasaCambioEd.valid && boolTasaCambio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="tasaCambioEd.valid && boolTasaCambio==true" style="color:green">Datos correctos!</div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Moneda</label>
+                            <select class="form-control" required name="Id_Moneda" ngModel="{{EdicionCompra.Id_Moneda}}">
+                                <option value="">Seleccione una Moneda</option>
+                                <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Funcionario</label>
-                        <select class="form-control" required name="Identificacion_Funcionario" ngModel="{{Funcionario}}"
-                            (focus)="$event.target.select()" (focusout)="boolFuncionario = true" required
-                            #funcionarioEd="ngModel">
-                            <option value="">Seleccione un Funcionario</option>
-                            <option *ngFor="let Funcionario of Funcionarios" [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}</option>
-                        </select>
-                        <div *ngIf="funcionarioEd.value=='' && boolFuncionario==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!funcionarioEd.value==''" style="color:green">Datos correctos!</div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Tipo de Compra</label>
+                            <select class="form-control" required name="Tipo_Compra" ngModel="{{EdicionCompra.Tipo_Compra}}" (change)="verificarTipoCompra($event.target.value)">
+                                <option value="">Seleccione un tipo de compra</option>
+                                <option value="Banco">Depositar en Banco</option>
+                                <option value="Transferencia">Pagar Transferencia</option>
+                                <option value="Cliente">Depositar Cliente</option>
+                            </select>
+                        </div>
                     </div>
+    
+                    <div class="col-md-4" *ngIf="Caso1">
+                        <div class="form-group">
+                            <label>Valor Abono</label>
+                            <input required class="form-control" name="Abono" ngModel="{{EdicionCompra.Abono}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        </div>
+                    </div>
+    
+                    <div class="col-md-4" *ngIf="Caso1">
+                        <div class="form-group">
+                            <label>Tasa</label>
+                            <input required class="form-control" name="Tasa" ngModel="{{EdicionCompra.Tasa}}">
+                        </div>
+                    </div>
+    
+                    <div class="col-md-4" *ngIf="Caso1">
+                        <div class="form-group">
+                            <label>Valor en peso</label>
+                            <input required class="form-control" name="Valor_Peso" ngModel="{{EdicionCompra.Valor_Peso}}">
+                        </div>
+                    </div>
+    
+                    <div class="col-md-12" *ngIf="Caso1">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="table-responsive">
+                                    <table class="table  invoice-detail-table">
+                                        <tbody>
+                                            <tr *ngFor="let item of Lista_Destinatarios_Compra; let i = index" id="fila{{i}}">
+                                                <td>
+                                                    <select class="form-control" id="Id_Cuenta_Bancaria{{i}}" name="Id_Cuenta_Bancaria{{i}}"
+                                                        [(ngModel)]="item.Id_Cuenta_Bancaria" required (change)="agregarfila(i)">
+                                                        <option value="">Seleccione Cuenta</option>
+                                                        <option *ngFor="let cuentaBancaria of CuentaBancaria; let i=index"
+                                                            [value]="cuentaBancaria.Id_Cuenta_Bancaria">{{cuentaBancaria.Nombre_Titular}}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
+                                                        [(ngModel)]="item.Valor" required (input)="agregarfila(i)">
+    
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detalle</label>
+                            <textarea rows="4" cols="50" class="form-control" placeholder="Detalle Compra" name="Detalle"
+                            ngModel="{{EdicionCompra.Detalle}}"></textarea>
+                        </div>
+                    </div>
+    
                 </div>
-            </div>
         </form>
     </div>
     <div class="app-modal-footer">
