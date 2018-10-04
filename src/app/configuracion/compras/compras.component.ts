@@ -20,7 +20,7 @@ export class ComprasComponent implements OnInit {
 
   //variables que hacen referencia a los campos del formulario editar   
 
-  public Identificacion: any[];
+  public Identificacion: any;
   public Proveedor: any[];
   public Valor: any[];
   public TasaCambio: any[];
@@ -157,6 +157,7 @@ export class ComprasComponent implements OnInit {
           }
         ]
         this.EdicionCompra=[];
+        this.Identificacion ="";
         this.ActualizarVista();
       });
   }
