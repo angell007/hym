@@ -32,6 +32,8 @@ export class TableroconsultorComponent implements OnInit {
   @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
   @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;   
+  @ViewChild('ModalVerCompra') ModalVerCompra: any;   
+  
 
   Identificacion: any;
   CuentaDestino: any;
@@ -49,6 +51,7 @@ export class TableroconsultorComponent implements OnInit {
   DestinatarioRecibo = [];
   DevolucionesRecibo = [];
   filaRecibo = false;
+  compras = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -98,13 +101,43 @@ export class TableroconsultorComponent implements OnInit {
     };
   }
   
+  Pendientes = true;
+  Realizadas  = false;
+  ComprasPendientes = false;
 
+  mostrarPendientes(){
+    this.Pendientes = true;
+    this.Realizadas = false;
+    this.ComprasPendientes = false;
+  }
+
+  mostrarRealizadas(){
+    this.Pendientes = false;
+    this.Realizadas = true;
+    this.ComprasPendientes = false;
+  }
+
+  MostrarComprasPendientes(){
+    this.ComprasPendientes = true;
+    this.Pendientes = false;
+    this.Realizadas = false;
+
+  }
+
+  cuentasBancarias =[];
   ActualizarVista() {    
 
+    /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
+      this.compras = data;
+    });*/
+
+    this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
+      this.cuentasBancarias = data;
+    });
+    
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
       this.conteoTransferencias = data[0];
     });
-
 
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
     .subscribe((data: any) => {
@@ -222,22 +255,6 @@ export class TableroconsultorComponent implements OnInit {
     });
   }
 
-  /*
-  alertaDesbloqueo(usuario){
-
-    this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
-      params: { id: usuario }
-    }).subscribe((data: any) => {
-      this.desbloqueoSwal.title = "Desbloqueo"
-      this.desbloqueoSwal.text ='Está transferencia fue bloqueada por '+data[0].nombreFuncionario+' ¿ Está seguro que desea desbloquearla ?' , 
-      this.desbloqueoSwal.type='warning', 
-      this.desbloqueoSwal.showCancelButton= true, 
-      this.desbloqueoSwal.confirmButtonText= 'Si, Desbloquear', 
-      this.desbloqueoSwal.cancelButtonText='No, Dejame Comprobar!'
-      this.desbloqueoSwal.show();      
-    });
-   
-  }*/
   
   BloquearTransferenciaDestinatario(id, estado) {
     let datos = new FormData();
@@ -378,5 +395,102 @@ export class TableroconsultorComponent implements OnInit {
 
       this.ModalVerRecibo.show();      
     });    
+  }
+
+  detalleCompra =[];
+  Pagos = [{
+    Ingreso : "",
+    Transferencia : ""
+  }]
+  Abonos = [{
+    Abono : ""
+  }]
+
+  HabilitarCobroBanesco = false;
+  idCompra:any;
+  idCuenta:any;
+  idCompraCuenta:any;
+  auditarCompra(idCompra,idCuenta, idCompraCuenta){
+    var posCuenta = this.cuentasBancarias.findIndex(x=> x.Id_Cuenta_Bancaria === idCuenta);
+
+    if(this.cuentasBancarias[posCuenta].Numero_Cuenta.substring(0, 4) == "0134"){
+      this.HabilitarCobroBanesco = true;
+    }else{
+      this.HabilitarCobroBanesco = false;
+    }
+
+    this.idCompra = idCompra;
+    this.idCuenta = idCuenta;
+    this.idCompraCuenta = idCompraCuenta;
+
+    var posCompra = this.cuentasBancarias[posCuenta].Compra.findIndex(x=>x.Id_Compra == idCompra);
+    this.detalleCompra = this.cuentasBancarias[posCuenta].Compra[posCompra];
+    this.ModalVerCompra.show();   
+
+  }
+
+  GuardarMovimientoCompra(formulario: NgForm, modal){
+    console.log(this.Pagos);
+    console.log(this.Abonos);
+
+    this.Pagos.forEach((element,index) => {
+     if(element.Ingreso == "" || element.Transferencia == ""){
+        this.Pagos.splice(index,1);
+      }
+    });
+
+    this.Abonos.forEach((element,index) => {
+      if(element.Abono == ""){
+        this.Abonos.splice(index,1);
+      }
+    });
+
+    let info = JSON.stringify(formulario.value);
+    let pagos = JSON.stringify(this.Pagos);
+    let abonos = JSON.stringify(this.Abonos);
+    let datos = new FormData();
+    datos.append("datos", info);
+    datos.append("pagos", pagos);
+    datos.append("abonos", abonos);
+    this.http.post(this.globales.ruta + 'php/compras/guardar_movimiento_compra.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Compra Actualizada"
+      this.mensajeSwal.text = "Se ha Actualizado correctamente la compra"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      modal.hide();
+    });
+    //modal.hide():
+  }
+
+  agregarfilaIngresos(pos) {
+    var cuenta = this.Pagos[pos].Transferencia;
+    var valor = this.Pagos[pos].Ingreso;
+
+    if (parseInt(valor) > 0 && cuenta != "") {
+      var i = pos + 1;
+      if (this.Pagos[i] == undefined) {
+        this.Pagos.push(
+          {
+            Ingreso : "",
+            Transferencia : ""
+          });
+
+      }
+    }
+  }
+
+  agregarfilaAbonos(pos){
+    var valor = this.Abonos[pos].Abono;
+    if (parseInt(valor) > 0 ) {
+      var i = pos + 1;
+      if (this.Abonos[i] == undefined) {
+        this.Abonos.push(
+          {
+            Abono : ""
+          });
+
+      }
+    }
   }
 }
