@@ -281,12 +281,7 @@ export class ComprasComponent implements OnInit {
     var suma = 0;
     this.Lista_Destinatarios_Compra.forEach(element => {
       suma+= Number(element.Valor);
-      console.log(suma)
     });    
-
-    console.log(suma)
-    console.log(suma == parseInt(this.totalCompra));
-    console.log(this.totalCompra)
 
     if(suma == parseInt(this.totalCompra)){
       this.agregarfila(pos);
