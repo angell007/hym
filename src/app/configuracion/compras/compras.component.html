@@ -101,14 +101,14 @@
                 <div class="col-md-4" *ngIf="Caso1">
                     <div class="form-group">
                         <label>Tasa</label>
-                        <input required class="form-control" name="Tasa" ngModel>
+                        <input required class="form-control" name="Tasa" ngModel (input)="calcularValorMoneda($event.target.value)">
                     </div>
                 </div>
 
                 <div class="col-md-4" *ngIf="Caso1">
                     <div class="form-group">
                         <label>Valor en peso</label>
-                        <input required class="form-control" name="Valor_Peso" ngModel>
+                        <input required class="form-control" name="Valor_Peso" ngModel="{{tasa}}" readonly>
                     </div>
                 </div>
 
@@ -285,7 +285,7 @@
                     <div class="col-md-4" *ngIf="Caso1">
                         <div class="form-group">
                             <label>Tasa</label>
-                            <input required class="form-control" name="Tasa" ngModel="{{EdicionCompra.Tasa}}">
+                            <input required class="form-control" name="Tasa" ngModel="{{EdicionCompra.Tasa}}" >
                         </div>
                     </div>
     

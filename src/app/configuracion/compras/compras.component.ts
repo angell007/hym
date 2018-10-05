@@ -288,4 +288,18 @@ export class ComprasComponent implements OnInit {
     }
 
   }
+
+  //operacion  this.entregar = (parseInt(monedaOrigen) / parseInt(value));
+
+  tasa:any;
+  calcularValorMoneda(value){
+    
+    if(value == ""){
+      this.tasa = 0.0;
+    }else{
+      this.tasa = (parseFloat(this.totalCompra) * parseFloat(value));
+      
+    }
+  }
+
 }
