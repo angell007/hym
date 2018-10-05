@@ -94,7 +94,7 @@
                 <div class="col-md-4" *ngIf="Caso1">
                     <div class="form-group">
                         <label>Valor Compra</label>
-                        <input required class="form-control" name="Abono" ngModel [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <input (blur)="ValidarValorCompra($event.target.value)" required class="form-control" name="Abono" ngModel [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 
@@ -121,7 +121,7 @@
                                         <tr *ngFor="let item of Lista_Destinatarios_Compra; let i = index" id="fila{{i}}">
                                             <td>
                                                 <select class="form-control" id="Id_Cuenta_Bancaria{{i}}" name="Id_Cuenta_Bancaria{{i}}"
-                                                    [(ngModel)]="item.Id_Cuenta_Bancaria" required (change)="agregarfila(i)">
+                                                    [(ngModel)]="item.Id_Cuenta_Bancaria" required (change)="validarAutoSuma(i);">
                                                     <option value="">Seleccione Cuenta</option>
                                                     <option *ngFor="let cuentaBancaria of CuentaBancaria; let i=index"
                                                         [value]="cuentaBancaria.Id_Cuenta_Bancaria">{{cuentaBancaria.Nombre_Titular}}</option>
@@ -129,7 +129,7 @@
                                             </td>
                                             <td>
                                                 <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
-                                                    [(ngModel)]="item.Valor" required (input)="agregarfila(i)">
+                                                    [(ngModel)]="item.Valor" required (change)="validarAutoSuma(i);">
 
                                             </td>
                                         </tr>

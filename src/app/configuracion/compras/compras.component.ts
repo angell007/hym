@@ -270,4 +270,27 @@ export class ComprasComponent implements OnInit {
         this.ActualizarVista();
       });
   }
+
+  totalCompra: any;
+  ValidarValorCompra(value){
+   this.totalCompra = value;
+   this.Lista_Destinatarios_Compra[0].Valor = value;
+  }
+  
+  validarAutoSuma(pos){
+    var suma = 0;
+    this.Lista_Destinatarios_Compra.forEach(element => {
+      suma+= Number(element.Valor);
+      console.log(suma)
+    });    
+
+    console.log(suma)
+    console.log(suma == parseInt(this.totalCompra));
+    console.log(this.totalCompra)
+
+    if(suma == parseInt(this.totalCompra)){
+      this.agregarfila(pos);
+    }
+
+  }
 }
