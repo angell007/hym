@@ -54,6 +54,11 @@ export class ComprasComponent implements OnInit {
     this.ActualizarVista();
   }
 
+  ngAfterViewInit() {
+    (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+  }
+
+
   CuentaBancaria = [];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
@@ -100,21 +105,21 @@ export class ComprasComponent implements OnInit {
         this.Caso1 = false;
         break;
       }
-      default:{
+      default: {
         this.Caso1 = false;
       }
     }
 
   }
 
-  CrearCompra(){
+  CrearCompra() {
     this.Lista_Destinatarios_Compra = [
       {
         Id_Cuenta_Bancaria: "",
         Valor: 0
-  
+
       }]
-      this.ModalCompra.show();
+    this.ModalCompra.show();
   }
 
 
@@ -137,6 +142,16 @@ export class ComprasComponent implements OnInit {
 
   }
 
+  nombre: any;
+  nombreProveedor(valor) {
+    if (valor != "") {
+      var proveedor = this.Proveedores.findIndex(x => x.Id_Tercero === valor);
+      this.nombre = this.Proveedores[proveedor].Nombre;
+    } else {
+      this.nombre = "";
+    }
+  }
+
   GuardarCompra(formulario: NgForm, modal: any) {
 
     this.Lista_Destinatarios_Compra.forEach((element, index) => {
@@ -157,7 +172,7 @@ export class ComprasComponent implements OnInit {
         this.errorSwal.show();
         return this.handleError(error);
       })
-      .subscribe((data: any) => {        
+      .subscribe((data: any) => {
         formulario.reset();
         this.saveSwal.show();
         modal.hide();
@@ -167,8 +182,8 @@ export class ComprasComponent implements OnInit {
             Valor: 0
           }
         ]
-        this.EdicionCompra=[];
-        this.Identificacion ="";
+        this.EdicionCompra = [];
+        this.Identificacion = "";
         this.ActualizarVista();
       });
   }
@@ -190,8 +205,8 @@ export class ComprasComponent implements OnInit {
     });
   }
 
-  EdicionCompra=[];
-  AprobarCompra =false;
+  EdicionCompra = [];
+  AprobarCompra = false;
   EditarCompra(id, modal) {
     this.http.get(this.globales.ruta + 'php/compras/detalle_compra.php', {
       params: { modulo: 'Compra', id: id }
@@ -199,27 +214,27 @@ export class ComprasComponent implements OnInit {
       this.Identificacion = id;
       this.EdicionCompra = data.Compras[0];
       this.verificarTipoCompra(data.Compras[0].Tipo_Compra)
-      this.Lista_Destinatarios_Compra =data.CuentaCompra;
+      this.Lista_Destinatarios_Compra = data.CuentaCompra;
       var suma = 0;
       this.Lista_Destinatarios_Compra.forEach(element => {
         suma += element.Valor;
-      });     
+      });
       console.log(suma);
-      
+
       var resultado = parseInt(data.Compras[0].Abono) - suma;
       console.log(resultado);
-      if(resultado == 0){
+      if (resultado == 0) {
         this.AprobarCompra = true;
-      }else{
+      } else {
         this.AprobarCompra = false;
       }
-      
+
 
       modal.show();
     });
   }
 
-  CambiarValores(i,value){
+  CambiarValores(i, value) {
     this.Lista_Destinatarios_Compra[i].Valor = value;
   }
 
@@ -244,7 +259,7 @@ export class ComprasComponent implements OnInit {
     req.send();
   }
 
-  MarcarRealizada(formulario: NgForm, modal: any){    
+  MarcarRealizada(formulario: NgForm, modal: any) {
 
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
@@ -255,7 +270,7 @@ export class ComprasComponent implements OnInit {
         this.errorSwal.show();
         return this.handleError(error);
       })
-      .subscribe((data: any) => {        
+      .subscribe((data: any) => {
         formulario.reset();
         this.saveSwal.show();
         modal.hide();
@@ -265,40 +280,50 @@ export class ComprasComponent implements OnInit {
             Valor: 0
           }
         ]
-        this.EdicionCompra=[];
-        this.Identificacion ="";
+        this.EdicionCompra = [];
+        this.Identificacion = "";
         this.ActualizarVista();
       });
   }
 
   totalCompra: any;
-  ValidarValorCompra(value){
-   this.totalCompra = value;
-   this.Lista_Destinatarios_Compra[0].Valor = value;
+
+  ValidarValorCompra(value) {
+    this.totalCompra = value;
+    this.Lista_Destinatarios_Compra[0].Valor = value;
+
+    var tasa = (document.getElementById("Tasa") as HTMLInputElement).value;
+
+    if (tasa != "" || tasa != undefined) {
+      this.tasa = (parseFloat(value) * parseFloat(tasa));
+    }
+
   }
-  
-  validarAutoSuma(pos){
+
+  validarAutoSuma(pos) {
     var suma = 0;
     this.Lista_Destinatarios_Compra.forEach(element => {
-      suma+= Number(element.Valor);
-    });    
+      suma += Number(element.Valor);
+    });
 
-    if(suma == parseInt(this.totalCompra)){
+    if (suma == parseInt(this.totalCompra)) {
       this.agregarfila(pos);
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = false;
+    } else {
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
     }
 
   }
 
   //operacion  this.entregar = (parseInt(monedaOrigen) / parseInt(value));
 
-  tasa:any;
-  calcularValorMoneda(value){
-    
-    if(value == ""){
+  tasa: any;
+  calcularValorMoneda(value) {
+
+    if (value == "" || value == undefined) {
       this.tasa = 0.0;
-    }else{
+    } else {
       this.tasa = (parseFloat(this.totalCompra) * parseFloat(value));
-      
     }
   }
 

@@ -97,7 +97,7 @@ export class CommonLayoutComponent implements OnInit {
         }
 
         this.startTimer();
-        console.log(localStorage)
+        //console.log(localStorage)
     }
 
     salir() {
@@ -115,10 +115,10 @@ export class CommonLayoutComponent implements OnInit {
             timeout: 15000,
             theme: "bootstrap",
             onAdd: (toast: ToastData) => {
-                console.log('Toast ' + toast.id + ' has been added!');
+                //console.log('Toast ' + toast.id + ' has been added!');
             },
             onRemove: function (toast: ToastData) {
-                console.log('Toast ' + toast.id + ' has been removed!');
+                //console.log('Toast ' + toast.id + ' has been removed!');
             }
         };
         this.toastyService.error(toastOptions);
@@ -127,13 +127,13 @@ export class CommonLayoutComponent implements OnInit {
 
 
     CambiarContrasena(formulario: NgForm) {
-        console.log(formulario.value);
+        //console.log(formulario.value);
         let datos = new FormData();
         datos.append("clave", formulario.value.clave);
         datos.append("user", this.user.Identificacion_Funcionario);
         this.http.post(this.globales.ruta + 'php/funcionarios/cambia_clave.php', datos).subscribe((data: any) => {
             this.changePasswordMessage = data.Mensaje;
-            console.log(this.changePasswordMessage);
+            //console.log(this.changePasswordMessage);
             formulario.reset();
             this.ModalCambiarContrasena.hide();
             this.confirmSwal.show();
