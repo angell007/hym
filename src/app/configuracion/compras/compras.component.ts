@@ -307,15 +307,11 @@ export class ComprasComponent implements OnInit {
     });
 
     if (suma == parseInt(this.totalCompra)) {
-      this.agregarfila(pos);
-      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = false;
-    } else {
-      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
-    }
+      this.agregarfila(pos);      
+    } 
 
   }
 
-  //operacion  this.entregar = (parseInt(monedaOrigen) / parseInt(value));
 
   tasa: any;
   calcularValorMoneda(value) {
@@ -326,5 +322,44 @@ export class ComprasComponent implements OnInit {
       this.tasa = (parseFloat(this.totalCompra) * parseFloat(value));
     }
   }
+
+  validarSelect(value) {
+    
+    var tercero = (document.getElementById("Lista_Id_Tercero") as HTMLInputElement).value;
+    var pais = (document.getElementById("Lista_Id_Pais") as HTMLInputElement).value;
+    var moneda = (document.getElementById("Lista_Id_Moneda") as HTMLInputElement).value;
+    var tipo_compra = (document.getElementById("Lista_Tipo_Compra") as HTMLInputElement).value;
+
+    if (tercero == "") {
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+    } 
+
+    if (pais == "") {
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+    } 
+
+    if (moneda == "") {
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+    } 
+
+    if (tipo_compra == "") {
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+    } 
+
+  }
+
+  HabilitarGuardar(value){
+    if(this.LongitudCarateres(value) > 5){
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = false;
+    }else{
+      (document.getElementById("BotonCompraCrear") as HTMLInputElement).disabled = true;
+    }
+    
+  }
+
+  LongitudCarateres(i) {
+    return parseInt(i.length);
+  }
+
 
 }

@@ -15,14 +15,18 @@ export class CuentasbancariasverComponent implements OnInit {
 
 
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;   
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
+  @ViewChild('ModalAjusteEditar') ModalAjusteEditar: any;   
+  
   Movimientos=[];
   id = this.route.snapshot.params["id"];
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   SaldoActual: any;
   DatosBanco = [];
-  EncabezadoRecibo = [];
+  EncabezadoRecibo = [{
+    
+  }];
   DestinatarioRecibo= [];
   DevolucionesRecibo= [];
   filaRecibo = false;
@@ -36,8 +40,8 @@ export class CuentasbancariasverComponent implements OnInit {
   }
 
   datosCuentaBancaria(){
-    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
-      params: { id: this.id, modulo: 'Cuenta_Bancaria' }
+    this.http.get(this.globales.ruta + 'php/bancos/detalle_banco.php', {
+      params: { id: this.id }
     }).subscribe((data: any) => {
       this.DatosBanco = data;
     });
@@ -48,40 +52,10 @@ export class CuentasbancariasverComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
       params: { id:this.id }
     }).subscribe((data: any) => {
-      console.log(data)
       this.Movimientos = data.lista;
-      this.dtTrigger.next();
     });
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
+    
   }
 
   GuardarMovimiento(formulario: NgForm, modal) {
@@ -89,7 +63,7 @@ export class CuentasbancariasverComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Movimiento_Cuenta_Bancaria');
     datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
+    this.http.post(this.globales.ruta + 'php/bancos/guardar_ajuste.php', datos)
       .subscribe((data: any) => {
         formulario.reset();
         modal.hide();
@@ -133,4 +107,32 @@ export class CuentasbancariasverComponent implements OnInit {
     });    
   }
 
+  borrarAjuste(id){
+    let datos = new FormData();
+    datos.append("modulo", 'Movimiento_Cuenta_Bancaria');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos)
+      .subscribe((data: any) => {
+        this.ActualizarVista();
+        this.confirmacionSwal.title = "Movimiento Eliminado"
+        this.confirmacionSwal.text = "Se ha eliminado el ajuste"
+        this.confirmacionSwal.type = "success";
+        this.confirmacionSwal.show();
+        this.calcularSaldoActual();
+      });
+  }
+
+  idItem:any;
+  ajusteBancario = [];
+  editarAjuste(id , modal){
+    this.idItem = id;
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { id: id , modulo:"Movimiento_Cuenta_Bancaria"}
+    }).subscribe((data: any) => {
+      this.ajusteBancario = data;
+    });
+
+    modal.show();
+   }
+  
 }
