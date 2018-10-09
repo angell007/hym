@@ -38,9 +38,9 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
   @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
   @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
-  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;   
-  @ViewChild('ModalVerCompra') ModalVerCompra: any;   
-  
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
+  @ViewChild('ModalVerCompra') ModalVerCompra: any;
+
 
   Identificacion: any;
   CuentaDestino: any;
@@ -49,7 +49,7 @@ export class TransferenciasComponent implements OnInit {
   Monto: any;
   BancosEmpresa = [];
   idTransferencia: any;
-  transferenciasRealizadas =[];
+  transferenciasRealizadas = [];
   valorDevolverTransferencia: any;
   PagoTransferencia: any;
   Recibo: any;
@@ -66,73 +66,43 @@ export class TransferenciasComponent implements OnInit {
     this.ActualizarVista();
 
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      
+
       data.pendientes.forEach(element => {
-        if(element.Valor_Transferencia_Bolivar !== 0){
+        if (element.Valor_Transferencia_Bolivar !== 0) {
           this.transferencias.push(element);
-        }        
+        }
       });
       this.transferenciasRealizadas = data.realizadas;
-      this.dtTrigger.next();
-      
+
     });
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
   }
-  
+
   Pendientes = true;
-  Realizadas  = false;
+  Realizadas = false;
   ComprasPendientes = false;
 
-  mostrarPendientes(){
+  mostrarPendientes() {
     this.Pendientes = true;
     this.Realizadas = false;
     this.ComprasPendientes = false;
   }
 
-  mostrarRealizadas(){
+  mostrarRealizadas() {
     this.Pendientes = false;
     this.Realizadas = true;
     this.ComprasPendientes = false;
   }
 
-  MostrarComprasPendientes(){
+  MostrarComprasPendientes() {
     this.ComprasPendientes = true;
     this.Pendientes = false;
     this.Realizadas = false;
 
   }
 
-  cuentasBancarias =[];
-  ActualizarVista() {    
+  cuentasBancarias = [];
+  ActualizarVista() {
 
     /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
       this.compras = data;
@@ -141,15 +111,15 @@ export class TransferenciasComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
       this.cuentasBancarias = data;
     });
-    
+
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
       this.conteoTransferencias = data[0];
     });
 
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
-    .subscribe((data: any) => {
-      this.BancosEmpresa = data;
-    });
+      .subscribe((data: any) => {
+        this.BancosEmpresa = data;
+      });
 
     this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
       var chart = AmCharts.makeChart("chartdiv", {
@@ -186,18 +156,18 @@ export class TransferenciasComponent implements OnInit {
 
 
   }
-  
-  refrescarVistaPrincipalConsultor(){
-    this.transferencias =[];
-    this.transferenciasRealizadas =[];
+
+  refrescarVistaPrincipalConsultor() {
+    this.transferencias = [];
+    this.transferenciasRealizadas = [];
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-      
+
       data.pendientes.forEach(element => {
-        if(element.Valor_Transferencia_Bolivar !== 0){
+        if (element.Valor_Transferencia_Bolivar !== 0) {
           this.transferencias.push(element);
-        }        
+        }
       });
-      this.transferenciasRealizadas = data.realizadas;      
+      this.transferenciasRealizadas = data.realizadas;
     });
   }
 
@@ -254,7 +224,7 @@ export class TransferenciasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia_Destinatario');
     datos.append("id", id);
-    datos.append("estado", estado); 
+    datos.append("estado", estado);
     datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
     this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
       //this.bloqueoSwal.show();
@@ -262,7 +232,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  
+
   BloquearTransferenciaDestinatario(id, estado) {
     let datos = new FormData();
     datos.append("modulo", 'Transferencia_Destinatario');
@@ -275,17 +245,17 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado,funcionario) {
-    
-    if(funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario){
+  Bloqueado(estado, funcionario) {
+
+    if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
       switch (estado) {
         case "Si": { return false }
         case "No": { return true }
-      }      
-    }else{
+      }
+    } else {
       return true
     }
-    
+
   }
 
   Devuelto(estado) {
@@ -310,13 +280,13 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  RealizarTransferencia(id,numeroCuenta,valor,cajero,codigo) {
+  RealizarTransferencia(id, numeroCuenta, valor, cajero, codigo) {
     //this.BloquearTransferencia(id, "No");
-   
+
     this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
-      params: { id: id , cuentaBancaria : numeroCuenta }
+      params: { id: id, cuentaBancaria: numeroCuenta }
     }).subscribe((data: any) => {
-      
+
       this.idTransferencia = id;
       this.CuentaDestino = data.cuenta
       this.Recibe = data.NombreDestinatario
@@ -330,20 +300,20 @@ export class TransferenciasComponent implements OnInit {
       } else {
         this.ModalCrearTransferenciaOtroBanco.show();
       }
-      
+
       this.refrescarVistaPrincipalConsultor();
 
     });
   }
 
-  verificarBloqueo(id, numeroCuenta, valorActual,cajero,codigo){
+  verificarBloqueo(id, numeroCuenta, valorActual, cajero, codigo) {
     this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      switch(data[0].Bloqueo){//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
-        case "Si": { this.mensajeSwal.title="Estado transferencia"; this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].nombreFuncionario; this.mensajeSwal.type="error"; this.mensajeSwal.show(); break;  }
-        case "No": { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual,cajero,codigo); break; }
-        default: { this.BloquearTransferenciaDestinatario(id,"No"); this.RealizarTransferencia(id,numeroCuenta,valorActual,cajero,codigo); break; }
+      switch (data[0].Bloqueo) {//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
+        case "Si": { this.mensajeSwal.title = "Estado transferencia"; this.mensajeSwal.text = "Esta transferencia fue bloqueda por " + data[0].nombreFuncionario; this.mensajeSwal.type = "error"; this.mensajeSwal.show(); break; }
+        case "No": { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual, cajero, codigo); break; }
+        default: { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual, cajero, codigo); break; }
       }
     });
   }
@@ -363,7 +333,7 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  CrearTransferencia(formulario: NgForm, modal){
+  CrearTransferencia(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -378,15 +348,15 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  
-  CancelarBloqueo(id,modal,formulario){
-    this.BloquearTransferenciaDestinatario(id,"Si");
+
+  CancelarBloqueo(id, modal, formulario) {
+    this.BloquearTransferenciaDestinatario(id, "Si");
     this.refrescarVistaPrincipalConsultor();
     formulario.reset();
-    modal.hide();    
+    modal.hide();
   }
 
-  verRecibo(valor){
+  verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
     }).subscribe((data: any) => {
@@ -394,35 +364,35 @@ export class TransferenciasComponent implements OnInit {
       this.DestinatarioRecibo = data.destinatario;
       this.DevolucionesRecibo = data.devoluciones;
 
-      if(this.DevolucionesRecibo.length > 0){
+      if (this.DevolucionesRecibo.length > 0) {
         this.filaRecibo = true;
-      }else{
+      } else {
         this.filaRecibo = false;
       }
 
-      this.ModalVerRecibo.show();      
-    });    
+      this.ModalVerRecibo.show();
+    });
   }
 
-  detalleCompra =[];
+  detalleCompra = [];
   Pagos = [{
-    Ingreso : "",
-    Transferencia : ""
+    Ingreso: "",
+    Transferencia: ""
   }]
   Abonos = [{
-    Abono : ""
+    Abono: ""
   }]
 
   HabilitarCobroBanesco = false;
-  idCompra:any;
-  idCuenta:any;
-  idCompraCuenta:any;
-  auditarCompra(idCompra,idCuenta, idCompraCuenta){
-    var posCuenta = this.cuentasBancarias.findIndex(x=> x.Id_Cuenta_Bancaria === idCuenta);
+  idCompra: any;
+  idCuenta: any;
+  idCompraCuenta: any;
+  auditarCompra(idCompra, idCuenta, idCompraCuenta) {
+    var posCuenta = this.cuentasBancarias.findIndex(x => x.Id_Cuenta_Bancaria === idCuenta);
 
-    if(this.cuentasBancarias[posCuenta].Numero_Cuenta.substring(0, 4) == "0134"){
+    if (this.cuentasBancarias[posCuenta].Numero_Cuenta.substring(0, 4) == "0134") {
       this.HabilitarCobroBanesco = true;
-    }else{
+    } else {
       this.HabilitarCobroBanesco = false;
     }
 
@@ -430,25 +400,25 @@ export class TransferenciasComponent implements OnInit {
     this.idCuenta = idCuenta;
     this.idCompraCuenta = idCompraCuenta;
 
-    var posCompra = this.cuentasBancarias[posCuenta].Compra.findIndex(x=>x.Id_Compra == idCompra);
+    var posCompra = this.cuentasBancarias[posCuenta].Compra.findIndex(x => x.Id_Compra == idCompra);
     this.detalleCompra = this.cuentasBancarias[posCuenta].Compra[posCompra];
-    this.ModalVerCompra.show();   
+    this.ModalVerCompra.show();
 
   }
 
-  GuardarMovimientoCompra(formulario: NgForm, modal){
+  GuardarMovimientoCompra(formulario: NgForm, modal) {
     console.log(this.Pagos);
     console.log(this.Abonos);
 
-    this.Pagos.forEach((element,index) => {
-     if(element.Ingreso == "" || element.Transferencia == ""){
-        this.Pagos.splice(index,1);
+    this.Pagos.forEach((element, index) => {
+      if (element.Ingreso == "" || element.Transferencia == "") {
+        this.Pagos.splice(index, 1);
       }
     });
 
-    this.Abonos.forEach((element,index) => {
-      if(element.Abono == ""){
-        this.Abonos.splice(index,1);
+    this.Abonos.forEach((element, index) => {
+      if (element.Abono == "") {
+        this.Abonos.splice(index, 1);
       }
     });
 
@@ -479,22 +449,22 @@ export class TransferenciasComponent implements OnInit {
       if (this.Pagos[i] == undefined) {
         this.Pagos.push(
           {
-            Ingreso : "",
-            Transferencia : ""
+            Ingreso: "",
+            Transferencia: ""
           });
 
       }
     }
   }
 
-  agregarfilaAbonos(pos){
+  agregarfilaAbonos(pos) {
     var valor = this.Abonos[pos].Abono;
-    if (parseInt(valor) > 0 ) {
+    if (parseInt(valor) > 0) {
       var i = pos + 1;
       if (this.Abonos[i] == undefined) {
         this.Abonos.push(
           {
-            Abono : ""
+            Abono: ""
           });
 
       }

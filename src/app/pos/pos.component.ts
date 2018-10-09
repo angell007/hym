@@ -198,12 +198,12 @@ export class PosComponent implements OnInit {
   Detalle_Destinatario = [];
   Lista_Destinatarios = [{
     Id_Pais: '2',
-          Id_Banco: '',
-          Bancos: [],
-          Id_Tipo_Cuenta: '',
-          Numero_Cuenta: '',
-          Otra_Cuenta: '',
-          Observacion: ''
+    Id_Banco: '',
+    Bancos: [],
+    Id_Tipo_Cuenta: '',
+    Numero_Cuenta: '',
+    Otra_Cuenta: '',
+    Observacion: ''
   }];
   Identificacion: any;
   TipoDocumentoExtranjero = [];
@@ -222,7 +222,7 @@ export class PosComponent implements OnInit {
   PrecioSugeridoCompra: any;
   IdentificacionCrearDestinatario: any;
   EncabezadoRecibo = [];
-  DestinatarioRecibo =[];
+  DestinatarioRecibo = [];
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
@@ -240,27 +240,27 @@ export class PosComponent implements OnInit {
     this.Bancos_Pais(2, 0);
     this.Origen(2);
     this.bancosDestinatarios();
-   
+
 
   }
 
-  
-  
-  HabilitarGuardar(valor){
-    if(valor.length > 0){
+
+
+  HabilitarGuardar(valor) {
+    if (valor.length > 0) {
       if (this.Recibe == 'Cliente') {
         (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
       } else {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
-      } 
-    }else{
+      }
+    } else {
       if (this.Recibe == 'Cliente') {
         (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
       } else {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
       }
     }
-    
+
   }
 
   bancosDestinatarios() {
@@ -367,7 +367,7 @@ export class PosComponent implements OnInit {
     switch (valor) {
       case "V": {
         //this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;         
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
         window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula, '_blank');
         break;
       }
@@ -380,19 +380,19 @@ export class PosComponent implements OnInit {
       default: {
         this.frame = false;
       }
-       /*if (window.frames['myframe'] && !userSet){
-          this.setAttribute('data-userset', 'true');
-          frames['myframe'].location.href='http://test.com/hello?uname='+getUserName();
-      }*/
+      /*if (window.frames['myframe'] && !userSet){
+         this.setAttribute('data-userset', 'true');
+         frames['myframe'].location.href='http://test.com/hello?uname='+getUserName();
+     }*/
     }
 
-    
+
   }
 
   buscarRiff() {
     this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
     //this.frameRiff = !this.frameRiff;
-    window.open("http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp",'_blank');
+    window.open("http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp", '_blank');
   }
 
   recargarBancos(i, id) {
@@ -425,9 +425,8 @@ export class PosComponent implements OnInit {
 
   GuardarMovimiento(formulario: NgForm) {
 
-    formulario.value.Estado = "Pendiente";
-    formulario.value.Id_Oficina = JSON.parse(localStorage['Oficina']);
-    formulario.value.Id_Caja = JSON.parse(localStorage['Caja']);
+    formulario.value.Id_Oficina = 5;
+    formulario.value.Id_Caja = 4;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
     let info = JSON.stringify(formulario.value);
@@ -449,12 +448,6 @@ export class PosComponent implements OnInit {
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
-
-        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
-          this.Transferencia = data;
-          this.dtTrigger1.next();
-        });
-
       });
   }
 
@@ -1071,48 +1064,22 @@ export class PosComponent implements OnInit {
               this.NuevoDestinatario(0, 'Peso')
             }
 
-            /*
-           console.log("Id_Destinatario_Cuenta" + pos);
-           
-           var valor = (document.getElementById("Id_Destinatario_Cuenta" + pos) as HTMLInputElement).value;
-           
-          
-           if (valor == "") {
-             
-             this.confirmacionSwal.title = "Valores vacios";
-             this.confirmacionSwal.text = "Por favor digite los valores del destinatario para poder continuar";
-             this.confirmacionSwal.type = "error";
-             this.confirmacionSwal.show();
-
-             if (this.Recibe == 'Cliente') {
-               (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-             } else {
-               (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
-             }
-           }*/
-
             if (suma == parseInt(value)) {
 
-              if (this.Recibe == 'Cliente') {
-                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
-              } else {
+              if (this.Recibe != 'Cliente') {
                 (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
               }
 
             } else {
-              this.confirmacionSwal.title = "Valores no coinciden";
-              this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
-              this.confirmacionSwal.type = "error";
-              this.confirmacionSwal.show();
-              if (this.Recibe == 'Cliente') {
-                (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-              } else {
+
+              if (this.Recibe != 'Cliente') {
+                this.confirmacionSwal.title = "Valores no coinciden";
+                this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
+                this.confirmacionSwal.type = "error";
+                this.confirmacionSwal.show();
                 (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
               }
             }
-
-
-
           }
         }
         break;
@@ -1482,7 +1449,7 @@ export class PosComponent implements OnInit {
       Valor_Transferencia_Peso: '',
       Cuentas: [],
       esconder: false
-    }];   
+    }];
   }
 
   volverReciboGiro() {
@@ -1531,11 +1498,11 @@ export class PosComponent implements OnInit {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
         }
       } else {
-        this.confirmacionSwal.title="Información Vacia"; 
-        this.confirmacionSwal.text="Hay campos vacios que deben ser digitados para poder continuar" ;
-        this.confirmacionSwal.type="error";
+        this.confirmacionSwal.title = "Información Vacia";
+        this.confirmacionSwal.text = "Hay campos vacios que deben ser digitados para poder continuar";
+        this.confirmacionSwal.type = "error";
         this.confirmacionSwal.show();
-        
+
         if (this.Recibe == 'Cliente') {
           (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
         } else {
@@ -1612,9 +1579,7 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.text = "La tasa de cambio supera el permitido"
       this.confirmacionSwal.type = "error"
       this.confirmacionSwal.show();
-      if (this.Recibe == 'Cliente') {
-        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-      } else {
+      if (this.Recibe != 'Cliente') {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
       }
 
@@ -1635,20 +1600,16 @@ export class PosComponent implements OnInit {
         sumaBolivar += element.Valor_Transferencia_Bolivar;
       });
 
-      if ((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso)) {
+      if (((this.entregar != sumaBolivar) || (this.cambiar != sumaPeso)) && this.Recibe != 'Cliente') {
         this.confirmacionSwal.title = "Valores no coinciden";
         this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
         this.confirmacionSwal.type = "error";
         this.confirmacionSwal.show();
-        if (this.Recibe == 'Cliente') {
-          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-        } else {
+        if (this.Recibe != 'Cliente') {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
         }
       } else {
-        if (this.Recibe == 'Cliente') {
-          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
-        } else {
+        if (this.Recibe != 'Cliente') {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
         }
       }
@@ -2064,14 +2025,14 @@ export class PosComponent implements OnInit {
     });
   }
 
-  verRecibo(valor){
+  verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
     }).subscribe((data: any) => {
       this.EncabezadoRecibo = data.encabezado;
       this.DestinatarioRecibo = data.destinatario;
-      this.ModalVerRecibo.show();           
-    });    
+      this.ModalVerRecibo.show();
+    });
   }
 
 }

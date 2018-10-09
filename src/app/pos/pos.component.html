@@ -421,7 +421,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="transferencia">Recibe Para</label>
-                                                <select class="form-control" (change)="SeleccionarTipo($event.target.value)"
+                                                <select id="TipoTransferencia" class="form-control" (change)="SeleccionarTipo($event.target.value)"
                                                     name="Tipo_Transferencia" [(ngModel)]="recibeParaDefault" required>
                                                     <option value="Transferencia">Transferencia</option>
                                                     <option value="Cliente">Cliente</option>
@@ -430,7 +430,7 @@
                                             </div>
                                             <div class="col-md-6" *ngIf="Recibe==='Cliente'">
                                                 <label class="transferencia">Seleccione Cliente</label>
-                                                <select class="form-control" name="Id_Tercero" [(ngModel)]="seleccioneClienteDefault"
+                                                <select class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
                                                     required >
                                                     <option value="">Seleccione un cliente</option>
                                                     <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
@@ -666,7 +666,7 @@
                                         <div class="col-md-10">
                                             <button id="BotonMovimiento" class="btn btn-primary btn-sm btn-block mrg-top-10"
                                                 [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                (click)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
+                                                (confirm)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
                                             </button>
                                         </div>
                                         <div class="col-md-2">
