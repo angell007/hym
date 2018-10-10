@@ -95,10 +95,10 @@
                                             <td><a [routerLink]="" (click)="verRecibo(transferencia.Id_Recibo)">{{transferencia.ReciboCodigo}}</a></td>
                                             <td>{{transferencia.NombreCajero}}</td>
                                             <td>{{transferencia.Numero_Cuenta}}</td>
-                                            <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
+                                            <td class="text-right" >{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
                                             <td>{{transferencia.nombreFuncionario}}</td>
-                                            <td class="text-center">
+                                            <td class="text-center" *ngIf="tipoTransferencia(transferencia.Tipo_Transferencia)" >
                                                 <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
                                                     (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar , transferencia.NombreCajero , transferencia.ReciboCodigo )"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">

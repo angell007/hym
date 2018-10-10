@@ -245,13 +245,14 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado, funcionario) {
+  Bloqueado(estado, funcionario, tipo) {
 
     if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
       switch (estado) {
         case "Si": { return false }
         case "No": { return true }
       }
+
     } else {
       return true
     }
@@ -467,6 +468,17 @@ export class TransferenciasComponent implements OnInit {
             Abono: ""
           });
 
+      }
+    }
+  }
+
+  tipoTransferencia(value){
+    switch(value){
+      case "Transferencia":{
+        return true;
+      }
+      case "Cliente":{
+        return false;
       }
     }
   }
