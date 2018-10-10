@@ -930,7 +930,7 @@ export class PosComponent implements OnInit {
       this.Tercero = data;
     });
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_colombianos.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
       this.CuentaBancaria = data;
     });
 
