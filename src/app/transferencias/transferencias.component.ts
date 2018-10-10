@@ -120,41 +120,6 @@ export class TransferenciasComponent implements OnInit {
       .subscribe((data: any) => {
         this.BancosEmpresa = data;
       });
-
-    this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
-      var chart = AmCharts.makeChart("chartdiv", {
-        "type": "serial",
-        "theme": "light",
-        "dataProvider": data,
-        "gridAboveGraphs": true,
-        "startDuration": 1,
-        "graphs": [{
-          "balloonText": "[[Funcionario]]: <b>[[Conteo]]</b>",
-          "fillAlphas": 0.8,
-          "lineAlpha": 0.2,
-          "type": "column",
-          "valueField": "Conteo"
-        }],
-        "chartCursor": {
-          "categoryBalloonEnabled": false,
-          "cursorAlpha": 0,
-          "zoomable": false
-        },
-        "categoryField": "Funcionario",
-        "categoryAxis": {
-          "gridPosition": "start",
-          "gridAlpha": 0,
-          "tickPosition": "start",
-          "tickLength": 20
-        },
-        "export": {
-          "enabled": true
-        }
-
-      });
-    });
-
-
   }
 
   refrescarVistaPrincipalConsultor() {
@@ -245,7 +210,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado, funcionario, tipo) {
+  Bloqueado(estado, funcionario,tipo) {
 
     if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
       switch (estado) {
@@ -408,8 +373,8 @@ export class TransferenciasComponent implements OnInit {
   }
 
   GuardarMovimientoCompra(formulario: NgForm, modal) {
-    console.log(this.Pagos);
-    console.log(this.Abonos);
+    //console.log(this.Pagos);
+    //console.log(this.Abonos);
 
     this.Pagos.forEach((element, index) => {
       if (element.Ingreso == "" || element.Transferencia == "") {
@@ -472,7 +437,7 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  tipoTransferencia(value){
+  tipoTransferencia(value,estado, funcionario){
     switch(value){
       case "Transferencia":{
         return true;
