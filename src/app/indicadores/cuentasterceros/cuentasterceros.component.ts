@@ -14,10 +14,6 @@ export class CuentastercerosComponent implements OnInit {
  
   constructor(private http: HttpClient, private globales: Globales) { }
 
-  ngOnInit() {
-    this.http.get(this.globales.ruta + 'php/movimientos/movimiento_tercero.php').subscribe((data: any) => {
-     this.Tercero = data;    
-    });
-  }
+  ngOnInit() {}
 
 }

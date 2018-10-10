@@ -17,15 +17,77 @@ export class TercerosverComponent implements OnInit {
 
   id = this.route.snapshot.params["id"];
   Tercero = [];
+  MovimientosTercero =[];
+  SaldoActual: any;
+
+  @ViewChild('ModalAjuste') ModalAjuste: any;
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;  
 
   constructor(private route: ActivatedRoute,private http : HttpClient, private globales: Globales) { }
 
   ngOnInit() {
+    this.actualizarVista();
+  }
+
+  actualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
       params:{id:this.id}
     }).subscribe((data:any)=>{
       this.Tercero = data;  
     });
+
+    this.http.get(this.globales.ruta + 'php/movimientos/movimiento_tercero.php', {
+      params: { id: this.id }
+    }).subscribe((data: any) => {
+      this.MovimientosTercero = data.lista;
+      this.SaldoActual = data.total;
+    });
+  }
+
+  GuardarMovimiento(formulario: NgForm, modal) {
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    var newId = this.id;
+    datos.append("modulo", 'Movimiento_Tercero');
+    datos.append("datos", info);
+    datos.append("Id_Tercero", this.id);
+    datos.append("Id_Movimiento_Tercero", this.idItem);
+    this.http.post(this.globales.ruta + 'php/terceros/guardar_ajuste_tercero.php', datos)
+      .subscribe((data: any) => {
+       formulario.reset();
+        modal.hide();
+        this.actualizarVista();
+        this.confirmacionSwal.title = "Movimiento Realizado"
+        this.confirmacionSwal.text = "Se ha guardado correctamente el movimiento"
+        this.confirmacionSwal.type = "success";
+        this.confirmacionSwal.show();
+      });
+  }
+
+  idItem: any;
+  ajusteBancario = [];
+  editarAjuste(id, modal) {
+    this.idItem = id;
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { id: id, modulo: "Movimiento_Tercero" }
+    }).subscribe((data: any) => {
+      this.ajusteBancario = data;
+    });
+    modal.show();
+  }
+
+  borrarAjuste(id) {
+    let datos = new FormData();
+    datos.append("modulo", 'Movimiento_Tercero');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos)
+      .subscribe((data: any) => {
+        this.actualizarVista();
+        this.confirmacionSwal.title = "Movimiento Eliminado"
+        this.confirmacionSwal.text = "Se ha eliminado el ajuste"
+        this.confirmacionSwal.type = "success";
+        this.confirmacionSwal.show();
+      });
   }
 
 }
