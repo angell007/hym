@@ -16,19 +16,16 @@
                 <tr>
                   <th>Documento</th>
                   <th>Nombre</th>
-                  <th>Apellido</th>
                   <th>Telefono</th>
-                  <th>Celular</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let GiroRemitente of GirosRemitentes" class=" {{GiroRemitente.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                   <td>{{GiroRemitente.Documento_Remitente}}</td>
-                  <td>{{GiroRemitente.Nombre}}</td>
-                  <td>{{GiroRemitente.Apellido}}</td>
-                  <td>{{GiroRemitente.Telefono}}</td>
-                  <td>{{GiroRemitente.Celular}}</td>
+                  <td>{{GiroRemitente.Nombre_Remitente}}</td>
+                  <td>{{GiroRemitente.Telefono_Remitente}}</td>
+                  <td>{{GiroRemitente.Celular_Remitente}}</td>
                   <td>
                     <button class="btn btn-default btn-xs" type="button" (click)="EditarGiro(GiroRemitente.Documento_Remitente,  'Remitente')"
                       style="margin:0;">
@@ -59,19 +56,16 @@
                 <tr>
                   <th>Documento</th>
                   <th>Nombre</th>
-                  <th>Apellido</th>
                   <th>Telefono</th>
-                  <th>Celular</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let GiroDestinatario of GirosDestinatarios" class=" {{GiroDestinatario.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                   <td>{{GiroDestinatario.Documento_Destinatario}}</td>
-                  <td>{{GiroDestinatario.Nombre}}</td>
-                  <td>{{GiroDestinatario.Apellido}}</td>
-                  <td>{{GiroDestinatario.Telefono}}</td>
-                  <td>{{GiroDestinatario.Celular}}</td>
+                  <td>{{GiroDestinatario.Nombre_Destinatario}}</td>
+                  <td>{{GiroDestinatario.Telefono_Destinatario}}</td>
+                  <td>{{GiroDestinatario.Celular_Destinatario}}</td>
                   <td>
                     <button class="btn btn-default btn-xs" type="button" (click)="EditarGiro(GiroDestinatario.Documento_Destinatario,  'Destinatario')"
                       style="margin:0;">
@@ -110,27 +104,15 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre Remitente" class="form-control" name="Nombre" ngModel>
+            <input type="text" placeholder="Nombre Remitente" class="form-control" name="Nombre_Remitente" ngModel>
           </div>
-        </div>
+        </div>        
         <div class="col-md-4">
           <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
             <label>Telefono</label>
-            <input type="Celular" placeholder="Telefono" class="form-control" name="Telefono" ngModel>
+            <input type="Celular" placeholder="Telefono" class="form-control" name="Telefono_Remitente" ngModel>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Celular</label>
-            <input type="Celular" placeholder="Telefono" class="form-control" name="Celular" ngModel>
-          </div>
-        </div>
+        </div>        
       </div>
     </form>
   </div>
@@ -159,27 +141,16 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre Remitente" class="form-control" name="Nombre" ngModel="{{GiroEditar.Nombre}}">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel="{{GiroEditar.Apellido}}">
+            <input type="text" placeholder="Nombre Remitente" class="form-control" name="Nombre_Remitente" ngModel="{{GiroEditar.Nombre_Remitente}}">
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Telefono</label>
-            <input type="number" placeholder="Telefono" class="form-control" name="Telefono" ngModel="{{GiroEditar.Telefono}}">
+            <input type="number" placeholder="Telefono" class="form-control" name="Telefono_Remitente" ngModel="{{GiroEditar.Telefono_Remitente}}">
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Celular</label>
-            <input type="number" placeholder="Celular" class="form-control" name="Celular" ngModel="{{GiroEditar.Celular}}">
-          </div>
-        </div>
+        
       </div>
     </form>
   </div>
@@ -207,27 +178,15 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre Destinatario" class="form-control" name="Nombre" ngModel>
+            <input type="text" placeholder="Nombre Destinatario" class="form-control" name="Nombre_Destinatario" ngModel>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
             <label>Telefono</label>
-            <input type="number" placeholder="Telefono" class="form-control" name="Telefono" ngModel>
+            <input type="number" placeholder="Telefono" class="form-control" name="Telefono_Destinatario" ngModel>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Celular</label>
-            <input type="number" placeholder="Celular" class="form-control" name="Celular" ngModel>
-          </div>
-        </div>
+        </div>        
       </div>
     </form>
   </div>
@@ -256,25 +215,13 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre Destinatario" class="form-control" name="Nombre" ngModel="{{GiroEditar.Nombre}}">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" placeholder="Apellido" class="form-control" name="Apellido" ngModel="{{GiroEditar.Apellido}}">
+            <input type="text" placeholder="Nombre Destinatario" class="form-control" name="Nombre_Destinatario" ngModel="{{GiroEditar.Nombre_Destinatario}}">
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Telefono</label>
-            <input type="number" placeholder="Telefono" class="form-control" name="Telefono" ngModel="{{GiroEditar.Telefono}}">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Celular</label>
-            <input type="number" placeholder="Celular" class="form-control" name="Celular" ngModel="{{GiroEditar.Celular}}">
+            <input type="number" placeholder="Telefono" class="form-control" name="Telefono_Destinatario" ngModel="{{GiroEditar.Telefono_Destinatario}}">
           </div>
         </div>
       </div>
