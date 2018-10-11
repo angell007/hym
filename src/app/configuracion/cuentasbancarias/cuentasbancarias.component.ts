@@ -48,18 +48,6 @@ export class CuentasbancariasComponent implements OnInit {
     });*/
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios() {
-    this.OcultarFormulario(this.ModalCuenta);
-    this.OcultarFormulario(this.ModalVerCuenta);
-    this.OcultarFormulario(this.ModalEditarCuenta);
-  }
-
 
   Paises =[];
   ActualizarVista() {
@@ -89,7 +77,8 @@ export class CuentasbancariasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Cuenta_Bancaria');
     datos.append("datos", info);
-    this.OcultarFormulario(modal);
+    datos.append("identificacion",this.Identificacion);
+    modal.hide();
     this.http.post(this.globales.ruta + 'php/cuentasbancarias/guardar_cuenta_bancaria.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -140,16 +129,7 @@ export class CuentasbancariasComponent implements OnInit {
     });
   }
 
-  OcultarFormulario(modal) {  
-    modal.hide();
-  }
-
-
-  Cerrar(modal) {
-    this.OcultarFormulario(modal)
-  }
-
-  ////
+   ////
   EstadoCuentaBancaria(value, estado) {
     let datos = new FormData();
     var titulo;
@@ -176,7 +156,8 @@ export class CuentasbancariasComponent implements OnInit {
       this.confirmacionSwal.text = texto;
       this.confirmacionSwal.type = "success";
       this.confirmacionSwal.show();
-      this.cuentas = data;
+      //this.cuentas = data;
+      this.ActualizarVista();
     });
   }
 
