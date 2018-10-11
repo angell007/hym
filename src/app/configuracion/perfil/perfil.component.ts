@@ -25,10 +25,7 @@ export class PerfilComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Perfil', id:this.id}
     }).subscribe((data:any)=>{
-     this.Datos=data;
-     console.log(this.Datos);
-     
-
+     this.Datos=data;     
     });
   }
 
