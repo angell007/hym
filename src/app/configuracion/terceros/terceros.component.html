@@ -61,7 +61,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>T. Doc</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="">
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel>
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
@@ -154,7 +154,7 @@
                         <label>Grupo Tercero</label>
                         <select class="form-control" ngModel name="Id_Grupo_Tercero">
                             <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
-                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo_Tercero}}">{{item.Nombre}}</option>
                             </optgroup>
                         </select>
                     </div>
@@ -199,7 +199,7 @@
         <h4>Editar Tercero</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormTercero="ngForm">
+        <form #FormTerceroEditar="ngForm">
             <input hidden type="text" class="form-control" name="id" ngModel="{{Identificacion}}">
             <div class="row">
                 <div class="col-md-2">
@@ -298,7 +298,7 @@
                         <label>Grupo Tercero</label>
                         <select class="form-control" ngModel="{{tercero.Id_Grupo_Tercero}}" name="Id_Grupo_Tercero">
                             <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
-                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo_Tercero}}">{{item.Nombre}}</option>
                             </optgroup>
                         </select>
                     </div>
@@ -334,7 +334,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarTercero(FormTercero, ModalTerceroEditar)">Actualizar Información</button>
+                (confirm)="GuardarTercero(FormTerceroEditar, ModalTerceroEditar)">Actualizar Información</button>
         </div>
     </div>
 </app-modal-basic>
