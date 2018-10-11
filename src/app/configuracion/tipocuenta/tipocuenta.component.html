@@ -48,10 +48,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre de la Cuenta" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolNombre = true" required #nombre="ngModel">
-                        <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre de la Cuenta" class="form-control" name="Nombre" ngModel required>
+                        
                     </div>
                 </div>
                 
@@ -84,11 +82,8 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre del Cuenta" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                        (focusout)="boolNombre = true" required #nombreEd="ngModel">
-                        <div *ngIf="!nombreEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="nombreEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
-                    </div>
+                        <input type="text" placeholder="Nombre del Cuenta" class="form-control" name="Nombre" ngModel="{{Nombre}}" required>
+                     </div>
                 </div>             
             </div>
         </form>
