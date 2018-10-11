@@ -41,26 +41,6 @@ export class CargosComponent implements OnInit {
     this.ActualizarVista();
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {     
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios()
-  {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalDocumento);
-    this.OcultarFormulario(this.ModalVerDocumento);
-    this.OcultarFormulario(this.ModalEditarDocumento);
-  }
-
-  InicializarBool()
-  {
-    this.boolNombre = false;
-    this.boolCodigo = false;
-  }
-
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
       params:{modulo:'Grupo_Tercero'}
@@ -96,7 +76,6 @@ export class CargosComponent implements OnInit {
     .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-      this.InicializarBool();
       this.saveSwal.show();
     });  
     
@@ -117,7 +96,6 @@ export class CargosComponent implements OnInit {
     .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-      this.InicializarBool();
       this.saveSwal.show();
     });  
     
@@ -138,7 +116,6 @@ export class CargosComponent implements OnInit {
     .subscribe((data:any)=>{
       formulario.reset();
       this.ActualizarVista();
-      this.InicializarBool();
       this.saveSwal.show();
     });  
     
@@ -148,31 +125,29 @@ export class CargosComponent implements OnInit {
     return Observable.throw(error);
   }
  
+  Edicion =[];
   EditarGrupo(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Grupo_Tercero', id:id}
-    }).subscribe((data:any)=>{      
+    }).subscribe((data:any)=>{
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
+      this.Edicion = data;
       modal.show();
     });
   }
 
   EditarDependencia(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Dependencia', id:id}
     }).subscribe((data:any)=>{      
       this.Identificacion = id;
-      this.Nombre = data.Nombre;
+      this.Nombre = data;
       this.IdGrupo = data.Id_Grupo;
       modal.show();
     });
   }
 
   EditarCargo(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Cargo', id:id}
     }).subscribe((data:any)=>{      
