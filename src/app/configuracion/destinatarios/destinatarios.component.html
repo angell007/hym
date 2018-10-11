@@ -18,7 +18,6 @@
                                 <tr>
                                     <th>Identificación</th>
                                     <th>Nombre</th>
-                                    <th>Detalle</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -26,7 +25,6 @@
                                 <tr *ngFor="let destinatario of destinatarios" class=" {{destinatario.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                     <td>{{destinatario.Id_Destinatario}}</td>
                                     <td>{{destinatario.Nombre}}</td>
-                                    <td>{{destinatario.Detalle}}</td>
                                     <td class="text-center">
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerDestinatario(destinatario.Id_Destinatario, ModalVerDestinatario)">
                                             <i class="ti-search"></i>
@@ -49,22 +47,24 @@
     </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario"
+    #ModalDestinatario>
     <div class="app-modal-header">
         <h4>Crear Destinatario</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormCrearDestinatarioTransferencia="ngForm">
+        <form #FormCrearDestinatario="ngForm">
             <div class="row">
                 <div class="col-md-4">
                     <label>Identificación</label>
                     <div class="form-group input-group input-group-button">
-                        <input class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario" type="text"
-                            placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
+                        <input class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
+                            type="text" placeholder="Identificación Destinatario" 
                             ngModel={{Id_Destinatario}} required>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
                             Riff
-                        </button>
+                        </button> 
 
                     </div>
                 </div>
@@ -72,13 +72,12 @@
                     <div class="form-group">
                         <label>Tipo Doc.</label>
                         <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                            (change)="BuscarCNE($event.target.value)">
+                        (change)="BuscarCNE($event.target.value)"> <!--(change)="BuscarCNE($event.target.value)"-->
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
                     </div>
                 </div>
-
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
@@ -86,12 +85,13 @@
                             maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
                             ngModel required>
                     </div>
-                </div>
+                </div>               
+
             </div>
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
+                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"  ></iframe>
                         <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                                         <tbody>
                                             <tr>
                                                 <td width="20%">
-                                                    <select class="form-control" id="Id_Pais_Destinatario{{i}}" name="Id_Pais_Destinatario{{i}}"
+                                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}"
                                                         [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
                                                         required>
                                                         <option value="">Seleccione País</option>
@@ -203,14 +203,13 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button id="BotonGuardarDestinatarioTransferencia" class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatarioTransferencia.valid"
+            <button id="BotonGuardarDestinatario" class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatario.valid"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalDestinatario)">Guardar
+                (confirm)="GuardarDestinatario(FormCrearDestinatario, ModalDestinatario)">Guardar
             </button>
         </div>
     </div>
 </app-modal-basic>
-
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
     <div class="app-modal-header">
@@ -240,7 +239,7 @@
                     <label>Identificación</label>
                     <div class="form-group input-group input-group-button">
                         <input readonly class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
-                            type="text" placeholder="Identificación Destinatario" (blur)="BuscarIdentificacion($event.target.value)"
+                            type="text" placeholder="Identificación Destinatario" 
                             ngModel="{{Detalle_Destinatario.Id_Destinatario}}" required>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
                             Riff
@@ -295,7 +294,7 @@
                                         <tbody>
                                             <tr>
                                                 <td width="20%">
-                                                    <select class="form-control" id="Id_Pais_Destinatario{{i}}" name="Id_Pais_Destinatario{{i}}"
+                                                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}"
                                                         [(ngModel)]="item.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
                                                         required>
                                                         <option value="">Seleccione País</option>

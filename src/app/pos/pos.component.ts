@@ -614,6 +614,12 @@ export class PosComponent implements OnInit {
 
   GuardarDestinatario(formulario: NgForm, modal) {
 
+    this.Lista_Destinatarios.forEach((element,index) => {
+      if(element.Numero_Cuenta == ""){
+        this.Lista_Destinatarios.splice(index,1);
+      }
+    });
+
     let info = JSON.stringify(formulario.value);
     let cuentas = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();

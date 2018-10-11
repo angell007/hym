@@ -33,7 +33,7 @@ export class PerfileditarComponent implements OnInit {
     }).subscribe((data: any) => {
       
       this.Datos = data;
-      console.log(this.Datos);
+      //console.log(this.Datos);
 
 
     });
@@ -42,14 +42,14 @@ export class PerfileditarComponent implements OnInit {
 
     let info = JSON.stringify(formulario.value);
      let datos = new FormData();
-     console.log(info);    
+     //console.log(info);    
      datos.append("modulo",'Perfil');
      datos.append("datos",info);
      
-     //console.log(datos);
+     ////console.log(datos);
      this.http.post(this.globales.ruta+'/php/perfiles/guardar_perfil.php',datos)
      .catch(error => { 
-       console.error('An error occurred:', error.error);
+       ////console.error('An error occurred:', error.error);
        this.errorSwal.show();
        return this.handleError(error);
      })
