@@ -98,6 +98,7 @@ import { TableroauditoriaComponent } from './tableros/tableroauditoria/tableroau
 import { TablerogerenciaComponent } from './tableros/tablerogerencia/tablerogerencia.component';
 import { TableroDirective } from "./tablero/tablero.directive";
 import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
+import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -204,7 +205,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TableroauditoriaComponent,
         TablerogerenciaComponent,
         TableroDirective,
-        ComprascrearComponent
+        ComprascrearComponent,
+        CompraseditarComponent
     ],
     exports:[
         ModalBasicComponent

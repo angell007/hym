@@ -5,6 +5,7 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-compras',
@@ -48,7 +49,7 @@ export class ComprasComponent implements OnInit {
   Pais = [];
   Monedas = [];
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, private router: Router) { }
 
   ngOnInit() {
     this.ActualizarVista();
@@ -199,30 +200,7 @@ export class ComprasComponent implements OnInit {
   EdicionCompra = [];
   AprobarCompra = false;
   EditarCompra(id, modal) {
-    this.http.get(this.globales.ruta + 'php/compras/detalle_compra.php', {
-      params: { modulo: 'Compra', id: id }
-    }).subscribe((data: any) => {
-      this.Identificacion = id;
-      this.EdicionCompra = data.Compras[0];
-      this.verificarTipoCompra(data.Compras[0].Tipo_Compra)
-      this.Lista_Destinatarios_Compra = data.CuentaCompra;
-      var suma = 0;
-      this.Lista_Destinatarios_Compra.forEach(element => {
-        suma += element.Valor;
-      });
-      console.log(suma);
-
-      var resultado = parseInt(data.Compras[0].Abono) - suma;
-      console.log(resultado);
-      if (resultado == 0) {
-        this.AprobarCompra = true;
-      } else {
-        this.AprobarCompra = false;
-      }
-
-
-      modal.show();
-    });
+    this.router.navigate(['/compraseditar',id]);
   }
 
   CambiarValores(i, value) {
