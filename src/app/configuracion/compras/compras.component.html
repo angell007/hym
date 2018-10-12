@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Compras en nuestro Sistema</h4>
-        <button class="pull-right btn btn-info" (click)="CrearCompra()">
+        <button class="pull-right btn btn-info" [routerLink]="['/comprascrear']">
             <i class="ti-plus"></i> Agregar Nueva Compra</button>
     </div>
     <div class="clearfix"></div>
@@ -25,10 +25,10 @@
                                 <tr *ngFor="let compra of compras">
                                     <td>{{compra.Fecha | date:"short"}}</td>
                                     <td>{{compra.Codigo}}</td>
-                                    <td>{{compra.Abono | currency:"BsS."}}</td>
+                                    <td>{{compra.Valor_Compra | currency:"BsS."}}</td>
                                     <td>{{compra.Tasa}}</td>
                                     <td class="text-center">
-                                        
+
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra, ModalEditarCompra)">
                                             <i class="ti-pencil"></i>
                                         </button>
@@ -55,83 +55,54 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <select class="form-control" required id="Lista_Id_Tercero" name="Id_Tercero" ngModel (change)="nombreProveedor($event.target.value);validarSelect()"> 
+                        <select class="form-control" required id="Lista_Id_Tercero" name="Id_Tercero" ngModel (change)="nombreProveedor($event.target.value);">
                             <option value="">Seleccione un Proveedor</option>
                             <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
                         </select>
                     </div>
                     <input hidden name="nombreProveedor" [(ngModel)]="nombre">
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>País</label>
-                        <select class="form-control" required id="Lista_Id_Pais" name="Id_Pais" ngModel (change)="validarSelect()">
-                            <option value="">Seleccione un País</option>
-                            <option *ngFor="let pais of Pais" [value]="pais.Id_Pais">{{pais.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Moneda</label>
-                        <select class="form-control" required id="Lista_Id_Moneda" name="Id_Moneda" ngModel (change)="validarSelect()">
-                            <option value="">Seleccione una Moneda</option>
-                            <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Tipo de Compra</label>
-                        <select class="form-control" required id="Lista_Tipo_Compra" name="Tipo_Compra" ngModel (change)="verificarTipoCompra($event.target.value);validarSelect()">
-                            <option value="">Seleccione un tipo de compra</option>
-                            <option value="Banco">Depositar en Banco</option>
-                            <option value="Transferencia">Pagar Transferencia</option>
-                            <option value="Cliente">Depositar Cliente</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="col-md-4" *ngIf="Caso1">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor Compra</label>
-                        <input (blur)="ValidarValorCompra($event.target.value)" required class="form-control" name="Abono" ngModel [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <input (blur)="ValidarValorCompra($event.target.value)" required class="form-control" name="Valor_Compra"
+                            ngModel={{TotalCompra}} [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 
-                <div class="col-md-4" *ngIf="Caso1">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Tasa</label>
                         <input required class="form-control" id="Tasa" name="Tasa" ngModel (input)="calcularValorMoneda($event.target.value)">
                     </div>
                 </div>
 
-                <div class="col-md-4" *ngIf="Caso1">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Valor en peso</label>
                         <input required class="form-control" name="Valor_Peso" ngModel="{{tasa}}" readonly>
                     </div>
                 </div>
 
-                <div class="col-md-12" *ngIf="Caso1">
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="table-responsive">
                                 <table class="table  invoice-detail-table">
                                     <tbody>
-                                        <tr *ngFor="let item of Lista_Destinatarios_Compra; let i = index" id="fila{{i}}">
+                                        <th></th>
+                                        <th>Titular</th>
+                                        <th>Valor</th>
+                                        <tr *ngFor="let item of ComprasPendientes; let i = index" id="fila{{i}}">
                                             <td>
-                                                <select class="form-control" name="Id_Cuenta_Bancaria{{i}}"
-                                                    [(ngModel)]="item.Id_Cuenta_Bancaria" required (change)="validarAutoSuma(i);">
-                                                    <option value="">Seleccione Cuenta</option>
-                                                    <option *ngFor="let cuentaBancaria of CuentaBancaria; let i=index"
-                                                        [value]="cuentaBancaria.Id_Cuenta_Bancaria">{{cuentaBancaria.Nombre_Titular}}</option>
-                                                </select>
+                                                <input type="checkbox" id="pendiente{{i}}" value="{{i}}" (change)="cambiarEstado(i)" >
                                             </td>
                                             <td>
-                                                <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
-                                                    [(ngModel)]="item.Valor" required (change)="validarAutoSuma(i);">
-
+                                                {{item.Nombre_Titular}}
+                                            </td>
+                                            <td>
+                                                {{item.Valor | currency: "BsS. "}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -155,140 +126,11 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button id="BotonCompraCrear" type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone crear esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCompra(FormCompra, ModalCompra)" >Crear Compra</button>
+                (confirm)="GuardarCompra(FormCompra, ModalCompra)">Crear Compra</button>
         </div>
     </div>
 </app-modal-basic>
 
-
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCompra" #ModalEditarCompra>
-    <div class="app-modal-header">        
-        <h4>Editar Compra</h4>
-    </div>
-    <div class="app-modal-body">
-        <form #FormEditarCompra="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}"
-                        required>
-                        <input name="Codigo" type="text" placeholder="Identificación" class="form-control" ngModel="{{EdicionCompra.Codigo}}"
-                        required>
-                </div>
-            </div>
-            <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Proveedor</label>
-                            <select class="form-control" required name="Id_Tercero" ngModel="{{EdicionCompra.Id_Tercero}}">
-                                <option value="">Seleccione un Proveedor</option>
-                                <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>País</label>
-                            <select class="form-control" required name="Id_Pais" ngModel="{{EdicionCompra.Id_Pais}}">
-                                <option value="">Seleccione un País</option>
-                                <option *ngFor="let pais of Pais" [value]="pais.Id_Pais">{{pais.Nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Moneda</label>
-                            <select class="form-control" required name="Id_Moneda" ngModel="{{EdicionCompra.Id_Moneda}}">
-                                <option value="">Seleccione una Moneda</option>
-                                <option *ngFor="let Moneda of Monedas" [value]="Moneda.Id_Moneda">{{Moneda.Nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Tipo de Compra</label>
-                            <select class="form-control" required name="Tipo_Compra" ngModel="{{EdicionCompra.Tipo_Compra}}" (change)="verificarTipoCompra($event.target.value)">
-                                <option value="">Seleccione un tipo de compra</option>
-                                <option value="Banco">Depositar en Banco</option>
-                                <option value="Transferencia">Pagar Transferencia</option>
-                                <option value="Cliente">Depositar Cliente</option>
-                            </select>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4" *ngIf="Caso1">
-                        <div class="form-group">
-                            <label>Valor Compra</label>
-                            <input required class="form-control" name="Abono" ngModel="{{EdicionCompra.Abono}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4" *ngIf="Caso1">
-                        <div class="form-group">
-                            <label>Tasa</label>
-                            <input required class="form-control" name="Tasa" ngModel="{{EdicionCompra.Tasa}}" >
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4" *ngIf="Caso1">
-                        <div class="form-group">
-                            <label>Valor en peso</label>
-                            <input required class="form-control" name="Valor_Peso" ngModel="{{EdicionCompra.Valor_Peso}}">
-                        </div>
-                    </div>
-    
-                    <div class="col-md-12" *ngIf="Caso1">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="table-responsive">
-                                    <table class="table  invoice-detail-table">
-                                        <tbody>
-                                            <tr *ngFor="let item of Lista_Destinatarios_Compra; let i = index" id="filaEditar{{i}}">
-                                                <td>
-                                                    <select class="form-control" name="Id_Cuenta_Bancaria{{i}}"
-                                                        [(ngModel)]="item.Id_Cuenta_Bancaria" required (change)="agregarfila(i)">
-                                                        <option value="">Seleccione Cuenta</option>
-                                                        <option *ngFor="let cuentaBancaria of CuentaBancaria; let i=index"
-                                                            [value]="cuentaBancaria.Id_Cuenta_Bancaria">{{cuentaBancaria.Nombre_Titular}}</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <label>{{ item.Valor | currency:"BsS." }}</label>
-        
-                                                    </td>
-                                                <td>
-                                                    <input class="form-control" name="Numero_Cuenta{{i}}" type="text"
-                                                        [(ngModel)]="item.Sumatoria" required (input)="CambiarValores(i,$event.target.value)">
-    
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Detalle</label>
-                            <textarea rows="4" cols="50" class="form-control" placeholder="Detalle Compra" name="Detalle"
-                            ngModel="{{EdicionCompra.Detalle}}"></textarea>
-                        </div>
-                    </div>
-    
-                </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCompra(FormEditarCompra, ModalEditarCompra)">Guardar</button>
-            <button class="btn btn-primary btn-sm" *ngIf="AprobarCompra" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a marcar esta compra como realizada' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="MarcarRealizada(FormEditarCompra, ModalEditarCompra)">Aprobar</button>
-        </div>
-    </div>
-</app-modal-basic>
 
 <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>

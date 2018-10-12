@@ -60,6 +60,7 @@ export class ComprasComponent implements OnInit {
 
 
   CuentaBancaria = [];
+  ComprasPendientes =[];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
       this.compras = data;
@@ -76,9 +77,12 @@ export class ComprasComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       this.Monedas = data;
     });
-
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
       this.CuentaBancaria = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/compras/compras_no_verificadas.php').subscribe((data: any) => {
+      this.ComprasPendientes = data;
     });
 
   }
@@ -154,12 +158,7 @@ export class ComprasComponent implements OnInit {
 
   GuardarCompra(formulario: NgForm, modal: any) {
 
-    this.Lista_Destinatarios_Compra.forEach((element, index) => {
-      if (element.Valor == 0) {
-        this.Lista_Destinatarios_Compra.splice(index, 1);
-      }
-    });
-
+  /*
     let info = JSON.stringify(formulario.value);
     let cuentas = JSON.stringify(this.Lista_Destinatarios_Compra);
 
@@ -176,16 +175,8 @@ export class ComprasComponent implements OnInit {
         formulario.reset();
         this.saveSwal.show();
         modal.hide();
-        this.Lista_Destinatarios_Compra = [
-          {
-            Id_Cuenta_Bancaria: "",
-            Valor: 0
-          }
-        ]
-        this.EdicionCompra = [];
-        this.Identificacion = "";
         this.ActualizarVista();
-      });
+      });*/
   }
 
   handleError(error: Response) {
@@ -359,6 +350,21 @@ export class ComprasComponent implements OnInit {
 
   LongitudCarateres(i) {
     return parseInt(i.length);
+  }
+
+  TotalCompra:any;
+  cambiarEstado(pos){
+    var pendiente = (document.getElementById("pendiente"+pos) as HTMLInputElement).checked;
+    this.ComprasPendientes[pos].Estado = pendiente;
+    
+    var suma = 0;
+    this.ComprasPendientes.forEach(element => {
+      if(element.Estado == true){
+        suma += Number(element.Valor)
+      }
+    });
+
+    this.TotalCompra = suma;
   }
 
 

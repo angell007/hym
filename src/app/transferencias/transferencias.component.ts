@@ -102,11 +102,8 @@ export class TransferenciasComponent implements OnInit {
   }
 
   cuentasBancarias = [];
+  BancosVenezolanos= [];
   ActualizarVista() {
-
-    /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
-      this.compras = data;
-    });*/
 
     this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
       this.cuentasBancarias = data;
@@ -119,6 +116,12 @@ export class TransferenciasComponent implements OnInit {
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
       .subscribe((data: any) => {
         this.BancosEmpresa = data;
+      });
+
+
+    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_venezolanos.php')
+      .subscribe((data: any) => {
+        this.BancosVenezolanos = data;
       });
   }
 
@@ -210,7 +213,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
-  Bloqueado(estado, funcionario,tipo) {
+  Bloqueado(estado, funcionario, tipo) {
 
     if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
       switch (estado) {
@@ -437,14 +440,28 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  tipoTransferencia(value,estado, funcionario){
-    switch(value){
-      case "Transferencia":{
+  tipoTransferencia(value, estado, funcionario) {
+    switch (value) {
+      case "Transferencia": {
         return true;
       }
-      case "Cliente":{
+      case "Cliente": {
         return false;
       }
     }
+  }
+
+  RealizarReporte(formulario: NgForm, modal){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/compras/guardar_movimiento_cuenta_compra.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Reporte Creado"
+      this.mensajeSwal.text = "Se ha creado el reporte para este banco"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      modal.hide();
+    });
   }
 }
