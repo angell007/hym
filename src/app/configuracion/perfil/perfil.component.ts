@@ -17,15 +17,32 @@ export class PerfilComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
   public Datos:any[]=[];
-  
+  public Permisos: any[] = [{}];
+  public Cabecera:any[]=[];
+
   constructor(private http : HttpClient, private globales : Globales, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
       
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
+    /*this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Perfil', id:this.id}
     }).subscribe((data:any)=>{
+      console.log(data);
      this.Datos=data;     
+    });*/
+
+    this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil.php', {
+      params: { id: this.id}
+    }).subscribe((data: any) => {
+      console.log(data)
+      this.Permisos=data;    
+    });
+
+    this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil_cabecera.php', {
+      params: { id: this.id}
+    }).subscribe((data: any) => {
+      console.log(data);      
+      this.Cabecera=data;
     });
   }
 

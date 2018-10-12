@@ -13,25 +13,13 @@
         <div class="card-body" style="padding-bottom: 0px;">
           <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
             <div class="col-md-12">
-              <h4>Ver Prefil</h4>
+              <h4>Perfil: <b>{{Cabecera.Nombre}}</b></h4>
             </div>
-
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Nombre</label>
-                {{Datos.Nombre}}
-              </div>
-            </div>
-            <div class="col-md-4">
+            
+            <div class="col-md-12">
               <div class="form-group">
                 <label>Detalles</label>
-                {{Datos.Detalle}}
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label>Tablero</label>
-                {{Datos.Tablero}}
+                {{Cabecera.Detalle}}
               </div>
             </div>
 
@@ -44,12 +32,11 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6 text-left">
-              <h1>Generales</h1>
+            <div class="col-md-12 text-left">
               <table class="table  invoice-detail-table space">
                 <thead>
                   <tr class="thead-default">
-                    <th> </th>
+                    <th> <b>Módulo</b> </th>
                     <th><i class="fa fa-search"></i></th>
                     <th><i class="fa fa-pencil"></i></th>
                     <th><i class="fa fa-trash"></i></th>
@@ -57,269 +44,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td> Transferencias </td>
-                    <td> <i class=" {{Datos.TransfVer == 'true' ? 'fa fa-check' : '' }} "></i> </td>
-                    <td> <i class=" {{Datos.TransfEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TransfEliminar == 'true' ? 'fa fa-check' : '' }} "></i> </td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Traslados </td>
-                    <td> <i class=" {{Datos.TraslVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TraslEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TraslEliminar == 'true' ? 'fa fa-check' : '' }} "></i> </td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Agentes Externos </td>
-                    <td> <i class=" {{Datos.AgentesVerVal == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.AgentesEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.AgentesEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Giros </td>
-                    <td> <i class=" {{Datos.GirosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GirosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GirosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Corresponsales Bancarios </td>
-                    <td> <i class=" {{Datos.CorrVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CorrEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CorrEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Servicios Externos </td>
-                    <td> <i class=" {{Datos.ServVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ServEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ServEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Egresos </td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
+                  <tr *ngFor="let permiso of Permisos" >
+                    <td> {{permiso.Titulo_Modulo}} </td>
+                    <td> <i class=" {{permiso.Ver == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i> </td>
+                    <td> <i class=" {{permiso.Editar == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i></td>
+                    <td> <i class=" {{permiso.Eliminar == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i> </td>
+                    <td> <i class=" {{permiso.Crear == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i></td>                   
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div class="col-md-6 text-left">
-              <h1>POS</h1>
-              <table class="table  invoice-detail-table space">
-                <thead>
-                  <tr class="thead-default">
-                    <th> </th>
-                    <th><i class="fa fa-search"></i></th>
-                    <th><i class="fa fa-pencil"></i></th>
-                    <th><i class="fa fa-trash"></i></th>
-                    <th><i class="fa fa-plus"></i></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td> Cambios Efectivo </td>
-                    <td> <i class=" {{Datos.CambiosEfectivoVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CambiosEfectivoEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CambiosEfectivoEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CambiosEfectivoCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Transferencias </td>
-                    <td> <i class=" {{Datos.TransferenciasPOSVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TransferenciasPOSEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TransferenciasPOSEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TransferenciasPOSCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Giros </td>
-                    <td> <i class=" {{Datos.EgresosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EgresosEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Giros </td>
-                    <td> <i class=" {{Datos.GirosPOSVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GirosPOSEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GirosPOSEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GirosPOSCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Traslados</td>
-                    <td> <i class=" {{Datos.TrasladosPOSVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TrasladosPOSEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TrasladosPOSEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TrasladosPOSCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Corresponsal Bancario </td>
-                    <td> <i class=" {{Datos.CorresponsalPOSVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CorresponsalPOSEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CorresponsalPOSEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CorresponsalPOSCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Servicios Externos </td>
-                    <td> <i class=" {{Datos.ServiciosPOSVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ServiciosPOSEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ServiciosPOSEliminar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ServiciosPOSCrear == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="col-md-6 text-left">
-              <h1>Configuración</h1>
-              <table class="table  invoice-detail-table space">
-                <thead>
-                  <tr class="thead-default">
-                    <th> </th>
-                    <th><i class="fa fa-search"></i></th>
-                    <th><i class="fa fa-pencil"></i></th>
-                    <th><i class="fa fa-trash"></i></th>
-                    <th><i class="fa fa-plus"></i></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td> Configuracion General </td>
-                    <td> <i class=" {{Datos.ConfVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ConfEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Cargo </td>
-                    <td> <i class=" {{Datos.CargoVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CargoEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>                    
-                  </tr>
-                  <tr>
-                    <td> Oficinas </td>
-                    <td> <i class=" {{Datos.OficinasVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.OficinasEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Cajas </td>
-                    <td> <i class=" {{Datos.CajasVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CajasEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Bancos </td>
-                    <td> <i class=" {{Datos.BancosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.BancosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Cuentas Bancarias </td>
-                    <td> <i class=" {{Datos.CuentasVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CuentasEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Destinatarios </td>
-                    <td> <i class=" {{Datos.DestinatariosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.DestinatariosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>                   
-                  </tr>
-                  <tr>
-                    <td> Cajas Recaudo </td>
-                    <td> <i class=" {{Datos.CajasRVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CajasREditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Perfiles </td>
-                    <td> <i class=" {{Datos.PerfilesVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.PerfilesEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Funcionarios </td>
-                    <td> <i class=" {{Datos.FuncionariosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.FuncionariosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Terceros </td>
-                    <td> <i class=" {{Datos.TercerosVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.TercerosEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Grupos </td>
-                    <td> <i class=" {{Datos.GruposVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.GruposEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>                  </tr>
-                  <tr>
-                    <td> Proveedores </td>
-                    <td> <i class=" {{Datos.ProveedoresVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.ProveedoresEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="col-md-6 text-left">
-              <h1>Indicadores</h1>
-              <table class="table  invoice-detail-table space">
-                <thead>
-                  <tr class="thead-default">
-                    <th> </th>
-                    <th><i class="fa fa-search"></i></th>
-                    <th><i class="fa fa-pencil"></i></th>
-                    <th><i class="fa fa-trash"></i></th>
-                    <th><i class="fa fa-plus"></i></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td> Balance General </td>
-                    <td> <i class=" {{Datos.BalanceVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.BalanceEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Flujo de Efectivo </td>
-                    <td> <i class=" {{Datos.FlujoVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.FlujoEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Cuentas por Cobrar </td>
-                    <td> <i class=" {{Datos.CuentaCVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CuentaCEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Cuenta por Pagar </td>
-                    <td> <i class=" {{Datos.CuentaPVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.CuentaPEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-                  <tr>
-                    <td> Estado de Cuentas</td>
-                    <td> <i class=" {{Datos.EstadoVer == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                    <td> <i class=" {{Datos.EstadoEditar == 'true' ? 'fa fa-check' : '' }} "></i></td>
-                  </tr>
-
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
