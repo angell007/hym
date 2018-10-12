@@ -47,11 +47,10 @@ export class TercerosverComponent implements OnInit {
   GuardarMovimiento(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    var newId = this.id;
     datos.append("modulo", 'Movimiento_Tercero');
     datos.append("datos", info);
-    datos.append("Id_Tercero", this.id);
-    datos.append("Id_Movimiento_Tercero", this.idItem);
+    datos.append("Id_Tercero",this.id);
+    datos.append("Id_Movimiento_Tercero",this.idItem);
     this.http.post(this.globales.ruta + 'php/terceros/guardar_ajuste_tercero.php', datos)
       .subscribe((data: any) => {
        formulario.reset();
@@ -88,6 +87,11 @@ export class TercerosverComponent implements OnInit {
         this.confirmacionSwal.type = "success";
         this.confirmacionSwal.show();
       });
+  }
+
+  crear(){
+    this.ModalAjuste.show();
+    this.idItem ="";
   }
 
 }
