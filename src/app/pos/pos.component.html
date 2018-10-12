@@ -471,7 +471,7 @@
                                                     <div class="row">
                                                         <div class="col-md-2">
                                                             <div class="form-group">
-                                                                <label class="transferencia">N. Documento</label>
+                                                                <label class="transferencia">N. Documento <i class="ti-pencil" *ngIf="Envio.esconder" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)" ></i> </label>
                                                                 <input type="text" class="form-control" name="Destino{{i}}"
                                                                     id="Destino{{i}}" [(ngModel)]="Envio.Destino"
                                                                     [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
@@ -480,14 +480,16 @@
                                                                     (change)="AutoCompletarDestinatario(Envio.Destino, i);"
                                                                     (blur)="CrearDestinatrioModal(Envio.Destino,i);"
                                                                     (foucs)="CrearDestinatrioModal(Envio.Destino,i);">
+                                                              <!--    
                                                                 <button *ngIf="Envio.esconder" class="btn btn-default btn-xs"
                                                                     type="button" style="margin:0;" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)">
                                                                     <i class="ti-pencil"></i>
                                                                 </button>
+
                                                                 <button *ngIf="Envio.esconder" class="btn btn-default btn-xs"
                                                                     type="button" style="margin:0;" (click)="NuevaHileraDestinatario(i)">
                                                                     <i class="fa fa-user"></i>
-                                                                </button>
+                                                                </button> -->
                                                             </div>
                                                         </div>
 
@@ -504,7 +506,7 @@
                                                                 <label class="transferencia">Cuenta</label>
                                                                 <select id="Id_Destinatario_Cuenta{{i}}" name="Id_Destinatario_Cuenta{{i}}"
                                                                     [(ngModel)]="Envio.Id_Destinatario_Cuenta" class="form-control"
-                                                                    autocomplete="off" required>
+                                                                    autocomplete="off" required (change)="NuevaHileraDestinatario(i);" >
                                                                     <option value="">Seleccione una Cuenta</option>
                                                                     <option *ngFor="let Cuenta of Envio.Cuentas"
                                                                         [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
@@ -517,7 +519,7 @@
                                                                 <input id="Valor_Transferencia_Bolivar{{i}}" type="number"
                                                                     placeholder="Valor a Transferir en Bolivares" class="form-control"
                                                                     name="Valor_Transferencia_Bolivar{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
-                                                                    (blur)="AutoSumaBolivares(i,$event.target.value)"
+                                                                    (blur)="AutoSumaBolivares(i,$event.target.value);"
                                                                     required>
                                                             </div>
                                                         </div>

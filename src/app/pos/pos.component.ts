@@ -293,14 +293,6 @@ export class PosComponent implements OnInit {
   formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
 
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {
-      //this.FormOficinaAgregar.reset();
-      this.OcultarFormulario(this.ModalRemitente);
-      this.OcultarFormulario(this.ModalDestinatario);
-    }
-  }
-
   muestra_tabla(id) {
     var tot = document.getElementsByClassName('modulos').length;
     for (let i = 0; i < tot; i++) {
@@ -406,10 +398,6 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
       this.Destinatarios = data;
     });
-  }
-
-  OcultarFormulario(modal) {
-    modal.hide();
   }
 
   handleError(error: Response) {
@@ -524,6 +512,7 @@ export class PosComponent implements OnInit {
     this.entregar = sumabolivar.toFixed(2);
     this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
     this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
+    this.NuevaHileraDestinatario(pos);
   }
 
   EliminarDestinatario(index) {
@@ -614,9 +603,9 @@ export class PosComponent implements OnInit {
 
   GuardarDestinatario(formulario: NgForm, modal) {
 
-    this.Lista_Destinatarios.forEach((element,index) => {
-      if(element.Numero_Cuenta == ""){
-        this.Lista_Destinatarios.splice(index,1);
+    this.Lista_Destinatarios.forEach((element, index) => {
+      if (element.Numero_Cuenta == "") {
+        this.Lista_Destinatarios.splice(index, 1);
       }
     });
 
@@ -752,7 +741,6 @@ export class PosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
       this.Cambios = data;
-      this.dtTrigger.next();
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
@@ -762,36 +750,6 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
       this.Cuentas = data;
     });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
       this.Documentos = data;
@@ -837,73 +795,11 @@ export class PosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
       this.Transferencia = data;
-      this.dtTrigger1.next();
     });
-
-    this.dtOptions1 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro' } }).subscribe((data: any) => {
       this.Giros = data;
-      this.dtTrigger3.next();
     });
-
-    this.dtOptions3 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
       this.Departamentos = data;
@@ -920,8 +816,6 @@ export class PosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
       this.Traslados = data.origen;
       this.TrasladosRecibidos = data.destino;
-      this.dtTriggerTraslado.next();
-      this.dtTriggerTraslado1.next();
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Comision' } }).subscribe((data: any) => {
@@ -940,6 +834,7 @@ export class PosComponent implements OnInit {
       this.CuentaBancaria = data;
     });
 
+    this.CambiarTasa(1);
 
   }
 
@@ -959,9 +854,7 @@ export class PosComponent implements OnInit {
       this.maximoTransferencia = data.Dependencia[6].Valor;
       this.minimoTransferencia = data.Dependencia[7].Valor;
       this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
-      this.MonedaDestino = data.Moneda[0].Nombre
-
-
+      this.MonedaDestino = data.Moneda[0].Nombre;
     });
   }
 
@@ -1192,6 +1085,13 @@ export class PosComponent implements OnInit {
     formulario.value.Id_Caja = 4;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
+    
+    this.Envios.forEach((element,index) => {
+      if(element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0 || element.Valor_Transferencia_Peso == 0){
+        this.Envios.splice(index,1);
+      }
+    });
+    
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let info = JSON.stringify(formulario.value);
     let destinatarios = JSON.stringify(this.Envios);
@@ -1226,14 +1126,9 @@ export class PosComponent implements OnInit {
           esconder: false
         }];
 
-        this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
-          this.Transferencia = data;
-          //this.dtTrigger1.next();
-        });
-
+        this.actualizarVista();
 
       });
-
   }
 
 
@@ -1257,34 +1152,6 @@ export class PosComponent implements OnInit {
     });
   }
 
-
-  /*agregarDinamico(i, valor) {
-    var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
-
-    if (parseInt(idpais) == 2) {
-      var longitud = this.LongitudCarateres(valor);
-      if (longitud == 20) {
-        var pos = parseInt(i) + 1;
-        if (this.Lista_Destinatarios[pos] == undefined) {
-          this.AgregarFila();
-          this.Bancos_Pais(2, pos);
-          this.botonDestinatario = true;
-        }
-      } else {
-        this.botonDestinatario = false;
-        this.confirmacionSwal.title = "Banco no valido";
-        this.confirmacionSwal.text = "Digite correctamente el número del banco";
-        this.confirmacionSwal.type = "error"
-        this.confirmacionSwal.show();
-      }
-    } else {
-      var pos = parseInt(i) + 1;
-      if (this.Lista_Destinatarios[pos] == undefined) {
-        this.AgregarFila();
-        this.Bancos_Pais(2, pos);
-      }
-    }
-  } */
 
   validarBanco(i, valor) {
     var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
@@ -1364,7 +1231,6 @@ export class PosComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let bancos = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
-    this.OcultarFormulario(modal);
     datos.append("modulo", 'Destinatario');
     datos.append("datos", info);
     datos.append("destinatario", bancos);
@@ -1428,19 +1294,10 @@ export class PosComponent implements OnInit {
 
   }
 
-  limpiarFormularios() {
-    this.FormMoneda.reset();
-    this.FormTransferencia.reset();
-    this.FormGiro.reset();
-    this.FormTraslado.reset();
-    this.FormCorresponsal.reset();
-    this.FormServicio.reset();
-  }
 
   volverCambioEfectivo() {
     this.Cambios1 = true;
     this.Cambios2 = false;
-    //this.limpiarFormularios();
   }
 
   volverReciboTransferencia() {
@@ -1456,37 +1313,35 @@ export class PosComponent implements OnInit {
       Cuentas: [],
       esconder: false
     }];
+    this.CambiarTasa(1);
   }
 
   volverReciboGiro() {
     this.Giro1 = true;
     this.Giro2 = false;
-    //this.limpiarFormularios();
   }
 
   volverTraslado() {
     this.Traslado1 = true;
     this.Traslado2 = false;
-    //this.limpiarFormularios();
   }
 
   volverServicio() {
     this.Servicio1 = true;
     this.Servicio2 = false;
-    //this.limpiarFormularios();
   }
 
   volverReciboServicio() {
     this.Servicio1 = true;
     this.Servicio2 = false;
-    //this.limpiarFormularios();
   }
 
   NuevaHileraDestinatario(pos) {
     var limite = parseInt(this.LimiteOficina);
     if (this.Envios.length != limite) {
       var index = pos + 1;
-      if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Valor_Transferencia_Peso > 0 && this.Envios[pos].Valor_Transferencia_Bolivar > 0)) {
+    
+      if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Peso > 1 && this.Envios[pos].Valor_Transferencia_Bolivar > 1)) {
         this.Envios.push({
           Destino: '',
           Numero_Documento_Destino: '',
@@ -1498,21 +1353,27 @@ export class PosComponent implements OnInit {
           esconder: false
         });
 
-        if (this.Recibe == 'Cliente') {
-          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
-        } else {
-          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
-        }
-      } else {
-        this.confirmacionSwal.title = "Información Vacia";
-        this.confirmacionSwal.text = "Hay campos vacios que deben ser digitados para poder continuar";
-        this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
-
-        if (this.Recibe == 'Cliente') {
+        if (this.Recibe == 'Cliente' && this.Envios.length == 1) {
           (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
         } else {
-          (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+          if (this.Envios.length == 1) {
+            (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+          }
+        }
+      } else {
+        if (this.Envios[pos].Id_Destinatario_Cuenta == "") {
+          this.confirmacionSwal.title = "Información Vacia";
+          this.confirmacionSwal.text = "Hay campos vacios que deben ser digitados para poder continuar";
+          this.confirmacionSwal.type = "error";
+          this.confirmacionSwal.show();
+
+          if (this.Recibe == 'Cliente' && this.Envios.length == 1) {
+            (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+          } else {
+            if (this.Envios.length == 1) {
+              (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
+            }
+          }
         }
 
       }
@@ -1663,39 +1524,7 @@ export class PosComponent implements OnInit {
         this.confirmacionSwal.type = "error"
         this.confirmacionSwal.show();
       }
-      this.dtTrigger2.next();
     });
-
-    this.dtOptions2 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
-
   }
 
   Municipios_Departamento(Departamento, tipo) {
@@ -1779,9 +1608,6 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.show();
       this.actualizarVista();
     });
-
-    //formulario.reset();
-
   }
 
 
@@ -1794,11 +1620,7 @@ export class PosComponent implements OnInit {
       formulario.reset();
       this.volverTraslado();
       modal.hide();
-      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
-        this.Traslados = data.origen;
-        this.TrasladosRecibidos = data.destino;
-      });
-
+      this.actualizarVista();
     });
   }
 
@@ -1808,10 +1630,7 @@ export class PosComponent implements OnInit {
     datos.append("id", id);
     datos.append("estado", estado);
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
-      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
-        this.Traslados = data.origen;
-        this.TrasladosRecibidos = data.destino;
-      });
+      this.actualizarVista();
     });
   }
 
@@ -1841,10 +1660,7 @@ export class PosComponent implements OnInit {
     datos.append("estado", valor);
 
     this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
-      this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
-        this.Traslados = data.origen;
-        this.TrasladosRecibidos = data.destino;
-      });
+      this.actualizarVista();
     });
   }
 
@@ -1890,9 +1706,7 @@ export class PosComponent implements OnInit {
       formulario.reset();
       modal.hide();
       this.volverServicio();
-      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
-        this.Servicios = data;
-      });
+      this.actualizarVista();
     });
   }
 
@@ -1902,9 +1716,7 @@ export class PosComponent implements OnInit {
     datos.append("id", id);
     datos.append("estado", estado);
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
-      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
-        this.Servicios = data;
-      });
+      this.actualizarVista();
     });
   }
 
