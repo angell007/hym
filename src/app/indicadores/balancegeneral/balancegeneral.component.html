@@ -32,12 +32,14 @@
                       <a data-toggle="collapse" data-parent="#accordionEx1" href="#collapseOne{{i}}{{j}}" aria-expanded="true"
                         aria-controls="collapseOne{{i}}">
                         
-                        <table class="table table-hover table-sm table-striped table-bordered" style="font-size: 12px">
+                        <table class="table" style="font-size: 12px">
                             <tr>
-                                <th><h5 class="mb-0"> {{subitem.Nombre}} </h5></th>
-                                <th style="text-align: center">Total Pesos: </th>
-                                <th style="text-align: center">Total Bolivares: {{subitem.saldoBolivar | currency:"BsS."}} </th>
-                                <th><i class="fa fa-angle-down rotate-icon"></i></th>
+                                <th style="width: 120px"><h5 class="mb-0"> {{subitem.Nombre}} </h5></th>
+                                <th class="text-center" style="width: 120px">Total Pesos:</th>
+                                <th class="text-center" style="width: 120px"></th>
+                                <th class="text-center" style="width: 120px">Total Bolivares: </th>
+                                <th class="text-center" style="width: 120px">{{subitem.saldoBolivar | currency:"BsS."}} </th>
+                                <th style="width: 120px"><i class="fa fa-angle-down rotate-icon"></i></th>
                               </tr>
                         </table>
                       </a>
@@ -46,20 +48,20 @@
                       data-parent="#accordionEx">
                       <div class="card-body">
                         <div class="table-responsive">
-                          <table class="table table-hover table-sm table-striped table-bordered" style="font-size: 12px">
+                          <table class="table" style="font-size: 12px">
                             <tr>
                               <th></th>
                               <th colspan="3" style="text-align: center">$</th>
                               <th colspan="3" style="text-align: center">BsS.</th>
                             </tr>
                             <tr>
-                              <td style="text-align: center;width:200px !important;" > Movimiento</td>
-                              <td style="text-align: center;width:60px !important;">Ingreso</td>
-                              <td style="text-align: center;width:60px !important;">Egreso</td>
-                              <td style="text-align: center;width:60px !important;">Saldo</td>
-                              <td style="text-align: center;width:60px !important;">Ingreso</td>
-                              <td style="text-align: center;width:60px !important;">Egreso</td>
-                              <td style="text-align: center;width:60px !important;">Saldo</td>
+                              <td class="text-center" style="width:100px !important;"> Movimiento</td>
+                              <td class="text-center" style="width:60px !important;">Ingreso</td>
+                              <td class="text-center" style="width:60px !important;">Egreso</td>
+                              <td class="text-center" style="width:60px !important;">Saldo</td>
+                              <td class="text-center" style="width:20px !important;">Ingreso</td>
+                              <td class="text-center" style="width:20px !important;">Egreso</td>
+                              <td class="text-center" style="width:20px !important;">Saldo</td>
                             </tr>
                             <tr *ngFor="let movimiento of subitem.lista ; let k = index">
                               <td>{{movimiento.ItemDetalle}} {{movimiento.Codigo}} -- {{movimiento.Fecha}} -- {{movimiento.Detalle}} </td>
