@@ -29,6 +29,10 @@ export class ComprascrearComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(){
+    (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
+  }
+
   TotalCompra: any;
   cambiarEstado(pos) {
     var posItem = this.ComprasPendientes.findIndex(x => x.Id_Compra_Cuenta === pos);
@@ -46,6 +50,7 @@ export class ComprascrearComponent implements OnInit {
       tasa = "0";
     }
     this.tasa = this.TotalCompra * Number(tasa);
+    this.validarGuardar(this.tasa);
   }
 
   rectificar(pos) {
@@ -64,6 +69,15 @@ export class ComprascrearComponent implements OnInit {
       tasa = "0";
     }
     this.tasa = this.TotalCompra * Number(tasa);
+    this.validarGuardar(this.tasa);
+  }
+
+  validarGuardar(valor){
+    if(valor > 0 ){
+      (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = false;
+    }else{
+      (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
+    }
   }
 
   tasa: any;
@@ -84,6 +98,7 @@ export class ComprascrearComponent implements OnInit {
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("compras_proveedor", cuentas);
+    datos.append("Nombre_Proveedor", this.nombre);
     this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
       .subscribe((data: any) => {
         formulario.reset();

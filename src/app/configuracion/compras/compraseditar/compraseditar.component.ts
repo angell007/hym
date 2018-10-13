@@ -35,6 +35,9 @@ export class CompraseditarComponent implements OnInit {
       this.CompraEditar = data;
       this.TotalCompra = data.Valor_Compra;
       this.tasa = data.Valor_Peso;
+      var proveedor = this.Proveedores.findIndex(x => x.Id_Tercero === data.Id_Tercero);
+      this.nombre = this.Proveedores[proveedor].Nombre;
+      
     });
 
     this.http.get(this.globales.ruta + 'php/compras/compras_realizadas_edicion.php', { params: { modulo: 'Compra' , id : this.id } }).subscribe((data: any) => {
@@ -60,12 +63,13 @@ export class CompraseditarComponent implements OnInit {
       tasa = "0";
     }
     this.tasa = this.TotalCompra * Number(tasa);
+    this.validarGuardar(this.tasa);
   }
 
   ListaCompraEliminada = [];
-  rectificar(pos) {
+  rectificar(pos,i) {
     this.ListarCompra.forEach((element,index) => {
-      if(element.editable == "editable"){
+      if(element.editable == "editable" && index == i){
         this.ListarCompra[index].editable="editado";
         this.ListaCompraEliminada.push(element);
       }
@@ -86,6 +90,15 @@ export class CompraseditarComponent implements OnInit {
       tasa = "0";
     }
     this.tasa = this.TotalCompra * Number(tasa);
+    this.validarGuardar(this.tasa);
+  }
+
+  validarGuardar(valor){
+    if(valor > 0 ){
+      (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = false;
+    }else{
+      (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
+    }
   }
 
   tasa: any;
@@ -102,13 +115,15 @@ export class CompraseditarComponent implements OnInit {
 
     let info = JSON.stringify(formulario.value);
     let cuentas = JSON.stringify(this.ListarCompra);
-    let egresos = JSON.stringify(this.ListaCompraEliminada);
+    let egresos = JSON.stringify(this.ListaCompraEliminada);   
 
     let datos = new FormData();
     datos.append("datos", info);
     datos.append("compras_proveedor", cuentas);
     datos.append("Id_Compra", this.id);
     datos.append("Compras_Egresos", egresos);
+    datos.append("Nombre_Proveedor", this.nombre);
+
     this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
       .subscribe((data: any) => {
         formulario.reset();

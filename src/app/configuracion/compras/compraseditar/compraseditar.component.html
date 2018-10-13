@@ -67,7 +67,7 @@
                                     {{item.Valor | currency: "BsS. "}}
                                   </td>
                                   <td>
-                                    <i class="fa fa-times" (click)="rectificar(item.Id_Compra_Cuenta)"></i>
+                                    <i class="fa fa-times" (click)="rectificar(item.Id_Compra_Cuenta,i)"></i>
                                   </td>
                                 </tr>
                               </tbody>
@@ -81,7 +81,7 @@
                       <div class="form-group">
                         <label>Detalle</label>
                         <textarea rows="4" cols="50" class="form-control" placeholder="Detalle Compra" name="Detalle"
-                        ngModel="{{CompraEditar.Detalle}}" (input)="HabilitarGuardar($event.target.value)"></textarea>
+                        ngModel="{{CompraEditar.Detalle}}" ></textarea>
                       </div>
                     </div>
 
@@ -124,8 +124,7 @@
               <div class="col-md-10">
               </div>
               <div class="col-md-2 botonFlotante">
-                <button type="button" class="btn btn-primary btn-block btn-enviar" (click)="GuardarCompra(FormCompra)">Generar
-                  Compra</button>
+                <button id="GenerarCompra" type="button" class="btn btn-primary btn-block btn-enviar" (click)="GuardarCompra(FormCompra)" >Generar Compra</button>
               </div>
             </div>
           </div>
