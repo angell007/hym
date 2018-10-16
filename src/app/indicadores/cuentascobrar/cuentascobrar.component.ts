@@ -66,7 +66,7 @@ export class CuentascobrarComponent implements OnInit {
   datos = [0];
 
   ngOnInit() {
-
+    var chartData = [];
     this.http.get(this.globales.ruta + 'php/terceros/cuentas_cobro.php').subscribe((data: any) => {
       data.forEach(element => {
         element.tercero.forEach(element1 => {
@@ -74,6 +74,10 @@ export class CuentascobrarComponent implements OnInit {
             this.ListaBalance.push(element);
             this.lineChartLabels.push(element.Nombre);
             this.datos.push(element1.Valor);
+            chartData.push({
+              Proveedor: element.Nombre,
+              Egresos: element1.Valor
+            })
           }
 
         });
@@ -83,6 +87,41 @@ export class CuentascobrarComponent implements OnInit {
         { data: this.datos, label: 'Cuentas por cobrar BsS.' }
       ];
       
+      var chart = AmCharts.makeChart("chartdiv", {
+        "type": "serial",
+        "theme": "light",
+        "legend": {
+          "useGraphSettings": true
+        },
+        "dataProvider": chartData,
+        "synchronizeGrid": true,
+        "valueAxes": [{
+          "id": "v1",
+          "axisColor": "#cc0000",
+          "axisThickness": 2,
+          "axisAlpha": 1,
+          "position": "left"
+        }],
+        "graphs": [{
+          "valueAxis": "v1",
+          "lineColor": "#cc0000",
+          "bullet": "round",
+          "bulletBorderThickness": 1,
+          "hideBulletsCount": 30,
+          "title": "Egresos",
+          "valueField": "Egresos",
+          "fillAlphas": 0
+        }],
+        "chartCursor": {
+          "cursorPosition": "mouse"
+        },
+        "categoryField": "Proveedor",        
+        "export": {
+          "enabled": true,
+          "position": "bottom-right"
+        }
+      });
+
     });
 
   }

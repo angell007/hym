@@ -65,6 +65,7 @@ export class CuentaspagarComponent implements OnInit {
  
   datos = [0];
   ngAfterViewInit(){
+    var chartData = [];
     this.http.get(this.globales.ruta + 'php/terceros/cuentas_pago.php').subscribe((data: any) => {
       data.forEach(element => {
         element.tercero.forEach(element1 => {
@@ -73,16 +74,57 @@ export class CuentaspagarComponent implements OnInit {
             this.lineChartLabels.push(element.Nombre);
             this.datos.push(element1.Valor);
             //this.lineChartData.push( { data: [element1.Valor] });
+            chartData.push({
+              Proveedor: element.Nombre,
+              Ingresos: element1.Valor
+            })
           }
         });
       });
 
-      this.lineChartData= [
+      /*this.lineChartData= [
         { data: this.datos, label: 'Cuentas por cobrar BsS.' }
-      ];
+      ];*/
+
+      var chart = AmCharts.makeChart("chartdiv", {
+        "type": "serial",
+        "theme": "light",
+        "legend": {
+          "useGraphSettings": true
+        },
+        "dataProvider": chartData,
+        "synchronizeGrid": true,
+        "valueAxes": [{
+          "id": "v1",
+          "axisColor": "#009900",
+          "axisThickness": 2,
+          "axisAlpha": 1,
+          "position": "left"
+        }],
+        "graphs": [{
+          "valueAxis": "v1",
+          "lineColor": "#009900",
+          "bullet": "round",
+          "bulletBorderThickness": 1,
+          "hideBulletsCount": 30,
+          "title": "Ingresos",
+          "valueField": "Ingresos",
+          "fillAlphas": 0
+        }],
+        "chartCursor": {
+          "cursorPosition": "mouse"
+        },
+        "categoryField": "Proveedor",        
+        "export": {
+          "enabled": true,
+          "position": "bottom-right"
+        }
+      });
 
     });
     
+   
+
     
 
   }
