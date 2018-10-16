@@ -106,11 +106,7 @@
               <tbody>
                 <tr *ngFor="let movimiento of MovimientosTercero ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }}">
                   <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha | date : "dd/MM/yyyy" }}</td>
-                  <td *ngIf="movimiento.Ajuste == 'No'; else yesContent">{{movimiento.Codigo
-                      }}</td> <!--<a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)" > </a>-->
-                  <ng-template #yesContent>
-                    <td>Ajuste</td>
-                  </ng-template>
+                  <td >{{movimiento.ItemDetalle}}</td> <!--<a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)" > </a>-->
                   <td>{{movimiento.Detalle}}</td>
                   <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
                   <td *ngIf="movimiento.Tipo==='Egreso'"></td>
