@@ -85,7 +85,6 @@ export class GirosComponent implements OnInit {
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     this.IdOficina = 5;
     this.IdCaja = 4;
-    console.log(localStorage['User'])
     this.http.get(this.globales.ruta + 'php/giros/lista.php').subscribe((data: any) => {
       this.giros = data;
     });
@@ -127,18 +126,6 @@ export class GirosComponent implements OnInit {
       this.Estado=data.Estado;
       this.Identificacion = id;
 
-      console.log(this.Giro);
-      console.log(this.Identificacion);
-      /*this.Grupos.forEach(element => {
-        if (element.Id_Grupo == data.Id_Grupo) this.Grupo = element.Nombre;
-      });
-
-      this.Terceros.forEach(element => {
-        if (element.Id_Tercero == data.Id_Tercero) this.Tercero = element.Nombre;
-      });
-      this.Moneda = data.Moneda;
-      this.Valor = data.Valor;
-      this.Detalle = data.Detalle;*/
       modal.show();
     });
   }
@@ -207,39 +194,8 @@ export class GirosComponent implements OnInit {
   ActualizarVista()
   {
     this.http.get(this.globales.ruta+'php/giros/lista.php').subscribe((data:any)=>{
-      this.giros= data;
-      this.dtTrigger.next();
+      this.giros= data;      
     });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    }; 
 
     this.http.get(this.globales.ruta+'/php/giros/fecha_giro.php').subscribe((data:any)=>{
       var chart = AmCharts.makeChart("chartdiv", {
