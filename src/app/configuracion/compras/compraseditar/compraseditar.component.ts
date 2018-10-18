@@ -21,6 +21,8 @@ export class CompraseditarComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
 
+  @ViewChild('mensajeSwal') mensajeSwal: any;
+
   constructor(private http: HttpClient, private globales: Globales, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -113,24 +115,29 @@ export class CompraseditarComponent implements OnInit {
 
   GuardarCompra(formulario: NgForm) {
 
-    let info = JSON.stringify(formulario.value);
-    let cuentas = JSON.stringify(this.ListarCompra);
-    let egresos = JSON.stringify(this.ListaCompraEliminada);   
-
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("compras_proveedor", cuentas);
-    datos.append("Id_Compra", this.id);
-    datos.append("Compras_Egresos", egresos);
-    datos.append("Nombre_Proveedor", this.nombre);
-
-    this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
-      .subscribe((data: any) => {
-        formulario.reset();
-        /*this.saveSwal.show();
-        this.ActualizarVista();*/
-        this.router.navigate(['/compras']);
-      });
+      let info = JSON.stringify(formulario.value);
+      let cuentas = JSON.stringify(this.ListarCompra);
+      let egresos = JSON.stringify(this.ListaCompraEliminada);   
+  
+      let datos = new FormData();
+      datos.append("datos", info);
+      datos.append("compras_proveedor", cuentas);
+      datos.append("Id_Compra", this.id);
+      datos.append("Compras_Egresos", egresos);
+      datos.append("Nombre_Proveedor", this.nombre);
+  
+      this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
+        .subscribe((data: any) => {
+          formulario.reset();
+          /*this.saveSwal.show();
+          this.ActualizarVista();*/
+          this.mensajeSwal.title = "Compra generada";
+          this.mensajeSwal.text = "Se ha generado la compra correctamente";
+          this.mensajeSwal.type = "success";
+          this.mensajeSwal.show();
+          this.router.navigate(['/compras']);
+        });
+  
   }
 
   nombre: any;

@@ -15,6 +15,7 @@ export class CuentasbancariasverComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
   @ViewChild('ModalAjusteEditar') ModalAjusteEditar: any;
+  @ViewChild('ModalAjuste') ModalAjuste: any;
 
   Movimientos = [];
   public id = this.route.snapshot.params["id"];
@@ -35,7 +36,8 @@ export class CuentasbancariasverComponent implements OnInit {
     this.id = this.route.snapshot.params["id"];
     this.ActualizarVista();
     this.calcularSaldoActual();
-    this.datosCuentaBancaria();
+    this.datosCuentaBancaria();   
+
   }
 
   datosCuentaBancaria() {
@@ -129,6 +131,16 @@ export class CuentasbancariasverComponent implements OnInit {
       this.ajusteBancario = data;
     });
     modal.show();
+  }
+
+  abrirModal(){
+    this.ModalAjuste.show();
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var hoy = yyyy+'-'+mm+'-'+dd;
+    (document.getElementById("datefield") as HTMLInputElement).setAttribute("max",hoy);
   }
 
 }

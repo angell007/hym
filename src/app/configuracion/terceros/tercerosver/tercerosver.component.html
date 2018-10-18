@@ -71,7 +71,7 @@
             <div class="card-block">
               <div class="row text-center">
                 <div class="col-md-12">
-                  <h1 class="no-mrg-top font-size-20" style="color:#fff">{{SaldoPesos | currency:"$" }} </h1>
+                  <h1 class="no-mrg-top font-size-20" style="color:#fff">{{SaldoPesos  }} </h1>
                   <span class="text-white">Saldo Actual ($) </span>
                 </div>
                 <!--<div class="col-md-4 text-center">
@@ -86,7 +86,7 @@
             <div class="card-block">
               <div class="row text-center">
                 <div class="col-md-12">
-                  <h1 class="no-mrg-top font-size-20" style="color:#fff"> {{SaldoBolivar | currency:"BsS." }} </h1>
+                  <h1 class="no-mrg-top font-size-20" style="color:#fff"> {{SaldoBolivar  }} </h1>
                   <span class="text-white"> Saldo Actual (BsS.)</span>
                 </div>
                 <!--<div class="col-md-5 text-center">
@@ -219,7 +219,7 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Fecha</label>
-            <input type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
+            <input id="datefield" type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
           </div>
         </div>
         <div class="col-md-3">

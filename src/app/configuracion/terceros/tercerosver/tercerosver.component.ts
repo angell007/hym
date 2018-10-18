@@ -49,6 +49,7 @@ export class TercerosverComponent implements OnInit {
       params: { id: this.id }
     }).subscribe((data: any) => {
       this.MovimientosTercero = data.lista;
+console.log(data.lista)
       this.SaldoActual = data.total;
       this.SaldoPesos = data.totalPeso;
       this.SaldoBolivar = data.totalBolivar;
@@ -102,7 +103,12 @@ export class TercerosverComponent implements OnInit {
 
   crear(){
     this.ModalAjuste.show();
-    this.idItem ="";
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var hoy = yyyy+'-'+mm+'-'+dd;
+    (document.getElementById("datefield") as HTMLInputElement).setAttribute("max",hoy);
   }
 
 }

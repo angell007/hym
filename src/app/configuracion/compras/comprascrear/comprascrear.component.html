@@ -22,13 +22,13 @@
                         <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
                       </select>
                     </div>
-                    <input hidden name="nombreProveedor" [(ngModel)]="nombre">
+                    <!--<input hidden name="nombreProveedor" [(ngModel)]="nombre">-->
                   </div>
   
                   <div class="col-md-3">
                     <div class="form-group">
                       <label>Valor Compra</label>
-                      <input readonly (blur)="ValidarValorCompra($event.target.value)" required class="form-control" name="Valor_Compra"
+                      <input readonly required class="form-control" name="Valor_Compra"
                         ngModel={{TotalCompra}} [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                   </div>
@@ -78,7 +78,8 @@
                     <div class="form-group">
                       <label>Detalle</label>
                       <textarea rows="4" cols="50" class="form-control" placeholder="Detalle Compra" name="Detalle"
-                        ngModel (input)="HabilitarGuardar($event.target.value)"></textarea>
+                        ngModel ></textarea>
+                        <!--(input)="HabilitarGuardar($event.target.value)"-->
                     </div>
                   </div>
   
@@ -131,3 +132,6 @@
     </div>
   </div>
 </div>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>

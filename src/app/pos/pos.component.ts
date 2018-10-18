@@ -488,13 +488,13 @@ export class PosComponent implements OnInit {
   AutoSumaBolivares(pos, valor) {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
     this.Envios[pos].Valor_Transferencia_Peso = (parseInt(valor) * parseInt(divisor));
-    this.Envios[pos].Valor_Transferencia_Bolivar = (this.Envios[pos].Valor_Transferencia_Peso / parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Bolivar = Math.round(this.Envios[pos].Valor_Transferencia_Peso / parseInt(divisor));
     this.AutoSuma(pos);
   }
 
   AutoSumaPeso(pos, valor) {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    this.Envios[pos].Valor_Transferencia_Bolivar = (parseInt(valor) / parseInt(divisor));
+    this.Envios[pos].Valor_Transferencia_Bolivar = Math.round(parseInt(valor) / parseInt(divisor));
     this.Envios[pos].Valor_Transferencia_Peso = (this.Envios[pos].Valor_Transferencia_Bolivar * parseInt(divisor));
     this.AutoSuma(pos);
   }

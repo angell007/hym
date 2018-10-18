@@ -18,6 +18,8 @@ export class ComprascrearComponent implements OnInit {
   ListarCompra = [];
   Proveedores = [];
 
+  @ViewChild('mensajeSwal') mensajeSwal: any;
+
   constructor(private http: HttpClient, private globales: Globales, private router: Router) { }
 
   ngOnInit() {
@@ -29,8 +31,8 @@ export class ComprascrearComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit(){
-//    (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
+  ngAfterViewInit() {
+    //    (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
   }
 
   TotalCompra: any;
@@ -72,7 +74,7 @@ export class ComprascrearComponent implements OnInit {
     this.validarGuardar(this.tasa);
   }
 
-  validarGuardar(valor){
+  validarGuardar(valor) {
     /*if(valor > 0 ){
       (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = false;
     }else{
@@ -92,20 +94,31 @@ export class ComprascrearComponent implements OnInit {
 
   GuardarCompra(formulario: NgForm) {
 
-    let info = JSON.stringify(formulario.value);
-    let cuentas = JSON.stringify(this.ListarCompra);
+    if (this.TotalCompra == 0 || this.TotalCompra == undefined || this.nombre == "" || this.nombre == null) {
+      this.mensajeSwal.title = "Error al guardar";
+      this.mensajeSwal.text = "Hay valores que no han sido digitados, rellene todos los campos e incluya las compras necesarias para poder continuar";
+      this.mensajeSwal.type = "error";
+      this.mensajeSwal.show();
+    } else {
+      let info = JSON.stringify(formulario.value);
+      let cuentas = JSON.stringify(this.ListarCompra);
 
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("compras_proveedor", cuentas);
-    datos.append("Nombre_Proveedor", this.nombre);
-    this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
-      .subscribe((data: any) => {
-        formulario.reset();
-        /*this.saveSwal.show();
-        this.ActualizarVista();*/
-        this.router.navigate(['/compras']);
-      });
+      let datos = new FormData();
+      datos.append("datos", info);
+      datos.append("compras_proveedor", cuentas);
+      datos.append("Nombre_Proveedor", this.nombre);
+      this.http.post(this.globales.ruta + 'php/compras/guardar_compra.php', datos)
+        .subscribe((data: any) => {
+          formulario.reset();
+          /*this.saveSwal.show();
+          this.ActualizarVista();*/
+          this.mensajeSwal.title = "Compra generada";
+          this.mensajeSwal.text = "Se ha generado la compra correctamente";
+          this.mensajeSwal.type = "success";
+          this.mensajeSwal.show();
+          this.router.navigate(['/compras']);
+        });
+    }
   }
 
   nombre: any;
@@ -117,5 +130,6 @@ export class ComprascrearComponent implements OnInit {
       this.nombre = "";
     }
   }
+
 
 }

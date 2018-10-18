@@ -69,6 +69,7 @@ export class FlujoefectivoComponent implements OnInit {
 
     var chartData = [];
     this.http.get(this.globales.ruta + 'php/terceros/flujo_efectivo.php').subscribe((data: any) => {
+      var datos =[];
       data.forEach((element,index) => {
        
         if(element.tercero.length > 0){
@@ -93,14 +94,47 @@ export class FlujoefectivoComponent implements OnInit {
             item4 = element.tercero[3].Valor;
           }
 
-            chartData.push({
-              Proveedor: element.Nombre,
-              Egresos: item1,
-              Ingresos: item2
-            })
-          
-        }
-        
+          element.tercero.forEach(element1 => {
+  
+              chartData.push({
+                Proveedor: element.Nombre,
+                Egresos: element1.Valor,
+                Ingresos: 0
+              })           
+              
+              if(element1.Tipo == "Ingreso" && element1.Moneda_Origen == "Pesos" ){
+                var index = datos.findIndex(x=> x.Proveedor === element.Nombre);
+  
+                if(index == -1){
+                  datos.push({
+                    Proveedor: element.Nombre,
+                    Egresos:  0,
+                    Ingresos: element1.Valor
+                  });
+                }else{
+                  datos[index].Ingresos = element1.Valor
+                }              
+                
+              }
+              if(element1.Tipo == "Ingreso" && element1.Moneda_Origen == "Bolivares" ){
+                var index = datos.findIndex(x=> x.Proveedor === element.Nombre);
+  
+                if(index == -1){
+                  datos.push({
+                    Proveedor: element.Nombre,
+                    Egresos:  0,
+                    Ingresos: element1.Valor
+                  });
+                }else{
+                  datos[index].Ingresos = element1.Valor
+                }  
+              } 
+
+              console.log(datos);
+              
+            
+          });
+        }        
       });
 
       var chart = AmCharts.makeChart("chartdiv", {
