@@ -57,7 +57,7 @@ export class TrasladosComponent implements OnInit {
   codigo_Formato: string;
   verTraslado = [];
   edicionTraslado = [];
-
+  movimiento = [];
 
   constructor(private http: HttpClient, private globales: Globales) {
 
@@ -74,6 +74,7 @@ export class TrasladosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/traslados/lista.php').subscribe((data: any) => {
       this.traslados = data;
+      
     });
   }
 
@@ -92,7 +93,7 @@ export class TrasladosComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
-
+      
       var chart = AmCharts.makeChart("chartdiv1", {
         "type": "pie",
         "theme": "light",
@@ -114,6 +115,8 @@ export class TrasladosComponent implements OnInit {
       });
 
     });
+
+
   }
 
   CasoTraslado(valor) {

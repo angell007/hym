@@ -7,7 +7,7 @@
     <div class="col-md-4">
       <div class="card">
         <div class="card-block">
-            <h4 class="pull-left">Datos Tercero</h4>
+          <h4 class="pull-left">Datos Tercero</h4>
           <div class="table-responsive">
             <table class="table table-hover table-sm table-striped">
               <tbody>
@@ -64,19 +64,41 @@
           </div>
         </div>
       </div>
-      <div class="card" style="background-color: #7774e7; ">
-        <div class="card-block">
-          <div class="row">
-            <div class="col-md-7">
-              <h1 class="no-mrg-top font-size-20" style="color:#fff">{{SaldoActual | currency:"BsS." }} </h1>
-              <span class="text-white">Saldo Actual</span>
+
+      <div class="row">
+                <div class="col-md-6">
+          <div class="card" style="background-color: #7774e7; ">
+            <div class="card-block">
+              <div class="row text-center">
+                <div class="col-md-12">
+                  <h1 class="no-mrg-top font-size-20" style="color:#fff">{{SaldoPesos | currency:"$" }} </h1>
+                  <span class="text-white">Saldo Actual ($) </span>
+                </div>
+                <!--<div class="col-md-4 text-center">
+                  <i class="fa fa-money font-size-50 text-white"></i>
+                </div> -->
+              </div>
             </div>
-            <div class="col-md-5 text-center">
-              <i class="fa fa-money font-size-50 text-white"></i>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card" style="background-color: #5DADE2; ">
+            <div class="card-block">
+              <div class="row text-center">
+                <div class="col-md-12">
+                  <h1 class="no-mrg-top font-size-20" style="color:#fff"> {{SaldoBolivar | currency:"BsS." }} </h1>
+                  <span class="text-white"> Saldo Actual (BsS.)</span>
+                </div>
+                <!--<div class="col-md-5 text-center">
+                  <i class="fa fa-money font-size-50 text-white"></i>
+                </div> -->
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+
     </div>
     <div class="col-md-8">
       <div class="card">
@@ -97,25 +119,25 @@
                   <th style="width:60px !important;">Fecha</th>
                   <th>Recibo</th>
                   <th>Detalle</th>
-                  <th class="text-center" style="width: 120px">Egreso</th>
                   <th class="text-center" style="width: 120px">Ingreso</th>
+                  <th class="text-center" style="width: 120px">Egreso</th>
                   <th class="text-center" style="width: 120px">Saldo</th>
                   <th class="text-center" style="width: 50px"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let movimiento of MovimientosTercero ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }}">
+                <tr *ngFor="let movimiento of MovimientosTercero ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }} {{movimiento.ValorPesos  ? '' : 'esconder' }}">
                   <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha | date : "dd/MM/yyyy" }}</td>
-                  <td >{{movimiento.ItemDetalle}}</td> <!--<a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)" > </a>-->
+                  <td>{{movimiento.ItemDetalle}}</td>
+                  <!--<a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)" > </a>-->
                   <td>{{movimiento.Detalle}}</td>
-                  <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
-                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.ValorPesos }}</td>
                   <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
-                  <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
-                  <td class="text-right {{movimiento.Saldo < 0 ? 'text-danger' : ''}} {{ i == 0 ? 'grande' : '' }}">{{movimiento.Saldo
-                    | currency:"BsS."}}</td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.ValorPesos }}</td>
+                  <td class="text-right {{movimiento.SaldoPeso < 0 ? 'text-danger' : 'text-success'}} ">{{movimiento.SaldoPesoSimbolo}}</td>
                   <td class="text-center" *ngIf="movimiento.Ajuste==='Si'">
-                    <a  class="text-success"  [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Tercero,ModalAjusteEditar)">
+                    <a class="text-success" [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Tercero,ModalAjusteEditar)">
                       <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
 
@@ -130,6 +152,49 @@
               </tbody>
             </table>
           </div>
+
+          <div class="table-responsive margin-top:10px;">
+            <!--datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"-->
+            <table class="table table-hover table-sm table-striped table-bordered" style="font-size: 12px">
+              <thead>
+                <tr>
+                  <th style="width:60px !important;">Fecha</th>
+                  <th>Recibo</th>
+                  <th>Detalle</th>
+                  <th class="text-center" style="width: 120px">Ingreso</th>
+                  <th class="text-center" style="width: 120px">Egreso</th>
+                  <th class="text-center" style="width: 120px">Saldo</th>
+                  <th class="text-center" style="width: 50px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let movimiento of MovimientosTercero ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }} {{movimiento.ValorBolivares  ? '' : 'esconder' }}">
+                  <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha | date : "dd/MM/yyyy" }}</td>
+                  <td>{{movimiento.ItemDetalle}}</td>
+                  <!--<a [routerLink]="" (click)="verRecibo(movimiento.Id_Recibo)" > </a>-->
+                  <td>{{movimiento.Detalle}}</td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.ValorBolivares }}</td>
+                  <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.ValorBolivares }}</td>
+                  <td class="text-right {{movimiento.SaldoBolivar < 0 ? 'text-danger' : 'text-success'}} ">{{movimiento.SaldoBolivarSimbolo}}</td>
+                  <td class="text-center" *ngIf="movimiento.Ajuste==='Si'">
+                    <a class="text-success" [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Tercero,ModalAjusteEditar)">
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+
+                    <a class="text-danger" style=" margin-left: 5px" [routerLink]="" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a eliminar este ajuste' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                      (confirm)="borrarAjuste(movimiento.Id_Movimiento_Tercero)">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>
@@ -144,19 +209,20 @@
   <div class="app-modal-body">
     <form #FormCuenta="ngForm">
       <div class="row">
-        <div class="col-md-4" hidden>
+        <div class="col-md-3" hidden>
           <div class="form-group">
             <label>id</label>
-            <input type="tex" placeholder="" id="Id_Cuenta_Bancaria" class="form-control" name="Id_Tercero" ngModel="{{id}}" required>
+            <input type="tex" placeholder="" id="Id_Cuenta_Bancaria" class="form-control" name="Id_Tercero" ngModel="{{id}}"
+              required>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Fecha</label>
             <input type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>Tipo </label>
           <select class="form-control" name="Tipo" ngModel required>
             <option value="">Seleccione Tipo</option>
@@ -164,7 +230,14 @@
             <option value="Egreso">Egreso</option>
           </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <label>Moneda </label>
+          <select class="form-control" name="Moneda_Origen" ngModel required>
+            <option value="">Seleccione Tipo</option>
+            <option *ngFor="let moneda of Monedas" [value]="moneda.Nombre">{{moneda.Nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
           <div class="form-group">
             <label>Valor</label>
             <input type="number" placeholder="Valor" class="form-control" name="Valor" ngModel required>
@@ -197,19 +270,19 @@
   <div class="app-modal-body">
     <form #FormCuentaEditar="ngForm">
       <div class="row">
-        <div class="col-md-4" hidden>
+        <div class="col-md-3" hidden>
           <div class="form-group">
             <input type="tex" placeholder="" class="form-control" name="Id_Tercero" ngModel="{{id}}" required>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="form-group">
             <label>Fecha</label>
             <input type="date" placeholder="Valor" class="form-control" name="Fecha" [(ngModel)]="ajusteBancario.Fecha"
               required>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label>Tipo </label>
           <select class="form-control" name="Tipo" [(ngModel)]="ajusteBancario.Tipo" required>
             <option value="">Seleccione Tipo</option>
@@ -217,7 +290,14 @@
             <option value="Egreso">Egreso</option>
           </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <label>Moneda </label>
+          <select class="form-control" name="Moneda_Origen" [(ngModel)]="ajusteBancario.Moneda_Origen" required>
+            <option value="">Seleccione Tipo</option>
+            <option *ngFor="let moneda of Monedas" [value]="moneda.Nombre">{{moneda.Nombre}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
           <div class="form-group">
             <label>Valor</label>
             <input type="number" placeholder="Valor" class="form-control" name="Valor" [(ngModel)]="ajusteBancario.Valor"

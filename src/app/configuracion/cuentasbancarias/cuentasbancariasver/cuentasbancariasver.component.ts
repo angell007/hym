@@ -79,11 +79,11 @@ export class CuentasbancariasverComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
       params: { id: this.id }
     }).subscribe((data: any) => {
-      if (data.total > 0) {
+      //if (data.total > 0) {
         this.SaldoActual = data.total;
-      } else {
+      /*} else {
         this.SaldoActual = 0;
-      }
+      }*/
     });
   }
 

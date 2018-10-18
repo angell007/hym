@@ -30,7 +30,7 @@ export class ComprascrearComponent implements OnInit {
   }
 
   ngAfterViewInit(){
-    (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
+//    (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
   }
 
   TotalCompra: any;
@@ -73,11 +73,11 @@ export class ComprascrearComponent implements OnInit {
   }
 
   validarGuardar(valor){
-    if(valor > 0 ){
+    /*if(valor > 0 ){
       (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = false;
     }else{
       (document.getElementById("GenerarCompra") as HTMLInputElement).disabled = true;
-    }
+    }*/
   }
 
   tasa: any;

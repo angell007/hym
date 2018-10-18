@@ -19,6 +19,7 @@ export class TercerosverComponent implements OnInit {
   Tercero = [];
   MovimientosTercero =[];
   SaldoActual: any;
+  Monedas=[];
 
   @ViewChild('ModalAjuste') ModalAjuste: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;  
@@ -29,6 +30,8 @@ export class TercerosverComponent implements OnInit {
     this.actualizarVista();
   }
 
+  SaldoPesos=[];
+  SaldoBolivar =[];
   actualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/detalle_tercero.php',{
       params:{id:this.id}
@@ -36,11 +39,19 @@ export class TercerosverComponent implements OnInit {
       this.Tercero = data;  
     });
 
+    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
+      params:{modulo : "Moneda"}
+    }).subscribe((data:any)=>{
+      this.Monedas = data;  
+    });
+
     this.http.get(this.globales.ruta + 'php/movimientos/movimiento_tercero.php', {
       params: { id: this.id }
     }).subscribe((data: any) => {
       this.MovimientosTercero = data.lista;
       this.SaldoActual = data.total;
+      this.SaldoPesos = data.totalPeso;
+      this.SaldoBolivar = data.totalBolivar;
     });
   }
 

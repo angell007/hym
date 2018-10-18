@@ -80,8 +80,8 @@
                   <th style="width:60px !important;">Fecha</th>
                   <th>Recibo</th>
                   <th>Detalle</th>
-                  <th class="text-center" style="width: 120px">Egreso</th>
                   <th class="text-center" style="width: 120px">Ingreso</th>
+                  <th class="text-center" style="width: 120px">Egreso</th>
                   <th class="text-center" style="width: 120px">Saldo</th>
                   <th class="text-center" style="width: 50px"></th>
                 </tr>
@@ -95,11 +95,11 @@
                     <td>Ajuste</td>
                   </ng-template>
                   <td>{{movimiento.Detalle}}</td>
-                  <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
-                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
-                  <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
                   <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
-                  <td class="text-right {{movimiento.Saldo < 0 ? 'text-danger' : ''}} {{ i == 0 ? 'grande' : '' }}">{{movimiento.Saldo
+                  <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                  <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor | currency:"BsS."}}</td>
+                  <td class="text-right {{movimiento.Saldo < 0 ? 'text-danger' : 'text-success'}}">{{movimiento.Saldo
                     | currency:"BsS."}}</td>
                   <td class="text-center" *ngIf="movimiento.Ajuste==='Si'">
                     <a  class="text-success"  [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Cuenta_Bancaria,ModalAjusteEditar)">

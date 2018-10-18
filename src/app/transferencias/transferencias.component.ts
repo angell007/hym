@@ -110,7 +110,7 @@ export class TransferenciasComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data[0];
+      this.conteoTransferencias = data;
     });
 
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
@@ -137,6 +137,8 @@ export class TransferenciasComponent implements OnInit {
       });
       this.transferenciasRealizadas = data.realizadas;
     });
+
+    this.ActualizarVista();
   }
 
 

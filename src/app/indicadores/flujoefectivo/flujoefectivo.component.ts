@@ -69,19 +69,40 @@ export class FlujoefectivoComponent implements OnInit {
 
     var chartData = [];
     this.http.get(this.globales.ruta + 'php/terceros/flujo_efectivo.php').subscribe((data: any) => {
-      data.forEach(element => {
-        if (element.tercero[0].Valor != "0") {
+      data.forEach((element,index) => {
+       
+        if(element.tercero.length > 0){
+          //console.log(element);
           this.ListaBalance.push(element);
-          this.lineChartLabels.push(element.Nombre);
-          this.datos.push(element.tercero[0].Valor);
-          this.datos1.push(element.tercero[1].Valor);
-          chartData.push({
-            Proveedor: element.Nombre,
-            Egresos: element.tercero[0].Valor,
-            Ingresos: element.tercero[1].Valor
-          })
+
+          var item1 = 0;
+          var item2 = 0;
+          var item3 = 0;
+          var item4 = 0;
+          
+          if(element.tercero[0] != undefined){
+            item1 = element.tercero[0].Valor;
+          }
+          if(element.tercero[1] != undefined){
+            item2 = element.tercero[1].Valor;
+          }
+          if(element.tercero[2] != undefined){
+            item3 = element.tercero[2].Valor;
+          }
+          if(element.tercero[3] != undefined){
+            item4 = element.tercero[3].Valor;
+          }
+
+            chartData.push({
+              Proveedor: element.Nombre,
+              Egresos: item1,
+              Ingresos: item2
+            })
+          
         }
+        
       });
+
       var chart = AmCharts.makeChart("chartdiv", {
         "type": "serial",
         "theme": "light",
