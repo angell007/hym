@@ -126,21 +126,21 @@
                                             [dtTrigger]="dtTrigger">
                                             <thead>
                                                 <tr>
-                                                    <th style="width:60px;">Hora</th>
+                                                    <th style="width:160px;">Hora</th>
                                                     <th>Código</th>
-                                                    <th>Tipo</th>
-                                                    <th>Valor</th>
-                                                    <th style="width:80px">Tasa</th>
-                                                    <th style="width:160px;"></th>
+                                                    <th>Valor Pesos</th>
+                                                    <th>Valor Bolivares</th>
+                                                    <th>Tasa</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let cambio of Cambios">
-                                                    <td>{{cambio.Fecha | date:"HH:mm" }}</td>
+                                                    <td>{{cambio.Fecha | date:"short" }}</td>
                                                     <td>{{cambio.Codigo}}</td>
                                                     <td>{{cambio.Tipo}}</td>
-                                                    <td class="text-right">{{cambio.Valor_Origen | currency }}</td>
-                                                    <td class="text-right">{{cambio.Tasa}}</td>
+                                                    <td>{{cambio.Valor_Origen | currency : "BsS." }}</td>
+                                                    <td>{{cambio.Tasa}}</td>
 
                                                     <td class="text-center">
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
@@ -232,7 +232,7 @@
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                                                     Con</label>
-                                                <input type="text" placeholder="Paga con" class="form-control" name="Recibido"
+                                                <input id="pagocon" type="text" placeholder="Paga con" class="form-control" name="Recibido"
                                                     (blur)="ObtenerVueltos($event.target.value)">
                                             </div>
 
@@ -433,7 +433,7 @@
                                                 <select class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
                                                     required >
                                                     <option value="">Seleccione un cliente</option>
-                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}} ({{Cliente.Cupo | currency: "BsS."}})</option>
                                                 </select>
 
                                             </div>
@@ -445,7 +445,7 @@
                                                 <h5>Crédito</h5>
                                                 <select class="form-control" id="Id_Tercero" name="Id_Tercero" ngModel>
                                                     <option value="">Seleccione Tercero</option>
-                                                    <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}</option>
+                                                    <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}} ({{tercero.Cupo | currency: "BsS."}}) </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -586,7 +586,6 @@
                                                                 type="number" min=0 placeholder="Precio Transferencia"
                                                                 class="form-control" [(ngModel)]="entregar" name="Cantidad_Transferida"
                                                                 required>
-
                                                         </div>
                                                     </div>
 

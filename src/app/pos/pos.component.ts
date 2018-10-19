@@ -1083,10 +1083,20 @@ export class PosComponent implements OnInit {
   }
 
   ObtenerVueltos(valor) {
-    if (parseInt(valor) > 0) {
+    if (parseInt(valor) > 0) {      
       (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
       var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
       this.vueltos = valor - parseInt(plata);
+        if(this.vueltos < 0){
+          (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
+          (document.getElementById("pagocon") as HTMLInputElement).value = "0";
+          this.vueltos = 0;
+          this.confirmacionSwal.title = "Problemas cambio";
+          this.confirmacionSwal.text = "La plata entregada es inferior a lo que va a cambiar";
+          this.confirmacionSwal.type ="error";
+          this.confirmacionSwal.show();
+
+        }
     }
   }
 
@@ -1151,9 +1161,8 @@ export class PosComponent implements OnInit {
       this.confirmacionSwal.show();
       this.Cambios1 = true;
       this.Cambios2 = false;
-
+      this.actualizarVista();
     });
-
   }
 
   GuardarTransferencia(formulario: NgForm) {
@@ -1377,6 +1386,8 @@ export class PosComponent implements OnInit {
   volverCambioEfectivo() {
     this.Cambios1 = true;
     this.Cambios2 = false;
+    this.vueltos = 0;
+    this.entregar = 0;
   }
 
   volverReciboTransferencia() {
