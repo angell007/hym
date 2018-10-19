@@ -1163,9 +1163,10 @@ export class PosComponent implements OnInit {
     formulario.value.Id_Caja = 4;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
+    formulario.value.Cantidad_Transferida = this.entregar;
     
     this.Envios.forEach((element,index) => {
-      if(element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0 || element.Valor_Transferencia_Peso == 0){
+      if(element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0 ){
         this.Envios.splice(index,1);
       }
     });
