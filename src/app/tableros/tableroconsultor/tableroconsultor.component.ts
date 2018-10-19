@@ -95,18 +95,15 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   cuentasBancarias = [];
+  BancosVenezolanos= [];
   ActualizarVista() {
-
-    /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
-      this.compras = data;
-    });*/
 
     this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
       this.cuentasBancarias = data;
     });
 
     this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data[0];
+      this.conteoTransferencias = data;
     });
 
     this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
@@ -114,40 +111,11 @@ export class TableroconsultorComponent implements OnInit {
         this.BancosEmpresa = data;
       });
 
-    this.http.get(this.globales.ruta + 'php/transferencias/grafico_transferencia.php').subscribe((data: any) => {
-      var chart = AmCharts.makeChart("chartdiv", {
-        "type": "serial",
-        "theme": "light",
-        "dataProvider": data,
-        "gridAboveGraphs": true,
-        "startDuration": 1,
-        "graphs": [{
-          "balloonText": "[[Funcionario]]: <b>[[Conteo]]</b>",
-          "fillAlphas": 0.8,
-          "lineAlpha": 0.2,
-          "type": "column",
-          "valueField": "Conteo"
-        }],
-        "chartCursor": {
-          "categoryBalloonEnabled": false,
-          "cursorAlpha": 0,
-          "zoomable": false
-        },
-        "categoryField": "Funcionario",
-        "categoryAxis": {
-          "gridPosition": "start",
-          "gridAlpha": 0,
-          "tickPosition": "start",
-          "tickLength": 20
-        },
-        "export": {
-          "enabled": true
-        }
 
+    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_venezolanos.php')
+      .subscribe((data: any) => {
+        this.BancosVenezolanos = data;
       });
-    });
-
-
   }
 
   refrescarVistaPrincipalConsultor() {
@@ -162,6 +130,8 @@ export class TableroconsultorComponent implements OnInit {
       });
       this.transferenciasRealizadas = data.realizadas;
     });
+
+    this.ActualizarVista();
   }
 
 
@@ -401,8 +371,8 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   GuardarMovimientoCompra(formulario: NgForm, modal) {
-    console.log(this.Pagos);
-    console.log(this.Abonos);
+    //console.log(this.Pagos);
+    //console.log(this.Abonos);
 
     this.Pagos.forEach((element, index) => {
       if (element.Ingreso == "" || element.Transferencia == "") {
@@ -465,14 +435,28 @@ export class TableroconsultorComponent implements OnInit {
     }
   }
 
-  tipoTransferencia(value){
-    switch(value){
-      case "Transferencia":{
+  tipoTransferencia(value, estado, funcionario) {
+    switch (value) {
+      case "Transferencia": {
         return true;
       }
-      case "Cliente":{
+      case "Cliente": {
         return false;
       }
     }
+  }
+
+  RealizarReporte(formulario: NgForm, modal){
+    let info = JSON.stringify(formulario.value);
+    let datos = new FormData();
+    datos.append("datos", info);
+    this.http.post(this.globales.ruta + 'php/compras/guardar_movimiento_cuenta_compra.php', datos).subscribe((data: any) => {
+      formulario.reset();
+      this.mensajeSwal.title = "Reporte Creado"
+      this.mensajeSwal.text = "Se ha creado el reporte para este banco"
+      this.mensajeSwal.type = "success"
+      this.mensajeSwal.show();
+      modal.hide();
+    });
   }
 }

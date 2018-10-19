@@ -79,27 +79,27 @@
                                     [dtTrigger]="dtTrigger">
                                     <thead>
                                         <tr>
-                                            <th style="width:150px;">Fecha</th>
-                                            <th>Recibo</th>
-                                            <th>Cajero</th>
-                                            <th style="width:80px">Cuenta Destino</th>
-                                            <th>Valor</th>
-                                            <th>Bloqueado por</th>
-                                            <th style="width:160px;"></th>
+                                            <th class="text-center" style="width:150px;">Fecha</th>
+                                            <th class="text-center">Recibo</th>
+                                            <th class="text-center">Cajero</th>
+                                            <th class="text-center" style="width:80px">Cuenta Destino</th>
+                                            <th class="text-center" style="width:80px;">Valor</th>
+                                            <th class="text-center" style="width:160px;">Bloqueado por</th>
+                                            <th class="text-center" style="width:160px;"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Si' ? 'bg-danger text-white' : '' }}">
-                                            <td>{{transferencia.Fecha | date:"short" }}</td>
-                                            <td><a [routerLink]="" (click)="verRecibo(transferencia.Id_Recibo)">{{transferencia.ReciboCodigo}}</a></td>
-                                            <td>{{transferencia.NombreCajero}}</td>
-                                            <td>{{transferencia.Numero_Cuenta}}</td>
-                                            <td class="text-right" >{{transferencia.Valor_Transferencia_Bolivar |
+                                            <td class="text-center">{{transferencia.Fecha | date:"short" }}</td>
+                                            <td class="text-center"><a [routerLink]="" (click)="verRecibo(transferencia.Id_Recibo)">{{transferencia.ReciboCodigo}}</a></td>
+                                            <td class="text-center">{{transferencia.NombreCajero}}</td>
+                                            <td class="text-center">{{transferencia.Numero_Cuenta}}</td>
+                                            <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
-                                            <td>{{transferencia.nombreFuncionario}}</td>
-                                            <td class="text-center" *ngIf="tipoTransferencia(transferencia.Tipo_Transferencia)" >
-                                                <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
+                                            <td class="text-center">{{transferencia.nombreFuncionario}}</td>
+                                            <td class="text-center">
+                                                <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario, transferencia.Tipo_Transferencia)"
                                                     (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar , transferencia.NombreCajero , transferencia.ReciboCodigo )"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                     <i class="fa fa-check"></i>
@@ -110,6 +110,13 @@
                                                     type="button" style="margin:0;" (confirm)="BloquearTransferencia(transferencia.Id_Transferencia_Destinatario,transferencia.Bloqueo);bloqueoSwal.show();">
                                                     <i class="fa fa-unlock"></i>
                                                 </button>
+
+                                                <!--s
+                                                <button *ngIf="!tipoTransferencia(transferencia.Tipo_Transferencia,transferencia.Bloqueo,transferencia.Bloqueo_Funcionario)"
+                                                    class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                    <i class="fa fa-check"></i> 
+                                                </button>-->
+
                                             </td>
                                         </tr>
                                     </tbody>
@@ -180,52 +187,8 @@
         <div class="col-md-12" *ngIf="ComprasPendientes">
             <div class="row">
                 <div class="col-md-12">
-                    <!--Accordion wrapper-->
-                    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-
-                        <!-- Accordion card -->
-                        <div class="card" *ngFor="let cuentasBancaria of cuentasBancarias; let i = index">
-                            <!-- Card header -->
-                            <div class="card-header" role="tab" id="headingOne1">
-                                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}"
-                                    aria-expanded="true" aria-controls="collapseOne{{i}}">
-                                    <h5 class="mb-0"> {{ cuentasBancaria.Nombre_Titular }} <i class="fa fa-angle-down rotate-icon"></i>
-                                    </h5>
-                                </a>
-                            </div>
-
-                            <!-- Card body -->
-                            <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}"
-                                data-parent="#accordionEx">
-                                <div class="card-body">
-                                    <div class="table-overflow">
-                                        <table class="table table-hover table-sm table-striped">
-                                            <thead>
-                                                <th> Fecha </th>
-                                                <th> Codigo Compra </th>
-                                                <th> Valor Compra </th>
-                                                <th> Tasa Cambio </th>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let Item of cuentasBancaria.Compra; let j = index">
-                                                    <td>{{Item.Fecha | date: "short"}}</td>
-                                                    <td><a [routerLink]="" (click)="auditarCompra(Item.Id_Compra,Item.Id_Cuenta_Bancaria,Item.Id_Compra_Cuenta)">{{Item.Codigo}}</a></td>
-                                                    <td>{{Item.Abono}}</td>
-                                                    <td>{{Item.Tasa}}</td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- Accordion card -->
-
-
-                    </div>
-                    <!-- Accordion wrapper -->
+                    <button type="button" class="btn btn-primary btn-sm btn-block" (click)="ModalReportarIngresoCuenta.show()">Reportar
+                        Ingreso de dinero a cuenta</button>
                 </div>
             </div>
         </div>
@@ -507,9 +470,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>{{detalleCompra.Codigo}} - BsS. {{detalleCompra.Abono}}</label>
-                        <input hidden class="form-control" name="Id_Compra" type="text" [(ngModel)]="idCompra" readonly >
+                        <input hidden class="form-control" name="Id_Compra" type="text" [(ngModel)]="idCompra" readonly>
                         <input hidden class="form-control" name="Id_Cuenta" type="text" [(ngModel)]="idCuenta" readonly>
-                        <input hidden class="form-control" name="Id_Compra_Cuenta" type="text" [(ngModel)]="idCompraCuenta" readonly>
+                        <input hidden class="form-control" name="Id_Compra_Cuenta" type="text" [(ngModel)]="idCompraCuenta"
+                            readonly>
                     </div>
                 </div>
 
@@ -572,6 +536,44 @@
                 (confirm)="GuardarMovimientoCompra(FormCrearMovimientoCuenta,ModalVerCompra)">Guardar</button>
             <!--<button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaOtroBanco,FormCrearTransferenciaOtroBanco)">
                 Volver</button>-->
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalReportarIngresoCuenta" #ModalReportarIngresoCuenta>
+    <div class="app-modal-header">
+        <h4>Reportar Ingreso Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormMovimientoCuenta="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Cuenta</label>
+                    <select name="Id_Cuenta_Bancaria" class="form-control" ngModel>
+                        <option value="">Seleccione un Banco Venezolano</option>
+                        <option *ngFor="let Banco of BancosVenezolanos" value="{{Banco.Id_Cuenta_Bancaria}}">{{Banco.Nombre_Titular}}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Valor</label>
+                    <input class="form-control" name="Valor" type="text" ngModel required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalle</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalle" name="Detalle" ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este movimiento' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="RealizarReporte(FormMovimientoCuenta, ModalReportarIngresoCuenta)">Crear Reporte</button>
         </div>
     </div>
 </app-modal-basic>

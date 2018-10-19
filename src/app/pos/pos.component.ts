@@ -46,7 +46,8 @@ export class PosComponent implements OnInit {
     Valor_Transferencia_Bolivar: '',
     Valor_Transferencia_Peso: '',
     Cuentas: [],
-    esconder: false
+    esconder: false,
+	disabled : false
   }];
   public CuentasDestinatario: any[];
   public Cajas: any[];
@@ -274,6 +275,7 @@ export class PosComponent implements OnInit {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
+
   }
 
   search_destino = (text$: Observable<string>) =>
@@ -478,7 +480,8 @@ export class PosComponent implements OnInit {
             Valor_Transferencia_Bolivar: 0,
             Valor_Transferencia_Peso: 0,
             Cuentas: [],
-            esconder: false
+            esconder: false,
+			disabled: false
           });
         }
       });
@@ -501,18 +504,75 @@ export class PosComponent implements OnInit {
 
   AutoSuma(pos) {
     var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    var sumapeso = 0;
+    //var sumapeso = 0;
     var sumabolivar = 0;
     this.Envios.forEach((element, index) => {
-      sumapeso += element.Valor_Transferencia_Peso;
+      //sumapeso += element.Valor_Transferencia_Peso;
       sumabolivar += element.Valor_Transferencia_Bolivar;
     });
 
-    this.cambiar = sumapeso;
-    this.entregar = sumabolivar.toFixed(2);
-    this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
-    this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
-    this.NuevaHileraDestinatario(pos);
+	var totalBolivares = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+
+    //this.cambiar = sumapeso;
+    //this.entregar = sumabolivar.toFixed(2);
+    //this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
+    //this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
+	
+	var formaPago = (document.getElementById("Forma_Pago") as HTMLInputElement).value; 
+	if(formaPago=="Credito"){
+		var idTercero = (document.getElementById("Id_Tercero") as HTMLInputElement).value;
+		if(idTercero != ""){
+			var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
+			if(indice > -1){
+				var cupo = this.Tercero[indice].Cupo;
+				if(parseInt(totalBolivares) < parseInt(cupo)){
+					if(sumabolivar > parseInt(totalBolivares)){
+						this.confirmacionSwal.title="Valor excedido";
+						this.confirmacionSwal.text="La suma de los valores digitados no coinciden con el valor en bolivares para enviar ("+totalBolivares+")";
+						this.confirmacionSwal.type="error";
+						this.confirmacionSwal.show();
+						this.Envios[pos].Valor_Transferencia_Bolivar = 0;
+					}else{
+						if(sumabolivar != parseInt(totalBolivares)){
+							this.NuevaHileraDestinatario(pos);
+						}
+					}
+					
+				}else{
+					this.confirmacionSwal.title="Valor excedido";
+					this.confirmacionSwal.text="El valor en Bolivares supera el cupo permitido para este cliente ("+cupo+")";
+					this.confirmacionSwal.type="error";
+					this.confirmacionSwal.show();
+				}
+			}
+		}
+	}else{
+		if(sumabolivar > parseInt(totalBolivares)){
+			this.confirmacionSwal.title="Valor excedido";
+			this.confirmacionSwal.text="La suma de los valores digitados no coinciden con el valor en bolivares para enviar ("+totalBolivares+")";
+			this.confirmacionSwal.type="error";
+			this.confirmacionSwal.show();
+			this.Envios[pos].Valor_Transferencia_Bolivar = 0;
+		}else{
+			this.NuevaHileraDestinatario(pos);
+		}
+		
+	}
+	
+	
+	
+    //this.NuevaHileraDestinatario(pos);
+  }
+
+  validarCamposBolivares(valor){
+    var longitud = 0; 
+    longitud = this.LongitudCarateres(valor);
+    if(longitud > 0){
+	 (document.getElementById("Valor_Transferencia_Bolivar0") as HTMLInputElement).disabled = false;
+	}else{
+	 (document.getElementById("Valor_Transferencia_Bolivar0") as HTMLInputElement).disabled = true;
+	}   
+    
   }
 
   EliminarDestinatario(index) {
@@ -826,7 +886,7 @@ export class PosComponent implements OnInit {
       this.Servicios = data;
     });
 
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       this.Tercero = data;
     });
 
@@ -975,11 +1035,29 @@ export class PosComponent implements OnInit {
                 this.confirmacionSwal.title = "Valores no coinciden";
                 this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
                 this.confirmacionSwal.type = "error";
-                this.confirmacionSwal.show();
+                //this.confirmacionSwal.show();
                 (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
               }
             }
           }
+		  var formaPago = (document.getElementById("Forma_Pago") as HTMLInputElement).value; 
+			if(formaPago=="Credito"){
+				var idTercero = (document.getElementById("Id_Tercero") as HTMLInputElement).value;
+				if(idTercero != ""){
+					var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
+					if(indice > -1){
+						var cupo = this.Tercero[indice].Cupo;
+						if(parseInt(this.entregar) > parseInt(cupo)){
+							this.confirmacionSwal.title="Valor excedido";
+							this.confirmacionSwal.text="El valor en Bolivares supera el cupo permitido para este cliente ("+cupo+")";
+							this.confirmacionSwal.type="error";
+							this.confirmacionSwal.show();
+							this.entregar = 0;
+							this.cambiar = 0;
+						}
+					}
+				}
+			}
         }
         break;
       }
@@ -1340,8 +1418,10 @@ export class PosComponent implements OnInit {
     var limite = parseInt(this.LimiteOficina);
     if (this.Envios.length != limite) {
       var index = pos + 1;
+	  
+	console.log(this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1));
     
-      if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Peso > 1 && this.Envios[pos].Valor_Transferencia_Bolivar > 1)) {
+      if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1)) {
         this.Envios.push({
           Destino: '',
           Numero_Documento_Destino: '',
@@ -1350,8 +1430,11 @@ export class PosComponent implements OnInit {
           Valor_Transferencia_Bolivar: 0,
           Valor_Transferencia_Peso: 0,
           Cuentas: [],
-          esconder: false
+          esconder: false,
+		  disabled: true
         });
+		
+		//(document.getElementById("Valor_Transferencia_Bolivar"+(index)) as HTMLInputElement).disabled = false;
 
         if (this.Recibe == 'Cliente' && this.Envios.length == 1) {
           (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
@@ -1450,7 +1533,7 @@ export class PosComponent implements OnInit {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
       }
 
-    } else {
+    } /*else {
       var monedaOrigen = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
       var monedaDestino = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
       this.RealizarCambioMonedaTransferencia(monedaOrigen, 'cambia');
@@ -1471,7 +1554,7 @@ export class PosComponent implements OnInit {
         this.confirmacionSwal.title = "Valores no coinciden";
         this.confirmacionSwal.text = "Los valores a entregar no coinciden con la sumatoria de los valores de los destiantarios";
         this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
+        //this.confirmacionSwal.show();
         if (this.Recibe != 'Cliente') {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
         }
@@ -1480,7 +1563,7 @@ export class PosComponent implements OnInit {
           (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
         }
       }
-    }
+    }*/
 
   }
 
