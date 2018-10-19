@@ -118,7 +118,7 @@
                             placeholder="" class="form-control" name="Identificacion_Titular" ngModel required>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Moneda</label>
                         <select class="form-control" required name="Moneda" ngModel required>
@@ -131,13 +131,6 @@
                     <div class="form-group">
                         <label>Saldo Inicial</label>
                         <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Apodo</label>
-                        <input type="text" placeholder="Apodo Cuenta" class="form-control" name="Apodo" ngModel
-                            required>
                     </div>
                 </div>
             </div>
@@ -220,7 +213,7 @@
                                 placeholder="" class="form-control" name="Identificacion_Titular" ngModel="{{CuentaBancaria.Identificacion_Titular}}" required>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Moneda</label>
                             <select class="form-control" required name="Moneda" ngModel="{{CuentaBancaria.Moneda}}" required>
@@ -233,13 +226,6 @@
                         <div class="form-group">
                             <label>Saldo Inicial</label>
                             <input currencyMask class="form-control" name="Valor" ngModel="{{CuentaBancaria.Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Apodo</label>
-                            <input type="text" placeholder="Apodo Cuenta" class="form-control" name="Apodo" ngModel="{{CuentaBancaria.Apodo}}"
-                                required>
                         </div>
                     </div>
                 </div>
