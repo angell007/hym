@@ -27,6 +27,8 @@ export class CommonLayoutComponent implements OnInit {
     public user: any;
     public changePasswordMessage: string;
     public alertas: any[];
+    public alertasCajas: any[];
+    public contadorTraslado = 0;
 
     @ViewChild('confirmSwal') confirmSwal: any;
     @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena: any;
@@ -74,20 +76,16 @@ export class CommonLayoutComponent implements OnInit {
         }, 1000);
     }
 
-
+    OcultarCajero = false;
     ngOnInit() {
         this.user = JSON.parse(localStorage.User);
-
-        switch (this.user.Id_Cargo) {
-            case "3": {
-                this.cajero = false;
-                break;
-            }
-            default:{
-                this.cajero = true;
+        switch (this.user.Permisos[0].Id_Perfil) {
+            case "1": {
+                this.OcultarCajero = true;
                 break;
             }
         }
+
         this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
             this.alertas = data;
         });
@@ -98,6 +96,28 @@ export class CommonLayoutComponent implements OnInit {
 
         this.startTimer();
         //console.log(localStorage)
+        
+        this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+            this.alertasCajas = data;
+            if(this.alertasCajas.length > 0){
+               this.contadorTraslado = this.alertasCajas.length;
+            }else{
+                this.contadorTraslado = 0;
+            }
+
+        });
+
+        setInterval(() => {
+            this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+                this.alertasCajas = data;
+                if(this.alertasCajas.length > 0){
+                   this.contadorTraslado = this.alertasCajas.length;
+                }else{
+                    this.contadorTraslado = 0;
+                }
+
+            });
+        }, 30000);
     }
 
     salir() {
@@ -138,5 +158,14 @@ export class CommonLayoutComponent implements OnInit {
             this.ModalCambiarContrasena.hide();
             this.confirmSwal.show();
         });
+    }
+
+    muestra_tabla(id) {
+        var tot = document.getElementsByClassName('modulos').length;
+        for (let i = 0; i < tot; i++) {
+            var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
+            document.getElementById(id2).style.display = 'none';
+        }
+        document.getElementById(id).style.display = 'block';
     }
 }

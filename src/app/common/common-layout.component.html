@@ -8,12 +8,11 @@
 
         <div [ngClass]="sidenavSelected">
             <!-- Side Nav START -->
-            <div class="side-nav" sideBar>
+            <div class="side-nav" sideBar *ngIf="!OcultarCajero">
                 <div class="side-nav-inner">
                     <div class="side-nav-logo">
                         <a href="" [routerLink]="['/dashboard']">
                             <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
-                            <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
                         </a>
                         <div class="mobile-toggle side-nav-toggle">
                             <a href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
@@ -188,7 +187,7 @@
                                 <li>
                                     <a href="" [routerLink]="['/terceros']">Terceros</a>
                                 </li>
-                               <!-- <li>
+                                <!-- <li>
                                     <a href="" [routerLink]="['/grupos']">Grupos</a>
                                 </li> -->
                                 <li>
@@ -249,17 +248,18 @@
             <!-- Side Nav END -->
 
             <!-- Page Container START -->
-            <div class='page-container'>
+            <div class="page-container {{OcultarCajero ? 'casocajero': '' }} ">
 
                 <!-- Top Nav START -->
 
-                <div class="header navbar contenido">
+                <div class="header navbar contenido {{OcultarCajero ? 'header2': '' }}">
                     <div class="header-container">
                         <ul class="nav-left">
                             <li>
-                                <a class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
+                                <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                                     <i class="fa fa-bars"></i>
                                 </a>
+                                <a *ngIf="OcultarCajero" href="javascript:void(0);" class="logo logo-dark"><img src="assets/images/logo/logo.png" /></a>
                             </li>
                         </ul>
                         <ul class="nav-left">
@@ -267,12 +267,60 @@
                                 <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <div class="user-info">
-                                        <span class="name pdd-right-5">{{ myDate | date:'medium' }}</span>
+                                        <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy HH:mm:ss' }}</span>
                                     </div>
                                 </a>
                             </li>
                         </ul>
                         <ul class="nav-right">
+                            <li class="notifications dropdown">
+                                <!-- NOTIFICACIONES -->
+                                <span class="counter">{{contadorTraslado}}</span>
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-refresh"></i> Traslados Recibidos
+                                </a>
+                                <ul class="dropdown-menu ">
+                                    <li class="notice-header">
+                                        <i class="fa fa-refresh pdd-right-10"></i>
+                                        <span>Traslados Recibidos</span>
+                                    </li>
+                                    <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
+                                        <li *ngFor="let alerta of alertasCajas">
+                                            <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                                                <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg"
+                                                    alt="">
+                                                <img class="thumb-img" *ngIf=" alerta.Imagen != '' " src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}"
+                                                    alt="">
+                                                <div class="info">
+                                                    <span class="title">
+
+                                                        <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
+                                                        </span>
+                                                        <span class="text-gray"> Ha realizado un traslado por </span>
+                                                        <span class="font-size-14 text-semibold">{{alerta.Valor |
+                                                            currency }}</span>
+                                                        <span class="text-gray"> con código </span>
+                                                        <span class="font-size-14 text-semibold">{{alerta.Codigo}}
+                                                            <!--<span class="text-dark">{{alerta.Detalles}}</span> -->
+                                                        </span>
+                                                    </span>
+                                                    <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <li class="notice-footer">
+                                        <span>
+                                            <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                                                Ver Todos Los Traslados
+                                                <i class="ei-right-chevron pdd-left-5 font-size-10"></i>
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+
+
                             <li class="notifications dropdown">
                                 <!-- NOTIFICACIONES -->
                                 <span class="counter">2</span>
@@ -303,59 +351,6 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <!--<li>
-                                                                <a href="">
-                                                                    <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Samuel Field</span> 
-                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-primary">
-                                                                            <span class="text-white">M</span>
-                                                                        </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Michael Birch</span> 
-                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                                        </span>
-                                                                        <span class="sub-title">5 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-success">
-                                                                        <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
-                                                                    </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Message sent</span>
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-info">
-                                                                        <span class="text-white"><i class="ti-user"></i></span>
-                                                                    </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Admin</span> 
-                                                                            <span class="text-gray">Welcome on board</span> 
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li> -->
                                     </ul>
                                     <li class="notice-footer">
                                         <span>
@@ -366,6 +361,15 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <li class="notifications dropdown" *ngIf="OcultarCajero">
+                                <!-- NOTIFICACIONES -->
+                                <button class="btn btn-mini btn-danger" style="margin-top: 10px" (click)="CierreCaja.show()">
+                                    <i class="fa fa-lock"> Cerrar Caja</i>
+                                </button>
+                            </li>
+
+
                             <li class="user-profile dropdown">
                                 <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -389,12 +393,12 @@
                                         </a>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li>
+                                    <!--<li>
                                         <a (click)="CierreCaja.show()">
-                                            <!--<i class="ti-power-off pdd-right-10"></i> -->
+                                           <i class="ti-power-off pdd-right-10"></i> 
                                             <span>Cierre de caja</span>
                                         </a>
-                                    </li>
+                                    </li>-->
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a (click)="salir()">
@@ -504,7 +508,7 @@
     <div class="app-modal-header">
         <h4>Cierre de caja</h4>
     </div>
-    <div class="app-modal-body" >
+    <div class="app-modal-body">
         <form #FormCierreCaja="ngForm">
             <div class="row">
                 <div class="col-md-12">
@@ -512,11 +516,13 @@
                         <table class="table table-bordered data-table" style="clear:none;">
                             <tbody>
                                 <tr>
-                                    <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
+                                    <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
+                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
-                                    <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
+                                    <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
+                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
@@ -532,10 +538,10 @@
                                 <tr>
                                     <td style="width:160px;">Giros</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Giros</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Traslados</td>
@@ -548,7 +554,7 @@
                                 <tr>
                                     <td style="width:160px;">Corresponsal Bancario</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Gastos</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
@@ -556,7 +562,7 @@
                                 <tr>
                                     <td style="width:160px;">Servicios Externos</td>
                                     <td style="text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;"></td>
                                     <td style="text-align:center;"></td>
                                     <td style="text-align:center;"></td>
@@ -574,12 +580,7 @@
                         </table>
                         <table style="width:250px;clear:none;float:left" class="table table-bordered data-table">
                             <tr>
-                                <td>Ch. Cambiados</td>
-                                <td style="text-align:right;">$ 0</td>
-                                <td style="text-align:right;">BsS. 0</td>
-                            </tr>
-                            <tr>
-                                <td>Base Caja</td>
+                                <td>Saldo Inicial</td>
                                 <td style="text-align:right;">$ 0</td>
                                 <td style="text-align:right;">BsS. 0</td>
                             </tr>
@@ -587,7 +588,7 @@
                                 <td style="background:#9BFFAC;">Efectivo</td>
                                 <td style="text-align:right;background:#9BFFAC;">+$ 0</td>
                                 <td style="text-align:right;background:#9BFFAC;">+BsS. 0</td>
- 
+
                             </tr>
                             <tr>
                                 <td style="background:#FF9B9B;">Egresos</td>
@@ -615,7 +616,7 @@
                             </tr>
                         </table>
 
-                        <form id="cierre" method="POST"> 
+                        <form id="cierre" method="POST">
                             <div class="detalles" id="mnd" style="width:auto;padding:5px;margin-left: 20px;">
                                 <div class="moneda" style="width:25%;">
                                     <center>
@@ -634,7 +635,7 @@
                                     <div class="linea2">
                                         <label>$ 10.000: </label>
                                         <input type="number" min="0" step="1" pattern="\d+" name="datos[F10]" value="0"
-                                            class="nume2"  (click)="this.select()" />
+                                            class="nume2" (click)="this.select()" />
                                     </div>
                                     <div class="linea2">
                                         <label>$ &nbsp;5.000: </label>
@@ -644,7 +645,7 @@
                                     <div class="linea2">
                                         <label>$ &nbsp;2.000: </label>
                                         <input type="number" min="0" step="1" pattern="\d+" name="datos[F2]" value="0"
-                                            class="nume2"  (click)="this.select()" />
+                                            class="nume2" (click)="this.select()" />
                                     </div>
                                     <div class="linea2">
                                         <label>$ &nbsp;1.000: </label>
@@ -706,7 +707,7 @@
                                     <div class="linea2">
                                         <label>$ 10.000: </label>
                                         <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
-                                            class="nume2"  (click)="this.select()" />
+                                            class="nume2" (click)="this.select()" />
                                     </div>
                                     <div class="linea2">
                                         <label>$ &nbsp;5.000: </label>
@@ -740,7 +741,7 @@
                             <div>
                                 <h6 style="margin:0;">Observaciones</h6>
                                 <textarea class="normal" id="obser" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
-                                <input type="hidden" name="id" >
+                                <input type="hidden" name="id">
                                 <input type="hidden" id="reci_cuadre" name="recibido" value="0">
                                 <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
                             </div>
@@ -752,39 +753,18 @@
 
             </div>
 
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja(FormCierreCaja,CierreCaja)">Guardar</button>
-                </div>
-            </div>
         </form>
+    </div>
+
+    <div class="app-modal-footer">
+
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja(FormCierreCaja,CierreCaja)">Guardar</button>
+        </div>
+
     </div>
 </app-modal-basic>
 
 <swal #confirmSwal title="Contraseña cambiada" text="Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
     type="success" (confirm)="salir()">
 </swal>
-
-
-
-
-
-
-
-
-
-
-
-<!--
-                      <li *ngFor="let alerta of alertas">
-                  <div class="media">
-                    <img class="d-flex align-self-center img-radius" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="{{alerta.Nombre}}">
-                    <div class="media-body">
-                      <h5 class="notification-user">{{alerta.Nombre}}</h5>
-                      <p class="notification-msg">{{alerta.Detalles}}</p>
-                      <span class="notification-time">{{alerta.Fecha}}</span>
-                    </div>
-                  </div>
-                </li>
-
-            -->

@@ -359,7 +359,7 @@
               <!--FIN INFORMACION PERSONAL-->
 
               <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
-              <wizard-step [title]="'Contacto Emergencia'" [isValid]="nombreContactoEmergenciaEd.valid && parentescoContactoEmergenciaEd.valid && celularContactoEmergenciaEd.valid && telefonoContactoEmergenciaEd.valid && direccionContactoEmergenciaEd.valid">
+              <wizard-step [title]="'Contacto Emergencia'" >
                 <form #FormContactoEmergencia="ngForm">
                   <div class="content2">
                     <div>
@@ -428,7 +428,7 @@
               <!--FIN INFORMACION CONTACTO EMERGENCIA-->
 
               <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
-              <wizard-step [title]="'Experiencia Laboral'" [isValid]="empresaExperienciaLaboral1Ed.valid && cargoExperienciaLaboral1Ed.valid && jefeExperienciaLaboral1Ed.valid && fechaingresoExperienciaLaboral1Ed.valid && fecharetiroExperienciaLaboral1Ed.valid && telefonoExperienciaLaboral1Ed.valid && laboresExperienciaLaboral1Ed.valid && empresaExperienciaLaboral2Ed.valid && cargoExperienciaLaboral2Ed.valid && jefeExperienciaLaboral2Ed.valid && fechaingresoExperienciaLaboral2Ed.valid && fecharetiroExperienciaLaboral2Ed.valid && telefonoExperienciaLaboral2Ed.valid && laboresExperienciaLaboral2Ed.valid">
+              <wizard-step [title]="'Experiencia Laboral'" >
                 <div class="content">
                   <div>
                     <h5>Experiencia Laboral 1</h5>
@@ -707,7 +707,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Perfil</label>
-                          <select class="form-control form-control-sm" (change)="AsignarPermisos($event.target.value)" name="Id_Perfil"
+                          <select id="IdPerfil" class="form-control form-control-sm" (change)="AsignarPermisos($event.target.value)" name="Id_Perfil"
                             ngModel="{{Id_Perfil}}">                            
                             <option value="">Seleccione</option>
                             <option *ngFor="let Perfil of Perfiles; let i=index" [value]="Perfil.Id_Perfil">{{Perfil.Nombre}}</option>

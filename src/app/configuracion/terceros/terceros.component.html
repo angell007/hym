@@ -171,7 +171,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 
@@ -286,7 +286,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select class="form-control" ngModel="{{tercero.Tipo}}" name="Tipo">
+                        <select class="form-control" ngModel="{{tercero.Tipo_Tercero}}" name="Tipo">
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Propio">Propio</option>
@@ -316,7 +316,7 @@
                     <div class="form-group">
                         <label>Cupo</label>
                         <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{tercero.Cupo}}"
-                            [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                            [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 

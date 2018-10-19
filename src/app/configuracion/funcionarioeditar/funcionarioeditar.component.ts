@@ -182,7 +182,10 @@ export class FuncionarioeditarComponent implements OnInit {
     datos.append("experiencia", dummyExperienciaLaboral);
     datos.append("referencias", dummyReferenciaPersonal);
     datos.append('Foto', this.Fotos);
-    datos.append('id_perfil',this.Id_Perfil); 
+    
+   
+   var perfil = (document.getElementById("IdPerfil") as HTMLInputElement).value;
+    datos.append('id_perfil',perfil); 
     datos.append('modulos', modulos);
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_editar.php', datos).subscribe((data: any) => {
       this.VerPantallaLista();
