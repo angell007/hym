@@ -105,7 +105,7 @@
                                 </span>
                                 <div class="info">
                                     <b class="text-dark font-size-22">Cambios Efectivo</b>
-                                    <p class="no-mrg-btm ">Compras o Ventas</p>
+                                    <p class="no-mrg-btm ">{{tituloCambio}}</p>
                                 </div>
                             </li>
                         </ul>
@@ -127,8 +127,8 @@
                                                 <tr>
                                                     <th style="width:160px;">Hora</th>
                                                     <th>Código</th>
-                                                    <th>Valor Pesos</th>
-                                                    <th>Valor Bolivares</th>
+                                                    <th>Tipo</th>
+                                                    <th>Valor</th>
                                                     <th>Tasa</th>
                                                     <th></th>
                                                 </tr>
@@ -138,7 +138,7 @@
                                                     <td>{{cambio.Fecha | date:"HH:mm" }}</td>
                                                     <td>{{cambio.Codigo}}</td>
                                                     <td>{{cambio.Tipo}}</td>
-                                                    <td>{{cambio.Valor_Origen | currency : "BsS." }}</td>
+                                                    <td>{{cambio.Valor_Origen }}</td>
                                                     <td>{{cambio.Tasa}}</td>
 
                                                     <td class="text-center">
@@ -147,12 +147,8 @@
                                                             <i class="ti-printer"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                            <i class="ti-pencil"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                            <i class="ti-reload"></i>
+                                                            (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
+                                                            <i class="fa fa-eye"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                             [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
@@ -174,13 +170,15 @@
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que recibe</label>
-                                                <select class="form-control" placeholder="Origen" ngModel="" id="Origen"
+                                                <select *ngIf="!Venta" class="form-control" placeholder="Origen" ngModel="" id="Origen"
                                                     name="Origen" (change)="validarDestino($event.target.value)"
                                                     required>
                                                     <option value=""> Seleccione Moneda</option>
                                                     <option *ngFor="let moneda of MonedaOrigenCambio" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
                                                         ({{ moneda.Codigo }}) </option>
                                                 </select>
+                                                <input *ngIf="Venta"  disabled name="Origen" readonly type="text" class="form-control"
+                                                ngModel="Pesos">
                                                 <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
                                                     ngModel="{{MonedaOrigen}}">
                                             </div>
@@ -188,13 +186,13 @@
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que entrego</label>
-                                                <select class="form-control" placeholder="Destino" id="Destino" name="Destino"
-                                                    ngModel="" (change)="validarTasaCambio($event.target.value)">
+                                                <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino" name="Destino"
+                                                    ngModel="{{ Venta === false ? '2' : '' }}" (change)="validarTasaCambio($event.target.value)">
                                                     <option value=""> Seleccione Moneda</option>
                                                     <option *ngFor="let moneda1 of MonedaOrigenDestino" [value]="moneda1.Id_Moneda">{{moneda1.Nombre}}
                                                         ({{ moneda1.Codigo }}) </option>
-                                                </select>
-                                                <input hidden name="Moneda_Destino" readonly type="text" class="form-control"
+                                                </select> 
+                                                <input *ngIf="!Venta" disabled name="Moneda_Destino" readonly type="text" class="form-control"
                                                     ngModel="{{MonedaDestino}}">
                                                     <input hidden name="Tipo" readonly type="text" class="form-control"
                                                     ngModel="{{Tipo}}">
@@ -203,7 +201,7 @@
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
                                                 <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
-                                                    id="Cambia" ngModel="{{cambiar}}" (input)="conversionMoneda()">
+                                                    id="Cambia" ngModel="{{cambiar}}" (input)="conversionMoneda(Venta,$event.target.value)">
 
                                             </div>
 
@@ -671,6 +669,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="giros" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -755,7 +754,7 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Departamento Remitente</label>
-                                                                <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                                <select name="Departamento_Remitente" ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
                                                                     <option value="">Seleccione Departamento</option>
                                                                     <option *ngFor="let departamento of Departamentos"
                                                                         [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
@@ -784,8 +783,6 @@
                                                                 [(ngModel)]="DatosRemitenteGiro" [ngbTypeahead]="search_remitente"
                                                                 [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
                                                                 (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);">
-                                                            <input type="text" class="form-control" readonly name="Documento_Remitente"
-                                                                ngModel="{{DatosRemitenteGiro.Id_Transferencia_Remitente}}">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -794,7 +791,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Pepito Perez"
                                                                     class="form-control" name="Nombre_Remitente"
-                                                                    ngModel="{{DatosRemitenteGiro.Nombre}}">
+                                                                    ngModel="{{resultado.Nombre}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -804,7 +801,7 @@
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 318 3555555"
                                                                     class="form-control" name="Telefono_Remitente"
-                                                                    ngModel="{{DatosRemitenteGiro.Telefono}}">
+                                                                    ngModel>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -817,7 +814,7 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Departamento Destinatario</label>
-                                                                <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                                <select name="Departamento_Destinatario" ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
                                                                     <option value="">Seleccione Departamento</option>
                                                                     <option *ngFor="let departamento of Departamentos"
                                                                         [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
@@ -846,8 +843,6 @@
                                                                     [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente"
                                                                     [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
                                                                     (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
-                                                                <input type="text" class="form-control" readonly name="Documento_Destinatario"
-                                                                    ngModel="{{DatosDestinatario.Id_Transferencia_Remitente}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -857,7 +852,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Juan Sanchez"
                                                                     class="form-control" name="Nombre_Destinatario"
-                                                                    ngModel="{{DatosDestinatario.Nombre}}">
+                                                                    ngModel>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -866,7 +861,7 @@
                                                             <div class="form-group">
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 6543424" class="form-control"
-                                                                    name="Telefono_Destinatario" ngModel="{{DatosDestinatario.Telefono}}">
+                                                                    name="Telefono_Destinatario" ngModel>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -963,6 +958,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="traslados" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -1135,6 +1131,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="card modulos" id="corresponsal" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -1203,6 +1200,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="card modulos" id="servicios" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -2312,6 +2310,57 @@
                         <td colspan="6">{{item.Observacion_Transferencia}}</td>
                     </tr>
 
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCambio" #ModalVerCambio>
+    <div class="app-modal-header">
+        <h4 *ngIf="verCambio.Tipo == 'Compra' " >Recibo de Venta Cliente  </h4>
+        <h4 *ngIf="verCambio.Tipo == 'Venta' " >Recibo de Compra Cliente  </h4>
+
+    </div>
+    <div class="app-modal-body">
+        <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Codigo Recibo</td>
+                        <td>{{verCambio.Codigo}}</td>
+                    </tr>
+                    <tr *ngIf="verCambio.Tipo == 'Compra' ">
+                        <td>Tipo De Cambio</td>
+                        <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
+                    </tr>
+                    <tr  *ngIf="verCambio.Tipo == 'Venta' ">
+                        <td>Tipo De Cambio</td>
+                        <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Destino}} a {{verCambio.Moneda_Origen}}</td>
+                    </tr>
+                    <tr>
+                        <td>Recibo</td>
+                        <td>{{verCambio.Valor_Origen | currency: currencyOrigen}} </td>
+                    </tr>
+
+                    <tr>
+                        <td>Tasa</td>
+                        <td>{{verCambio.Tasa}} </td>
+                    </tr>
+
+                    <tr>
+                        <td>Entrego</td>
+                        <td>{{verCambio.Valor_Destino | currency: currencyDestino}}  </td>
+                    </tr>
+                  
                 </tbody>
             </table>
         </div>

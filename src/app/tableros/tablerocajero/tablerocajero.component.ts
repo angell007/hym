@@ -117,6 +117,7 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('FormServicio') FormServicio: any;
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
   @ViewChild('ModalSaldoInicio') ModalSaldoInicio: any;
+  @ViewChild('ModalVerCambio') ModalVerCambio: any;
 
   vueltos: number;
   Venta = false;
@@ -124,7 +125,7 @@ export class TablerocajeroComponent implements OnInit {
   entregar: any;
   cambiar: any;
   MonedaOrigen: any;
-  MonedaDestino: any;
+  MonedaDestino: any = "Pesos";
   Tipo: string;
   Cambios1 = true;
   Cambios2 = false
@@ -836,9 +837,11 @@ export class TablerocajeroComponent implements OnInit {
   MonedaOrigenDestino = [];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
+    this.MonedaOrigenCambio = [];
+    this.MonedaOrigenDestino = [];
 
-    this.http.get(this.globales.ruta + 'php/genericos/listar_fecha_hoy.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
-      this.Cambios = data;
+    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
+      this.Cambios = data;      
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
@@ -866,7 +869,11 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-      this.MonedaOrigenCambio = data;
+       data.forEach(element => {
+         if(element.Nombre != "Pesos"){
+          this.MonedaOrigenCambio.push(element);
+         }
+       });
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
@@ -938,7 +945,12 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-      this.MonedaOrigenDestino = data;
+      data.forEach(element => {
+        if(element.Nombre != "Pesos"){
+          this.MonedaOrigenDestino.push(element);
+        }
+        
+      });
     });
 
     this.CambiarTasa(1);
@@ -961,7 +973,7 @@ export class TablerocajeroComponent implements OnInit {
       this.maximoTransferencia = data.Dependencia[6].Valor;
       this.minimoTransferencia = data.Dependencia[7].Valor;
       this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
-      this.MonedaDestino = data.Moneda[0].Nombre;
+      //this.MonedaDestino = data.Moneda[0].Nombre;
     });
   }
 
@@ -994,10 +1006,8 @@ export class TablerocajeroComponent implements OnInit {
 
   Origen(moneda) {
 
-    var index = this.MonedaOrigenDestino.findIndex(x => x.Id_Moneda === moneda);
-    console.log(this.MonedaOrigenDestino[index]);
-    this.MonedaOrigenDestino.splice(index, 1)
-    console.log(this.MonedaOrigenDestino);
+    /*var index = this.MonedaOrigenDestino.findIndex(x => x.Id_Moneda === moneda);
+    this.MonedaOrigenDestino.splice(index, 1)*/
 
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: moneda }
@@ -1010,8 +1020,10 @@ export class TablerocajeroComponent implements OnInit {
         this.MonedaTasaCambio = false;
         this.MonedaComision = true;
       }
-
     });
+
+    var index = this.MonedaOrigenDestino.findIndex(x => x.Id_Moneda === moneda);
+    this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
   }
 
   formulaCambio(valor) {
@@ -1185,6 +1197,7 @@ export class TablerocajeroComponent implements OnInit {
         this.Venta = false;
         this.TextoBoton = "Comprar"
         this.Tipo = "Compra";
+        this.tituloCambio = "Compras"
         /*this.defectoDestino = "2";
         this.defectoOrigen = ""*/
         break;
@@ -1193,6 +1206,7 @@ export class TablerocajeroComponent implements OnInit {
         this.Venta = true;
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
+        this.tituloCambio = "Ventas"
         /*this.defectoDestino = "";
         this.defectoOrigen = "2"*/
         break;
@@ -1226,6 +1240,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   guardarCambio(formulario: NgForm) {
+    formulario.value.Moneda_Destino = this.MonedaDestino;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Cambio');
@@ -1239,6 +1254,9 @@ export class TablerocajeroComponent implements OnInit {
       this.confirmacionSwal.show();
       this.Cambios1 = true;
       this.Cambios2 = false;
+      this.tasaCambiaria =""; 
+      this.entregar = "";
+      this.MonedaDestino = "Pesos";
       this.actualizarVista();
     });
   }
@@ -1481,6 +1499,7 @@ export class TablerocajeroComponent implements OnInit {
     this.Cambios2 = false;
     this.vueltos = 0;
     this.entregar = 0;
+    this.tasaCambiaria = "";
   }
 
   volverReciboTransferencia() {
@@ -1720,12 +1739,12 @@ export class TablerocajeroComponent implements OnInit {
       switch (tipo) {
         case "Remitente": {
           this.Municipios_Remitente = data;
-          this.Departamento_Remitente = this.Departamentos[(Departamento) - 1].Nombre;
+          //this.Departamento_Remitente = this.Departamentos[(Departamento) - 1].Nombre;
           break;
         }
         case "Destinatario": {
           this.Municipios_Destinatario = data;
-          this.Departamento_Destinatario = this.Departamentos[(Departamento) - 1].Nombre;
+          //this.Departamento_Destinatario = this.Departamentos[(Departamento) - 1].Nombre;
           break;
         }
 
@@ -1734,15 +1753,22 @@ export class TablerocajeroComponent implements OnInit {
   }
 
 
+  resultado =[{    
+    Id_Transferencia_Remitente: "",
+    Nombre: "",
+    Telefono: ""
+  }];
   AutoCompletarRemitenteGiro(modelo) {
     if (modelo) {
       if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
+        this.resultado = this.RemitentesFiltrados;
       }
       else {
         this.RemitentesFiltrados = null;
       }
     }
+    
   }
 
   valorComision(value) {
@@ -2042,7 +2068,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   validarDestino(value = "") {
-    if (value != "") {
+    /*if (value != "") {
       this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
         this.MonedaOrigenDestino = data;
         var index = this.MonedaOrigenDestino.findIndex(x => x.Id_Moneda === value);
@@ -2056,36 +2082,20 @@ export class TablerocajeroComponent implements OnInit {
       });
     }
 
+    var index = this.MonedaOrigenCambio.findIndex(x => x.Id_Moneda === value);
+    this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;*/
+    this.validarTasaCambio(value);
+
   }
 
   validarTasaCambio(value) {
-    if (value == "2") {
-      var origen = (document.getElementById("Origen") as HTMLInputElement).value;
-      this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
-        params: { id: origen }
-      }).subscribe((data: any) => {
-        this.MaxEfectivo = data.Dependencia[0].Valor;
-        this.MinEfectivo = data.Dependencia[1].Valor;
-        this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
-        this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
-
-        this.MaxCompra = data.Dependencia[3].Valor;
-        this.MinCompra = data.Dependencia[4].Valor;
-        this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
-
-        this.maximoTransferencia = data.Dependencia[6].Valor;
-        this.minimoTransferencia = data.Dependencia[7].Valor;
-        this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
-        this.MonedaDestino = data.Moneda[0].Nombre;
-      });
-    } else {
+    
       this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
         params: { id: value }
       }).subscribe((data: any) => {
         this.MaxEfectivo = data.Dependencia[0].Valor;
         this.MinEfectivo = data.Dependencia[1].Valor;
         this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
-        this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
 
         this.MaxCompra = data.Dependencia[3].Valor;
         this.MinCompra = data.Dependencia[4].Valor;
@@ -2094,17 +2104,43 @@ export class TablerocajeroComponent implements OnInit {
         this.maximoTransferencia = data.Dependencia[6].Valor;
         this.minimoTransferencia = data.Dependencia[7].Valor;
         this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
-        this.MonedaDestino = data.Moneda[0].Nombre;
-      });
-    }
+        this.MonedaOrigen = data.Moneda[0].Nombre;
 
+        if(this.Venta == true){
+          this.tasaCambiaria = this.PrecioSugeridoEfectivo;
+          this.MonedaOrigen = "Pesos";
+          this.MonedaDestino  = data.Moneda[0].Nombre;
+        }else{
+          this.tasaCambiaria = this.PrecioSugeridoCompra;
+          this.MonedaOrigen = data.Moneda[0].Nombre;
+          this.MonedaDestino  = "Pesos";
+        }        
+      });
+
+
+    
   }
 
   tasaCambiaria :any;
-  conversionMoneda() {
+  conversionMoneda(valor,texto) {
+
+    if(valor == false){
+      //compra
+      this.tasaCambiaria = this.PrecioSugeridoCompra;
+      var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
+      
+      var cambio = Number(texto) * Number( this.tasaCambiaria);
+      this.entregar = cambio;
+      (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+    }else{
+      var cambio = Number(texto) / Number( this.tasaCambiaria);
+      this.entregar = cambio.toFixed(2);
+      this.MonedaOrigen = "Pesos"
+    }
+    
+    /*
     //peso es 2
     var origen = (document.getElementById("Origen") as HTMLInputElement).value;
-    var destino = (document.getElementById("Destino") as HTMLInputElement).value;
     var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
 
     if (origen == "2") {
@@ -2118,7 +2154,48 @@ export class TablerocajeroComponent implements OnInit {
       this.entregar = Number(valorCambio) * Number(this.PrecioSugeridoCompra);
     }
     (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
-    this.tasaCambiaria =(document.getElementById("Precio_Sugerido") as HTMLInputElement).value;
+    this.tasaCambiaria =(document.getElementById("Precio_Sugerido") as HTMLInputElement).value;*/
+  }
+
+  AnulaCambio(id){
+    let datos = new FormData();
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + '/php/cambio/anular_cambio.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = "Cambio Anulado";
+      this.confirmacionSwal.text = "Se ha anulado el cambio seleccionado"
+      this.confirmacionSwal.type = "success"
+      this.confirmacionSwal.show();
+      this.actualizarVista();
+    });
+
+  }
+
+  verCambio =[];
+  currencyOrigen:any;
+  currencyDestino:any;
+  tituloCambio = "Compras o Ventas";
+  VerCambio(id,modal){
+    
+    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: id , modulo: "Cambio" } }).subscribe((data: any) => {
+      this.verCambio = data;
+        
+        if(data.Moneda_Origen == "Bolivares" ){
+          this.currencyOrigen = "BsS.";
+        }
+        if(data.Moneda_Origen == "Pesos" ){
+          this.currencyOrigen = "$";
+        }
+
+        if(data.Moneda_Destino == "Bolivares" ){
+          this.currencyDestino = "BsS.";
+        }
+
+        if(data.Moneda_Destino == "Pesos" ){
+          this.currencyDestino = "$";
+        }
+      modal.show();
+    });
+
   }
 
 
