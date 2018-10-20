@@ -67,7 +67,7 @@ export class TablerocajeroComponent implements OnInit {
   public IdRemitente: any[];
   public FormaPago: string;
   public Costo: number;
-  public PrecioSugeridoEfectivo: number;
+  public PrecioSugeridoEfectivo: any;
   public CantidadRecibida: number;
   public CantidadTransferida: number;
   public ValorTotal: number;
@@ -2040,5 +2040,88 @@ export class TablerocajeroComponent implements OnInit {
       this.ModalVerRecibo.show();
     });
   }
+
+  validarDestino(value = "") {
+    if (value != "") {
+      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
+        this.MonedaOrigenDestino = data;
+        var index = this.MonedaOrigenDestino.findIndex(x => x.Id_Moneda === value);
+        if (index > -1) {
+          this.MonedaOrigenDestino.splice(index, 1);
+        }
+      });
+    } else {
+      this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
+        this.MonedaOrigenDestino = data;
+      });
+    }
+
+  }
+
+  validarTasaCambio(value) {
+    if (value == "2") {
+      var origen = (document.getElementById("Origen") as HTMLInputElement).value;
+      this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
+        params: { id: origen }
+      }).subscribe((data: any) => {
+        this.MaxEfectivo = data.Dependencia[0].Valor;
+        this.MinEfectivo = data.Dependencia[1].Valor;
+        this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
+        this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
+
+        this.MaxCompra = data.Dependencia[3].Valor;
+        this.MinCompra = data.Dependencia[4].Valor;
+        this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+
+        this.maximoTransferencia = data.Dependencia[6].Valor;
+        this.minimoTransferencia = data.Dependencia[7].Valor;
+        this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+        this.MonedaDestino = data.Moneda[0].Nombre;
+      });
+    } else {
+      this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
+        params: { id: value }
+      }).subscribe((data: any) => {
+        this.MaxEfectivo = data.Dependencia[0].Valor;
+        this.MinEfectivo = data.Dependencia[1].Valor;
+        this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
+        this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
+
+        this.MaxCompra = data.Dependencia[3].Valor;
+        this.MinCompra = data.Dependencia[4].Valor;
+        this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+
+        this.maximoTransferencia = data.Dependencia[6].Valor;
+        this.minimoTransferencia = data.Dependencia[7].Valor;
+        this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+        this.MonedaDestino = data.Moneda[0].Nombre;
+      });
+    }
+
+  }
+
+  tasaCambiaria :any;
+  conversionMoneda() {
+    //peso es 2
+    var origen = (document.getElementById("Origen") as HTMLInputElement).value;
+    var destino = (document.getElementById("Destino") as HTMLInputElement).value;
+    var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
+
+    if (origen == "2") {
+      //divido
+      (document.getElementById("Precio_Sugerido") as HTMLInputElement).value = this.PrecioSugeridoEfectivo;
+      var cambio = Number(valorCambio) / Number(this.PrecioSugeridoEfectivo);
+      this.entregar = cambio.toFixed(2);
+    } else {
+      // multiplico
+      (document.getElementById("Precio_Sugerido") as HTMLInputElement).value = this.PrecioSugeridoCompra;
+      this.entregar = Number(valorCambio) * Number(this.PrecioSugeridoCompra);
+    }
+    (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+    this.tasaCambiaria =(document.getElementById("Precio_Sugerido") as HTMLInputElement).value;
+  }
+
+
+
 
 }

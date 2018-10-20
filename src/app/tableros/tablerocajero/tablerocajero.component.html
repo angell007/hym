@@ -122,8 +122,7 @@
                                     <hr>
                                     <h5>Últimos Cambios Registrados</h5>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
-                                            [dtTrigger]="dtTrigger">
+                                        <table class="table ">
                                             <thead>
                                                 <tr>
                                                     <th style="width:160px;">Hora</th>
@@ -171,14 +170,14 @@
                                 <div class="col-md-12">
                                     <form #FormMoneda="ngForm">
                                         <div class="row">
-                                            
+
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que recibe</label>
-                                                <select class="form-control" placeholder="Origen" ngModel
-                                                    id="Origen" name="Origen" (change)="Origen($event.target.value);"
+                                                <select class="form-control" placeholder="Origen" ngModel="" id="Origen"
+                                                    name="Origen" (change)="validarDestino($event.target.value)"
                                                     required>
-                                                    <option> Seleccione Moneda</option>
+                                                    <option value=""> Seleccione Moneda</option>
                                                     <option *ngFor="let moneda of MonedaOrigenCambio" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
                                                         ({{ moneda.Codigo }}) </option>
                                                 </select>
@@ -190,46 +189,37 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que entrego</label>
                                                 <select class="form-control" placeholder="Destino" id="Destino" name="Destino"
-                                                    ngModel >
-                                                    <option> Seleccione Moneda</option>
+                                                    ngModel="" (change)="validarTasaCambio($event.target.value)">
+                                                    <option value=""> Seleccione Moneda</option>
                                                     <option *ngFor="let moneda1 of MonedaOrigenDestino" [value]="moneda1.Id_Moneda">{{moneda1.Nombre}}
-                                                        ({{ moneda1.Codigo }}) </option> 
+                                                        ({{ moneda1.Codigo }}) </option>
                                                 </select>
                                                 <input hidden name="Moneda_Destino" readonly type="text" class="form-control"
                                                     ngModel="{{MonedaDestino}}">
-                                                <input hidden name="Id_Oficina" readonly type="text" class="form-control"
-                                                    ngModel="5">
-                                                <input hidden name="Id_Caja" readonly type="text" class="form-control"
-                                                    ngModel="1">
-                                                <input hidden name="Tipo" readonly type="text" class="form-control"
+                                                    <input hidden name="Tipo" readonly type="text" class="form-control"
                                                     ngModel="{{Tipo}}">
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
-                                                <input  type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
-                                                    (blur)="formulaCambio($event.target.value)" id="Cambia"
-                                                    ngModel="{{cambiar}}">
-                                                    <!--RealizarCambioMoneda($event.target.value,'cambia')-->
+                                                <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
+                                                    id="Cambia" ngModel="{{cambiar}}" (input)="conversionMoneda()">
+
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                                                     Cambio</label>
                                                 <input *ngIf="Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" 
-                                                    name="Tasa" [(ngModel)]="PrecioSugeridoCompra">
-                                                <!--PrecioSugeridoCompra : PrecioSugeridoEfectivo -->
+                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
                                                 <input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" 
-                                                    name="Tasa" [(ngModel)]="PrecioSugeridoEfectivo">
+                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
-                                                    id="Entrega"
-                                                    ngModel="{{entregar }}">
+                                                    id="Entrega" ngModel="{{entregar }}">
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">
@@ -238,6 +228,7 @@
                                                 <input id="pagocon" type="text" placeholder="Paga con" class="form-control"
                                                     name="Recibido" (blur)="ObtenerVueltos($event.target.value)">
                                             </div>
+
 
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
@@ -326,6 +317,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="transferencias" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -2334,13 +2326,14 @@
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalSaldoInicio" #ModalSaldoInicio>
     <div class="app-modal-header" style="margin: 0 auto;">
-            <h4>Apertura de caja</h4>
+        <h4>Apertura de caja</h4>
     </div>
     <div class="app-modal-body">
         <form #FormMontoInicial="ngForm">
             <div class="col-md-12 ">
                 <label>Saldo Anterior Caja</label>
-                <input currencyMask type="text" class="form-control" name="Monto_Inicio" ngModel="{{CierreCajaAyer}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+                <input currencyMask type="text" class="form-control" name="Monto_Inicio" ngModel="{{CierreCajaAyer}}"
+                    [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
             </div>
 
             <!-- <div class="col-md-12">
