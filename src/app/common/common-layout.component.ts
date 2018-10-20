@@ -29,9 +29,14 @@ export class CommonLayoutComponent implements OnInit {
     public alertas: any[];
     public alertasCajas: any[];
     public contadorTraslado = 0;
+    public cierreCajaCambioIngreso = [];
+    public cierreCajaCambioEgreso = [];
+    public SaldoInicial =[];
 
     @ViewChild('confirmSwal') confirmSwal: any;
     @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena: any;
+    @ViewChild('CierreCaja') CierreCaja: any;
+    
     cajero = true;
 
     ticks = 0;
@@ -167,5 +172,27 @@ export class CommonLayoutComponent implements OnInit {
             document.getElementById(id2).style.display = 'none';
         }
         document.getElementById(id).style.display = 'block';
+    }
+
+    SumaIngresosPesos:number;
+    SumaIngresosBolivar:number;
+    SumaEgresosPesos:number;
+    SumaEgresosBolivar:number;
+    EntregadoIngresosPesos:number;
+    EntregadoIngresosBolivares:number;
+    EntregadoEgresosBolivares:number;
+    cerrarCaja(){
+        this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja.php').subscribe((data: any) => {
+            this.cierreCajaCambioIngreso = data.ingresoCambio;
+            this.cierreCajaCambioEgreso = data.egresoCambio;
+            this.SaldoInicial = data.saldoInicial;
+            this.SumaIngresosPesos = data.SumaIngresosPesos;
+            this.SumaIngresosBolivar = data.SumaIngresosBolivar
+            this.SumaEgresosPesos = data.SumaEgresosPesos;
+            this.SumaEgresosBolivar = data.SumaEgresosBolivar
+            this.EntregadoIngresosPesos = Number(data.SumaIngresosPesos) - Number(data.SumaEgresosPesos); 
+            this.EntregadoEgresosBolivares = Number(data.SumaIngresosBolivar) - Number(data.SumaEgresosBolivar); 
+            this.CierreCaja.show();
+        });
     }
 }

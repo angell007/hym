@@ -2338,13 +2338,9 @@
                         <td>Codigo Recibo</td>
                         <td>{{verCambio.Codigo}}</td>
                     </tr>
-                    <tr *ngIf="verCambio.Tipo == 'Compra' ">
+                    <tr >
                         <td>Tipo De Cambio</td>
                         <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
-                    </tr>
-                    <tr  *ngIf="verCambio.Tipo == 'Venta' ">
-                        <td>Tipo De Cambio</td>
-                        <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Destino}} a {{verCambio.Moneda_Origen}}</td>
                     </tr>
                     <tr>
                         <td>Recibo</td>

@@ -364,7 +364,7 @@
 
                             <li class="notifications dropdown" *ngIf="OcultarCajero">
                                 <!-- NOTIFICACIONES -->
-                                <button class="btn btn-mini btn-danger" style="margin-top: 10px" (click)="CierreCaja.show()">
+                                <button class="btn btn-mini btn-danger" style="margin-top: 10px" (click)="this.cerrarCaja()">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
                             </li>
@@ -519,13 +519,13 @@
                                     <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioIngreso[1].Ingreso | currency }}</td>
+                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioIngreso[0].Ingreso | currency : "BsS. "}}</td>
                                     <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioEgreso[0].Egreso | currency }}</td>
+                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioEgreso[1].Egreso | currency : "BsS. "}}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Recibo Transferencia</td>
@@ -569,36 +569,36 @@
                                 </tr>
                                 <tr>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>$ 0</strong></td>
-                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
+                                    <td style="text-align:center;"><strong>{{ SumaIngresosPesos | currency}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{ SumaIngresosBolivar | currency: "BsS. "}}</strong></td>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>$ 0</strong></td>
-                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
+                                    <td style="text-align:center;"><strong>{{ SumaEgresosPesos | currency}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{ SumaEgresosBolivar | currency: "BsS. "}}</strong></td>
                                 </tr>
 
                             </tbody>
                         </table>
-                        <table style="width:250px;clear:none;float:left" class="table table-bordered data-table">
+                        <table style="width:320px;clear:none;float:left" class="table table-bordered data-table">
                             <tr>
                                 <td>Saldo Inicial</td>
-                                <td style="text-align:right;">$ 0</td>
+                                <td style="text-align:right;">{{SaldoInicial[0].Monto_Inicio | currency }}</td>
                                 <td style="text-align:right;">BsS. 0</td>
                             </tr>
                             <tr>
-                                <td style="background:#9BFFAC;">Efectivo</td>
-                                <td style="text-align:right;background:#9BFFAC;">+$ 0</td>
-                                <td style="text-align:right;background:#9BFFAC;">+BsS. 0</td>
+                                <td style="background:#9BFFAC;">Ingreso</td>
+                                <td style="text-align:right;background:#9BFFAC;">+ {{ SumaIngresosPesos | currency}}</td>
+                                <td style="text-align:right;background:#9BFFAC;">+ {{ SumaIngresosBolivar | currency: "BsS. "}}</td>
 
                             </tr>
                             <tr>
                                 <td style="background:#FF9B9B;">Egresos</td>
-                                <td style="text-align:right;background:#FF9B9B;">-$ 0</td>
-                                <td style="text-align:right;background:#FF9B9B;">-BsS. 0</td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{ SumaEgresosPesos | currency}}</td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{ SumaEgresosBolivar | currency: "BsS. "}}</td>
                             </tr>
                             <tr>
                                 <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega">$0</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">BsS. 0</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega">{{ EntregadoIngresosPesos | currency}}</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{ EntregadoEgresosBolivares | currency: "BsS. " }}</strong></td>
                             </tr>
                             <tr>
                                 <td>Entregado</td>
