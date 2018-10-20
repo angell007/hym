@@ -445,7 +445,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   ResetValues() {
-    //////console.log("resetear valores");
+    ////////console.log("resetear valores");
     this.PrecioSugeridoEfectivo = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
@@ -472,7 +472,7 @@ export class TablerocajeroComponent implements OnInit {
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
-        //////console.log(data);
+        ////////console.log(data);
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
@@ -754,7 +754,7 @@ export class TablerocajeroComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //////console.log(data);
+        ////////console.log(data);
         this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
         this.ModalRemitente.hide();
         this.remitenteCreadoSwal.show();
@@ -763,7 +763,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   RealizarCambio(value, accion) {
-    //////console.log(value);    
+    ////////console.log(value);    
     if (this.MonedaRecibida != this.MonedaTransferencia) {
       switch (accion) {
         case "transferir":
@@ -1052,7 +1052,7 @@ export class TablerocajeroComponent implements OnInit {
 
   RealizarCambioMoneda(value, tipo) {
 
-    //////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
+    ////////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
     switch (tipo) {
       case 'cambia': {
 
@@ -1108,7 +1108,7 @@ export class TablerocajeroComponent implements OnInit {
               suma += element.Valor_Transferencia_Peso;
             });
             if (suma == 0) {
-              ////console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
+              //////console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
               this.Envios[0].Valor_Transferencia_Peso = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
               this.NuevoDestinatario(0, 'Peso')
             }
@@ -1137,9 +1137,9 @@ export class TablerocajeroComponent implements OnInit {
               var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
               if (indice > -1) {
                 var cupo = this.Tercero[indice].Cupo;
-                if (parseInt(this.entregar) > parseInt(cupo)) {
+                if (parseInt(value) > parseInt(cupo)) {
                   this.confirmacionSwal.title = "Valor excedido";
-                  this.confirmacionSwal.text = "El valor en Bolivares supera el cupo permitido para este cliente (" + cupo + ")";
+                  this.confirmacionSwal.text = "El valor digitado en pesos supera el cupo que tiene el cliente en este momento (" + cupo + ")";
                   this.confirmacionSwal.type = "error";
                   this.confirmacionSwal.show();
                   this.entregar = 0;
@@ -1282,7 +1282,7 @@ export class TablerocajeroComponent implements OnInit {
         suma += Number(element.Valor_Transferencia_Bolivar);     
     });
 
-    console.log(suma +"=="+ parseInt(this.entregar));
+    //console.log(suma +"=="+ parseInt(this.entregar));
     if (suma == this.entregar) {
       this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
@@ -1335,7 +1335,7 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      ////console.log(data.destinatario);
+      //////console.log(data.destinatario);
       this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 
@@ -1465,9 +1465,9 @@ export class TablerocajeroComponent implements OnInit {
 
   codigoBanco(seleccion, posicion, texto) {
 
-    //console.log(seleccion + " , " + posicion + " , " + texto);
+    ////console.log(seleccion + " , " + posicion + " , " + texto);
     var pais = ((document.getElementById("Id_Pais" + posicion) as HTMLInputElement).value);
-    //console.log("pais = " + 2);
+    ////console.log("pais = " + 2);
 
     if (pais == "2") {
       switch (texto) {
@@ -1477,7 +1477,7 @@ export class TablerocajeroComponent implements OnInit {
           break;
         }
         case "input": {
-          //console.log("soy input");
+          ////console.log("soy input");
 
           var cadena = seleccion.substring(0, 4);
           var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
@@ -1543,7 +1543,7 @@ export class TablerocajeroComponent implements OnInit {
     if (this.Envios.length != limite) {
       var index = pos + 1;
 
-      console.log(this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1));
+      //console.log(this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1));
 
       if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1)) {
         this.Envios.push({
@@ -1996,24 +1996,28 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
+  cliente = true;
   TipoPagoTransferencia(value) {
     switch (value) {
       case "Credito": {
         this.credito = true;
         this.consignacion = false;
         this.efectivo = false;
+        this.cliente = false;
         break;
       }
       case "Consignacion": {
         this.credito = false;
         this.consignacion = true;
         this.efectivo = false;
+        this.cliente = true;
         break;
       }
       case "Efectivo": {
         this.efectivo = true;
         this.consignacion = false;
         this.credito = false;
+        this.cliente = true;
         break;
       }
     }
@@ -2066,6 +2070,7 @@ export class TablerocajeroComponent implements OnInit {
       this.ModalVerRecibo.show();
     });
   }
+ 
 
   validarDestino(value = "") {
     /*if (value != "") {
@@ -2196,6 +2201,30 @@ export class TablerocajeroComponent implements OnInit {
       modal.show();
     });
 
+  }
+
+  cupoTercero:any;
+  SaldoBolivar:any;
+  VerificarTercero(valor){
+    //console.log(valor);
+    
+    var index = this.Tercero.findIndex(x=>x.Id_Tercero === valor);
+    if(index > -1){
+      //console.log(index);
+      //console.log(this.Tercero[index].Cupo);
+       this.cupoTercero = this.Tercero[index].Cupo;
+    }
+    
+    this.http.get(this.globales.ruta + 'php/transferencias/saldo_bolivares.php', { params: { id: valor } }).subscribe((data: any) => {
+      if(data.Saldo > 0 || data.Saldo != "" ){
+        this.SaldoBolivar = data.Saldo;
+        this.Envios[0].Valor_Transferencia_Bolivar = data.Saldo;
+        (document.getElementById("Valor_Transferencia_Bolivar0") as HTMLInputElement).disabled= false;
+      }else{
+        this.SaldoBolivar = 0;
+      }
+ 
+    });
   }
 
 

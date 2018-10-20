@@ -83,6 +83,7 @@ export class CommonLayoutComponent implements OnInit {
 
     OcultarCajero = false;
     ngOnInit() {
+
         this.user = JSON.parse(localStorage.User);
         switch (this.user.Permisos[0].Id_Perfil) {
             case "1": {
@@ -190,7 +191,7 @@ export class CommonLayoutComponent implements OnInit {
             this.SumaIngresosBolivar = data.SumaIngresosBolivar
             this.SumaEgresosPesos = data.SumaEgresosPesos;
             this.SumaEgresosBolivar = data.SumaEgresosBolivar
-            this.EntregadoIngresosPesos = Number(data.SumaIngresosPesos) - Number(data.SumaEgresosPesos); 
+            this.EntregadoIngresosPesos =  Number(this.SaldoInicial[0].Monto_Inicio) + (Number(data.SumaIngresosPesos) - Number(data.SumaEgresosPesos)); 
             this.EntregadoEgresosBolivares = Number(data.SumaIngresosBolivar) - Number(data.SumaEgresosBolivar); 
             this.CierreCaja.show();
         });
