@@ -781,7 +781,7 @@
                                                                     ngModel>
                                                                     <option value="">Seleccione Ciudad</option>
                                                                     <option *ngFor="let municipio of Municipios_Remitente"
-                                                                        [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                        [value]="municipio.Id_Municipio">{{municipio.Nombre}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -789,11 +789,11 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <label>Número de documento</label>
-                                                            <input type="text" class="form-control" placeholder="Número Documento"
+                                                            <input id="DocumentoGiroRemitente" type="text" class="form-control" placeholder="Número Documento"
                                                                 name="Documento_Remitente" autocomplete="off"
                                                                 [(ngModel)]="DatosRemitenteGiro" [ngbTypeahead]="search_remitente"
                                                                 [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                                (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);">
+                                                                (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);CompletarDatosRemitenteGiro()">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -802,7 +802,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Pepito Perez"
                                                                     class="form-control" name="Nombre_Remitente"
-                                                                    ngModel="{{resultado.Nombre}}">
+                                                                    ngModel="{{NombreRemitenteGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -812,7 +812,7 @@
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 318 3555555"
                                                                     class="form-control" name="Telefono_Remitente"
-                                                                    ngModel>
+                                                                    ngModel="{{TelefonoRemitenteGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -825,7 +825,7 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Departamento Destinatario</label>
-                                                                <select name="Departamento_Destinatario" ngModel class="form-control"
+                                                                <select ngModel name="Departamento_Destinatario" class="form-control"
                                                                     (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
                                                                     <option value="">Seleccione Departamento</option>
                                                                     <option *ngFor="let departamento of Departamentos"
@@ -841,7 +841,7 @@
                                                                 <select class="form-control" ngModel name="Municipio_Destinatario">
                                                                     <option value="">Seleccione Ciudad</option>
                                                                     <option *ngFor="let municipio of Municipios_Destinatario"
-                                                                        [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                        [value]="municipio.Id_Municipio">{{municipio.Nombre}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -850,11 +850,11 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Número de Documento</label>
-                                                                <input type="text" class="form-control" placeholder="Número Documento"
+                                                                <input id="DocumentoGiroDestinatario" type="text" class="form-control" placeholder="Número Documento"
                                                                     autocomplete="off" name="Documento_Destinatario"
                                                                     [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente"
                                                                     [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                                    (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
+                                                                    (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario);CompletarDatosDestinatarioGiro()">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -864,7 +864,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Juan Sanchez"
                                                                     class="form-control" name="Nombre_Destinatario"
-                                                                    ngModel>
+                                                                    ngModel="{{NombreDestinatarioGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -873,7 +873,7 @@
                                                             <div class="form-group">
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 6543424" class="form-control"
-                                                                    name="Telefono_Destinatario" ngModel>
+                                                                    name="Telefono_Destinatario" ngModel="{{TelefonoDestinatarioGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>

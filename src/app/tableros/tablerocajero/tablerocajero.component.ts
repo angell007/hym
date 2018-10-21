@@ -1697,14 +1697,47 @@ export class TablerocajeroComponent implements OnInit {
   AutoCompletarRemitenteGiro(modelo) {
     if (modelo) {
       if (modelo.length > 0) {
-        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);        
-        this.resultado = this.RemitentesFiltrados;
+        this.RemitentesFiltrados = this.Remitentes.filter(number => number.Id_Transferencia_Remitente.slice(0, modelo.length) == modelo);
       }
       else {
         this.RemitentesFiltrados = null;
       }
     }
     
+  }
+
+  IdRemitenteGiro:any ="";
+  NombreRemitenteGiro:any ="";
+  TelefonoRemitenteGiro:any ="";
+  CompletarDatosRemitenteGiro(){
+    var valor = ((document.getElementById("DocumentoGiroRemitente") as HTMLInputElement).value);
+    var index = this.Remitentes.findIndex(x=>x.Id_Transferencia_Remitente === valor)
+    if(index > -1){
+      this.IdRemitenteGiro = this.Remitentes[index].Id_Transferencia_Remitente;
+      this.NombreRemitenteGiro = this.Remitentes[index].Nombre;
+      this.TelefonoRemitenteGiro = this.Remitentes[index].Telefono;
+    }else{
+      this.IdRemitenteGiro = valor;
+      this.NombreRemitenteGiro = "";
+      this.TelefonoRemitenteGiro = "";
+    }    
+  }
+
+  IdDestinatarioGiro:any = "";
+  NombreDestinatarioGiro:any = "";
+  TelefonoDestinatarioGiro:any = "";
+  CompletarDatosDestinatarioGiro(){
+    var valor = ((document.getElementById("DocumentoGiroDestinatario") as HTMLInputElement).value);
+    var index = this.Remitentes.findIndex(x=>x.Id_Transferencia_Remitente === valor)
+    if(index > -1){
+      this.IdDestinatarioGiro = this.Remitentes[index].Id_Transferencia_Remitente;
+      this.NombreDestinatarioGiro = this.Remitentes[index].Nombre;
+      this.TelefonoDestinatarioGiro = this.Remitentes[index].Telefono;
+    }else{
+      this.IdDestinatarioGiro = valor;
+      this.NombreDestinatarioGiro = "";
+      this.TelefonoDestinatarioGiro = "";
+    }
   }
 
   valorComision(value) {
@@ -1731,8 +1764,13 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   RealizarGiro(formulario: NgForm) {
-    let info = JSON.stringify(formulario.value);
+    
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    formulario.value.Documento_Remitente = this.IdRemitenteGiro;
+    formulario.value.Documento_Destinatario	 = this.IdDestinatarioGiro
+    formulario.value.Id_Oficina = 5;
+    formulario.value.Id_Caja = 4;
+    let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
