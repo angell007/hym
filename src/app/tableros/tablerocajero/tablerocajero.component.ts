@@ -144,21 +144,7 @@ export class TablerocajeroComponent implements OnInit {
   Giro1 = true;
   Giro2 = false;
 
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
-  dtOptions1: DataTables.Settings = {};
-  dtTrigger1 = new Subject();
-
-
-  dtOptionsTraslado: DataTables.Settings = {};
-  dtTriggerTraslado = new Subject();
-  dtOptionsTraslado1: DataTables.Settings = {};
-  dtTriggerTraslado1 = new Subject();
-
-  dtOptions2: DataTables.Settings = {};
-  dtTrigger2 = new Subject();
-  dtOptions3: DataTables.Settings = {};
-  dtTrigger3 = new Subject();
+  
 
   Giros = [];
   Departamentos = [];
@@ -229,6 +215,13 @@ export class TablerocajeroComponent implements OnInit {
   MontoInicial: any;
   CierreCajaAyer: any;
   IdDiario: any;
+  verCambio =[];
+  currencyOrigen:any;
+  currencyDestino:any;
+  cupoTercero:any;
+  SaldoBolivar:any;
+  tasaCambiaria :any;
+
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
 
@@ -540,67 +533,7 @@ export class TablerocajeroComponent implements OnInit {
     this.AutoSuma(pos);
   }
 
-  AutoSuma(pos) {
-    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
-    //var sumapeso = 0;
-    var sumabolivar = 0;
-    this.Envios.forEach((element, index) => {
-      //sumapeso += element.Valor_Transferencia_Peso;
-      sumabolivar += element.Valor_Transferencia_Bolivar;
-    });
 
-    var totalBolivares = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
-
-    //this.cambiar = sumapeso;
-    //this.entregar = sumabolivar.toFixed(2);
-    //this.RealizarCambioMonedaTransferencia(sumapeso, 'cambia');
-    //this.RealizarCambioMonedaTransferencia(sumabolivar, 'entrega');
-
-    var formaPago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
-    if (formaPago == "Credito") {
-      var idTercero = (document.getElementById("Id_Tercero") as HTMLInputElement).value;
-      if (idTercero != "") {
-        var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
-        if (indice > -1) {
-          var cupo = this.Tercero[indice].Cupo;
-          if (parseInt(totalBolivares) < parseInt(cupo)) {
-            if (sumabolivar > parseInt(totalBolivares)) {
-              this.confirmacionSwal.title = "Valor excedido";
-              this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
-              this.confirmacionSwal.type = "error";
-              this.confirmacionSwal.show();
-              this.Envios[pos].Valor_Transferencia_Bolivar = 0;
-            } else {
-              if (sumabolivar != parseInt(totalBolivares)) {
-                this.NuevaHileraDestinatario(pos);
-              }
-            }
-
-          } else {
-            this.confirmacionSwal.title = "Valor excedido";
-            this.confirmacionSwal.text = "El valor en Bolivares supera el cupo permitido para este cliente (" + cupo + ")";
-            this.confirmacionSwal.type = "error";
-            this.confirmacionSwal.show();
-          }
-        }
-      }
-    } else {
-      if (sumabolivar > parseInt(totalBolivares)) {
-        this.confirmacionSwal.title = "Valor excedido";
-        this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
-        this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
-        this.Envios[pos].Valor_Transferencia_Bolivar = 0;
-      } else {
-        this.NuevaHileraDestinatario(pos);
-      }
-
-    }
-
-
-
-    //this.NuevaHileraDestinatario(pos);
-  }
 
   validarCamposBolivares(valor) {
     var longitud = 0;
@@ -1282,8 +1215,10 @@ export class TablerocajeroComponent implements OnInit {
         suma += Number(element.Valor_Transferencia_Bolivar);     
     });
 
-    //console.log(suma +"=="+ parseInt(this.entregar));
-    if (suma == this.entregar) {
+    var totalPermitido = Number(this.entregar) + Number(this.SaldoBolivar)
+    //alert(suma +"=="+ totalPermitido);
+    
+    if (suma == Number(this.entregar)) {
       this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
       let destinatarios = JSON.stringify(this.Envios);
@@ -2126,7 +2061,7 @@ export class TablerocajeroComponent implements OnInit {
     
   }
 
-  tasaCambiaria :any;
+
   conversionMoneda(valor,texto) {
 
     if(valor == false){
@@ -2175,9 +2110,7 @@ export class TablerocajeroComponent implements OnInit {
 
   }
 
-  verCambio =[];
-  currencyOrigen:any;
-  currencyDestino:any;
+
   tituloCambio = "Compras o Ventas";
   VerCambio(id,modal){
     
@@ -2203,8 +2136,7 @@ export class TablerocajeroComponent implements OnInit {
 
   }
 
-  cupoTercero:any;
-  SaldoBolivar:any;
+
   VerificarTercero(valor){
     //console.log(valor);
     
@@ -2216,15 +2148,57 @@ export class TablerocajeroComponent implements OnInit {
     }
     
     this.http.get(this.globales.ruta + 'php/transferencias/saldo_bolivares.php', { params: { id: valor } }).subscribe((data: any) => {
-      if(data.Saldo > 0 || data.Saldo != "" ){
-        this.SaldoBolivar = data.Saldo;
-        this.Envios[0].Valor_Transferencia_Bolivar = data.Saldo;
-        (document.getElementById("Valor_Transferencia_Bolivar0") as HTMLInputElement).disabled= false;
-      }else{
-        this.SaldoBolivar = 0;
-      }
- 
+        this.SaldoBolivar = data.Saldo;         
     });
+  }
+
+  AutoSuma(pos) {
+    var divisor = (document.getElementById("Tasa_Cambio_Transferencia") as HTMLInputElement).value;
+    var sumabolivar = 0;
+    this.Envios.forEach((element, index) => {
+      sumabolivar += Number(element.Valor_Transferencia_Bolivar);
+    });
+
+    var totalBolivares = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
+    
+    var formaPago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
+    if (formaPago == "Credito") {
+      var total = Number(totalBolivares) + Number(this.SaldoBolivar)
+      var idTercero = (document.getElementById("Id_Tercero") as HTMLInputElement).value;
+      if (idTercero != "") {
+        var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
+        if (indice > -1) {
+            if (sumabolivar > total) {
+              this.confirmacionSwal.title = "Valor excedido";
+              this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
+              this.confirmacionSwal.type = "error";
+              this.confirmacionSwal.show();
+              this.Envios[pos].Valor_Transferencia_Bolivar = 0;
+            } else {
+              if (sumabolivar < parseInt(totalBolivares)) {
+                this.NuevaHileraDestinatario(pos);
+              }
+            }
+        }
+      }
+    } else {
+      if (sumabolivar > parseInt(totalBolivares)) {
+        this.confirmacionSwal.title = "Valor excedido";
+        this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
+        this.confirmacionSwal.type = "error";
+        this.confirmacionSwal.show();
+        this.Envios[pos].Valor_Transferencia_Bolivar = 0;
+      } else {
+        this.NuevaHileraDestinatario(pos);
+      }
+
+    }
+
+    
+
+
+
+    //this.NuevaHileraDestinatario(pos);
   }
 
 
