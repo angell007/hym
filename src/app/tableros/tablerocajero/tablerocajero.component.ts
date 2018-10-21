@@ -1174,6 +1174,7 @@ export class TablerocajeroComponent implements OnInit {
 
   guardarCambio(formulario: NgForm) {
     formulario.value.Moneda_Destino = this.MonedaDestino;
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Cambio');
@@ -1731,6 +1732,7 @@ export class TablerocajeroComponent implements OnInit {
 
   RealizarGiro(formulario: NgForm) {
     let info = JSON.stringify(formulario.value);
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let datos = new FormData();
     datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
@@ -1762,6 +1764,7 @@ export class TablerocajeroComponent implements OnInit {
 
   RealizarTraslado(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let datos = new FormData();
     datos.append("modulo", 'Traslado_Caja');
     datos.append("datos", info);
