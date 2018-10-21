@@ -519,13 +519,13 @@
                                     <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioIngreso[1].Ingreso | currency }}</td>
-                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioIngreso[0].Ingreso | currency : "BsS. "}}</td>
+                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioIngresoPeso | currency }}</td>
+                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioIngresoBolivar | currency : "BsS. "}}</td>
                                     <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioEgreso[0].Egreso | currency }}</td>
-                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioEgreso[1].Egreso | currency : "BsS. "}}</td>
+                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioEgresoPeso | currency }}</td>
+                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioEgresoBolivar | currency : "BsS. "}}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Recibo Transferencia</td>
@@ -581,7 +581,7 @@
                         <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
                             <tr>
                                 <td>Saldo Inicial</td>
-                                <td style="text-align:right;">{{SaldoInicial[0].Monto_Inicio | currency }}</td>
+                                <td style="text-align:right;">{{SaldoInicialPeso | currency }}</td>
                                 <td style="text-align:right;">BsS. 0</td>
                             </tr>
                             <tr>

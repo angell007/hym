@@ -31,7 +31,15 @@ export class CommonLayoutComponent implements OnInit {
     public contadorTraslado = 0;
     public cierreCajaCambioIngreso = [];
     public cierreCajaCambioEgreso = [];
-    public SaldoInicial =[];
+    public SaldoInicialPeso:number = 0;
+
+    SumaIngresosPesos:number = 0;
+    SumaIngresosBolivar:number = 0;
+    SumaEgresosPesos:number = 0;
+    SumaEgresosBolivar:number = 0;
+    EntregadoIngresosPesos:number = 0;
+    EntregadoIngresosBolivares:number = 0;
+    EntregadoEgresosBolivares:number = 0;
 
     @ViewChild('confirmSwal') confirmSwal: any;
     @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena: any;
@@ -175,23 +183,23 @@ export class CommonLayoutComponent implements OnInit {
         document.getElementById(id).style.display = 'block';
     }
 
-    SumaIngresosPesos:number;
-    SumaIngresosBolivar:number;
-    SumaEgresosPesos:number;
-    SumaEgresosBolivar:number;
-    EntregadoIngresosPesos:number;
-    EntregadoIngresosBolivares:number;
-    EntregadoEgresosBolivares:number;
+
+    cierreCajaCambioIngresoPeso:number=0;
+    cierreCajaCambioIngresoBolivar:number=0;
+    cierreCajaCambioEgresoPeso:number=0;
+    cierreCajaCambioEgresoBolivar:number=0;
     cerrarCaja(){
         this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja.php').subscribe((data: any) => {
-            this.cierreCajaCambioIngreso = data.ingresoCambio;
-            this.cierreCajaCambioEgreso = data.egresoCambio;
-            this.SaldoInicial = data.saldoInicial;
+            this.cierreCajaCambioIngresoPeso = data.ingresoCambio[1].Ingreso;
+            this.cierreCajaCambioIngresoBolivar =data.ingresoCambio[0].Ingreso;
+            this.cierreCajaCambioEgresoPeso = data.egresoCambio[0].Egreso;
+            this.cierreCajaCambioEgresoBolivar = data.egresoCambio[1].Egreso;
+            this.SaldoInicialPeso = data.saldoInicial[0].Monto_Inicio;
             this.SumaIngresosPesos = data.SumaIngresosPesos;
             this.SumaIngresosBolivar = data.SumaIngresosBolivar
             this.SumaEgresosPesos = data.SumaEgresosPesos;
             this.SumaEgresosBolivar = data.SumaEgresosBolivar
-            this.EntregadoIngresosPesos =  Number(this.SaldoInicial[0].Monto_Inicio) + (Number(data.SumaIngresosPesos) - Number(data.SumaEgresosPesos)); 
+            this.EntregadoIngresosPesos =  Number(this.SaldoInicialPeso) + (Number(data.SumaIngresosPesos) - Number(data.SumaEgresosPesos)); 
             this.EntregadoEgresosBolivares = Number(data.SumaIngresosBolivar) - Number(data.SumaEgresosBolivar); 
             this.CierreCaja.show();
         });

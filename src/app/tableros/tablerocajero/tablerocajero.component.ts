@@ -2138,12 +2138,9 @@ export class TablerocajeroComponent implements OnInit {
 
 
   VerificarTercero(valor){
-    //console.log(valor);
-    
+   
     var index = this.Tercero.findIndex(x=>x.Id_Tercero === valor);
     if(index > -1){
-      //console.log(index);
-      //console.log(this.Tercero[index].Cupo);
        this.cupoTercero = this.Tercero[index].Cupo;
     }
     
