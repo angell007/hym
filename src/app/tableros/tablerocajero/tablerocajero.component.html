@@ -180,7 +180,7 @@
                                                 </select>
                                                 <input *ngIf="Venta" disabled name="Origen" readonly type="text" class="form-control"
                                                     ngModel="Pesos">
-                                                <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
+                                                <input hidden readonly name="Moneda_Origen_1" type="text" class="form-control"
                                                     ngModel="{{MonedaOrigen}}">
                                             </div>
 
@@ -421,11 +421,16 @@
                                             </div>
                                             <div class="col-md-6" *ngIf="Recibe==='Cliente'">
                                                 <label class="transferencia">Seleccione Cliente</label>
-                                                <select class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
+                                                <select *ngIf="!efectivo" class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
                                                     required>
                                                     <option value="">Seleccione un cliente</option>
-                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}
-                                                        ({{Cliente.Cupo | currency: "BsS."}})</option>
+                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                                                </select>
+
+                                                <select *ngIf="efectivo" class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
+                                                    required>
+                                                    <option value="">Seleccione un cliente</option>
+                                                    <option *ngFor="let Cliente of TerceroCliente" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                                 </select>
 
                                             </div>
@@ -2285,7 +2290,7 @@
                         <td>Fecha</td>
                         <td>{{ item.Fecha }}</td>
                         <td>Tipo Transferencia </td>
-                        <td colspan="3" style="text-align: center;">{{ item.Tipo_Transferencia }}</td>
+                        <td colspan="3" style="text-align: center;">{{ item.Forma_Pago }} - {{ item.Tipo_Transferencia }} </td>
                     </tr>
                     <tr *ngFor="let item of EncabezadoRecibo">
                         <td>Total Pesos</td>
@@ -2298,7 +2303,7 @@
                     <tr>
                         <td colspan="6"> </td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="itemDestinatario">
                         <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
                     </tr>
                     <tr *ngFor="let item1 of DestinatarioRecibo">

@@ -124,7 +124,7 @@ export class TablerocajeroComponent implements OnInit {
   TextoBoton = "Vender";
   entregar: any;
   cambiar: any;
-  MonedaOrigen: any;
+  MonedaOrigen: any = "Pesos";
   MonedaDestino: any = "Pesos";
   Tipo: string;
   Cambios1 = true;
@@ -225,6 +225,7 @@ export class TablerocajeroComponent implements OnInit {
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
+  
 
   ngOnInit() {
 
@@ -473,6 +474,7 @@ export class TablerocajeroComponent implements OnInit {
     formulario.value.Id_Caja = 4;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
+    formulario.value.Cantidad_Transferida  = this.entregar;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -492,6 +494,7 @@ export class TablerocajeroComponent implements OnInit {
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
+        this.actualizarVista();
       });
   }
 
@@ -792,6 +795,7 @@ export class TablerocajeroComponent implements OnInit {
   MonedaOrigenCambio = [];
   MonedaOrigenDestino = [];
   FuncionariosCajaDestino=[];
+  TerceroCliente=[];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -852,6 +856,9 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       this.Clientes = data;
     });
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+      this.TerceroCliente = data;
+    });
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Banco' } }).subscribe((data: any) => {
       this.Bancos = data;
     });
@@ -898,7 +905,12 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
-      this.Tercero = data;
+      //this.Tercero = data;
+      data.forEach(element => {
+        if(element.Cupo != "0"){
+          this.Tercero.push(element);
+        }
+      });
     });
 
     this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_colombianos.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
@@ -973,7 +985,7 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: moneda }
     }).subscribe((data: any) => {
-      this.MonedaOrigen = data.Moneda[0].Nombre
+      //this.MonedaOrigen = data.Moneda[0].Nombre
       if (moneda == 2) {
         this.MonedaTasaCambio = true;
         this.MonedaComision = false;
@@ -1664,8 +1676,8 @@ export class TablerocajeroComponent implements OnInit {
         break;
       }
       case "Cliente": {
-        this.MonedaTransferencia = 2;
-        this.CambiarTasa(2);
+        this.MonedaTransferencia = 1;
+        this.CambiarTasa(1);
         break;
       }
     }
@@ -2066,12 +2078,18 @@ export class TablerocajeroComponent implements OnInit {
     });
   }
 
+  itemDestinatario = true;
   verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
     }).subscribe((data: any) => {
       this.EncabezadoRecibo = data.encabezado;
       this.DestinatarioRecibo = data.destinatario;
+      if(this.DestinatarioRecibo.length > 0){
+        this.itemDestinatario = true;
+      }else{
+        this.itemDestinatario = false;
+      }
       this.ModalVerRecibo.show();
     });
   }
@@ -2119,11 +2137,11 @@ export class TablerocajeroComponent implements OnInit {
       if (this.Venta == true) {
         this.tasaCambiaria = this.PrecioSugeridoEfectivo;
         this.MonedaOrigen = "Pesos";
-        this.MonedaDestino = data.Moneda[0].Nombre;
+        //this.MonedaDestino = data.Moneda[0].Nombre;
       } else {
         this.tasaCambiaria = this.PrecioSugeridoCompra;
-        this.MonedaOrigen = data.Moneda[0].Nombre;
-        this.MonedaDestino = "Pesos";
+        this.MonedaOrigen = "Pesos";
+        
       }
     });
 

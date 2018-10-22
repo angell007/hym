@@ -49,7 +49,7 @@ export class TercerosverComponent implements OnInit {
       params: { id: this.id }
     }).subscribe((data: any) => {
       this.MovimientosTercero = data.lista;
-console.log(data.lista)
+//console.log(data.lista)
       this.SaldoActual = data.total;
       this.SaldoPesos = data.totalPeso;
       this.SaldoBolivar = data.totalBolivar;
