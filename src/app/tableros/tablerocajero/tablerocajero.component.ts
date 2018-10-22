@@ -144,7 +144,7 @@ export class TablerocajeroComponent implements OnInit {
   Giro1 = true;
   Giro2 = false;
 
-  
+
 
   Giros = [];
   Departamentos = [];
@@ -213,18 +213,18 @@ export class TablerocajeroComponent implements OnInit {
   DestinatarioRecibo = [];
 
   MontoInicial: any = 0;
-  CierreCajaAyer: any =0;
+  CierreCajaAyer: any = 0;
   IdDiario: any;
-  verCambio =[];
-  currencyOrigen:any;
-  currencyDestino:any;
-  cupoTercero:any;
-  SaldoBolivar:any;
-  tasaCambiaria :any;
+  verCambio = [];
+  currencyOrigen: any;
+  currencyDestino: any;
+  cupoTercero: any;
+  SaldoBolivar: any;
+  tasaCambiaria: any;
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
   CierreCajaAyerBolivares = 0;
-  MontoInicialBolivar=0;
+  MontoInicialBolivar = 0;
 
   ngOnInit() {
 
@@ -242,20 +242,22 @@ export class TablerocajeroComponent implements OnInit {
     //hacer la peticion si este usuario tiene un 'diario' ya registrado en la DB y si el saldo de inicio es vacio
 
     this.http.get(this.globales.ruta + 'php/diario/detalle_diario.php', { params: { id: this.IdentificacionFuncionario } }).subscribe((data: any) => {
-      
-      if(data.hoy[0]){
+
+      if (data.hoy[0]) {
         this.MontoInicial = data.hoy[0].MontoInicial;
         this.MontoInicialBolivar = data.hoy[0].MontoInicialBolivar;
         this.IdDiario = data.hoy[0].Diario;
-      }else{
-        this.ModalSaldoInicio.show();
+
+        if (data.hoy[0].MontoInicial == "0" && data.hoy[0].MontoInicialBolivar == "0") {
+          this.ModalSaldoInicio.show();
+        }
       }
 
-      if(data.ayer[0]){
+      if (data.ayer[0]) {
         this.CierreCajaAyer = data.ayer[0].MontoCierre;
         this.CierreCajaAyerBolivares = data.ayer[0].MontoCierreBolivar
       }
-      
+
 
     });
   }
@@ -263,27 +265,38 @@ export class TablerocajeroComponent implements OnInit {
 
   GuardarMontoInicial(formulario: NgForm, modal) {
 
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    datos.append("caja", "5");
-    datos.append("oficina", "4");
-    this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        formulario.reset();
-        this.confirmacionSwal.title = "Apertura de caja";
-        this.confirmacionSwal.text = "Se ha realizado la apertura de caja exitosamente";
-        this.confirmacionSwal.type = "success";
-        this.confirmacionSwal.show();
-        modal.hide();
+    var peso = formulario.value.Monto_Inicio;
+    var bolivares = formulario.value.Monto_Inicio_Bolivar;
 
-      });
+    if (peso > 0 && bolivares > 0) {
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      datos.append("datos", info);
+      datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+      datos.append("caja", "5");
+      datos.append("oficina", "4");
+      datos.append("idDiario",this.IdDiario);
+      this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
+        .catch(error => {
+          console.error('An error occurred:', error.error);
+          this.errorSwal.show();
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          formulario.reset();
+          this.confirmacionSwal.title = "Apertura de caja";
+          this.confirmacionSwal.text = "Se ha realizado la apertura de caja exitosamente";
+          this.confirmacionSwal.type = "success";
+          this.confirmacionSwal.show();
+          modal.hide();
+
+        });
+    } else {
+      this.confirmacionSwal.title = "Ojo";
+      this.confirmacionSwal.text = "No se puede aperturar caja con los valores digitados, por favor compruebe";
+      this.confirmacionSwal.type = "warning";
+      this.confirmacionSwal.show();
+    }
 
   }
 
@@ -784,7 +797,7 @@ export class TablerocajeroComponent implements OnInit {
     this.MonedaOrigenDestino = [];
 
     this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
-      this.Cambios = data;      
+      this.Cambios = data;
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
@@ -812,11 +825,11 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
-       data.forEach(element => {
-         if(element.Nombre != "Pesos"){
+      data.forEach(element => {
+        if (element.Nombre != "Pesos") {
           this.MonedaOrigenCambio.push(element);
-         }
-       });
+        }
+      });
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
@@ -889,10 +902,10 @@ export class TablerocajeroComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       data.forEach(element => {
-        if(element.Nombre != "Pesos"){
+        if (element.Nombre != "Pesos") {
           this.MonedaOrigenDestino.push(element);
         }
-        
+
       });
     });
 
@@ -1198,7 +1211,7 @@ export class TablerocajeroComponent implements OnInit {
       this.confirmacionSwal.show();
       this.Cambios1 = true;
       this.Cambios2 = false;
-      this.tasaCambiaria =""; 
+      this.tasaCambiaria = "";
       this.entregar = "";
       this.MonedaDestino = "Pesos";
       this.actualizarVista();
@@ -1223,12 +1236,12 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     this.Envios.forEach((element, index) => {
-        suma += Number(element.Valor_Transferencia_Bolivar);     
+      suma += Number(element.Valor_Transferencia_Bolivar);
     });
 
     var totalPermitido = Number(this.entregar) + Number(this.SaldoBolivar)
     //alert(suma +"=="+ totalPermitido);
-    
+
     if (suma == Number(this.entregar)) {
       this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
@@ -1269,7 +1282,7 @@ export class TablerocajeroComponent implements OnInit {
         });
     } else {
       this.confirmacionSwal.title = "Pendiente";
-      this.confirmacionSwal.text = "Aún queda saldo por enviar, por favor verifique los valores" ;
+      this.confirmacionSwal.text = "Aún queda saldo por enviar, por favor verifique los valores";
       this.confirmacionSwal.type = "warning";
       this.confirmacionSwal.show();
     }
@@ -1699,7 +1712,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
 
-  resultado =[{    
+  resultado = [{
     Id_Transferencia_Remitente: "",
     Nombre: "",
     Telefono: ""
@@ -1713,37 +1726,37 @@ export class TablerocajeroComponent implements OnInit {
         this.RemitentesFiltrados = null;
       }
     }
-    
+
   }
 
-  IdRemitenteGiro:any ="";
-  NombreRemitenteGiro:any ="";
-  TelefonoRemitenteGiro:any ="";
-  CompletarDatosRemitenteGiro(){
+  IdRemitenteGiro: any = "";
+  NombreRemitenteGiro: any = "";
+  TelefonoRemitenteGiro: any = "";
+  CompletarDatosRemitenteGiro() {
     var valor = ((document.getElementById("DocumentoGiroRemitente") as HTMLInputElement).value);
-    var index = this.Remitentes.findIndex(x=>x.Id_Transferencia_Remitente === valor)
-    if(index > -1){
+    var index = this.Remitentes.findIndex(x => x.Id_Transferencia_Remitente === valor)
+    if (index > -1) {
       this.IdRemitenteGiro = this.Remitentes[index].Id_Transferencia_Remitente;
       this.NombreRemitenteGiro = this.Remitentes[index].Nombre;
       this.TelefonoRemitenteGiro = this.Remitentes[index].Telefono;
-    }else{
+    } else {
       this.IdRemitenteGiro = valor;
       this.NombreRemitenteGiro = "";
       this.TelefonoRemitenteGiro = "";
-    }    
+    }
   }
 
-  IdDestinatarioGiro:any = "";
-  NombreDestinatarioGiro:any = "";
-  TelefonoDestinatarioGiro:any = "";
-  CompletarDatosDestinatarioGiro(){
+  IdDestinatarioGiro: any = "";
+  NombreDestinatarioGiro: any = "";
+  TelefonoDestinatarioGiro: any = "";
+  CompletarDatosDestinatarioGiro() {
     var valor = ((document.getElementById("DocumentoGiroDestinatario") as HTMLInputElement).value);
-    var index = this.Remitentes.findIndex(x=>x.Id_Transferencia_Remitente === valor)
-    if(index > -1){
+    var index = this.Remitentes.findIndex(x => x.Id_Transferencia_Remitente === valor)
+    if (index > -1) {
       this.IdDestinatarioGiro = this.Remitentes[index].Id_Transferencia_Remitente;
       this.NombreDestinatarioGiro = this.Remitentes[index].Nombre;
       this.TelefonoDestinatarioGiro = this.Remitentes[index].Telefono;
-    }else{
+    } else {
       this.IdDestinatarioGiro = valor;
       this.NombreDestinatarioGiro = "";
       this.TelefonoDestinatarioGiro = "";
@@ -1774,10 +1787,10 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   RealizarGiro(formulario: NgForm) {
-    
+
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Documento_Remitente = this.IdRemitenteGiro;
-    formulario.value.Documento_Destinatario	 = this.IdDestinatarioGiro
+    formulario.value.Documento_Destinatario = this.IdDestinatarioGiro
     formulario.value.Id_Oficina = 5;
     formulario.value.Id_Caja = 4;
     let info = JSON.stringify(formulario.value);
@@ -2057,7 +2070,7 @@ export class TablerocajeroComponent implements OnInit {
       this.ModalVerRecibo.show();
     });
   }
- 
+
 
   validarDestino(value = "") {
     /*if (value != "") {
@@ -2081,55 +2094,55 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   validarTasaCambio(value) {
-    
-      this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
-        params: { id: value }
-      }).subscribe((data: any) => {
-        this.MaxEfectivo = data.Dependencia[0].Valor;
-        this.MinEfectivo = data.Dependencia[1].Valor;
-        this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
 
-        this.MaxCompra = data.Dependencia[3].Valor;
-        this.MinCompra = data.Dependencia[4].Valor;
-        this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+    this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
+      params: { id: value }
+    }).subscribe((data: any) => {
+      this.MaxEfectivo = data.Dependencia[0].Valor;
+      this.MinEfectivo = data.Dependencia[1].Valor;
+      this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
 
-        this.maximoTransferencia = data.Dependencia[6].Valor;
-        this.minimoTransferencia = data.Dependencia[7].Valor;
-        this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+      this.MaxCompra = data.Dependencia[3].Valor;
+      this.MinCompra = data.Dependencia[4].Valor;
+      this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+
+      this.maximoTransferencia = data.Dependencia[6].Valor;
+      this.minimoTransferencia = data.Dependencia[7].Valor;
+      this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+      this.MonedaOrigen = data.Moneda[0].Nombre;
+
+      if (this.Venta == true) {
+        this.tasaCambiaria = this.PrecioSugeridoEfectivo;
+        this.MonedaOrigen = "Pesos";
+        this.MonedaDestino = data.Moneda[0].Nombre;
+      } else {
+        this.tasaCambiaria = this.PrecioSugeridoCompra;
         this.MonedaOrigen = data.Moneda[0].Nombre;
-
-        if(this.Venta == true){
-          this.tasaCambiaria = this.PrecioSugeridoEfectivo;
-          this.MonedaOrigen = "Pesos";
-          this.MonedaDestino  = data.Moneda[0].Nombre;
-        }else{
-          this.tasaCambiaria = this.PrecioSugeridoCompra;
-          this.MonedaOrigen = data.Moneda[0].Nombre;
-          this.MonedaDestino  = "Pesos";
-        }        
-      });
+        this.MonedaDestino = "Pesos";
+      }
+    });
 
 
-    
+
   }
 
 
-  conversionMoneda(valor,texto) {
+  conversionMoneda(valor, texto) {
 
-    if(valor == false){
+    if (valor == false) {
       //compra
       this.tasaCambiaria = this.PrecioSugeridoCompra;
       var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
-      
-      var cambio = Number(texto) * Number( this.tasaCambiaria);
+
+      var cambio = Number(texto) * Number(this.tasaCambiaria);
       this.entregar = cambio;
       (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
-    }else{
-      var cambio = Number(texto) / Number( this.tasaCambiaria);
+    } else {
+      var cambio = Number(texto) / Number(this.tasaCambiaria);
       this.entregar = cambio.toFixed(2);
       this.MonedaOrigen = "Pesos"
     }
-    
+
     /*
     //peso es 2
     var origen = (document.getElementById("Origen") as HTMLInputElement).value;
@@ -2149,7 +2162,7 @@ export class TablerocajeroComponent implements OnInit {
     this.tasaCambiaria =(document.getElementById("Precio_Sugerido") as HTMLInputElement).value;*/
   }
 
-  AnulaCambio(id){
+  AnulaCambio(id) {
     let datos = new FormData();
     datos.append("id", id);
     this.http.post(this.globales.ruta + '/php/cambio/anular_cambio.php', datos).subscribe((data: any) => {
@@ -2164,40 +2177,40 @@ export class TablerocajeroComponent implements OnInit {
 
 
   tituloCambio = "Compras o Ventas";
-  VerCambio(id,modal){
-    
-    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: id , modulo: "Cambio" } }).subscribe((data: any) => {
+  VerCambio(id, modal) {
+
+    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: id, modulo: "Cambio" } }).subscribe((data: any) => {
       this.verCambio = data;
-        
-        if(data.Moneda_Origen == "Bolivares" ){
-          this.currencyOrigen = "BsS.";
-        }
-        if(data.Moneda_Origen == "Pesos" ){
-          this.currencyOrigen = "$";
-        }
 
-        if(data.Moneda_Destino == "Bolivares" ){
-          this.currencyDestino = "BsS.";
-        }
+      if (data.Moneda_Origen == "Bolivares") {
+        this.currencyOrigen = "BsS.";
+      }
+      if (data.Moneda_Origen == "Pesos") {
+        this.currencyOrigen = "$";
+      }
 
-        if(data.Moneda_Destino == "Pesos" ){
-          this.currencyDestino = "$";
-        }
+      if (data.Moneda_Destino == "Bolivares") {
+        this.currencyDestino = "BsS.";
+      }
+
+      if (data.Moneda_Destino == "Pesos") {
+        this.currencyDestino = "$";
+      }
       modal.show();
     });
 
   }
 
 
-  VerificarTercero(valor){
-   
-    var index = this.Tercero.findIndex(x=>x.Id_Tercero === valor);
-    if(index > -1){
-       this.cupoTercero = this.Tercero[index].Cupo;
+  VerificarTercero(valor) {
+
+    var index = this.Tercero.findIndex(x => x.Id_Tercero === valor);
+    if (index > -1) {
+      this.cupoTercero = this.Tercero[index].Cupo;
     }
-    
+
     this.http.get(this.globales.ruta + 'php/transferencias/saldo_bolivares.php', { params: { id: valor } }).subscribe((data: any) => {
-        this.SaldoBolivar = data.Saldo;         
+      this.SaldoBolivar = data.Saldo;
     });
   }
 
@@ -2209,7 +2222,7 @@ export class TablerocajeroComponent implements OnInit {
     });
 
     var totalBolivares = (document.getElementById("Cantidad_Transferida") as HTMLInputElement).value;
-    
+
     var formaPago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
     if (formaPago == "Credito") {
       var total = Number(totalBolivares) + Number(this.SaldoBolivar)
@@ -2217,17 +2230,17 @@ export class TablerocajeroComponent implements OnInit {
       if (idTercero != "") {
         var indice = this.Tercero.findIndex(x => x.Id_Tercero === idTercero);
         if (indice > -1) {
-            if (sumabolivar > total) {
-              this.confirmacionSwal.title = "Valor excedido";
-              this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
-              this.confirmacionSwal.type = "error";
-              this.confirmacionSwal.show();
-              this.Envios[pos].Valor_Transferencia_Bolivar = 0;
-            } else {
-              if (sumabolivar < parseInt(totalBolivares)) {
-                this.NuevaHileraDestinatario(pos);
-              }
+          if (sumabolivar > total) {
+            this.confirmacionSwal.title = "Valor excedido";
+            this.confirmacionSwal.text = "La suma de los valores digitados no coinciden con el valor en bolivares para enviar (" + totalBolivares + ")";
+            this.confirmacionSwal.type = "error";
+            this.confirmacionSwal.show();
+            this.Envios[pos].Valor_Transferencia_Bolivar = 0;
+          } else {
+            if (sumabolivar < parseInt(totalBolivares)) {
+              this.NuevaHileraDestinatario(pos);
             }
+          }
         }
       }
     } else {
@@ -2243,7 +2256,7 @@ export class TablerocajeroComponent implements OnInit {
 
     }
 
-    
+
 
 
 

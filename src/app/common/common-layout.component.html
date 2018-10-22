@@ -520,16 +520,19 @@
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
                                     <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "$." }}</td>
-                                    <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS. "}}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
                                     <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
                                     <td style="width:150px;text-align:center;">{{egresoCambio | currency : "$." }}</td>
-                                    <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS. "}}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Recibo Transferencia</td>
-                                    <td style="width:150px;text-align:center;">{{ingresoTransferencia | currency : "$."}}</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoTransferencia | currency :
+                                        "$."}}</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
                                     <td style="width:160px;"></td>
                                     <td style="width:160px;"></td>
@@ -546,14 +549,17 @@
                                 <tr>
                                     <td style="width:160px;">Traslados</td>
                                     <td style="width:150px;text-align:center;">{{ingresoTraslado | currency : "$."}}</td>
-                                    <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency: "BsS. "}}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency:
+                                        "BsS. "}}</td>
                                     <td style="width:160px;">Traslados</td>
                                     <td style="width:150px;text-align:center;">{{egresoTraslado | currency : "$." }}</td>
-                                    <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar | currency: "BsS. " }}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar | currency:
+                                        "BsS. " }}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Corresponsal Bancario</td>
-                                    <td style="width:150px;text-align:center;">{{ingresoCorresponsal | currency : "$."}}</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCorresponsal | currency :
+                                        "$."}}</td>
                                     <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Gastos</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
@@ -569,185 +575,132 @@
                                 </tr>
                                 <tr>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}} </strong></td>
-                                    <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS. "}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}}
+                                        </strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
                                     <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
-                                    <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS. "}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
                                 </tr>
 
                             </tbody>
                         </table>
-                        <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
-                            <tr>
-                                <td>Saldo Inicial</td>
-                                <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
-                                <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
-                            </tr>
-                            <tr>
-                                <td style="background:#9BFFAC;">Ingreso</td>
-                                <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos | currency : "$."}} </td>
-                                <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares | currency: "BsS. "}} </td>
+                    </div>
 
-                            </tr>
-                            <tr>
-                                <td style="background:#FF9B9B;">Egresos</td>
-                                <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos | currency : "$." }} </td>
-                                <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares | currency: "BsS. "}}</td>
-                            </tr>
-                            <tr>
-                                <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{ EntregadoIngresosPesos | currency : "$." }}</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar  | currency: "BsS. " }}</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Entregado</td>
-                                <td style="text-align:right;" id="mon_rec_cuadre">$ 0</td>
-                                <td style="text-align:right;" id="mon_rec_cuadreBsS">BsS. 0</td>
+                </div>
+                <div class="col-md-4">
+                    <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+                        <tr>
+                            <td>Saldo Inicial</td>
+                            <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
+                            <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#9BFFAC;">Ingreso</td>
+                            <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos | currency : "$."}}
+                            </td>
+                            <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares | currency:
+                                "BsS. "}} </td>
 
-                            </tr>
-                            <tr>
-                                <td>Diferencia</td>
-                                <td style="text-align:right;" id="diferencia"></td>
-                            </tr>
-                            <tr id="requerido" style="display:none;">
-                                <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
-                                    observaciones del día</td>
-                            </tr>
-                        </table>
+                        </tr>
+                        <tr>
+                            <td style="background:#FF9B9B;">Egresos</td>
+                            <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos | currency : "$." }}
+                            </td>
+                            <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares | currency:
+                                "BsS. "}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
+                            <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{
+                                    EntregadoIngresosPesos | currency : "$." }}</strong></td>
+                            <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar
+                                    | currency: "BsS. " }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Entregado</td>
+                            <td style="text-align:right;" id="mon_rec_cuadre">{{ entregadoPesos | currency : "$." }}</td>
+                            <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar | currency : "BsS."}}</td>
 
-                        <form id="cierre" method="POST">
-                            <div class="detalles" id="mnd" style="width:auto;padding:5px;margin-left: 20px;">
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Fajo Entero (x100)</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F20]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F10]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F5]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F2]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F1]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                </div>
+                        </tr>
+                        <tr>
+                            <td>Diferencia</td>
+                            <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency : "$."  }}</td>
+                            <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency : "BsS."  }}</td>
+                        </tr>
+                        <tr id="requerido" style="display:none;">
+                            <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                observaciones del día</td>
+                        </tr>
+                    </table>
+                </div>
 
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Medio Fajo (x50)</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF50]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF20]" value="0"
-                                            class="nume2 1000000" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF10]" value="0"
-                                            class="nume2 500000" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF5]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF2]" value="0"
-                                            class="nume2 100000" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF1]" value="0"
-                                            class="nume2 50000" (click)="this.select()" />
-                                    </div>
-                                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-bordered data-table" style="clear:none;">
+                                <tr>
+                                    <th colspan="2">Fajo Entero (x100)</th>
+                                    <th colspan="2">Medio Fajo (x50)</th>
+                                    <th colspan="2">Billetes Sueltos</th>
+                                </tr>
+                                <tr *ngFor="let item of fajosPesos; let i= index">
+                                    <td>{{ item.BilleteEntero100 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero100')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero50')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorSuelto')" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Monedas</td>
+                                    <td colspan="3">
+                                        <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]"
+                                            value="0" class="nume2" ngModel (input)="calcularFajoBilletes(0,i,'Moneda')"
+                                            style=" width: 170px !important;" /></td>
+                                </tr>
 
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Billetes Sueltos</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B50]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B20]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B5]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B2]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
-                                            class="nume2" (click)="this.select()" />
-                                    </div>
-                                </div>
+                            </table>
 
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Monedas</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <input style="width:97%;" type="number" min="0" step="1" pattern="\d+" name="datos[M1]"
-                                            value="0" class="nume2 1000" id="1" (click)="this.select()" />
-                                    </div>
-                                    <a nohref class="button erase" onclick="limpiar_num_cuadre();" style="margin:3px;">Limpiar
-                                        (c)</a>
-                                </div>
-                            </div>
-                            <div>
-                                <h6 style="margin:0;">Observaciones</h6>
-                                <textarea class="normal" id="obser" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
-                                <input type="hidden" name="id">
-                                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
-                                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
-                            </div>
-                        </form>
+                        </div>
+
+                        <div class="col-md-6">
+                            <table class="table table-bordered data-table" style="clear:none;">
+                                <tr>
+                                    <th colspan="2">Fajo Entero (x100)</th>
+                                    <th colspan="2">Medio Fajo (x50)</th>
+                                    <th colspan="2">Billetes Sueltos</th>
+                                </tr>
+                                <tr *ngFor="let item of fajosBolivares; let i= index">
+                                    <td>{{ item.BilleteEntero100 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero100')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero50')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorSuelto')" /></td>
+                                </tr>
+                                
+                            </table>
+
+                        </div>
 
                     </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h6 style="margin:0;">Observaciones</h6>
+                    <textarea id="Observacion" class="normal" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
+                    <input type="hidden" name="id">
+                    <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                    <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
 
                 </div>
 
@@ -759,7 +712,7 @@
     <div class="app-modal-footer">
 
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja(FormCierreCaja,CierreCaja)">Guardar</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja()">Guardar</button>
         </div>
 
     </div>
@@ -767,4 +720,7 @@
 
 <swal #confirmSwal title="Contraseña cambiada" text="Su contraseña a sido cambiada exitosamente, por favor inicie sesión nuevamente."
     type="success" (confirm)="salir()">
+</swal>
+
+<swal #errorSwal title="" text="" type="" >
 </swal>
