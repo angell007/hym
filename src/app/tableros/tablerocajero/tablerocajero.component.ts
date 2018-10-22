@@ -791,6 +791,7 @@ export class TablerocajeroComponent implements OnInit {
 
   MonedaOrigenCambio = [];
   MonedaOrigenDestino = [];
+  FuncionariosCajaDestino=[];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -877,6 +878,10 @@ export class TablerocajeroComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/pos/lista_cajeros_sistema.php').subscribe((data: any) => {
       this.FuncionariosCaja = data;
+      this.FuncionariosCajaDestino = data;
+
+      var index = this.FuncionariosCajaDestino.findIndex(x=>x.Identificacion_Funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario );
+      this.FuncionariosCajaDestino.splice(index,1)
     });
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
