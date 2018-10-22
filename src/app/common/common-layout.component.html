@@ -519,17 +519,17 @@
                                     <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioIngresoPeso | currency }}</td>
-                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioIngresoBolivar | currency : "BsS. "}}</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS. "}}</td>
                                     <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">{{cierreCajaCambioEgresoPeso | currency }}</td>
-                                    <td style="width:160px;text-align:center;">{{cierreCajaCambioEgresoBolivar | currency : "BsS. "}}</td>
+                                    <td style="width:150px;text-align:center;">{{egresoCambio | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS. "}}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Recibo Transferencia</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoTransferencia | currency : "$."}}</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
                                     <td style="width:160px;"></td>
                                     <td style="width:160px;"></td>
@@ -537,23 +537,23 @@
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Giros</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:150px;text-align:center;">{{ ingresoGiro | currency : "$." }}</td>
                                     <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Giros</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:150px;text-align:center;">{{egresoGiro | currency : "$." }}</td>
                                     <td style="width:160px;text-align:center;"></td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Traslados</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoTraslado | currency : "$."}}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency: "BsS. "}}</td>
                                     <td style="width:160px;">Traslados</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{egresoTraslado | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar | currency: "BsS. " }}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Corresponsal Bancario</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCorresponsal | currency : "$."}}</td>
                                     <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Gastos</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
@@ -561,7 +561,7 @@
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Servicios Externos</td>
-                                    <td style="text-align:center;">$ 0</td>
+                                    <td style="text-align:center;">{{ingresoServicio | currency : "$."}}</td>
                                     <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;"></td>
                                     <td style="text-align:center;"></td>
@@ -569,11 +569,11 @@
                                 </tr>
                                 <tr>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>{{ SumaIngresosPesos | currency}}</strong></td>
-                                    <td style="text-align:center;"><strong>{{ SumaIngresosBolivar | currency: "BsS. "}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}} </strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS. "}}</strong></td>
                                     <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>{{ SumaEgresosPesos | currency}}</strong></td>
-                                    <td style="text-align:center;"><strong>{{ SumaEgresosBolivar | currency: "BsS. "}}</strong></td>
+                                    <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
+                                    <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS. "}}</strong></td>
                                 </tr>
 
                             </tbody>
@@ -581,24 +581,24 @@
                         <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
                             <tr>
                                 <td>Saldo Inicial</td>
-                                <td style="text-align:right;">{{SaldoInicialPeso | currency }}</td>
-                                <td style="text-align:right;">BsS. 0</td>
+                                <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
+                                <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
                             </tr>
                             <tr>
                                 <td style="background:#9BFFAC;">Ingreso</td>
-                                <td style="text-align:right;background:#9BFFAC;">+ {{ SumaIngresosPesos | currency}}</td>
-                                <td style="text-align:right;background:#9BFFAC;">+ {{ SumaIngresosBolivar | currency: "BsS. "}}</td>
+                                <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos | currency : "$."}} </td>
+                                <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares | currency: "BsS. "}} </td>
 
                             </tr>
                             <tr>
                                 <td style="background:#FF9B9B;">Egresos</td>
-                                <td style="text-align:right;background:#FF9B9B;">- {{ SumaEgresosPesos | currency}}</td>
-                                <td style="text-align:right;background:#FF9B9B;">- {{ SumaEgresosBolivar | currency: "BsS. "}}</td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos | currency : "$." }} </td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares | currency: "BsS. "}}</td>
                             </tr>
                             <tr>
                                 <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega">{{ EntregadoIngresosPesos | currency}}</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{ EntregadoEgresosBolivares | currency: "BsS. " }}</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{ EntregadoIngresosPesos | currency : "$." }}</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar  | currency: "BsS. " }}</strong></td>
                             </tr>
                             <tr>
                                 <td>Entregado</td>

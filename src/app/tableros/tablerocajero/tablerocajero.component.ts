@@ -212,8 +212,8 @@ export class TablerocajeroComponent implements OnInit {
   EncabezadoRecibo = [];
   DestinatarioRecibo = [];
 
-  MontoInicial: any;
-  CierreCajaAyer: any;
+  MontoInicial: any = 0;
+  CierreCajaAyer: any =0;
   IdDiario: any;
   verCambio =[];
   currencyOrigen:any;
@@ -223,7 +223,8 @@ export class TablerocajeroComponent implements OnInit {
   tasaCambiaria :any;
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
-
+  CierreCajaAyerBolivares = 0;
+  MontoInicialBolivar=0;
 
   ngOnInit() {
 
@@ -241,13 +242,20 @@ export class TablerocajeroComponent implements OnInit {
     //hacer la peticion si este usuario tiene un 'diario' ya registrado en la DB y si el saldo de inicio es vacio
 
     this.http.get(this.globales.ruta + 'php/diario/detalle_diario.php', { params: { id: this.IdentificacionFuncionario } }).subscribe((data: any) => {
-      this.MontoInicial = data.hoy[0].MontoInicial;
-      this.CierreCajaAyer = data.ayer[0].MontoCierre;
-      this.IdDiario = data.hoy[0].Diario;
-
-      if (this.MontoInicial == "0") {
+      
+      if(data.hoy[0]){
+        this.MontoInicial = data.hoy[0].MontoInicial;
+        this.MontoInicialBolivar = data.hoy[0].MontoInicialBolivar;
+        this.IdDiario = data.hoy[0].Diario;
+      }else{
         this.ModalSaldoInicio.show();
       }
+
+      if(data.ayer[0]){
+        this.CierreCajaAyer = data.ayer[0].MontoCierre;
+        this.CierreCajaAyerBolivares = data.ayer[0].MontoCierreBolivar
+      }
+      
 
     });
   }
@@ -258,7 +266,9 @@ export class TablerocajeroComponent implements OnInit {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
-    datos.append("idDiario", this.IdDiario);
+    datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+    datos.append("caja", "5");
+    datos.append("oficina", "4");
     this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -1801,8 +1811,8 @@ export class TablerocajeroComponent implements OnInit {
 
 
   RealizarTraslado(formulario: NgForm, modal) {
-    let info = JSON.stringify(formulario.value);
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+    let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Traslado_Caja');
     datos.append("datos", info);
@@ -1888,6 +1898,7 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   GuardarServicio(formulario: NgForm, modal) {
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Servicio');

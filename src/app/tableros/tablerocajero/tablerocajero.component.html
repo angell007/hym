@@ -2388,16 +2388,17 @@
     <div class="app-modal-body">
         <form #FormMontoInicial="ngForm">
             <div class="col-md-12 ">
-                <label>Saldo Anterior Caja</label>
+                <label>Saldo Anterior Caja Pesos</label>
                 <input currencyMask type="text" class="form-control" name="Monto_Inicio" ngModel="{{CierreCajaAyer}}"
                     [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
             </div>
+            
+            <div class="col-md-12 ">
+                <label>Saldo Anterior Caja Bolivares</label>
+                <input currencyMask type="text" class="form-control" name="Monto_Inicio_Bolivar" ngModel="{{CierreCajaAyerBolivares}}"
+                    [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required>
+            </div>
 
-            <!-- <div class="col-md-12">
-                <label>Saldo Inicio Caja</label>
-                <input type="text" placeholder="Digite el monto inicial" class="form-control" name="Monto_Inicio"
-                    ngModel>
-            </div> -->
         </form>
     </div>
     <div class="app-modal-footer" style="margin: 0 auto;">
