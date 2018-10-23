@@ -50,6 +50,7 @@ export class CuentasbancariasComponent implements OnInit {
 
 
   Paises =[];
+  TipoCuenta=[];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/cuentasbancarias/lista_cuentas.php').subscribe((data: any) => {
       this.cuentas = data;      
@@ -57,6 +58,10 @@ export class CuentasbancariasComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
       this.Paises = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
+      this.TipoCuenta = data;
     });
 
     this.http.get(this.globales.ruta + '/php/genericos/lista_generales.php', {

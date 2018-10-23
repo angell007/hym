@@ -65,7 +65,7 @@
     <div class="app-modal-body">
         <form #FormCuenta="ngForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Tipo Cuenta</label>
                     <select class="form-control" name="Tipo_Cuenta" ngModel required>
                         <option value="">Seleccione Tipo</option>
@@ -73,6 +73,14 @@
                         <option value="Personal">Cuenta Personal</option>
                     </select>
                 </div>
+
+                <div class="col-md-2">
+                        <label>Tipo </label>
+                        <select class="form-control" name="Tipo" ngModel required>
+                            <option value="">Seleccione Tipo</option>
+                            <option *ngFor="let item of TipoCuenta; let i=index" [value]="item.Id_Tipo_Cuenta">{{item.Nombre}}</option>                           
+                        </select>
+                    </div>
 
                 <div class="col-md-2">
                     <div class="form-group">
@@ -93,7 +101,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Banco</label>
                         <select class="form-control" required name="Id_Banco" ngModel required>
@@ -172,7 +180,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>País</label>
-                            <select class="form-control" name="Id_Pais" ngModel="{{CuentaBancaria.Id_Pais}}" (change)="Bancos_Pais($event.target.value, i);"
+                            <select class="form-control" name="Id_Pais" [(ngModel)]="CuentaBancaria.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
                                 required>
                                 <option value="">Seleccione País</option>
                                 <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
@@ -191,7 +199,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Banco</label>
-                            <select class="form-control" required name="Id_Banco" ngModel="{{CuentaBancaria.Id_Banco}}" required>
+                            <select class="form-control" required name="Id_Banco" [(ngModel)]="CuentaBancaria.Id_Banco" required>
                                 <option value="">Seleccione Banco</option>
                                 <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
                             </select>
@@ -216,7 +224,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Moneda</label>
-                            <select class="form-control" required name="Moneda" ngModel="{{CuentaBancaria.Moneda}}" required>
+                            <select class="form-control" required name="Moneda" [(ngModel)]="CuentaBancaria.Moneda" required>
                                 <option value="">Seleccione Banco</option>
                                 <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
                             </select>

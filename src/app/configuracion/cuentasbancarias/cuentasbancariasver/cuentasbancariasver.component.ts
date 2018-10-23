@@ -55,6 +55,15 @@ export class CuentasbancariasverComponent implements OnInit {
       this.Movimientos = data.lista;
     });
   }
+  
+  retornarSimbolo(){
+    if(this.DatosBanco[0].Moneda == "Pesos"){
+      return "$.";
+    }else{
+      return "BsS."
+    }
+  }
+
 
   GuardarMovimiento(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
