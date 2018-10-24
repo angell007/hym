@@ -119,7 +119,8 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('ModalSaldoInicio') ModalSaldoInicio: any;
   @ViewChild('ModalVerCambio') ModalVerCambio: any;
   @ViewChild('ModalAprobarGiro') ModalAprobarGiro: any;
-
+  @ViewChild('confirmacionGiro') confirmacionGiro: any;
+  
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -264,6 +265,7 @@ export class TablerocajeroComponent implements OnInit {
 
     });
   }
+ 
 
 
   GuardarMontoInicial(formulario: NgForm, modal) {
@@ -332,6 +334,8 @@ export class TablerocajeroComponent implements OnInit {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
     }
+
+    (document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = true;
 
   }
 
@@ -771,17 +775,21 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   }
 
   GuardarCorresponsal(formulario: NgForm) {
+    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Diario');
     datos.append("datos", info);
     this.http.post(this.globales.ruta + 'php/corresponsaldiario/guardar_corresponsal_diario.php', datos).subscribe((data: any) => {
       formulario.reset();
+      (document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = false;
     });
   }
 
   ConsultarCorresponsal(id) {
     this.CorresponsalBancario = id;
+    this.ValorCorresponsal = 0;
+    this.DetalleCorresponsal = "";
     let datos = new FormData();
     //let funcionario = this.IdentificacionFuncionario;
     datos.append("Identificacion_Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
@@ -790,6 +798,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       this.IdCorresponsal = data.Id_Corresponsal_Diario;
       this.ValorCorresponsal = data.Valor;
       this.DetalleCorresponsal = data.Detalle;
+      (document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = false;
     });
   }
 
@@ -914,10 +923,17 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       this.FuncionariosCajaDestino.splice(index, 1)
     });
 
-    this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.Funcionario } }).subscribe((data: any) => {
-      this.Traslados = data.origen;
-      this.TrasladosRecibidos = data.destino;
+    this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+      this.Traslados = data;
+
     });
+
+    this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+      this.TrasladosRecibidos = data;
+      console.log(data);
+      
+    });
+
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Comision' } }).subscribe((data: any) => {
       this.ServicioComision = data;
@@ -1868,9 +1884,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           break;
         }
         case false: {
-          this.ValorTotal = parseFloat(value);
-          this.ValorEntrega = parseFloat(value);
-          this.Costo = 0;
+          this.ValorTotal = parseFloat(value)- parseFloat(element.Comision);
+          this.ValorEntrega = parseFloat(value) ;
           break;
         }
       }
@@ -2430,6 +2445,12 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     
   }
 
+  ConfirmacionGiro(valor){
+    this.confirmacionGiro.title ="¿ esta seguro ?";
+    this.confirmacionGiro.text = "Confirme que el valor entregado sea de " +valor;
+    this.confirmacionGiro.type = "warning"    
+    this.confirmacionGiro.show();
+  }
 
 
 

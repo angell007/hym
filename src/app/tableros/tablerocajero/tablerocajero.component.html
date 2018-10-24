@@ -753,8 +753,7 @@
                                                                             <th>Enviado Por</th>
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
-                                                                            <th>Valor Recibido</th>
-                                                                            <th>Comisión</th>
+                                                                            <th>Valor</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -764,8 +763,7 @@
                                                                             <td>{{Giro.Nombre_Remitente}}</td>
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td>{{Giro.Comision | currency}}</td>                                                                            
+                                                                            <td>{{Giro.Valor_Total | currency}}</td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -774,32 +772,30 @@
                                                     </div>
                                                     <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
                                                         <div class="pdd-horizon-15 pdd-vertical-20">
-                                                                <div class="table-responsive">
-                                                                        <table class="table table-hover table-sm table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th style="width:60px;">Hora</th>
-                                                                                    <th>Código</th>
-                                                                                    <th>Enviado Por</th>
-                                                                                    <th>Cédula Destinatario</th>
-                                                                                    <th>Nombre Destinatario</th>
-                                                                                    <th>Valor Recibido</th>
-                                                                                    <th>Comisión</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr *ngFor="let Giro of GirosAprobados">
-                                                                                    <td>{{Giro.Fecha | date:"HH:mm" }}</td>
-                                                                                    <td>{{Giro.Codigo}}</td>
-                                                                                    <td>{{Giro.Nombre_Remitente}}</td>
-                                                                                    <td>{{Giro.Documento_Destinatario}}</td>
-                                                                                    <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                                    <td>{{Giro.Valor_Recibido | currency}}</td> 
-                                                                                    <td>{{Giro.Comision | currency}}</td>                                                                            
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:60px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Enviado Por</th>
+                                                                            <th>Cédula Destinatario</th>
+                                                                            <th>Nombre Destinatario</th>
+                                                                            <th>Valor</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let Giro of GirosAprobados">
+                                                                            <td>{{Giro.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{Giro.Codigo}}</td>
+                                                                            <td>{{Giro.Nombre_Remitente}}</td>
+                                                                            <td>{{Giro.Documento_Destinatario}}</td>
+                                                                            <td>{{Giro.Nombre_Destinatario}} </td>
+                                                                            <td>{{Giro.Valor_Total | currency}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
 
                                                         </div>
                                                     </div>
@@ -831,24 +827,21 @@
                                                                                         <th>Enviado Por</th>
                                                                                         <th>Cédula Destinatario</th>
                                                                                         <th>Nombre Destinatario</th>
-                                                                                        <th>Valor a Pagar</th>
-                                                                                        <th>Comisión</th>
+                                                                                        <th>Valor</th>
                                                                                         <th style="width:160px;"></th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr *ngFor="let Giro of GirosBuscar"
                                                                                         class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
-                                                                                        <td>{{Giro.Fecha | date:"HH:mm"}}</td>
+                                                                                        <td>{{Giro.Fecha | date }}</td>
                                                                                         <td>{{Giro.Codigo}}</td>
                                                                                         <td>{{Giro.Nombre_Remitente}}</td>
                                                                                         <td>{{Giro.Documento_Destinatario}}</td>
                                                                                         <td>{{Giro.Nombre_Destinatario}}
                                                                                         </td>
-                                                                                        <td>{{Giro.Valor_Recibido |
+                                                                                        <td>{{Giro.Valor_Total |
                                                                                             currency}}</td>
-                                                                                          <td>{{Giro.Comision |
-                                                                                                currency}}</td>
                                                                                         <td class="text-center">
                                                                                             <button class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;"
@@ -1067,22 +1060,23 @@
                                                 <div class="col-md-1">
                                                     <div class="form-group text-center">
                                                         <label>Libre</label>
-                                                        <input id="libre" type="checkbox" placeholder="Precio" class="form-control"
-                                                            (click)="valorComision(ValorEnviar)">
+                                                        <input currencyMask id="libre" type="checkbox" placeholder="Precio"
+                                                            class="form-control" (click)="valorComision(ValorEnviar)">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Valor a Entregar</label>
-                                                        <input type="text" placeholder="Precio" class="form-control"
-                                                            readonly name="Valor_Total" ngModel="{{ValorTotal}}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>Total</label>
+                                                        <label>Total Que Recibo</label>
                                                         <input type="text" placeholder="valor" class="form-control"
                                                             name="Valor_Entrega" ngModel="{{ValorEntrega}}" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label style="color: green"> Valor a Enviar </label>
+                                                        <input type="text" placeholder="Precio" class="form-control"
+                                                            readonly name="Valor_Total" ngModel="{{ValorTotal}}">
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1099,9 +1093,15 @@
                                     </div>
                                     <div class="row mrg-top-20">
                                         <div class="col-md-10">
-                                            <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                (confirm)="RealizarGiro(FormGiro)" class="btn btn-primary btn-sm btn-block">Hacer
+                                            <!--[swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro ' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                                (confirm)="RealizarGiro(FormGiro)"-->
+                                            <button type="button" (click)="ConfirmacionGiro(ValorEntrega )" class="btn btn-primary btn-sm btn-block">Hacer
                                                 Giro</button>
+
+                                            <swal #confirmacionGiro title="" text="" type="" showCancelButton="true"
+                                                confirmButtonText='Sí, guardar' cancelButtonText='¡No, déjame comprobar!'
+                                                (confirm)="RealizarGiro(FormGiro)">
+                                            </swal>
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn btn-success btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
@@ -1135,18 +1135,20 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-block">
-                                        <div class="tab-info center-tabs">
+                                        <!-- <h4 class="card-title">Default Tabs</h4> -->
+                                        <div class="tab-success">
                                             <ul class="nav nav-tabs" role="tablist">
                                                 <li class="nav-item">
-                                                    <a href="#default-tab-1" class="nav-link active" role="tab"
-                                                        data-toggle="tab">Enviados</a>
+                                                    <a href="#default-tab1-1" class="nav-link active" role="tab"
+                                                        data-toggle="tab">Traslados Enviados</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="#default-tab-2" class="nav-link" role="tab" data-toggle="tab">Recibidos</a>
+                                                    <a href="#default-tab1-2" class="nav-link" role="tab" data-toggle="tab">Traslados
+                                                        Recibidos</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
-                                                <div role="tabpanel" class="tab-pane fade in active" id="default-tab-1">
+                                                <div role="tabpanel" class="tab-pane fade in active" id="default-tab1-1">
                                                     <div class="pdd-horizon-15 pdd-vertical-20">
                                                         <div class="table-responsive">
                                                             <table class="table table-hover table-sm table-striped">
@@ -1154,6 +1156,7 @@
                                                                     <tr>
                                                                         <th style="width:60px;">Hora</th>
                                                                         <th>Código</th>
+                                                                        <th>Enviado a</th>
                                                                         <th>Valor</th>
                                                                         <th>Moneda</th>
                                                                         <th style="width:160px;"></th>
@@ -1163,10 +1166,11 @@
                                                                     <tr *ngFor="let Traslado of Traslados" class=" {{Traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
-                                                                        <td>{{Traslado.Valor | currency}}</td>
-                                                                        <td>{{Traslado.Moneda }}
-                                                                        </td>
+                                                                        <td>{{Traslado.Nombres}} </td>
+                                                                        <td>{{Traslado.Valor}}</td>
+                                                                        <td>{{Traslado.Moneda }}</td>
 
+                                                                        <!--
                                                                         <td class="text-center" *ngIf="esconder(Traslado.Estado,Traslado.Aprobado)">
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
@@ -1181,13 +1185,14 @@
                                                                         <td *ngIf="!esconder(Traslado.Estado,Traslado.Aprobado)">
                                                                             Este traslado fue anulado o aprobado.
                                                                         </td>
+                                                                    -->
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
+                                                <div role="tabpanel" class="tab-pane fade" id="default-tab1-2">
                                                     <div class="pdd-horizon-15 pdd-vertical-20">
                                                         <div class="table-responsive">
                                                             <table class="table table-hover table-sm table-striped">
@@ -1195,42 +1200,45 @@
                                                                     <tr>
                                                                         <th style="width:60px;">Hora</th>
                                                                         <th>Código</th>
+                                                                        <th>Recibido de</th>
                                                                         <th>Valor</th>
                                                                         <th>Moneda</th>
                                                                         <th style="width:160px;"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr *ngFor="let Traslado of TrasladosRecibidos"
-                                                                        class=" {{Traslado.Aprobado == 'No' ? 'bg-danger text-white' : '' }} ">
-                                                                        <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
-                                                                        <td>{{Traslado.Codigo}}</td>
-                                                                        <td>{{Traslado.Valor | currency}}</td>
-                                                                        <td>{{Traslado.Moneda }}
-                                                                        </td>
+                                                                    <tr *ngFor="let Traslado1 of TrasladosRecibidos">
+                                                                        <td>{{Traslado1.Fecha_Traslado | date:"HH:mm" }}</td>
+                                                                        <td>{{Traslado1.Codigo}}</td>
+                                                                        <td>{{Traslado1.Nombres}} </td>
+                                                                        <td>{{Traslado1.Valor}}</td>
+                                                                        <td>{{Traslado1.Moneda }}</td>
 
+                                                                        <!--
                                                                         <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
+                                                                                (confirm)="decisionTraslado(Traslado1.Id_Traslado_Caja,'Si')">
                                                                                 <i class="fa fa-check"></i>
                                                                             </button>
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'No')">
+                                                                                (confirm)="decisionTraslado(Traslado1.Id_Traslado_Caja,'No')">
                                                                                 <i class="fa fa-times"></i>
                                                                             </button>
                                                                         </td>
-                                                                        <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
+                                                                        <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado1.Aprobado)">
                                                                             <label *ngSwitchCase="true">Aprobado</label>
                                                                             <label *ngSwitchCase="false">Negado</label>
-                                                                        </td>
+                                                                        </td> -->
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
+
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1365,7 +1373,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>&nbsp;</label>
-                                            <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarCorresponsal(FormCorresponsal)">Guardar</button>
+                                            <button id="GuardarCorresponsalBancario" type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarCorresponsal(FormCorresponsal)">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -2576,30 +2584,31 @@
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalAprobarGiro" #ModalAprobarGiro>
-        <div class="app-modal-header" style="margin: 0 auto;">
-            <h4>Información Giro</h4>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Información Giro</h4>
+    </div>
+    <div class="app-modal-body">
+        <h2>¿ Está seguro que desea realizar el giro ?</h2>
+        <table class="table table-hover table-sm table-striped">
+            <tr>
+                <td>Remitente</td>
+                <td>{{informacionGiro.Nombre_Remitente}}</td>
+            </tr>
+            <tr>
+                <td>Destinatario</td>
+                <td>{{informacionGiro.Nombre_Destinatario}}</td>
+            </tr>
+            <tr>
+                <td>Valor A Entregar</td>
+                <td>{{Valor_Total | currency: "$. "}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button class="btn btn-primary btn-sm" (click)="PagarGiro(informacionGiro.Id_Giro,ModalAprobarGiro,informacionGiro.Documento_Destinatario)">Pagar
+                Giro
+            </button>
         </div>
-        <div class="app-modal-body">
-            <h2>¿ Está seguro que desea realizar el giro ?</h2> 
-            <table class="table table-hover table-sm table-striped" >
-                    <tr>
-                      <td>Remitente</td>
-                      <td>{{informacionGiro.Nombre_Remitente}}</td>
-                    </tr>
-                    <tr>
-                      <td>Destinatario</td>
-                      <td>{{informacionGiro.Nombre_Destinatario}}</td>
-                    </tr>
-                    <tr>
-                      <td>Valor A Entregar</td>
-                      <td>{{ValorTotalGiro | currency: "$. "}}</td>
-                    </tr>
-                  </table>
-        </div>
-        <div class="app-modal-footer" style="margin: 0 auto;">
-            <div class="text-center">
-                <button class="btn btn-primary btn-sm" (click)="PagarGiro(informacionGiro.Id_Giro,ModalAprobarGiro,informacionGiro.Documento_Destinatario)">Pagar Giro
-                </button>
-            </div>
-        </div>
-    </app-modal-basic>
+    </div>
+</app-modal-basic>

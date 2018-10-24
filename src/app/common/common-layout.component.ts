@@ -224,6 +224,14 @@ export class CommonLayoutComponent implements OnInit {
             document.getElementById(id2).style.display = 'none';
         }
         document.getElementById(id).style.display = 'block';
+
+        let datos = new FormData();
+        datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+        this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php' , datos).subscribe((data: any) => {
+            this.alertasCajas = [];
+            this.contadorTraslado = 0;
+        });
+
     }
 
 
@@ -239,6 +247,7 @@ export class CommonLayoutComponent implements OnInit {
     egresoGiroBolivar = 0;
     egresoTrasladoBolivar = 0;
     ingresoTrasladoBolivar = 0;
+    GiroComision:any = 0;
 
     cerrarCaja() {
 
@@ -263,6 +272,7 @@ export class CommonLayoutComponent implements OnInit {
         this.egresoGiroBolivar = 0;
         this.egresoTrasladoBolivar = 0;
         this.ingresoTrasladoBolivar = 0;
+        this.GiroComision = 0
 
         this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_V2.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
 
@@ -308,7 +318,7 @@ export class CommonLayoutComponent implements OnInit {
 
             }
             if (this.TransferenciaIngresos[0]) { this.ingresoTransferencia = this.TransferenciaIngresos[0].Ingreso }
-            if (this.GiroIngresos[0]) { this.ingresoGiro = this.GiroIngresos[0].Ingreso }
+            if (this.GiroIngresos[0]) { this.ingresoGiro = this.GiroIngresos[0].Ingreso; this.GiroComision = this.GiroIngresos[0].Comision }
             if (this.TrasladoIngresos[0]) {
                 var index = this.TrasladoIngresos.findIndex(x => x.Moneda_Origen === "Bolivares");
                 var index1 = this.TrasladoIngresos.findIndex(x => x.Moneda_Origen === "Pesos");

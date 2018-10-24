@@ -296,9 +296,8 @@
 
                                                         <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
                                                         </span>
-                                                        <span class="text-gray"> Ha realizado un traslado por </span>
-                                                        <span class="font-size-14 text-semibold">{{alerta.Valor |
-                                                            currency }}</span>
+                                                        <span class="text-gray"> Le ha realizado un traslado por </span>
+                                                        <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
                                                         <span class="text-gray"> con código </span>
                                                         <span class="font-size-14 text-semibold">{{alerta.Codigo}}
                                                             <!--<span class="text-dark">{{alerta.Detalles}}</span> -->
@@ -547,6 +546,11 @@
                                     <td style="width:160px;text-align:center;"></td>
                                 </tr>
                                 <tr>
+                                    <td style="width:160px;">Comision de Giros</td>
+                                    <td style="width:150px;text-align:center;">{{ GiroComision | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;"></td>
+                                </tr>
+                                <tr>
                                     <td style="width:160px;">Traslados</td>
                                     <td style="width:150px;text-align:center;">{{ingresoTraslado | currency : "$."}}</td>
                                     <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency:
@@ -574,12 +578,12 @@
                                     <td style="text-align:center;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
+                                    <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
                                     <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}}
                                         </strong></td>
                                     <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS.
                                             "}}</strong></td>
-                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
+                                    <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
                                     <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
                                     <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS.
                                             "}}</strong></td>
