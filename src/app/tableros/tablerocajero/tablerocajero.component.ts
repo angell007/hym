@@ -847,7 +847,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     });
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       this.Monedas = data;
-      
+      this.MonedasTransferencia = [];
+      this.MonedasOrigen =[];
       data.forEach(element => {
         if(element.Nombre != "Pesos"){
           this.MonedasTransferencia.push(element);
@@ -861,6 +862,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     });
 
+    this.MonedaOrigenCambio =[];
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       data.forEach(element => {
         if (element.Nombre != "Pesos") {
@@ -945,6 +947,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       //this.Tercero = data;
+      this.Tercero =[];
       data.forEach(element => {
         if (element.Cupo != "0") {
           this.Tercero.push(element);
@@ -957,6 +960,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
+      this.MonedaOrigenDestino = [];
       data.forEach(element => {
         if (element.Nombre != "Pesos") {
           this.MonedaOrigenDestino.push(element);
