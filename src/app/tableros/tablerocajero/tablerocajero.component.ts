@@ -1835,6 +1835,25 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   }
 
+  IdRemitenteTransferencia: any = "";
+  NombreRemitenteTransferencia: any = "";
+  TelefonoRemitenteTransferencia: any = "";
+  CompletarDatosRemitenteTransferencia(i){
+    var valor = ((document.getElementById("remitenteTransferencia") as HTMLInputElement).value);
+    var index = this.Remitentes.findIndex(x => x.Id_Transferencia_Remitente === valor)
+    if (index > -1) {
+      this.IdRemitenteTransferencia = this.Remitentes[index].Id_Transferencia_Remitente;
+      this.NombreRemitenteTransferencia = this.Remitentes[index].Nombre;
+      this.TelefonoRemitenteTransferencia = this.Remitentes[index].Telefono;
+    } else {
+      this.IdRemitenteTransferencia = valor;
+      this.NombreRemitenteTransferencia = "";
+      this.TelefonoRemitenteTransferencia = "";
+    }
+
+  }
+  
+
   IdRemitenteGiro: any = "";
   NombreRemitenteGiro: any = "";
   TelefonoRemitenteGiro: any = "";
