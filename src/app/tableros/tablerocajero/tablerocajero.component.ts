@@ -2163,11 +2163,12 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   }
 
-  AnularTransferencia(id, formulario: NgForm) {
+  AnularTransferencia(id, formulario: NgForm ) {
     let datos = new FormData();
     let info = JSON.stringify(formulario.value);
     datos.append("id", id);
     datos.append("datos", info);
+    datos.append("idTercero", this.idTerceroDestino);
     this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -2186,7 +2187,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   }
 
-  AnularTransferenciaModal(id, modal) {
+  idTerceroDestino:any;
+  AnularTransferenciaModal(id, modal, tercero) {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
       if (parseInt(conteo) > 0) {
@@ -2196,6 +2198,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         this.confirmacionSwal.show();
       } else {
         this.idTransferencia = id;
+        this.idTerceroDestino = tercero;
         modal.show();
       }
     });
