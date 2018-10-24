@@ -31,7 +31,7 @@ export class TableroComponent implements OnInit {
       params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
     }).subscribe((data: any) => {
       var vari: any;
-      switch (data.Id_Cargo) {
+      switch (data.Id_Perfil) {
         case '3':
           vari = TablerocajeroComponent
           break;

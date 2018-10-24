@@ -137,7 +137,7 @@ export class CommonLayoutComponent implements OnInit {
 
         this.user = JSON.parse(localStorage.User);
         switch (this.user.Permisos[0].Id_Perfil) {
-            case "1": {
+            case "3": {
                 this.OcultarCajero = true;
                 break;
             }

@@ -231,8 +231,14 @@ export class FuncionariocrearComponent implements OnInit {
       this.confirmacionSwal.type = "error";
       this.confirmacionSwal.show();
       this.funcionario.Identificacion_Funcionario = "";
+    }    
+  }
+
+  validarLongitud(item){
+    if (item.length > 10) {
+     // identificacion
+     (document.getElementById("identificacion") as HTMLInputElement).value = item.slice(0,10); 
     }
-    
   }
 
 }

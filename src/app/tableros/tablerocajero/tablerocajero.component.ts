@@ -1868,8 +1868,9 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           break;
         }
         case false: {
-          this.ValorTotal = parseFloat(value) - element.Comision;
+          this.ValorTotal = parseFloat(value);
           this.ValorEntrega = parseFloat(value);
+          this.Costo = 0;
           break;
         }
       }
@@ -2361,13 +2362,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         this.NuevaHileraDestinatario(pos);
       }
 
-    }
-
-
-
-
-
-    //this.NuevaHileraDestinatario(pos);
+    }    //this.NuevaHileraDestinatario(pos);
   }
 
   NombreTitular:any;
@@ -2383,9 +2378,11 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   }
 
   informacionGiro = [];
+  ValorTotalGiro:any;
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
+      this.ValorTotalGiro = Number(data.Valor_Recibido) + Number(data.Comision);
     });
     this.ModalAprobarGiro.show();
   }
@@ -2423,6 +2420,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
           this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value } }).subscribe((data: any) => {
               this.GirosBuscar = data;
+              this.actualizarVista();
               if(this.GirosBuscar.length > 0){
                 this.Aparecer = true;
               }      

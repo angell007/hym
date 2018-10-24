@@ -754,6 +754,7 @@
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
                                                                             <th>Valor Recibido</th>
+                                                                            <th>Comisión</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -763,7 +764,8 @@
                                                                             <td>{{Giro.Nombre_Remitente}}</td>
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>                                                                            
+                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
+                                                                            <td>{{Giro.Comision | currency}}</td>                                                                            
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -782,6 +784,7 @@
                                                                                     <th>Cédula Destinatario</th>
                                                                                     <th>Nombre Destinatario</th>
                                                                                     <th>Valor Recibido</th>
+                                                                                    <th>Comisión</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -791,7 +794,8 @@
                                                                                     <td>{{Giro.Nombre_Remitente}}</td>
                                                                                     <td>{{Giro.Documento_Destinatario}}</td>
                                                                                     <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                                    <td>{{Giro.Valor_Recibido | currency}}</td>                                                                            
+                                                                                    <td>{{Giro.Valor_Recibido | currency}}</td> 
+                                                                                    <td>{{Giro.Comision | currency}}</td>                                                                            
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -828,6 +832,7 @@
                                                                                         <th>Cédula Destinatario</th>
                                                                                         <th>Nombre Destinatario</th>
                                                                                         <th>Valor a Pagar</th>
+                                                                                        <th>Comisión</th>
                                                                                         <th style="width:160px;"></th>
                                                                                     </tr>
                                                                                 </thead>
@@ -842,6 +847,8 @@
                                                                                         </td>
                                                                                         <td>{{Giro.Valor_Recibido |
                                                                                             currency}}</td>
+                                                                                          <td>{{Giro.Comision |
+                                                                                                currency}}</td>
                                                                                         <td class="text-center">
                                                                                             <button class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;"
@@ -2585,7 +2592,7 @@
                     </tr>
                     <tr>
                       <td>Valor A Entregar</td>
-                      <td>{{informacionGiro.Valor_Recibido | currency: "$. "}}</td>
+                      <td>{{ValorTotalGiro | currency: "$. "}}</td>
                     </tr>
                   </table>
         </div>

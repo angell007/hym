@@ -33,7 +33,9 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <input type="number" min="0" name="Identificacion_Funcionario" [(ngModel)]="funcionario.Identificacion_Funcionario"
-                                class="form-control form-control-sm f-9" id="identificacion" required (blur)="validarIdentificacion($event.target.value)" />
+                                class="form-control form-control-sm f-9" id="identificacion" required 
+                                (blur)="validarIdentificacion($event.target.value)" 
+                                (input)="validarLongitud($event.target.value)" />
                               <label class="floating-label">Identificación (*)</label>
 
                             </div>
