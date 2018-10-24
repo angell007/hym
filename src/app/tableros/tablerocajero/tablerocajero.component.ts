@@ -475,7 +475,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   }
 
   ResetValues() {
-    ////////console.log("resetear valores");
+    //////////console.log("resetear valores");
     this.PrecioSugeridoEfectivo = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Sugerido_Venta;
     this.MonedaTransferencia = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Bolivares")].Nombre;
     this.MonedaRecibida = this.Monedas[this.Monedas.findIndex(moneda => moneda.Nombre == "Pesos")].Nombre;
@@ -503,7 +503,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         this.recibeParaDefault = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
-        ////////console.log(data);
+        //////////console.log(data);
         this.TipoPagoTransferencia("Efectivo");
         this.Transferencia1 = true;
         this.Transferencia2 = false;
@@ -726,7 +726,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        ////////console.log(data);
+        //////////console.log(data);
         this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
         this.ModalRemitente.hide();
         this.remitenteCreadoSwal.show();
@@ -735,7 +735,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   }
 
   RealizarCambio(value, accion) {
-    ////////console.log(value);    
+    //////////console.log(value);    
     if (this.MonedaRecibida != this.MonedaTransferencia) {
       switch (accion) {
         case "transferir":
@@ -925,12 +925,12 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
+      
 
     });
 
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.TrasladosRecibidos = data;
-      console.log(data);
       
     });
 
@@ -1072,7 +1072,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   RealizarCambioMoneda(value, tipo) {
 
-    ////////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
+    //////////console.log(value + " " +this.MonedaTasaCambio +  " " + this.MonedaComision)
     switch (tipo) {
       case 'cambia': {
 
@@ -1128,7 +1128,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
               suma += element.Valor_Transferencia_Peso;
             });
             if (suma == 0) {
-              //////console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
+              ////////console.log((document.getElementById("Cantidad_Recibida") as HTMLInputElement).value)
               this.Envios[0].Valor_Transferencia_Peso = (document.getElementById("Cantidad_Recibida") as HTMLInputElement).value;
               this.NuevoDestinatario(0, 'Peso')
             }
@@ -1400,7 +1400,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      //////console.log(data.destinatario);
+      ////////console.log(data.destinatario);
       this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 
@@ -1530,9 +1530,9 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   codigoBanco(seleccion, posicion, texto) {
 
-    ////console.log(seleccion + " , " + posicion + " , " + texto);
+    //////console.log(seleccion + " , " + posicion + " , " + texto);
     var pais = ((document.getElementById("Id_Pais" + posicion) as HTMLInputElement).value);
-    ////console.log("pais = " + 2);
+    //////console.log("pais = " + 2);
 
     if (pais == "2") {
       switch (texto) {
@@ -1542,7 +1542,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           break;
         }
         case "input": {
-          ////console.log("soy input");
+          //////console.log("soy input");
 
           var cadena = seleccion.substring(0, 4);
           var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
@@ -1608,7 +1608,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     if (this.Envios.length != limite) {
       var index = pos + 1;
 
-      //console.log(this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1));
+      ////console.log(this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1));
 
       if (this.Envios[index] == undefined && (this.Envios[pos].Destino != "") && (this.Envios[pos].Id_Destinatario_Cuenta != "") && (this.Envios[pos].Valor_Transferencia_Bolivar > 1)) {
         this.Envios.push({

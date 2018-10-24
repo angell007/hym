@@ -230,6 +230,7 @@ export class CommonLayoutComponent implements OnInit {
         this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php' , datos).subscribe((data: any) => {
             this.alertasCajas = [];
             this.contadorTraslado = 0;
+            
         });
 
     }
