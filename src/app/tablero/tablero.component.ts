@@ -35,7 +35,7 @@ export class TableroComponent implements OnInit {
         case '3':
           vari = TablerocajeroComponent
           break;
-        case '5':
+        case '4':
           vari = TableroconsultorComponent
           break;
       }

@@ -81,6 +81,7 @@
                                         <tr>
                                             <th class="text-center" style="width:150px;">Fecha</th>
                                             <th class="text-center">Recibo</th>
+                                            <th class="text-center">Tipo</th>
                                             <th class="text-center">Cajero</th>
                                             <th class="text-center" style="width:80px">Cuenta Destino</th>
                                             <th class="text-center" style="width:80px;">Valor</th>
@@ -93,6 +94,7 @@
                                         <tr *ngFor="let transferencia of transferencias" class="{{transferencia.EstadoTransferencia == 'Si' ? 'bg-danger text-white' : '' }}">
                                             <td class="text-center">{{transferencia.Fecha | date:"short" }}</td>
                                             <td class="text-center"><a [routerLink]="" (click)="verRecibo(transferencia.Id_Recibo)">{{transferencia.ReciboCodigo}}</a></td>
+                                            <td class="text-center">{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
                                             <td class="text-center">{{transferencia.NombreCajero}}</td>
                                             <td class="text-center">{{transferencia.Numero_Cuenta}}</td>
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
@@ -250,15 +252,6 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Id Cuenta Origen</label>
-                        <select class="form-control" name="Id_Cuenta_Bancaria" ngModel required>
-                            <option [value]="">Seleccione Cuenta Origen</option>
-                            <option *ngFor="let banco of BancosEmpresa" [value]="banco.Id_Cuenta_Bancaria">{{banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group">
                         <label>Cuenta Destino</label>
                         <input class="form-control" name="Cuenta_Destino" type="text" [(ngModel)]="CuentaDestino"
                             required readonly>
@@ -323,15 +316,7 @@
             <input hidden class="form-control" name="Id_Transferencia_Destino" type="text" [(ngModel)]="idTransferencia"
                 required>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Id Cuenta Origen</label>
-                        <select class="form-control" name="Id_Cuenta_Bancaria" ngModel required>
-                            <option value="">Seleccione Cuenta Origen</option>
-                            <option *ngFor="let banco of BancosEmpresa" [value]="banco.Id_Cuenta_Bancaria">{{banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
+
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Para</label>
@@ -574,6 +559,38 @@
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este movimiento' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="RealizarReporte(FormMovimientoCuenta, ModalReportarIngresoCuenta)">Crear Reporte</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalSaldoInicialBanco" #ModalSaldoInicialBanco>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Apertura de Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormMontoInicialCuentaBancaria="ngForm">
+            <div class="col-md-12 ">
+                <label>Banco Venezolanos</label>
+                <select ngModel name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" required class="form-control">
+                    <option value=""> Seleccione Banco</option>
+                    <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                        ({{banco.Numero_Cuenta}}) </option>
+                </select>
+
+            </div>
+
+            <div class="col-md-12 ">
+                <label>Saldo Cuenta Bancaria</label>
+                <input currencyMask type="text" class="form-control" id="Monto_Inicial" name="Monto_Inicial" ngModel
+                    [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required (input)="HabilitarBoton($event.target.value)">
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormMontoInicialCuentaBancaria , ModalSaldoInicialBanco)">Iniciar
+            </button>
         </div>
     </div>
 </app-modal-basic>

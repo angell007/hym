@@ -45,7 +45,10 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('ModalCambiarContrasena') ModalCambiarContrasena: any;
     @ViewChild('CierreCaja') CierreCaja: any;
     @ViewChild('errorSwal') errorSwal: any;
-
+    @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
+    @ViewChild('mensajeSwal') mensajeSwal: any;
+    @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
+    @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;    
 
     cajero = true;
 
@@ -133,12 +136,19 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     OcultarCajero = false;
+    OcultarConsultor = false;
+    ListaBancos = [];
     ngOnInit() {
 
         this.user = JSON.parse(localStorage.User);
         switch (this.user.Permisos[0].Id_Perfil) {
             case "3": {
                 this.OcultarCajero = true;
+                break;
+            }
+            case "4": {
+                this.OcultarCajero = true;
+                this.OcultarConsultor = true;
                 break;
             }
         }
@@ -174,6 +184,14 @@ export class CommonLayoutComponent implements OnInit {
                 }
 
             });
+        }, 30000);
+
+        this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+            this.ListaBancos = data;
+        });
+
+        setInterval(() => {
+            this.cerrarCaja()
         }, 30000);
     }
 
@@ -227,10 +245,10 @@ export class CommonLayoutComponent implements OnInit {
 
         let datos = new FormData();
         datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-        this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php' , datos).subscribe((data: any) => {
+        this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php', datos).subscribe((data: any) => {
             this.alertasCajas = [];
             this.contadorTraslado = 0;
-            
+
         });
 
     }
@@ -248,19 +266,19 @@ export class CommonLayoutComponent implements OnInit {
     egresoGiroBolivar = 0;
     egresoTrasladoBolivar = 0;
     ingresoTrasladoBolivar = 0;
-    GiroComision:any = 0;
+    GiroComision: any = 0;
 
-    cerrarCaja() {
+    cerrarCaja(value ="") {
 
-        this.CambiosIngresos= [];
+        this.CambiosIngresos = [];
         this.TransferenciaIngresos = [];
         this.GiroIngresos = [];
-        this.TrasladoIngresos= [];
+        this.TrasladoIngresos = [];
         this.CorresponsalIngresos = [];
         this.ServicioIngresos = [];
         this.CambiosEgresos = [];
         this.GiroEgresos = [];
-        this.TrasladoEgresos = [];        
+        this.TrasladoEgresos = [];
         this.totalIngresosPesos = 0;
         this.totalIngresosBolivares = 0;
         this.TotalEgresosPesos = 0;
@@ -373,7 +391,10 @@ export class CommonLayoutComponent implements OnInit {
 
         });
 
-        this.CierreCaja.show();
+        if(value != ""){
+            this.CierreCaja.show();
+        }
+
     }
 
     entregadoPesos = 0;
@@ -494,5 +515,77 @@ export class CommonLayoutComponent implements OnInit {
             this.errorSwal.type = "warning"
             this.errorSwal.show();
         }
+    }
+
+    GuardarMontoInicial(formulario: NgForm, modal) {
+
+        if (formulario.value.Id_Cuenta_Bancaria != "" && formulario.value.Monto_Inicial != 0) {
+            formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+            let info = JSON.stringify(formulario.value);
+            let datos = new FormData();
+            datos.append("datos", info);
+            this.http.post(this.globales.ruta + '/php/consultor/cambiar_banco_consultor.php', datos).subscribe((data: any) => {
+                if (data != "") {
+                    formulario.reset();
+                    this.mensajeSwal.title = "Apertura"
+                    this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
+                    this.mensajeSwal.type = "success"
+                    this.mensajeSwal.show();
+                    modal.hide();
+                    this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+                        localStorage.setItem('Banco', data[0].Id_Cuenta_Bancaria);
+                    });
+
+                } else {
+                    this.mensajeSwal.title = "Apertura";
+                    this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
+                    this.mensajeSwal.type = "warning";
+                    this.mensajeSwal.show();
+                }
+
+            });
+        } else {
+            this.mensajeSwal.title = "Apertura";
+            this.mensajeSwal.text = "Seleccione un banco y digite el monto inicial";
+            this.mensajeSwal.type = "warning";
+            this.mensajeSwal.show();
+        }
+    }
+
+    Movimientos =[];
+    MontoInicialCuenta=[];
+    sumaIngresos=0;
+    sumaEgresos=0;
+    SaldoActual = 0;
+    MontoInicial=0;
+    CierreCuentaBancaria(){
+      //JSON.parse(localStorage['Banco']);
+
+      this.MontoInicialCuenta = [];
+      this.MontoInicial = 0;
+      this.sumaEgresos = 0;
+      this.sumaIngresos = 0;
+      this.SaldoActual =0;
+      this.Movimientos = [];
+
+      this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+        params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" }
+      }).subscribe((data: any) => {
+        this.MontoInicialCuenta = data;
+        this.MontoInicial = data.Monto_Inicial;
+      });
+
+      this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+        params: { id: JSON.parse(localStorage['Banco']) }
+      }).subscribe((data: any) => {
+        this.Movimientos = data.lista;
+        this.Movimientos.forEach(element => {
+            if(element.Tipo == "Egreso"){this.sumaEgresos += Number(element.ValorSinSimbolo)}
+            if(element.Tipo == "Ingreso"){this.sumaIngresos += Number(element.ValorSinSimbolo)}
+        });
+
+        this.SaldoActual = Number(this.MontoInicial) - Number(this.sumaEgresos) + Number(this.sumaIngresos);
+        this.ModalResumenCuenta.show();
+      });
     }
 }

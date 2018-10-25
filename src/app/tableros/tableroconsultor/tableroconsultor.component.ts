@@ -33,8 +33,9 @@ export class TableroconsultorComponent implements OnInit {
   @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
   @ViewChild('ModalVerCompra') ModalVerCompra: any;
+  @ViewChild('ModalSaldoInicialBanco') ModalSaldoInicialBanco: any;
 
-
+  
   Identificacion: any;
   CuentaDestino: any;
   Recibe: any;
@@ -52,6 +53,7 @@ export class TableroconsultorComponent implements OnInit {
   DevolucionesRecibo = [];
   filaRecibo = false;
   compras = [];
+  ListaBancos = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -67,6 +69,20 @@ export class TableroconsultorComponent implements OnInit {
       });
       this.transferenciasRealizadas = data.realizadas;
 
+    });
+
+    //hym.corvuslab.co/php/consultor/lista_bancos.php
+
+    this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+      this.ListaBancos = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+      if (data.length == 0) {
+        this.ModalSaldoInicialBanco.show();
+      }else{
+        localStorage.setItem('Banco',data[0].Id_Cuenta_Bancaria);
+      }
     });
 
   }
@@ -95,7 +111,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   cuentasBancarias = [];
-  BancosVenezolanos= [];
+  BancosVenezolanos = [];
   ActualizarVista() {
 
     this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
@@ -168,6 +184,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   RealizarDevolucion(formulario: NgForm, modal) {
+    formulario.value.Id_Cuenta_Bancaria = JSON.parse(localStorage['Banco']);
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
@@ -298,6 +315,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   CrearTransferencia(formulario: NgForm, modal) {
+    formulario.value.Id_Cuenta_Bancaria =  JSON.parse(localStorage['Banco']);
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -446,7 +464,7 @@ export class TableroconsultorComponent implements OnInit {
     }
   }
 
-  RealizarReporte(formulario: NgForm, modal){
+  RealizarReporte(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -459,4 +477,40 @@ export class TableroconsultorComponent implements OnInit {
       modal.hide();
     });
   }
+
+  GuardarMontoInicial(formulario: NgForm, modal) {
+    var banco = (document.getElementById("Id_Cuenta_Bancaria") as HTMLInputElement).value;
+    var montoInicial = (document.getElementById("Monto_Inicial") as HTMLInputElement).value;
+
+    if (banco != "" && montoInicial != "BsS. 0") {
+      formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      datos.append("datos", info);
+      this.http.post(this.globales.ruta + 'php/consultor/guardar_monto_inicial.php', datos).subscribe((data: any) => {
+        if (data != "") {
+          formulario.reset();
+          this.mensajeSwal.title = "Apertura"
+          this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
+          this.mensajeSwal.type = "success"
+          this.mensajeSwal.show();
+          modal.hide();
+        } else {
+          this.mensajeSwal.title = "Apertura";
+          this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
+          this.mensajeSwal.type = "warning";
+          this.mensajeSwal.show();
+        }
+
+      });
+    } else {
+      this.mensajeSwal.title = "Apertura";
+      this.mensajeSwal.text = "Seleccione un banco y digite el monto inicial";
+      this.mensajeSwal.type = "warning";
+      this.mensajeSwal.show();
+    }
+  }
+
+
+
 }

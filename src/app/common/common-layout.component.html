@@ -273,7 +273,7 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="notifications dropdown">
+                            <li class="notifications dropdown" *ngIf="!OcultarConsultor">
                                 <!-- NOTIFICACIONES -->
                                 <span class="counter">{{contadorTraslado}}</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -319,10 +319,43 @@
                                 </ul>
                             </li>
 
+                            <li class="user-profile dropdown" *ngIf="OcultarConsultor">
+                                <!-- PERFIL -->
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                    <div class="user-info">
+                                        <span class="name pdd-right-5">Cierre Caja</span>
+                                        <i class="ti-angle-down font-size-10"></i>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="" [routerLink]="" (click)="ModalCambiarBanco.show()">
+                                            <!--<i class="ti-user pdd-right-10"></i> -->
+                                            <span>Cambiar Cuenta</span>
+                                        </a>
+                                    </li>
+
+                                    <li role="separator" class="divider"></li>
+                                    <!--<li>
+                                        <a (click)="CierreCaja.show()">
+                                           <i class="ti-power-off pdd-right-10"></i> 
+                                            <span>Cierre de caja</span>
+                                        </a>
+                                    </li>-->
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="" [routerLink]="" (click)="CierreCuentaBancaria()">
+                                            <!-- <i class="ti-power-off pdd-right-10"></i> -->
+                                            <span>Cierre Cuenta</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
 
                             <li class="notifications dropdown">
                                 <!-- NOTIFICACIONES -->
-                                <span class="counter">2</span>
+                                <span class="counter">0</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="ti-bell"></i>
                                 </a>
@@ -363,9 +396,11 @@
 
                             <li class="notifications dropdown" *ngIf="OcultarCajero">
                                 <!-- NOTIFICACIONES -->
-                                <button class="btn btn-mini btn-danger" style="margin-top: 10px" (click)="this.cerrarCaja()">
+                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
+                                    (click)="this.cerrarCaja(1)">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
+
                             </li>
 
 
@@ -480,26 +515,26 @@
 </div>
 
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarContrasena" #ModalCambiarContrasena>
     <div class="app-modal-header">
         <h4>Cambiar contraseña</h4>
     </div>
     <div class="app-modal-body">
         <form #FormCambiarContrasena="ngForm">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Escriba una nueva contraseña</label>
-                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="">
+                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="" style="width: 100% !important">
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
-                </div>
-            </div>
         </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
+        </div>
     </div>
 </app-modal-basic>
 
@@ -626,13 +661,14 @@
                         <tr>
                             <td>Entregado</td>
                             <td style="text-align:right;" id="mon_rec_cuadre">{{ entregadoPesos | currency : "$." }}</td>
-                            <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar | currency : "BsS."}}</td>
+                            <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar | currency :
+                                "BsS."}}</td>
 
                         </tr>
                         <tr>
                             <td>Diferencia</td>
-                            <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency : "$."  }}</td>
-                            <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency : "BsS."  }}</td>
+                            <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency : "$." }}</td>
+                            <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency : "BsS." }}</td>
                         </tr>
                         <tr id="requerido" style="display:none;">
                             <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
@@ -691,7 +727,7 @@
                                     <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
                                             class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorSuelto')" /></td>
                                 </tr>
-                                
+
                             </table>
 
                         </div>
@@ -726,5 +762,99 @@
     type="success" (confirm)="salir()">
 </swal>
 
-<swal #errorSwal title="" text="" type="" >
+<swal #errorSwal title="" text="" type="">
 </swal>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Cambio de Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCambiarBanco="ngForm">
+            <div class="col-md-12 ">
+                <label>Banco Venezolanos</label>
+                <select ngModel name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" required class="form-control">
+                    <option value=""> Seleccione Banco</option>
+                    <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                        ({{banco.Numero_Cuenta}}) </option>
+                </select>
+
+            </div>
+
+            <div class="col-md-12 ">
+                <label>Saldo Cuenta Bancaria</label>
+                <input style="width:100% !important" currencyMask type="text" class="form-control" id="Monto_Inicial"
+                    name="Monto_Inicial" ngModel [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required>
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormCambiarBanco , ModalCambiarBanco)">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalResumenCuenta" #ModalResumenCuenta>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Resumen Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCambiarBanco="ngForm">
+            <div class="col-md-12 ">
+                <div class="col-md-4">
+                    <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+                        <tr>
+                            <td>Saldo Inicial</td>
+                            <td style="text-align:right;"> {{ MontoInicialCuenta.Monto_Inicial | currency: "BsS." }}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#FF9B9B;">Egresos</td>
+                            <td style="text-align:right;background:#FF9B9B;">- {{sumaEgresos | currency: "BsS."}} </td>
+                        </tr>
+
+                        <tr>
+                            <td>Ingreso por Devolución</td>
+                            <td style="text-align:right;">+ {{sumaIngresos | currency: "BsS."}}</td>
+
+                        </tr>
+                        <tr>
+                            <td style="background:#efefef;"><strong>Saldo Actual</strong></td>
+                            <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{SaldoActual | currency:"BsS."}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Diferencia</td>
+                            <td style="text-align:right;" id="diferencia1"></td>
+                        </tr>
+                        <tr id="requerido" style="display:none;">
+                            <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                observaciones del día</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <!--            <div class="col-md-12">
+                <h6 style="margin:0;">Observaciones</h6>
+                <textarea id="Observacion" class="normal" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
+                <input type="hidden" name="id">
+                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+
+            </div> -->
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>

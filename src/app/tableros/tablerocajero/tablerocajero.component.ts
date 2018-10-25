@@ -309,13 +309,13 @@ export class TablerocajeroComponent implements OnInit {
   HabilitarGuardar(valor) {
     if (valor.length > 0) {
       if (this.Recibe == 'Cliente') {
-        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+        (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = false;
       } else {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
       }
     } else {
       if (this.Recibe == 'Cliente') {
-        (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+        (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = true;
       } else {
         (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
       }
@@ -819,7 +819,8 @@ export class TablerocajeroComponent implements OnInit {
   FuncionariosCajaDestino = [];
   TerceroCliente = [];
   MonedasTransferencia = [];
-  MonedasOrigen = []
+  MonedasOrigen = [];
+  TransferenciasAnuladas =[];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -978,8 +979,9 @@ export class TablerocajeroComponent implements OnInit {
       this.GirosAprobados = data;
     });
 
-    //GirosPagados
-
+    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_anuladas.php').subscribe((data: any) => {
+      this.TransferenciasAnuladas = data;
+    });
 
     this.CambiarTasa(1);
 
@@ -1301,12 +1303,14 @@ export class TablerocajeroComponent implements OnInit {
     formulario.value.Cantidad_Transferida = this.entregar;
 
     var suma = 0;
-    this.Envios.forEach((element, index) => {
-      if (element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0) {
-        this.Envios.splice(index, 1);
-        suma += element.Valor_Transferencia_Bolivar;
-      }
-    });
+    if(this.Envios.length != 1){
+      this.Envios.forEach((element, index) => {
+        if (element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0) {
+          this.Envios.splice(index, 1);
+          suma += element.Valor_Transferencia_Bolivar;
+        }
+      });
+    }    
 
     this.Envios.forEach((element, index) => {
       suma += Number(element.Valor_Transferencia_Bolivar);
@@ -1356,6 +1360,7 @@ export class TablerocajeroComponent implements OnInit {
 
           this.actualizarVista();
           this.VerificarTipoTransferencia();
+          this.ReiniciarTransferencias();
 
         });
 
@@ -1644,7 +1649,7 @@ export class TablerocajeroComponent implements OnInit {
         //(document.getElementById("Valor_Transferencia_Bolivar"+(index)) as HTMLInputElement).disabled = false;
 
         if (this.Recibe == 'Cliente' && this.Envios.length == 1) {
-          (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+          (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = true;
         } else {
           if (this.Envios.length == 1) {
             (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
@@ -1658,7 +1663,7 @@ export class TablerocajeroComponent implements OnInit {
           this.confirmacionSwal.show();
 
           if (this.Recibe == 'Cliente' && this.Envios.length == 1) {
-            (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = true;
+            (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = true;
           } else {
             if (this.Envios.length == 1) {
               (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = true;
@@ -1696,7 +1701,7 @@ export class TablerocajeroComponent implements OnInit {
             });
 
             if (this.Recibe == 'Cliente') {
-              (document.getElementById("BotonMovimiento") as HTMLInputElement).disabled = false;
+              (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = false;
             } else {
               (document.getElementById("BotonTransferencia") as HTMLInputElement).disabled = false;
             }
@@ -2183,6 +2188,7 @@ export class TablerocajeroComponent implements OnInit {
     datos.append("id", id);
     datos.append("datos", info);
     datos.append("idTercero", this.idTerceroDestino);
+    datos.append("idDestino", this.destinoTercero);
     this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -2202,7 +2208,8 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   idTerceroDestino: any;
-  AnularTransferenciaModal(id, modal, tercero) {
+  destinoTercero:any;
+  AnularTransferenciaModal(id, modal, tercero, destino) {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
       if (parseInt(conteo) > 0) {
@@ -2213,12 +2220,14 @@ export class TablerocajeroComponent implements OnInit {
       } else {
         this.idTransferencia = id;
         this.idTerceroDestino = tercero;
+        this.destinoTercero = destino;
         modal.show();
       }
     });
   }
 
   itemDestinatario = true;
+  NombreTercero:any;
   verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
@@ -2230,6 +2239,17 @@ export class TablerocajeroComponent implements OnInit {
       } else {
         this.itemDestinatario = false;
       }
+
+      var index = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero);
+      if(index >-1){
+        this.NombreTercero = this.TerceroCliente[index].Nombre;
+      }
+      
+      var index1 = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero_Destino);
+      if(index1 >-1){
+        this.NombreTercero = this.TerceroCliente[index1].Nombre;
+      }
+
       this.ModalVerRecibo.show();
     });
   }
@@ -2517,6 +2537,7 @@ export class TablerocajeroComponent implements OnInit {
           this.datosRemitenteTransferencia = true;
           this.Credito = false;
           this.Consignacion = false;
+          this.RecibeCliente = false;
           break;
         }
         case "Credito": {
@@ -2535,6 +2556,7 @@ export class TablerocajeroComponent implements OnInit {
           this.datosRemitenteTransferencia = false;
           this.Credito = false;
           this.Consignacion = true;
+          this.RecibeCliente = false;
           break;
         }
       }
@@ -2570,6 +2592,17 @@ export class TablerocajeroComponent implements OnInit {
       }
     }
 
+  }
+
+  ReiniciarTransferencias(){
+    this.BotonTransferencia = true;
+    this.BotonMovimiento = false;
+    this.tipoCliente = true;
+    this.transferencia = true;
+    this.datosRemitenteTransferencia = true;
+    this.Credito = false;
+    this.Consignacion = false;
+    this.RecibeCliente = false;
   }
 
 

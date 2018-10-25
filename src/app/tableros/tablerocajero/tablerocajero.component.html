@@ -342,61 +342,117 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <hr>
-                                    <h5>Últimas transferencias Registrados</h5>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:160px;">Hora</th>
-                                                    <th>Código</th>
-                                                    <th>Tipo</th>
-                                                    <th>Valor Pesos</th>
-                                                    <th>Valor Bolivares</th>
-                                                    <th>Tasa</th>
-                                                    <th></th>
-                                                    <!--
-                                                            <th style="width:80px">Tasa</th>
-                                                            <th style="width:160px;"></th>-->
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let transferencia of Transferencia">
-                                                    <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
-                                                    <td>{{transferencia.CodigoRecibo}}</td>
-                                                    <td>{{transferencia.Forma_Pago}} {{transferencia.Tipo_Transferencia}}</td>
-                                                    <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                    <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
-                                                    <td>{{transferencia.Tasa_Cambio }}</td>
-                                                    <!--
-                                                            <td class="text-right">{{transferencia.Valor_Transferencia |
-                                                                currency}}</td>
-                                                            <td class="text-right">{{transferencia.Tasa_Cambio}}</td> -->
 
-                                                    <td class="text-center">
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                                            <i class="ti-printer"></i>
-                                                        </button>
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <!-- <h4 class="card-title">Default Tabs</h4> -->
+                                            <div class="tab-success">
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a href="#default-tabtransferencias-1" class="nav-link active" role="tab"
+                                                            data-toggle="tab">Últimas transferencias Registradas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#default-tabtransferencias-2" class="nav-link" role="tab"
+                                                            data-toggle="tab" style="color: red">Anuladas</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div role="tabpanel" class="tab-pane fade in active" id="default-tabtransferencias-1">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:160px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Tipo</th>
+                                                                            <th>Valor Pesos</th>
+                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Tasa</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let transferencia of Transferencia">
+                                                                            <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{transferencia.CodigoRecibo}}</td>
+                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
+                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
+                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
+                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
+                        
+                                                                            <td class="text-center">
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                                                    <i class="ti-printer"></i>
+                                                                                </button>
+                        
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    <i class="fa fa-eye"></i>
+                                                                                </button>
+                        
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                                                    <i class="ti-pencil"></i>
+                                                                                </button>
+                        
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia,transferencia.Id_Tercero, transferencia.Id_Tercero_Destino)">
+                                                                                    <i class="ti-close"></i>
+                                                                                </button>
+                        
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="default-tabtransferencias-2">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:160px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Tipo</th>
+                                                                            <th>Valor Pesos</th>
+                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Tasa</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let transferencia of TransferenciasAnuladas">
+                                                                            <td>{{transferencia.Fecha | date }}</td>
+                                                                            <td>{{transferencia.CodigoRecibo}}</td>
+                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
+                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
+                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
+                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
+                        
+                                                                            <td class="text-center">
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    <i class="fa fa-eye"></i>
+                                                                                </button>
+                        
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
 
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="verRecibo(transferencia.Id_Recibo)">
-                                                            <i class="fa fa-eye"></i>
-                                                        </button>
 
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                                            <i class="ti-pencil"></i>
-                                                        </button>
-
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia)">
-                                                            <i class="ti-close"></i>
-                                                        </button>
-
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                        </div>
+                                                    </div>
+                                                  
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -676,7 +732,7 @@
                                         </div>
                                         <div class="row mrg-top-20" *ngIf="BotonMovimiento">
                                             <div class="col-md-10">
-                                                <button id="BotonMovimiento" class="btn btn-primary btn-sm btn-block mrg-top-10"
+                                                <button id="BotonMovimientoGuardar" class="btn btn-primary btn-sm btn-block mrg-top-10"
                                                     [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                                                     (confirm)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
                                                 </button>
@@ -2459,6 +2515,10 @@
                         <td>{{item.Cantidad_Transferida | currency: "BsS."}}</td>
                         <td>Al Cambio</td>
                         <td>{{ item.Tasa_Cambio}}</td>
+                    </tr>
+                    <tr>
+                        <td> Envia</td>
+                        <td colspan="5"> {{NombreTercero}} </td>
                     </tr>
                     <tr>
                         <td colspan="6"> </td>

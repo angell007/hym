@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('Oficina',JSON.stringify(Oficina));
             localStorage.setItem('Caja',JSON.stringify(Caja));
             localStorage.setItem('Tipo_Oficina',"Propia"); //CAMBIAR POR UNA VALIDACIÓN EN EL LOGIN
-            console.log(localStorage);
+            //console.log(localStorage);
             
             this.router.navigate(['/tablero']);
         }else{

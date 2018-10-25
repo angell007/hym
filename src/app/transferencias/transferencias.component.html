@@ -82,6 +82,7 @@
                                             <th class="text-center" style="width:150px;">Fecha</th>
                                             <th class="text-center">Recibo</th>
                                             <th class="text-center">Cajero</th>
+                                            <th class="text-center">Tipo Transferencia</th>
                                             <th class="text-center" style="width:80px">Cuenta Destino</th>
                                             <th class="text-center" style="width:80px;">Valor</th>
                                             <th class="text-center" style="width:160px;">Bloqueado por</th>
@@ -94,6 +95,7 @@
                                             <td class="text-center">{{transferencia.Fecha | date:"short" }}</td>
                                             <td class="text-center"><a [routerLink]="" (click)="verRecibo(transferencia.Id_Recibo)">{{transferencia.ReciboCodigo}}</a></td>
                                             <td class="text-center">{{transferencia.NombreCajero}}</td>
+                                            <td class="text-center">{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
                                             <td class="text-center">{{transferencia.Numero_Cuenta}}</td>
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
