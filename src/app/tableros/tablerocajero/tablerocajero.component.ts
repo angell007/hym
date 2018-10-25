@@ -120,7 +120,7 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('ModalVerCambio') ModalVerCambio: any;
   @ViewChild('ModalAprobarGiro') ModalAprobarGiro: any;
   @ViewChild('confirmacionGiro') confirmacionGiro: any;
-  
+
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
@@ -265,7 +265,7 @@ export class TablerocajeroComponent implements OnInit {
 
     });
   }
- 
+
 
 
   GuardarMontoInicial(formulario: NgForm, modal) {
@@ -335,7 +335,7 @@ export class TablerocajeroComponent implements OnInit {
       this.MonedaTransferencia = 1;
     }
 
-    (document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = true;
+    //(document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = true;
 
   }
 
@@ -356,12 +356,12 @@ export class TablerocajeroComponent implements OnInit {
   formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
 
   search_cuenta = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.Remitentes.filter(v => v.Numero_Cuenta.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-  );
-formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.Remitentes.filter(v => v.Numero_Cuenta.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    );
+  formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   muestra_tabla(id) {
     var tot = document.getElementsByClassName('modulos').length;
@@ -488,10 +488,13 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
     formulario.value.Cantidad_Transferida = this.entregar;
+    var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
+    formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    datos.append("datos", info);
+    datos.append("datos", info); 
     this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
+    //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
         this.errorSwal.show();
@@ -499,8 +502,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       })
       .subscribe((data: any) => {
         formulario.reset();
-        this.formaPagoDefault = "Efectivo";
-        this.recibeParaDefault = "Transferencia";
+        this.opcionDefaultFormaPago = "Efectivo";
+        this.opcionTipoTransferencia  = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
         //////////console.log(data);
@@ -508,6 +511,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         this.Transferencia1 = true;
         this.Transferencia2 = false;
         this.actualizarVista();
+        this.VerificarTipoTransferencia();
       });
   }
 
@@ -814,8 +818,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   MonedaOrigenDestino = [];
   FuncionariosCajaDestino = [];
   TerceroCliente = [];
-  MonedasTransferencia=[];
-  MonedasOrigen=[]
+  MonedasTransferencia = [];
+  MonedasOrigen = []
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -848,13 +852,13 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       this.Monedas = data;
       this.MonedasTransferencia = [];
-      this.MonedasOrigen =[];
+      this.MonedasOrigen = [];
       data.forEach(element => {
-        if(element.Nombre != "Pesos"){
+        if (element.Nombre != "Pesos") {
           this.MonedasTransferencia.push(element);
         }
 
-        if(element.Nombre == "Pesos"){
+        if (element.Nombre == "Pesos") {
           this.MonedasOrigen.push(element)
         }
 
@@ -862,7 +866,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     });
 
-    this.MonedaOrigenCambio =[];
+    this.MonedaOrigenCambio = [];
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Moneda' } }).subscribe((data: any) => {
       data.forEach(element => {
         if (element.Nombre != "Pesos") {
@@ -905,7 +909,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       this.Transferencia = data;
     });
 
-    this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario.php', { params: { modulo: 'Giro', funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario  } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario.php', { params: { modulo: 'Giro', funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Giros = data;
     });
 
@@ -927,13 +931,13 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
-      
+
 
     });
 
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.TrasladosRecibidos = data;
-      
+
     });
 
 
@@ -947,7 +951,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
     this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       //this.Tercero = data;
-      this.Tercero =[];
+      this.Tercero = [];
       data.forEach(element => {
         if (element.Cupo != "0") {
           this.Tercero.push(element);
@@ -969,7 +973,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       });
     });
 
-    
+
     this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.GirosAprobados = data;
     });
@@ -1263,8 +1267,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     }
   }
 
-  guardarCambio(formulario: NgForm , item) {
-    
+  guardarCambio(formulario: NgForm, item) {
+
     formulario.value.Moneda_Destino = this.MonedaDestino;
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     let info = JSON.stringify(formulario.value);
@@ -1275,7 +1279,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
       formulario.reset();
       this.confirmacionSwal.title = "Guardado con exito";
-      this.confirmacionSwal.text = "Se ha guardado correctamente la " +item
+      this.confirmacionSwal.text = "Se ha guardado correctamente la " + item
       this.confirmacionSwal.type = "success"
       this.confirmacionSwal.show();
       this.Cambios1 = true;
@@ -1311,6 +1315,9 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     var totalPermitido = Number(this.entregar) + Number(this.SaldoBolivar)
 
     if (this.credito == true) {
+      var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
+        formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
+        this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
       let destinatarios = JSON.stringify(this.Envios);
@@ -1318,6 +1325,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       datos.append("datos", info);
       datos.append("envios", destinatarios);
       this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
+      //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
         .catch(error => {
           console.error('An error occurred:', error.error);
           this.errorSwal.show();
@@ -1325,14 +1333,15 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         })
         .subscribe((data: any) => {
           formulario.reset();
-          this.formaPagoDefault = "Efectivo";
-          this.recibeParaDefault = "Transferencia";
+          this.opcionDefaultFormaPago = "Efectivo";
+          this.opcionTipoTransferencia  = "Transferencia";
           this.seleccioneClienteDefault = "";
           this.transferenciaExitosaSwal.show();
           this.TipoPagoTransferencia("Efectivo");
           this.Transferencia1 = true;
           this.Transferencia2 = false;
           this.recargarDestinatario();
+
 
           this.Envios = [{
             Destino: '',
@@ -1346,11 +1355,14 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           }];
 
           this.actualizarVista();
+          this.VerificarTipoTransferencia();
 
         });
 
     } else {
       if (suma == Number(this.entregar)) {
+        var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
+        formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
         this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
         let info = JSON.stringify(formulario.value);
         let destinatarios = JSON.stringify(this.Envios);
@@ -1358,6 +1370,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
         datos.append("datos", info);
         datos.append("envios", destinatarios);
         this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
+        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
           .catch(error => {
             console.error('An error occurred:', error.error);
             this.errorSwal.show();
@@ -1365,8 +1378,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           })
           .subscribe((data: any) => {
             formulario.reset();
-            this.formaPagoDefault = "Efectivo";
-            this.recibeParaDefault = "Transferencia";
+        this.opcionDefaultFormaPago = "Efectivo";
+        this.opcionTipoTransferencia  = "Transferencia";
             this.seleccioneClienteDefault = "";
             this.transferenciaExitosaSwal.show();
             this.TipoPagoTransferencia("Efectivo");
@@ -1386,6 +1399,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
             }];
 
             this.actualizarVista();
+            this.VerificarTipoTransferencia();
 
           });
       } else {
@@ -1568,7 +1582,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     this.Cambios2 = false;
     this.vueltos = 0;
     this.entregar = 0;
-    this.tasaCambiaria = "";     
+    this.tasaCambiaria = "";
   }
 
   volverReciboTransferencia() {
@@ -1842,7 +1856,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
   IdRemitenteTransferencia: any = "";
   NombreRemitenteTransferencia: any = "";
   TelefonoRemitenteTransferencia: any = "";
-  CompletarDatosRemitenteTransferencia(i){
+  CompletarDatosRemitenteTransferencia(i) {
     var valor = ((document.getElementById("remitenteTransferencia") as HTMLInputElement).value);
     var index = this.Remitentes.findIndex(x => x.Id_Transferencia_Remitente === valor)
     if (index > -1) {
@@ -1856,7 +1870,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     }
 
   }
-  
+
 
   IdRemitenteGiro: any = "";
   NombreRemitenteGiro: any = "";
@@ -1907,8 +1921,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
           break;
         }
         case false: {
-          this.ValorTotal = parseFloat(value)- parseFloat(element.Comision);
-          this.ValorEntrega = parseFloat(value) ;
+          this.ValorTotal = parseFloat(value) - parseFloat(element.Comision);
+          this.ValorEntrega = parseFloat(value);
           break;
         }
       }
@@ -2152,18 +2166,18 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     }
   }
 
-  listaClientes(){
-    if(this.efectivo == true && this.cliente == true){
+  listaClientes() {
+    if (this.efectivo == true && this.cliente == true) {
       return true
     }
 
-    if(this.consignacion == true && this.cliente == true){
+    if (this.consignacion == true && this.cliente == true) {
       return true
     }
 
   }
 
-  AnularTransferencia(id, formulario: NgForm ) {
+  AnularTransferencia(id, formulario: NgForm) {
     let datos = new FormData();
     let info = JSON.stringify(formulario.value);
     datos.append("id", id);
@@ -2187,7 +2201,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
 
   }
 
-  idTerceroDestino:any;
+  idTerceroDestino: any;
   AnularTransferenciaModal(id, modal, tercero) {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
@@ -2236,8 +2250,8 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       });
     }*/
 
-    
-    
+
+
     this.validarTasaCambio(value);
 
   }
@@ -2258,7 +2272,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       this.maximoTransferencia = data.Dependencia[6].Valor;
       this.minimoTransferencia = data.Dependencia[7].Valor;
       this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
-    
+
       if (this.Venta == true) {
         this.tasaCambiaria = this.PrecioSugeridoEfectivo;
         this.MonedaOrigen = "Pesos";
@@ -2319,7 +2333,7 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
       this.confirmacionSwal.type = "success"
       this.confirmacionSwal.show();
       this.actualizarVista();
-      
+
     });
 
   }
@@ -2406,20 +2420,20 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     }    //this.NuevaHileraDestinatario(pos);
   }
 
-  NombreTitular:any;
-  tipoCuenta:any;
+  NombreTitular: any;
+  tipoCuenta: any;
 
   InformacionCuentaBancaria(id) {
     var index = this.CuentaBancaria.findIndex(x => x.Id_Cuenta_Bancaria === id);
     if (index > -1) {
       var tipoCuenta = this.CuentaBancaria[index].Tipo;
-      (document.getElementById("NombreTitular") as HTMLInputElement).value = this.CuentaBancaria[index].Nombre_Titular ;
-      (document.getElementById("tipoCuenta") as HTMLInputElement).value =  this.TipoCuentas[tipoCuenta].Nombre; 
+      (document.getElementById("NombreTitular") as HTMLInputElement).value = this.CuentaBancaria[index].Nombre_Titular;
+      (document.getElementById("tipoCuenta") as HTMLInputElement).value = this.TipoCuentas[tipoCuenta].Nombre;
     }
   }
 
   informacionGiro = [];
-  ValorTotalGiro:any;
+  ValorTotalGiro: any;
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
@@ -2428,56 +2442,132 @@ formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
     this.ModalAprobarGiro.show();
   }
 
-  GirosBuscar =[];
+  GirosBuscar = [];
   Aparecer = false;
-  FiltrarGiroCedula(value){
-    
+  FiltrarGiroCedula(value) {
+
     this.Aparecer = false;
-    this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value, funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario  } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value, funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.GirosBuscar = data;
-      if(this.GirosBuscar.length > 0){
+      if (this.GirosBuscar.length > 0) {
         this.Aparecer = true;
-      }      
-    });    
+      }
+    });
 
   }
 
-  PagarGiro(id,modal,value){
+  PagarGiro(id, modal, value) {
     let datos = new FormData();
     datos.append("id", id);
-    datos.append("caja",JSON.parse(localStorage['User']).Identificacion_Funcionario );
+    datos.append("caja", JSON.parse(localStorage['User']).Identificacion_Funcionario);
     this.http.post(this.globales.ruta + 'php/giros/pagar_giro.php', datos)
-        .catch(error => {
-          console.error('An error occurred:', error.error);
-          this.errorSwal.show();
-          return this.handleError(error);
-        })
-        .subscribe((data: any) => {
-          this.confirmacionSwal.title = "Pago Exitoso";
-          this.confirmacionSwal.text = "Se ha realizado el pago del giro correctamente";
-          this.confirmacionSwal.type = "success";
-          this.confirmacionSwal.show();
-          modal.hide();
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        this.confirmacionSwal.title = "Pago Exitoso";
+        this.confirmacionSwal.text = "Se ha realizado el pago del giro correctamente";
+        this.confirmacionSwal.type = "success";
+        this.confirmacionSwal.show();
+        modal.hide();
 
-          this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value } }).subscribe((data: any) => {
-              this.GirosBuscar = data;
-              this.actualizarVista();
-              if(this.GirosBuscar.length > 0){
-                this.Aparecer = true;
-              }      
-          });
-
+        this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value } }).subscribe((data: any) => {
+          this.GirosBuscar = data;
+          this.actualizarVista();
+          if (this.GirosBuscar.length > 0) {
+            this.Aparecer = true;
+          }
         });
-    
+
+      });
+
   }
 
-  ConfirmacionGiro(valor){
-    this.confirmacionGiro.title ="¿ esta seguro ?";
-    this.confirmacionGiro.text = "Confirme que el valor entregado sea de " +valor;
-    this.confirmacionGiro.type = "warning"    
+  ConfirmacionGiro(valor) {
+    this.confirmacionGiro.title = "¿ esta seguro ?";
+    this.confirmacionGiro.text = "Confirme que el valor entregado sea de " + valor;
+    this.confirmacionGiro.type = "warning"
     this.confirmacionGiro.show();
   }
 
+  RecibeCliente = false;
+  tipoCliente = true
+  transferencia = true;
+  Credito = false;
+  Consignacion = false;
+  datosRemitenteTransferencia = true;
+  BotonTransferencia = true;
+  BotonMovimiento = false;
+  opcionDefaultFormaPago = "Efectivo";
+  opcionTipoTransferencia  = "Transferencia";
+  VerificarTipoTransferencia() {
+    var Forma_Pago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
+    var Tipo_Transferencia = (document.getElementById("Tipo_Transferencia") as HTMLInputElement).value;
+
+    if (Tipo_Transferencia == "Transferencia") {
+      this.BotonTransferencia = true;
+      this.BotonMovimiento = false;
+      switch (Forma_Pago) {
+        case "Efectivo": {
+          this.tipoCliente = true;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = true;
+          this.Credito = false;
+          this.Consignacion = false;
+          break;
+        }
+        case "Credito": {
+          this.tipoCliente = false;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = false;
+          this.RecibeCliente = false;
+          this.Credito = true;
+          this.Consignacion = false;
+          break;
+        }
+        case "Consignacion": {
+          this.tipoCliente = true;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = false;
+          this.Credito = false;
+          this.Consignacion = true;
+          break;
+        }
+      }
+    }
+
+    if (Tipo_Transferencia == "Cliente") {
+      this.BotonTransferencia = false;
+      this.BotonMovimiento = true;
+      switch (Forma_Pago) {
+        case "Efectivo": {
+          this.RecibeCliente = true;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = false;
+          break;
+        }
+        case "Credito": {
+          this.RecibeCliente = false;
+          this.tipoCliente = false;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = false;
+          break;
+        }
+        case "Consignacion": {
+          this.RecibeCliente = true;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = true;
+          break;
+        }
+      }
+    }
+
+  }
 
 
 }
