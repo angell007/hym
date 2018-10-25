@@ -2506,6 +2506,7 @@ export class TablerocajeroComponent implements OnInit {
     var Forma_Pago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
     var Tipo_Transferencia = (document.getElementById("Tipo_Transferencia") as HTMLInputElement).value;
 
+
     if (Tipo_Transferencia == "Transferencia") {
       this.BotonTransferencia = true;
       this.BotonMovimiento = false;
@@ -2525,6 +2526,7 @@ export class TablerocajeroComponent implements OnInit {
           this.RecibeCliente = false;
           this.Credito = true;
           this.Consignacion = false;
+          
           break;
         }
         case "Consignacion": {
@@ -2552,9 +2554,10 @@ export class TablerocajeroComponent implements OnInit {
         case "Credito": {
           this.RecibeCliente = false;
           this.tipoCliente = false;
-          this.transferencia =false;
-          this.Credito = false;
           this.Consignacion = false;
+          this.Credito = true;
+          this.transferencia = true;
+          this.opcionTipoTransferencia = "Transferencia";
           break;
         }
         case "Consignacion": {
