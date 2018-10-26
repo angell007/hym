@@ -821,6 +821,8 @@ export class TablerocajeroComponent implements OnInit {
   MonedasTransferencia = [];
   MonedasOrigen = [];
   TransferenciasAnuladas =[];
+  RemitentesTransferencias = [];
+  CuentasBancarias =[];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -981,6 +983,14 @@ export class TablerocajeroComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_anuladas.php').subscribe((data: any) => {
       this.TransferenciasAnuladas = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
+      this.RemitentesTransferencias = data;
+    });
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Cuenta_Bancaria' } }).subscribe((data: any) => {
+      this.CuentasBancarias = data;
     });
 
     this.CambiarTasa(1);
@@ -1359,7 +1369,6 @@ export class TablerocajeroComponent implements OnInit {
           }];
 
           this.actualizarVista();
-          this.VerificarTipoTransferencia();
           this.ReiniciarTransferencias();
 
         });
@@ -1404,7 +1413,7 @@ export class TablerocajeroComponent implements OnInit {
             }];
 
             this.actualizarVista();
-            this.VerificarTipoTransferencia();
+            this.ReiniciarTransferencias();
 
           });
       } else {
@@ -2213,9 +2222,9 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
       if (parseInt(conteo) > 0) {
-        this.confirmacionSwal.title = "Bloqueada"
-        this.confirmacionSwal.text = "Esta transferencia esta bloqueada"
-        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.title = "Anulacion"
+        this.confirmacionSwal.text = "Esta transferencia no se puede anular"
+        this.confirmacionSwal.type = "warning"
         this.confirmacionSwal.show();
       } else {
         this.idTransferencia = id;
@@ -2228,6 +2237,7 @@ export class TablerocajeroComponent implements OnInit {
 
   itemDestinatario = true;
   NombreTercero:any;
+  TituloModalTransferencia ="Envia";
   verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
@@ -2243,11 +2253,25 @@ export class TablerocajeroComponent implements OnInit {
       var index = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero);
       if(index >-1){
         this.NombreTercero = this.TerceroCliente[index].Nombre;
+        this.TituloModalTransferencia = "Tercero "
       }
       
       var index1 = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero_Destino);
       if(index1 >-1){
         this.NombreTercero = this.TerceroCliente[index1].Nombre;
+        this.TituloModalTransferencia = "Tercero "
+      }
+
+      var index2 = this.RemitentesTransferencias.findIndex(x=>x.Id_Transferencia_Remitente === data.encabezado[0].Documento_Origen);
+      if(index2 >-1){
+        this.NombreTercero = this.RemitentesTransferencias[index2].Nombre;
+        this.TituloModalTransferencia = "Remitente "
+      }
+      //CuentasBancarias
+      var index3 = this.CuentasBancarias.findIndex(x=>x.Id_Cuenta_Bancaria === data.encabezado[0].Id_Cuenta_Bancaria);
+      if(index3 >-1){
+        this.NombreTercero = this.CuentasBancarias[index3].Nombre_Titular;
+        this.TituloModalTransferencia = "Cuenta De "
       }
 
       this.ModalVerRecibo.show();
@@ -2595,14 +2619,17 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   ReiniciarTransferencias(){
-    this.BotonTransferencia = true;
-    this.BotonMovimiento = false;
-    this.tipoCliente = true;
+    this.RecibeCliente = false;
+    this.tipoCliente = true
     this.transferencia = true;
-    this.datosRemitenteTransferencia = true;
     this.Credito = false;
     this.Consignacion = false;
-    this.RecibeCliente = false;
+    this.datosRemitenteTransferencia = true;
+    this.BotonTransferencia = true;
+    this.BotonMovimiento = false;
+    this.opcionDefaultFormaPago = "Efectivo";
+    this.opcionTipoTransferencia  = "Transferencia";
+    this.transferencia = true
   }
 
 

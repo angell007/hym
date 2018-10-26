@@ -1,4 +1,11 @@
-
+import '../../../assets/charts/amchart/amcharts.js';
+import '../../../assets/charts/amchart/gauge.js';
+import '../../../assets/charts/amchart/pie.js';
+import '../../../assets/charts/amchart/serial.js';
+import '../../../assets/charts/amchart/light.js';
+import '../../../assets/charts/amchart/ammap.js';
+import '../../../assets/charts/amchart/worldLow.js';
+import '../../../assets/charts/amchart/continentsLow.js';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../../node_modules/@types/selenium-webdriver';
@@ -85,6 +92,8 @@ export class TableroconsultorComponent implements OnInit {
       }
     });
 
+    this.graficas();
+
   }
 
   Pendientes = true;
@@ -132,6 +141,9 @@ export class TableroconsultorComponent implements OnInit {
       .subscribe((data: any) => {
         this.BancosVenezolanos = data;
       });
+
+
+      this.graficas();
   }
 
   refrescarVistaPrincipalConsultor() {
@@ -261,6 +273,7 @@ export class TableroconsultorComponent implements OnInit {
     });
   }
 
+  NombreBancoEmpresa = "";
   RealizarTransferencia(id, numeroCuenta, valor, cajero, codigo) {
     //this.BloquearTransferencia(id, "No");
 
@@ -275,6 +288,16 @@ export class TableroconsultorComponent implements OnInit {
       this.Monto = valor;
       this.Cajero = cajero
       this.Recibo = codigo
+
+      // buscar id Cuenta =  JSON.parse(localStorage['Banco']);
+     
+      console.log(this.BancosVenezolanos);
+      console.log(JSON.parse(localStorage['Banco']));
+      var index = this.BancosVenezolanos.findIndex(x=>x.Id_Cuenta_Bancaria === localStorage['Banco'] );
+      console.log(index);
+      if(index > -1 ){
+        this.NombreBancoEmpresa = this.BancosEmpresa[index].Nombre_Titular;
+      }
 
       if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
@@ -479,10 +502,6 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   GuardarMontoInicial(formulario: NgForm, modal) {
-    var banco = (document.getElementById("Id_Cuenta_Bancaria") as HTMLInputElement).value;
-    var montoInicial = (document.getElementById("Monto_Inicial") as HTMLInputElement).value;
-
-    if (banco != "" && montoInicial != "BsS. 0") {
       formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
       let datos = new FormData();
@@ -503,14 +522,67 @@ export class TableroconsultorComponent implements OnInit {
         }
 
       });
-    } else {
-      this.mensajeSwal.title = "Apertura";
-      this.mensajeSwal.text = "Seleccione un banco y digite el monto inicial";
-      this.mensajeSwal.type = "warning";
-      this.mensajeSwal.show();
-    }
+
   }
 
+  graficas(){
+    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
+      var chart = AmCharts.makeChart( "chartdiv", {
+        "type": "serial",
+        "theme": "light",
+        "dataProvider": [ {
+          "country": "Realizadas",
+          "visits": data.TransferenciasRealizadas
+        }, {
+          "country": "Devueltas",
+          "visits": data.TransferenciasDevueltas
+        }, {
+          "country": "Revisadas",
+          "visits": data.TotalTransferencias
+        } ],
+        "valueAxes": [ {
+          "gridColor": "#FFFFFF",
+          "gridAlpha": 0.2,
+          "dashLength": 0
+        } ],
+        "gridAboveGraphs": true,
+        "startDuration": 1,
+        "graphs": [ {
+          "balloonText": "[[category]]: <b>[[value]]</b>",
+          "fillAlphas": 0.8,
+          "lineAlpha": 0.2,
+          "type": "column",
+          "valueField": "visits"
+        } ],
+        "chartCursor": {
+          "categoryBalloonEnabled": false,
+          "cursorAlpha": 0,
+          "zoomable": false
+        },
+        "categoryField": "country",
+        "categoryAxis": {
+          "gridPosition": "start",
+          "gridAlpha": 0,
+          "tickPosition": "start",
+          "tickLength": 20
+        },
+        "export": {
+          "enabled": true
+        }
+      
+      } );
+    });
+
+  }
+
+  SaldoInicialBanco = 0;
+  VerificarSaldo(value){
+    var index = this.ListaBancos.findIndex(x=>x.Id_Cuenta_Bancaria === value);
+    if(index > -1 ){
+      this.SaldoInicialBanco= this.ListaBancos[index].Valor;
+      //GuardarInicio
+    }
+  }
 
 
 }

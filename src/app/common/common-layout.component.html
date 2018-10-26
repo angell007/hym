@@ -773,25 +773,24 @@
         <h4>Cambio de Cuenta</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormCambiarBanco="ngForm">
-            <div class="col-md-12 ">
-                <label>Banco Venezolanos</label>
-                <select ngModel name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" required class="form-control">
-                    <option value=""> Seleccione Banco</option>
-                    <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
-                        ({{banco.Numero_Cuenta}}) </option>
-                </select>
-
-            </div>
-
-            <div class="col-md-12 ">
-                <label>Saldo Cuenta Bancaria</label>
-                <input style="width:100% !important" currencyMask type="text" class="form-control" id="Monto_Inicial"
-                    name="Monto_Inicial" ngModel [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required>
-            </div>
-
-        </form>
-    </div>
+            <form #FormCambiarBanco="ngForm">
+                <div class="col-md-12 ">
+                    <label>Banco Venezolanos</label>
+                    <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" ngModel required class="form-control" (change)="VerificarSaldo($event.target.value)">
+                        <option value=""> Seleccione Banco</option>
+                        <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                            ({{banco.Numero_Cuenta}}) </option>
+                    </select>
+                </div>
+                <hr>    
+                <div class="col-md-12 ">
+                    <label>Saldo Cuenta Bancaria</label>
+                    <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" ngModel="{{SaldoInicialBanco}}"
+                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
+                </div>
+    
+            </form>
+        </div>
     <div class="app-modal-footer" style="margin: 0 auto;">
         <div class="text-center">
             <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormCambiarBanco , ModalCambiarBanco)">Iniciar
@@ -801,42 +800,115 @@
 </app-modal-basic>
 
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalResumenCuenta" #ModalResumenCuenta>
+<app-modal-basic [dialogClass]="'modal-xl'" id="ModalResumenCuenta" #ModalResumenCuenta>
     <div class="app-modal-header" style="margin: 0 auto;">
-        <h4>Resumen Cuenta</h4>
+        <h4>Resumen Cuenta {{nombreBanco}}</h4>
     </div>
     <div class="app-modal-body">
         <form #FormCambiarBanco="ngForm">
             <div class="col-md-12 ">
-                <div class="col-md-4">
-                    <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
-                        <tr>
-                            <td>Saldo Inicial</td>
-                            <td style="text-align:right;"> {{ MontoInicialCuenta.Monto_Inicial | currency: "BsS." }}</td>
-                        </tr>
-                        <tr>
-                            <td style="background:#FF9B9B;">Egresos</td>
-                            <td style="text-align:right;background:#FF9B9B;">- {{sumaEgresos | currency: "BsS."}} </td>
-                        </tr>
 
-                        <tr>
-                            <td>Ingreso por Devolución</td>
-                            <td style="text-align:right;">+ {{sumaIngresos | currency: "BsS."}}</td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-primary btn-sm btn-block" (click)="abrirModal()"><i
+                                                class="ti-plus"></i>
+                                            Movimiento de Ajuste
+                                        </button>
+                                    </div>
+                                </div>
 
-                        </tr>
-                        <tr>
-                            <td style="background:#efefef;"><strong>Saldo Actual</strong></td>
-                            <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{SaldoActual | currency:"BsS."}}</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Diferencia</td>
-                            <td style="text-align:right;" id="diferencia1"></td>
-                        </tr>
-                        <tr id="requerido" style="display:none;">
-                            <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
-                                observaciones del día</td>
-                        </tr>
-                    </table>
+                                <div class="table-responsive margin-top:10px;">
+                                    <!--datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"-->
+                                    <table class="table table-hover table-sm table-striped table-bordered" style="font-size: 12px">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px !important;">Fecha</th>
+                                                <th>Recibo</th>
+                                                <th>Detalle</th>
+                                                <th class="text-center" style="width: 120px">Ingreso</th>
+                                                <th class="text-center" style="width: 120px">Egreso</th>
+                                                <th class="text-center" style="width: 120px">Saldo</th>
+                                                <th class="text-center" style="width: 50px"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let movimiento of Movimientos ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }}">
+                                                <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha |
+                                                    date :
+                                                    "dd/MM/yyyy" }}</td>
+                                                <td *ngIf="movimiento.Ajuste == 'No'; else yesContent"><a [routerLink]=""
+                                                        (click)="verRecibo(movimiento.Id_Recibo)">{{movimiento.Codigo
+                                                        }}</a></td>
+                                                <ng-template #yesContent>
+                                                    <td>Ajuste</td>
+                                                </ng-template>
+                                                <td>{{movimiento.Detalle}}</td>
+                                                <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.Valor
+                                                    }}</td>
+                                                <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                                                <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                                                <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor
+                                                    }}</td>
+                                                <td class="text-right {{movimiento.Saldo < 0 ? 'text-danger' : 'text-success'}}">{{movimiento.Saldo}}</td>
+                                                <td class="text-center" *ngIf="movimiento.Ajuste==='Si'">
+                                                    <a class="text-success" [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Cuenta_Bancaria,ModalAjusteEditar)">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </a>
+
+                                                    <a class="text-danger" style=" margin-left: 5px" [routerLink]=""
+                                                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a eliminar este ajuste' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                                        (confirm)="borrarAjuste(movimiento.Id_Movimiento_Cuenta_Bancaria)">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </a>
+
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+                            <tr>
+                                <td>Saldo Inicial</td>
+                                <td style="text-align:right;"> {{ ValorInicial | currency: "BsS."
+                                    }}</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#FF9B9B;">Egresos</td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{sumaEgresos | currency: "BsS."}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Ingreso por Devolución</td>
+                                <td style="text-align:right;">+ {{sumaIngresos | currency: "BsS."}}</td>
+
+                            </tr>
+                            <tr>
+                                <td style="background:#efefef;"><strong>Saldo Actual</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{SaldoActual
+                                        | currency:"BsS."}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Diferencia</td>
+                                <td style="text-align:right;" id="diferencia1"></td>
+                            </tr>
+                            <tr id="requerido" style="display:none;">
+                                <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                    observaciones del día</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
 
             </div>
@@ -853,8 +925,56 @@
     </div>
     <div class="app-modal-footer" style="margin: 0 auto;">
         <div class="text-center">
-            <button id="GuardarInicio" class="btn btn-primary btn-sm">Iniciar
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="RealizarCierreDiaCuentaBancaria()">
+                Cerrar 
             </button>
         </div>
     </div>
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAjuste" #ModalAjuste>
+        <div class="app-modal-header">
+          <h4>Ajuste de Movimiento</h4>
+        </div>
+        <div class="app-modal-body">
+          <form #FormCuenta="ngForm">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <input style="width: 100%" id="datefield" type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label>Tipo </label>
+                <select class="form-control" name="Tipo" ngModel required>
+                  <option value="">Seleccione Tipo</option>
+                  <option value="Ingreso">Ingreso</option>
+                  <option value="Egreso">Egreso</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Valor</label>
+                  <input style="width: 100%" type="number" placeholder="Valor" class="form-control" name="Valor" ngModel required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Detalles</label>
+                  <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Movimiento" name="Detalle"
+                    ngModel required></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="app-modal-footer">
+          <div class="text-right">
+            <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="GuardarMovimiento(FormCuenta, ModalAjuste)">Guardar</button>
+          </div>
+        </div>
+      </app-modal-basic>

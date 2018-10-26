@@ -364,7 +364,7 @@
                                                                 <table class="table table-hover table-sm table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th style="width:160px;">Hora</th>
+                                                                            <th >Hora</th>
                                                                             <th>Código</th>
                                                                             <th>Tipo</th>
                                                                             <th>Valor Pesos</th>
@@ -374,7 +374,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr *ngFor="let transferencia of Transferencia">
+                                                                        <tr *ngFor="let transferencia of Transferencia" class=" {{ transferencia.Conteo == false ? 'bg-success text-white' : '' }}">
                                                                             <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
                                                                             <td>{{transferencia.CodigoRecibo}}</td>
                                                                             <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
@@ -392,11 +392,11 @@
                                                                                     <i class="fa fa-eye"></i>
                                                                                 </button>
                         
-                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                                                <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                                                     <i class="ti-pencil"></i>
                                                                                 </button>
                         
-                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                                                     (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia,transferencia.Id_Tercero, transferencia.Id_Tercero_Destino)">
                                                                                     <i class="ti-close"></i>
                                                                                 </button>
@@ -443,16 +443,12 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-
-
                                                         </div>
                                                     </div>
-                                                  
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -2517,7 +2513,7 @@
                         <td>{{ item.Tasa_Cambio}}</td>
                     </tr>
                     <tr>
-                        <td> Envia</td>
+                        <td> {{ TituloModalTransferencia }} </td>
                         <td colspan="5"> {{NombreTercero}} </td>
                     </tr>
                     <tr>

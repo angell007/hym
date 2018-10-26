@@ -48,7 +48,8 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
     @ViewChild('mensajeSwal') mensajeSwal: any;
     @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
-    @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;    
+    @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;
+    @ViewChild('ModalAjuste') ModalAjuste: any;
 
     cajero = true;
 
@@ -138,6 +139,7 @@ export class CommonLayoutComponent implements OnInit {
     OcultarCajero = false;
     OcultarConsultor = false;
     ListaBancos = [];
+    nombreBanco = "";
     ngOnInit() {
 
         this.user = JSON.parse(localStorage.User);
@@ -193,11 +195,28 @@ export class CommonLayoutComponent implements OnInit {
         setInterval(() => {
             this.cerrarCaja()
         }, 30000);
+
+        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+            params: { id: JSON.parse(localStorage['Banco']) }
+        }).subscribe((data: any) => {
+            this.Movimientos = data.lista;
+        });
+
+        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+            params: { id: JSON.parse(localStorage['Banco']) }
+        }).subscribe((data: any) => {
+            this.Movimientos = data.lista;
+        });
+
+        this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+            this.nombreBanco = data.Nombre_Titular;
+        });
     }
 
     salir() {
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
+        localStorage.removeItem("Banco");
         this.router.navigate(["/login"]);
     }
 
@@ -268,7 +287,7 @@ export class CommonLayoutComponent implements OnInit {
     ingresoTrasladoBolivar = 0;
     GiroComision: any = 0;
 
-    cerrarCaja(value ="") {
+    cerrarCaja(value = "") {
 
         this.CambiosIngresos = [];
         this.TransferenciaIngresos = [];
@@ -391,7 +410,7 @@ export class CommonLayoutComponent implements OnInit {
 
         });
 
-        if(value != ""){
+        if (value != "") {
             this.CierreCaja.show();
         }
 
@@ -519,73 +538,171 @@ export class CommonLayoutComponent implements OnInit {
 
     GuardarMontoInicial(formulario: NgForm, modal) {
 
-        if (formulario.value.Id_Cuenta_Bancaria != "" && formulario.value.Monto_Inicial != 0) {
-            formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-            let info = JSON.stringify(formulario.value);
-            let datos = new FormData();
-            datos.append("datos", info);
-            this.http.post(this.globales.ruta + '/php/consultor/cambiar_banco_consultor.php', datos).subscribe((data: any) => {
-                if (data != "") {
-                    formulario.reset();
-                    this.mensajeSwal.title = "Apertura"
-                    this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
-                    this.mensajeSwal.type = "success"
-                    this.mensajeSwal.show();
-                    modal.hide();
-                    this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
-                        localStorage.setItem('Banco', data[0].Id_Cuenta_Bancaria);
-                    });
+        formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+        formulario.value.Id_Cuenta_Bancaria = this.IdBanco;
+        formulario.value.Monto_Inicial = this.SaldoInicialBanco;
+        let info = JSON.stringify(formulario.value);
+        let datos = new FormData();
+        datos.append("datos", info);
+        this.http.post(this.globales.ruta + '/php/consultor/cambiar_banco_consultor.php', datos).subscribe((data: any) => {
+            if (data != "") {
+                formulario.reset();
+                this.mensajeSwal.title = "Apertura"
+                this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
+                this.mensajeSwal.type = "success"
+                this.mensajeSwal.show();
+                modal.hide();
+                this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+                    localStorage.setItem('Banco', data[0].Id_Cuenta_Bancaria);
+                });
 
-                } else {
-                    this.mensajeSwal.title = "Apertura";
-                    this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
-                    this.mensajeSwal.type = "warning";
-                    this.mensajeSwal.show();
-                }
+            } else {
+                this.mensajeSwal.title = "Apertura";
+                this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
+                this.mensajeSwal.type = "warning";
+                this.mensajeSwal.show();
+            }
 
-            });
-        } else {
-            this.mensajeSwal.title = "Apertura";
-            this.mensajeSwal.text = "Seleccione un banco y digite el monto inicial";
-            this.mensajeSwal.type = "warning";
-            this.mensajeSwal.show();
-        }
-    }
-
-    Movimientos =[];
-    MontoInicialCuenta=[];
-    sumaIngresos=0;
-    sumaEgresos=0;
-    SaldoActual = 0;
-    MontoInicial=0;
-    CierreCuentaBancaria(){
-      //JSON.parse(localStorage['Banco']);
-
-      this.MontoInicialCuenta = [];
-      this.MontoInicial = 0;
-      this.sumaEgresos = 0;
-      this.sumaIngresos = 0;
-      this.SaldoActual =0;
-      this.Movimientos = [];
-
-      this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
-        params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" }
-      }).subscribe((data: any) => {
-        this.MontoInicialCuenta = data;
-        this.MontoInicial = data.Monto_Inicial;
-      });
-
-      this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-        params: { id: JSON.parse(localStorage['Banco']) }
-      }).subscribe((data: any) => {
-        this.Movimientos = data.lista;
-        this.Movimientos.forEach(element => {
-            if(element.Tipo == "Egreso"){this.sumaEgresos += Number(element.ValorSinSimbolo)}
-            if(element.Tipo == "Ingreso"){this.sumaIngresos += Number(element.ValorSinSimbolo)}
         });
 
-        this.SaldoActual = Number(this.MontoInicial) - Number(this.sumaEgresos) + Number(this.sumaIngresos);
-        this.ModalResumenCuenta.show();
-      });
+    }
+
+    Movimientos = [];
+    MontoInicialCuenta = [];
+    sumaIngresos = 0;
+    sumaEgresos = 0;
+    SaldoActual = 0;
+    MontoInicial = 0;
+    ValorInicial =0;
+    CierreCuentaBancaria() {
+        //JSON.parse(localStorage['Banco']);
+
+        this.MontoInicialCuenta = [];
+        this.MontoInicial = 0;
+        this.sumaEgresos = 0;
+        this.sumaIngresos = 0;
+        this.SaldoActual = 0;
+        this.Movimientos = [];
+        this.ValorInicial =0;
+
+        this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+            params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" }
+        }).subscribe((data: any) => {
+            this.MontoInicialCuenta = data;
+            this.ValorInicial = data.Monto_Inicial;
+            this.MontoInicial = data.Monto_Inicial;
+        });
+
+        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+            params: { id: JSON.parse(localStorage['Banco']) }
+        }).subscribe((data: any) => {
+            this.Movimientos = data.lista;
+           
+            /*if (Number(this.MontoInicial) + Number(this.sumaEgresos)  == Number(this.ValorInicial)){
+                this.sumaEgresos = 0;   
+            }
+            this.ModalResumenCuenta.show();*/
+        });
+
+        this.http.get(this.globales.ruta + 'php/movimientos/movimientos_cuenta_bancaria_Detalle.php', {
+            params: { id: JSON.parse(localStorage['Banco']) }
+        }).subscribe((data: any) => {
+            data.lista.forEach(element => {
+                if (element.Tipo == "Egreso") { this.sumaEgresos += Number(element.ValorSinSimbolo) }
+                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial") { this.sumaIngresos += Number(element.ValorSinSimbolo) }                
+            });            
+
+
+            this.SaldoActual = Number(this.MontoInicial) - Number(this.sumaEgresos) + Number(this.sumaIngresos);
+            this.MontoInicial = Number(this.MontoInicial) - Number(this.sumaEgresos);
+            /*if (Number(this.MontoInicial) + Number(this.sumaEgresos)  == Number(this.ValorInicial)){
+                this.sumaEgresos = 0;   
+            }*/
+            this.ModalResumenCuenta.show();
+        });
+
+        this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+            this.nombreBanco = data.Nombre_Titular;
+        });
+    }
+
+    CierreCuentaBancariaNoModal() {
+        this.MontoInicialCuenta = [];
+        this.MontoInicial = 0;
+        this.sumaEgresos = 0;
+        this.sumaIngresos = 0;
+        this.SaldoActual = 0;
+        this.Movimientos = [];
+
+        this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
+            params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" }
+        }).subscribe((data: any) => {
+            this.MontoInicialCuenta = data;
+            this.MontoInicial = data.Monto_Inicial;
+        });
+
+        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+            params: { id: JSON.parse(localStorage['Banco']) }
+        }).subscribe((data: any) => {
+            this.Movimientos = data.lista;
+            this.Movimientos.forEach(element => {
+                if (element.Tipo == "Egreso") { this.sumaEgresos += Number(element.ValorSinSimbolo) }
+                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial" ) { this.sumaIngresos += Number(element.ValorSinSimbolo) }
+                this.MontoInicial = element.Saldo;
+            });
+
+            this.SaldoActual = Number(this.MontoInicial) - Number(this.sumaEgresos) + Number(this.sumaIngresos);
+        });
+    }
+
+    abrirModal() {
+        this.ModalAjuste.show();
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        var hoy = yyyy + '-' + mm + '-' + dd;
+        (document.getElementById("datefield") as HTMLInputElement).setAttribute("max", hoy);
+    }
+
+    GuardarMovimiento(formulario: NgForm, modal) {
+        let info = JSON.stringify(formulario.value);
+        let datos = new FormData();
+        var newId = JSON.parse(localStorage['Banco']);
+        datos.append("modulo", 'Movimiento_Cuenta_Bancaria');
+        datos.append("datos", info);
+        datos.append("Id_Cuenta_Bancaria", JSON.parse(localStorage['Banco']));
+        this.http.post(this.globales.ruta + 'php/bancos/guardar_ajuste.php', datos)
+            .subscribe((data: any) => {
+                formulario.reset();
+                modal.hide();
+                this.CierreCuentaBancariaNoModal();
+            });
+    }
+
+
+    SaldoInicialBanco = 0;
+    IdBanco = 0;
+    VerificarSaldo(value) {
+        this.IdBanco = value;
+        var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === value);
+        if (index > -1) {
+            this.SaldoInicialBanco = this.ListaBancos[index].Valor;
+            //GuardarInicio
+        }
+
+    }
+
+    RealizarCierreDiaCuentaBancaria(modal) {
+        let saldoActual = JSON.stringify(this.SaldoActual);
+        JSON.parse(localStorage['Banco'])
+        let datos = new FormData();
+        datos.append("SaldoActualBanco",saldoActual );
+        datos.append("Id_Cuenta_Bancaria", JSON.parse(localStorage['Banco']));
+        this.http.post(this.globales.ruta + 'php/cierreCaja/Cierre_Banco.php', datos)
+            .subscribe((data: any) => {
+                this.salir(); 
+                modal.hide();
+        });
     }
 }

@@ -144,6 +144,7 @@
                                             <th style="width:150px;">Fecha</th>
                                             <th>Recibo</th>
                                             <th>Cajero</th>
+                                            <th class="text-center">Tipo Transferencia</th>
                                             <th>Cuenta Destino</th>
                                             <th style="width:80px">Valor</th>
                                             <th style="width:160px;"></th>
@@ -154,6 +155,7 @@
                                         <tr *ngFor="let transferencia of transferenciasRealizadas" class="bg-success text-white">
                                             <td>{{transferencia.Fecha | date:"short" }}</td>
                                             <td><a [routerLink]="" (click)="verRecibo(transferencia.Recibo)">{{transferencia.Recibo}}</a></td>
+                                            <td class="text-center">{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
                                             <td>{{transferencia.Cajero}}</td>
                                             <td>{{transferencia.Cuenta_Destino}}</td>
                                             <td class="text-right">{{transferencia.Valor |

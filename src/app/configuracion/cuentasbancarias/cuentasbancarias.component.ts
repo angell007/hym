@@ -82,7 +82,7 @@ export class CuentasbancariasComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Cuenta_Bancaria');
     datos.append("datos", info);
-    datos.append("identificacion",this.Identificacion);
+    datos.append("identificacion",JSON.parse(localStorage['User']).Identificacion_Funcionario);
     modal.hide();
     this.http.post(this.globales.ruta + 'php/cuentasbancarias/guardar_cuenta_bancaria.php', datos)
       .catch(error => {
