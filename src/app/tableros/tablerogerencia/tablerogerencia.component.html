@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <!--Accordion wrapper-->
                     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
 
@@ -49,12 +49,16 @@
                                                             </tr>
                                                             <tr *ngFor="let subItem of Item.Movimientos ">
                                                                 <td class="text-center" style="width:100px !important;">
-                                                                {{subItem.modulo}}    
+                                                                    {{subItem.modulo}}
                                                                 </td>
-                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Pesos'" >{{ subItem.Ingreso | currency: "$." }}</td>
-                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Pesos'" >{{ 0 | currency: "BsS." }}</td>
-                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Bolivares'" >{{ 0 | currency: "$." }}</td>                                                                
-                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Bolivares'" >{{ subItem.Ingreso | currency: "BsS." }}</td>                                                                
+                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Pesos'">{{
+                                                                    subItem.Ingreso | currency: "$." }}</td>
+                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Pesos'">{{
+                                                                    0 | currency: "BsS." }}</td>
+                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Bolivares'">{{
+                                                                    0 | currency: "$." }}</td>
+                                                                <td class="text-center" *ngIf="subItem.Moneda_Origen == 'Bolivares'">{{
+                                                                    subItem.Ingreso | currency: "BsS." }}</td>
                                                             </tr>
                                                         </table>
                                                     </div>
@@ -72,11 +76,13 @@
                     <!-- Accordion wrapper -->
                 </div>
 
-                <div class="col-md-4">
-                        <div class="form-group">
-                                <label>Fecha</label>
-                                <input id="datefield" type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel (change)="Historial($event.target.value)" >
-                              </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input id="datefield" type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel
+                            (change)="Historial($event.target.value)">
+                    </div>
+                    <div id="chartdiv" style="height: 500px;font-size: 11px;width: 100%;"></div>
                 </div>
 
             </div>
