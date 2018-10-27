@@ -62,7 +62,21 @@ export class TransferenciasComponent implements OnInit {
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
+  esconder = true;
   ngOnInit() {
+
+    var perfil = JSON.parse(localStorage.Perfil);
+
+    switch(perfil){
+      case '5':{
+        this.esconder = false;
+      }
+      default:{
+        this.esconder = true;
+        break;
+      }
+    }
+
     this.ActualizarVista();
 
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {

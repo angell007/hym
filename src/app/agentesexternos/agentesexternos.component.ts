@@ -109,7 +109,21 @@ export class AgentesexternosComponent implements OnInit {
     }
   ];
 
+  esconder = true;
   ngOnInit() {
+
+    var perfil = JSON.parse(localStorage.Perfil);
+    switch(perfil){
+      case 5:{
+        this.esconder = false;
+        break;
+      }
+      default:{
+        this.esconder = true;
+        break;
+      }
+    }
+
     this.http.get(this.globales.ruta + 'php/agentesexternos/lista.php').subscribe((data: any) => {
       this.agentes = data;
     });

@@ -63,7 +63,20 @@ export class TrasladosComponent implements OnInit {
 
   }
 
+  esconder = true;
   ngOnInit() {
+    var perfil = JSON.parse(localStorage.Perfil);
+
+    switch(perfil){
+      case 5:{
+        this.esconder = false;
+      }
+      default:{
+        this.esconder = true;
+        break;
+      }
+    }
+
     this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
     this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;

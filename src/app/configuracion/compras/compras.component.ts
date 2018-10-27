@@ -51,7 +51,19 @@ export class ComprasComponent implements OnInit {
 
   constructor(private http: HttpClient, private globales: Globales, private router: Router) { }
 
+  esconder = true;
   ngOnInit() {
+    var perfil = JSON.parse(localStorage.Perfil);
+
+    switch(perfil){
+      case 5:{
+        this.esconder = false;
+      }
+      default:{
+        this.esconder = true;
+        break;
+      }
+    }    
     this.ActualizarVista();
   }
 

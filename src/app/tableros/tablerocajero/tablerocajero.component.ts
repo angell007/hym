@@ -1374,7 +1374,7 @@ export class TablerocajeroComponent implements OnInit {
         });
 
     } else {
-      if (suma == Number(this.entregar)) {
+      if (suma == totalPermitido && totalPermitido > 0) {
         var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
         formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
         this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;

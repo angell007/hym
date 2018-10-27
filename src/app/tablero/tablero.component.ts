@@ -32,11 +32,26 @@ export class TableroComponent implements OnInit {
     }).subscribe((data: any) => {
       var vari: any;
       switch (data.Id_Perfil) {
+        //administrador
+        case '1': break;
+        //cajeroprincipal
+        case '2':
+          vari = TablerocajeroprincipalComponent
+          break;
+        //cajero
         case '3':
           vari = TablerocajeroComponent
           break;
+        //consultor  
         case '4':
           vari = TableroconsultorComponent
+          break;
+        //auditor
+        case '5':
+          vari = TableroauditoriaComponent
+          break;
+        case '6':
+          vari = TablerogerenciaComponent
           break;
       }
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(vari);

@@ -143,7 +143,17 @@ export class CommonLayoutComponent implements OnInit {
     ngOnInit() {
 
         this.user = JSON.parse(localStorage.User);
+        localStorage.setItem('Perfil',this.user.Permisos[0].Id_Perfil);
         switch (this.user.Permisos[0].Id_Perfil) {
+            case "1":{
+                this.OcultarCajero = false;
+                this.OcultarConsultor = false;
+                break;                
+            }
+            case "2":{
+                this.OcultarCajero = true;
+                break;
+            }
             case "3": {
                 this.OcultarCajero = true;
                 break;
@@ -151,6 +161,14 @@ export class CommonLayoutComponent implements OnInit {
             case "4": {
                 this.OcultarCajero = true;
                 this.OcultarConsultor = true;
+                break;
+            }
+            case "5":{
+                break;
+            }
+            case "6":{
+                this.OcultarCajero = false;
+                this.OcultarConsultor = false;
                 break;
             }
         }
@@ -217,6 +235,7 @@ export class CommonLayoutComponent implements OnInit {
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
         localStorage.removeItem("Banco");
+        localStorage.removeItem('Perfil');
         this.router.navigate(["/login"]);
     }
 

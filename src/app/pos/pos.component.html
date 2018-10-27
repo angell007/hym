@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-3 ">
-                <sticky [sticky-offset-top]="95">
+                <sticky [sticky-offset-top]="105">
                     <a href="#cambios" scrollTo class="card mrg-btm-15 m-t-15 scroll-to" (click)="muestra_tabla('cambios')">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
@@ -105,7 +105,7 @@
                                 </span>
                                 <div class="info">
                                     <b class="text-dark font-size-22">Cambios Efectivo</b>
-                                    <p class="no-mrg-btm ">Compras o Ventas</p>
+                                    <p class="no-mrg-btm ">{{tituloCambio}}</p>
                                 </div>
                             </li>
                         </ul>
@@ -122,24 +122,23 @@
                                     <hr>
                                     <h5>Últimos Cambios Registrados</h5>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
-                                            [dtTrigger]="dtTrigger">
+                                        <table class="table ">
                                             <thead>
                                                 <tr>
                                                     <th style="width:160px;">Hora</th>
                                                     <th>Código</th>
-                                                    <th>Valor Pesos</th>
-                                                    <th>Valor Bolivares</th>
+                                                    <th>Tipo</th>
+                                                    <th>Valor</th>
                                                     <th>Tasa</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let cambio of Cambios">
-                                                    <td>{{cambio.Fecha | date:"short" }}</td>
+                                                    <td>{{cambio.Fecha | date:"HH:mm" }}</td>
                                                     <td>{{cambio.Codigo}}</td>
                                                     <td>{{cambio.Tipo}}</td>
-                                                    <td>{{cambio.Valor_Origen | currency : "BsS." }}</td>
+                                                    <td>{{cambio.Valor_Origen }}</td>
                                                     <td>{{cambio.Tasa}}</td>
 
                                                     <td class="text-center">
@@ -148,18 +147,15 @@
                                                             <i class="ti-printer"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                            <i class="ti-pencil"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="EditarCambio(cambio.Id_Cambio, ModalEditarCambio)">
-                                                            <i class="ti-reload"></i>
+                                                            (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
+                                                            <i class="fa fa-eye"></i>
                                                         </button>
                                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                             [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                                             (confirm)="AnulaCambio(cambio.Id_Cambio)">
                                                             <i class="ti-close"></i>
                                                         </button>
+
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -171,34 +167,34 @@
                                 <div class="col-md-12">
                                     <form #FormMoneda="ngForm">
                                         <div class="row">
+
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que recibe</label>
-                                                <select class="form-control" placeholder="Origen" [(ngModel)]="defectoOrigen"
-                                                    id="Origen" name="Origen" (change)="Origen($event.target.value);"
+                                                <select *ngIf="!Venta" class="form-control" placeholder="Origen"
+                                                    ngModel="" id="Origen" name="Origen" (change)="validarDestino($event.target.value)"
                                                     required>
-                                                    <option> Seleccione Moneda</option>
-                                                    <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                    <option value=""> Seleccione Moneda</option>
+                                                    <option *ngFor="let moneda of MonedaOrigenCambio" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
                                                         ({{ moneda.Codigo }}) </option>
                                                 </select>
+                                                <input *ngIf="Venta" disabled name="Origen" readonly type="text" class="form-control"
+                                                    ngModel="Pesos">
                                                 <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
                                                     ngModel="{{MonedaOrigen}}">
                                             </div>
+
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que entrego</label>
-                                                <select class="form-control" placeholder="Destino" id="Destino" name="Destino"
-                                                    [(ngModel)]="defectoDestino" (change)="CambiarTasa($event.target.value);">
-                                                    <option> Seleccione Moneda</option>
-                                                    <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                                        ({{ moneda.Codigo }}) </option>
+                                                <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino"
+                                                    name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="validarTasaCambio($event.target.value)">
+                                                    <option value=""> Seleccione Moneda</option>
+                                                    <option *ngFor="let moneda1 of MonedaOrigenDestino" [value]="moneda1.Id_Moneda">{{moneda1.Nombre}}
+                                                        ({{ moneda1.Codigo }}) </option>
                                                 </select>
-                                                <input hidden name="Moneda_Destino" readonly type="text" class="form-control"
-                                                    ngModel="{{MonedaDestino}}">
-                                                <input hidden name="Id_Oficina" readonly type="text" class="form-control"
-                                                    ngModel="5">
-                                                <input hidden name="Id_Caja" readonly type="text" class="form-control"
-                                                    ngModel="1">
+                                                <input *ngIf="!Venta" disabled name="Moneda_Destino" readonly type="text"
+                                                    class="form-control" ngModel="{{MonedaDestino}}">
                                                 <input hidden name="Tipo" readonly type="text" class="form-control"
                                                     ngModel="{{Tipo}}">
                                             </div>
@@ -206,35 +202,32 @@
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
                                                 <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
-                                                    (blur)="RealizarCambioMoneda($event.target.value,'cambia')" id="Cambia"
-                                                    ngModel="{{cambiar}}">
+                                                    id="Cambia" ngModel="{{cambiar}}" (input)="conversionMoneda(Venta,$event.target.value)">
+
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                                                     Cambio</label>
                                                 <input *ngIf="Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" (change)="validarPrecioSugerido($event.target.value)"
-                                                    name="Tasa" [(ngModel)]="PrecioSugeridoEfectivo">
-                                                <!--PrecioSugeridoCompra : PrecioSugeridoEfectivo -->
+                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
                                                 <input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" (change)="validarPrecioSugerido($event.target.value)"
-                                                    name="Tasa" [(ngModel)]="PrecioSugeridoCompra">
+                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
-                                                    (blur)="RealizarCambioMoneda($event.target.value,'entrega')" id="Entrega"
-                                                    ngModel="{{entregar }}">
+                                                    id="Entrega" ngModel="{{entregar }}">
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                                                     Con</label>
-                                                <input id="pagocon" type="text" placeholder="Paga con" class="form-control" name="Recibido"
-                                                    (blur)="ObtenerVueltos($event.target.value)">
+                                                <input id="pagocon" type="text" placeholder="Paga con" class="form-control"
+                                                    name="Recibido" (blur)="ObtenerVueltos($event.target.value)">
                                             </div>
+
 
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
@@ -248,9 +241,13 @@
                                     </form>
                                 </div>
                                 <div class="col-md-10" style="margin-top: 50px">
-                                    <button id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra/venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                    <button *ngIf="Venta === false" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                         class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
-                                        (confirm)="guardarCambio(FormMoneda)">{{TextoBoton}}</button>
+                                        (confirm)="guardarCambio(FormMoneda,'compra')">{{TextoBoton}}</button>
+
+                                    <button *ngIf="Venta === true" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                        class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+                                        (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>
                                 </div>
                                 <div class="col-md-2" style="margin-top: 50px">
                                     <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
@@ -323,6 +320,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="transferencias" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -339,68 +337,117 @@
                         <div class="mrg-top-10" style="min-height: 470px;">
                             <div class="row" id="transferencias1" *ngIf="Transferencia1">
                                 <div class="col-md-12">
-                                    <button (click)="CambiarVista('Transferencia')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nueva
-                                        Transferencia</button>
+                                    <button (click)="CambiarVista('Transferencia')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo
+                                        Recibo De Transferencia</button>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <hr>
-                                    <h5>Últimas transferencias Registrados</h5>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
-                                            [dtTrigger]="dtTrigger1">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:160px;">Hora</th>
-                                                    <th>Código</th>
-                                                    <th>Valor Pesos</th>
-                                                    <th>Valor Bolivares</th>
-                                                    <th>Tasa</th>
-                                                    <th></th>
-                                                    <!--
-                                                        <th style="width:80px">Tasa</th>
-                                                        <th style="width:160px;"></th>-->
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let transferencia of Transferencia">
-                                                    <td>{{transferencia.Fecha | date:"short" }}</td>
-                                                    <td>{{transferencia.CodigoRecibo}}</td>
-                                                    <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                    <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
-                                                    <td>{{transferencia.Tasa_Cambio }}</td>
-                                                    <!--
-                                                        <td class="text-right">{{transferencia.Valor_Transferencia |
-                                                            currency}}</td>
-                                                        <td class="text-right">{{transferencia.Tasa_Cambio}}</td> -->
 
-                                                    <td class="text-center">
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="verRecibo(transferencia.Id_Recibo)">
-                                                            <i class="ti-printer"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            >
-                                                            <i class="ti-pencil"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            >
-                                                            <i class="ti-reload"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                            (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia)">
-                                                            <i class="ti-close"></i>
-                                                        </button>
-                                                        <!--ModalAnularTransferencia.show();
-                                                            <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                                [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                (confirm)="AnularTransferencia(transferencia.Id_Transferencia)">
-                                                                <i class="ti-close"></i>
-                                                            </button> -->
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <!-- <h4 class="card-title">Default Tabs</h4> -->
+                                            <div class="tab-success">
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a href="#default-tabtransferencias-1" class="nav-link active" role="tab"
+                                                            data-toggle="tab">Últimas transferencias Registradas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#default-tabtransferencias-2" class="nav-link" role="tab"
+                                                            data-toggle="tab" style="color: red">Anuladas</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div role="tabpanel" class="tab-pane fade in active" id="default-tabtransferencias-1">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th >Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Tipo</th>
+                                                                            <th>Valor Pesos</th>
+                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Tasa</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let transferencia of Transferencia" class=" {{ transferencia.Conteo == false ? 'bg-success text-white' : '' }}">
+                                                                            <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{transferencia.CodigoRecibo}}</td>
+                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
+                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
+                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
+                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
+                        
+                                                                            <td class="text-center">
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                                                    <i class="ti-printer"></i>
+                                                                                </button>
+                        
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    <i class="fa fa-eye"></i>
+                                                                                </button>
+                        
+                                                                                <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                                                                    <i class="ti-pencil"></i>
+                                                                                </button>
+                        
+                                                                                <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia,transferencia.Id_Tercero, transferencia.Id_Tercero_Destino)">
+                                                                                    <i class="ti-close"></i>
+                                                                                </button>
+                        
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="default-tabtransferencias-2">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:160px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Tipo</th>
+                                                                            <th>Valor Pesos</th>
+                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Tasa</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let transferencia of TransferenciasAnuladas">
+                                                                            <td>{{transferencia.Fecha | date }}</td>
+                                                                            <td>{{transferencia.CodigoRecibo}}</td>
+                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
+                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
+                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
+                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
+                        
+                                                                            <td class="text-center">
+                                                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    <i class="fa fa-eye"></i>
+                                                                                </button>
+                        
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -411,67 +458,108 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <label class="transferencia">Forma de Pago</label>
-                                                <select id="Forma_Pago"(change)="TipoPagoTransferencia($event.target.value)" class="form-control"
-                                                    name="Forma_Pago" [(ngModel)]="formaPagoDefault" required>
-                                                    <option value="Efectivo">Efectivo</option>
+                                                <select id="Forma_Pago" class="form-control" (change)="VerificarTipoTransferencia()"
+                                                    name="Forma_Pago" [(ngModel)]="opcionDefaultFormaPago" required>
+                                                    <option value="Efectivo" [selected]>Efectivo</option>
                                                     <option value="Credito">Credito</option>
                                                     <option value="Consignacion">Consignación</option>
                                                 </select>
-
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="transferencia">Recibe Para</label>
-                                                <select id="TipoTransferencia" class="form-control" (change)="SeleccionarTipo($event.target.value)"
-                                                    name="Tipo_Transferencia" [(ngModel)]="recibeParaDefault" required>
+                                                <select id="Tipo_Transferencia" (change)="VerificarTipoTransferencia()"
+                                                    class="form-control" name="Tipo_Transferencia" [(ngModel)]="opcionTipoTransferencia"
+                                                    required>
                                                     <option value="Transferencia">Transferencia</option>
-                                                    <option value="Cliente">Cliente</option>
+                                                    <option value="Cliente" *ngIf="tipoCliente">Cliente</option>
                                                 </select>
-
                                             </div>
-                                            <div class="col-md-6" *ngIf="Recibe==='Cliente'">
+
+                                            <div class="col-md-6" *ngIf="RecibeCliente">
                                                 <label class="transferencia">Seleccione Cliente</label>
-                                                <select class="form-control" name="Id_Tercero_Destino" [(ngModel)]="seleccioneClienteDefault"
-                                                    required >
+                                                <select *ngIf="!listaClientes()" class="form-control" name="Id_Tercero_Destino"
+                                                    ngModel required>
                                                     <option value="">Seleccione un cliente</option>
-                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}} ({{Cliente.Cupo | currency: "BsS."}})</option>
+                                                    <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                                 </select>
 
+                                                <select *ngIf="listaClientes()" class="form-control" name="Id_Tercero_Destino"
+                                                    ngModel required>
+                                                    <option value="">Seleccione un cliente</option>
+                                                    <option *ngFor="let Cliente of TerceroCliente" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+                                                </select>
                                             </div>
+
                                         </div>
+
                                         <!-- Para Credito-->
-                                        <div class="row" *ngIf="credito">
-                                            <div class="col-md-4">
+                                        <div class="row" *ngIf="Credito">
+                                            <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Crédito</h5>
-                                                <select class="form-control" id="Id_Tercero" name="Id_Tercero" ngModel>
-                                                    <option value="">Seleccione Tercero</option>
-                                                    <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}} ({{tercero.Cupo | currency: "BsS."}}) </option>
-                                                </select>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Tercero</label>
+                                                        <select class="form-control" id="Id_Tercero" name="Id_Tercero"
+                                                            ngModel (change)="VerificarTercero($event.target.value)">
+                                                            <option>Seleccione Tercero</option>
+                                                            <option *ngFor="let tercero of Tercero" [value]="tercero.Id_Tercero">{{tercero.Nombre}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Cupo Tercero</label>
+                                                        <input name="cupoTercero" currencyMask [options]="{ prefix: '$. ', thousands: '.', decimal: ',' }"
+                                                            ngModel="{{cupoTercero}}" type="text" readonly class="form-control">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Bolsa de Bolivares</label>
+                                                        <input currencyMask [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }"
+                                                            name="SaldoBolivar" ngModel="{{SaldoBolivar}}" type="text"
+                                                            readonly class="form-control">
+                                                    </div>
+
+                                                </div>
+
                                             </div>
+
                                         </div>
                                         <!-- Para Consignacion-->
-                                        <div class="row" *ngIf="consignacion">
+                                        <div class="row" *ngIf="Consignacion">
                                             <div class="col-md-4">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Consignación</h5>
-                                                <select class="form-control" name="Id_Cuenta_Bancaria" ngModel>
-                                                    <option value="">Seleccione Cuenta Bancaria</option>
-                                                    <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Id_Cuenta_Bancaria">{{cuenta.Numero_Cuenta}}</option>
+                                                <select class="form-control" name="Id_Cuenta_Bancaria" ngModel (change)="InformacionCuentaBancaria($event.target.value)">
+                                                    <option>Seleccione Cuenta Bancaria</option>
+                                                    <option *ngFor="let cuenta of CuentaBancaria" [value]="cuenta.Id_Cuenta_Bancaria">
+                                                        {{cuenta.Numero_Cuenta}}
+                                                    </option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <hr class="mrg-top-10 mrg-btm-10">
+                                                <h5>Tipo Cuenta</h5>
+                                                <input id="tipoCuenta" class="form-control" type="text" readonly>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <hr class="mrg-top-10 mrg-btm-10">
+                                                <h5>Titular</h5>
+                                                <input id="NombreTitular" class="form-control" type="text" readonly>
                                             </div>
                                         </div>
 
                                         <!-- efectivo -->
-
-                                        <div class="row">
-                                            <div *ngIf="Recibe==='Transferencia'" class="col-md-12">
+                                        <div class="row" *ngIf="transferencia">
+                                            <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Destinatarios</h5>
                                                 <div *ngFor="let Envio of Envios; let i= index">
                                                     <div class="row">
                                                         <div class="col-md-2">
                                                             <div class="form-group">
-                                                                <label class="transferencia">N. Documento <i class="ti-pencil" *ngIf="Envio.esconder" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)" ></i> </label>
+                                                                <label class="transferencia">N. Documento <i class="ti-pencil"
+                                                                        *ngIf="Envio.esconder" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)"></i>
+                                                                </label>
                                                                 <input type="text" class="form-control" name="Destino{{i}}"
                                                                     id="Destino{{i}}" [(ngModel)]="Envio.Destino"
                                                                     [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
@@ -480,16 +568,6 @@
                                                                     (change)="AutoCompletarDestinatario(Envio.Destino, i);"
                                                                     (blur)="CrearDestinatrioModal(Envio.Destino,i);"
                                                                     (foucs)="CrearDestinatrioModal(Envio.Destino,i);">
-                                                              <!--    
-                                                                <button *ngIf="Envio.esconder" class="btn btn-default btn-xs"
-                                                                    type="button" style="margin:0;" (click)="EditarDestinatario(Envio.Numero_Documento_Destino, i)">
-                                                                    <i class="ti-pencil"></i>
-                                                                </button>
-
-                                                                <button *ngIf="Envio.esconder" class="btn btn-default btn-xs"
-                                                                    type="button" style="margin:0;" (click)="NuevaHileraDestinatario(i)">
-                                                                    <i class="fa fa-user"></i>
-                                                                </button> -->
                                                             </div>
                                                         </div>
 
@@ -506,7 +584,7 @@
                                                                 <label class="transferencia">Cuenta</label>
                                                                 <select id="Id_Destinatario_Cuenta{{i}}" name="Id_Destinatario_Cuenta{{i}}"
                                                                     [(ngModel)]="Envio.Id_Destinatario_Cuenta" class="form-control"
-                                                                    autocomplete="off" required (change)="NuevaHileraDestinatario(i);" >
+                                                                    autocomplete="off" required (change)="NuevaHileraDestinatario(i);">
                                                                     <option value="">Seleccione una Cuenta</option>
                                                                     <option *ngFor="let Cuenta of Envio.Cuentas"
                                                                         [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
@@ -516,11 +594,11 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label class="transferencia">Valor Bolivares</label>
-                                                                <input disabled="{{ i== 0 ? 'true':'false'}}" id="Valor_Transferencia_Bolivar{{i}}" type="number"
-                                                                    placeholder="Valor a Transferir en Bolivares" class="form-control"
-                                                                    name="Valor_Transferencia_Bolivar{{i}}" [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
-                                                                    (blur)="AutoSuma(i);"
-                                                                    required>
+                                                                <input disabled="{{ i== 0 ? 'true':'false'}}" id="Valor_Transferencia_Bolivar{{i}}"
+                                                                    type="number" placeholder="Valor a Transferir en Bolivares"
+                                                                    class="form-control" name="Valor_Transferencia_Bolivar{{i}}"
+                                                                    [(ngModel)]="Envio.Valor_Transferencia_Bolivar"
+                                                                    (input)="AutoSuma(i);" required>
                                                             </div>
                                                         </div>
 
@@ -528,6 +606,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
@@ -536,18 +615,12 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group text-center">
                                                             <label class="transferencia">Moneda Recibida</label>
-                                                            <select class="form-control" placeholder="Moneda Recibida"
-                                                                (change)="Origen($event.target.value)" name="MonedaRecibidaTransferencia"
-                                                                ngModel="{{MonedaRecibidaTransferencia}}">
-                                                                <option> Seleccione Moneda</option>
-                                                                <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                                                    ({{ moneda.Codigo }}) </option>
-                                                            </select>
-                                                            <input hidden readonly name="Moneda_Origen" type="text"
-                                                                class="form-control" ngModel="{{MonedaOrigen}}">
+                                                            <input readonly name="Moneda_Origen" type="text" class="form-control"
+                                                                ngModel="Pesos">
                                                         </div>
                                                         <div class="form-group">
-                                                            <input id="Cantidad_Recibida" type="number" min=0 (blur)="RealizarCambioMonedaTransferencia($event.target.value,'cambia')" (input)="validarCamposBolivares($event.target.value)"
+                                                            <input id="Cantidad_Recibida" type="number" min=0 (blur)="RealizarCambioMonedaTransferencia($event.target.value,'cambia')"
+                                                                (input)="validarCamposBolivares($event.target.value)"
                                                                 autocomplete="off" placeholder="Precio Recibido" class="form-control"
                                                                 [(ngModel)]="cambiar" name="Cantidad_Recibida" required>
                                                         </div>
@@ -559,32 +632,27 @@
                                                                 name="Tasa_Cambio" [(ngModel)]="PrecioSugeridoTransferencia"
                                                                 (blur)="ValidarTransferencia($event.target.value)">
                                                         </div>
-                                                        <div class="form-group text-center" *ngIf="MonedaComision">
-                                                            <label>Comisión</label>
-                                                            <input readonly type="number" class="form-control" name="Costo_Transferencia"
-                                                                ngModel="{{ValorTransferencia}}">
-                                                        </div>
+
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group text-center">
                                                             <label class="transferencia">Moneda de Transferencia
                                                             </label>
-                                                            <select name="MonedaTransferencia" class="form-control"
-                                                                placeholder="Moneda de transferencia" ngModel="{{MonedaTransferencia}}"
-                                                                (change)="CambiarTasa($event.target.value);">
+                                                            <select name="Moneda_Destino" class="form-control"
+                                                                placeholder="Moneda de transferencia" ngModel="{{1}}">
                                                                 <option> Seleccione Moneda</option>
-                                                                <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                                <option *ngFor="let moneda of MonedasTransferencia"
+                                                                    [value]="moneda.Id_Moneda">{{moneda.Nombre}}
                                                                     ({{ moneda.Codigo }}) </option>
                                                             </select>
-                                                            <input hidden name="Moneda_Destino" readonly type="text"
-                                                                class="form-control" ngModel="{{MonedaDestino}}">
+
                                                         </div>
                                                         <div class="form-group">
                                                             <!--(blur)="RealizarCambioMonedaTransferencia($event.target.value,'entrega')"
-                                                            -->
-                                                            <input disabled id="Cantidad_Transferida" 
-                                                                type="number" min=0 placeholder="Precio Transferencia"
-                                                                class="form-control" [(ngModel)]="entregar" name="Cantidad_Transferida"
+                                                                        -->
+                                                            <input disabled id="Cantidad_Transferida" type="number" min=0
+                                                                placeholder="Precio Transferencia" class="form-control"
+                                                                [(ngModel)]="entregar" name="Cantidad_Transferida"
                                                                 required>
                                                         </div>
                                                     </div>
@@ -592,7 +660,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" *ngIf="efectivo">
+
+                                        <div class="row" *ngIf="datosRemitenteTransferencia">
                                             <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
                                                 <h5>Datos del Remitente</h5>
@@ -630,10 +699,11 @@
                                                                 autocomplete="off" class="form-control" name="Telefono_Envia"
                                                                 ngModel="{{DatosRemitente.Telefono}}">
                                                         </div>
-                                                    </div>                                                  
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row mrg-top-20">
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -643,31 +713,33 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
 
-                                    <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
-                                        <div class="col-md-10">
-                                            <button disabled id="BotonTransferencia" class="btn btn-primary btn-sm btn-block mrg-top-10"
-                                                [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
-                                                Transferencia
-                                            </button>
+                                        <div class="row mrg-top-20" *ngIf="BotonTransferencia">
+                                            <div class="col-md-10">
+                                                <button disabled id="BotonTransferencia" class="btn btn-primary btn-sm btn-block mrg-top-10"
+                                                    [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                                    (confirm)="GuardarTransferencia(FormTransferencia)">Guardar
+                                                    Transferencia
+                                                </button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                        <div class="row mrg-top-20" *ngIf="BotonMovimiento">
+                                            <div class="col-md-10">
+                                                <button id="BotonMovimientoGuardar" class="btn btn-primary btn-sm btn-block mrg-top-10"
+                                                    [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                                    (confirm)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
+                                                </button>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">
-                                        <div class="col-md-10">
-                                            <button id="BotonMovimiento" class="btn btn-primary btn-sm btn-block mrg-top-10"
-                                                [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                (confirm)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
-                                            </button>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
-                                        </div>
-                                    </div>
+
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -694,50 +766,171 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <hr>
-                                    <h5>Últimas Giros Registrados</h5>
-                                    <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions3"
-                                            [dtTrigger]="dtTrigger3">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:60px;">Hora</th>
-                                                    <th>Código</th>
-                                                    <th>Valor Recibido</th>
-                                                    <th>Valor Entrega</th>
-                                                    <th>Comision</th>
-                                                    <th style="width:160px;"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let Giro of Giros" class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
-                                                    <td>{{Giro.Fecha | date:"HH:mm" }}</td>
-                                                    <td>{{Giro.Codigo}}</td>
-                                                    <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                    <td>{{Giro.Valor_Entrega | currency}}</td>
-                                                    <td>{{Giro.Comision | currency }}
-                                                    </td>
 
-                                                    <td class="text-center">
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                                            <i class="ti-printer"></i>
-                                                        </button>
-                                                        <button *ngIf="anulado(Giro.Estado)" (click)="EditarGiro(Giro.Id_Giro)"
-                                                            class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                                            <i class="ti-pencil"></i>
-                                                        </button>
-                                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
-                                                            <i class="ti-reload"></i>
-                                                        </button>
-                                                        <button *ngIf="anulado(Giro.Estado)" class="btn btn-default btn-xs"
-                                                            type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                            (confirm)="AnularGiro(Giro.Id_Giro)">
-                                                            <i class="ti-close"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <!-- <h4 class="card-title">Default Tabs</h4> -->
+                                            <div class="tab-success">
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a href="#default-tab-1" class="nav-link active" role="tab"
+                                                            data-toggle="tab">Giros Enviados</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#default-tab-2" class="nav-link" role="tab"
+                                                            data-toggle="tab">Giros Pagados</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#default-tab-3" class="nav-link" role="tab"
+                                                            data-toggle="tab">Buscador</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div role="tabpanel" class="tab-pane fade in active" id="default-tab-1">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:60px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Enviado Por</th>
+                                                                            <th>Cédula Destinatario</th>
+                                                                            <th>Nombre Destinatario</th>
+                                                                            <th>Valor Recibido</th>
+                                                                            <th>Comisión</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let Giro of Giros" class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
+                                                                            <td>{{Giro.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{Giro.Codigo}}</td>
+                                                                            <td>{{Giro.Nombre_Remitente}}</td>
+                                                                            <td>{{Giro.Documento_Destinatario}}</td>
+                                                                            <td>{{Giro.Nombre_Destinatario}} </td>
+                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
+                                                                            <td>{{Giro.Comision | currency}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-sm table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width:60px;">Hora</th>
+                                                                            <th>Código</th>
+                                                                            <th>Enviado Por</th>
+                                                                            <th>Cédula Destinatario</th>
+                                                                            <th>Nombre Destinatario</th>
+                                                                            <th>Valor Recibido</th>
+                                                                            <th>Comisión</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let Giro of GirosAprobados">
+                                                                            <td>{{Giro.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{Giro.Codigo}}</td>
+                                                                            <td>{{Giro.Nombre_Remitente}}</td>
+                                                                            <td>{{Giro.Documento_Destinatario}}</td>
+                                                                            <td>{{Giro.Nombre_Destinatario}} </td>
+                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
+                                                                            <td>{{Giro.Comision | currency}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="default-tab-3">
+                                                        <div class="pdd-horizon-15 pdd-vertical-20">
+                                                            <div class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-md-8">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="Buscador de cedula"
+                                                                            [(ngModel)]="Cedula">
+                                                                    </div>
+                                                                    <div class="col-md-4">
+                                                                        <button (click)="FiltrarGiroCedula(Cedula)"
+                                                                            class="btn btn-default btn-xs" type="button"
+                                                                            style="margin:0;">
+                                                                            <i class="ti-search"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row" *ngIf="Aparecer">
+                                                                    <div class="col-md-12">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-hover table-sm table-striped">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th style="width:60px;">Hora</th>
+                                                                                        <th>Código</th>
+                                                                                        <th>Enviado Por</th>
+                                                                                        <th>Cédula Destinatario</th>
+                                                                                        <th>Nombre Destinatario</th>
+                                                                                        <th>Valor a Pagar</th>
+                                                                                        <th>Comisión</th>
+                                                                                        <th style="width:160px;"></th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr *ngFor="let Giro of GirosBuscar"
+                                                                                        class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
+                                                                                        <td>{{Giro.Fecha |
+                                                                                            date:"HH:mm"}}</td>
+                                                                                        <td>{{Giro.Codigo}}</td>
+                                                                                        <td>{{Giro.Nombre_Remitente}}</td>
+                                                                                        <td>{{Giro.Documento_Destinatario}}</td>
+                                                                                        <td>{{Giro.Nombre_Destinatario}}
+                                                                                        </td>
+                                                                                        <td>{{Giro.Valor_Recibido |
+                                                                                            currency}}</td>
+                                                                                        <td>{{Giro.Comision |
+                                                                                            currency}}</td>
+                                                                                        <td class="text-center">
+                                                                                            <button class="btn btn-default btn-xs"
+                                                                                                type="button" style="margin:0;"
+                                                                                                (click)="ModalVerGiro(Giro.Id_Giro)">
+                                                                                                <i class="fa fa-check"></i>
+                                                                                            </button>
+                                                                                            <button class="btn btn-default btn-xs"
+                                                                                                type="button" style="margin:0;">
+                                                                                                <i class="ti-printer"></i>
+                                                                                            </button>
+                                                                                            <button *ngIf="anulado(Giro.Estado)"
+                                                                                                (click)="EditarGiro(Giro.Id_Giro)"
+                                                                                                class="btn btn-default btn-xs"
+                                                                                                type="button" style="margin:0;">
+                                                                                                <i class="ti-pencil"></i>
+                                                                                            </button>
+                                                                                            <button *ngIf="anulado(Giro.Estado)"
+                                                                                                class="btn btn-default btn-xs"
+                                                                                                type="button" style="margin:0;"
+                                                                                                [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                                                                (confirm)="AnularGiro(Giro.Id_Giro)">
+                                                                                                <i class="ti-close"></i>
+                                                                                            </button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -757,7 +950,8 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Departamento Remitente</label>
-                                                                <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Remitente')">
+                                                                <select name="Departamento_Remitente" ngModel class="form-control"
+                                                                    (change)="Municipios_Departamento($event.target.value, 'Remitente')">
                                                                     <option value="">Seleccione Departamento</option>
                                                                     <option *ngFor="let departamento of Departamentos"
                                                                         [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
@@ -773,7 +967,7 @@
                                                                     ngModel>
                                                                     <option value="">Seleccione Ciudad</option>
                                                                     <option *ngFor="let municipio of Municipios_Remitente"
-                                                                        [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                        [value]="municipio.Id_Municipio">{{municipio.Nombre}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -781,13 +975,11 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <label>Número de documento</label>
-                                                            <input type="text" class="form-control" placeholder="Número Documento"
-                                                                name="Documento_Remitente" autocomplete="off"
-                                                                [(ngModel)]="DatosRemitenteGiro" [ngbTypeahead]="search_remitente"
-                                                                [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                                (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);">
-                                                            <input type="text" class="form-control" readonly name="Documento_Remitente"
-                                                                ngModel="{{DatosRemitenteGiro.Id_Transferencia_Remitente}}">
+                                                            <input id="DocumentoGiroRemitente" type="text" class="form-control"
+                                                                placeholder="Número Documento" name="Documento_Remitente"
+                                                                autocomplete="off" [(ngModel)]="DatosRemitenteGiro"
+                                                                [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                                [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarRemitenteGiro(DatosRemitenteGiro);CompletarDatosRemitenteGiro()">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -796,7 +988,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Pepito Perez"
                                                                     class="form-control" name="Nombre_Remitente"
-                                                                    ngModel="{{DatosRemitenteGiro.Nombre}}">
+                                                                    ngModel="{{NombreRemitenteGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -806,7 +998,7 @@
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 318 3555555"
                                                                     class="form-control" name="Telefono_Remitente"
-                                                                    ngModel="{{DatosRemitenteGiro.Telefono}}">
+                                                                    ngModel="{{TelefonoRemitenteGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -819,7 +1011,8 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Departamento Destinatario</label>
-                                                                <select ngModel class="form-control" (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
+                                                                <select ngModel name="Departamento_Destinatario" class="form-control"
+                                                                    (change)="Municipios_Departamento($event.target.value, 'Destinatario')">
                                                                     <option value="">Seleccione Departamento</option>
                                                                     <option *ngFor="let departamento of Departamentos"
                                                                         [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
@@ -834,7 +1027,7 @@
                                                                 <select class="form-control" ngModel name="Municipio_Destinatario">
                                                                     <option value="">Seleccione Ciudad</option>
                                                                     <option *ngFor="let municipio of Municipios_Destinatario"
-                                                                        [value]="municipio.Nombre">{{municipio.Nombre}}</option>
+                                                                        [value]="municipio.Id_Municipio">{{municipio.Nombre}}</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -843,13 +1036,12 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Número de Documento</label>
-                                                                <input type="text" class="form-control" placeholder="Número Documento"
-                                                                    autocomplete="off" name="Documento_Destinatario"
-                                                                    [(ngModel)]="DatosDestinatario" [ngbTypeahead]="search_remitente"
-                                                                    [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                                    (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario)">
-                                                                <input type="text" class="form-control" readonly name="Documento_Destinatario"
-                                                                    ngModel="{{DatosDestinatario.Id_Transferencia_Remitente}}">
+                                                                <input id="DocumentoGiroDestinatario" type="text" class="form-control"
+                                                                    placeholder="Número Documento" autocomplete="off"
+                                                                    name="Documento_Destinatario" [(ngModel)]="DatosDestinatario"
+                                                                    [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                                    [inputFormatter]="formatter_remitente"
+                                                                    (ngModelChange)="AutoCompletarRemitenteGiro(DatosDestinatario);CompletarDatosDestinatarioGiro()">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -859,7 +1051,7 @@
                                                                 <label>Nombre Completo</label>
                                                                 <input type="text" placeholder="Ejem: Juan Sanchez"
                                                                     class="form-control" name="Nombre_Destinatario"
-                                                                    ngModel="{{DatosDestinatario.Nombre}}">
+                                                                    ngModel="{{NombreDestinatarioGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -868,7 +1060,7 @@
                                                             <div class="form-group">
                                                                 <label>Teléfono</label>
                                                                 <input type="text" placeholder="Ejem: 6543424" class="form-control"
-                                                                    name="Telefono_Destinatario" ngModel="{{DatosDestinatario.Telefono}}">
+                                                                    name="Telefono_Destinatario" ngModel="{{TelefonoDestinatarioGiro}}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -926,14 +1118,14 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Total</label>
+                                                        <label>Valor a Entregar</label>
                                                         <input type="text" placeholder="Precio" class="form-control"
                                                             readonly name="Valor_Total" ngModel="{{ValorTotal}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Entregado</label>
+                                                        <label>Total</label>
                                                         <input type="text" placeholder="valor" class="form-control"
                                                             name="Valor_Entrega" ngModel="{{ValorEntrega}}" readonly>
                                                     </div>
@@ -965,6 +1157,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="traslados" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -984,93 +1177,112 @@
                                     Traslado</button>
                             </div>
 
-                            <div class="col-md-6">
-                                <hr>
-                                <h5>Últimos Traslados Enviados del dia</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado"
-                                        [dtTrigger]="dtTriggerTraslado">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:60px;">Hora</th>
-                                                <th>Código</th>
-                                                <th>Valor</th>
-                                                <th>Moneda</th>
-                                                <th style="width:160px;"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let Traslado of Traslados" class=" {{Traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                                <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
-                                                <td>{{Traslado.Codigo}}</td>
-                                                <td>{{Traslado.Valor | currency}}</td>
-                                                <td>{{Traslado.Moneda }}
-                                                </td>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="tab-info center-tabs">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a href="#default-tab-1" class="nav-link active" role="tab"
+                                                        data-toggle="tab">Enviados</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#default-tab-2" class="nav-link" role="tab" data-toggle="tab">Recibidos</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div role="tabpanel" class="tab-pane fade in active" id="default-tab-1">
+                                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-sm table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width:60px;">Hora</th>
+                                                                        <th>Código</th>
+                                                                        <th>Valor</th>
+                                                                        <th>Moneda</th>
+                                                                        <th style="width:160px;"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let Traslado of Traslados" class=" {{Traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                                                        <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
+                                                                        <td>{{Traslado.Codigo}}</td>
+                                                                        <td>{{Traslado.Valor | currency}}</td>
+                                                                        <td>{{Traslado.Moneda }}
+                                                                        </td>
 
-                                                <td class="text-center" *ngIf="esconder(Traslado.Estado,Traslado.Aprobado)">
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                        (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
-                                                        <i class="ti-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                        (confirm)="AnularTraslado(Traslado.Id_Traslado_Caja,Traslado.Estado)">
-                                                        <i class="ti-close"></i>
-                                                    </button>
-                                                </td>
-                                                <td *ngIf="!esconder(Traslado.Estado,Traslado.Aprobado)">
-                                                    Este traslado fue anulado o aprobado.
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                                        <td class="text-center" *ngIf="esconder(Traslado.Estado,Traslado.Aprobado)">
+                                                                            <button class="btn btn-default btn-xs" type="button"
+                                                                                style="margin:0;" (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
+                                                                                <i class="ti-pencil"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-xs" type="button"
+                                                                                style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                                                (confirm)="AnularTraslado(Traslado.Id_Traslado_Caja,Traslado.Estado)">
+                                                                                <i class="ti-close"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td *ngIf="!esconder(Traslado.Estado,Traslado.Aprobado)">
+                                                                            Este traslado fue anulado o aprobado.
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
+                                                    <div class="pdd-horizon-15 pdd-vertical-20">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-sm table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width:60px;">Hora</th>
+                                                                        <th>Código</th>
+                                                                        <th>Valor</th>
+                                                                        <th>Moneda</th>
+                                                                        <th style="width:160px;"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let Traslado of TrasladosRecibidos"
+                                                                        class=" {{Traslado.Aprobado == 'No' ? 'bg-danger text-white' : '' }} ">
+                                                                        <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
+                                                                        <td>{{Traslado.Codigo}}</td>
+                                                                        <td>{{Traslado.Valor | currency}}</td>
+                                                                        <td>{{Traslado.Moneda }}
+                                                                        </td>
+
+                                                                        <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
+                                                                            <button class="btn btn-default btn-xs" type="button"
+                                                                                style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
+                                                                                <i class="fa fa-check"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-default btn-xs" type="button"
+                                                                                style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'No')">
+                                                                                <i class="fa fa-times"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
+                                                                            <label *ngSwitchCase="true">Aprobado</label>
+                                                                            <label *ngSwitchCase="false">Negado</label>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <hr>
-                                <h5>Últimas Traslados Recibidos del dia</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptionsTraslado1"
-                                        [dtTrigger]="dtTriggerTraslado1">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:60px;">Hora</th>
-                                                <th>Código</th>
-                                                <th>Valor</th>
-                                                <th>Moneda</th>
-                                                <th style="width:160px;"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let Traslado of TrasladosRecibidos" class=" {{Traslado.Aprobado == 'No' ? 'bg-danger text-white' : '' }} ">
-                                                <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
-                                                <td>{{Traslado.Codigo}}</td>
-                                                <td>{{Traslado.Valor | currency}}</td>
-                                                <td>{{Traslado.Moneda }}
-                                                </td>
 
-                                                <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                        (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
-                                                        <i class="fa fa-check"></i>
-                                                    </button>
-                                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                        (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'No')">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                                <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
-                                                    <label *ngSwitchCase="true">Aprobado</label>
-                                                    <label *ngSwitchCase="false">Negado</label>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row" id="Traslados2" *ngIf="Traslado2" style="margin-top: 10px">
@@ -1082,7 +1294,7 @@
                                             <div class="col-md-6" hidden>
                                                 <div class="form-group">
                                                     <input name="Id_Cajero_Origen" type="text" class="form-control"
-                                                        ngModel="{{Funcionario}}" required >
+                                                        ngModel="{{Funcionario}}" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -1090,7 +1302,7 @@
                                                     <label>Cajero Destino</label>
                                                     <select name="Funcionario_Destino" class="form-control" ngModel>
                                                         <option value="">seleccione una opción</option>
-                                                        <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
+                                                        <option *ngFor="let Caja of FuncionariosCajaDestino" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
                                                             {{Caja.Apellidos}}</option>
                                                     </select>
                                                 </div>
@@ -1137,6 +1349,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="corresponsal" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -1205,6 +1418,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card modulos" id="servicios" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -1229,8 +1443,7 @@
                                     <hr>
                                     <h5>Últimas Servicios Registrados</h5>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions1"
-                                            [dtTrigger]="dtTrigger1">
+                                        <table class="table table-hover table-sm table-striped">
                                             <thead>
                                                 <tr>
                                                     <th style="width:60px;">Hora</th>
@@ -1347,6 +1560,12 @@
 <ng-template #rt_remitente let-r="result" let-t="term">
     <span class="f-9">{{ r.Id_Transferencia_Remitente }}
         <strong>{{r.Nombre}}</strong>
+    </span>
+</ng-template>
+
+<ng-template #rt_cuenta let-r="result" let-t="term">
+    <span class="f-9">{{ r.Numero_cuenta }}
+        <strong>{{r.Nombre_Titular}}</strong>
     </span>
 </ng-template>
 
@@ -1515,8 +1734,7 @@
                 <hr>
                 <h5>Últimos Movimientos del remitente</h5>
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions2"
-                        [dtTrigger]="dtTrigger2">
+                    <table class="table table-hover table-sm table-striped">
                         <thead>
                             <tr>
                                 <th style="width:60px;">Hora</th>
@@ -2090,7 +2308,8 @@
                     <div class="form-group">
                         <label>Tipo Doc.</label>
                         <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                        (change)="BuscarCNE($event.target.value)"> <!--(change)="BuscarCNE($event.target.value)"-->
+                            (change)="BuscarCNE($event.target.value)">
+                            <!--(change)="BuscarCNE($event.target.value)"-->
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2104,7 +2323,7 @@
                             ngModel={{Id_Destinatario}} required>
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
                             Riff
-                        </button> 
+                        </button>
 
                     </div>
                 </div>
@@ -2115,13 +2334,13 @@
                             maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
                             ngModel required>
                     </div>
-                </div>               
+                </div>
 
             </div>
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"  ></iframe>
+                        <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"></iframe>
                         <button class="btn btn-primary btn-sm" (click)="frame = !frame"> Ocultar página</button>
                     </div>
                 </div>
@@ -2251,7 +2470,7 @@
                 <div class="col-md-12">
                     <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
                     <div class="form-group">
-                        <label>Tipo Doc.</label>
+                        <label>Motivo Anulación</label>
                         <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion" ngModel></textarea>
                     </div>
                 </div>
@@ -2261,12 +2480,11 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)">Guardar
+            <button class="btn btn-primary btn-sm" (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)">Anular
             </button>
         </div>
     </div>
 </app-modal-basic>
-
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
     <div class="app-modal-header">
@@ -2283,7 +2501,8 @@
                         <td>Fecha</td>
                         <td>{{ item.Fecha }}</td>
                         <td>Tipo Transferencia </td>
-                        <td colspan="3" style="text-align: center;">{{ item.Tipo_Transferencia }}</td>
+                        <td colspan="3" style="text-align: center;">{{ item.Forma_Pago }} - {{ item.Tipo_Transferencia
+                            }} </td>
                     </tr>
                     <tr *ngFor="let item of EncabezadoRecibo">
                         <td>Total Pesos</td>
@@ -2294,9 +2513,13 @@
                         <td>{{ item.Tasa_Cambio}}</td>
                     </tr>
                     <tr>
-                        <td colspan="6"> </td>
+                        <td> {{ TituloModalTransferencia }} </td>
+                        <td colspan="5"> {{NombreTercero}} </td>
                     </tr>
                     <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr *ngIf="itemDestinatario">
                         <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
                     </tr>
                     <tr *ngFor="let item1 of DestinatarioRecibo">
@@ -2322,6 +2545,111 @@
     <div class="app-modal-footer">
         <div class="text-right">
 
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCambio" #ModalVerCambio>
+    <div class="app-modal-header">
+        <h4 *ngIf="verCambio.Tipo == 'Compra' ">Recibo de Venta Cliente </h4>
+        <h4 *ngIf="verCambio.Tipo == 'Venta' ">Recibo de Compra Cliente </h4>
+
+    </div>
+    <div class="app-modal-body">
+        <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Codigo Recibo</td>
+                        <td>{{verCambio.Codigo}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tipo De Cambio</td>
+                        <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
+                    </tr>
+                    <tr>
+                        <td>Recibo</td>
+                        <td>{{verCambio.Valor_Origen | currency: currencyOrigen}} </td>
+                    </tr>
+
+                    <tr>
+                        <td>Tasa</td>
+                        <td>{{verCambio.Tasa}} </td>
+                    </tr>
+
+                    <tr>
+                        <td>Entrego</td>
+                        <td>{{verCambio.Valor_Destino | currency: currencyDestino}} </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalSaldoInicio" #ModalSaldoInicio>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Apertura de caja</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormMontoInicial="ngForm">
+            <div class="col-md-12 ">
+                <label>Saldo Anterior Caja Pesos</label>
+                <input currencyMask type="text" class="form-control" name="Monto_Inicio" ngModel="{{CierreCajaAyer}}"
+                    [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+            </div>
+
+            <div class="col-md-12 ">
+                <label>Saldo Anterior Caja Bolivares</label>
+                <input currencyMask type="text" class="form-control" name="Monto_Inicio_Bolivar" ngModel="{{CierreCajaAyerBolivares}}"
+                    [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required>
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormMontoInicial , ModalSaldoInicio)">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalAprobarGiro" #ModalAprobarGiro>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Información Giro</h4>
+    </div>
+    <div class="app-modal-body">
+        <h2>¿ Está seguro que desea realizar el giro ?</h2>
+        <table class="table table-hover table-sm table-striped">
+            <tr>
+                <td>Remitente</td>
+                <td>{{informacionGiro.Nombre_Remitente}}</td>
+            </tr>
+            <tr>
+                <td>Destinatario</td>
+                <td>{{informacionGiro.Nombre_Destinatario}}</td>
+            </tr>
+            <tr>
+                <td>Valor A Entregar</td>
+                <td>{{ValorTotalGiro | currency: "$. "}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button class="btn btn-primary btn-sm" (click)="PagarGiro(informacionGiro.Id_Giro,ModalAprobarGiro,informacionGiro.Documento_Destinatario)">Pagar
+                Giro
+            </button>
         </div>
     </div>
 </app-modal-basic>

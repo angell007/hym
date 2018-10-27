@@ -86,7 +86,7 @@
                                             <th class="text-center" style="width:80px">Cuenta Destino</th>
                                             <th class="text-center" style="width:80px;">Valor</th>
                                             <th class="text-center" style="width:160px;">Bloqueado por</th>
-                                            <th class="text-center" style="width:160px;"></th>
+                                            <th class="text-center" style="width:160px;" *ngIf="esconder"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,7 +100,7 @@
                                             <td class="text-right">{{transferencia.Valor_Transferencia_Bolivar |
                                                 currency:"BsS."}}</td>
                                             <td class="text-center">{{transferencia.nombreFuncionario}}</td>
-                                            <td class="text-center">
+                                            <td class="text-center" *ngIf="esconder">
                                                 <button *ngIf="Bloqueado(transferencia.Bloqueo,transferencia.Bloqueo_Funcionario, transferencia.Tipo_Transferencia)"
                                                     (click)="verificarBloqueo(transferencia.Id_Transferencia_Destinatario,transferencia.Numero_Cuenta,transferencia.Valor_Transferencia_Bolivar , transferencia.NombreCajero , transferencia.ReciboCodigo )"
                                                     class="btn btn-default btn-xs" type="button" style="margin:0;">

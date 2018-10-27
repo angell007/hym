@@ -18,7 +18,7 @@
                                     <th>Código</th>
                                     <th>Valor</th>
                                     <th>Tasa Cambio</th>
-                                    <th style="width:300px;"></th>
+                                    <th style="width:300px;" *ngIf="esconder"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -27,7 +27,7 @@
                                     <td>{{compra.Codigo}}</td>
                                     <td>{{compra.Valor_Compra | currency:"BsS."}}</td>
                                     <td>{{compra.Tasa}}</td>
-                                    <td class="text-center">
+                                    <td class="text-center" *ngIf="esconder">
 
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra)">
                                             <i class="ti-pencil"></i>

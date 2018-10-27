@@ -8,7 +8,7 @@
                     <div class="card" style="height: 500px">
                         <div class="card-header">
                             <h4 class="pull-left">Traslados</h4>
-                            <button class="pull-right btn btn-info" (click)="ModalTraslado.show();">
+                            <button *ngIf="esconder"  class="pull-right btn btn-info" (click)="ModalTraslado.show();">
                                 <i class="ti-plus"></i>Nuevo Traslado</button>
                         </div>
                         <div class="card-body">
