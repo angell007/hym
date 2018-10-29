@@ -279,7 +279,7 @@ export class TablerocajeroComponent implements OnInit {
       datos.append("datos", info);
       datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
       datos.append("caja", "5");
-      datos.append("oficina", "4");
+      datos.append("oficina", "16");
       datos.append("idDiario", this.IdDiario);
       this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
         .catch(error => {
@@ -1326,7 +1326,7 @@ export class TablerocajeroComponent implements OnInit {
       suma += Number(element.Valor_Transferencia_Bolivar);
     });
 
-    var totalPermitido = Number(this.entregar) + Number(this.SaldoBolivar)
+    var totalPermitido = Number(this.entregar) 
 
     if (this.credito == true) {
       var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
@@ -2481,7 +2481,7 @@ export class TablerocajeroComponent implements OnInit {
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
-      this.ValorTotalGiro = Number(data.Valor_Recibido) + Number(data.Comision);
+      this.ValorTotalGiro = Number(data.Valor_Recibido);
     });
     this.ModalAprobarGiro.show();
   }

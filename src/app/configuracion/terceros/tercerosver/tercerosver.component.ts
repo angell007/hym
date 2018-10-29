@@ -57,6 +57,7 @@ export class TercerosverComponent implements OnInit {
   }
 
   GuardarMovimiento(formulario: NgForm, modal) {
+    formulario.value.Id_Tercero = this.id;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Movimiento_Tercero');
