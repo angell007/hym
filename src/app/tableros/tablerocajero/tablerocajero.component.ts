@@ -2192,12 +2192,14 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   AnularTransferencia(id, formulario: NgForm) {
+    formulario.value.idTercero = this.idTerceroDestino;
+    formulario.value.idDestino = this.destinoTercero;
     let datos = new FormData();
     let info = JSON.stringify(formulario.value);
     datos.append("id", id);
     datos.append("datos", info);
-    datos.append("idTercero", this.idTerceroDestino);
-    datos.append("idDestino", this.destinoTercero);
+    /*datos.append("idTercero", this.idTerceroDestino);
+    datos.append("idDestino", this.destinoTercero);*/
     this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
