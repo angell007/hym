@@ -103,6 +103,8 @@ export class TercerosComponent implements OnInit {
 
 
   EditarTercero(id, modal){
+    this.Identificacion = [];
+    this.tercero = [];
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tercero', id:id}
     }).subscribe((data:any)=>{   

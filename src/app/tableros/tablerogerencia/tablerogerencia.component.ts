@@ -31,6 +31,7 @@ export class TablerogerenciaComponent {
   CajerosAbiertos: any[];
   Funcionarios: any[];
   botonVolver = false;
+  fechaHoy = "";
   @ViewChild('CierreCaja') CierreCaja: any;
   ngOnInit() {
     this.http.get(this.globales.ruta + 'php/gerencia/movimentos_fechas.php').subscribe((data: any) => {
@@ -49,6 +50,7 @@ export class TablerogerenciaComponent {
     var yyyy = today.getFullYear();
     var hoy = yyyy + '-' + mm + '-' + dd;
     (document.getElementById("datefield") as HTMLInputElement).setAttribute("max", hoy);
+    this.fechaHoy = hoy;
 
     this.http.get(this.globales.ruta + 'php/gerencia/cajeros_abiertos.php').subscribe((data: any) => {
       this.CajerosAbiertos = data;
@@ -590,6 +592,15 @@ export class TablerogerenciaComponent {
   }
   
   VolverTodos(){
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    var hoy = yyyy + '-' + mm + '-' + dd;
+    (document.getElementById("datefield") as HTMLInputElement).setAttribute("max", hoy);
+    this.fechaHoy = hoy;
+    
     this.Titulo = " ";
     this.botonVolver = false;
     this.CambiosIngresos = [];

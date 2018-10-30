@@ -828,7 +828,7 @@ export class TablerocajeroComponent implements OnInit {
     this.MonedaOrigenCambio = [];
     this.MonedaOrigenDestino = [];
 
-    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' , funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Cambios = data;
     });
 
@@ -908,7 +908,7 @@ export class TablerocajeroComponent implements OnInit {
       this.LimiteOficina = data.Limite_Transferencia;
     });
 
-    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php' , {params: {funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario} } ).subscribe((data: any) => {
       this.Transferencia = data;
     });
 
@@ -2483,7 +2483,7 @@ export class TablerocajeroComponent implements OnInit {
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
-      this.ValorTotalGiro = Number(data.Valor_Recibido);
+      this.ValorTotalGiro = Number(data.Valor_Total);
     });
     this.ModalAprobarGiro.show();
   }

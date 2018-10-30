@@ -798,7 +798,7 @@
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
                                                                             <th>Valor Recibido</th>
-                                                                            <th>Comisión</th>
+                                                                            <th>Valor Entrega</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -809,7 +809,11 @@
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
                                                                             <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td>{{Giro.Comision | currency}}</td>
+                                                                            <td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
+                                                                            <ng-template #entrego>
+                                                                                <td>{{Giro.Valor_Recibido | currency}}</td>
+                                                                              </ng-template>
+                                                                            <!--<td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -827,7 +831,7 @@
                                                                             <th>Enviado Por</th>
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
-                                                                            <th>Valor Recibido</th>
+                                                                            <th>Valor Pagado</th>
                                                                             <th>Comisión</th>
                                                                         </tr>
                                                                     </thead>
