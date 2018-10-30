@@ -8,7 +8,7 @@
                     <div class="card" style="height: 500px">
                         <div class="card-header">
                             <h4 class="pull-left">Traslados</h4>
-                            <button class="pull-right btn btn-info" (click)="ModalTraslado.show();">
+                            <button *ngIf="esconder"  class="pull-right btn btn-info" (click)="ModalTraslado.show();">
                                 <i class="ti-plus"></i>Nuevo Traslado</button>
                         </div>
                         <div class="card-body">
@@ -17,21 +17,27 @@
                                     [dtTrigger]="dtTrigger">
                                     <thead>
                                         <tr>
-                                            <th>Fecha</th>
-                                            <th>Codigo</th>
-                                            <th>Funcionario</th>
-                                            <th>Moneda</th>
-                                            <th>Valor</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Codigo</th>
+                                            <th class="text-center">Funcionario</th>
+                                            <th class="text-center">Origen</th>
+                                            <th class="text-center">Destino</th>
+                                            <th class="text-center">Moneda</th>
+                                            <th class="text-center">Valor</th>
+
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                            <td>{{traslado.Fecha | date:"dd/MM/yy"}}</td>
-                                            <td>{{traslado.Codigo}}</td>
-                                            <td>{{traslado.Funcionario}}</td>
-                                            <td>{{traslado.Moneda}}</td>
-                                            <td>{{traslado.Valor | currency }}</td>
+                                            <td style="font-size: 11px;">{{traslado.Fecha | date:"dd/MM/yy"}}</td>
+                                            <td style="font-size: 11px;">{{traslado.Codigo}}</td>
+                                            <td style="font-size: 11px;">{{traslado.Funcionario}}</td>
+                                            <td style="font-size: 11px;" >{{traslado.Origen}}</td>
+                                            <td style="font-size: 11px;">{{traslado.Destino}}</td>
+                                            <td style="font-size: 11px;">{{traslado.Moneda}}</td>
+                                            <td class="text-right" style="font-size: 11px;" >{{traslado.Valor }}</td>
+
                                             <td class="text-center">
                                                 <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)"
                                                     style="margin:0;">
@@ -60,7 +66,7 @@
         <div class="col-md-4">
             <div class="col-md-12 card min-heigth">
                 <div>
-                    <div id="chartdiv1" style="height: 800px;font-size: 11px;width: 100%;"></div>
+                    <div id="chartdiv1" style="height: 500px;font-size: 11px;width: 100%;"></div>
                 </div>
             </div>
         </div>

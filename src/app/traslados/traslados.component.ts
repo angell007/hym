@@ -57,88 +57,38 @@ export class TrasladosComponent implements OnInit {
   codigo_Formato: string;
   verTraslado = [];
   edicionTraslado = [];
-
+  movimiento = [];
 
   constructor(private http: HttpClient, private globales: Globales) {
 
   }
 
+  esconder = true;
   ngOnInit() {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
+    var perfil = JSON.parse(localStorage.Perfil);
+
+    switch(perfil){
+      case 5:{
+        this.esconder = false;
       }
-    };
+      default:{
+        this.esconder = true;
+        break;
+      }
+    }
 
     this.ActualizarVista();
     this.user = JSON.parse(localStorage.User);
-
+    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
   }
 
   ActualizarVista() {
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-
     this.consultas();
 
     this.http.get(this.globales.ruta + 'php/traslados/lista.php').subscribe((data: any) => {
       this.traslados = data;
-      this.dtTrigger.next();
+      
     });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    }; 
-
   }
 
   consultas() {
@@ -156,8 +106,8 @@ export class TrasladosComponent implements OnInit {
     });
 
     this.http.get(this.globales.ruta + 'php/traslados/conteo.php').subscribe((data: any) => {
-     
-      var chart = AmCharts.makeChart( "chartdiv1", {
+      
+      var chart = AmCharts.makeChart("chartdiv1", {
         "type": "pie",
         "theme": "light",
         "dataProvider": data,
@@ -170,14 +120,16 @@ export class TrasladosComponent implements OnInit {
         "export": {
           "enabled": true
         },
-        "legend":{
-          "position":"bottom",
-         "marginRight":0,
-         "autoMargins":false
-       }
-      } );
+        "legend": {
+          "position": "bottom",
+          "marginRight": 0,
+          "autoMargins": false
+        }
+      });
 
     });
+
+
   }
 
   CasoTraslado(valor) {
@@ -372,7 +324,7 @@ export class TrasladosComponent implements OnInit {
   }
 
   proveedorDestinatario(pos) {
-    console.log(pos)
+    //console.log(pos)
     this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
       this.ProveedoresDestino = data.proveedor;
       var index = this.ProveedoresDestino.findIndex(x => x.Id_Tercero === pos);
@@ -388,7 +340,7 @@ export class TrasladosComponent implements OnInit {
   }
 
   ClienteDestinatario(pos) {
-    console.log(pos);
+    //console.log(pos);
     this.http.get(this.globales.ruta + 'php/terceros/lista_personas.php').subscribe((data: any) => {
       this.ClientesDestino = data.cliente;
       var index = this.ClientesDestino.findIndex(x => x.Id_Tercero === pos);
@@ -401,6 +353,7 @@ export class TrasladosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Traslado');
     datos.append("datos", info);
+    datos.append("Identificacion_Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
     this.http.post(this.globales.ruta + '/php/traslados/guardar_traslado.php', datos)
       .subscribe((data: any) => {
         formulario.reset();
@@ -455,7 +408,7 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Traslado', id: id }
     }).subscribe((data: any) => {
-      console.log(data);
+      //console.log(data);
       this.Identificacion = id;
       this.edicionTraslado = data;
       this.Origen(data.Origen);

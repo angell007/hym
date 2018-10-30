@@ -56,8 +56,6 @@ export class InformaciongirosComponent implements OnInit {
     }).subscribe((data: any) => {
       this.Identificacion = identificacion;
       this.GiroEditar = data;
-      console.log(data);
-
       switch (tipo) {
         case 'Remitente': {
           this.ModalEditarRemitente.show();
@@ -81,7 +79,6 @@ export class InformaciongirosComponent implements OnInit {
     datos.append("tipo",tipo);
     
     this.http.post(this.globales.ruta + 'php/giros/eliminar_giro.php', datos).subscribe((data: any) => {
-      /*this.deleteSwal.show();*/
       this.ActualizarVista();
     });
 
@@ -90,73 +87,11 @@ export class InformaciongirosComponent implements OnInit {
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
       this.GirosRemitentes = data;
-      this.dtTrigger.next();
     });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Destinatario' } }).subscribe((data: any) => {
       this.GirosDestinatarios = data;
-      this.dtTrigger1.next();
     });
-
-    this.dtOptions1 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
     
   }
 
@@ -171,8 +106,6 @@ export class InformaciongirosComponent implements OnInit {
       formulario.reset();
       modal.hide();
       this.ActualizarVista();
-      /*this.paisDefault = "";
-      this.saveSwal.show();*/      
     });
   }
 

@@ -30,9 +30,12 @@ export class ModalBasicComponent implements OnInit {
   }
 
   public onContainerClicked(event: MouseEvent): void {
-    if ((<HTMLElement>event.target).classList.contains('modal')) {
-      this.hide();
+    if((<HTMLElement>event.target).innerText.substr(0,11) != "Apertura de"){
+      if ((<HTMLElement>event.target).classList.contains('modal')) {
+        this.hide();      
+      }
     }
+
   }
 
 }

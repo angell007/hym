@@ -131,37 +131,8 @@ export class EgresosComponent implements OnInit {
   {
     this.http.get(this.globales.ruta+'php/egresos/lista_egresos.php').subscribe((data:any)=>{
       this.Egresos= data;
-      this.dtTrigger.next();
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar MENU &eacute;l&eacute;ments",
-        info: "Mostrando desde START al END de TOTAL elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado MAX elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    }; 
-
+ 
     //Terceros
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Tercero'}}).subscribe((data:any)=>{
       this.Terceros= data;

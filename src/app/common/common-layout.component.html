@@ -8,12 +8,11 @@
 
         <div [ngClass]="sidenavSelected">
             <!-- Side Nav START -->
-            <div class="side-nav" sideBar *ngIf="cajero">
+            <div class="side-nav" sideBar *ngIf="!OcultarCajero">
                 <div class="side-nav-inner">
                     <div class="side-nav-logo">
                         <a href="" [routerLink]="['/dashboard']">
                             <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
-                            <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
                         </a>
                         <div class="mobile-toggle side-nav-toggle">
                             <a href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
@@ -63,6 +62,14 @@
                             </a>
                         </li>
                         <li clas="nav-item" routerLinkActive="active">
+                            <a href="" [routerLink]="['/compras']">
+                                <span class="icon-holder">
+                                    <i class="ti-shopping-cart"></i>
+                                </span>
+                                <span class="title">Compras</span>
+                            </a>
+                        </li>
+                        <li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/egresos']">
                                 <span class="icon-holder">
                                     <i class="ti-share"></i>
@@ -94,6 +101,7 @@
                                 <span class="title">Servicios Externos</span>
                             </a>
                         </li>
+                        <!--                        
                         <li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/liquidacionsalario']">
                                 <span class="icon-holder">
@@ -101,7 +109,7 @@
                                 </span>
                                 <span class="title">Liquidación Salario</span>
                             </a>
-                        </li>
+                        </li> -->
 
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
@@ -179,9 +187,9 @@
                                 <li>
                                     <a href="" [routerLink]="['/terceros']">Terceros</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="" [routerLink]="['/grupos']">Grupos</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="" [routerLink]="['/tipodocumento']">Tipos de Documentos</a>
                                 </li>
@@ -194,9 +202,9 @@
                                 <li>
                                     <a href="" [routerLink]="['/informaciongiros']">Informacion Giros</a>
                                 </li>
-                                <li>
+                                <!--<li>
                                     <a href="" [routerLink]="['/compras']">Compras</a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="" [routerLink]="['/log']">Log del Sistema</a>
                                 </li>
@@ -240,17 +248,18 @@
             <!-- Side Nav END -->
 
             <!-- Page Container START -->
-            <div class="cajero ? 'page-container' : 'casocajero'">
+            <div class="page-container {{OcultarCajero ? 'casocajero': '' }} ">
 
                 <!-- Top Nav START -->
 
-                <div class="header navbar contenido">
+                <div class="header navbar contenido {{OcultarCajero ? 'header2': '' }}">
                     <div class="header-container">
-                        <ul class="nav-left" *ngIf="cajero">
+                        <ul class="nav-left">
                             <li>
-                                <a class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
+                                <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                                     <i class="fa fa-bars"></i>
                                 </a>
+                                <a *ngIf="OcultarCajero" href="javascript:void(0);" class="logo logo-dark"><img src="assets/images/logo/logo.png" /></a>
                             </li>
                         </ul>
                         <ul class="nav-left">
@@ -258,15 +267,95 @@
                                 <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <div class="user-info">
-                                        <span class="name pdd-right-5">{{ myDate | date:'medium' }}</span>
+                                        <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy HH:mm:ss' }}</span>
                                     </div>
                                 </a>
                             </li>
                         </ul>
                         <ul class="nav-right">
+                            <li class="notifications dropdown" *ngIf="!OcultarConsultor">
+                                <!-- NOTIFICACIONES -->
+                                <span class="counter">{{contadorTraslado}}</span>
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-refresh"></i> Traslados Recibidos
+                                </a>
+                                <ul class="dropdown-menu ">
+                                    <li class="notice-header">
+                                        <i class="fa fa-refresh pdd-right-10"></i>
+                                        <span>Traslados Recibidos</span>
+                                    </li>
+                                    <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
+                                        <li *ngFor="let alerta of alertasCajas">
+                                            <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                                                <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg"
+                                                    alt="">
+                                                <img class="thumb-img" *ngIf=" alerta.Imagen != '' " src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}"
+                                                    alt="">
+                                                <div class="info">
+                                                    <span class="title">
+
+                                                        <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
+                                                        </span>
+                                                        <span class="text-gray"> Le ha realizado un traslado por </span>
+                                                        <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
+                                                        <span class="text-gray"> con código </span>
+                                                        <span class="font-size-14 text-semibold">{{alerta.Codigo}}
+                                                            <!--<span class="text-dark">{{alerta.Detalles}}</span> -->
+                                                        </span>
+                                                    </span>
+                                                    <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <li class="notice-footer">
+                                        <span>
+                                            <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                                                Ver Todos Los Traslados
+                                                <i class="ei-right-chevron pdd-left-5 font-size-10"></i>
+                                            </a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="user-profile dropdown" *ngIf="OcultarConsultor">
+                                <!-- PERFIL -->
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                    <div class="user-info">
+                                        <span class="name pdd-right-5">Cierre Caja</span>
+                                        <i class="ti-angle-down font-size-10"></i>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="" [routerLink]="" (click)="ModalCambiarBanco.show()">
+                                            <!--<i class="ti-user pdd-right-10"></i> -->
+                                            <span>Cambiar Cuenta</span>
+                                        </a>
+                                    </li>
+
+                                    <li role="separator" class="divider"></li>
+                                    <!--<li>
+                                        <a (click)="CierreCaja.show()">
+                                           <i class="ti-power-off pdd-right-10"></i> 
+                                            <span>Cierre de caja</span>
+                                        </a>
+                                    </li>-->
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        <a href="" [routerLink]="" (click)="CierreCuentaBancaria()">
+                                            <!-- <i class="ti-power-off pdd-right-10"></i> -->
+                                            <span>Cierre Cuenta</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
                             <li class="notifications dropdown">
                                 <!-- NOTIFICACIONES -->
-                                <span class="counter">2</span>
+                                <span class="counter">0</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="ti-bell"></i>
                                 </a>
@@ -294,59 +383,6 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <!--<li>
-                                                                <a href="">
-                                                                    <img class="thumb-img" src="assets/images/avatars/thumb-4.jpg" alt="">
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Samuel Field</span> 
-                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-primary">
-                                                                            <span class="text-white">M</span>
-                                                                        </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Michael Birch</span> 
-                                                                            <span class="text-gray">likes your <span class="text-dark">photo</span></span> 
-                                                                        </span>
-                                                                        <span class="sub-title">5 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-success">
-                                                                        <span class="text-white"><i class="fa fa-paper-plane-o"></i></span>
-                                                                    </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Message sent</span>
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">
-                                                                    <span class="thumb-img bg-info">
-                                                                        <span class="text-white"><i class="ti-user"></i></span>
-                                                                    </span>
-                                                                    <div class="info">
-                                                                        <span class="title">
-                                                                            <span class="font-size-14 text-semibold">Admin</span> 
-                                                                            <span class="text-gray">Welcome on board</span> 
-                                                                        </span>
-                                                                        <span class="sub-title">8 hours ago</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li> -->
                                     </ul>
                                     <li class="notice-footer">
                                         <span>
@@ -357,6 +393,17 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            <li class="notifications dropdown" *ngIf="OcultarCajero">
+                                <!-- NOTIFICACIONES -->
+                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
+                                    (click)="this.cerrarCaja(1)">
+                                    <i class="fa fa-lock"> Cerrar Caja</i>
+                                </button>
+
+                            </li>
+
+
                             <li class="user-profile dropdown">
                                 <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -380,12 +427,12 @@
                                         </a>
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                    <li>
+                                    <!--<li>
                                         <a (click)="CierreCaja.show()">
-                                            <!--<i class="ti-power-off pdd-right-10"></i> -->
+                                           <i class="ti-power-off pdd-right-10"></i> 
                                             <span>Cierre de caja</span>
                                         </a>
-                                    </li>
+                                    </li>-->
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a (click)="salir()">
@@ -468,26 +515,26 @@
 </div>
 
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCambiarContrasena" #ModalCambiarContrasena>
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarContrasena" #ModalCambiarContrasena>
     <div class="app-modal-header">
         <h4>Cambiar contraseña</h4>
     </div>
     <div class="app-modal-body">
         <form #FormCambiarContrasena="ngForm">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label>Escriba una nueva contraseña</label>
-                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="">
+                        <input type="password" placeholder="" class="form-control" name="clave" ngModel="" style="width: 100% !important">
                     </div>
                 </div>
             </div>
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
-                </div>
-            </div>
         </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
+        </div>
     </div>
 </app-modal-basic>
 
@@ -495,7 +542,7 @@
     <div class="app-modal-header">
         <h4>Cierre de caja</h4>
     </div>
-    <div class="app-modal-body" >
+    <div class="app-modal-body">
         <form #FormCierreCaja="ngForm">
             <div class="row">
                 <div class="col-md-12">
@@ -503,252 +550,211 @@
                         <table class="table table-bordered data-table" style="clear:none;">
                             <tbody>
                                 <tr>
-                                    <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
+                                    <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
+                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
-                                    <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
+                                    <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
+                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{egresoCambio | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Recibo Transferencia</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoTransferencia | currency :
+                                        "$."}}</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;"></td>
                                     <td style="width:160px;"></td>
                                     <td style="width:150px;text-align:center;"></td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Giros</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{ ingresoGiro | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Giros</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{egresoGiro | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:160px;">Comision de Giros</td>
+                                    <td style="width:150px;text-align:center;">{{ GiroComision | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Traslados</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoTraslado | currency : "$."}}</td>
+                                    <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency:
+                                        "BsS. "}}</td>
                                     <td style="width:160px;">Traslados</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{egresoTraslado | currency : "$." }}</td>
+                                    <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar | currency:
+                                        "BsS. " }}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Corresponsal Bancario</td>
-                                    <td style="width:150px;text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCorresponsal | currency :
+                                        "$."}}</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;">Gastos</td>
                                     <td style="width:150px;text-align:center;">$ 0</td>
                                     <td style="width:160px;text-align:center;">BsS. 0</td>
                                 </tr>
                                 <tr>
                                     <td style="width:160px;">Servicios Externos</td>
-                                    <td style="text-align:center;">$ 0</td>
-                                    <td style="width:160px;text-align:center;">BsS. 0</td>
+                                    <td style="text-align:center;">{{ingresoServicio | currency : "$."}}</td>
+                                    <td style="width:160px;text-align:center;"></td>
                                     <td style="width:160px;"></td>
                                     <td style="text-align:center;"></td>
                                     <td style="text-align:center;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>$ 0</strong></td>
-                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
-                                    <td style="width:80px;text-align:right;"><strong>Total</strong></td>
-                                    <td style="text-align:center;"><strong>$ 0</strong></td>
-                                    <td style="text-align:center;"><strong>BsS. 0</strong></td>
+                                    <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}}
+                                        </strong></td>
+                                    <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
+                                    <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                                    <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
+                                    <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
                                 </tr>
 
                             </tbody>
                         </table>
-                        <table style="width:250px;clear:none;float:left" class="table table-bordered data-table">
-                            <tr>
-                                <td>Ch. Cambiados</td>
-                                <td style="text-align:right;">$ 0</td>
-                                <td style="text-align:right;">BsS. 0</td>
-                            </tr>
-                            <tr>
-                                <td>Base Caja</td>
-                                <td style="text-align:right;">$ 0</td>
-                                <td style="text-align:right;">BsS. 0</td>
-                            </tr>
-                            <tr>
-                                <td style="background:#9BFFAC;">Efectivo</td>
-                                <td style="text-align:right;background:#9BFFAC;">+$ 0</td>
-                                <td style="text-align:right;background:#9BFFAC;">+BsS. 0</td>
- 
-                            </tr>
-                            <tr>
-                                <td style="background:#FF9B9B;">Egresos</td>
-                                <td style="text-align:right;background:#FF9B9B;">-$ 0</td>
-                                <td style="text-align:right;background:#FF9B9B;">-BsS. 0</td>
-                            </tr>
-                            <tr>
-                                <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entrega">$0</strong></td>
-                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">BsS. 0</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Entregado</td>
-                                <td style="text-align:right;" id="mon_rec_cuadre">$ 0</td>
-                                <td style="text-align:right;" id="mon_rec_cuadreBsS">BsS. 0</td>
-
-                            </tr>
-                            <tr>
-                                <td>Diferencia</td>
-                                <td style="text-align:right;" id="diferencia"></td>
-                            </tr>
-                            <tr id="requerido" style="display:none;">
-                                <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
-                                    observaciones del día</td>
-                            </tr>
-                        </table>
-
-                        <form id="cierre" method="POST"> 
-                            <div class="detalles" id="mnd" style="width:auto;padding:5px;margin-left: 20px;">
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Fajo Entero (x100)</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
-                                            class="nume2" id="5000000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F20]" value="0"
-                                            class="nume2" id="2000000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F10]" value="0"
-                                            class="nume2" id="1000000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F5]" value="0"
-                                            class="nume2" id="500000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F2]" value="0"
-                                            class="nume2" id="200000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[F1]" value="0"
-                                            class="nume2" id="100000" onClick="this.select()" />
-                                    </div>
-                                </div>
-
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Medio Fajo (x50)</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF50]" value="0"
-                                            class="nume2" id="2500000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF20]" value="0"
-                                            class="nume2 1000000" id="1000000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF10]" value="0"
-                                            class="nume2 500000" id="500000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF5]" value="0"
-                                            class="nume2" id="250000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF2]" value="0"
-                                            class="nume2 100000" id="100000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[MF1]" value="0"
-                                            class="nume2 50000" id="50000" onClick="this.select()" />
-                                    </div>
-                                </div>
-
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Billetes Sueltos</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <label>$ 50.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B50]" value="0"
-                                            class="nume2" id="50000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 20.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B20]" value="0"
-                                            class="nume2" id="20000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ 10.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
-                                            class="nume2" id="10000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;5.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B5]" value="0"
-                                            class="nume2" id="5000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;2.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B2]" value="0"
-                                            class="nume2" id="2000" onClick="this.select()" />
-                                    </div>
-                                    <div class="linea2">
-                                        <label>$ &nbsp;1.000: </label>
-                                        <input type="number" min="0" step="1" pattern="\d+" name="datos[B10]" value="0"
-                                            class="nume2" id="1000" onClick="this.select()" />
-                                    </div>
-                                </div>
-
-                                <div class="moneda" style="width:25%;">
-                                    <center>
-                                        <h6 style="margin:0;">Monedas</h6>
-                                    </center>
-                                    <div class="linea2">
-                                        <input style="width:97%;" type="number" min="0" step="1" pattern="\d+" name="datos[M1]"
-                                            value="0" class="nume2 1000" id="1" onClick="this.select()" />
-                                    </div>
-                                    <a nohref class="button erase" onclick="limpiar_num_cuadre();" style="margin:3px;">Limpiar
-                                        (c)</a>
-                                </div>
-                            </div>
-                            <div>
-                                <h6 style="margin:0;">Observaciones</h6>
-                                <textarea class="normal" id="obser" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
-                                <input type="hidden" name="id" >
-                                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
-                                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
-                            </div>
-                        </form>
-
                     </div>
 
                 </div>
+                <div class="col-md-4">
+                    <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+                        <tr>
+                            <td>Saldo Inicial</td>
+                            <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
+                            <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#9BFFAC;">Ingreso</td>
+                            <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos | currency : "$."}}
+                            </td>
+                            <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares | currency:
+                                "BsS. "}} </td>
 
-            </div>
+                        </tr>
+                        <tr>
+                            <td style="background:#FF9B9B;">Egresos</td>
+                            <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos | currency : "$." }}
+                            </td>
+                            <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares | currency:
+                                "BsS. "}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
+                            <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{
+                                    EntregadoIngresosPesos | currency : "$." }}</strong></td>
+                            <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar
+                                    | currency: "BsS. " }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Entregado</td>
+                            <td style="text-align:right;" id="mon_rec_cuadre">{{ entregadoPesos | currency : "$." }}</td>
+                            <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar | currency :
+                                "BsS."}}</td>
 
-            <div class="modal-footer no-border">
-                <div class="text-right">
-                    <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja(FormCierreCaja,CierreCaja)">Guardar</button>
+                        </tr>
+                        <tr>
+                            <td>Diferencia</td>
+                            <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency : "$." }}</td>
+                            <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency : "BsS." }}</td>
+                        </tr>
+                        <tr id="requerido" style="display:none;">
+                            <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                observaciones del día</td>
+                        </tr>
+                    </table>
                 </div>
+
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-bordered data-table" style="clear:none;">
+                                <tr>
+                                    <th colspan="2">Fajo Entero (x100)</th>
+                                    <th colspan="2">Medio Fajo (x50)</th>
+                                    <th colspan="2">Billetes Sueltos</th>
+                                </tr>
+                                <tr *ngFor="let item of fajosPesos; let i= index">
+                                    <td>{{ item.BilleteEntero100 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero100')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero50')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorSuelto')" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Monedas</td>
+                                    <td colspan="3">
+                                        <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]"
+                                            value="0" class="nume2" ngModel (input)="calcularFajoBilletes(0,i,'Moneda')"
+                                            style=" width: 170px !important;" /></td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <table class="table table-bordered data-table" style="clear:none;">
+                                <tr>
+                                    <th colspan="2">Fajo Entero (x100)</th>
+                                    <th colspan="2">Medio Fajo (x50)</th>
+                                    <th colspan="2">Billetes Sueltos</th>
+                                </tr>
+                                <tr *ngFor="let item of fajosBolivares; let i= index">
+                                    <td>{{ item.BilleteEntero100 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero100')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero50')" /></td>
+                                    <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                    <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                            class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorSuelto')" /></td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h6 style="margin:0;">Observaciones</h6>
+                    <textarea id="Observacion" class="normal" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
+                    <input type="hidden" name="id">
+                    <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                    <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+
+                </div>
+
             </div>
+
         </form>
+    </div>
+
+    <div class="app-modal-footer">
+
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="RealizarCierreCaja()">Guardar</button>
+        </div>
+
     </div>
 </app-modal-basic>
 
@@ -756,26 +762,219 @@
     type="success" (confirm)="salir()">
 </swal>
 
+<swal #errorSwal title="" text="" type="">
+</swal>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Cambio de Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+            <form #FormCambiarBanco="ngForm">
+                <div class="col-md-12 ">
+                    <label>Banco Venezolanos</label>
+                    <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" ngModel required class="form-control" (change)="VerificarSaldo($event.target.value)">
+                        <option value=""> Seleccione Banco</option>
+                        <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                            ({{banco.Numero_Cuenta}}) </option>
+                    </select>
+                </div>
+                <hr>    
+                <div class="col-md-12 ">
+                    <label>Saldo Cuenta Bancaria</label>
+                    <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" ngModel="{{SaldoInicialBanco}}"
+                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
+                </div>
+    
+            </form>
+        </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormCambiarBanco , ModalCambiarBanco)">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
 
 
+<app-modal-basic [dialogClass]="'modal-xl'" id="ModalResumenCuenta" #ModalResumenCuenta>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Resumen Cuenta {{nombreBanco}}</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCambiarBanco="ngForm">
+            <div class="col-md-12 ">
 
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-primary btn-sm btn-block" (click)="abrirModal()"><i
+                                                class="ti-plus"></i>
+                                            Movimiento de Ajuste
+                                        </button>
+                                    </div>
+                                </div>
 
+                                <div class="table-responsive margin-top:10px;">
+                                    <!--datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"-->
+                                    <table class="table table-hover table-sm table-striped table-bordered" style="font-size: 12px">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:60px !important;">Fecha</th>
+                                                <th>Recibo</th>
+                                                <th>Detalle</th>
+                                                <th class="text-center" style="width: 120px">Ingreso</th>
+                                                <th class="text-center" style="width: 120px">Egreso</th>
+                                                <th class="text-center" style="width: 120px">Saldo</th>
+                                                <th class="text-center" style="width: 50px"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let movimiento of Movimientos ; let i = index" class="{{movimiento.Ajuste == 'Si' ? 'ajuste' : '' }}">
+                                                <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha |
+                                                    date :
+                                                    "dd/MM/yyyy" }}</td>
+                                                <td *ngIf="movimiento.Ajuste == 'No'; else yesContent"><a [routerLink]=""
+                                                        (click)="verRecibo(movimiento.Id_Recibo)">{{movimiento.Codigo
+                                                        }}</a></td>
+                                                <ng-template #yesContent>
+                                                    <td>Ajuste</td>
+                                                </ng-template>
+                                                <td>{{movimiento.Detalle}}</td>
+                                                <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.Valor
+                                                    }}</td>
+                                                <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                                                <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                                                <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor
+                                                    }}</td>
+                                                <td class="text-right {{movimiento.Saldo < 0 ? 'text-danger' : 'text-success'}}">{{movimiento.Saldo}}</td>
+                                                <td class="text-center" *ngIf="movimiento.Ajuste==='Si'">
+                                                    <a class="text-success" [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Cuenta_Bancaria,ModalAjusteEditar)">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </a>
 
+                                                    <a class="text-danger" style=" margin-left: 5px" [routerLink]=""
+                                                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a eliminar este ajuste' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                                        (confirm)="borrarAjuste(movimiento.Id_Movimiento_Cuenta_Bancaria)">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </a>
 
+                                                </td>
+                                            </tr>
 
+                                        </tbody>
+                                    </table>
+                                </div>
 
-
-
-<!--
-                      <li *ngFor="let alerta of alertas">
-                  <div class="media">
-                    <img class="d-flex align-self-center img-radius" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="{{alerta.Nombre}}">
-                    <div class="media-body">
-                      <h5 class="notification-user">{{alerta.Nombre}}</h5>
-                      <p class="notification-msg">{{alerta.Detalles}}</p>
-                      <span class="notification-time">{{alerta.Fecha}}</span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </li>
 
-            -->
+                    <div class="col-md-3">
+                        <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+                            <tr>
+                                <td>Saldo Inicial</td>
+                                <td style="text-align:right;"> {{ ValorInicial | currency: "BsS."
+                                    }}</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#FF9B9B;">Egresos</td>
+                                <td style="text-align:right;background:#FF9B9B;">- {{sumaEgresos | currency: "BsS."}}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Ingreso por Devolución</td>
+                                <td style="text-align:right;">+ {{sumaIngresos | currency: "BsS."}}</td>
+
+                            </tr>
+                            <tr>
+                                <td style="background:#efefef;"><strong>Saldo Actual</strong></td>
+                                <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{SaldoActual
+                                        | currency:"BsS."}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Diferencia</td>
+                                <td style="text-align:right;" id="diferencia1"></td>
+                            </tr>
+                            <tr id="requerido" style="display:none;">
+                                <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                                    observaciones del día</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--            <div class="col-md-12">
+                <h6 style="margin:0;">Observaciones</h6>
+                <textarea id="Observacion" class="normal" name="datos[Observaciones]" required placeholder="Escriba sus comentarios"></textarea>
+                <input type="hidden" name="id">
+                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+
+            </div> -->
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="RealizarCierreDiaCuentaBancaria()">
+                Cerrar 
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAjuste" #ModalAjuste>
+        <div class="app-modal-header">
+          <h4>Ajuste de Movimiento</h4>
+        </div>
+        <div class="app-modal-body">
+          <form #FormCuenta="ngForm">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <input style="width: 100%" id="datefield" type="date" placeholder="Valor" class="form-control" name="Fecha" ngModel required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label>Tipo </label>
+                <select class="form-control" name="Tipo" ngModel required>
+                  <option value="">Seleccione Tipo</option>
+                  <option value="Ingreso">Ingreso</option>
+                  <option value="Egreso">Egreso</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Valor</label>
+                  <input style="width: 100%" type="number" placeholder="Valor" class="form-control" name="Valor" ngModel required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Detalles</label>
+                  <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Movimiento" name="Detalle"
+                    ngModel required></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="app-modal-footer">
+          <div class="text-right">
+            <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="GuardarMovimiento(FormCuenta, ModalAjuste)">Guardar</button>
+          </div>
+        </div>
+      </app-modal-basic>

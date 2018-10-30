@@ -115,21 +115,35 @@
   <div class="app-modal-body">
     <form #FormGrupo="ngForm">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombre="ngModel">
-            <div *ngIf="!nombre.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombre.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel>
           </div>
         </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Padre</label>
+                <select class="form-control" required name="Padre" ngModel="Ninguno">
+                    <option value="Ninguno">--Ninguno--</option>
+                    <option *ngFor="let grupo of Grupo" [value]="grupo.Id_Grupo_Tercero">{{grupo.Nombre}}</option>
+                </select>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="form-group">
+                  <label>Detalles</label>
+                  <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel></textarea>
+              </div>
+          </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarGrupo(FormGrupo, ModalGrupo)">Guardar</button>
     </div>
   </div>
@@ -143,28 +157,37 @@
   </div>
   <div class="app-modal-body">
     <form #FormGrupoEditar="ngForm">
-      <div class="row">
-        <div class="col-md-4" hidden>
-          <div class="form-group">
-            <label>Identificación</label>
-            <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+        <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" [(ngModel)]="Edicion.Nombre">
+                <input type="text" class="form-control" name="id" ngModel="{{Identificacion}}" hidden>
+              </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Padre</label>
+                    <select class="form-control" required name="Padre" ngModel="{{Edicion.Padre}}">
+                        <option value="Ninguno">--Ninguno--</option>
+                        <option *ngFor="let grupo of Grupo" [value]="grupo.Id_Grupo_Tercero">{{grupo.Nombre}}</option>
+                    </select>
+                </div>
+            </div>
           </div>
-        </div>
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Detalles</label>
+                      <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel="{{Edicion.Detalle}}"></textarea>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
     </form>
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarGrupo(FormGrupoEditar, ModalGrupoEditar)">Guardar</button>
     </div>
   </div>
@@ -186,27 +209,20 @@
               <option> Seleccionar </option>
               <option *ngFor="let grupo of Grupo" value="{{grupo.Id_Grupo_Tercero}}">{{grupo.Nombre}}</option>
             </select>
-            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                  (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-                <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombre1="ngModel">
-            <div *ngIf="!nombre1.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombre1.valid && boolNombre==true" style="color:green">Datos correctos!</div>
-          </div>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel>
+           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombre1.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarDependencia(FormDependencia, ModalDependencia)">Guardar</button>
     </div>
   </div>
@@ -234,27 +250,20 @@
               <option> Seleccionar </option>
               <option *ngFor="let grupo of Grupo" value="{{grupo.Id_Grupo_Tercero}}">{{grupo.Nombre}}</option>
             </select>
-            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                  (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-                <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
-          </div>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" required>
+           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarDependencia(FormEditarDependencia, ModalEditarDependencia)">Guardar</button>
     </div>
   </div>
@@ -276,19 +285,12 @@
               <option> Seleccionar </option>
               <option *ngFor="let dependencia of Dependencia" value="{{dependencia.Id_Dependencia}}">{{dependencia.Nombre}}</option>
             </select>
-            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                      (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-                    <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                    <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombre2="ngModel">
-            <div *ngIf="!nombre2.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombre2.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel required>
           </div>
         </div>
       </div>
@@ -296,7 +298,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombre2.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarCargo(FormCargo, ModalCargo)">Guardar</button>
     </div>
   </div>
@@ -324,19 +326,12 @@
               <option> Seleccionar </option>
               <option *ngFor="let dependencia of Dependencia" value="{{dependencia.Id_Dependencia}}">{{dependencia.Nombre}}</option>
             </select>
-            <!-- <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-                    (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-                  <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-                  <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div> -->
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
-              (focusout)="boolNombre = true" required #nombreEditar="ngModel">
-            <div *ngIf="!nombreEditar.valid && boolNombre==true" style="color:red">Campo inválido</div>
-            <div *ngIf="nombreEditar.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+            <input type="text" placeholder="Nombre del grupo" class="form-control" name="Nombre" ngModel="{{Nombre}}" required>
           </div>
         </div>
       </div>
@@ -344,8 +339,11 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" [disabled]="!nombreEditar.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+      <button type="submit" class="btn btn-primary"  [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarCargo(FormEditarCargo, ModalEditarCargo)">Guardar</button>
     </div>
   </div>
 </app-modal-basic>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+  </swal>

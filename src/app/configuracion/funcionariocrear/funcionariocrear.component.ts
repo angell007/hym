@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-funcionariocrear',
   templateUrl: './funcionariocrear.component.html',
-  styleUrls: ['./funcionariocrear.component.css']
+  styleUrls: ['./funcionariocrear.component.scss']
 })
 export class FuncionariocrearComponent implements OnInit {
   // public funcionario: any [];
@@ -28,6 +28,7 @@ export class FuncionariocrearComponent implements OnInit {
   public Dependencias: any[];
   public Cargos: any[];
   public Fotos: any;
+  public Perfiles:any[]=[];
 
   public funcionario =
     {
@@ -105,6 +106,9 @@ export class FuncionariocrearComponent implements OnInit {
     }
   ];
   Funcionario = [];
+  public Permisos:any[]=[];
+  public Longitud=0;
+
 
   constructor(private http: HttpClient, private globales: Globales, private route: ActivatedRoute, private router: Router) { }
 
@@ -137,6 +141,10 @@ export class FuncionariocrearComponent implements OnInit {
       this.Funcionario = data;
     });
 
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Perfil' } }).subscribe((data: any) => {
+      this.Perfiles = data;
+    });
+
   }
 
   Dependencia_Grupo(Grupo) {
@@ -153,14 +161,26 @@ export class FuncionariocrearComponent implements OnInit {
     });
   }
 
+  AsignarPermisos(event){
+    let id=event;
+    this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil.php', {
+      params: { id: id}
+    }).subscribe((data: any) => {
+    this.Permisos=data;
+    this.Longitud=this.Permisos.length;
+    
+    });
+    
+  }
+
   GuardarFuncionario(formulario: NgForm) {
-    console.log(formulario.value);
 
     let info = JSON.stringify(formulario.value);
     let func = JSON.stringify(this.funcionario);
     let conemer = JSON.stringify(this.contacto_emergencia);
     let exper = JSON.stringify(this.experiencia);
     let refe = JSON.stringify(this.referencias);
+    let modulos=JSON.stringify(this.Permisos);
     let datos = new FormData();
     datos.append("modulo", 'Funcionario');
     datos.append("datos", info);
@@ -168,6 +188,7 @@ export class FuncionariocrearComponent implements OnInit {
     datos.append("contacto_emergencia", conemer);
     datos.append("experiencia", exper);
     datos.append("referencias", refe);
+    datos.append('modulos', modulos);
     datos.append('Foto', this.Fotos);
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_guardar2.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Guardado Correctamente";
@@ -210,8 +231,14 @@ export class FuncionariocrearComponent implements OnInit {
       this.confirmacionSwal.type = "error";
       this.confirmacionSwal.show();
       this.funcionario.Identificacion_Funcionario = "";
+    }    
+  }
+
+  validarLongitud(item){
+    if (item.length > 10) {
+     // identificacion
+     (document.getElementById("identificacion") as HTMLInputElement).value = item.slice(0,10); 
     }
-    
   }
 
 }

@@ -44,7 +44,7 @@
       <div class="card">
         <div class="card-heading">
           <h4 class="card-title inline-block pdd-top-5">Agentes Externos Registrados</h4>
-          <button href="" class="btn btn-info pull-right no-mrg" (click)="ModalAgente.show()">
+          <button *ngIf="esconder" href="" class="btn btn-info pull-right no-mrg" (click)="ModalAgente.show()">
             <i class="ti-plus"></i> Nuevo</button>
         </div>
         <div class="pdd-horizon-20 pdd-vertical-5">
@@ -76,10 +76,10 @@
                     <button class="btn btn-default btn-xs" type="button" style="margin:0;"  (click)="VerAgente(agente.Id_Agente_Externo, ModalVerAgente)">
                       <i class="ti-search"></i>
                     </button>
-                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarAgente(agente.Id_Agente_Externo, ModalEditarAgente)">
+                    <button *ngIf="esconder" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarAgente(agente.Id_Agente_Externo, ModalEditarAgente)">
                       <i class="ti-pencil"></i>
                     </button>
-                    <button class="btn btn-default  btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a suspender este agente externo, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                    <button *ngIf="esconder" class="btn btn-default  btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a suspender este agente externo, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
                       (confirm)="EliminarAgente(agente.Id_Agente_Externo)">
                       <i class="ti-close"></i>
                     </button>

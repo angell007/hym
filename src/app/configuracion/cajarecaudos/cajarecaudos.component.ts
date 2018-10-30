@@ -64,42 +64,10 @@ export class CajarecaudosComponent implements OnInit {
   }
 
 
-  ActualizarVista()
-  {
+  ActualizarVista(){
     this.http.get(this.globales.ruta+'php/cajarecaudos/lista.php').subscribe((data:any)=>{
       this.cajarecaudos= data;
-      this.dtTrigger.next();
-    });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    }; 
+    });   
   }
 
   GuardarCaja(formulario: NgForm, modal:any){
@@ -222,7 +190,8 @@ export class CajarecaudosComponent implements OnInit {
       this.confirmacionSwal.text = texto;
       this.confirmacionSwal.type = "success";
       this.confirmacionSwal.show();    
-      this.cajarecaudos= data;  
+      //this.cajarecaudos= data;  
+      this.ActualizarVista();
     });
   }
 }

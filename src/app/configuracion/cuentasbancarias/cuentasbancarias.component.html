@@ -1,7 +1,8 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Cuentas Bancarias</h4>
-        <button class="pull-right btn btn-primary btn-sm" (click)="ModalCuenta.show()"><i class="ti-plus"></i> Agregar Nueva
+        <button class="pull-right btn btn-primary btn-sm" (click)="ModalCuenta.show()"><i class="ti-plus"></i> Agregar
+            Nueva
             Cuenta Bancaria
         </button>
     </div>
@@ -13,7 +14,8 @@
                     <p>Todas las Cuentas Bancarias Propias</p>
 
                     <div class="table-responsive">
-                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                            [dtTrigger]="dtTrigger">
                             <thead>
                                 <tr>
                                     <th>Tipo de Cuenta</th>
@@ -32,7 +34,8 @@
                                     <td>{{cuenta.Nombre_Titular}}</td>
                                     <td>{{cuenta.Moneda}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"  [routerLink]="['/cuentabancariaver',cuenta.Id_Cuenta_Bancaria]" >
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                            [routerLink]="['/cuentabancariaver',cuenta.Id_Cuenta_Bancaria]">
                                             <i class="ti-search"></i>
                                         </button>
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCuenta(cuenta.Id_Cuenta_Bancaria)">
@@ -62,7 +65,7 @@
     <div class="app-modal-body">
         <form #FormCuenta="ngForm">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Tipo Cuenta</label>
                     <select class="form-control" name="Tipo_Cuenta" ngModel required>
                         <option value="">Seleccione Tipo</option>
@@ -70,13 +73,35 @@
                         <option value="Personal">Cuenta Personal</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-2">
+                        <label>Tipo </label>
+                        <select class="form-control" name="Tipo" ngModel required>
+                            <option value="">Seleccione Tipo</option>
+                            <option *ngFor="let item of TipoCuenta; let i=index" [value]="item.Id_Tipo_Cuenta">{{item.Nombre}}</option>                           
+                        </select>
+                    </div>
+
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel required>
+                        <label>País</label>
+                        <select class="form-control" name="Id_Pais" ngModel (change)="Bancos_Pais($event.target.value, i);"
+                            required>
+                            <option value="">Seleccione País</option>
+                            <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Cuenta</label>
+                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta"
+                            ngModel required>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>Banco</label>
                         <select class="form-control" required name="Id_Banco" ngModel required>
@@ -90,17 +115,18 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel required>
+                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular"
+                            ngModel required>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificación Titular</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
-                            name="Identificacion_Titular" ngModel required>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="" class="form-control" name="Identificacion_Titular" ngModel required>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Moneda</label>
                         <select class="form-control" required name="Moneda" ngModel required>
@@ -115,18 +141,13 @@
                         <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Fecha Saldo In.</label>
-                        <input type="date" placeholder="Fecha Saldo Inicial" class="form-control" name="Fecha" ngModel required>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel required></textarea>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Cuenta Bancaria"
+                            name="Detalle" ngModel required></textarea>
                     </div>
                 </div>
             </div>
@@ -145,66 +166,88 @@
         <h4>Editar Cuenta Bancaria</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormEditarCuenta="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Tipo Cuenta</label>
-                    <select class="form-control" name="Tipo_Cuenta" ngModel="{{CuentaBancaria.Tipo_Cuenta}}" required>
-                        <option value="">Seleccione Tipo</option>
-                        <option value="Empresarial">Cuenta Empresarial</option>
-                        <option value="Personal">Cuenta Personal</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Cuenta</label>
-                        <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta" ngModel="{{CuentaBancaria.Numero_Cuenta}}"
-                            required>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Banco</label>
-                        <select class="form-control" required name="Id_Banco" ngModel="{{CuentaBancaria.Id_Banco}}" required>
-                            <option value="">Seleccione Banco</option>
-                            <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+            <form #FormEditarCuenta="ngForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Tipo Cuenta</label>
+                        <select class="form-control" name="Tipo_Cuenta" ngModel="{{CuentaBancaria.Tipo_Cuenta}}" required>
+                            <option value="">Seleccione Tipo</option>
+                            <option value="Empresarial">Cuenta Empresarial</option>
+                            <option value="Personal">Cuenta Personal</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Titular</label>
-                        <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular" ngModel="{{CuentaBancaria.Nombre_Titular}}"
-                            required>
+    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>País</label>
+                            <select class="form-control" name="Id_Pais" [(ngModel)]="CuentaBancaria.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
+                                required>
+                                <option value="">Seleccione País</option>
+                                <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Cuenta</label>
+                            <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta"
+                            ngModel="{{CuentaBancaria.Numero_Cuenta}}" required>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" required name="Id_Banco" [(ngModel)]="CuentaBancaria.Id_Banco" required>
+                                <option value="">Seleccione Banco</option>
+                                <option *ngFor="let Banco of Bancos" [value]="Banco.Id_Banco">{{Banco.Nombre}}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Identificación Titular</label>
-                        <input readonly type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder=""
-                            class="form-control" name="Identificacion_Titular" ngModel="{{CuentaBancaria.Identificacion_Titular}}"
-                            required>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Titular</label>
+                            <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular"
+                            ngModel="{{CuentaBancaria.Nombre_Titular}}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Identificación Titular</label>
+                            <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                placeholder="" class="form-control" name="Identificacion_Titular" ngModel="{{CuentaBancaria.Identificacion_Titular}}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Moneda</label>
+                            <select class="form-control" required name="Moneda" [(ngModel)]="CuentaBancaria.Moneda" required>
+                                <option value="">Seleccione Banco</option>
+                                <option *ngFor="let Moneda of Monedas" [value]="Moneda.Nombre">{{Moneda.Nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Saldo Inicial</label>
+                            <input currencyMask class="form-control" name="Valor" ngModel="{{CuentaBancaria.Valor}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{CuentaBancaria.Detalle}}"></textarea>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detalles</label>
+                            <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Cuenta Bancaria"
+                                name="Detalle" ngModel="{{CuentaBancaria.Detalle}}" required></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
     <div class="app-modal-footer">
         <div class="text-right">
             <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"

@@ -1,3 +1,93 @@
-<p>
-  cuentascobrar works!
-</p>
+<style>
+    #chartdiv {
+      width	: 100%;
+      height	: 500px;
+    }
+                        
+</style>
+<div class="container-fluid">
+    <div class="page-title">
+      <h4 class="pull-left">Cuentas por cobrar</h4>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      
+        <div class="col-md-6">
+          <!--Accordion wrapper-->
+          <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+  
+            <!-- Accordion card -->
+            <div class="card" *ngFor="let item of ListaBalance; let i = index">
+  
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingOne1">
+                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}" aria-expanded="true"
+                  aria-controls="collapseOne{{i}}">
+                  <h5 class="mb-0"> {{ item.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
+                  </h5>
+                </a>
+              </div>
+  
+              <!-- Card body -->
+              <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}" data-parent="#accordionEx">
+                <div class="card-body">
+                  <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
+  
+                    <!-- Accordion card 1 -->
+                    <div class="card" *ngFor="let subitem of item.tercero; let j = index">
+                      <div class="card-header" role="tab" id="headingOne2">
+                        <a data-toggle="collapse" data-parent="#accordionEx1" href="#collapseOne{{i}}{{j}}" aria-expanded="true"
+                          aria-controls="collapseOne{{i}}">
+                          
+                          <table class="table" style="font-size: 12px">
+                              <tr>
+                                  <th style="width: 120px"><h5 class="mb-0"> {{subitem.Tipo}} </h5></th>
+                                  <th class="text-center" style="width: 120px">{{subitem. Valor| currency:"BsS."}} </th>
+                                </tr> 
+                          </table>
+                        </a>
+                      </div>
+                      <div id="collapseOne{{i}}{{j}}" class="collapse " role="tabpanel" aria-labelledby="headingOne2{{i}}"
+                        data-parent="#accordionEx">
+                        <div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table" style="font-size: 12px">
+                              <!--<tr>
+                                <th></th>
+                                <th colspan="3" style="text-align: center">$</th>
+                                <th colspan="3" style="text-align: center">BsS.</th>
+                              </tr> -->
+                              <tr>
+                                <td class="text-center" style="width:100px !important;">Tipo</td>
+                                <td class="text-center" style="width:60px !important;">Valor</td>
+                              </tr>
+                              <tr *ngFor="let movimiento of subitem.lista ; let k = index">
+                                <td *ngIf="movimiento.Tipo==='Ingreso'"></td>
+                                <td *ngIf="movimiento.Tipo==='Ingreso'" class="text-right">{{movimiento.Valor |
+                                  currency:"BsS."}}</td>
+                                <td *ngIf="movimiento.Tipo==='Egreso'" class="text-right">{{movimiento.Valor |
+                                  currency:"BsS."}}</td>
+                                <td *ngIf="movimiento.Tipo==='Egreso'"></td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END Accordion card 1 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Accordion card -->
+  
+          </div>
+          <!-- Accordion wrapper -->
+        </div>
+      
+        <div class="col-md-6">
+           <!-- <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>-->
+            <div id="chartdiv"></div>
+        </div>
+    </div>

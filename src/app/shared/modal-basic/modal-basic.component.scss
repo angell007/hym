@@ -11,6 +11,7 @@
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
     outline: 0;
+    overflow-y: auto;
   }
   &.fade {
     opacity: 0;

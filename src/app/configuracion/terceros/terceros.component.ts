@@ -64,38 +64,9 @@ export class TercerosComponent implements OnInit {
   ActualizarVista(){
     this.http.get(this.globales.ruta+'php/terceros/lista_terceros.php').subscribe((data:any)=>{
       this.terceros= data;
-      this.dtTrigger.next();
     });
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */ 
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
+
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Departamento'}}).subscribe((data:any)=>{
       this.Departamentos= data;
     });
@@ -117,7 +88,7 @@ export class TercerosComponent implements OnInit {
   GuardarTercero(formulario: NgForm, modal){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    console.log(info);
+    //console.log(info);
     datos.append("modulo",'Tercero');
     datos.append("datos",info);
     this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
@@ -135,7 +106,7 @@ export class TercerosComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tercero', id:id}
     }).subscribe((data:any)=>{   
-      console.log(data);         
+      //console.log(data);         
       this.Identificacion = id;
       this.tercero = data;
       this.SeleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
@@ -189,8 +160,9 @@ export class TercerosComponent implements OnInit {
       this.confirmacionSwal.title = titulo;
       this.confirmacionSwal.text = texto;
       this.confirmacionSwal.type = "success";
-      this.confirmacionSwal.show();    
-      this.terceros= data;  
+      this.confirmacionSwal.show();
+      this.ActualizarVista();   
+
     });
   }
 

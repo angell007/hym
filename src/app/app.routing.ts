@@ -55,6 +55,8 @@ import { RemitenteComponent } from "./configuracion/remitente/remitente.componen
 import { TercerosverComponent } from './configuracion/terceros/tercerosver/tercerosver.component';
 import { TransferenciaverComponent } from "./transferencias/transferenciaver/transferenciaver.component";
 import { TableroComponent } from './tablero/tablero.component';
+import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
+import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -172,6 +174,14 @@ export const AppRoutes: Routes = [
     {
         path: 'compras', component: CommonLayoutComponent,
         children: [{ path: '', component: ComprasComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'comprascrear', component: CommonLayoutComponent,
+        children: [{ path: '', component: ComprascrearComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'compraseditar/:id', component: CommonLayoutComponent,
+        children: [{ path: '', component: CompraseditarComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'egresos', component: CommonLayoutComponent,

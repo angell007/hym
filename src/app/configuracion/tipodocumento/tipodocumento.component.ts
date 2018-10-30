@@ -47,94 +47,15 @@ export class TipodocumentoComponent implements OnInit {
     this.ActualizarVista();
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
-    if (event.keyCode === 27) {
-      this.OcultarFormularios();
-    }
-  }
-
-  OcultarFormularios() {
-    this.InicializarBool();
-    this.OcultarFormulario(this.ModalDocumento);
-    this.OcultarFormulario(this.ModalVerDocumento);
-    this.OcultarFormulario(this.ModalEditarDocumento);
-  }
-
-  InicializarBool() {
-    this.boolNombre = false;
-    this.boolCodigo = false;
-  }
-
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
-      this.tiposDocumentos = data;
-      this.dtTrigger.next();
+      this.tiposDocumentos = data;      
     });
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
-
+   
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
       this.tiposDocumentosExtranjero = data;
-      this.dtTrigger1.next();
-    });
-
-    this.dtOptions1 = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
+    });   
   }
 
   GuardarDocumentoExtranjero(formulario: NgForm, modal) {
@@ -152,14 +73,12 @@ export class TipodocumentoComponent implements OnInit {
       .subscribe((data: any) => {
         formulario.reset();
         this.ActualizarVista();
-        this.InicializarBool();
         this.saveSwal.show();
       });
 
   }
 
   EditarDocumentoExtranjero(id, modal){
-    this.InicializarBool();
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Tipo_Documento_Extranjero', id:id}
     }).subscribe((data:any)=>{      
@@ -186,7 +105,6 @@ export class TipodocumentoComponent implements OnInit {
       .subscribe((data: any) => {
         formulario.reset();
         this.ActualizarVista();
-        this.InicializarBool();
         this.saveSwal.show();
       });
 
@@ -208,7 +126,6 @@ export class TipodocumentoComponent implements OnInit {
   }
 
   EditarDocumento(id, modal) {
-    this.InicializarBool();
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Tipo_Documento', id: id }
     }).subscribe((data: any) => {

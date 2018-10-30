@@ -28,7 +28,7 @@
                                     <td style="vertical-align: middle;">{{tercero.Nombre}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
                                     <td style="vertical-align: middle;">{{tercero.Telefono}}</td>
-                                    <td style="vertical-align: middle;" class="text-center">{{tercero.Tipo}}</td>
+                                    <td style="vertical-align: middle;" >{{tercero.Tipo_Tercero}}</td>
                                     <td style="vertical-align: middle;" class="text-center">
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/tercerover',tercero.Id_Tercero]">
                                             <i class="ti-search"></i>
@@ -61,7 +61,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>T. Doc</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" ngModel="">
+                        <select class="form-control" required name="Id_Tipo_Documento" ngModel>
                             <option value="">Seleccione tipo de documento</option>
                             <option *ngFor="let Documento of Documentos" [value]="Documento.Id_Tipo_Documento">{{Documento.Nombre}}</option>
                         </select>
@@ -154,7 +154,7 @@
                         <label>Grupo Tercero</label>
                         <select class="form-control" ngModel name="Id_Grupo_Tercero">
                             <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
-                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo_Tercero}}">{{item.Nombre}}</option>
                             </optgroup>
                         </select>
                     </div>
@@ -171,7 +171,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                        <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel=0 [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 
@@ -199,7 +199,7 @@
         <h4>Editar Tercero</h4>
     </div>
     <div class="app-modal-body">
-        <form #FormTercero="ngForm">
+        <form #FormTerceroEditar="ngForm">
             <input hidden type="text" class="form-control" name="id" ngModel="{{Identificacion}}">
             <div class="row">
                 <div class="col-md-2">
@@ -286,7 +286,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select class="form-control" ngModel="{{tercero.Tipo}}" name="Tipo">
+                        <select class="form-control" ngModel="{{tercero.Tipo_Tercero}}" name="Tipo">
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Propio">Propio</option>
@@ -298,7 +298,7 @@
                         <label>Grupo Tercero</label>
                         <select class="form-control" ngModel="{{tercero.Id_Grupo_Tercero}}" name="Id_Grupo_Tercero">
                             <optgroup *ngFor="let Grupo of Grupos" label="{{Grupo.Nombre}}">
-                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo}}">{{item.Nombre}}</option>
+                                <option *ngFor="let item of Grupo.Hijos" value="{{item.Id_Grupo_Tercero}}">{{item.Nombre}}</option>
                             </optgroup>
                         </select>
                     </div>
@@ -316,7 +316,7 @@
                     <div class="form-group">
                         <label>Cupo</label>
                         <input type="text" currencyMask placeholder="Cupo de Crédito" class="form-control" name="Cupo" ngModel="{{tercero.Cupo}}"
-                            [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                            [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }">
                     </div>
                 </div>
 
@@ -334,7 +334,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarTercero(FormTercero, ModalTerceroEditar)">Actualizar Información</button>
+                (confirm)="GuardarTercero(FormTerceroEditar, ModalTerceroEditar)">Actualizar Información</button>
         </div>
     </div>
 </app-modal-basic>

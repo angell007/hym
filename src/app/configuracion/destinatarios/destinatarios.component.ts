@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs/Subject';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-destinatarios',
@@ -30,13 +31,15 @@ export class DestinatariosComponent implements OnInit {
   public disabled: boolean = true;
   public Lista_Cuentas = [];
   public Detalle_Destinatario: any[] = [];
-  public Lista_Destinatarios: any = [{
-    Id_Pais: 2,
+  public Lista_Destinatarios = [{
+    Id_Pais: '2',
     Id_Banco: '',
     Bancos: [],
     Id_Tipo_Cuenta: '',
-    Numero_Cuenta: ''
-  }]
+    Numero_Cuenta: '',
+    Otra_Cuenta: '',
+    Observacion: ''
+  }];
 
   public boolNombre: boolean = false;
   public boolId: boolean = false;
@@ -65,8 +68,11 @@ export class DestinatariosComponent implements OnInit {
   public frame = false;
   TipoDocumentoExtranjero = [];
   url: string;
+  frameRiff = false;
+  urlCne: string;
+  urlRiff: string;
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.ActualizarVista();
@@ -97,38 +103,8 @@ export class DestinatariosComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/destinatarios/lista_destinatarios.php').subscribe((data: any) => {
       this.destinatarios = data;
-      this.dtTrigger.next();
     });
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-      dom: 'Bfrtip',
-      responsive: true,
-      /* below is the relevant part, e.g. translated to spanish */
-      language: {
-        processing: "Procesando...",
-        search: "Buscar:",
-        lengthMenu: "Mostrar _MENU_ &eacute;l&eacute;ments",
-        info: "Mostrando desde _START_ al _END_ de _TOTAL_ elementos",
-        infoEmpty: "Mostrando ningún elemento.",
-        infoFiltered: "(filtrado _MAX_ elementos total)",
-        infoPostFix: "",
-        loadingRecords: "Cargando registros...",
-        zeroRecords: "No se encontraron registros",
-        emptyTable: "No hay datos disponibles en la tabla",
-        paginate: {
-          first: "<<",
-          previous: "<",
-          next: ">",
-          last: ">>"
-        },
-        aria: {
-          sortAscending: ": Activar para ordenar la tabla en orden ascendente",
-          sortDescending: ": Activar para ordenar la tabla en orden descendente"
-        }
-      }
-    };
+  
   }
 
   Bancos_Pais(Pais, i) {
@@ -137,13 +113,7 @@ export class DestinatariosComponent implements OnInit {
     });
   }
 
-  agregarDinamico(i) {
-    var pos = parseInt(i) + 1;
-    if (this.Lista_Destinatarios[pos] == undefined) {
-      this.AgregarFila();
-      this.Bancos_Pais(2, pos);
-    }
-  }
+
 
   OcultarFormularios() {
     this.InicializarBool();
@@ -152,6 +122,7 @@ export class DestinatariosComponent implements OnInit {
     this.OcultarFormulario(this.ModalEditarDestinatario);
   }
 
+  /*
   BuscarIdentificacion(id) {
     this.http.get(this.globales.ruta + 'php/destinatarios/detalle_destinatario.php', {
       params: { id: id }
@@ -161,19 +132,16 @@ export class DestinatariosComponent implements OnInit {
         this.confirmacionSwal.title = "Error en la Identificacion";
         this.confirmacionSwal.text = "Esta identificacion ya se encuentra registrada, por favor verifique";
         this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
-        this.Id_Destinatario = "";
-      } else {
-        var tipoDoc = ((document.getElementById("Tipo_Documento") as HTMLInputElement).value);
-        this.buscarCne(id,tipoDoc);
-      }
+        this.confirmacionSwal.show();        
+      } 
     });
-
-  }
+  }*/
 
   codigoBanco(seleccion, posicion, texto) {
 
+    //console.log(seleccion + " , " + posicion + " , " + texto);
     var pais = ((document.getElementById("Id_Pais" + posicion) as HTMLInputElement).value);
+    //console.log("pais = " + 2);
 
     if (pais == "2") {
       switch (texto) {
@@ -183,17 +151,14 @@ export class DestinatariosComponent implements OnInit {
           break;
         }
         case "input": {
-          if(seleccion.length == 4){
-            var buscarBanco = this.Bancos.findIndex(x => x.Identificador === seleccion)
-            if(buscarBanco > -1){
-              this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
-            }else{
-              this.Lista_Destinatarios[posicion].Id_Banco = '';
-            }
-          }else{
-            if(seleccion.length < 4 && seleccion.length > 0){
-              this.Lista_Destinatarios[posicion].Id_Banco = '';
-            }
+          //console.log("soy input");
+
+          var cadena = seleccion.substring(0, 4);
+          var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
+          if (buscarBanco > -1) {
+            this.Lista_Destinatarios[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
+          } else {
+            this.Lista_Destinatarios[posicion].Id_Banco = '';
           }
           break;
         }
@@ -205,13 +170,7 @@ export class DestinatariosComponent implements OnInit {
   InicializarBool() {
     this.boolNombre = false;
     this.boolId = false;
-  }
-
-  buscarCne(id, tipo) {
-    
-    this.url = "http://cne.gov.ve/web/registro_electoral/ce.php?nacionalidad=" + tipo + "&cedula=" + id;
-    this.frame = true;
-  }
+  }  
 
   /**
    *guarda los datos ingresados en el formulario en la tabla que se indica como segundo parametro en 
@@ -221,10 +180,16 @@ export class DestinatariosComponent implements OnInit {
    * @memberof DestinatariosComponent
    */
   GuardarDestinatario(formulario: NgForm, modal: any) {
+    
+    this.Lista_Destinatarios.forEach((element,index) => {
+      if(element.Numero_Cuenta == ""){
+        this.Lista_Destinatarios.splice(index,1);
+      }
+    });
+    
     let info = JSON.stringify(formulario.value);
     let destinatario = JSON.stringify(this.Lista_Destinatarios);
     let datos = new FormData();
-    this.OcultarFormulario(modal);
     //datos.append("modulo",'Destinatario');
     datos.append("datos", info);
     datos.append("destinatario", destinatario);
@@ -235,46 +200,21 @@ export class DestinatariosComponent implements OnInit {
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        this.Lista_Destinatarios = [{
-          Id_Pais: '',
+        this.Lista_Destinatarios = []
+        this.Lista_Destinatarios.push({
+          Id_Pais: '2',
           Id_Banco: '',
           Bancos: [],
           Id_Tipo_Cuenta: '',
-          Numero_Cuenta: ''
-        }];
-        localStorage.removeItem("Lista_Inicial");
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        });
+        modal.hide();
         formulario.reset();
         this.ActualizarVista();
         this.saveSwal.show();
       });
-  }
-
-  GuardarDestinatarioEditar(formulario: NgForm, modal: any) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    this.OcultarFormulario(modal);
-    datos.append("modulo", 'Destinatario');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        this.Lista_Destinatarios = [{
-          Id_Pais: '',
-          Id_Banco: '',
-          Bancos: [],
-          Id_Tipo_Cuenta: '',
-          Numero_Cuenta: ''
-        }];
-
-        this.ActualizarVista();
-        this.InicializarBool();
-        this.saveSwal.show();
-      });
-
   }
 
   EstadoDestinatario(value, estado){
@@ -286,14 +226,14 @@ export class DestinatariosComponent implements OnInit {
     switch(estado){
       case "Activo":{
         datos.append("estado", "Activo");
-        titulo = "Destinatario Inactivo";
-        texto ="Se ha inactivado correctamente el destinatario seleccionado";
+        titulo = "Destinatario Eliminado";
+        texto ="Se ha eliminado correctamente el destinatario seleccionado";
         break;
       }
       case "Inactivo":{
         datos.append("estado", "Inactivo");
-        titulo = "Destinatario Activado";
-        texto ="Se ha Activado correctamente el destinatario seleccionado";
+        titulo = "Destinatario Eliminado";
+        texto ="Se ha eliminado correctamente el destinatario seleccionado";
         break;
       }
     }
@@ -303,7 +243,8 @@ export class DestinatariosComponent implements OnInit {
       this.confirmacionSwal.text = texto;
       this.confirmacionSwal.type = "success";
       this.confirmacionSwal.show();    
-      this.destinatarios= data;  
+      //this.destinatarios= data;
+      this.ActualizarVista();  
     });
   }
 
@@ -323,21 +264,24 @@ export class DestinatariosComponent implements OnInit {
 
   }
 
-  EditarDestinatario(id) {
-    this.InicializarBool();
+  posiciontemporal: any;
+  EditarDestinatario(id, pos) {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      console.log(data.destinatario);
-      this.Detalle_Destinatario = data.destinatario;      
+      ////console.log(data.destinatario);
+      this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 
-      for(var i = 0 ; i < this.Lista_Destinatarios.length ; i++){
-        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais,i);
+      for (var i = 0; i < this.Lista_Destinatarios.length; i++) {
+        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais, i);
       }
 
       this.Identificacion = id;
+      //this.AgregarFila();
+      this.Bancos_Pais(2, 1);
       this.ModalEditarDestinatario.show();
+      this.posiciontemporal = pos;
     });
   }
 
@@ -362,19 +306,6 @@ export class DestinatariosComponent implements OnInit {
   }
 
 
-  AgregarFila() {
-
-    this.Lista_Destinatarios.push({
-      Id_Pais: 2,
-      Id_Banco: '',
-      Bancos: [],
-      Id_Tipo_Cuenta: '',
-      Numero_Cuenta: ''
-    })
-
-  }
-
-
   EliminarFila(i) {
 
     this.Lista_Cuentas.splice(i, 1);
@@ -386,6 +317,122 @@ export class DestinatariosComponent implements OnInit {
 
   habilitarboton() {
     this.disabled = false;
+  }
+
+  verificarChequeo(pos, check) {
+    var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
+
+    switch (check) {
+      case true: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = false;
+        break;
+      }
+      case false: {
+        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = true;
+        break;
+      }
+    }
+
+  }
+
+  AgregarFila(i, valor) {
+
+    var idpais = ((document.getElementById("Id_Banco" + i) as HTMLInputElement).value)
+
+    if (valor != "" && idpais != "") {
+      var pos = parseInt(i) + 1;
+      if (this.Lista_Destinatarios[pos] == undefined) {
+        this.Lista_Destinatarios.push({
+          Id_Pais: '2',
+          Id_Banco: '',
+          Bancos: [],
+          Id_Tipo_Cuenta: '',
+          Numero_Cuenta: '',
+          Otra_Cuenta: '',
+          Observacion: ''
+        });
+
+        this.Bancos_Pais(2, pos);
+      }
+    }
+
+  }
+
+  BuscarCNE(valor) {
+
+    var cedula = this.Id_Destinatario;
+    if (cedula == undefined) {
+      cedula = (document.getElementById("idDestinatario") as HTMLInputElement).value;
+    }
+
+    switch (valor) {
+      case "V": {
+        //this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
+        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula, '_blank');
+        break;
+      }
+      case "E": {
+        //this.frame = true;
+        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
+        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula, '_blank');
+        break;
+      }
+      default: {
+        this.frame = false;
+      }
+      /*if (window.frames['myframe'] && !userSet){
+         this.setAttribute('data-userset', 'true');
+         frames['myframe'].location.href='http://test.com/hello?uname='+getUserName();
+     }*/
+    }
+
+
+  }
+
+  buscarRiff() {
+    this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
+    //this.frameRiff = !this.frameRiff;
+    window.open("http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp", '_blank');
+  }
+
+  botonDestinatario = false;
+  validarBanco(i, valor) {
+    var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value)
+
+    if (parseInt(idpais) == 2) {
+      var longitud = this.LongitudCarateres(valor);
+      if (longitud != 20) {
+        this.botonDestinatario = false;
+        this.confirmacionSwal.title = "Banco no valido";
+        this.confirmacionSwal.text = "Digite correctamente el número del banco";
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+      }
+
+      var indice = this.DestinatarioCuenta.findIndex(x => x.Numero_Cuenta === valor);
+      if (indice > -1) {
+        this.confirmacionSwal.title = "Cuenta Repetida";
+        this.confirmacionSwal.text = "Esta cuenta fue creada anteriormente y le pertenece a " + this.DestinatarioCuenta[indice].Nombre;
+        this.confirmacionSwal.type = "error"
+        this.confirmacionSwal.show();
+        ((document.getElementById("BotonGuardarDestinatario") as HTMLInputElement).disabled) = true;
+      } else {
+        ((document.getElementById("BotonGuardarDestinatario") as HTMLInputElement).disabled) = false;
+      }
+    }
+  }
+  DestinatarioCuenta =[];
+  bancosDestinatarios() {
+    this.http.get(this.globales.ruta + '/php/destinatarios/cuenta_bancaria_destinatario.php').subscribe((data: any) => {
+      this.DestinatarioCuenta = data;
+    });
+  }
+
+  LongitudCarateres(i) {
+    return parseInt(i.length);
   }
 
 }
