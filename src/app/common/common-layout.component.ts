@@ -143,14 +143,14 @@ export class CommonLayoutComponent implements OnInit {
     ngOnInit() {
 
         this.user = JSON.parse(localStorage.User);
-        localStorage.setItem('Perfil',this.user.Permisos[0].Id_Perfil);
+        localStorage.setItem('Perfil', this.user.Permisos[0].Id_Perfil);
         switch (this.user.Permisos[0].Id_Perfil) {
-            case "1":{
+            case "1": {
                 this.OcultarCajero = false;
                 this.OcultarConsultor = false;
-                break;                
+                break;
             }
-            case "2":{
+            case "2": {
                 this.OcultarCajero = true;
                 break;
             }
@@ -163,10 +163,10 @@ export class CommonLayoutComponent implements OnInit {
                 this.OcultarConsultor = true;
                 break;
             }
-            case "5":{
+            case "5": {
                 break;
             }
-            case "6":{
+            case "6": {
                 this.OcultarCajero = false;
                 this.OcultarConsultor = false;
                 break;
@@ -329,7 +329,18 @@ export class CommonLayoutComponent implements OnInit {
         this.egresoGiroBolivar = 0;
         this.egresoTrasladoBolivar = 0;
         this.ingresoTrasladoBolivar = 0;
-        this.GiroComision = 0
+        this.GiroComision = 0;
+
+        this.ingresoCambio = 0;
+        this.ingresoCambioBolivar = 0;
+        this.ingresoTransferencia = 0;
+        this.ingresoTraslado = 0;
+        this.egresoTraslado = 0;
+        this.totalIngresosPesos = 0;
+        this.egresoCambio = 0;
+        this.egresoCambioBolivar = 0;
+        this.ingresoCorresponsal = 0;
+        this.EntregadoIngresosPesos = 0;
 
         this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_V2.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
 
@@ -592,7 +603,7 @@ export class CommonLayoutComponent implements OnInit {
     sumaEgresos = 0;
     SaldoActual = 0;
     MontoInicial = 0;
-    ValorInicial =0;
+    ValorInicial = 0;
     CierreCuentaBancaria() {
         //JSON.parse(localStorage['Banco']);
 
@@ -602,7 +613,7 @@ export class CommonLayoutComponent implements OnInit {
         this.sumaIngresos = 0;
         this.SaldoActual = 0;
         this.Movimientos = [];
-        this.ValorInicial =0;
+        this.ValorInicial = 0;
 
         this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
             params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" }
@@ -616,7 +627,7 @@ export class CommonLayoutComponent implements OnInit {
             params: { id: JSON.parse(localStorage['Banco']) }
         }).subscribe((data: any) => {
             this.Movimientos = data.lista;
-           
+
             /*if (Number(this.MontoInicial) + Number(this.sumaEgresos)  == Number(this.ValorInicial)){
                 this.sumaEgresos = 0;   
             }
@@ -628,8 +639,8 @@ export class CommonLayoutComponent implements OnInit {
         }).subscribe((data: any) => {
             data.lista.forEach(element => {
                 if (element.Tipo == "Egreso") { this.sumaEgresos += Number(element.ValorSinSimbolo) }
-                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial") { this.sumaIngresos += Number(element.ValorSinSimbolo) }                
-            });            
+                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial") { this.sumaIngresos += Number(element.ValorSinSimbolo) }
+            });
 
 
             this.SaldoActual = Number(this.MontoInicial) - Number(this.sumaEgresos) + Number(this.sumaIngresos);
@@ -666,7 +677,7 @@ export class CommonLayoutComponent implements OnInit {
             this.Movimientos = data.lista;
             this.Movimientos.forEach(element => {
                 if (element.Tipo == "Egreso") { this.sumaEgresos += Number(element.ValorSinSimbolo) }
-                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial" ) { this.sumaIngresos += Number(element.ValorSinSimbolo) }
+                if (element.Tipo == "Ingreso" && element.Detalle != "Saldo Inicial") { this.sumaIngresos += Number(element.ValorSinSimbolo) }
                 this.MontoInicial = element.Saldo;
             });
 
@@ -716,12 +727,12 @@ export class CommonLayoutComponent implements OnInit {
         let saldoActual = JSON.stringify(this.SaldoActual);
         JSON.parse(localStorage['Banco'])
         let datos = new FormData();
-        datos.append("SaldoActualBanco",saldoActual );
+        datos.append("SaldoActualBanco", saldoActual);
         datos.append("Id_Cuenta_Bancaria", JSON.parse(localStorage['Banco']));
         this.http.post(this.globales.ruta + 'php/cierreCaja/Cierre_Banco.php', datos)
             .subscribe((data: any) => {
-                this.salir(); 
+                this.salir();
                 modal.hide();
-        });
+            });
     }
 }

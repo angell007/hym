@@ -40,8 +40,9 @@ export class TransferenciasComponent implements OnInit {
   @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
   @ViewChild('ModalVerCompra') ModalVerCompra: any;
+  @ViewChild('ModalSaldoInicialBanco') ModalSaldoInicialBanco: any;
 
-
+  
   Identificacion: any;
   CuentaDestino: any;
   Recibe: any;
@@ -59,24 +60,11 @@ export class TransferenciasComponent implements OnInit {
   DevolucionesRecibo = [];
   filaRecibo = false;
   compras = [];
+  ListaBancos = [];
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
-  esconder = true;
   ngOnInit() {
-
-    var perfil = JSON.parse(localStorage.Perfil);
-
-    switch(perfil){
-      case '5':{
-        this.esconder = false;
-      }
-      default:{
-        this.esconder = true;
-        break;
-      }
-    }
-
     this.ActualizarVista();
 
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
@@ -89,6 +77,15 @@ export class TransferenciasComponent implements OnInit {
       this.transferenciasRealizadas = data.realizadas;
 
     });
+
+    //hym.corvuslab.co/php/consultor/lista_bancos.php
+
+    this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+      this.ListaBancos = data;
+    });
+
+
+    this.graficas();
 
   }
 
@@ -116,7 +113,7 @@ export class TransferenciasComponent implements OnInit {
   }
 
   cuentasBancarias = [];
-  BancosVenezolanos= [];
+  BancosVenezolanos = [];
   ActualizarVista() {
 
     this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
@@ -137,6 +134,9 @@ export class TransferenciasComponent implements OnInit {
       .subscribe((data: any) => {
         this.BancosVenezolanos = data;
       });
+
+
+      this.graficas();
   }
 
   refrescarVistaPrincipalConsultor() {
@@ -189,6 +189,7 @@ export class TransferenciasComponent implements OnInit {
   }
 
   RealizarDevolucion(formulario: NgForm, modal) {
+    formulario.value.Id_Cuenta_Bancaria = JSON.parse(localStorage['Banco']);
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("modulo", 'Transferencia');
@@ -265,6 +266,7 @@ export class TransferenciasComponent implements OnInit {
     });
   }
 
+  NombreBancoEmpresa = "";
   RealizarTransferencia(id, numeroCuenta, valor, cajero, codigo) {
     //this.BloquearTransferencia(id, "No");
 
@@ -279,6 +281,16 @@ export class TransferenciasComponent implements OnInit {
       this.Monto = valor;
       this.Cajero = cajero
       this.Recibo = codigo
+
+      // buscar id Cuenta =  JSON.parse(localStorage['Banco']);
+     
+      console.log(this.BancosVenezolanos);
+      console.log(JSON.parse(localStorage['Banco']));
+      var index = this.BancosVenezolanos.findIndex(x=>x.Id_Cuenta_Bancaria === localStorage['Banco'] );
+      console.log(index);
+      if(index > -1 ){
+        this.NombreBancoEmpresa = this.BancosEmpresa[index].Nombre_Titular;
+      }
 
       if (numeroCuenta.substring(0, 4) == "0134") {
         this.ModalCrearTransferenciaBanesco.show();
@@ -319,6 +331,7 @@ export class TransferenciasComponent implements OnInit {
   }
 
   CrearTransferencia(formulario: NgForm, modal) {
+    formulario.value.Id_Cuenta_Bancaria =  JSON.parse(localStorage['Banco']);
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -467,7 +480,7 @@ export class TransferenciasComponent implements OnInit {
     }
   }
 
-  RealizarReporte(formulario: NgForm, modal){
+  RealizarReporte(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -480,4 +493,88 @@ export class TransferenciasComponent implements OnInit {
       modal.hide();
     });
   }
+
+  GuardarMontoInicial(formulario: NgForm, modal) {
+      formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      datos.append("datos", info);
+      this.http.post(this.globales.ruta + 'php/consultor/guardar_monto_inicial.php', datos).subscribe((data: any) => {
+        if (data != "") {
+          formulario.reset();
+          this.mensajeSwal.title = "Apertura"
+          this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
+          this.mensajeSwal.type = "success"
+          this.mensajeSwal.show();
+          modal.hide();
+        } else {
+          this.mensajeSwal.title = "Apertura";
+          this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
+          this.mensajeSwal.type = "warning";
+          this.mensajeSwal.show();
+        }
+
+      });
+
+  }
+
+  graficas(){
+    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
+      var chart = AmCharts.makeChart( "chartdiv", {
+        "type": "serial",
+        "theme": "light",
+        "dataProvider": [ {
+          "country": "Realizadas",
+          "visits": data.TransferenciasRealizadas
+        }, {
+          "country": "Devueltas",
+          "visits": data.TransferenciasDevueltas
+        }, {
+          "country": "Revisadas",
+          "visits": data.TotalTransferencias
+        } ],
+        "valueAxes": [ {
+          "gridColor": "#FFFFFF",
+          "gridAlpha": 0.2,
+          "dashLength": 0
+        } ],
+        "gridAboveGraphs": true,
+        "startDuration": 1,
+        "graphs": [ {
+          "balloonText": "[[category]]: <b>[[value]]</b>",
+          "fillAlphas": 0.8,
+          "lineAlpha": 0.2,
+          "type": "column",
+          "valueField": "visits"
+        } ],
+        "chartCursor": {
+          "categoryBalloonEnabled": false,
+          "cursorAlpha": 0,
+          "zoomable": false
+        },
+        "categoryField": "country",
+        "categoryAxis": {
+          "gridPosition": "start",
+          "gridAlpha": 0,
+          "tickPosition": "start",
+          "tickLength": 20
+        },
+        "export": {
+          "enabled": true
+        }
+      
+      } );
+    });
+
+  }
+
+  SaldoInicialBanco = 0;
+  VerificarSaldo(value){
+    var index = this.ListaBancos.findIndex(x=>x.Id_Cuenta_Bancaria === value);
+    if(index > -1 ){
+      this.SaldoInicialBanco= this.ListaBancos[index].Valor;
+      //GuardarInicio
+    }
+  }
+
 }

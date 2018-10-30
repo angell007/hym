@@ -279,7 +279,7 @@ export class PosComponent implements OnInit {
       datos.append("datos", info);
       datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
       datos.append("caja", "5");
-      datos.append("oficina", "4");
+      datos.append("oficina", "16");
       datos.append("idDiario", this.IdDiario);
       this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
         .catch(error => {
@@ -488,13 +488,13 @@ export class PosComponent implements OnInit {
     formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
     formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
     formulario.value.Cantidad_Transferida = this.entregar;
-    var index = this.Monedas.findIndex(x => x.Id_Moneda === formulario.value.Moneda_Destino);
+    var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
     formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
-    datos.append("datos", info);
+    datos.append("datos", info); 
     this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
-      //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+    //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
         this.errorSwal.show();
@@ -503,7 +503,7 @@ export class PosComponent implements OnInit {
       .subscribe((data: any) => {
         formulario.reset();
         this.opcionDefaultFormaPago = "Efectivo";
-        this.opcionTipoTransferencia = "Transferencia";
+        this.opcionTipoTransferencia  = "Transferencia";
         this.seleccioneClienteDefault = "";
         this.movimientoExitosoSwal.show();
         //////////console.log(data);
@@ -820,9 +820,9 @@ export class PosComponent implements OnInit {
   TerceroCliente = [];
   MonedasTransferencia = [];
   MonedasOrigen = [];
-  TransferenciasAnuladas = [];
+  TransferenciasAnuladas =[];
   RemitentesTransferencias = [];
-  CuentasBancarias = [];
+  CuentasBancarias =[];
   actualizarVista() {
     this.Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario
     this.MonedaOrigenCambio = [];
@@ -1313,25 +1313,25 @@ export class PosComponent implements OnInit {
     formulario.value.Cantidad_Transferida = this.entregar;
 
     var suma = 0;
-    if (this.Envios.length != 1) {
+    if(this.Envios.length != 1){
       this.Envios.forEach((element, index) => {
         if (element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0) {
           this.Envios.splice(index, 1);
           suma += element.Valor_Transferencia_Bolivar;
         }
       });
-    }
+    }    
 
     this.Envios.forEach((element, index) => {
       suma += Number(element.Valor_Transferencia_Bolivar);
     });
 
-    var totalPermitido = Number(this.entregar) + Number(this.SaldoBolivar)
+    var totalPermitido = Number(this.entregar) 
 
     if (this.credito == true) {
-      var index = this.Monedas.findIndex(x => x.Id_Moneda === formulario.value.Moneda_Destino);
-      formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
-      this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+      var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
+        formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
+        this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
       let info = JSON.stringify(formulario.value);
       let destinatarios = JSON.stringify(this.Envios);
@@ -1339,7 +1339,7 @@ export class PosComponent implements OnInit {
       datos.append("datos", info);
       datos.append("envios", destinatarios);
       this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+      //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
         .catch(error => {
           console.error('An error occurred:', error.error);
           this.errorSwal.show();
@@ -1348,7 +1348,7 @@ export class PosComponent implements OnInit {
         .subscribe((data: any) => {
           formulario.reset();
           this.opcionDefaultFormaPago = "Efectivo";
-          this.opcionTipoTransferencia = "Transferencia";
+          this.opcionTipoTransferencia  = "Transferencia";
           this.seleccioneClienteDefault = "";
           this.transferenciaExitosaSwal.show();
           this.TipoPagoTransferencia("Efectivo");
@@ -1375,7 +1375,7 @@ export class PosComponent implements OnInit {
 
     } else {
       if (suma == totalPermitido && totalPermitido > 0) {
-        var index = this.Monedas.findIndex(x => x.Id_Moneda === formulario.value.Moneda_Destino);
+        var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
         formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
         this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
         let info = JSON.stringify(formulario.value);
@@ -1384,7 +1384,7 @@ export class PosComponent implements OnInit {
         datos.append("datos", info);
         datos.append("envios", destinatarios);
         this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-          //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
           .catch(error => {
             console.error('An error occurred:', error.error);
             this.errorSwal.show();
@@ -1392,8 +1392,8 @@ export class PosComponent implements OnInit {
           })
           .subscribe((data: any) => {
             formulario.reset();
-            this.opcionDefaultFormaPago = "Efectivo";
-            this.opcionTipoTransferencia = "Transferencia";
+        this.opcionDefaultFormaPago = "Efectivo";
+        this.opcionTipoTransferencia  = "Transferencia";
             this.seleccioneClienteDefault = "";
             this.transferenciaExitosaSwal.show();
             this.TipoPagoTransferencia("Efectivo");
@@ -2192,12 +2192,14 @@ export class PosComponent implements OnInit {
   }
 
   AnularTransferencia(id, formulario: NgForm) {
+    formulario.value.idTercero = this.idTerceroDestino;
+    formulario.value.idDestino = this.destinoTercero;
     let datos = new FormData();
     let info = JSON.stringify(formulario.value);
     datos.append("id", id);
     datos.append("datos", info);
-    datos.append("idTercero", this.idTerceroDestino);
-    datos.append("idDestino", this.destinoTercero);
+    /*datos.append("idTercero", this.idTerceroDestino);
+    datos.append("idDestino", this.destinoTercero);*/
     this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -2217,7 +2219,7 @@ export class PosComponent implements OnInit {
   }
 
   idTerceroDestino: any;
-  destinoTercero: any;
+  destinoTercero:any;
   AnularTransferenciaModal(id, modal, tercero, destino) {
     this.http.get(this.globales.ruta + '/php/transferencias/verificar_realizada.php', { params: { id: id } }).subscribe((data: any) => {
       var conteo = data[0].conteo;
@@ -2236,8 +2238,8 @@ export class PosComponent implements OnInit {
   }
 
   itemDestinatario = true;
-  NombreTercero: any;
-  TituloModalTransferencia = "Envia";
+  NombreTercero:any;
+  TituloModalTransferencia ="Envia";
   verRecibo(valor) {
     this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
       params: { id: valor }
@@ -2250,26 +2252,26 @@ export class PosComponent implements OnInit {
         this.itemDestinatario = false;
       }
 
-      var index = this.TerceroCliente.findIndex(x => x.Id_Tercero === data.encabezado[0].Id_Tercero);
-      if (index > -1) {
+      var index = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero);
+      if(index >-1){
         this.NombreTercero = this.TerceroCliente[index].Nombre;
         this.TituloModalTransferencia = "Tercero "
       }
-
-      var index1 = this.TerceroCliente.findIndex(x => x.Id_Tercero === data.encabezado[0].Id_Tercero_Destino);
-      if (index1 > -1) {
+      
+      var index1 = this.TerceroCliente.findIndex(x=>x.Id_Tercero === data.encabezado[0].Id_Tercero_Destino);
+      if(index1 >-1){
         this.NombreTercero = this.TerceroCliente[index1].Nombre;
         this.TituloModalTransferencia = "Tercero "
       }
 
-      var index2 = this.RemitentesTransferencias.findIndex(x => x.Id_Transferencia_Remitente === data.encabezado[0].Documento_Origen);
-      if (index2 > -1) {
+      var index2 = this.RemitentesTransferencias.findIndex(x=>x.Id_Transferencia_Remitente === data.encabezado[0].Documento_Origen);
+      if(index2 >-1){
         this.NombreTercero = this.RemitentesTransferencias[index2].Nombre;
         this.TituloModalTransferencia = "Remitente "
       }
       //CuentasBancarias
-      var index3 = this.CuentasBancarias.findIndex(x => x.Id_Cuenta_Bancaria === data.encabezado[0].Id_Cuenta_Bancaria);
-      if (index3 > -1) {
+      var index3 = this.CuentasBancarias.findIndex(x=>x.Id_Cuenta_Bancaria === data.encabezado[0].Id_Cuenta_Bancaria);
+      if(index3 >-1){
         this.NombreTercero = this.CuentasBancarias[index3].Nombre_Titular;
         this.TituloModalTransferencia = "Cuenta De "
       }
@@ -2481,7 +2483,7 @@ export class PosComponent implements OnInit {
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
-      this.ValorTotalGiro = Number(data.Valor_Recibido) + Number(data.Comision);
+      this.ValorTotalGiro = Number(data.Valor_Recibido);
     });
     this.ModalAprobarGiro.show();
   }
@@ -2545,7 +2547,7 @@ export class PosComponent implements OnInit {
   BotonTransferencia = true;
   BotonMovimiento = false;
   opcionDefaultFormaPago = "Efectivo";
-  opcionTipoTransferencia = "Transferencia";
+  opcionTipoTransferencia  = "Transferencia";
   VerificarTipoTransferencia() {
     var Forma_Pago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
     var Tipo_Transferencia = (document.getElementById("Tipo_Transferencia") as HTMLInputElement).value;
@@ -2571,7 +2573,7 @@ export class PosComponent implements OnInit {
           this.RecibeCliente = false;
           this.Credito = true;
           this.Consignacion = false;
-
+          
           break;
         }
         case "Consignacion": {
@@ -2592,7 +2594,7 @@ export class PosComponent implements OnInit {
       switch (Forma_Pago) {
         case "Efectivo": {
           this.RecibeCliente = true;
-          this.transferencia = false;
+          this.transferencia =false;
           this.Credito = false;
           this.Consignacion = false;
           break;
@@ -2608,7 +2610,7 @@ export class PosComponent implements OnInit {
         }
         case "Consignacion": {
           this.RecibeCliente = true;
-          this.transferencia = false;
+          this.transferencia =false;
           this.Credito = false;
           this.Consignacion = true;
           break;
@@ -2618,7 +2620,7 @@ export class PosComponent implements OnInit {
 
   }
 
-  ReiniciarTransferencias() {
+  ReiniciarTransferencias(){
     this.RecibeCliente = false;
     this.tipoCliente = true
     this.transferencia = true;
@@ -2628,7 +2630,7 @@ export class PosComponent implements OnInit {
     this.BotonTransferencia = true;
     this.BotonMovimiento = false;
     this.opcionDefaultFormaPago = "Efectivo";
-    this.opcionTipoTransferencia = "Transferencia";
+    this.opcionTipoTransferencia  = "Transferencia";
     this.transferencia = true
   }
 
