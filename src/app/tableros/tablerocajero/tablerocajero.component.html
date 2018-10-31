@@ -809,11 +809,9 @@
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
                                                                             <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
-                                                                            <ng-template #entrego>
-                                                                                <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                              </ng-template>
-                                                                            <!--<td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
+                                                                            <td>{{Giro.Valor_Total | currency}}</td>
+                                                                            <!--<td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
+                                                                            <td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
