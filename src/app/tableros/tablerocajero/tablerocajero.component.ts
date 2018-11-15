@@ -1221,11 +1221,10 @@ export class TablerocajeroComponent implements OnInit {
         (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
         (document.getElementById("pagocon") as HTMLInputElement).value = "0";
         this.vueltos = 0;
-        this.confirmacionSwal.title = "Problemas cambio";
-        this.confirmacionSwal.text = "La plata entregada es inferior a lo que va a cambiar";
+        this.confirmacionSwal.title = "Problemas Cambio";
+        this.confirmacionSwal.text = "El dinero Recibido es inferior a lo que va a cambiar";
         this.confirmacionSwal.type = "error";
         this.confirmacionSwal.show();
-
       }
     }
   }
@@ -2329,24 +2328,14 @@ export class TablerocajeroComponent implements OnInit {
         this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
       }
     });
-
-
-
   }
-
-
-  conversionMoneda(valor, texto) {
-
-    if (valor == false) {
-      //compra
-      this.tasaCambiaria = this.PrecioSugeridoCompra;
-      var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
-
-      var cambio = Number(texto) * Number(this.tasaCambiaria);
+  conversionMoneda() {
+    if (this.Venta == false) {
+      var cambio = Number(this.cambiar) * Number(this.tasaCambiaria);
       this.entregar = cambio;
       (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
     } else {
-      var cambio = Number(texto) / Number(this.tasaCambiaria);
+      var cambio = Number(this.cambiar) / Number(this.tasaCambiaria);
       this.entregar = cambio.toFixed(2);
       this.MonedaOrigen = "Pesos"
     }

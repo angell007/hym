@@ -143,29 +143,35 @@ export class CommonLayoutComponent implements OnInit {
     ngOnInit() {
 
         this.user = JSON.parse(localStorage.User);
-        localStorage.setItem('Perfil', this.user.Permisos[0].Id_Perfil);
-        switch (this.user.Permisos[0].Id_Perfil) {
+        localStorage.setItem('Perfil', this.user.Id_Perfil);
+        switch (this.user.Id_Perfil) {
+            // administrador
             case "1": {
                 this.OcultarCajero = false;
                 this.OcultarConsultor = false;
                 break;
             }
+            //cajero principal
             case "2": {
                 this.OcultarCajero = true;
                 break;
             }
+            // cajero
             case "3": {
                 this.OcultarCajero = true;
                 break;
             }
+            // consultor
             case "4": {
                 this.OcultarCajero = true;
                 this.OcultarConsultor = true;
                 break;
             }
+            // auditor 
             case "5": {
                 break;
             }
+            // 
             case "6": {
                 this.OcultarCajero = false;
                 this.OcultarConsultor = false;
