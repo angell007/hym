@@ -14,12 +14,12 @@ import { Subject } from 'rxjs/Subject';
 })
 export class TipodocumentoComponent implements OnInit {
 
-  public tiposDocumentos: any[];
+  public tiposDocumentos: any = [];
 
   //variables de formulario
-  public Identificacion: any[];
-  public Nombre: any[];
-  public Codigo: any[];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Codigo: any = [];
 
   public boolNombre: boolean = false;
   public boolCodigo: boolean = false;
@@ -32,7 +32,7 @@ export class TipodocumentoComponent implements OnInit {
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('FormDocumento') FormDocumento: any;
   Orden: any;
-  tiposDocumentosExtranjero: any[];
+  tiposDocumentosExtranjero: any = [];
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -173,4 +173,7 @@ export class TipodocumentoComponent implements OnInit {
     });
   }
 
+  OcultarFormularios(activeModal:any){
+    activeModal.hide();
+  }
 }

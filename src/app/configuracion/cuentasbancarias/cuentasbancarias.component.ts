@@ -13,8 +13,8 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./cuentasbancarias.component.css']
 })
 export class CuentasbancariasComponent implements OnInit {
-  public cuentas: any[];
-  public Bancos: any[];
+  public cuentas: any = [];
+  public Bancos: any = [];
 
  
 
@@ -37,7 +37,7 @@ export class CuentasbancariasComponent implements OnInit {
   dtTrigger = new Subject();
   Monedas = [];
   Identificacion: any;
-  CuentaBancaria=[];
+  CuentaBancaria:any={};
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -71,7 +71,7 @@ export class CuentasbancariasComponent implements OnInit {
     });
   }
 
-  Bancos_Pais(Pais) {
+  Bancos_Pais(Pais, i) {
     this.http.get(this.globales.ruta + 'php/genericos/bancos_pais.php', { params: { id: Pais } }).subscribe((data: any) => {
       this.Bancos = data;
     });
@@ -129,7 +129,7 @@ export class CuentasbancariasComponent implements OnInit {
     }).subscribe((data: any) => {
       this.Identificacion = id;
       this.CuentaBancaria = data;
-      this.Bancos_Pais(data.Id_Pais);
+      this.Bancos_Pais(data.Id_Pais, 1);
       this.ModalEditarCuenta.show();
     });
   }

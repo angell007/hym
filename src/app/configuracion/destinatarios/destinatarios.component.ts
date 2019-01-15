@@ -15,22 +15,22 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class DestinatariosComponent implements OnInit {
 
-  public destinatarios: any[] = [];
-  public Paises: any[];
-  public Bancos: any[];
+  public destinatarios: any = [] = [];
+  public Paises: any = [];
+  public Bancos: any = [];
 
   //variables de formulario
-  public Identificacion: any[];
-  public Nombre: any[];
-  public Cuentas: any[];
-  public IdBanco: any[];
-  public Banco: any[];
-  public IdPais: any[];
-  public Pais: any[];
-  public Detalle: any[];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Cuentas: any = [];
+  public IdBanco: any = [];
+  public Banco: any = [];
+  public IdPais: any = [];
+  public Pais: any = [];
+  public Detalle: any = [];
   public disabled: boolean = true;
   public Lista_Cuentas = [];
-  public Detalle_Destinatario: any[] = [];
+  public Detalle_Destinatario: any = [] = [];
   public Lista_Destinatarios = [{
     Id_Pais: '2',
     Id_Banco: '',
@@ -43,8 +43,8 @@ export class DestinatariosComponent implements OnInit {
 
   public boolNombre: boolean = false;
   public boolId: boolean = false;
-  public cuentas: any[] = [];
-  public datos: any[] = [];
+  public cuentas: any = [] = [];
+  public datos: any = [] = [];
   public Id_Destinatario: any;
 
   //Valores por defecto

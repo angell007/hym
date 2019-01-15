@@ -58,7 +58,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!nombre.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+            <button type="submit" class="btn btn-primary" [disabled]="!FormCuenta.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCuenta(FormCuenta, ModalCuenta)">Guardar</button>
         </div>
     </div>
@@ -90,7 +90,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" [disabled]="!nombreEd.valid" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este Cuenta' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!FormEditarCuenta.valid" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este Cuenta' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
                 (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)">Guardar</button>
         </div>
     </div>

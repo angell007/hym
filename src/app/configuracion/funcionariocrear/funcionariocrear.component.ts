@@ -21,14 +21,14 @@ export class FuncionariocrearComponent implements OnInit {
    public Id_Perfil: any [];
    public Perfil: any [];
    
-   public cargo:any[];
-   public Procesos: any[]; 
-   public Proceso: any[];*/
-  public Grupos: any[];
-  public Dependencias: any[];
-  public Cargos: any[];
+   public cargo:any = [];
+   public Procesos: any = []; 
+   public Proceso: any = [];*/
+  public Grupos: any = [];
+  public Dependencias: any = [];
+  public Cargos: any = [];
   public Fotos: any;
-  public Perfiles:any[]=[];
+  public Perfiles:any=[];
 
   public funcionario =
     {
@@ -58,7 +58,8 @@ export class FuncionariocrearComponent implements OnInit {
       Talla_Pantalon: '',
       Talla_Botas: '',
       Saldo_Inicial_Peso : '',
-      Saldo_Inicial_Bolivar: ''
+      Saldo_Inicial_Bolivar: '',
+      Tipo_Sangre: ''
     };
 
   public contacto_emergencia =
@@ -105,9 +106,59 @@ export class FuncionariocrearComponent implements OnInit {
       Telefono: ''
     }
   ];
-  Funcionario = [];
-  public Permisos:any[]=[];
-  public Longitud=0;
+  Funcionario:any = [];
+  public Permisos:any = []=[];
+  public Longitud:number=0;
+
+  public boolNombresIP:boolean = false;
+  public boolApellidosIP:boolean = false;
+  public boolNacimientoIP:boolean = false;
+  public boolLugarNacimientoIP:boolean = false;
+  public boolTipoSangreIP:boolean = false;
+  public boolTelefonoIP:boolean = false;
+  public boolCelularIP:boolean = false;
+  public boolCorreoIP:boolean = false;
+  public boolDireccionIP:boolean = false;
+  public boolEstadoCivilIP:boolean = false;
+  public boolHijosIP:boolean = false;
+  public boolGradoIP:boolean = false;
+  public boolTituloIP:boolean = false;
+  public boolGrupoIP:boolean = false;
+  public boolDependenciaIP:boolean = false;
+  public boolCargoIP:boolean = false;
+  public boolSalarioIP:boolean = false;
+  public boolIngresoIP:boolean = false;
+  public boolCamisaIP:boolean = false;
+  public boolPantalonIP:boolean = false;
+  public boolBotasIP:boolean = false;
+  public boolNombreCE:boolean = false;
+  public boolParentescoCE:boolean = false;
+  public boolCelularCE:boolean = false;
+  public boolTelefonoCE:boolean = false;
+  public boolDireccionCE:boolean = false;
+  public boolEmpresaEL1:boolean = false;
+  public boolCargoEL1:boolean = false;
+  public boolJefeEL1:boolean = false;
+  public boolFechaIngresoEL1:boolean = false;
+  public boolFechaRetiroEL1:boolean = false;
+  public boolTelefonoEL1:boolean = false;
+  public boolLaboresEL1:boolean = false;
+  public boolEmpresaEL2:boolean = false;
+  public boolCargoEL2:boolean = false;
+  public boolJefeEL2:boolean = false;
+  public boolFechaIngresoEL2:boolean = false;
+  public boolFechaRetiroEL2:boolean = false;
+  public boolTelefonoEL2:boolean = false;
+  public boolLaboresEL2:boolean = false;
+  public boolNombreRP1:boolean = false;
+  public boolProfesionRP1:boolean = false;
+  public boolTelefonoRP1:boolean = false;
+  public boolNombreRP2:boolean = false;
+  public boolProfesionRP2:boolean = false;
+  public boolEmpresaRP2:boolean = false;
+  public boolTelefonoRP2:boolean = false;
+  public boolEmpresaRP1:boolean = false;
+
 
 
   constructor(private http: HttpClient, private globales: Globales, private route: ActivatedRoute, private router: Router) { }

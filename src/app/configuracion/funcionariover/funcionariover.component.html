@@ -3,9 +3,9 @@
     <div class="col-lg-3">
       <div class="widget-profile-1 card">
         <div class="profile border bottom">
-          <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg" style="height: 200px;width: 200px; cursor: pointer;"
+          <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == null " src="{{globales.ruta}}/assets/images/user.jpg" style="height: 200px;width: 200px; cursor: pointer;"
             class="thumb-img img-circle" id="foto_visual">
-          <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
+          <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != null" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
             style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">
           <h4 class="mrg-top-20 no-mrg-btm text-semibold">
             {{funcionario.Nombres}} {{funcionario.Apellidos}}

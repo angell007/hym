@@ -20,6 +20,8 @@ export class OficinascrearComponent implements OnInit {
   Campos = [];
   CamposMoneda = [];
   moneda1 = true;
+  departamentoDefault:any = '';
+  municipioDefault:any = '';
 
   ngOnInit() {
 
@@ -39,7 +41,7 @@ export class OficinascrearComponent implements OnInit {
     });
   }
 
-  GuardarOficina(formulario: NgForm, modal: any) {
+  GuardarOficina(formulario: NgForm, modal: any = null) {
     let info = JSON.stringify(formulario.value);
     let moneda = JSON.stringify(this.CamposMoneda);
     let datos = new FormData();

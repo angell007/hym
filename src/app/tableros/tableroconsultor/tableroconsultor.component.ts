@@ -21,7 +21,7 @@ import { NgForm } from '@angular/forms';
 export class TableroconsultorComponent implements OnInit {
   public fecha = new Date();
   transferencias = [];
-  conteoTransferencias = [];
+  conteoTransferencias:any = {};
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
 
@@ -379,7 +379,7 @@ export class TableroconsultorComponent implements OnInit {
     });
   }
 
-  detalleCompra = [];
+  detalleCompra:any = {};
   Pagos = [{
     Ingreso: "",
     Transferencia: ""

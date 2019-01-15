@@ -26,8 +26,8 @@ export class CommonLayoutComponent implements OnInit {
     public searchModel: any;
     public user: any;
     public changePasswordMessage: string;
-    public alertas: any[];
-    public alertasCajas: any[];
+    public alertas: any = [];
+    public alertasCajas: any = [];
     public contadorTraslado = 0;
     public cierreCajaCambioIngreso = [];
     public cierreCajaCambioEgreso = [];
@@ -265,7 +265,7 @@ export class CommonLayoutComponent implements OnInit {
 
 
 
-    CambiarContrasena(formulario: NgForm) {
+    CambiarContrasena(formulario: NgForm, modal) {
         //console.log(formulario.value);
         let datos = new FormData();
         datos.append("clave", formulario.value.clave);
@@ -729,7 +729,7 @@ export class CommonLayoutComponent implements OnInit {
 
     }
 
-    RealizarCierreDiaCuentaBancaria(modal) {
+    RealizarCierreDiaCuentaBancaria(modal:any = null) {
         let saldoActual = JSON.stringify(this.SaldoActual);
         JSON.parse(localStorage['Banco'])
         let datos = new FormData();

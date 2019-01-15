@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class OficinaverComponent implements OnInit {
   id = this.route.snapshot.params["id"];
-  oficina = [];
+  oficina:any = {};
   Municipios: any;
   Departamentos: any;
 

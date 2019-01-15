@@ -13,11 +13,11 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./bancos.component.css']
 })
 export class BancosComponent implements OnInit {
-  public bancos : any[];
-  public Paises : any[];
+  public bancos : any = [];
+  public Paises : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
+  public Identificacion : any = [];
  
 
   public boolNombre:boolean = false;
@@ -44,7 +44,7 @@ export class BancosComponent implements OnInit {
 
   Colombia = false;
   Venezuela = false;
-  infoBanco = [];
+  infoBanco:any = {};
 
   constructor(private http : HttpClient, private globales : Globales) { }
 

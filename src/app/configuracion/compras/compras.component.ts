@@ -22,10 +22,10 @@ export class ComprasComponent implements OnInit {
   //variables que hacen referencia a los campos del formulario editar   
 
   public Identificacion: any;
-  public Proveedor: any[];
-  public Valor: any[];
-  public TasaCambio: any[];
-  public Funcionario: any[];
+  public Proveedor: any = [];
+  public Valor: any = [];
+  public TasaCambio: any = [];
+  public Funcionario: any = [];
 
   public boolProveedor: boolean = false;
   public boolValor: boolean = false;

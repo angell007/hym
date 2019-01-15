@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class FuncionarioverComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
-  public funcionario : any[] = [];
+  public funcionario : any = [] = [];
   public Fotos: any;
   public ExisteFoto: boolean;
   public ContactoEmergencia = 
@@ -28,7 +28,7 @@ export class FuncionarioverComponent implements OnInit {
     Telefono: '',
     Direccion : ''
   };
-  public Experiencia : any[] = [{
+  public Experiencia : any = [] = [{
     id_Funcionario_Experiencia_Laboral : '',
     Nombre_Empresa : '',
     Cargo : '',
@@ -64,9 +64,9 @@ export class FuncionarioverComponent implements OnInit {
       Telefono: ''
     }
   ];
-  public Grupos : any[] = [];
-  public Dependencias : any[] = [];
-  public Cargos : any[] = [];
+  public Grupos : any = [] = [];
+  public Dependencias : any = [] = [];
+  public Cargos : any = [] = [];
   public Grupo : any = [];
   public Dependencia : any = [];
   public Cargo : any = [];    

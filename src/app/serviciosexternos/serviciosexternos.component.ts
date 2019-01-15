@@ -10,13 +10,13 @@ import { NgForm } from '@angular/forms';
 export class ServiciosexternosComponent implements OnInit {
 
 
-  public serviciosexternos: any[];
+  public serviciosexternos: any = [];
 
   //variables que hacen referencia a los campos del formulario editar   
 
-  public Identificacion: any[];
-  public Nombre: any[];
-  public Comision: any[];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Comision: any = [];
 
   public boolNombre:boolean = false;
   public boolComision:boolean = false;

@@ -22,10 +22,15 @@ export class CuentasbancariasverComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
   SaldoActual: any;
-  DatosBanco = [];
-  EncabezadoRecibo = [{
-
-  }];
+  DatosBanco:any = {
+    /*Numero_Cuenta: '',
+    NombreCuenta: '',
+    Nombre_Titular: '',
+    Identificacion_Titular: '',
+    Detalle: '',
+    Estado: ''*/
+  };
+  EncabezadoRecibo:any = [];
   DestinatarioRecibo = [];
   DevolucionesRecibo = [];
   filaRecibo = false;
@@ -131,7 +136,7 @@ export class CuentasbancariasverComponent implements OnInit {
   }
 
   idItem: any;
-  ajusteBancario = [];
+  ajusteBancario:any = {};
   editarAjuste(id, modal) {
     this.idItem = id;
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {

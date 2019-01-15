@@ -14,13 +14,13 @@ import { Subject } from 'rxjs/Subject';
 })
 export class CajasComponent implements OnInit {
   public cajas = [];
-  public Oficinas : any[];
+  public Oficinas : any = [];
 
   //variables del formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Oficina : any[];
-  public Detalles : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Oficina : any = [];
+  public Detalles : any = [];
 
   public boolNombre:boolean = false;
   public boolOficina:boolean = false;

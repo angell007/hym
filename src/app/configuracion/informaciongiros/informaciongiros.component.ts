@@ -14,8 +14,8 @@ import { NgForm } from '@angular/forms';
 export class InformaciongirosComponent implements OnInit {
 
 
-  public GirosRemitentes: any[];
-  public GirosDestinatarios: any[];
+  public GirosRemitentes: any = [];
+  public GirosDestinatarios: any = [];
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -28,7 +28,7 @@ export class InformaciongirosComponent implements OnInit {
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
   Identificacion: any;
-  GiroEditar =[];
+  GiroEditar:any ={};
 
   constructor(private http: HttpClient, private globales: Globales) { }
 

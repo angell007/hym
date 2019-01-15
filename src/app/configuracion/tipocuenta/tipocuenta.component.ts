@@ -13,11 +13,11 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class TipocuentaComponent implements OnInit {
 
-  public tiposCuenta : any[];
+  public tiposCuenta : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
 
   public boolNombre:boolean = false;
   public boolCodigo:boolean = false;

@@ -13,15 +13,17 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./terceros.component.css']
 })
 export class TercerosComponent implements OnInit {
-  public terceros : any[];
-  public Departamentos : any[];
-  public Municipios : any[];
-  public Grupos : any[];
-  public Documentos : any[];
+  public terceros : any = {};
+  public Departamentos : any = [];
+  public Municipios : any = [];
+  public Grupos : any = [];
+  public Documentos : any = [];
 
   public actualClienteDesde:string;
   public year:string;
   public month:string;
+
+  public boolMunicipio:boolean = false;
 
   //Valores por defecto
   tipoDocumentoDefault: string = "";
@@ -44,7 +46,7 @@ export class TercerosComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  tercero = [];
+  tercero:any = {};
   IdMunicipio=[];
   Identificacion: any;
   

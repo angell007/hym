@@ -11,6 +11,8 @@ import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Globales } from '../shared/globales/globales';
 import { NgForm } from '@angular/forms';
+import { Observable } from "rxjs";
+import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-giros',
@@ -22,33 +24,33 @@ export class GirosComponent implements OnInit {
   public fecha = new Date();
   public giros = [];
 
-  public Identificacion: any[];
+  public Identificacion: any = [];
 
-  public Giro: any[];
+  public Giro: any = [];
 
-  public Datos : any[] = [];
-  public Origen : any[] = [];
-  public Nombre_Remitente : any[] = [];
-  public Documento_Remitente : any[] = [];
-  public Telefono_Remitente : any[] = [];
-  public Nombre_Destinatario : any[] = [];
-  public Documento_Destinatario : any[] = [];
-  public Telefono_Destinatario : any[] = [];
-  public Valor_Recibido : any[] = [];
-  public Valor_Entrega : any[] = [];
-  public Comision : any[] = [];
-  public Detalle : any[] = [];
-  public Estado : any[] = [];
-  public IdentificacionFuncionario: any[];
-  DatosRemitenteEditarGiro=[];
-  DatosDestinatario = [];
-  DatosDestinatarioEditarGiro = [];
+  public Datos : any = [] = [];
+  public Origen : any = [] = [];
+  public Nombre_Remitente : any = [] = [];
+  public Documento_Remitente : any = [] = [];
+  public Telefono_Remitente : any = [] = [];
+  public Nombre_Destinatario : any = [] = [];
+  public Documento_Destinatario : any = [] = [];
+  public Telefono_Destinatario : any = [] = [];
+  public Valor_Recibido : any = [] = [];
+  public Valor_Entrega : any = [] = [];
+  public Comision : any = [] = [];
+  public Detalle : any = [] = [];
+  public Estado : any = [] = [];
+  public IdentificacionFuncionario: any = [];
+  DatosRemitenteEditarGiro:any={};
+  DatosDestinatario:any = {};
+  DatosDestinatarioEditarGiro:any = {};
   Departamento_Remitente: any;
   Departamento_Destinatario: any;
   Municipios_Remitente = [];
   Municipios_Destinatario = [];
-  Remitente = [];
-  Destinatario= [];
+  Remitente:any = {};
+  Destinatario:any= {};
   ValorEnviar: any;
   idGiro: any;
   public Costo: number;
@@ -62,13 +64,13 @@ export class GirosComponent implements OnInit {
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('ModalDevolucionGiro') ModalDevolucionGiro: any;
   
-  /*public Origen : any[];
-  public Remitente : any[];
-  public Destinatario : any[];
-  public Monto : any[];
-  public Estado : any[];*/
+  /*public Origen : any = [];
+  public Remitente : any = [];
+  public Destinatario : any = [];
+  public Monto : any = [];
+  public Estado : any = [];*/
 
-  conteoGiros = [];
+  conteoGiros:any = {};
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -78,6 +80,17 @@ export class GirosComponent implements OnInit {
   IdOficina: number;
   IdCaja: number;
   IdentificacionGiro: any;
+
+  public RemitentesFiltrar:any = [];
+
+  //BUSQUEDA Remitentes
+  search_remitente = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(200),
+    map(term => term.length < 4 ? []
+      : this.RemitentesFiltrar.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+  );
+  formatter_remitente = (x: { Nombre: string }) => x.Nombre;
   
   constructor(private http: HttpClient, private globales: Globales) { }
 
@@ -101,6 +114,8 @@ export class GirosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
       this.Departamentos = data;
     });
+
+    //AGREGAR QUERY EN BD DE LOS REMITENTES
 
   }
 
@@ -289,7 +304,7 @@ export class GirosComponent implements OnInit {
     this.ModalDevolucionGiro.show();
   }
 
-  RealizarDevolucionGiro(formulario: NgForm){
+  RealizarDevolucionGiro(formulario: NgForm, activeModal:any){
     let info = JSON.stringify(formulario.value);
     let datos = new FormData();
     datos.append("datos", info);
@@ -299,6 +314,11 @@ export class GirosComponent implements OnInit {
     datos.append("Estado", "Devuelta");
     this.http.post(this.globales.ruta + 'php/giros/estado_giro.php', datos).subscribe((data: any) => {    
     });
+  }
+
+  AutoCompletarRemitenteGiro(datosRemitenteGiro:any){
+    console.log(datosRemitenteGiro);
+    
   }
 
 }

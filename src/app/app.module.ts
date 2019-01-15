@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormWizardModule } from 'angular2-wizard';
+//import { FormWizardModule } from 'angular2-wizard';
 import { FuncionarioService } from './shared/funcionario/funcionario.service'
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
@@ -99,6 +99,8 @@ import { TablerogerenciaComponent } from './tableros/tablerogerencia/tablerogere
 import { TableroDirective } from "./tablero/tablero.directive";
 import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
 import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
+import { cardPortletRefresh, cardPortletDelete } from './shared/directives/cards.directive';
+
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -121,7 +123,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         PerfectScrollbarModule,
         HttpClientModule,
         ReactiveFormsModule,
-        FormWizardModule,
+        //FormWizardModule,
         NgxDatatableModule,
         DataTablesModule,
         ChartsModule,
@@ -206,7 +208,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablerogerenciaComponent,
         TableroDirective,
         ComprascrearComponent,
-        CompraseditarComponent
+        CompraseditarComponent,
+        cardPortletRefresh,
+        cardPortletDelete
     ],
     exports:[
         ModalBasicComponent

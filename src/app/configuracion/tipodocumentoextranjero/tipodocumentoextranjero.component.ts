@@ -13,12 +13,12 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class TipodocumentoextranjeroComponent implements OnInit {
 
-  public tiposDocumentosExtranjero : any[];
+  public tiposDocumentosExtranjero : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Codigo : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Codigo : any = [];
 
   public boolNombre:boolean = false;
   public boolCodigo:boolean = false;

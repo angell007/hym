@@ -9,17 +9,17 @@ import { NgForm } from '@angular/forms';
 })
 export class CorresponsalesbancariosComponent implements OnInit {
 
-  public corresponsales: any[];
-  public Departamentos: any[];
-  public Municipios: any[];
+  public corresponsales: any = [];
+  public Departamentos: any = [];
+  public Municipios: any = [];
 
   //variables que hacen referencia a los campos del formulario editar   
 
-  public Identificacion: any[];
-  public Nombre: any[];
-  public Cupo: any[];
-  public Departamento: any[];
-  public Municipio: any[];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Cupo: any = [];
+  public Departamento: any = [];
+  public Municipio: any = [];
 
   public boolCorresponsal: boolean = false;
   public boolCupo: boolean = false;

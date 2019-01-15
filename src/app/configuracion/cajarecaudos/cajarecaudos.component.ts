@@ -14,19 +14,19 @@ import { Subject } from 'rxjs/Subject';
 })
 export class CajarecaudosComponent implements OnInit {
 
-  public cajarecaudos : any[];
-  public Departamentos : any[];
-  public Municipios : any[];
+  public cajarecaudos : any = [];
+  public Departamentos : any = [];
+  public Municipios : any = [];
 
   //variables que hacen referencia a los campos del formulario editar   
 
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Username : any[];
-  public Password : any[];
-  public Tipo : any[];
-  public Departamento : any[];
-  public Municipio : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Username : any = [];
+  public Password : any = [];
+  public Tipo : any = [];
+  public Departamento : any = [];
+  public Municipio : any = [];
 
   public boolNombre:boolean = false;
   public boolUsername:boolean = false;
@@ -52,7 +52,7 @@ export class CajarecaudosComponent implements OnInit {
   
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  Caja = [];
+  Caja:any = {};
 
   constructor(private http : HttpClient,private globales : Globales) { }
 

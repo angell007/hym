@@ -85,7 +85,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Id_Pais" ngModel (change)="Bancos_Pais($event.target.value, i);"
+                        <select class="form-control" name="Id_Pais" ngModel (change)="Bancos_Pais($event.target.value, 1);"
                             required>
                             <option value="">Seleccione País</option>
                             <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
@@ -180,7 +180,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>País</label>
-                            <select class="form-control" name="Id_Pais" [(ngModel)]="CuentaBancaria.Id_Pais" (change)="Bancos_Pais($event.target.value, i);"
+                            <select class="form-control" name="Id_Pais" [(ngModel)]="CuentaBancaria.Id_Pais" (change)="Bancos_Pais($event.target.value, 1);"
                                 required>
                                 <option value="">Seleccione País</option>
                                 <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>

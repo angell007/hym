@@ -16,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class TercerosverComponent implements OnInit {
 
   id = this.route.snapshot.params["id"];
-  Tercero = [];
+  Tercero:any = {};
   MovimientosTercero =[];
   SaldoActual: any;
   Monedas=[];
@@ -77,7 +77,7 @@ export class TercerosverComponent implements OnInit {
   }
 
   idItem: any;
-  ajusteBancario = [];
+  ajusteBancario:any = {};
   editarAjuste(id, modal) {
     this.idItem = id;
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {

@@ -18,38 +18,38 @@ export class PosComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
 
-  public IdentificacionFuncionario: any[];
-  public Destinatarios: any[] = [];
-  public Remitentes: any[] = [];
-  public Paises: any[] = [];
-  public Bancos: any[] = [];
-  public TipoCuentas: any[] = [];
-  public Clientes: any[] = [];
-  public DestinatariosFiltrados: any[] = [];
-  public RemitentesFiltrados: any[] = [];
-  public DatosRemitente: any[] = [];
-  public Funcionarios: any[] = [];
-  public ServiciosExternos: any[] = [];
-  public CorresponsalesBancarios: any[] = [];
-  public Documentos: any[];
-  public Cuentas: any[] = [{
+  public IdentificacionFuncionario: any = [];
+  public Destinatarios: any = [] = [];
+  public Remitentes: any = [] = [];
+  public Paises: any = [] = [];
+  public Bancos: any = [] = [];
+  public TipoCuentas: any = [] = [];
+  public Clientes: any = [] = [];
+  public DestinatariosFiltrados: any = [] = [];
+  public RemitentesFiltrados: any = [] = [];
+  public DatosRemitente: any = [] = [];
+  public Funcionarios: any = [] = [];
+  public ServiciosExternos: any = [] = [];
+  public CorresponsalesBancarios: any = [] = [];
+  public Documentos: any = [];
+  public Cuentas: any = [] = [{
     Id_Destinatario: '',
     Id_Pais: "",
     Id_Banco: '',
     Numero_Cuenta: '',
     Id_Tipo_Cuenta: ''
   }];
-  public Envios: any[] = [{
+  public Envios: any = [] = [{
     Destino : '',
     Numero_Documento_Destino: '',
     Id_Cuenta_Destino: '',
     Valor_Transferencia: '',
     Cuentas: []
   }];
-  public CuentasDestinatario: any[];
-  public Cajas: any[];
+  public CuentasDestinatario: any = [];
+  public Cajas: any = [];
   public Cambios : any [];
-  public Monedas: any[];
+  public Monedas: any = [];
   public Recibe: any = "Transferencia";
   public MonedaRecibe: any = "Bolivares";
   public IdCorresponsal: number;
@@ -57,12 +57,12 @@ export class PosComponent implements OnInit {
   public IdCaja: number;
   public Estado: string;
   public DetalleCorresponsal: string;
-  public Detalle: any[];
-  public Indice: any[];
+  public Detalle: any = [];
+  public Indice: any = [];
   public MonedaTransferencia: any;
   public MonedaRecibida: any;
-  public Cedula: any[];
-  public IdRemitente: any[];
+  public Cedula: any = [];
+  public IdRemitente: any = [];
   public FormaPago: string;
   public Costo: number;
   public PrecioSugerido: number;

@@ -13,21 +13,21 @@ import { Subject } from '../../../node_modules/rxjs/Subject';
 })
 export class EgresosComponent implements OnInit {
 
-  public Egresos : any[]=[];  
-  public Grupos : any[];
-  public Terceros : any[];
-  public Monedas : any[];
+  public Egresos : any = []=[];  
+  public Grupos : any = [];
+  public Terceros : any = [];
+  public Monedas : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public IdentificacionFuncionario : any[];
-  public IdGrupo : any[];
+  public Identificacion : any = [];
+  public IdentificacionFuncionario : any = [];
+  public IdGrupo : any = [];
   public IdTercero = "";
-  public Moneda : any[];
-  public Valor : any[];
-  public Grupo : any[];
-  public Tercero : any[];
-  public Detalle : any[];
+  public Moneda : any = [];
+  public Valor : any = [];
+  public Grupo : any = [];
+  public Tercero : any = [];
+  public Detalle : any = [];
 
   public tEnero: Number;
   public tFebrero: Number;
@@ -73,7 +73,7 @@ export class EgresosComponent implements OnInit {
   @ViewChild('FormEditarEgreso') FormEditarEgreso:any;
   @ViewChild('ModalEditarEgreso') ModalEditarEgreso:any; 
   @ViewChild('ModalEgresoEditar') ModalEgresoEditar:any; 
-  EgresoEditar = [];
+  EgresoEditar:any = {};
   IdEgreso: any;
   
   constructor(private http : HttpClient, private colorConfig: ThemeConstants, private globales: Globales) { }
@@ -219,5 +219,10 @@ export class EgresosComponent implements OnInit {
     .subscribe((data:any)=>{
       this.ActualizarVista();      
     });
+  }
+
+  ListaTerceros(event:any){
+    console.log(event);
+    
   }
 }

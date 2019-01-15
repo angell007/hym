@@ -21,7 +21,7 @@ export class OficinasComponent implements OnInit {
 
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
-  public oficinas : any[];
+  public oficinas : any = [];
   
   constructor(private http: HttpClient,private globales: Globales) { }
 

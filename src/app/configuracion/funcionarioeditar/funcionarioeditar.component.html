@@ -10,7 +10,7 @@
           <form #FormFuncionarioCrear="ngForm">
             <form-wizard style="border:0 !important;">
               <!--INICIO INFORMACION PERSONAL-->
-              <wizard-step [title]="'Información Personal'" [isValid]="nombresInformacionPersonalEd.valid && apellidosInformacionPersonalEd.valid && nacimientoInformacionPersonalEd.valid && lugarnacimientoInformacionPersonalEd.valid && !tiposangreInformacionPersonalEd.value=='' && telefonoInformacionPersonalEd.valid && celularInformacionPersonalEd.valid && correoInformacionPersonalEd.valid && direccionInformacionPersonalEd.valid && !estadocivilInformacionPersonalEd.value=='' && !hijosInformacionPersonalEd.value=='' && !gradoInformacionPersonalEd.value=='' && tituloInformacionPersonalEd.valid && !grupoInformacionPersonalEd.value=='' && !dependenciaInformacionPersonalEd.value=='' && !cargoInformacionPersonalEd.value=='' && salarioInformacionPersonalEd.valid && ingresoInformacionPersonalEd.valid && !camisaInformacionPersonalEd.value=='' && !pantalonInformacionPersonalEd.value=='' && !botasInformacionPersonalEd.value=='' ">
+              <wizard-step [title]="'Información Personal'" [isValid]="nombresInformacionPersonalEd.valid && apellidosInformacionPersonalEd.valid && nacimientoInformacionPersonalEd.valid && lugarnacimientoInformacionPersonalEd.valid && !tiposangreInformacionPersonalEd.value && telefonoInformacionPersonalEd.valid && celularInformacionPersonalEd.valid && correoInformacionPersonalEd.valid && direccionInformacionPersonalEd.valid && !estadocivilInformacionPersonalEd.value && !hijosInformacionPersonalEd.value && !gradoInformacionPersonalEd.value && tituloInformacionPersonalEd.valid && !grupoInformacionPersonalEd.value && !dependenciaInformacionPersonalEd.value && !cargoInformacionPersonalEd.value && salarioInformacionPersonalEd.valid && ingresoInformacionPersonalEd.valid && !camisaInformacionPersonalEd.value && !pantalonInformacionPersonalEd.value && !botasInformacionPersonalEd.value ">
                 <form #FormFuncionario="ngForm">
                   <div class="content2">
                     <div>
@@ -32,10 +32,10 @@
                         <div class="col-md-3">
                           <div style="text-align: center">
                             <label style="display: block" for="Foto">
-                              <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg"
+                              <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == null " src="{{globales.ruta}}/assets/images/user.jpg"
                                 style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
                                 id="foto_visual">
-                              <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
+                              <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != null" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
                                 style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
                                 id="foto_visual">
                             </label>

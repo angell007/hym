@@ -55,8 +55,8 @@ export class TrasladosComponent implements OnInit {
   traslados = [];
   Identificacion: any;
   codigo_Formato: string;
-  verTraslado = [];
-  edicionTraslado = [];
+  verTraslado:any = {};
+  edicionTraslado:any = {};
   movimiento = [];
 
   constructor(private http: HttpClient, private globales: Globales) {

@@ -26,12 +26,20 @@ export class TablerogerenciaComponent {
 
   constructor(private http: HttpClient, private globales: Globales) {}
 
-  Municipios: any[];
-  Oficina: any[];
-  CajerosAbiertos: any[];
-  Funcionarios: any[];
+  Municipios: any = [];
+  Oficina: any = [];
+  CajerosAbiertos: any = [];
+  Funcionarios: any = [];
   botonVolver = false;
   fechaHoy = "";
+  
+  public entregadoPesos:any = '';
+  public entregadoBolivar:any = '';
+  public diferenciaPesos:any = '';
+  public diferenciaBolivar:any = '';
+  public fajosPesos:any = [];
+  public fajosBolivares:any = [];
+
   @ViewChild('CierreCaja') CierreCaja: any;
   ngOnInit() {
     this.http.get(this.globales.ruta + 'php/gerencia/movimentos_fechas.php').subscribe((data: any) => {
@@ -734,6 +742,10 @@ export class TablerogerenciaComponent {
       }
 
     });
+  }
+
+  calcularFajoBilletes(cantidad:number,i:number,moneda:string){
+
   }
 
 }

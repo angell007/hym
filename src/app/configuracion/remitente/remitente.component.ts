@@ -20,7 +20,7 @@ export class RemitenteComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal:any;
   @ViewChild('saveSwal') saveSwal:any;
   @ViewChild('deleteSwal') deleteSwal:any;  
-  RemitenteEditar=[];
+  RemitenteEditar:any={};
 
   constructor(private http : HttpClient, private globales : Globales) { }
 

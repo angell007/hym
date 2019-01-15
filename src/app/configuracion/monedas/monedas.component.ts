@@ -16,7 +16,7 @@ import { log } from 'util';
 })
 export class MonedasComponent implements OnInit {
 
-  public Monedas: any[];
+  public Monedas: any = [];
 
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('deleteSwal') deleteSwal: any;
@@ -31,7 +31,7 @@ export class MonedasComponent implements OnInit {
   Campos = [];
   public Bandera = "";
   public cabecera = true;
-  Moneda = [];
+  Moneda:any = {};
   MonedaValor = [];
   Identificacion: any;
   Mensaje=[];
