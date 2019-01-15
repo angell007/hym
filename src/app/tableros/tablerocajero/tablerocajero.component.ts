@@ -828,7 +828,7 @@ export class TablerocajeroComponent implements OnInit {
     this.MonedaOrigenCambio = [];
     this.MonedaOrigenDestino = [];
 
-    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios.php', { params: { modulo: 'Cambio' , funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Cambios = data;
     });
 
@@ -908,7 +908,7 @@ export class TablerocajeroComponent implements OnInit {
       this.LimiteOficina = data.Limite_Transferencia;
     });
 
-    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php' , {params: {funcionario: JSON.parse(localStorage['User']).Identificacion_Funcionario} } ).subscribe((data: any) => {
       this.Transferencia = data;
     });
 
@@ -1221,11 +1221,10 @@ export class TablerocajeroComponent implements OnInit {
         (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
         (document.getElementById("pagocon") as HTMLInputElement).value = "0";
         this.vueltos = 0;
-        this.confirmacionSwal.title = "Problemas cambio";
-        this.confirmacionSwal.text = "La plata entregada es inferior a lo que va a cambiar";
+        this.confirmacionSwal.title = "Problemas Cambio";
+        this.confirmacionSwal.text = "El dinero Recibido es inferior a lo que va a cambiar";
         this.confirmacionSwal.type = "error";
         this.confirmacionSwal.show();
-
       }
     }
   }
@@ -2192,12 +2191,14 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   AnularTransferencia(id, formulario: NgForm) {
+    formulario.value.idTercero = this.idTerceroDestino;
+    formulario.value.idDestino = this.destinoTercero;
     let datos = new FormData();
     let info = JSON.stringify(formulario.value);
     datos.append("id", id);
     datos.append("datos", info);
-    datos.append("idTercero", this.idTerceroDestino);
-    datos.append("idDestino", this.destinoTercero);
+    /*datos.append("idTercero", this.idTerceroDestino);
+    datos.append("idDestino", this.destinoTercero);*/
     this.http.post(this.globales.ruta + '/php/transferencias/anular_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -2327,24 +2328,14 @@ export class TablerocajeroComponent implements OnInit {
         this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
       }
     });
-
-
-
   }
-
-
-  conversionMoneda(valor, texto) {
-
-    if (valor == false) {
-      //compra
-      this.tasaCambiaria = this.PrecioSugeridoCompra;
-      var valorCambio = (document.getElementById("Cambia") as HTMLInputElement).value;
-
-      var cambio = Number(texto) * Number(this.tasaCambiaria);
+  conversionMoneda() {
+    if (this.Venta == false) {
+      var cambio = Number(this.cambiar) * Number(this.tasaCambiaria);
       this.entregar = cambio;
       (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
     } else {
-      var cambio = Number(texto) / Number(this.tasaCambiaria);
+      var cambio = Number(this.cambiar) / Number(this.tasaCambiaria);
       this.entregar = cambio.toFixed(2);
       this.MonedaOrigen = "Pesos"
     }
@@ -2481,7 +2472,7 @@ export class TablerocajeroComponent implements OnInit {
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
       this.informacionGiro = data;
-      this.ValorTotalGiro = Number(data.Valor_Recibido);
+      this.ValorTotalGiro = Number(data.Valor_Total);
     });
     this.ModalAprobarGiro.show();
   }

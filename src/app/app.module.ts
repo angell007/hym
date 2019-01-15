@@ -105,11 +105,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     allowNegative: false,
     allowZero: false,
     decimal: ",",
-    precision: 0,
+    precision: 2,
     prefix: " ",
     suffix: "",
     thousands: ".",
-    nullable: true
+    nullable: false
 };
 
 @NgModule({

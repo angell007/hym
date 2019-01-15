@@ -201,24 +201,24 @@
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
-                                                <input type="text" placeholder="Valor" class="form-control" name="Valor_Origen"
-                                                    id="Cambia" ngModel="{{cambiar}}" (input)="conversionMoneda(Venta,$event.target.value)">
+                                                <input type="text" autocomplete="false" placeholder="Valor" class="form-control text-right" name="Valor_Origen"
+                                                    id="Cambia" [(ngModel)]="cambiar" (input)="conversionMoneda()" currencyMask [options]="{ prefix: '' , thousands: '.', decimal: ',' }" >
 
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                                                     Cambio</label>
-                                                <input *ngIf="Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
-                                                <input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control"
-                                                    id="Precio_Sugerido" name="Tasa" ngModel="{{tasaCambiaria}}">
+                                                <input *ngIf="Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
+                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" >
+                                                <input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
+                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (input)="conversionMoneda()">
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
-                                                <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control"
-                                                    id="Entrega" ngModel="{{entregar }}">
+                                                <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" autocomplete="false"
+                                                    id="Entrega" [(ngModel)]="entregar" (input)="conversionMoneda()">
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">
@@ -250,7 +250,7 @@
                                         (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>
                                 </div>
                                 <div class="col-md-2" style="margin-top: 50px">
-                                    <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
+                                    <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-danger btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
                                         Volver
                                     </button>
                                 </div>
@@ -258,64 +258,23 @@
                                 <div class="col-md-12">
                                     <hr>
                                     <h4>Información Tasas de cambio</h4>
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <!--Accordion wrapper-->
-                                                    <div class="accordion md-accordion" id="accordionEx" role="tablist"
-                                                        aria-multiselectable="true">
-
-                                                        <!-- Accordion card -->
-                                                        <div class="card">
-
-                                                            <!-- Card header -->
-                                                            <div class="card-header" role="tab" id="headingOne1">
-                                                                <a data-toggle="collapse" data-parent="#accordionEx"
-                                                                    href="#collapseOne" aria-expanded="true"
-                                                                    aria-controls="collapseOne">
-                                                                    <h5 class="mb-0"> Tasa Autorizada <i class="fa fa-angle-down rotate-icon"></i>
-                                                                    </h5>
-                                                                </a>
-                                                            </div>
-
-                                                            <!-- Card body -->
-                                                            <div id="collapseOne" class="collapse " role="tabpanel"
-                                                                aria-labelledby="headingOne" data-parent="#accordionEx">
-                                                                <div class="card-body">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table table-hover table-sm table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Maximo </th>
-                                                                                    <th>Minimo</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td *ngIf="Venta">{{MaxEfectivo}}</td>
-                                                                                    <td *ngIf="Venta">{{MinEfectivo}}</td>
-                                                                                    <td *ngIf="!Venta">{{MaxCompra}}</td>
-                                                                                    <td *ngIf="!Venta">{{MinCompra}}</td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                        <!-- Accordion card -->
-
-
-                                                    </div>
-                                                    <!-- Accordion wrapper -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <table class="table table-hover table-sm table-striped text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Maximo </th>
+                                                <th>Minimo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="font-weight: bold;">
+                                                <td *ngIf="Venta">$ {{MaxEfectivo}}</td>
+                                                <td *ngIf="Venta">$ {{MinEfectivo}}</td>
+                                                <td *ngIf="!Venta">$ {{MaxCompra}}</td>
+                                                <td *ngIf="!Venta">$ {{MinCompra}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -395,7 +354,7 @@
                                                                                 <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;">
                                                                                     <i class="ti-pencil"></i>
                                                                                 </button>
-                        
+                                                                                
                                                                                 <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;"
                                                                                     (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia,transferencia.Id_Tercero, transferencia.Id_Tercero_Destino)">
                                                                                     <i class="ti-close"></i>
@@ -489,9 +448,7 @@
                                                     <option *ngFor="let Cliente of TerceroCliente" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                                 </select>
                                             </div>
-
                                         </div>
-
                                         <!-- Para Credito-->
                                         <div class="row" *ngIf="Credito">
                                             <div class="col-md-12">
@@ -798,7 +755,7 @@
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
                                                                             <th>Valor Recibido</th>
-                                                                            <th>Comisión</th>
+                                                                            <th>Valor Entrega</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -809,7 +766,9 @@
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
                                                                             <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td>{{Giro.Comision | currency}}</td>
+                                                                            <td>{{Giro.Valor_Total | currency}}</td>
+                                                                            <!--<td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
+                                                                            <td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -827,7 +786,7 @@
                                                                             <th>Enviado Por</th>
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
-                                                                            <th>Valor Recibido</th>
+                                                                            <th>Valor Pagado</th>
                                                                             <th>Comisión</th>
                                                                         </tr>
                                                                     </thead>
