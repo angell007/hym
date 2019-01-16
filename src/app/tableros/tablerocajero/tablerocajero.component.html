@@ -257,20 +257,20 @@
 
                                 <div class="col-md-12">
                                     <hr>
-                                    <h4>Información Tasas de cambio</h4>
+                                    <h4>Información Tasas de cambio<span *ngIf="NombreMonedaTasaCambio != ''">({{NombreMonedaTasaCambio}})</span></h4>
                                     <table class="table table-hover table-sm table-striped text-center">
                                         <thead>
                                             <tr>
-                                                <th>Maximo </th>
+                                                <th>Máximo </th>
                                                 <th>Minimo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr style="font-weight: bold;">
-                                                <td *ngIf="Venta">$ {{MaxEfectivo}}</td>
-                                                <td *ngIf="Venta">$ {{MinEfectivo}}</td>
-                                                <td *ngIf="!Venta">$ {{MaxCompra}}</td>
-                                                <td *ngIf="!Venta">$ {{MinCompra}}</td>
+                                                <td *ngIf="Venta">{{MaxEfectivo}}</td>
+                                                <td *ngIf="Venta">{{MinEfectivo}}</td>
+                                                <td *ngIf="!Venta">{{MaxCompra}}</td>
+                                                <td *ngIf="!Venta">{{MinCompra}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -280,6 +280,7 @@
                     </div>
                 </div>
 
+                <!--VISTA DE TRANSFERENCIAS-->
                 <div class="card modulos" id="transferencias" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -509,7 +510,9 @@
                                         <div class="row" *ngIf="transferencia">
                                             <div class="col-md-12">
                                                 <hr class="mrg-top-10 mrg-btm-10">
-                                                <h5>Destinatarios</h5>
+                                                <div>
+                                                    <h5>Destinatarios   <span><i class="ti-plus"></i> </span></h5>
+                                                </div>                                                
                                                 <div *ngFor="let Envio of Envios; let i= index">
                                                     <div class="row">
                                                         <div class="col-md-2">

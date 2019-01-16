@@ -124,7 +124,6 @@ export class TablerocajeroComponent implements OnInit {
 
   //SWEET ALERT FOR GENERAL ALERTS
   @ViewChild('alertSwal') alertSwal: any;
-
   @ViewChild("valorCambio") inputValorCambio: ElementRef;
 
   vueltos: number;
@@ -182,10 +181,10 @@ export class TablerocajeroComponent implements OnInit {
   CuentaBancaria = [];
   defectoDestino: string;
   defectoOrigen: string;
-  MaxEfectivo: any;
-  MinEfectivo: any;
-  MaxCompra: any;
-  MinCompra: any;
+  MaxEfectivo:number = 0;
+  MinEfectivo:number = 0;
+  MaxCompra:number = 0;
+  MinCompra:number = 0;
   PrecioSugeridoEfectivo1: any;
   MonedaRecibidaTransferencia: number;
   maximoTransferencia: any;
@@ -233,6 +232,40 @@ export class TablerocajeroComponent implements OnInit {
   //NUEVAS VARIABLES
   public HabilitarCampos:boolean = true;
   public TotalPagoCambio:any = '';
+  public NombreMonedaTasaCambio:string = '';
+
+  //MODELO PARA TRANSFERENCIAS
+  public TransferenciaModel:any = {
+    FormaPago: 'Efectivo',
+    TipoTransferencia: 'Transferencia',
+
+    //DESTINATARIO
+    Destinatarios: [
+      {
+        IdDestinatario: '',
+        NombreDestinatario: '',
+        CuentaBancoDestinatario: '',
+        ValorDestinatario: '',
+        Cuentas: []
+      }
+    ],    
+
+    //DATOS DEL CAMBIO
+    MonedaRecibida: 'Pesos',
+    ValorRecibido: 0,
+    MonedaTransferida: '',
+    ValorTransferencia: 0,
+    TasaCambioTransferencia: 0,
+
+    //DATOS REMITENTE
+    NroDocumentoRemitente: '',
+    NombreRemitente: '',
+    TelefonoRemitente: '',
+    Observaciones:'',
+
+    //TIPO TRANSFERENCIA - CLIENTE
+    //
+  };
 
   //Fin nuevas variables
 
@@ -1021,13 +1054,13 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: value }
     }).subscribe((data: any) => {
-      this.MaxEfectivo = data.Dependencia[0].Valor;
-      this.MinEfectivo = data.Dependencia[1].Valor;
+      this.MaxEfectivo = parseInt(data.Dependencia[0].Valor);
+      this.MinEfectivo = parseInt(data.Dependencia[1].Valor);
       this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
       this.PrecioSugeridoEfectivo1 = data.Dependencia[2].Valor;
 
-      this.MaxCompra = data.Dependencia[3].Valor;
-      this.MinCompra = data.Dependencia[4].Valor;
+      this.MaxCompra = parseInt(data.Dependencia[3].Valor);
+      this.MinCompra = parseInt(data.Dependencia[4].Valor);
       this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
 
       this.maximoTransferencia = data.Dependencia[6].Valor;
@@ -1041,7 +1074,7 @@ export class TablerocajeroComponent implements OnInit {
 
     switch (this.Venta) {
       case true: { //vendo
-        if (parseInt(this.MaxEfectivo) < parseInt(valor)) {
+        if (this.MaxEfectivo < parseInt(valor)) {
           this.PrecioSugeridoEfectivo = this.PrecioSugeridoEfectivo1;
           this.confirmacionSwal.title = "Error"
           this.confirmacionSwal.text = "El precio sugerido supera el máximo de efectivo"
@@ -1052,7 +1085,7 @@ export class TablerocajeroComponent implements OnInit {
       }
       case false: {
         //compro
-        if (parseInt(this.MaxCompra) < parseInt(valor)) {
+        if (this.MaxCompra < parseInt(valor)) {
           this.PrecioSugeridoEfectivo = this.PrecioSugeridoEfectivo1;
           this.confirmacionSwal.title = "Error"
           this.confirmacionSwal.text = "El precio sugerido supera el máximo de compra"
@@ -2333,16 +2366,15 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: value }
     }).subscribe((data: any) => {
-      console.log("es venta "+this.Venta);
       
       if(!this.IsObjEmpty(data)){
         
-        this.MaxEfectivo = data.Dependencia[0].Valor;
-        this.MinEfectivo = data.Dependencia[1].Valor;
+        this.MaxEfectivo = parseInt(data.Dependencia[0].Valor);
+        this.MinEfectivo = parseInt(data.Dependencia[1].Valor);
         this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
 
-        this.MaxCompra = data.Dependencia[3].Valor;
-        this.MinCompra = data.Dependencia[4].Valor;
+        this.MaxCompra = parseInt(data.Dependencia[3].Valor);
+        this.MinCompra = parseInt(data.Dependencia[4].Valor);
         this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
 
         this.maximoTransferencia = data.Dependencia[6].Valor;
@@ -2350,13 +2382,15 @@ export class TablerocajeroComponent implements OnInit {
         this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
 
         if (this.Venta == true) {
-          this.tasaCambiaria = this.PrecioSugeridoEfectivo;
+          this.tasaCambiaria = parseInt(this.PrecioSugeridoEfectivo);
           this.MonedaOrigen = "Pesos";
           this.MonedaDestino = data.Moneda[0].Nombre;
+          this.NombreMonedaTasaCambio = this.MonedaDestino;
         } else {
           this.tasaCambiaria = this.PrecioSugeridoCompra;
           var index = this.MonedaOrigenCambio.findIndex(x => x.Id_Moneda === value);
           this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
+          this.NombreMonedaTasaCambio = this.MonedaOrigen;
         }
       }else{
 
@@ -2373,6 +2407,11 @@ export class TablerocajeroComponent implements OnInit {
         this.tasaCambiaria = undefined;
         this.cambiar = undefined;
         this.entregar = undefined;
+        this.MinCompra = 0;
+        this.MaxCompra = 0;
+        this.MinEfectivo = 0;
+        this.MaxEfectivo = 0;
+        this.NombreMonedaTasaCambio = '';
       }           
       
     this.HabilitarCamposCambio();
@@ -2730,6 +2769,14 @@ export class TablerocajeroComponent implements OnInit {
     return true;
   }
 
+  //FUNCIONES/METODOS PARA TRANSFERENCIAS
+
+  AgregarNuevoDestinatario(){
+
+  }
+
+  //FIN FUNCIONES/METODOS PARA TRANSFERENCIAS
+
   FocusField(fieldElement:ElementRef){    
     fieldElement.nativeElement.focus();
   }
@@ -2772,5 +2819,5 @@ export class TablerocajeroComponent implements OnInit {
             return false;
     }
     return true;
-}
+  }
 }
