@@ -141,7 +141,8 @@ export class CommonLayoutComponent implements OnInit {
     ListaBancos = [];
     nombreBanco = "";
     ngOnInit() {
-
+        console.log(localStorage);
+        
         this.user = JSON.parse(localStorage.User);
         localStorage.setItem('Perfil', this.user.Id_Perfil);
         switch (this.user.Id_Perfil) {
@@ -220,21 +221,25 @@ export class CommonLayoutComponent implements OnInit {
             this.cerrarCaja()
         }, 30000);
 
-        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-            params: { id: JSON.parse(localStorage['Banco']) }
-        }).subscribe((data: any) => {
-            this.Movimientos = data.lista;
-        });
+        if (localStorage['Banco']) {
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
+            });
+    
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
+            });
+    
+            this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+                this.nombreBanco = data.Nombre_Titular;
+            });
+        }
 
-        this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-            params: { id: JSON.parse(localStorage['Banco']) }
-        }).subscribe((data: any) => {
-            this.Movimientos = data.lista;
-        });
 
-        this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
-            this.nombreBanco = data.Nombre_Titular;
-        });
     }
 
     salir() {

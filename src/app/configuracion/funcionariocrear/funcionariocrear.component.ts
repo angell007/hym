@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { CommonModule } from '@angular/common';
 import { Globales } from '../../shared/globales/globales';
-import { FormWizardModule } from 'angular2-wizard/dist';
+//import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 

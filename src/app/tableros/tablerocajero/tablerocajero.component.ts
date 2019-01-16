@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../../shared/globales/globales';
@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { isEmpty } from 'rxjs/operator/isEmpty';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -121,11 +122,16 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild('ModalAprobarGiro') ModalAprobarGiro: any;
   @ViewChild('confirmacionGiro') confirmacionGiro: any;
 
+  //SWEET ALERT FOR GENERAL ALERTS
+  @ViewChild('alertSwal') alertSwal: any;
+
+  @ViewChild("valorCambio") inputValorCambio: ElementRef;
+
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
   entregar: any;
-  cambiar: any;
+  cambiar:any;
   MonedaOrigen: any;
   MonedaDestino: any = "Pesos";
   Tipo: string;
@@ -223,6 +229,12 @@ export class TablerocajeroComponent implements OnInit {
   cupoTercero: any;
   SaldoBolivar: any;
   tasaCambiaria: any;
+
+  //NUEVAS VARIABLES
+  public HabilitarCampos:boolean = true;
+  public TotalPagoCambio:any = '';
+
+  //Fin nuevas variables
 
   constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
   CierreCajaAyerBolivares = 0;
@@ -339,6 +351,7 @@ export class TablerocajeroComponent implements OnInit {
     if (this.recibeParaDefault == "Transferencia") {
       this.CambiarTasa(1);
       this.MonedaTransferencia = 1;
+      
     }
 
     //(document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = true;
@@ -940,7 +953,8 @@ export class TablerocajeroComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
-
+      console.log(this.Traslados);
+      
 
     });
 
@@ -1222,7 +1236,8 @@ export class TablerocajeroComponent implements OnInit {
     if (parseInt(valor) > 0) {
       (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
       var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
-      this.vueltos = valor - parseInt(plata);
+      
+      this.vueltos = valor - parseInt(this.cambiar);
       if (this.vueltos < 0) {
         (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
         (document.getElementById("pagocon") as HTMLInputElement).value = "0";
@@ -1286,26 +1301,29 @@ export class TablerocajeroComponent implements OnInit {
 
   guardarCambio(formulario: NgForm, item) {
 
-    formulario.value.Moneda_Destino = this.MonedaDestino;
-    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", 'Cambio');
-    datos.append("datos", info);
+    if(this.ValidacionTasaCambio()){
+      formulario.value.Moneda_Destino = this.MonedaDestino;
+      formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+      let info = JSON.stringify(formulario.value);
+      let datos = new FormData();
+      datos.append("modulo", 'Cambio');
+      datos.append("datos", info);
+      datos.append("PagoTotal", this.TotalPagoCambio);
 
-    this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.confirmacionSwal.title = "Guardado con exito";
-      this.confirmacionSwal.text = "Se ha guardado correctamente la " + item
-      this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show();
-      this.Cambios1 = true;
-      this.Cambios2 = false;
-      this.tasaCambiaria = "";
-      this.entregar = "";
-      this.MonedaDestino = "Pesos";
-      this.actualizarVista();
-    });
+      this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
+        formulario.reset();
+        this.confirmacionSwal.title = "Guardado con exito";
+        this.confirmacionSwal.text = "Se ha guardado correctamente la " + item
+        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.show();
+        this.Cambios1 = true;
+        this.Cambios2 = false;
+        this.tasaCambiaria = "";
+        this.entregar = "";
+        this.MonedaDestino = "Pesos";
+        this.actualizarVista();
+      });
+    }    
   }
 
   GuardarTransferencia(formulario: NgForm) {
@@ -2024,6 +2042,8 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Traslado_Caja', id: id } }).subscribe((data: any) => {
       this.idTraslado = id;
       this.Traslado = data;
+      console.log(this.Traslado);
+      
       this.ModalTrasladoEditar.show();
     });
   }
@@ -2304,6 +2324,7 @@ export class TablerocajeroComponent implements OnInit {
 
 
     this.validarTasaCambio(value);
+    this.HabilitarCamposCambio();
 
   }
 
@@ -2312,39 +2333,71 @@ export class TablerocajeroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/pos/buscar_tasa.php', {
       params: { id: value }
     }).subscribe((data: any) => {
-      this.MaxEfectivo = data.Dependencia[0].Valor;
-      this.MinEfectivo = data.Dependencia[1].Valor;
-      this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
+      console.log("es venta "+this.Venta);
+      
+      if(!this.IsObjEmpty(data)){
+        
+        this.MaxEfectivo = data.Dependencia[0].Valor;
+        this.MinEfectivo = data.Dependencia[1].Valor;
+        this.PrecioSugeridoEfectivo = data.Dependencia[2].Valor;
 
-      this.MaxCompra = data.Dependencia[3].Valor;
-      this.MinCompra = data.Dependencia[4].Valor;
-      this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
+        this.MaxCompra = data.Dependencia[3].Valor;
+        this.MinCompra = data.Dependencia[4].Valor;
+        this.PrecioSugeridoCompra = data.Dependencia[5].Valor;
 
-      this.maximoTransferencia = data.Dependencia[6].Valor;
-      this.minimoTransferencia = data.Dependencia[7].Valor;
-      this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
+        this.maximoTransferencia = data.Dependencia[6].Valor;
+        this.minimoTransferencia = data.Dependencia[7].Valor;
+        this.PrecioSugeridoTransferencia = data.Dependencia[8].Valor;
 
-      if (this.Venta == true) {
-        this.tasaCambiaria = this.PrecioSugeridoEfectivo;
-        this.MonedaOrigen = "Pesos";
-        this.MonedaDestino = data.Moneda[0].Nombre;
-      } else {
-        this.tasaCambiaria = this.PrecioSugeridoCompra;
-        var index = this.MonedaOrigenCambio.findIndex(x => x.Id_Moneda === value);
-        this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
-      }
+        if (this.Venta == true) {
+          this.tasaCambiaria = this.PrecioSugeridoEfectivo;
+          this.MonedaOrigen = "Pesos";
+          this.MonedaDestino = data.Moneda[0].Nombre;
+        } else {
+          this.tasaCambiaria = this.PrecioSugeridoCompra;
+          var index = this.MonedaOrigenCambio.findIndex(x => x.Id_Moneda === value);
+          this.MonedaOrigen = this.MonedaOrigenCambio[index].Nombre;
+        }
+      }else{
+
+        if (this.Venta == true) {
+          
+          this.MonedaOrigen = 'Pesos';
+          this.MonedaDestino = '';
+        } else {
+
+          this.MonedaOrigen = '';
+          this.MonedaDestino = 'Pesos';
+        }
+        
+        this.tasaCambiaria = undefined;
+        this.cambiar = undefined;
+        this.entregar = undefined;
+      }           
+      
+    this.HabilitarCamposCambio();
     });
   }
+
   conversionMoneda() {
-    if (this.Venta == false) {
-      var cambio = Number(this.cambiar) * Number(this.tasaCambiaria);
-      this.entregar = cambio;
-      (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
-    } else {
-      var cambio = Number(this.cambiar) / Number(this.tasaCambiaria);
-      this.entregar = cambio.toFixed(2);
-      this.MonedaOrigen = "Pesos"
+    if(this.ValidacionTasaCambio()){
+
+      if (this.Venta == false) {
+
+        var cambio = Number(this.cambiar) * Number(this.tasaCambiaria);
+        this.entregar = cambio;
+        (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+      } else {
+
+        var cambio = Number(this.cambiar) / Number(this.tasaCambiaria);
+        this.entregar = cambio.toFixed(2);
+        this.MonedaOrigen = "Pesos"
+      }
+    }else{
+      this.tasaCambiaria = '';
     }
+
+    
 
     /*
     //peso es 2
@@ -2637,4 +2690,87 @@ export class TablerocajeroComponent implements OnInit {
     console.log(event);
     
   }
+
+
+  //CODIGO NUEVO - FRANKLIN GUERRA
+  ValidacionTasaCambio(){
+    if(this.cambiar == '' || this.cambiar == 0 || this.cambiar === undefined){
+
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor a cambiar primero!');
+      this.tasaCambiaria = '';
+      return false;
+    }else{
+
+      if(this.tasaCambiaria == '' || this.tasaCambiaria == 0 || this.tasaCambiaria === undefined){
+      
+        this.ShowSwal('warning', 'Tasa incorrecta', 'No se ha establecido una tasa de cambio!');
+        this.tasaCambiaria = '';
+        return false;
+
+      }else{
+
+        if(this.Venta){
+          if(this.tasaCambiaria > this.MaxEfectivo || this.tasaCambiaria < this.MinEfectivo ){
+            this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
+            this.tasaCambiaria = '';
+            return false;
+          }
+        }else{
+          if(this.tasaCambiaria > this.MaxCompra || this.tasaCambiaria < this.MinCompra ){
+            this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
+            this.tasaCambiaria = '';
+            return false;
+          }
+        }
+        
+      }
+    }
+       
+
+    return true;
+  }
+
+  FocusField(fieldElement:ElementRef){    
+    fieldElement.nativeElement.focus();
+  }
+
+  //MOSTRAR ALERTAS DESDE LA INSTANCIA DEL SWEET ALERT GLOBAL
+  ShowSwal(tipo:string, titulo:string, msg:string, confirmCallback = null, cancelCallback = null){
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+
+  HabilitarCamposCambio(){
+    if(this.Venta){
+      
+      if(this.MonedaDestino == '' || this.MonedaDestino == undefined){
+        this.HabilitarCampos = true;
+      }else{
+        this.HabilitarCampos = false;
+      }
+
+      console.log("campos habilitados "+this.HabilitarCampos);
+
+    }else{
+      console.log("venta "+this.Venta);
+      if(this.MonedaOrigen == '' || this.MonedaOrigen == undefined){
+        this.HabilitarCampos = true;
+      }else{
+        this.HabilitarCampos = false;
+      }
+
+      console.log("campos habilitados "+this.HabilitarCampos);
+
+    }
+  }
+
+  IsObjEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 }

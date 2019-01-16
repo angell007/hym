@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormWizardModule } from 'angular2-wizard/dist';
+//import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 
 @Component({
