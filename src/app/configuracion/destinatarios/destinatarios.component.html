@@ -52,42 +52,64 @@
     #ModalDestinatario>
     <div class="app-modal-header">
         <h4>Crear Destinatario</h4>
+        <button type="button" class="close basic-close" (click)="ModalDestinatario.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormCrearDestinatario="ngForm">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    <label>País</label>
+                    <div class="form-group">
+                        <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais" required
+                        (change)="FiltrarDatosNacionalidad($event.target.value)">
+                            <option value="">Seleccione pais</option>
+                            <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <label>Identificación</label>
                     <div class="form-group input-group input-group-button">
                         <input class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
-                            type="text" placeholder="Identificación Destinatario" 
-                            ngModel={{Id_Destinatario}} required>
+                            type="text" placeholder="Identificación Destinatario" (blur)="ValidarCedula($event.target.value)" 
+                            [(ngModel)]="DestinatarioModel.Id_Destinatario "required [disabled]="DestinatarioModel.Id_Pais == 0">
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="buscarRiff()">
                             Riff
                         </button> 
 
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <select ngModel class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                        (change)="BuscarCNE($event.target.value)"> <!--(change)="BuscarCNE($event.target.value)"-->
+                        <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
+                        (change)="BuscarCNE($event.target.value)" [disabled]="DestinatarioModel.Id_Pais == 0">
                             <option value="">Seleccione Tipo Documento</option>
-                            <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
+                            <option *ngFor="let documento of TipoDocumentoFiltrados; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
                     </div>
+                </div>              
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Destinatario"
+                            maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
+                            [(ngModel)]="DestinatarioModel.Nombre" required [disabled]="DestinatarioModel.Id_Destinatario == '' && DestinatarioModel.Tipo_Documento == ''">
+                    </div>
                 </div>
+            </div>
+            <!--<div class="row">                
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombre</label>
                         <input class="form-control" name="Nombre" type="text" placeholder="Nombre Destinatario"
                             maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
-                            ngModel required>
+                            [(ngModel)]="DestinatarioModel.Nombre" required [disabled]="DestinatarioModel.Id_Destinatario == '' && DestinatarioModel.Tipo_Documento == ''">
                     </div>
-                </div>               
-
-            </div>
+                </div> 
+            </div>-->
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -145,7 +167,7 @@
                                                 <td width="20%">
                                                     <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Numero_Cuenta{{i}}" type="text"
                                                         [(ngModel)]="item.Numero_Cuenta" (blur)="codigoBanco($event.target.value , i,'input')"
-                                                        (change)="validarBanco(i,$event.target.value)" minlength="20"
+                                                        (change)="validarBanco(i,$event.target.value)" minlength="20" (input)="RevalidarValores($event.target.value, i)"
                                                         maxlength="20" required>                                                    
                                                 </td>
                                                 <td width="20%">
