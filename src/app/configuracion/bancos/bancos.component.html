@@ -54,28 +54,37 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Nombre Banco" class="form-control" name="Nombre" ngModel="">
+                        <input type="text" placeholder="Nombre Banco" class="form-control" name="Nombre" [(ngModel)]="BancoModel.Nombre">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Moneda del Banco</label>
+                        <select class="form-control" name="Id_Moneda" [(ngModel)]="BancoModel.Id_Moneda" required (change)="SeleccionarPaisesPorMoneda($event.target.value)">
+                            <option value="" selected>Seleccione una moneda</option>
+                            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>País</label>
-                        <select class="form-control" name="Id_Pais" ngModel required (change)="SeleccionarPais($event.target.value)">
-                            <option value="">Seleccione un País</option>
-                            <option *ngFor="let Pais of Paises" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                        <select class="form-control" [disabled]="PaisesMoneda.length == 0" name="Id_Pais" [(ngModel)]="BancoModel.Id_Pais" required (change)="SeleccionarPais($event.target.value)">
+                            <option value="" selected>Seleccione un País</option>
+                            <option *ngFor="let Pais of PaisesMoneda" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" ngModel="" required>
+                        <input type="text" [disabled]="PaisesMoneda.length == 0" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" [(ngModel)]="BancoModel.Identificador" required>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Apodo</label>
-                        <input type="text" placeholder="Apodo" class="form-control" name="Apodo" ngModel="" required>
+                        <input type="text" placeholder="Apodo" class="form-control" name="Apodo" [(ngModel)]="BancoModel.Apodo" required>
                     </div>
                 </div>
             </div>
@@ -87,20 +96,20 @@
                             <div class="col-md-3">
                                 <label>Comisión Cons. Nac.</label>
                                 <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Nacional"
-                                    ngModel required>
+                                    [(ngModel)]="BancoModel.Comision_Consignacion_Nacional" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Comisión 4x1000</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Cuatro_Mil" ngModel required>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Cuatro_Mil" [(ngModel)]="BancoModel.Comision_Cuatro_Mil" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Comisión Cons. Local</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Local" ngModel
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Consignacion_Local" [(ngModel)]="BancoModel.Comision_Consignacion_Local"
                                     required>
                             </div>
                             <div class="col-md-3">
                                 <label>Max. Cons. Local</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Consignacion_Local" ngModel
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Consignacion_Local" [(ngModel)] ="BancoModel.Maximo_Consignacion_Local"
                                     required>
                             </div>
                         </div>
@@ -114,20 +123,20 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Comisión Otros Bancos</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Otros_Bancos" ngModel required>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Otros_Bancos" [(ngModel)]="BancoModel.Comision_Otros_Bancos" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Comisión Mayor Valor</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Mayor_Valor" ngModel required>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Comision_Mayor_Valor" [(ngModel)]="BancoModel.Comision_Mayor_Valor" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Mayor Valor</label>
-                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Mayor_Valor" ngModel required>
+                                <input  placeholder="Ejem: 1.0123" class="form-control" name="Mayor_Valor" [(ngModel)]="BancoModel.Mayor_Valor" required>
                             </div>
                             <div class="col-md-3">
                                 <label>Max. Trans. Otros Bancos</label>
                                 <input  placeholder="Ejem: 1.0123" class="form-control" name="Maximo_Transferencia_Otros_Bancos"
-                                    ngModel required>
+                                [(ngModel)]="BancoModel.Maximo_Transferencia_Otros_Bancos" required>
                             </div>
                         </div>
                     </div>
@@ -138,7 +147,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Detalles</label>
-                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" ngModel=""></textarea>
+                        <textarea class="form-control" placeholder="Detalles del Banco" name="Detalle" [(ngModel)]="BancoModel.Detalle"></textarea>
                     </div>
                 </div>
             </div>
@@ -147,7 +156,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button type="submit" class="btn btn-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarBanco(FormBanco, ModalBanco)">Guardar</button>
+                (confirm)="GuardarBanco(FormBanco, ModalBanco)" [disabled]="!FormBanco.valid">Guardar</button>
         </div>
     </div>
 </app-modal-basic>

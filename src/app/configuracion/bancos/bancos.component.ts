@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs/Subject';
+import { log } from 'util';
 
 @Component({
   selector: 'app-bancos',
@@ -14,7 +15,9 @@ import { Subject } from 'rxjs/Subject';
 })
 export class BancosComponent implements OnInit {
   public bancos : any = [];
-  public Paises : any = [];
+  public Paises:any = [];
+  public PaisesMoneda:any = [];
+  public Monedas:any = [];
 
   //variables de formulario
   public Identificacion : any = [];
@@ -29,6 +32,29 @@ export class BancosComponent implements OnInit {
 
   rowsFilter = [];
   tempFilter = [];
+
+  //Banco Model
+  public BancoModel:any = {
+    Nombre: '',
+    Id_Moneda: '',
+    Pais: '',
+    Identificador: '',
+    Apodo: '',
+    Detalle: '',
+    Estado: 'Activo',
+
+    //opciones bancos de colombia
+    Comision_Consignacion_Nacional: '',
+    Comision_Cuatro_Mil: '',
+    Comision_Consignacion_Local: '',
+    Maximo_Consignacion_Local: '',
+
+    //opciones bancos de venezuela
+    Comision_Otros_Bancos: '',
+    Comision_Mayor_Valor: '',
+    Mayor_Valor: '',
+    Maximo_Transferencia_Otros_Bancos: ''
+  };
 
   @ViewChild('ModalBanco') ModalBanco:any;
   @ViewChild('ModalVerBanco') ModalVerBanco:any;
@@ -46,13 +72,21 @@ export class BancosComponent implements OnInit {
   Venezuela = false;
   infoBanco:any = {};
 
-  constructor(private http : HttpClient, private globales : Globales) { }
+  constructor(private http : HttpClient, private globales : Globales) {   }
 
   ngOnInit() {
     this.ActualizarVista();
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
+    /*this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{ params: { modulo: 'Pais'}}).subscribe((data:any)=>{
       this.Paises= data;
-    });
+    });*/
+  }
+
+  ngAfterViewInit(){     
+    setTimeout(() => {
+      this.AsignarMonedas();
+      this.AsignarPaises();
+    }, 2000);  
+    
   }
  
   ActualizarVista()
@@ -91,6 +125,14 @@ export class BancosComponent implements OnInit {
         }
       }
     }; 
+  }
+
+  AsignarMonedas(){      
+    this.Monedas = this.globales.Monedas;
+  }
+
+  AsignarPaises(){      
+    this.Paises = this.globales.Paises;
   }
 
   GuardarBanco(formulario: NgForm, modal){
@@ -201,6 +243,22 @@ export class BancosComponent implements OnInit {
       }
     }
     
+  }
+
+  SeleccionarPaisesPorMoneda(idMoneda){
+    
+    if(idMoneda != ''){
+      this.PaisesMoneda = [];
+
+      this.Paises.forEach(obj => {
+        if(obj.Id_Moneda == idMoneda){
+          this.PaisesMoneda.push(obj);
+        }        
+      });     
+      
+    }else{
+      this.PaisesMoneda = [];
+    }    
   }
 
 }

@@ -234,19 +234,25 @@ export class TablerocajeroComponent implements OnInit {
   public TotalPagoCambio:any = '';
   public NombreMonedaTasaCambio:string = '';
 
+  public MonedaParaTransferencia = {
+    id: '',
+    nombre: ''
+  };
+
   //MODELO PARA TRANSFERENCIAS
   public TransferenciaModel:any = {
     FormaPago: 'Efectivo',
     TipoTransferencia: 'Transferencia',
 
-    //DESTINATARIO
+    //DESTINATARIOS
     Destinatarios: [
       {
         IdDestinatario: '',
         NombreDestinatario: '',
         CuentaBancoDestinatario: '',
         ValorDestinatario: '',
-        Cuentas: []
+        Cuentas: [],
+        EditarVisible: false
       }
     ],    
 
@@ -293,6 +299,8 @@ export class TablerocajeroComponent implements OnInit {
     this.MonedaRecibidaTransferencia = 2;
     this.Bancos_Pais(2, 0);
     this.bancosDestinatarios();
+    this.AsignarMonedas();
+    this.AsignarPaises();
 
     //hacer la peticion si este usuario tiene un 'diario' ya registrado en la DB y si el saldo de inicio es vacio
 
@@ -432,14 +440,25 @@ export class TablerocajeroComponent implements OnInit {
     document.getElementById(id).style.display = 'block';
   }
 
-  AutoCompletarDestinatario(modelo, i) {
-    if (modelo.Cuentas != undefined) {
+  AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
+    console.log(modelo);
+    
+    /*if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
       this.Envios[i].Nombre = modelo.Nombre;
       this.Envios[i].Cuentas = modelo.Cuentas;
       this.Envios[i].esconder = true;
     } else {
       this.Envios[i].esconder = false;
+    }*/
+
+    if (modelo.Cuentas != undefined) {
+      listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
+      listaDestinatarios[i].Nombre = modelo.Nombre;
+      listaDestinatarios[i].Cuentas = modelo.Cuentas;
+      listaDestinatarios[i].esconder = true;
+    } else {
+      listaDestinatarios[i].esconder = false;
     }
   }
 
@@ -448,7 +467,7 @@ export class TablerocajeroComponent implements OnInit {
     var encontrar = this.Destinatarios.findIndex(x => x.Id_Destinatario === value);
 
     if (encontrar == -1) {
-      var longitud = this.LongitudCarateres(value)
+      var longitud = this.LongitudCarateres(value);
       if (longitud > 6) {
         this.IdentificacionCrearDestinatario = value;
         this.ModalCrearDestinatarioTransferencia.show();
@@ -1604,11 +1623,11 @@ export class TablerocajeroComponent implements OnInit {
         }];
 
         this.actualizarVista();
-        this.AutoCompletarDestinatario(identificacion, this.posiciontemporal)
+        this.AutoCompletarDestinatario(identificacion, this.posiciontemporal, this.Envios);
         //this.recargarBancos(this.posiciontemporal,identificacion)
-        this.confirmacionSwal.title = "Actualización exitosa"
-        this.confirmacionSwal.text = "Se ha actualizado correctamente el destinatario"
-        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.title = "Actualización exitosa";
+        this.confirmacionSwal.text = "Se ha actualizado correctamente el destinatario";
+        this.confirmacionSwal.type = "success";
         this.confirmacionSwal.show();
         // this.posicionTemporal= pos
 
@@ -2771,8 +2790,53 @@ export class TablerocajeroComponent implements OnInit {
 
   //FUNCIONES/METODOS PARA TRANSFERENCIAS
 
-  AgregarNuevoDestinatario(){
+  AgregarDestinatarioTransferencia(){
 
+    let listaDestinatarios = this.TransferenciaModel.Destinatarios;
+    for (let index = 0; index < listaDestinatarios.length; index++) {
+      console.log(listaDestinatarios[index]);
+      
+      if(listaDestinatarios[index].IdDestinatario == 0 || listaDestinatarios[index].IdDestinatario == '' || listaDestinatarios[index].IdDestinatario === undefined){
+        this.ShowSwal('warning', 'Alerta', 'Debe anexar toda la información del(de los) destinatario(s) antes de agregar uno nuevo');
+        return;
+      }
+
+      if(listaDestinatarios[index].CuentaBancoDestinatario == '' || listaDestinatarios[index].CuentaBancoDestinatario === undefined){
+        this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
+        return;
+      }
+      
+    }
+
+    let nuevoDestinatario = {
+      IdDestinatario: '',
+      NombreDestinatario: '',
+      CuentaBancoDestinatario: '',
+      ValorDestinatario: '',
+      Cuentas: []
+    };
+    this.TransferenciaModel.Destinatarios.push(nuevoDestinatario);
+  }
+
+  AsignarMonedas(){      
+    this.Monedas = this.globales.Monedas;    
+  }
+
+  AsignarPaises(){      
+    this.Paises = this.globales.Paises;
+  }
+
+  SetMonedaTransferencia(value){
+    this.MonedaParaTransferencia.id = value;
+
+    if(value != ''){
+      let c = this.Monedas.find(x =>  x.Id_Moneda == value);
+      this.MonedaParaTransferencia.nombre = c.Nombre;
+    }else{
+      this.MonedaParaTransferencia.nombre = '';
+    }
+    
+    console.log(this.MonedaParaTransferencia);    
   }
 
   //FIN FUNCIONES/METODOS PARA TRANSFERENCIAS
