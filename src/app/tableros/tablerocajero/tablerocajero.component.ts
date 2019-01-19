@@ -255,6 +255,7 @@ export class TablerocajeroComponent implements OnInit {
   };
 
   public id_remitente:any = '';
+  public id_destinatario_transferencia:any = '';
 
   //MODELO PARA TRANSFERENCIAS
   public TransferenciaModel:any = {
@@ -274,6 +275,7 @@ export class TablerocajeroComponent implements OnInit {
     //DESTINATARIOS
     Destinatarios: [
       {
+        id_destinatario_transferencia: '',
         Numero_Documento_Destino: '',
         Nombre_Destinatario: '',
         Id_Cuenta_Destinatario: '',
@@ -465,7 +467,9 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
-    console.log(modelo);
+    console.log(i);
+    console.log(this.TransferenciaModel.Destinatarios[i]);
+    console.log(this.TransferenciaModel.Destinatarios);
     
     /*if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -476,14 +480,35 @@ export class TablerocajeroComponent implements OnInit {
       this.Envios[i].esconder = false;
     }*/
 
+    if (typeof(modelo) == 'object') {
+      if(this.BuscarCedulaRepetida(modelo)){
+        return;
+      };      
+    }
+
     if (modelo.Cuentas != undefined) {
       listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
-      listaDestinatarios[i].Nombre = modelo.Nombre;
+      listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
       listaDestinatarios[i].Cuentas = modelo.Cuentas;
       listaDestinatarios[i].esconder = true;
     } else {
       listaDestinatarios[i].esconder = false;
     }
+  }
+
+  BuscarCedulaRepetida(object){
+    this.TransferenciaModel.Destinatarios.forEach(element => {
+      if(element.Numero_Documento_Destino == object.Id_Destinatario){
+        
+        this.confirmacionSwal.title = "Atención"
+        this.confirmacionSwal.text = "Ya tiene un destinatario agregado con la misma cédula!"
+        this.confirmacionSwal.type = "warning"
+        this.confirmacionSwal.show();
+        return true;
+      };
+    });
+
+    return false;
   }
 
   CrearDestinatrioModal(value, pos) {
@@ -688,6 +713,10 @@ export class TablerocajeroComponent implements OnInit {
     if (index > 0) {
       this.Envios.splice(index, 1);
     }
+  }
+
+  EliminarDestinatarioTransferencia(index) {
+      this.TransferenciaModel.Destinatarios.splice(index, 1);
   }
 
   LlenarValoresRemitente(remitente) {
@@ -2835,6 +2864,7 @@ export class TablerocajeroComponent implements OnInit {
     }*/
 
     let nuevoDestinatario = {
+      id_destinatario_transferencia: '',
       Numero_Documento_Destino: '',
       Nombre_Destinatario: '',
       Id_Cuenta_Destinatario: '',
@@ -2967,177 +2997,6 @@ export class TablerocajeroComponent implements OnInit {
         this.confirmacionSwal.type = "error";
         this.confirmacionSwal.show();
         break;
-    }
-  }
-
-  //Calculo de pesos a X moneda
-  CambiarMonedaOrigenDestino(valor_origen){
-    let tasa_cambio = this.TransferenciaModel.Tasa_Cambio;    
-
-    if (parseInt(valor_origen) > 0) {
-      this.CalcularCambio(valor_origen, tasa_cambio, 'recibido');
-      /*let conversion_moneda = parseFloat((parseFloat(valor_origen) / parseFloat(tasa_cambio)).toFixed(2));
-      this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
-      
-      let count = this.TransferenciaModel.Destinatarios.length;
-      if (count == 1) {
-        this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = conversion_moneda;
-      }else{
-
-        let TotalTransferenciaDestinatario = 0;
-
-        this.TransferenciaModel.Destinatarios.forEach(e => {
-          if (e.Valor_Transferencia == undefined || e.Valor_Transferencia == NaN || e.Valor_Transferencia == '') {
-            TotalTransferenciaDestinatario += 0;
-          }else{
-            TotalTransferenciaDestinatario += parseFloat(e.Valor_Transferencia);
-          }
-        });
-
-        if (conversion_moneda > TotalTransferenciaDestinatario) {
-          let acumulado = 0;
-          this.TransferenciaModel.Destinatarios.forEach((d, i) => {
-            if(i < (count - 1)){
-              if (d.Valor_Transferencia == undefined || d.Valor_Transferencia == NaN || d.Valor_Transferencia == '') {
-                acumulado += 0;
-              }else{
-                acumulado += parseFloat(d.Valor_Transferencia);
-              }
-            }else if(i == (count - 1)){
-              let restante = conversion_moneda - acumulado;
-              d.Valor_Transferencia = restante;
-            }
-              
-          });
-        }else if(conversion_moneda < TotalTransferenciaDestinatario){
-          this.TransferenciaModel.Destinatarios.forEach(d => {
-              d.Valor_Transferencia = '';
-          });
-        }         
-      }*/
-    }
-  }
-
-  //Calculo de X moneda a pesos
-  CambiarMonedaDestinoOrigen(valor_destino){
-    let tasa_cambio = this.TransferenciaModel.Tasa_Cambio;
-
-    if (parseInt(valor_destino) > 0) {
-      this.CalcularCambio(valor_destino, tasa_cambio, 'transferencia');
-      /*let conversion_moneda = parseFloat((parseFloat(valor_destino) * parseFloat(tasa_cambio)).toFixed(2));
-      this.TransferenciaModel.Cantidad_Recibida = conversion_moneda;
-      
-      let count = this.TransferenciaModel.Destinatarios.length;
-      if (count == 1) {
-        this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = valor_destino;
-      }else{
-
-        let TotalTransferenciaDestinatario = 0;
-
-        this.TransferenciaModel.Destinatarios.forEach(e => {
-          if (e.Valor_Transferencia == undefined || e.Valor_Transferencia == NaN || e.Valor_Transferencia == '') {
-            TotalTransferenciaDestinatario += 0;
-          }else{
-            TotalTransferenciaDestinatario += parseFloat(e.Valor_Transferencia);
-          }
-        });
-
-        if (valor_destino > TotalTransferenciaDestinatario) {
-          let acumulado = 0;
-          this.TransferenciaModel.Destinatarios.forEach((d, i) => {
-            if(i < (count - 1)){
-              if (d.Valor_Transferencia == undefined || d.Valor_Transferencia == NaN || d.Valor_Transferencia == '') {
-                acumulado += 0;
-              }else{
-                acumulado += parseFloat(d.Valor_Transferencia);
-              }
-            }else if(i == (count - 1)){
-              let restante = valor_destino - acumulado;
-              d.Valor_Transferencia = restante;
-            }
-              
-          });
-        }else if(valor_destino < TotalTransferenciaDestinatario){
-          this.TransferenciaModel.Destinatarios.forEach(d => {
-              d.Valor_Transferencia = '';
-          });
-        }         
-      }*/
-    }
-  }
-
-  //CONVERSION MONEDA POR TASA CAMBIO
-  ConversionMonedaPorTasa(tasa){
-    let tasa_cambio = parseFloat(tasa);
-    let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
-    let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
-
-    if (tasa_cambio > max || tasa_cambio < min) {
-      this.TransferenciaModel.Tasa_Cambio = (max + min) / 2;
-      this.confirmacionSwal.title = "Alerta";
-      this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo/máximo establecido para la moneda"
-      this.confirmacionSwal.type = "warning"
-      this.confirmacionSwal.show();
-      return;
-    }
-
-    let valor_recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);
-    //let valor_destino = this.TransferenciaModel.Cantidad_Transferida;
-
-    if (valor_recibido > 0) {
-      this.CalcularCambio(valor_recibido, tasa_cambio, 'recibido');
-      /*let conversion_moneda = parseFloat((valor_recibido / tasa_cambio).toFixed(2));
-      this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
-      
-      let count = this.TransferenciaModel.Destinatarios.length;
-
-      if (count == 1) {
-        this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = conversion_moneda;
-      }else{
-
-        let TotalTransferenciaDestinatario = 0;
-
-        this.TransferenciaModel.Destinatarios.forEach(e => {
-          
-          if (e.Valor_Transferencia == undefined || e.Valor_Transferencia == NaN || e.Valor_Transferencia == '') {
-            TotalTransferenciaDestinatario += 0;
-          }else{
-            TotalTransferenciaDestinatario += parseFloat(e.Valor_Transferencia);
-          }
-        });*/
-
-        /*let TotalTransferenciaDestinatario = this.TransferenciaModel.Destinatarios.reduce((prevValue, currentValue)=>{
-          let a = ((prevValue.Valor_Transferencia === undefined || prevValue.Valor_Transferencia === NaN) ? 0 :prevValue.Valor_Transferencia) + ((currentValue.Valor_Transferencia === undefined || currentValue.Valor_Transferencia === NaN) ? 0 :currentValue.Valor_Transferencia);
-          console.log("prev - current");
-        console.log(prevValue, currentValue);
-          return a;
-        });*/      
-
-        /*if (conversion_moneda > TotalTransferenciaDestinatario) {
-          let acumulado = 0;
-          this.TransferenciaModel.Destinatarios.forEach((d, i) => {
-            if(i < (count - 1)){
-              
-              if (d.Valor_Transferencia == undefined || d.Valor_Transferencia == NaN || d.Valor_Transferencia == '') {
-                acumulado += 0;
-              }else{
-                acumulado += parseFloat(d.Valor_Transferencia);
-              }
-            }else if(i == (count - 1)){
-              
-              let restante = conversion_moneda - acumulado;
-              d.Valor_Transferencia = restante;
-              this.TransferenciaModel.Destinatarios[i].Valor_Transferencia = restante;
-            }
-              
-          });
-        }else if(conversion_moneda < TotalTransferenciaDestinatario){
-          this.TransferenciaModel.Destinatarios.forEach((d,i) => {
-              d.Valor_Transferencia = '';
-              this.TransferenciaModel.Destinatarios[i].Valor_Transferencia = '';
-          });
-        }         
-      }*/
     }
   }
 

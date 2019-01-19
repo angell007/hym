@@ -592,16 +592,16 @@
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
                                                                     <label class="transferencia">N. Documento <i class="ti-pencil"
-                                                                            *ngIf="destinatario.EditarVisible" (click)="EditarDestinatario(destinatario.idDestinatario, i)"></i>
+                                                                            *ngIf="destinatario.EditarVisible" (click)="EditarDestinatario(destinatario.Numero_Documento_Destino, i)"></i>
                                                                     </label>
                                                                     <input type="text" class="form-control" name="Destino_{{i}}"
-                                                                        id="Destino_{{i}}" [(ngModel)]="destinatario.Numero_Documento_Destino"
+                                                                        id="Destino_{{i}}" [(ngModel)]="id_destinatario_transferencia"
                                                                         [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
                                                                         [inputFormatter]="formatter_destino"
-                                                                        (ngModelChange)="AutoCompletarDestinatario(destinatario.idDestinatario, i, TransferenciaModel.Destinatarios);"
-                                                                        (change)="AutoCompletarDestinatario(destinatario.idDestinatario, i, TransferenciaModel.Destinatarios);"
-                                                                        (blur)="CrearDestinatrioModal(destinatario.idDestinatario,i);"
-                                                                        (foucs)="CrearDestinatrioModal(destinatario.idDestinatario,i);">
+                                                                        (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, TransferenciaModel.Destinatarios);"
+                                                                        (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, TransferenciaModel.Destinatarios);"
+                                                                        (blur)="CrearDestinatrioModal(destinatario.id_destinatario_transferencia,i);"
+                                                                        (foucs)="CrearDestinatrioModal(destinatario.id_destinatario_transferencia,i);">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3">
@@ -620,17 +620,27 @@
                                                                         autocomplete="off" required>
                                                                         <option value="">Seleccione una Cuenta</option>
                                                                         <option *ngFor="let c of destinatario.Cuentas"
-                                                                            [value]="Cuenta.Id_Destinatario_Cuenta">{{Cuenta.Nombre}}</option>
+                                                                            [value]="c.Id_Destinatario_Cuenta">{{c.Nombre}}</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label class="transferencia">Valor {{MonedaParaTransferencia.nombre}}</label>
-                                                                    <input id="Valor_Transferencia_{{i}}"
-                                                                        type="number" placeholder="Valor a Transferir"
-                                                                        class="form-control" name="Valor_Transferencia_{{i}}"
-                                                                        [(ngModel)]="destinatario.Valor_Transferencia" required>
+                                                                    <div class="row">
+                                                                        <div class="col-md-10">
+                                                                            <input id="Valor_Transferencia_{{i}}"
+                                                                            type="number" placeholder="Valor a Transferir"
+                                                                            class="form-control" name="Valor_Transferencia_{{i}}"
+                                                                            [(ngModel)]="destinatario.Valor_Transferencia" required>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <i *ngIf="i > 0" class="ti-trash" style="color:red" (confirm)="EliminarDestinatarioTransferencia(i)"
+                                                                        [swal]="{title : 'Eliminar Destinatario', text: '¿Está seguro de querer eliminar este destinatario?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
+                                                                            </i>
+                                                                        </div>
+                                                                    </div>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -650,7 +660,7 @@
                                                                     ngModel="Pesos">
                                                             </div>
                                                             <div class="form-group">
-                                                                <input id="Cantidad_Recibida" type="number" min=0 (blur)="CambiarMonedaOrigenDestino($event.target.value)"
+                                                                <input id="Cantidad_Recibida" type="number" min=0 (blur)="CalcularCambioMoneda($event.target.value, 'por origen')"
                                                                     autocomplete="off" placeholder="Valor Recibido" class="form-control"
                                                                     [(ngModel)]="TransferenciaModel.Cantidad_Recibida" name="Cantidad_Recibida" required>
                                                             </div>
@@ -660,7 +670,7 @@
                                                                 <label class="transferencia">Tasa de Cambio</label>
                                                                 <input id="Tasa_Cambio_Transferencia" type="text" class="form-control"
                                                                     name="Tasa_Cambio" [(ngModel)]="TransferenciaModel.Tasa_Cambio"
-                                                                    (blur)="ConversionMonedaPorTasa($event.target.value)">
+                                                                    (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')">
                                                             </div>
 
                                                         </div>
@@ -697,7 +707,7 @@
                                                                 <input id="Cantidad_Transferida" type="number" min=0
                                                                     placeholder="Valor Transferencia" class="form-control"
                                                                     [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
-                                                                    required (blur)="CambiarMonedaDestinoOrigen($event.target.value)">
+                                                                    required (blur)="CalcularCambioMoneda($event.target.value, 'por destino')">
                                                             </div>
                                                         </div>
 
