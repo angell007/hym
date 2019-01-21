@@ -595,7 +595,7 @@
                                                                             *ngIf="destinatario.EditarVisible" (click)="EditarDestinatario(destinatario.Numero_Documento_Destino, i)"></i>
                                                                     </label>
                                                                     <input type="text" class="form-control" name="Destino_{{i}}"
-                                                                        id="Destino_{{i}}" [(ngModel)]="id_destinatario_transferencia"
+                                                                        id="Destino_{{i}}" [(ngModel)]="destinatario.id_destinatario_transferencia"
                                                                         [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
                                                                         [inputFormatter]="formatter_destino"
                                                                         (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, TransferenciaModel.Destinatarios);"
@@ -616,7 +616,7 @@
                                                                 <div class="form-group">
                                                                     <label class="transferencia">Cuenta</label>
                                                                     <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
-                                                                        [(ngModel)]="destinatario.Id_Cuenta_Destinatario" class="form-control"
+                                                                        [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
                                                                         autocomplete="off" required>
                                                                         <option value="">Seleccione una Cuenta</option>
                                                                         <option *ngFor="let c of destinatario.Cuentas"
@@ -806,7 +806,7 @@
                                                     <div class="form-group">
                                                         <label class="transferencia">Observaciones</label>
                                                         <textarea placeholder="Observaciones" class="form-control" name="Observacion_Transferencia"
-                                                            ngModel (input)="HabilitarGuardar($event.target.value)"></textarea>
+                                                            [(ngModel)]="TransferenciaModel.Observacion_Transferencia" (input)="HabilitarGuardar($event.target.value)"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
