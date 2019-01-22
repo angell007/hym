@@ -259,6 +259,16 @@ export class TablerocajeroComponent implements OnInit {
   public funcionario_data = JSON.parse(localStorage['User']);
   public CuentasPersonales:any = [];
   public ShowClienteSelect:boolean = false;
+  public OpcionesTipo:any = ['Transferencia', 'Cliente'];
+
+  public ControlVisibilidadTransferencia:any = {
+    DatosCambio: true,
+    Destinatarios: true,
+    DatosRemitente: true,
+    DatosCredito: false,
+    DatosConsignacion: false,
+    SelectCliente: false
+  };
 
   //MODELO PARA TRANSFERENCIAS
   public TransferenciaModel:any = {
@@ -704,7 +714,7 @@ export class TablerocajeroComponent implements OnInit {
         this.Transferencia1 = true;
         this.Transferencia2 = false;
         this.actualizarVista();
-        this.VerificarTipoTransferencia('transferencia');
+        this.VerificarTipoTransferencia();
       });
   }
 
@@ -1505,8 +1515,8 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   GuardarTransferencia(formulario: NgForm) {
-
     let forma_pago = this.TransferenciaModel.Forma_Pago;
+    console.log(this.TransferenciaModel.Forma_Pago);
 
     //NUEVO CODIGO
     switch (forma_pago) {
@@ -1515,12 +1525,12 @@ export class TablerocajeroComponent implements OnInit {
         this.GuardarTransferenciaEfectivo();
         break;
 
-      case 'Consignación':
-        
+      case 'Consignacion':
+        this.GuardarTransferenciaEfectivo();
         break;
 
       case 'Credito':
-        
+        this.GuardarTransferenciaEfectivo();
         break;
     
       default:
@@ -1676,6 +1686,7 @@ export class TablerocajeroComponent implements OnInit {
             return this.handleError(error);
           }).subscribe((data: any) => {
             this.LimpiarModeloTransferencia();
+            this.SetTransferenciaDefault();
             //formulario.reset();
             this.transferenciaExitosaSwal.show();
             this.TipoPagoTransferencia("Efectivo");
@@ -1702,6 +1713,8 @@ export class TablerocajeroComponent implements OnInit {
             return this.handleError(error);
           })
           .subscribe((data: any) => {
+            this.LimpiarModeloTransferencia();
+            this.SetTransferenciaDefault();
             //formulario.reset();
             this.opcionDefaultFormaPago = "Efectivo";
             this.opcionTipoTransferencia  = "Transferencia";
@@ -1712,7 +1725,7 @@ export class TablerocajeroComponent implements OnInit {
             this.Transferencia1 = true;
             this.Transferencia2 = false;
             this.actualizarVista();
-            this.VerificarTipoTransferencia('transferencia');
+            this.VerificarTipoTransferencia();
           });
         break;
     
@@ -2881,17 +2894,12 @@ export class TablerocajeroComponent implements OnInit {
   opcionDefaultFormaPago = "Efectivo";
   opcionTipoTransferencia  = "Transferencia";
 
-  VerificarTipoTransferencia(valor) {
-
-    if (valor == 'Cliente') {
-      this.ShowClienteSelect = true;
-    }else{
-      this.ShowClienteSelect = false;
-    }
+  VerificarTipoTransferencia() {
 
     let Forma_Pago = this.TransferenciaModel.Forma_Pago;
+    let tipo = this.TransferenciaModel.Tipo_Transferencia;
 
-    if (valor == "Transferencia") {
+    if (tipo == "Transferencia") {
       this.BotonTransferencia = true;
       this.BotonMovimiento = false;
       switch (Forma_Pago) {
@@ -2902,6 +2910,7 @@ export class TablerocajeroComponent implements OnInit {
           this.Credito = false;
           this.Consignacion = false;
           this.RecibeCliente = false;
+          this.ShowClienteSelect = true;
           break;
         }
         case "Credito": {
@@ -2911,6 +2920,7 @@ export class TablerocajeroComponent implements OnInit {
           this.RecibeCliente = false;
           this.Credito = true;
           this.Consignacion = false;
+          this.ShowClienteSelect = false;
           
           break;
         }
@@ -2921,12 +2931,13 @@ export class TablerocajeroComponent implements OnInit {
           this.Credito = false;
           this.Consignacion = true;
           this.RecibeCliente = false;
+          this.ShowClienteSelect = true;
           break;
         }
       }
     }
 
-    if (valor == "Cliente") {
+    if (tipo == "Cliente") {
       this.BotonTransferencia = false;
       this.BotonMovimiento = true;
       switch (Forma_Pago) {
@@ -2935,6 +2946,7 @@ export class TablerocajeroComponent implements OnInit {
           this.transferencia =false;
           this.Credito = false;
           this.Consignacion = false;
+          this.ShowClienteSelect = true;
           break;
         }
         case "Credito": {
@@ -2944,6 +2956,7 @@ export class TablerocajeroComponent implements OnInit {
           this.Credito = true;
           this.transferencia = true;
           this.opcionTipoTransferencia = "Transferencia";
+          this.ShowClienteSelect = false;
           break;
         }
         case "Consignacion": {
@@ -2951,6 +2964,7 @@ export class TablerocajeroComponent implements OnInit {
           this.transferencia =false;
           this.Credito = false;
           this.Consignacion = true;
+          this.ShowClienteSelect = true;
           break;
         }
       }
@@ -3026,6 +3040,174 @@ export class TablerocajeroComponent implements OnInit {
     }*/
 
     this.LimpiarModeloTransferencia(false, true);
+  }
+
+  ControlarValoresSelect(valor){
+
+    if (valor == 'Efectivo' || valor == 'Credito' || valor == 'Consignación') {
+      this.LimpiarModeloTransferencia(true, true);
+
+    }else if (valor == 'Transferencia' || valor == 'Cliente') {
+      this.LimpiarModeloTransferencia(true, true);
+    }    
+    
+    let Forma_Pago = this.TransferenciaModel.Forma_Pago;
+    let tipo = this.TransferenciaModel.Tipo_Transferencia;
+
+    if (Forma_Pago == 'Efectivo' && tipo == 'Transferencia') {
+      this.ControlVisibilidadTransferencia.DatosCambio = true;
+      this.ControlVisibilidadTransferencia.Destinatarios = true;
+      this.ControlVisibilidadTransferencia.DatosRemitente = true;
+      this.ControlVisibilidadTransferencia.DatosCredito = false;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = false;
+      this.ControlVisibilidadTransferencia.SelectCliente = false;
+
+    }else if (Forma_Pago == 'Efectivo' && tipo == 'Cliente') {
+      this.ControlVisibilidadTransferencia.DatosCambio = true;
+      this.ControlVisibilidadTransferencia.Destinatarios = false;
+      this.ControlVisibilidadTransferencia.DatosRemitente = true;
+      this.ControlVisibilidadTransferencia.DatosCredito = false;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = false;
+      this.ControlVisibilidadTransferencia.SelectCliente = true;
+
+    }else if (Forma_Pago == 'Credito' && tipo == 'Transferencia') {
+      this.ControlVisibilidadTransferencia.DatosCambio = true;
+      this.ControlVisibilidadTransferencia.Destinatarios = true;
+      this.ControlVisibilidadTransferencia.DatosRemitente = false;
+      this.ControlVisibilidadTransferencia.DatosCredito = true;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = false;
+      this.ControlVisibilidadTransferencia.SelectCliente = false;
+
+    }else if (Forma_Pago == 'Credito' && tipo == 'Cliente') {
+      this.ControlVisibilidadTransferencia.DatosCambio = false;
+      this.ControlVisibilidadTransferencia.Destinatarios = false;
+      this.ControlVisibilidadTransferencia.DatosRemitente = false;
+      this.ControlVisibilidadTransferencia.DatosCredito = false;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = false;
+      this.ControlVisibilidadTransferencia.SelectCliente = false;
+
+    }else if (Forma_Pago == 'Consignacion' && tipo == 'Transferencia') {
+      this.ControlVisibilidadTransferencia.DatosCambio = true;
+      this.ControlVisibilidadTransferencia.Destinatarios = true;
+      this.ControlVisibilidadTransferencia.DatosRemitente = true;
+      this.ControlVisibilidadTransferencia.DatosCredito = false;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = true;
+      this.ControlVisibilidadTransferencia.SelectCliente = false;
+
+    }else if (Forma_Pago == 'Consignacion' && tipo == 'Cliente') {
+      this.ControlVisibilidadTransferencia.DatosCambio = true;
+      this.ControlVisibilidadTransferencia.Destinatarios = false;
+      this.ControlVisibilidadTransferencia.DatosRemitente = true;
+      this.ControlVisibilidadTransferencia.DatosCredito = false;
+      this.ControlVisibilidadTransferencia.DatosConsignacion = true;
+      this.ControlVisibilidadTransferencia.SelectCliente = true;
+    }
+
+    /*switch (Forma_Pago) {
+      case 'Efectivo':
+        this.CargarValoresEfectivo(tipo);
+        break;
+
+      case 'Credito':        
+        this.TransferenciaModel.Tipo_Transferencia = 'Transferencia';
+        this.VerificarValoresSelect(Forma_Pago);
+        this.CargarValoresCredito(tipo);
+        break;
+
+      case 'Consignación':
+        this.CargarValoresConsignacion(tipo);
+        break;
+    
+      default:
+        break;
+    }*/
+  }
+
+  CargarValoresEfectivo(tipo){
+    switch (tipo) {
+      case 'Transferencia':
+
+        this.ShowClienteSelect = false;
+        this.tipoCliente = true;
+        this.transferencia = true;
+        this.datosRemitenteTransferencia = true;
+        this.Credito = false;
+        this.Consignacion = false;
+        this.RecibeCliente = false;
+        break;
+    
+      case 'Cliente':
+          
+          this.ShowClienteSelect = true;
+          this.RecibeCliente = true;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = false;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  CargarValoresCredito(tipo){
+    switch (tipo) {
+      case 'Transferencia':
+        this.ShowClienteSelect = false;
+        this.tipoCliente = false;
+        this.transferencia = true;
+        this.datosRemitenteTransferencia = false;
+        this.RecibeCliente = false;
+        this.Credito = true;
+        this.Consignacion = false;
+        break;
+    
+      /*case 'Cliente':
+        
+        this.RecibeCliente = false;
+        this.tipoCliente = false;
+        this.Consignacion = false;
+        this.Credito = true;
+        this.transferencia = true;
+        this.opcionTipoTransferencia = "Transferencia";
+        break;*/
+
+      default:
+        break;
+    }
+  }
+
+  CargarValoresConsignacion(tipo){
+    switch (tipo) {
+      case 'Transferencia':
+        this.ShowClienteSelect = false;
+        this.tipoCliente = true;
+        this.transferencia = true;
+        this.datosRemitenteTransferencia = false;
+        this.Credito = false;
+        this.Consignacion = true;
+        this.RecibeCliente = false;
+        break;
+    
+      case 'Cliente':
+        this.ShowClienteSelect = true;
+        this.RecibeCliente = true;
+        this.transferencia =false;
+        this.Credito = false;
+        this.Consignacion = true;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  VerificarValoresSelect(valor){
+    if(valor == "Credito"){
+      this.OpcionesTipo = ['Transferencia'];
+    }else{
+      this.OpcionesTipo = ['Transferencia', 'Cliente'];
+    }
   }
 
   ReiniciarTransferencias(){
@@ -3326,11 +3508,11 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  LimpiarModeloTransferencia(omitirFormaPago:boolean = false, omitirTipoTransferencia:boolean = false){
+  LimpiarModeloTransferencia(dejarFormaPago:boolean = false, dejarTipoTransferencia:boolean = false){
     //MODELO PARA TRANSFERENCIAS
     this.TransferenciaModel = {
-      Forma_Pago: omitirFormaPago ? this.TransferenciaModel.Forma_Pago : 'Efectivo',
-      Tipo_Transferencia: omitirTipoTransferencia ? this.TransferenciaModel.Tipo_Transferencia : 'Transferencia',   
+      Forma_Pago: dejarFormaPago ? this.TransferenciaModel.Forma_Pago : 'Efectivo',
+      Tipo_Transferencia: dejarTipoTransferencia ? this.TransferenciaModel.Tipo_Transferencia : 'Transferencia',   
 
       //DATOS DEL CAMBIO
       Moneda_Origen: '2',
@@ -3389,5 +3571,14 @@ export class TablerocajeroComponent implements OnInit {
       e.Cuentas = [];
       e.id_destinatario_transferencia = '';
     });
+  }
+
+  SetTransferenciaDefault(){
+    this.ControlVisibilidadTransferencia.DatosCambio = true;
+    this.ControlVisibilidadTransferencia.Destinatarios = true;
+    this.ControlVisibilidadTransferencia.DatosRemitente = true;
+    this.ControlVisibilidadTransferencia.DatosCredito = false;
+    this.ControlVisibilidadTransferencia.DatosConsignacion = false;
+    this.ControlVisibilidadTransferencia.SelectCliente = false;
   }
 }
