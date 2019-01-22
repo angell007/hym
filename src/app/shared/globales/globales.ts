@@ -8,12 +8,14 @@ export class Globales {
   public Monedas:any = [];
   public Paises:any = [];
   public TipoDocumentoExtranjero:any = [];
+  public CuentasPersonalesPesos:any = [];
   //llamar de base de datos para obtener los datos de configuración
   //se declara constructor para poderlo inicalizar
   constructor(private client:HttpClient) {
     this.BuscarMonedas();
     this.BuscarPaises();
     this.BuscarTiposDocumentos();
+    this.BuscarCuentasPersonales();
   }
 
   BuscarMonedas():void{
@@ -32,6 +34,13 @@ export class Globales {
   BuscarTiposDocumentos():void{
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
       this.TipoDocumentoExtranjero = data;
+      
+    });
+  }
+
+  BuscarCuentasPersonales(moneda:string = 'Pesos'):void{
+    this.client.get(this.ruta + 'php/cuentasbancarias/buscar_cuentas_bancarias_por_moneda.php', { params: { moneda: moneda } }).subscribe((data: any) => {
+      this.CuentasPersonalesPesos = data;
       
     });
   }

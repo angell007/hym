@@ -234,7 +234,7 @@ export class TablerocajeroComponent implements OnInit {
   public TotalPagoCambio:any = '';
   public NombreMonedaTasaCambio:string = '';
 
-  public MonedaParaTransferencia = {
+  public MonedaParaTransferencia:any = {
     id: '',
     nombre: '',
     Valores:{
@@ -257,6 +257,8 @@ export class TablerocajeroComponent implements OnInit {
   public id_remitente:any = '';
   public id_destinatario_transferencia:any = '';
   public funcionario_data = JSON.parse(localStorage['User']);
+  public CuentasPersonales:any = [];
+  public ShowClienteSelect:boolean = false;
 
   //MODELO PARA TRANSFERENCIAS
   public TransferenciaModel:any = {
@@ -291,8 +293,16 @@ export class TablerocajeroComponent implements OnInit {
     Nombre_Remitente: '',
     Telefono_Remitente: '',
 
-    //TIPO TRANSFERENCIA - CLIENTE
-    //
+    //DATOS CREDITO
+    Id_Tercero: '',
+    Cupo_Tercero: '',
+    Bolsa_Bolivares: '',
+
+    //DATOS CONSIGNACION
+    Id_Cuenta_Bancaria: '',
+
+    //DATOS PARA TRANSFERENCIAS DIRECTO A UN CLIENTE(TERCERO)
+    Id_Tercero_Destino: ''
   };
 
   //Fin nuevas variables
@@ -325,7 +335,8 @@ export class TablerocajeroComponent implements OnInit {
     setTimeout(() => {
       
       this.AsignarMonedas();
-      this.AsignarPaises();  
+      this.AsignarPaises();
+      this.AsignarCuentasPersonales();      
     }, 500);
     
 
@@ -393,6 +404,8 @@ export class TablerocajeroComponent implements OnInit {
 
 
   HabilitarGuardar(valor) {
+    console.log(valor);
+    return;
     if (valor.length > 0) {
       if (this.Recibe == 'Cliente') {
         (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = false;
@@ -468,8 +481,6 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
-    console.log(i);
-    console.log(modelo);
     
     /*if (modelo.Cuentas != undefined) {
       this.Envios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -485,9 +496,6 @@ export class TablerocajeroComponent implements OnInit {
       if(validacion){
         return;
       };
-
-      console.log("paso");
-      console.log(validacion);
 
       if (modelo.Cuentas != undefined) {
         listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -696,7 +704,7 @@ export class TablerocajeroComponent implements OnInit {
         this.Transferencia1 = true;
         this.Transferencia2 = false;
         this.actualizarVista();
-        this.VerificarTipoTransferencia();
+        this.VerificarTipoTransferencia('transferencia');
       });
   }
 
@@ -1499,48 +1507,12 @@ export class TablerocajeroComponent implements OnInit {
   GuardarTransferencia(formulario: NgForm) {
 
     let forma_pago = this.TransferenciaModel.Forma_Pago;
-    let tipo_transferencia = this.TransferenciaModel.Tipo_Transferencia;
-    let total_a_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-    let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios();
-
-    console.log(forma_pago);
-    
 
     //NUEVO CODIGO
     switch (forma_pago) {
       case 'Efectivo':
         
-        if(total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios){
-          this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
-          this.LimpiarBancosDestinatarios(this.TransferenciaModel.Destinatarios);
-          let info = JSON.stringify(this.TransferenciaModel);
-          let destinatarios = JSON.stringify(this.TransferenciaModel.Destinatarios);
-          console.log(info);
-          console.log(destinatarios);
-          //return;
-          
-          let datos = new FormData();
-          datos.append("datos", info);
-          datos.append("destinatarios", destinatarios);
-          this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-          //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
-          .catch(error => {
-            console.error('An error occurred:', error.error);
-            this.errorSwal.show();
-            return this.handleError(error);
-          }).subscribe((data: any) => {
-            this.LimpiarModeloTransferencia();
-            //formulario.reset();
-            this.transferenciaExitosaSwal.show();
-            this.TipoPagoTransferencia("Efectivo");
-            this.Transferencia1 = true;
-            this.Transferencia2 = false;
-            this.recargarDestinatario();
-            this.actualizarVista();
-            this.ReiniciarTransferencias();
-
-          });
-        }
+        this.GuardarTransferenciaEfectivo();
         break;
 
       case 'Consignación':
@@ -1674,8 +1646,79 @@ export class TablerocajeroComponent implements OnInit {
         this.confirmacionSwal.show();
       }
     }*/
+  }
 
+  GuardarTransferenciaEfectivo(){    
+    console.log(this.TransferenciaModel);
+    
+    let tipo_transferencia = this.TransferenciaModel.Tipo_Transferencia;
+    let total_a_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+    let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios(); 
+    this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;   
 
+    switch (tipo_transferencia) {
+      case 'Transferencia':
+        
+        if(total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios){
+          this.LimpiarBancosDestinatarios(this.TransferenciaModel.Destinatarios);
+          let info = JSON.stringify(this.TransferenciaModel);
+          let destinatarios = JSON.stringify(this.TransferenciaModel.Destinatarios);
+          //return;
+          
+          let datos = new FormData();
+          datos.append("datos", info);
+          datos.append("destinatarios", destinatarios);
+          this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
+          //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+          .catch(error => {
+            console.error('An error occurred:', error.error);
+            this.errorSwal.show();
+            return this.handleError(error);
+          }).subscribe((data: any) => {
+            this.LimpiarModeloTransferencia();
+            //formulario.reset();
+            this.transferenciaExitosaSwal.show();
+            this.TipoPagoTransferencia("Efectivo");
+            this.Transferencia1 = true;
+            this.Transferencia2 = false;
+            this.recargarDestinatario();
+            this.actualizarVista();
+            this.ReiniciarTransferencias();
+
+          });
+        }
+        break;
+
+      case 'Cliente':
+        
+        let info = JSON.stringify(this.TransferenciaModel);
+        let datos = new FormData();
+        datos.append("datos", info); 
+        this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
+        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+          .catch(error => {
+            console.error('An error occurred:', error.error);
+            this.errorSwal.show();
+            return this.handleError(error);
+          })
+          .subscribe((data: any) => {
+            //formulario.reset();
+            this.opcionDefaultFormaPago = "Efectivo";
+            this.opcionTipoTransferencia  = "Transferencia";
+            this.seleccioneClienteDefault = "";
+            this.movimientoExitosoSwal.show();
+            //////////console.log(data);
+            this.TipoPagoTransferencia("Efectivo");
+            this.Transferencia1 = true;
+            this.Transferencia2 = false;
+            this.actualizarVista();
+            this.VerificarTipoTransferencia('transferencia');
+          });
+        break;
+    
+      default:
+        break;
+    }
   }
 
 
@@ -2838,8 +2881,82 @@ export class TablerocajeroComponent implements OnInit {
   opcionDefaultFormaPago = "Efectivo";
   opcionTipoTransferencia  = "Transferencia";
 
-  VerificarTipoTransferencia() {
-    var Forma_Pago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
+  VerificarTipoTransferencia(valor) {
+
+    if (valor == 'Cliente') {
+      this.ShowClienteSelect = true;
+    }else{
+      this.ShowClienteSelect = false;
+    }
+
+    let Forma_Pago = this.TransferenciaModel.Forma_Pago;
+
+    if (valor == "Transferencia") {
+      this.BotonTransferencia = true;
+      this.BotonMovimiento = false;
+      switch (Forma_Pago) {
+        case "Efectivo": {
+          this.tipoCliente = true;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = true;
+          this.Credito = false;
+          this.Consignacion = false;
+          this.RecibeCliente = false;
+          break;
+        }
+        case "Credito": {
+          this.tipoCliente = false;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = false;
+          this.RecibeCliente = false;
+          this.Credito = true;
+          this.Consignacion = false;
+          
+          break;
+        }
+        case "Consignacion": {
+          this.tipoCliente = true;
+          this.transferencia = true;
+          this.datosRemitenteTransferencia = false;
+          this.Credito = false;
+          this.Consignacion = true;
+          this.RecibeCliente = false;
+          break;
+        }
+      }
+    }
+
+    if (valor == "Cliente") {
+      this.BotonTransferencia = false;
+      this.BotonMovimiento = true;
+      switch (Forma_Pago) {
+        case "Efectivo": {
+          this.RecibeCliente = true;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = false;
+          break;
+        }
+        case "Credito": {
+          this.RecibeCliente = false;
+          this.tipoCliente = false;
+          this.Consignacion = false;
+          this.Credito = true;
+          this.transferencia = true;
+          this.opcionTipoTransferencia = "Transferencia";
+          break;
+        }
+        case "Consignacion": {
+          this.RecibeCliente = true;
+          this.transferencia =false;
+          this.Credito = false;
+          this.Consignacion = true;
+          break;
+        }
+      }
+    }
+    
+    /*var Forma_Pago = (document.getElementById("Forma_Pago") as HTMLInputElement).value;
     var Tipo_Transferencia = (document.getElementById("Tipo_Transferencia") as HTMLInputElement).value;
 
 
@@ -2876,8 +2993,6 @@ export class TablerocajeroComponent implements OnInit {
           break;
         }
       }
-      
-      this.LimpiarModeloTransferencia();
     }
 
     if (Tipo_Transferencia == "Cliente") {
@@ -2908,8 +3023,9 @@ export class TablerocajeroComponent implements OnInit {
           break;
         }
       }
-    }
+    }*/
 
+    this.LimpiarModeloTransferencia(false, true);
   }
 
   ReiniciarTransferencias(){
@@ -3019,6 +3135,10 @@ export class TablerocajeroComponent implements OnInit {
 
   AsignarPaises(){      
     this.Paises = this.globales.Paises;
+  }
+
+  AsignarCuentasPersonales(){      
+    this.CuentasPersonales = this.globales.CuentasPersonalesPesos;    
   }
 
   SetMonedaTransferencia(value){
@@ -3206,20 +3326,20 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  LimpiarModeloTransferencia(){
+  LimpiarModeloTransferencia(omitirFormaPago:boolean = false, omitirTipoTransferencia:boolean = false){
     //MODELO PARA TRANSFERENCIAS
     this.TransferenciaModel = {
-      Forma_Pago: 'Efectivo',
-      Tipo_Transferencia: 'Transferencia',   
+      Forma_Pago: omitirFormaPago ? this.TransferenciaModel.Forma_Pago : 'Efectivo',
+      Tipo_Transferencia: omitirTipoTransferencia ? this.TransferenciaModel.Tipo_Transferencia : 'Transferencia',   
 
       //DATOS DEL CAMBIO
-      Moneda_Origen: '1',
+      Moneda_Origen: '2',
       Moneda_Destino: '',
       Cantidad_Recibida: '',
       Cantidad_Transferida: '',
       Tasa_Cambio: '',
       Identificacion_Funcionario: '',
-      Id_Caja: this.IdCaja,
+      Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
       Observacion_Transferencia:'',
 
       //DESTINATARIOS
@@ -3239,10 +3359,29 @@ export class TablerocajeroComponent implements OnInit {
       Documento_Origen: '',
       Nombre_Remitente: '',
       Telefono_Remitente: '',
-
-      //TIPO TRANSFERENCIA - CLIENTE
-      //
     };
+
+    this.MonedaParaTransferencia = {
+      id: '',
+      nombre: '',
+      Valores:{
+        Min_Venta_Efectivo:'',
+        Max_Venta_Efectivo:'',
+        Sugerido_Venta_Efectivo:'',
+        Min_Compra_Efectivo:'',
+        Max_Compra_Efectivo:'',
+        Sugerido_Compra_Efectivo:'',
+        Min_Venta_Transferencia:'',
+        Max_Venta_Transferencia:'',
+        Sugerido_Venta_Transferencia:'',
+        Costo_Transferencia:'',
+        Comision_Efectivo_Transferencia:'',
+        Pagar_Comision_Desde:'',
+        Min_No_Cobro_Transferencia:'',
+      }
+    };
+
+    this.id_remitente = '';
   }
 
   LimpiarBancosDestinatarios(listaLimpiar){

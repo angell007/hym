@@ -427,7 +427,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="transferencia">Recibe Para</label>
-                                                <select id="Tipo_Transferencia" (change)="VerificarTipoTransferencia()"
+                                                <select id="Tipo_Transferencia" (change)="VerificarTipoTransferencia($event.target.value)"
                                                     class="form-control" name="Tipo_Transferencia" [(ngModel)]="TransferenciaModel.Tipo_Transferencia"
                                                     required>
                                                     <option value="Transferencia">Transferencia</option>
@@ -445,7 +445,16 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-3" *ngIf="RecibeCliente">
+                                            <div class="col-md-3" *ngIf="ShowClienteSelect">
+                                                <label class="transferencia">Seleccione Cliente</label>
+                                                <select class="form-control" name="Id_Tercero_Destino"
+                                                    [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" required>
+                                                    <option value="">Seleccione un cliente</option>
+                                                    <option *ngFor="let c of Clientes" [value]="c.Id_Tercero">{{c.Nombre}}</option>
+                                                </select>
+                                            </div>
+
+                                            <!--<div class="col-md-3" *ngIf="TransferenciaModel.Tipo_Transferencia == 'Cliente'">
                                                 <label class="transferencia">Seleccione Cliente</label>
                                                 <select *ngIf="!listaClientes()" class="form-control" name="Id_Tercero_Destino"
                                                     ngModel required>
@@ -458,7 +467,7 @@
                                                     <option value="">Seleccione un cliente</option>
                                                     <option *ngFor="let Cliente of TerceroCliente" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
                                                 </select>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div id="data-container">
                                         
@@ -496,7 +505,17 @@
                                             </div>
                                             <!-- Para Consignacion-->
                                             <div class="row" *ngIf="Consignacion">
-                                                <div class="col-md-4">
+                                                <div class="col-md-12">
+                                                    <hr>
+                                                    <h5>Consignación</h5>
+                                                    <select class="form-control" name="Id_Cuenta_Bancaria" ngModel (change)="InformacionCuentaBancaria($event.target.value)">
+                                                        <option value="" selected>Seleccione Cuenta Bancaria</option>
+                                                        <option *ngFor="let c of CuentasPersonales" [value]="c.Id_Cuenta_Bancaria">
+                                                            {{c.Numero_Cuenta}} - {{c.Nombre_Titular}} - {{c.Tipo_de_Cuenta}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <!--<div class="col-md-4"> 
                                                     <hr class="mrg-top-10 mrg-btm-10">
                                                     <h5>Consignación</h5>
                                                     <select class="form-control" name="Id_Cuenta_Bancaria" ngModel (change)="InformacionCuentaBancaria($event.target.value)">
@@ -515,6 +534,73 @@
                                                     <hr class="mrg-top-10 mrg-btm-10">
                                                     <h5>Titular</h5>
                                                     <input id="NombreTitular" class="form-control" type="text" readonly>
+                                                </div>-->
+                                            </div>
+
+                                            <div class="row"><!--SECCION DATOS CAMBIO-->
+                                                <div class="col-md-12">
+                                                    <hr class="mrg-top-10 mrg-btm-10">
+                                                    <h5>Datos del Cambio</h5>
+                                                    <div class="row mrg-top-20">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group text-center">
+                                                                <label class="transferencia">Moneda Recibida</label>
+                                                                <input readonly name="Moneda_Origen" type="text" class="form-control"
+                                                                    ngModel="Pesos">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input id="Cantidad_Recibida" type="number" min=0 (blur)="CalcularCambioMoneda($event.target.value, 'por origen')"
+                                                                    autocomplete="off" placeholder="Valor Recibido" class="form-control"
+                                                                    [(ngModel)]="TransferenciaModel.Cantidad_Recibida" name="Cantidad_Recibida" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group text-center">
+                                                                <label class="transferencia">Tasa de Cambio</label>
+                                                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control"
+                                                                    name="Tasa_Cambio" [(ngModel)]="TransferenciaModel.Tasa_Cambio"
+                                                                    (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')">
+                                                            </div>
+
+                                                        </div>
+                                                    <!-- <div class="col-md-4">
+                                                            <div class="form-group text-center">
+                                                                <label class="transferencia">Moneda de Transferencia
+                                                                </label>
+                                                                <select name="Moneda_Destino" class="form-control"
+                                                                    placeholder="Moneda de transferencia" ngModel="{{1}}">
+                                                                    <option> Seleccione Moneda</option>
+                                                                    <option *ngFor="let moneda of MonedasTransferencia"
+                                                                        [value]="moneda.Id_Moneda">{{moneda.Nombre}}
+                                                                        ({{ moneda.Codigo }}) </option>
+                                                                </select>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input disabled id="Cantidad_Transferida" type="number" min=0
+                                                                    placeholder="Precio Transferencia" class="form-control"
+                                                                    [(ngModel)]="entregar" name="Cantidad_Transferida"
+                                                                    required>
+                                                            </div>
+                                                        </div>-->
+
+                                                        <div class="col-md-4">
+                                                            <div class="form-group text-center">
+                                                                <label class="transferencia">Moneda de Transferencia
+                                                                </label>
+                                                                <input type="text" class="form-control" disabled [(value)]="MonedaParaTransferencia.nombre" placeholder="Moneda">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <!--(blur)="RealizarCambioMonedaTransferencia($event.target.value,'entrega')"
+                                                                            -->
+                                                                <input id="Cantidad_Transferida" type="number" min=0
+                                                                    placeholder="Valor Transferencia" class="form-control"
+                                                                    [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
+                                                                    required (blur)="CalcularCambioMoneda($event.target.value, 'por destino')">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -648,72 +734,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <hr class="mrg-top-10 mrg-btm-10">
-                                                    <h5>Datos del Cambio</h5>
-                                                    <div class="row mrg-top-20">
-                                                        <div class="col-md-4">
-                                                            <div class="form-group text-center">
-                                                                <label class="transferencia">Moneda Recibida</label>
-                                                                <input readonly name="Moneda_Origen" type="text" class="form-control"
-                                                                    ngModel="Pesos">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input id="Cantidad_Recibida" type="number" min=0 (blur)="CalcularCambioMoneda($event.target.value, 'por origen')"
-                                                                    autocomplete="off" placeholder="Valor Recibido" class="form-control"
-                                                                    [(ngModel)]="TransferenciaModel.Cantidad_Recibida" name="Cantidad_Recibida" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="form-group text-center">
-                                                                <label class="transferencia">Tasa de Cambio</label>
-                                                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control"
-                                                                    name="Tasa_Cambio" [(ngModel)]="TransferenciaModel.Tasa_Cambio"
-                                                                    (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')">
-                                                            </div>
-
-                                                        </div>
-                                                    <!-- <div class="col-md-4">
-                                                            <div class="form-group text-center">
-                                                                <label class="transferencia">Moneda de Transferencia
-                                                                </label>
-                                                                <select name="Moneda_Destino" class="form-control"
-                                                                    placeholder="Moneda de transferencia" ngModel="{{1}}">
-                                                                    <option> Seleccione Moneda</option>
-                                                                    <option *ngFor="let moneda of MonedasTransferencia"
-                                                                        [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                                                        ({{ moneda.Codigo }}) </option>
-                                                                </select>
-
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input disabled id="Cantidad_Transferida" type="number" min=0
-                                                                    placeholder="Precio Transferencia" class="form-control"
-                                                                    [(ngModel)]="entregar" name="Cantidad_Transferida"
-                                                                    required>
-                                                            </div>
-                                                        </div>-->
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group text-center">
-                                                                <label class="transferencia">Moneda de Transferencia
-                                                                </label>
-                                                                <input type="text" class="form-control" disabled [(value)]="MonedaParaTransferencia.nombre" placeholder="Moneda">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <!--(blur)="RealizarCambioMonedaTransferencia($event.target.value,'entrega')"
-                                                                            -->
-                                                                <input id="Cantidad_Transferida" type="number" min=0
-                                                                    placeholder="Valor Transferencia" class="form-control"
-                                                                    [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
-                                                                    required (blur)="CalcularCambioMoneda($event.target.value, 'por destino')">
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
 
                                             <!--<div class="row" *ngIf="datosRemitenteTransferencia">
                                                 <div class="col-md-12">
@@ -827,7 +848,7 @@
                                                 <div class="col-md-10">
                                                     <button id="BotonMovimientoGuardar" class="btn btn-primary btn-sm btn-block mrg-top-10"
                                                         [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                        (confirm)="GuardarMovimiento(FormTransferencia)">Guardar Movimiento
+                                                        (confirm)="GuardarTransferencia(FormTransferencia)" [disabled]="!FormTransferencia.valid">Guardar Movimiento
                                                     </button>
                                                 </div>
                                                 <div class="col-md-2">
