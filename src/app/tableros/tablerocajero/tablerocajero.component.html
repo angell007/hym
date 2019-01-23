@@ -478,6 +478,23 @@
                                                     <hr class="mrg-top-10 mrg-btm-10">
                                                     <h5>Crédito</h5>
                                                     <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label>Tercero</label>
+                                                                    <input class="form-control" name="Id_Tercero" type="text" [(ngModel)]="tercero_credito" 
+                                                                    [ngbTypeahead]="search_tercero_credito" [resultTemplate]="rt_tercero_credito"
+                                                                    [inputFormatter]="formatter_tercero_credito"
+                                                                    (ngModelChange)="AutoCompletarTerceroCredito(tercero_credito)">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label>Cupo Tercero</label>
+                                                                    <input name="Cupo_T"
+                                                                        [(ngModel)]="TransferenciaModel.Cupo_Tercero" type="text" readonly class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
                                                         <div class="col-md-4">
                                                             <label>Tercero</label>
                                                             <select class="form-control" id="Id_Tercero" name="Id_Tercero"
@@ -492,7 +509,7 @@
                                                             <input name="cupoTercero" currencyMask [options]="{ prefix: '$. ', thousands: '.', decimal: ',' }"
                                                                 ngModel="{{cupoTercero}}" type="text" readonly class="form-control">
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div *ngIf="InputBolsaBolivares" class="col-md-4">
                                                             <label>Bolsa de Bolivares</label>
                                                             <input currencyMask [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }"
                                                                 name="SaldoBolivar" ngModel="{{SaldoBolivar}}" type="text"
@@ -1692,6 +1709,12 @@
         <strong>{{r.Nombre_Titular}}</strong>
     </span>
 </ng-template>
+
+<ng-template #rt_tercero_credito let-r="result" let-t="term">
+        <span class="f-9">
+            <strong>{{r.Nombre}}</strong>
+        </span>
+    </ng-template>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
     <div class="app-modal-header">

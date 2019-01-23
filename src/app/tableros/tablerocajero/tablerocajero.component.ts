@@ -4,7 +4,8 @@ import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import 'rxjs/add/operator/do';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -256,10 +257,12 @@ export class TablerocajeroComponent implements OnInit {
 
   public id_remitente:any = '';
   public id_destinatario_transferencia:any = '';
+  public tercero_credito:any = '';
   public funcionario_data = JSON.parse(localStorage['User']);
   public CuentasPersonales:any = [];
   public ShowClienteSelect:boolean = false;
   public OpcionesTipo:any = ['Transferencia', 'Cliente'];
+  public InputBolsaBolivares:boolean = false;
 
   public ControlVisibilidadTransferencia:any = {
     DatosCambio: true,
@@ -415,7 +418,7 @@ export class TablerocajeroComponent implements OnInit {
 
   HabilitarGuardar(valor) {
     console.log(valor);
-    return;
+    //return;
     if (valor.length > 0) {
       if (this.Recibe == 'Cliente') {
         (document.getElementById("BotonMovimientoGuardar") as HTMLInputElement).disabled = false;
@@ -472,6 +475,19 @@ export class TablerocajeroComponent implements OnInit {
         : this.Remitentes.filter(v => v.Numero_Cuenta.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
+
+  search_tercero_credito = (text$: Observable<string>) =>        
+    text$
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap( term => 
+        this.http.get(this.globales.ruta+'php/terceros/filtrar_terceros.php', {params: {nombre:term}})
+        .map(response => response)
+        .do(data => console.log(this.tercero_credito))
+      )
+    );
+  formatter_tercero_credito = (x: { Nombre: string }) => x.Nombre;
 
   muestra_tabla(id) {
     var tot = document.getElementsByClassName('modulos').length;
@@ -1141,9 +1157,6 @@ export class TablerocajeroComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
-      console.log(this.Traslados);
-      
-
     });
 
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
@@ -3335,6 +3348,12 @@ export class TablerocajeroComponent implements OnInit {
         this.MonedaParaTransferencia.Valores = data;
         
         this.TransferenciaModel.Tasa_Cambio = data.Sugerido_Compra_Efectivo;
+
+        if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
+          this.InputBolsaBolivares  = true;
+        }else{
+          this.InputBolsaBolivares  = false;
+        }
       });
     }else{
       this.MonedaParaTransferencia.nombre = '';
@@ -3580,5 +3599,25 @@ export class TablerocajeroComponent implements OnInit {
     this.ControlVisibilidadTransferencia.DatosCredito = false;
     this.ControlVisibilidadTransferencia.DatosConsignacion = false;
     this.ControlVisibilidadTransferencia.SelectCliente = false;
+  }
+
+  AutoCompletarTerceroCredito(datos_tercero){
+    console.log(datos_tercero);
+    
+    if (typeof(datos_tercero) == 'object') {
+
+      this.TransferenciaModel.Id_Tercero = datos_tercero.Id_Tercero;
+      this.TransferenciaModel.Cupo_Tercero = datos_tercero.Cupo;
+    }else{
+      this.TransferenciaModel.Id_Tercero = '';
+      this.TransferenciaModel.Cupo_Tercero = '';
+    }
+
+    console.log(this.TransferenciaModel);
+    
+  }
+
+  ValidacionTransferenciaCredito(){
+
   }
 }
