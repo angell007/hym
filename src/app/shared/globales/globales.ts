@@ -9,6 +9,7 @@ export class Globales {
   public Paises:any = [];
   public TipoDocumentoExtranjero:any = [];
   public CuentasPersonalesPesos:any = [];
+  public FuncionariosCaja:any = [];
   //llamar de base de datos para obtener los datos de configuración
   //se declara constructor para poderlo inicalizar
   constructor(private client:HttpClient) {
@@ -16,6 +17,7 @@ export class Globales {
     this.BuscarPaises();
     this.BuscarTiposDocumentos();
     this.BuscarCuentasPersonales();
+    this.BuscarCajerosSitema();
   }
 
   BuscarMonedas():void{
@@ -42,6 +44,12 @@ export class Globales {
     this.client.get(this.ruta + 'php/cuentasbancarias/buscar_cuentas_bancarias_por_moneda.php', { params: { moneda: moneda } }).subscribe((data: any) => {
       this.CuentasPersonalesPesos = data;
       
+    });
+  }
+
+  BuscarCajerosSitema(){
+    this.client.get(this.ruta + 'php/pos/lista_cajeros_sistema.php').subscribe((data: any) => {
+      this.FuncionariosCaja = data;
     });
   }
 

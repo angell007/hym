@@ -231,9 +231,25 @@ export class TablerocajeroComponent implements OnInit {
   tasaCambiaria: any;
 
   //NUEVAS VARIABLES
+
+  //--------------------------------GENERALES-----------------------------//
+  
+  public funcionario_data = JSON.parse(localStorage['User']);
+
+  //----------------------------------------------------------------------//
+
+
+  //-----------------------------DATOS CAMBIOS-----------------------------//
+  
   public HabilitarCampos:boolean = true;
   public TotalPagoCambio:any = '';
   public NombreMonedaTasaCambio:string = '';
+
+  //----------------------------------------------------------------------//
+
+
+
+  //-------------------------DATOS TRANSFERENCIAS-------------------------//
 
   public MonedaParaTransferencia:any = {
     id: '',
@@ -258,11 +274,11 @@ export class TablerocajeroComponent implements OnInit {
   public id_remitente:any = '';
   public id_destinatario_transferencia:any = '';
   public tercero_credito:any = '';
-  public funcionario_data = JSON.parse(localStorage['User']);
   public CuentasPersonales:any = [];
   public ShowClienteSelect:boolean = false;
   public OpcionesTipo:any = ['Transferencia', 'Cliente'];
   public InputBolsaBolivares:boolean = false;
+  public MonedasTransferencia:any = [];
 
   public ControlVisibilidadTransferencia:any = {
     DatosCambio: true,
@@ -318,6 +334,10 @@ export class TablerocajeroComponent implements OnInit {
     Id_Tercero_Destino: ''
   };
 
+
+  //--------------------------------------------------------------------------//
+
+  //-------------------------DATOS GIROS-------------------------//
   //MODELO PARA GIROS
   public GiroModel:any = {
     
@@ -360,6 +380,62 @@ export class TablerocajeroComponent implements OnInit {
 
   public Remitente_Giro:any = '';
   public Destinatario_Giro:any = '';
+
+  //--------------------------------------------------------------------------//
+
+
+  //--------------------------------DATOS TRASLADOS---------------------------//
+  //MODELO TRASLADOS
+  public TrasladoModel:any = {
+    Id_traslado_Caja: '',
+    Funcionario_Destino: '',
+    Id_Cajero_Origen: '',
+    Valor: '',
+    Detalle: '',
+    Id_Moneda: '',
+    Estado: 'Activo',
+    Identificacion_Funcionario: ''
+  };
+
+  public CajerosTraslados:any = [];
+  public MonedasTraslados:any = [];
+  public MonedaSeleccionadaTraslado:string = '';
+
+  //--------------------------------------------------------------------------//
+
+  //-----------------------------DATOS CORRESPONSALES-------------------------//
+  //MODELO CORRESPONSAL
+  public CorresponsalModel:any = {
+    Id_traslado_Caja: '',
+    Funcionario_Destino: '',
+    Id_Cajero_Origen: '',
+    Valor: '',
+    Detalle: '',
+    Id_Moneda: '',
+    Estado: 'Activo',
+    Identificacion_Funcionario: ''
+  };
+
+  public CorresponsalesBancos:any = [];
+
+  //--------------------------------------------------------------------------//
+
+  //------------------------DATOS SERVICIOS EXTERNOS-------------------------//
+  //MODELO SERVICIOS
+  public ServicioExternoModel:any = {
+    Id_traslado_Caja: '',
+    Funcionario_Destino: '',
+    Id_Cajero_Origen: '',
+    Valor: '',
+    Detalle: '',
+    Id_Moneda: '',
+    Estado: 'Activo',
+    Identificacion_Funcionario: ''
+  };
+
+  public ListaServiciosExternos:any = [];
+
+  //--------------------------------------------------------------------------//
 
   //Fin nuevas variables
 
@@ -798,6 +874,9 @@ export class TablerocajeroComponent implements OnInit {
   //FIN GIROS
 
   //TRASLADOS
+
+
+
   //FIN TRASLADOS
 
   //CORRESPONSAL BANCARIO
@@ -807,6 +886,77 @@ export class TablerocajeroComponent implements OnInit {
   //FIN SERVICIOS EXTERNOS
 
   //GENERALES
+
+
+  CargarDatosModulos(modulo:string){
+    switch (modulo) {
+      case 'cambios':
+        
+        break;
+
+      case 'transferencias':
+        
+        break;
+
+      case 'giros':
+        
+        break;
+
+      case 'traslados':
+        this.CargarDatosTraslados();
+        break;
+
+      case 'corresponsal':
+        
+        break;
+
+      case 'servicios':
+        
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  CargarDatosCambios(){
+    this.ShowSwal("warning", "Alerta", "Desarrollar");
+  }
+
+  CargarDatosTransferencia(){
+    this.MonedasTransferencia = [];
+    this.globales.Monedas.forEach(moneda => {
+      if (moneda.Nombre != 'Pesos') {
+        this.MonedasTransferencia.push(moneda);     
+      }
+    });
+
+    this.ShowSwal("warning", "Alerta", "Terminar de cargar datos");
+  }
+
+  CargarDatosGiros(){
+    this.ShowSwal("warning", "Alerta", "Desarrollar");
+  }
+
+  CargarDatosTraslados(){
+    this.CajerosTraslados = [];
+    this.globales.FuncionariosCaja.forEach(fc => {
+      if (fc.Nombres != this.funcionario_data.Identificacion_Funcionario) {
+        this.CajerosTraslados.push(fc);     
+      }
+    });
+
+    this.MonedasTraslados = [];
+    this.MonedasTraslados = this.globales.Monedas;
+  }
+
+  CargarDatosCorresponsal(){
+    this.ShowSwal("warning", "Alerta", "Desarrollar");
+  }
+
+  CargarDatosServicios(){
+    this.ShowSwal("warning", "Alerta", "Desarrollar");
+  }
 
   Municipios_Departamento(Departamento, tipo) {
     this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
@@ -1486,7 +1636,7 @@ export class TablerocajeroComponent implements OnInit {
   MonedaOrigenDestino = [];
   FuncionariosCajaDestino = [];
   TerceroCliente = [];
-  MonedasTransferencia = [];
+  //MonedasTransferencia = [];
   MonedasOrigen = [];
   TransferenciasAnuladas =[];
   RemitentesTransferencias = [];
