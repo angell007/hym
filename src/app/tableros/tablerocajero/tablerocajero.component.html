@@ -173,16 +173,16 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que recibe</label>
                                                 <select *ngIf="!Venta" class="form-control" placeholder="Origen"
-                                                    ngModel="" id="Origen" name="Origen" (change)="validarDestino($event.target.value);"
+                                                    ngModel="" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
                                                     required>
                                                     <option value=""> Seleccione Moneda</option>
-                                                    <option *ngFor="let moneda of MonedaOrigenCambio" [value]="moneda.Id_Moneda">{{moneda.Nombre}}
-                                                        ({{ moneda.Codigo }}) </option>
+                                                    <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
+                                                        ({{ m.Codigo }}) </option>
                                                 </select>
                                                 <input *ngIf="Venta" disabled name="Origen" readonly type="text" class="form-control"
                                                     ngModel="Pesos">
-                                                <input hidden readonly name="Moneda_Origen" type="text" class="form-control"
-                                                    ngModel="{{MonedaOrigen}}">
+                                                <!--<input hidden readonly name="Moneda_Origen" type="text" class="form-control"
+                                                    ngModel="{{MonedaOrigen}}">-->
                                             </div>
 
                                             <!--ESCOGER MONEDA PARA VENTA-->
@@ -190,21 +190,27 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que entrego</label>
                                                 <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino"
-                                                    name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="validarTasaCambio($event.target.value);">
+                                                    name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);">
                                                     <option value=""> Seleccione Moneda</option>
-                                                    <option *ngFor="let moneda1 of MonedaOrigenDestino" [value]="moneda1.Id_Moneda">{{moneda1.Nombre}}
-                                                        ({{ moneda1.Codigo }}) </option>
+                                                    <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
+                                                        ({{ m.Codigo }}) </option>
                                                 </select>
                                                 <input *ngIf="!Venta" disabled name="Moneda_Destino" readonly type="text"
                                                     class="form-control" ngModel="{{MonedaDestino}}">
-                                                <input hidden name="Tipo" readonly type="text" class="form-control"
-                                                    ngModel="{{Tipo}}">
+                                                <!--<input hidden name="Tipo" readonly type="text" class="form-control"
+                                                    ngModel="{{Tipo}}">-->
                                             </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
-                                                <input #valorCambio type="text" autocomplete="false" placeholder="Valor" class="form-control text-right" name="Valor_Origen"
-                                                    id="Cambia" [(ngModel)]="cambiar" (blur)="ValidacionTasaCambio()" (input)="conversionMoneda()" currencyMask [options]="{ prefix: '' , thousands: '.', decimal: ',' }" [disabled]="HabilitarCampos">
+                                                <input #valorCambio type="text" 
+                                                    autocomplete="false" 
+                                                    placeholder="Valor" class="form-control text-right" name="Valor_Origen"
+                                                    id="Cambia" 
+                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda()" 
+                                                    currencyMask [options]="{ prefix: '' , thousands: '.', decimal: ',' }" 
+                                                    [disabled]="HabilitarCampos"
+                                                    required>
 
                                             </div>
 
@@ -212,7 +218,8 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                                                     Cambio</label>
                                                 <input type="text" placeholder="Cambio" class="form-control" autocomplete="false"
-                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">
+                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa" (blur)="conversionMoneda()" [disabled]="HabilitarCampos"
+                                                    required>
                                                 <!--<input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
                                                     id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">-->
                                             </div>
@@ -220,7 +227,7 @@
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" autocomplete="false"
-                                                    id="Entrega" [(ngModel)]="entregar" readonly>
+                                                    id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly>
                                             </div>
 
                                             <div *ngIf="Venta" class="col-md-6">
@@ -241,13 +248,15 @@
                                     </form>
                                 </div>
                                 <div class="col-md-10" style="margin-top: 50px">
-                                    <button *ngIf="Venta === false" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                                        class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
-                                        (confirm)="guardarCambio(FormMoneda,'compra')">{{TextoBoton}}</button>
+                                    <button id="BotonEnviar" 
+                                            [disabled]="!FormMoneda.valid" 
+                                            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este cambio ', type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                            class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+                                            (confirm)="guardarCambio(FormMoneda,'compra')">Realizar Cambio</button>
 
-                                    <button *ngIf="Venta === true" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                    <!--<button *ngIf="Venta === true" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                                         class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
-                                        (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>
+                                        (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>-->
                                 </div>
                                 <div class="col-md-2" style="margin-top: 50px">
                                     <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-danger btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
@@ -262,15 +271,15 @@
                                         <thead>
                                             <tr>
                                                 <th>Máximo </th>
-                                                <th>Minimo</th>
+                                                <th>Mínimo</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr style="font-weight: bold;">
-                                                <td *ngIf="Venta">{{MaxEfectivo}}</td>
-                                                <td *ngIf="Venta">{{MinEfectivo}}</td>
-                                                <td *ngIf="!Venta">{{MaxCompra}}</td>
-                                                <td *ngIf="!Venta">{{MinCompra}}</td>
+                                                <td *ngIf="Venta">{{MonedaParaCambio.Valores.Max_Venta_Efectivo}}</td>
+                                                <td *ngIf="Venta">{{MonedaParaCambio.Valores.Min_Venta_Efectivo}}</td>
+                                                <td *ngIf="!Venta">{{MonedaParaCambio.Valores.Max_Compra_Efectivo}}</td>
+                                                <td *ngIf="!Venta">{{MonedaParaCambio.Valores.Min_Compra_Efectivo}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
