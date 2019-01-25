@@ -190,7 +190,7 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
                                                     que entrego</label>
                                                 <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino"
-                                                    name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);">
+                                                    name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);" required>
                                                     <option value=""> Seleccione Moneda</option>
                                                     <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
                                                         ({{ m.Codigo }}) </option>
@@ -234,14 +234,14 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                                                     Con</label>
                                                 <input id="pagocon" type="text" placeholder="Paga con" class="form-control"
-                                                    name="Recibido" (blur)="ObtenerVueltos($event.target.value)" [(ngModel)] = "TotalPagoCambio" [disabled]="HabilitarCampos">
+                                                    name="Recibido" (blur)="ObtenerVueltos()" [(ngModel)] = "CambioModel.Recibido" [disabled]="HabilitarCampos" required>
                                             </div>
 
 
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
                                                 <input readonly type="text" placeholder="Vueltos" class="form-control"
-                                                    name="Vueltos" ngModel="{{vueltos}}">
+                                                    name="Vueltos" [(ngModel)]="CambioModel.Vueltos" required>
 
                                             </div>
                                         </div>
@@ -691,7 +691,8 @@
                                                                             <input id="Valor_Transferencia_{{i}}"
                                                                             type="number" placeholder="Valor a Transferir"
                                                                             class="form-control" name="Valor_Transferencia_{{i}}"
-                                                                            [(ngModel)]="destinatario.Valor_Transferencia" required>
+                                                                            [(ngModel)]="destinatario.Valor_Transferencia" required
+                                                                            (blur)="ValidarValorTransferirDestinatario($event.target.value, i)">
                                                                         </div>
                                                                         <div class="col-md-2">
                                                                             <i *ngIf="i > 0" class="ti-trash" style="color:red" (confirm)="EliminarDestinatarioTransferencia(i)"

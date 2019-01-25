@@ -255,7 +255,7 @@ export class TablerocajeroComponent implements OnInit {
     TotalPago: '',
     Vueltos:'0',
     Recibido:'',
-    Identificacion_Funcionario: ''
+    Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
   };
 
   public MonedaParaCambio:any = {
@@ -278,6 +278,7 @@ export class TablerocajeroComponent implements OnInit {
     }
   };
   
+  public Bolsa_Restante = '0';
   public HabilitarCampos:boolean = true;
   public TotalPagoCambio:any = '';
   public NombreMonedaTasaCambio:string = '';
@@ -553,26 +554,26 @@ export class TablerocajeroComponent implements OnInit {
       this.http.get(this.globales.ruta+'php/monedas/buscar_valores_moneda.php', { params: {id_moneda:value} }).subscribe((data:any) => {
         this.MonedaParaCambio.Valores = data;
 
-        if (this.Venta == true) {
+        if (this.Venta) {
           
           this.CambioModel.Tasa = data.Sugerido_Venta_Efectivo;
-          this.CambioModel.Moneda_Origen = '1';
+          this.CambioModel.Moneda_Origen = '2';
           this.CambioModel.Moneda_Destino = value;
         } else {         
           this.CambioModel.Tasa = data.Sugerido_Compra_Efectivo;
           this.CambioModel.Moneda_Origen = value;
-          this.CambioModel.Moneda_Destino = '1';
+          this.CambioModel.Moneda_Destino = '2';
         }
 
         this.HabilitarCamposCambio();
       });
     }else{
-      if (this.Venta == true) {          
-        this.CambioModel.Moneda_Origen = '1';
+      if (this.Venta) {          
+        this.CambioModel.Moneda_Origen = '2';
         this.CambioModel.Moneda_Destino = value;
       } else {         
         this.CambioModel.Moneda_Origen = value;
-        this.CambioModel.Moneda_Destino = '1';
+        this.CambioModel.Moneda_Destino = '2';
       }
 
       this.MonedaParaCambio.nombre = '';
@@ -608,37 +609,96 @@ export class TablerocajeroComponent implements OnInit {
 
   guardarCambio(formulario: NgForm, item) {
 
-    if(this.ValidacionTasaCambio()){
-      /*formulario.value.Moneda_Destino = this.MonedaDestino;
-      formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;*/
-      
-      //let info = JSON.stringify(formulario.value);
-      if (this.Venta) {
-        this.CambioModel.Tipo = 'Venta';
-      }else{
-        this.CambioModel.Tipo = 'Compra';
-      }
-      let info = JSON.stringify(this.CambioModel);
-      let datos = new FormData();
-      datos.append("modulo", 'Cambio');
-      datos.append("datos", info);
-      datos.append("PagoTotal", this.TotalPagoCambio);
+    if (this.ValidateCambioBeforeSubmit()) {
+        
+      if(this.ValidacionTasaCambio()){
 
-      this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
-        //formulario.reset();
-        this.LimpiarModeloCambio();
-        this.confirmacionSwal.title = "Guardado con exito";
-        this.confirmacionSwal.text = "Se ha guardado correctamente la " + item
-        this.confirmacionSwal.type = "success"
-        this.confirmacionSwal.show();
-        this.Cambios1 = true;
-        this.Cambios2 = false;
-        this.tasaCambiaria = "";
-        this.entregar = "";
-        this.MonedaDestino = "Pesos";
-        this.actualizarVista();
-      });
+      
+        /*formulario.value.Moneda_Destino = this.MonedaDestino;
+        formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;*/
+        
+        //let info = JSON.stringify(formulario.value);
+        if (this.Venta) {
+          this.CambioModel.Tipo = 'Venta';
+          this.CambioModel.Estado = 'Realizado';
+        }else{
+          this.CambioModel.Tipo = 'Compra';
+          this.CambioModel.Recibido = '0';
+          this.CambioModel.Estado = 'Realizado';
+        }
+        let info = JSON.stringify(this.CambioModel);
+        let datos = new FormData();
+        datos.append("modulo", 'Cambio');
+        datos.append("datos", info);
+        datos.append("PagoTotal", this.TotalPagoCambio);
+  
+        this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
+          //formulario.reset();
+          this.LimpiarModeloCambio();
+          this.confirmacionSwal.title = "Guardado con exito";
+          this.confirmacionSwal.text = "Se ha guardado correctamente la " + item
+          this.confirmacionSwal.type = "success"
+          this.confirmacionSwal.show();
+          this.Cambios1 = true;
+          this.Cambios2 = false;
+          this.tasaCambiaria = "";
+          this.entregar = "";
+          this.MonedaDestino = "Pesos";
+          this.actualizarVista();
+        });
+      }
+    }        
+  }
+
+  ObtenerVueltos() {
+
+    let pagoCon = this.CambioModel.Recibido;
+    let recibido = this.CambioModel.Valor_Origen;
+
+    if (recibido == '' || recibido == undefined || isNaN(recibido)) {
+      
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a cambiar!');
+      this.CambioModel.Recibido = '';
+      return;
+    }
+
+    if (pagoCon == '' || pagoCon == undefined || isNaN(pagoCon)) {
+      
+      this.ShowSwal('warning', 'alerta', 'El valor del campo "Pago Con" debe ser un valor numerico!');
+      return;
     }    
+
+    recibido = parseFloat(recibido);
+    pagoCon = parseFloat(pagoCon);
+    
+    if (pagoCon > 0) {
+
+      if (pagoCon < recibido) {
+        this.ShowSwal('warning', 'alerta', 'El valor a cambiar no puede ser mayor al valor recibido!');
+        this.CambioModel.Recibido = '';
+        return;
+      }else{
+        let vuelto = pagoCon - recibido;
+        this.CambioModel.TotalPago = pagoCon;
+        this.CambioModel.Vueltos = vuelto;
+      }
+    }
+
+    /*if (parseInt(valor) > 0) {
+      (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
+      var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
+      
+      this.vueltos = valor - parseInt(this.cambiar);
+      if (this.vueltos < 0) {
+        (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
+        (document.getElementById("pagocon") as HTMLInputElement).value = "0";
+        this.vueltos = 0;
+        this.confirmacionSwal.title = "Problemas Cambio";
+        this.confirmacionSwal.text = "El dinero Recibido es inferior a lo que va a cambiar";
+        this.confirmacionSwal.type = "error";
+        this.confirmacionSwal.show();
+      }
+    }*/
   }
 
   validarDestino(value) {
@@ -841,17 +901,17 @@ export class TablerocajeroComponent implements OnInit {
     this.CambioModel = {
       Id_Cambio: '',
       Tipo: '',
-      Id_Caja: '',
-      Id_Oficina: '',
+      Id_Caja:  this.IdCaja == '' ? '0' : this.IdCaja,
+      Id_Oficina: '5',
       Moneda_Origen: '',
       Moneda_Destino: '',
       Tasa: '',
       Valor_Origen: '',
       Valor_Destino: '',
       TotalPago: '',
-      Vueltos:'',
+      Vueltos:'0',
       Recibido:'',
-      Identificacion_Funcionario: ''
+      Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
     };
   
     this.MonedaParaCambio = {
@@ -879,6 +939,68 @@ export class TablerocajeroComponent implements OnInit {
     this.NombreMonedaTasaCambio = '';
   }
 
+  ValidateCambioBeforeSubmit(){
+    if (this.Venta) {
+      
+      if (this.CambioModel.Moneda_Destino == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe escoger una moneda para el cambio!');
+        return false;
+
+      }else if (this.CambioModel.Valor_Origen == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'El monto a cambiar no puede ser 0!');
+        return false;
+
+      }else if (this.CambioModel.Tasa == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe colocar una tasa para el cambio!');
+        return false;
+
+      }else if (this.CambioModel.Valor_Destino == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe recalcular el monto a entregar!');
+        return false;
+
+      }else if (this.CambioModel.Recibido == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe colocar el monto en el campo "Paga Con"!');
+        return false;
+
+      }else{
+        
+        return true;
+      }
+
+    }else{
+
+      if (this.CambioModel.Moneda_Origen == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe escoger una moneda para el cambio!');
+        return false;
+
+      }else if (this.CambioModel.Valor_Origen == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'El monto a cambiar no puede ser 0!');
+        return false;
+
+      }else if (this.CambioModel.Tasa == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe colocar una tasa para el cambio!');
+        return false;
+
+      }else if (this.CambioModel.Valor_Destino == '') {
+
+        this.ShowSwal('warning', 'Alerta', 'Debe recalcular el monto a entregar!');
+        return false;
+
+      }else{
+
+        return true;
+      }
+    }
+  }
+
   //FIN CAMBIOS EFECTIVO
 
   //FUNCIONES TRANSFERENCIAS
@@ -898,26 +1020,24 @@ export class TablerocajeroComponent implements OnInit {
     switch (tipo_cambio) {
       case 'por origen': 
         if (value > 0) {
+
           this.CalcularCambio(value, tasa_cambio, 'recibido');
+        }else{
+          this.LimpiarCantidades();
         }
         break;
 
       case 'por destino': 
         if (value > 0) {
+
           this.CalcularCambio(value, tasa_cambio, 'transferencia');
+        }else{
+          this.LimpiarCantidades();
         }
         break;
 
       case 'por tasa':
-        let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
-        let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
-
-        if (tasa_cambio > max || tasa_cambio < min) {
-          this.TransferenciaModel.Tasa_Cambio = (max + min) / 2;
-          this.confirmacionSwal.title = "Alerta";
-          this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo/máximo establecido para la moneda"
-          this.confirmacionSwal.type = "warning"
-          this.confirmacionSwal.show();
+        if (!this.ValidarTasaCambio(tasa_cambio)) {
           return;
         }
 
@@ -925,6 +1045,8 @@ export class TablerocajeroComponent implements OnInit {
 
         if (value > 0) {
           this.CalcularCambio(valor_recibido, value, 'recibido');
+        }else{
+          this.LimpiarCantidades();
         }
         break;
     
@@ -937,33 +1059,117 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
+  LimpiarCantidades(){
+    this.TransferenciaModel.Cantidad_Recibida = '';
+    this.TransferenciaModel.Cantidad_Transferida = '';
+
+    this.TransferenciaModel.Destinatarios.forEach((d,i) => {
+        this.TransferenciaModel.Destinatarios[i].Valor_Transferencia = '';
+    });
+  }
+
+  ValidarTasaCambio(tasa_cambio){
+    let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
+    let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
+
+    if (tasa_cambio > max || tasa_cambio < min) {
+      this.TransferenciaModel.Tasa_Cambio = (max + min) / 2;
+      this.confirmacionSwal.title = "Alerta";
+      this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo/máximo establecido para la moneda"
+      this.confirmacionSwal.type = "warning"
+      this.confirmacionSwal.show();
+      return false;
+    }
+
+    return true;
+  }
+
+  ValidarCupoTercero(){
+
+    if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+
+      if (this.TransferenciaModel.Cupo_Tercero == '' || this.TransferenciaModel.Cupo_Tercero == '0' || this.TransferenciaModel.Cupo_Tercero == undefined) {
+        this.ShowSwal('warning', 'Alerta', 'El tercero no posee un cupo de crédito disponible!');
+        this.TransferenciaModel.Cantidad_Recibida = '';
+        return false;
+      }
+  
+      let cupo = parseFloat(this.TransferenciaModel.Cupo_Tercero);
+      let recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);
+  
+      if (cupo < recibido) {
+        this.ShowSwal('warning', 'Alerta', 'El cupo disponible es menor a la cantidad recibida!');
+        this.TransferenciaModel.Cantidad_Recibida = cupo;
+        return false;
+      }
+  
+      return true;
+    }else{
+      return true;
+    }
+  }
+
+  ValidarBolsaBolivares(){
+
+    if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+      if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
+        if (this.TransferenciaModel.Bolsa_Bolivares == '' || this.TransferenciaModel.Bolsa_Bolivares == '0' || this.TransferenciaModel.Bolsa_Bolivares == undefined) {
+          return true;
+        }else{
+          let bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+          let transferido = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+    
+          if (bolsa < transferido) {
+            this.ShowSwal('warning', 'Alerta', 'El valor a transferir es mayor a la cantidad bolsa pendiente!');
+            return false;
+          }else{
+            return true;
+          }
+        }
+      }else{
+        return true;
+      }
+    }else{
+      return true;
+    }
+  }
+
   CalcularCambio(valor:number, tasa:number, tipo:string){
 
     let conversion_moneda = 0;
-    let count = this.TransferenciaModel.Destinatarios.length;
-    let TotalTransferenciaDestinatario = this.GetTotalTransferenciaDestinatarios();
 
     switch (tipo) {
       case 'recibido':
 
-        if(this.TransferenciaModel.Forma_Pago == 'Credito'){
-          
-          let validacion_credito = this.ValidarValorRecibidoCredito();
-          if (!validacion_credito) {
-            return;
-          }
+        if (!this.ValidarCupoTercero()) {
+          return;
+        }
+
+        if (!this.ValidarTasaCambio(tasa)) {
+          return;
         }
         
         conversion_moneda = parseFloat((valor / tasa).toFixed(2));
         this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
-        this.AsignarValorDestinatarios(conversion_moneda, TotalTransferenciaDestinatario, count);
+        //this.AsignarValorDestinatarios(conversion_moneda, TotalTransferenciaDestinatario, count);
+        this.AsignarValorTransferirDestinatario(conversion_moneda);
         break;
 
       case 'transferencia':
+
+        if (!this.ValidarCupoTercero()) {
+          return;
+        }
+      
+        if (!this.ValidarTasaCambio(tasa)) {
+          return;
+        }
         
         conversion_moneda = parseFloat((valor * tasa).toFixed(2));
         this.TransferenciaModel.Cantidad_Recibida = Math.round(conversion_moneda);
-        this.AsignarValorDestinatarios(valor, TotalTransferenciaDestinatario, count);
+        //this.AsignarValorDestinatarios(valor, TotalTransferenciaDestinatario, count);
+        this.AsignarValorTransferirDestinatario(valor);
+        
         break;
     
       default:
@@ -981,7 +1187,7 @@ export class TablerocajeroComponent implements OnInit {
 
     this.TransferenciaModel.Destinatarios.forEach(e => {
       
-      if (e.Valor_Transferencia == undefined || e.Valor_Transferencia == NaN || e.Valor_Transferencia == '') {
+      if (e.Valor_Transferencia == undefined || isNaN(e.Valor_Transferencia) || e.Valor_Transferencia == '') {
         TotalTransferenciaDestinatario += 0;
       }else{
         TotalTransferenciaDestinatario += parseFloat(e.Valor_Transferencia);
@@ -1001,7 +1207,7 @@ export class TablerocajeroComponent implements OnInit {
         this.TransferenciaModel.Destinatarios.forEach((d, i) => {
           if(i < (count - 1)){
             
-            if (d.Valor_Transferencia == undefined || d.Valor_Transferencia == NaN || d.Valor_Transferencia == '') {
+            if (d.Valor_Transferencia == undefined || isNaN(d.Valor_Transferencia) || d.Valor_Transferencia == '') {
               acumulado += 0;
             }else{
               acumulado += parseFloat(d.Valor_Transferencia);
@@ -1021,11 +1227,363 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
+  AsignarValorTransferirDestinatario(valor){
+
+    if (valor == '' || valor == '0') {
+      this.TransferenciaModel.Destinatarios.array.forEach(d => {
+        d.Valor_Transferencia = '';
+      });
+      return;
+    }
+
+    valor = parseFloat(valor).toFixed(2);
+    let total_destinatarios = this.GetTotalTransferenciaDestinatarios();
+    let count = this.TransferenciaModel.Destinatarios.length;    
+    
+    setTimeout(() => {
+      this.Asignar(valor, total_destinatarios, count);
+    }, 300);
+  }
+
+  Asignar(valor, total_destinatarios, count){
+
+    if (this.TransferenciaModel.Bolsa_Bolivares != '' || this.TransferenciaModel.Bolsa_Bolivares != '0') {
+      let valor_bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+      let nuevo_valor = valor + valor_bolsa;
+      
+      if (nuevo_valor > total_destinatarios) {
+      
+        if(this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia == ''){
+          this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = '0';
+        }
+        let v_transferir = parseFloat(this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia);
+        let operacion = v_transferir + (nuevo_valor - total_destinatarios);
+        this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = operacion.toFixed(2);
+  
+      }else if (nuevo_valor < total_destinatarios) {
+  
+        let resta = total_destinatarios;
+        
+        for (let index = count; index > 0; index--) {
+          let valor_pos = parseFloat(this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia).toFixed(2);
+          
+          resta -= Number(valor_pos);
+  
+          if (resta > nuevo_valor) {
+            
+            this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia = '0';
+  
+          }else if (resta < nuevo_valor && resta > valor) {
+            let asignar = nuevo_valor - resta;
+            this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia = asignar.toFixed(2);    
+            if (asignar > 0) {
+              break;
+            }   
+          
+          }else if (resta < nuevo_valor && resta < valor) {
+            let asignar = valor - resta;
+            this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia = asignar.toFixed(2);    
+            if (asignar > 0) {
+              break;
+            }   
+          
+          }else if (resta == nuevo_valor) {
+            break;   
+          }        
+        }
+      }
+
+    }else{
+
+      if (valor > total_destinatarios) {
+      
+        if(this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia == ''){
+          this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = '0';
+        }
+        let v_transferir = parseFloat(this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia);
+        let operacion = v_transferir + (valor - total_destinatarios);
+        this.TransferenciaModel.Destinatarios[(count - 1)].Valor_Transferencia = operacion.toFixed(2);
+  
+      }else if (valor < total_destinatarios) {
+  
+        let resta = total_destinatarios;
+        
+        for (let index = count; index > 0; index--) {
+          let valor_pos = parseFloat(this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia).toFixed(2);
+          
+          resta -= Number(valor_pos);
+  
+          if (resta > valor) {
+            
+            this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia = '0';
+  
+          }else if (resta < valor) {
+            let asignar = valor - resta;
+            this.TransferenciaModel.Destinatarios[index - 1].Valor_Transferencia = asignar.toFixed(2);    
+            if (asignar > 0) {
+              break;
+            }   
+          
+          }else if (resta == valor) {
+            break;   
+          }        
+        }
+      }
+    }
+  }
+
+  ValidarValorTransferirDestinatario(valor, index){
+
+    if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+      if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
+        if (this.TransferenciaModel.Bolsa_Bolivares == '' || this.TransferenciaModel.Bolsa_Bolivares == '0' || this.TransferenciaModel.Bolsa_Bolivares == undefined) {
+        }else{
+          
+          if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
+            this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = '';
+            this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
+            return;
+          }
+      
+          if (valor == '') {
+            return;
+          }
+                
+          let bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+          let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+          let total_sumado = bolsa + transferir;
+          valor = parseFloat(valor);
+          let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+      
+          if (total_valor_destinatarios > total_sumado) {
+            
+            let asignar = valor - (total_valor_destinatarios - total_sumado);
+            this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+
+          }else if (total_valor_destinatarios < total_sumado) {
+
+            let restante = - (total_valor_destinatarios - total_sumado);
+            this.Bolsa_Restante = restante.toFixed(2);
+          }
+        }
+      }
+    }else{
+      if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
+        
+        this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = '';
+        this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
+        return;
+      }
+  
+      if (valor == '') {
+        this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = '';
+        return;
+      }
+  
+      let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+      valor = parseFloat(valor).toFixed(2);
+      let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+  
+      if (total_valor_destinatarios > transferir) {
+
+        let asignar = valor - (total_valor_destinatarios - transferir);
+        this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+
+      }else if(total_valor_destinatarios < transferir){
+
+        //let asignar = valor + (transferir - total_valor_destinatarios);
+        //this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+      }
+    }
+
+    /*if (this.TransferenciaModel.Cantidad_Transferida != '' || this.TransferenciaModel.Cantidad_Transferida != '0' || this.TransferenciaModel.Cantidad_Transferida != undefined) {
+      
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
+      return;
+    }
+
+    if (valor == '') {
+      return;
+    }
+
+    let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+    valor = parseFloat(valor);
+    let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+
+    if (total_valor_destinatarios > transferir || total_valor_destinatarios < transferir) {
+      
+      let asignar = valor - (total_valor_destinatarios - transferir);
+      this.TransferenciaModel.Destinatarios[index].Valor_Transferencia = asignar.toString();
+    }*/
+  }
+
+  ValidarCantidadTransferidaDestinatarios(){   
+
+    let totalDestinatarios = this.GetTotalTransferenciaDestinatarios();
+    
+    if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+      if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
+        if (this.TransferenciaModel.Bolsa_Bolivares == '' || this.TransferenciaModel.Bolsa_Bolivares == '0' || this.TransferenciaModel.Bolsa_Bolivares == undefined) {
+          return true;
+        }else{
+          let bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+          let transferido = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+          let total = bolsa + transferido;
+    
+          if (totalDestinatarios > total) {
+            this.ShowSwal('warning', 'Alerta', 'La suma del valor a transferir entre los destinatarios es mayor al máximo total a transferir!');
+            return false;
+          }else{
+            return true;
+          }
+        }
+      }else{
+        return true;
+      }
+    }else{
+      return true;
+    }
+  }
+
+
+
+  GuardarTransferencia(formulario: NgForm) {
+    let forma_pago = this.TransferenciaModel.Forma_Pago;
+    console.log(this.TransferenciaModel.Forma_Pago);
+    
+
+    //NUEVO CODIGO
+    switch (forma_pago) {
+      case 'Efectivo':        
+        this.GuardarTransferenciaEfectivo();
+        break;
+
+      case 'Consignacion':
+        this.GuardarTransferenciaEfectivo();
+        break;
+
+      case 'Credito':
+        this.GuardarTransferenciaEfectivo();
+        break;
+    
+      default:
+        this.ShowSwal("warning","Alerta","Tipo de Transferencia erronea");
+        break;
+    }
+  }
+
+  GuardarTransferenciaEfectivo(){  
+    
+    let tipo_transferencia = this.TransferenciaModel.Tipo_Transferencia;
+    let total_a_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+    let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios(); 
+    this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;  
+
+    console.log(this.TransferenciaModel);
+    
+    
+    if(!this.ValidateBeforeSubmit()){
+      return;
+    }
+
+    switch (tipo_transferencia) {
+      case 'Transferencia':
+
+        if (this.TransferenciaModel.Bolsa_Bolivares != '' || this.TransferenciaModel.Bolsa_Bolivares != '0' ) {
+          
+          if (total_suma_transferir_destinatarios < (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
+            let restante_bolsa = ((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios).toFixed(2);
+
+            this.SaveTransferencia(restante_bolsa);
+          }else{
+            this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
+          }
+        }else{
+
+          if(total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios){
+
+            this.SaveTransferencia();
+          }else{
+            this.ShowSwal('warning', 'Alerta', 'El total repartido entre los destinatarios es mayor al total a entegar');
+          }
+        }        
+        break;
+
+      case 'Cliente':
+        
+        let info = JSON.stringify(this.TransferenciaModel);
+        let datos = new FormData();
+        datos.append("datos", info); 
+        this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
+        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+          .catch(error => {
+            console.error('An error occurred:', error.error);
+            this.errorSwal.show();
+            return this.handleError(error);
+          })
+          .subscribe((data: any) => {
+            this.LimpiarModeloTransferencia();
+            this.SetTransferenciaDefault();
+            //formulario.reset();
+            this.opcionDefaultFormaPago = "Efectivo";
+            this.opcionTipoTransferencia  = "Transferencia";
+            this.seleccioneClienteDefault = "";
+            this.movimientoExitosoSwal.show();
+            //////////console.log(data);
+            this.TipoPagoTransferencia("Efectivo");
+            this.Transferencia1 = true;
+            this.Transferencia2 = false;
+            this.actualizarVista();
+            this.VerificarTipoTransferencia();
+          });
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  SaveTransferencia(bolsa = ''){
+    this.TransferenciaModel.Id_Tercero_Destino = '0';
+  
+    this.LimpiarBancosDestinatarios(this.TransferenciaModel.Destinatarios);
+    let info = JSON.stringify(this.TransferenciaModel);
+    let destinatarios = JSON.stringify(this.TransferenciaModel.Destinatarios);
+    //return;
+    
+    let datos = new FormData();
+    datos.append("datos", info);
+    datos.append("destinatarios", destinatarios);
+
+    if (bolsa != '') {
+      datos.append("bolsa_restante", bolsa);
+    }
+    this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
+    //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
+    .catch(error => {
+      console.error('An error occurred:', error.error);
+      this.errorSwal.show();
+      return this.handleError(error);
+    }).subscribe((data: any) => {
+      this.LimpiarModeloTransferencia();
+      this.SetTransferenciaDefault();
+      //formulario.reset();
+      this.transferenciaExitosaSwal.show();
+      this.TipoPagoTransferencia("Efectivo");
+      this.Transferencia1 = true;
+      this.Transferencia2 = false;
+      this.recargarDestinatario();
+      this.actualizarVista();
+      this.ReiniciarTransferencias();
+
+    });
+  }
+
   LimpiarModeloTransferencia(dejarFormaPago:boolean = false, dejarTipoTransferencia:boolean = false){
     //MODELO PARA TRANSFERENCIAS
     this.TransferenciaModel = {
       Forma_Pago: dejarFormaPago ? this.TransferenciaModel.Forma_Pago : 'Efectivo',
-      Tipo_Transferencia: dejarTipoTransferencia ? this.TransferenciaModel.Tipo_Transferencia : 'Transferencia',   
+      Tipo_Transferencia: dejarTipoTransferencia ? this.TransferenciaModel.Tipo_Transferencia : 'Transferencia',
 
       //DATOS DEL CAMBIO
       Moneda_Origen: '2',
@@ -1043,7 +1601,7 @@ export class TablerocajeroComponent implements OnInit {
           id_destinatario_transferencia: '',
           Numero_Documento_Destino: '',
           Nombre_Destinatario: '',
-          Id_Cuenta_Destinatario: '',
+          Id_Destinatario_Cuenta: '',
           Valor_Transferencia: '',
           Cuentas: [],
           EditarVisible: false
@@ -1054,6 +1612,17 @@ export class TablerocajeroComponent implements OnInit {
       Documento_Origen: '',
       Nombre_Remitente: '',
       Telefono_Remitente: '',
+
+      //DATOS CREDITO
+      Id_Tercero: '',
+      Cupo_Tercero: 0,
+      Bolsa_Bolivares: 0,
+
+      //DATOS CONSIGNACION
+      Id_Cuenta_Bancaria: '',
+
+      //DATOS PARA TRANSFERENCIAS DIRECTO A UN CLIENTE(TERCERO)
+      Id_Tercero_Destino: ''
     };
 
     this.MonedaParaTransferencia = {
@@ -1111,8 +1680,8 @@ export class TablerocajeroComponent implements OnInit {
 
   ValidarValorRecibidoCredito(){
     
-    let cupo = (this.TransferenciaModel.Cupo_Tercero == '' || isNaN(this.TransferenciaModel.Cupo_Tercero)) ? 0 : parseFloat(this.TransferenciaModel.Cupo_Tercero);
-    let recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);    
+    let cupo = (this.TransferenciaModel.Cupo_Tercero == '' || this.TransferenciaModel.Cupo_Tercero == '0' || isNaN(this.TransferenciaModel.Cupo_Tercero)) ? 0 : parseFloat(this.TransferenciaModel.Cupo_Tercero);
+    let recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida); 
 
     if (cupo == 0) {
       this.ShowSwal('warning', 'Alerta', 'El tercero no posee crédito disponible o no se ha cargado la información del tercero');
@@ -1125,6 +1694,9 @@ export class TablerocajeroComponent implements OnInit {
       return false;
     }
 
+      
+    console.log(cupo);
+    console.log(recibido);
     if (recibido > cupo) {
       this.ShowSwal('warning', 'Alerta', 'No puede asignar un monto mayor al cupo disponible');
       this.TransferenciaModel.Cantidad_Recibida = cupo;
@@ -1165,33 +1737,41 @@ export class TablerocajeroComponent implements OnInit {
 
   AgregarDestinatarioTransferencia(){
 
-    let listaDestinatarios = this.TransferenciaModel.Destinatarios;
-    for (let index = 0; index < listaDestinatarios.length; index++) {
+    if (this.TransferenciaModel.Cantidad_Recibida > 0) {
       
-      if(listaDestinatarios[index].Numero_Documento_Destino == 0 || listaDestinatarios[index].Numero_Documento_Destino == '' || listaDestinatarios[index].Numero_Documento_Destino === undefined){
-        this.ShowSwal('warning', 'Alerta', 'Debe anexar toda la información del(de los) destinatario(s) antes de agregar uno nuevo');
-        return;
+      let listaDestinatarios = this.TransferenciaModel.Destinatarios;
+      for (let index = 0; index < listaDestinatarios.length; index++) {
+        
+        if(listaDestinatarios[index].Numero_Documento_Destino == 0 || listaDestinatarios[index].Numero_Documento_Destino == '' || listaDestinatarios[index].Numero_Documento_Destino === undefined){
+          this.ShowSwal('warning', 'Alerta', 'Debe anexar toda la información del(de los) destinatario(s) antes de agregar uno nuevo');
+          return;
+        }
+
+        if(listaDestinatarios[index].Id_Destinatario_Cuenta == '' || listaDestinatarios[index].Id_Destinatario_Cuenta === undefined){
+          this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
+          return;
+        }
+
+        if(listaDestinatarios[index].Valor_Transferencia == '' || listaDestinatarios[index].Valor_Transferencia === undefined){
+          this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
+          return;
+        }      
       }
 
-      if(listaDestinatarios[index].Id_Destinatario_Cuenta == '' || listaDestinatarios[index].Id_Destinatario_Cuenta === undefined){
-        this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
-        return;
-      }
+      let nuevoDestinatario = {
+        id_destinatario_transferencia: '',
+        Numero_Documento_Destino: '',
+        Nombre_Destinatario: '',
+        Id_Destinatario_Cuenta: '',
+        Valor_Transferencia: '',
+        Cuentas: [],
+        EditarVisible: false
+      };
       
+      this.TransferenciaModel.Destinatarios.push(nuevoDestinatario);
+    }else{
+      this.ShowSwal('warning','Alerta','Debe colocar la cantidad a transferir antes de agregar destinatarios!');
     }
-
-    let nuevoDestinatario = {
-      id_destinatario_transferencia: '',
-      Numero_Documento_Destino: '',
-      Nombre_Destinatario: '',
-      Id_Cuenta_Destinatario: '',
-      Valor_Transferencia: '',
-      Cuentas: [],
-      EditarVisible: false
-    };
-    console.log(nuevoDestinatario);
-    
-    this.TransferenciaModel.Destinatarios.push(nuevoDestinatario);
   }
 
   SetMonedaTransferencia(value){
@@ -3395,23 +3975,7 @@ export class TablerocajeroComponent implements OnInit {
     }
   }
 
-  ObtenerVueltos(valor) {
-    if (parseInt(valor) > 0) {
-      (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = false;
-      var plata = ((document.getElementById("Cambia") as HTMLInputElement).value);
-      
-      this.vueltos = valor - parseInt(this.cambiar);
-      if (this.vueltos < 0) {
-        (document.getElementById("BotonEnviar") as HTMLInputElement).disabled = true;
-        (document.getElementById("pagocon") as HTMLInputElement).value = "0";
-        this.vueltos = 0;
-        this.confirmacionSwal.title = "Problemas Cambio";
-        this.confirmacionSwal.text = "El dinero Recibido es inferior a lo que va a cambiar";
-        this.confirmacionSwal.type = "error";
-        this.confirmacionSwal.show();
-      }
-    }
-  }
+  
 
   CambiarVista(tipo) {
 
@@ -3421,6 +3985,7 @@ export class TablerocajeroComponent implements OnInit {
         this.TextoBoton = "Comprar"
         this.Tipo = "Compra";
         this.tituloCambio = "Compras"
+        this.CambioModel.Moneda_Destino = '2';
         /*this.defectoDestino = "2";
         this.defectoOrigen = ""*/
         break;
@@ -3430,6 +3995,7 @@ export class TablerocajeroComponent implements OnInit {
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
         this.tituloCambio = "Ventas"
+        this.CambioModel.Moneda_Origen = '2';
         /*this.defectoDestino = "";
         this.defectoOrigen = "2"*/
         break;
@@ -3459,231 +4025,6 @@ export class TablerocajeroComponent implements OnInit {
         this.Servicio1 = false;
         break;
       }
-    }
-  }
-
-  
-
-  GuardarTransferencia(formulario: NgForm) {
-    let forma_pago = this.TransferenciaModel.Forma_Pago;
-    console.log(this.TransferenciaModel.Forma_Pago);
-
-    //NUEVO CODIGO
-    switch (forma_pago) {
-      case 'Efectivo':
-        
-        this.GuardarTransferenciaEfectivo();
-        break;
-
-      case 'Consignacion':
-        this.GuardarTransferenciaEfectivo();
-        break;
-
-      case 'Credito':
-        this.GuardarTransferenciaEfectivo();
-        break;
-    
-      default:
-        this.ShowSwal("warning","Alerta","Tipo de Transferencia erronea");
-        break;
-    }
-
-    //formulario.value.Costo_Transferencia = 1;
-   /* formulario.value.Id_Oficina = 5;
-    formulario.value.Id_Caja = 4;
-    formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    formulario.value.Tipo_Oficina = localStorage['Tipo_Oficina'];
-    formulario.value.Cantidad_Transferida = this.entregar;
-
-    var suma = 0;
-    if(this.Envios.length != 1){
-      this.Envios.forEach((element, index) => {
-        if (element.Nombre == "" || element.Valor_Transferencia_Bolivar == 0) {
-          this.Envios.splice(index, 1);
-          suma += element.Valor_Transferencia_Bolivar;
-        }
-      });
-    }    
-
-    this.Envios.forEach((element, index) => {
-      suma += Number(element.Valor_Transferencia_Bolivar);
-    });
-
-    var totalPermitido = Number(this.entregar);
-
-    if (this.credito == true) {
-      var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
-        formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
-        this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-      this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-      let info = JSON.stringify(formulario.value);
-      let destinatarios = JSON.stringify(this.Envios);
-      let datos = new FormData();
-      datos.append("datos", info);
-      datos.append("envios", destinatarios);
-      this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-      //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
-        .catch(error => {
-          console.error('An error occurred:', error.error);
-          this.errorSwal.show();
-          return this.handleError(error);
-        })
-        .subscribe((data: any) => {
-          formulario.reset();
-          this.opcionDefaultFormaPago = "Efectivo";
-          this.opcionTipoTransferencia  = "Transferencia";
-          this.seleccioneClienteDefault = "";
-          this.transferenciaExitosaSwal.show();
-          this.TipoPagoTransferencia("Efectivo");
-          this.Transferencia1 = true;
-          this.Transferencia2 = false;
-          this.recargarDestinatario();
-
-
-          this.Envios = [{
-            Destino: '',
-            Numero_Documento_Destino: '',
-            Nombre: '',
-            Id_Destinatario_Cuenta: '',
-            Valor_Transferencia_Bolivar: '',
-            Valor_Transferencia_Peso: '',
-            Cuentas: [],
-            esconder: false
-          }];
-
-          this.actualizarVista();
-          this.ReiniciarTransferencias();
-
-        });
-
-    } else {
-      if (suma == totalPermitido && totalPermitido > 0) {
-        var index = this.Monedas.findIndex(x=>x.Id_Moneda === formulario.value.Moneda_Destino);
-        formulario.value.Moneda_Destino = this.Monedas[index].Nombre;
-        this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-        let info = JSON.stringify(formulario.value);
-        let destinatarios = JSON.stringify(this.Envios);
-        let datos = new FormData();
-        datos.append("datos", info);
-        datos.append("envios", destinatarios);
-        this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
-          .catch(error => {
-            console.error('An error occurred:', error.error);
-            this.errorSwal.show();
-            return this.handleError(error);
-          })
-          .subscribe((data: any) => {
-            formulario.reset();
-        this.opcionDefaultFormaPago = "Efectivo";
-        this.opcionTipoTransferencia  = "Transferencia";
-            this.seleccioneClienteDefault = "";
-            this.transferenciaExitosaSwal.show();
-            this.TipoPagoTransferencia("Efectivo");
-            this.Transferencia1 = true;
-            this.Transferencia2 = false;
-            this.recargarDestinatario();
-
-            this.Envios = [{
-              Destino: '',
-              Numero_Documento_Destino: '',
-              Nombre: '',
-              Id_Destinatario_Cuenta: '',
-              Valor_Transferencia_Bolivar: '',
-              Valor_Transferencia_Peso: '',
-              Cuentas: [],
-              esconder: false
-            }];
-
-            this.actualizarVista();
-            this.ReiniciarTransferencias();
-
-          });
-      } else {
-        this.confirmacionSwal.title = "Pendiente";
-        this.confirmacionSwal.text = "Aún queda saldo por enviar, por favor verifique los valores";
-        this.confirmacionSwal.type = "warning";
-        this.confirmacionSwal.show();
-      }
-    }*/
-  }
-
-  GuardarTransferenciaEfectivo(){  
-    
-    let tipo_transferencia = this.TransferenciaModel.Tipo_Transferencia;
-    let total_a_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-    let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios(); 
-    this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;  
-    
-    if(!this.ValidateBeforeSubmit()){
-      return;
-    }
-
-    switch (tipo_transferencia) {
-      case 'Transferencia':
-        
-        if(total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios){
-          this.LimpiarBancosDestinatarios(this.TransferenciaModel.Destinatarios);
-          let info = JSON.stringify(this.TransferenciaModel);
-          let destinatarios = JSON.stringify(this.TransferenciaModel.Destinatarios);
-          //return;
-          
-          let datos = new FormData();
-          datos.append("datos", info);
-          datos.append("destinatarios", destinatarios);
-          this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
-          //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
-          .catch(error => {
-            console.error('An error occurred:', error.error);
-            this.errorSwal.show();
-            return this.handleError(error);
-          }).subscribe((data: any) => {
-            this.LimpiarModeloTransferencia();
-            this.SetTransferenciaDefault();
-            //formulario.reset();
-            this.transferenciaExitosaSwal.show();
-            this.TipoPagoTransferencia("Efectivo");
-            this.Transferencia1 = true;
-            this.Transferencia2 = false;
-            this.recargarDestinatario();
-            this.actualizarVista();
-            this.ReiniciarTransferencias();
-
-          });
-        }
-        break;
-
-      case 'Cliente':
-        
-        let info = JSON.stringify(this.TransferenciaModel);
-        let datos = new FormData();
-        datos.append("datos", info); 
-        this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
-        //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
-          .catch(error => {
-            console.error('An error occurred:', error.error);
-            this.errorSwal.show();
-            return this.handleError(error);
-          })
-          .subscribe((data: any) => {
-            this.LimpiarModeloTransferencia();
-            this.SetTransferenciaDefault();
-            //formulario.reset();
-            this.opcionDefaultFormaPago = "Efectivo";
-            this.opcionTipoTransferencia  = "Transferencia";
-            this.seleccioneClienteDefault = "";
-            this.movimientoExitosoSwal.show();
-            //////////console.log(data);
-            this.TipoPagoTransferencia("Efectivo");
-            this.Transferencia1 = true;
-            this.Transferencia2 = false;
-            this.actualizarVista();
-            this.VerificarTipoTransferencia();
-          });
-        break;
-    
-      default:
-        break;
     }
   }
 
@@ -3864,7 +4205,7 @@ export class TablerocajeroComponent implements OnInit {
   volverReciboTransferencia() {
     this.Transferencia1 = true;
     this.Transferencia2 = false;
-    this.Envios = [{
+    /*this.Envios = [{
       Destino: '',
       Numero_Documento_Destino: '',
       Nombre: '',
@@ -3873,8 +4214,9 @@ export class TablerocajeroComponent implements OnInit {
       Valor_Transferencia_Peso: '',
       Cuentas: [],
       esconder: false
-    }];
-    this.CambiarTasa(1);
+    }];*/
+    //this.CambiarTasa(1);
+    this.LimpiarModeloTransferencia();
   }
 
   volverReciboGiro() {
