@@ -10,6 +10,8 @@ export class Globales {
   public TipoDocumentoExtranjero:any = [];
   public CuentasPersonalesPesos:any = [];
   public FuncionariosCaja:any = [];
+  public CorresponsalesBancarios:any = [];
+  public ServiciosExternos:any = [];
   //llamar de base de datos para obtener los datos de configuración
   //se declara constructor para poderlo inicalizar
   constructor(private client:HttpClient) {
@@ -18,6 +20,8 @@ export class Globales {
     this.BuscarTiposDocumentos();
     this.BuscarCuentasPersonales();
     this.BuscarCajerosSitema();
+    this.BuscarCorresponsales();
+    this.BuscarServiciosExternos();
   }
 
   BuscarMonedas():void{
@@ -43,13 +47,24 @@ export class Globales {
   BuscarCuentasPersonales(moneda:string = 'Pesos'):void{
     this.client.get(this.ruta + 'php/cuentasbancarias/buscar_cuentas_bancarias_por_moneda.php', { params: { moneda: moneda } }).subscribe((data: any) => {
       this.CuentasPersonalesPesos = data;
-      
     });
   }
 
   BuscarCajerosSitema(){
     this.client.get(this.ruta + 'php/pos/lista_cajeros_sistema.php').subscribe((data: any) => {
       this.FuncionariosCaja = data;
+    });
+  }
+
+  BuscarCorresponsales(){
+    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
+      this.CorresponsalesBancarios = data;
+    });
+  }
+
+  BuscarServiciosExternos(){
+    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
+      this.ServiciosExternos = data;
     });
   }
 

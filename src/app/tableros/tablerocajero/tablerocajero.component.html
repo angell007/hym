@@ -280,7 +280,6 @@
                     </div>
                 </div>
 
-                <!--VISTA DE TRANSFERENCIAS-->
                 <div class="card modulos" id="transferencias" style="display: none;">
                     <div class="card-block">
                         <ul class="list-unstyled list-info">
@@ -1324,7 +1323,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <div class="row" id="Traslados1" *ngIf="Traslado1">
+                        <div class="row" id="Traslados1" *ngIf="Traslado1"> <!--TABLAS DE INFORMACION-->
                             <div class="col-md-12">
                                 <button (click)="CambiarVista('Traslado')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nuevo
                                     Traslado</button>
@@ -1336,15 +1335,15 @@
                                         <div class="tab-info center-tabs">
                                             <ul class="nav nav-tabs" role="tablist">
                                                 <li class="nav-item">
-                                                    <a href="#default-tab-1" class="nav-link active" role="tab"
+                                                    <a href="#traslado-tab-1" class="nav-link active" role="tab"
                                                         data-toggle="tab">Enviados</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="#default-tab-2" class="nav-link" role="tab" data-toggle="tab">Recibidos</a>
+                                                    <a href="#traslado-tab-2" class="nav-link" role="tab" data-toggle="tab">Recibidos</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
-                                                <div role="tabpanel" class="tab-pane fade in active" id="default-tab-1">
+                                                <div role="tabpanel" class="tab-pane fade in active" id="traslado-tab-1">
                                                     <div class="pdd-horizon-15 pdd-vertical-20">
                                                         <div class="table-responsive">
                                                             <table class="table table-hover table-sm table-striped">
@@ -1385,7 +1384,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
+                                                <div role="tabpanel" class="tab-pane fade" id="traslado-tab-2">
                                                     <div class="pdd-horizon-15 pdd-vertical-20">
                                                         <div class="table-responsive">
                                                             <table class="table table-hover table-sm table-striped">
@@ -1438,42 +1437,46 @@
 
                         </div>
 
-                        <div class="row" id="Traslados2" *ngIf="Traslado2" style="margin-top: 10px">
+                        <div class="row" id="Traslados2" *ngIf="Traslado2" style="margin-top: 10px"> <!--FORMULARIOS-->
                             <div class="col-md-12">
-                                <div class="mrg-top-30" style="min-height: 470px;">
+                                <!--<div class="mrg-top-30" style="min-height: 470px;">-->
+                                <div class="mrg-top-30">
                                     <form #FormTraslado="ngForm">
                                         <h4>Datos del traslado</h4>
                                         <div class="row">
-                                            <div class="col-md-6" hidden>
+                                            <!--<div class="col-md-6" hidden>
                                                 <div class="form-group">
                                                     <input name="Id_Cajero_Origen" type="text" class="form-control"
-                                                        ngModel="{{Funcionario}}" required>
+                                                        [(ngModel)]="TrasladoModel.Id_Cajero_Origen" required>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Cajero Destino</label>
-                                                    <select name="Funcionario_Destino" class="form-control" ngModel>
+                                                    <select name="Funcionario_Destino" class="form-control" 
+                                                            [(ngModel)]="TrasladoModel.Funcionario_Destino" required>
                                                         <option value="">seleccione una opción</option>
-                                                        <option *ngFor="let Caja of FuncionariosCajaDestino" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
-                                                            {{Caja.Apellidos}}</option>
+                                                        <option *ngFor="let ct of CajerosTraslados" 
+                                                                value="{{ct.Identificacion_Funcionario}}">{{ct.Nombres}} {{ct.Apellidos}}
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Moneda</label>
-                                                    <select name="Id_Moneda" class="form-control" ngModel="">
+                                                    <select name="Id_Moneda" class="form-control" [(ngModel)]="TrasladoModel.Id_Moneda"
+                                                            (change)="SetMonedaTraslados($event.target.value)" required>
                                                         <option value="">Seleccione una Opción</option>
-                                                        <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                                        <option *ngFor="let m of MonedasTraslados" value="{{m.Id_Moneda}}">{{m.Nombre}}</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <label>Valor</label>
+                                                    <label>Valor {{MonedaSeleccionadaTraslado}}</label>
                                                     <input name="Valor" type="text" placeholder="$ 100.000" class="form-control"
-                                                        ngModel="" required>
+                                                        [(ngModel)]="TrasladoModel.Valor" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -1482,7 +1485,7 @@
                                                 <div class="form-group">
                                                     <label>Observaciones</label>
                                                     <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                                        ngModel="" style="min-height:150px !important;"></textarea>
+                                                        [(ngModel)]="TrasladoModel.Detalle" style="min-height:150px !important;"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -1490,8 +1493,11 @@
                                 </div>
                                 <div class="row mrg-top-10">
                                     <div class="col-md-10">
-                                        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                            (confirm)="RealizarTraslado(FormTraslado,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Hacer
+                                        <button type="button" 
+                                                [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                                                (confirm)="RealizarTraslado(FormTraslado,ModalTrasladoEditar)" 
+                                                class="btn btn-primary btn-sm btn-block"
+                                                [disabled]="!FormTraslado.valid">Hacer
                                             Traslado</button>
                                     </div>
                                     <div class="col-md-2">
@@ -1519,7 +1525,7 @@
                         <div class="mrg-top-30" style="min-height: 470px;">
                             <form #FormCorresponsal="ngForm">
                                 <h4>Datos del corresponsal</h4>
-                                <div class="col-md-4" hidden>
+                                <!--<div class="col-md-4" hidden>
                                     <div class="form-group">
                                         <label>Cajero Origen</label>
                                         <input type="text" name="id" class="form-control" ngModel="{{IdCorresponsal}}">
@@ -1531,16 +1537,17 @@
                                         <input type="text" name="Identificacion_Funcionario" class="form-control"
                                             ngModel="{{IdentificacionFuncionario}}">
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Corresponsal</label>
-                                            <select name="Id_Corresponsal_Bancario" class="form-control" ngModel="{{CorresponsalBancario}}"
-                                                (change)="ConsultarCorresponsal($event.target.value)">
+                                            <select name="Id_Corresponsal_Bancario" class="form-control" 
+                                                    [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario"
+                                                (change)="ConsultarCorresponsalDiario()">
                                                 <option value="">Seleccione un Corresponsal</option>
-                                                <option *ngFor="let CorresponsalBancario of CorresponsalesBancarios"
-                                                    value="{{CorresponsalBancario.Id_Corresponsal_Bancario}}">{{CorresponsalBancario.Nombre}}</option>
+                                                <option *ngFor="let cb of CorresponsalesBancarios"
+                                                    value="{{cb.Id_Corresponsal_Bancario}}">{{cb.Nombre}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1548,7 +1555,7 @@
                                         <div class="form-group">
                                             <label>Valor</label>
                                             <input name="Valor" type="text" placeholder="Saldo del día" class="form-control"
-                                                ngModel="{{ValorCorresponsal}}">
+                                                [(ngModel)]="CorresponsalModel.Valor">
                                         </div>
                                     </div>
                                 </div>
@@ -1557,7 +1564,7 @@
                                         <div class="form-group">
                                             <label>Observaciones</label>
                                             <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                                ngModel="{{DetalleCorresponsal}}"></textarea>
+                                                [(ngModel)]="CorresponsalModel.Detalle"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -1641,26 +1648,27 @@
                             <div class="row" id="Servicios2" *ngIf="Servicio2" style="margin-top: 10px">
                                 <div class="col-md-12">
 
-                                    <div class="mrg-top-30" style="min-height: 470px;">
+                                    <!--<div class="mrg-top-30" style="min-height: 470px;">-->
+                                    <div class="mrg-top-30">
                                         <form #FormServicio="ngForm">
                                             <h4>Datos del servicio</h4>
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Servicio</label>
-                                                        <select name="Servicio_Externo" class="form-control" ngModel=""
-                                                            (change)="AsignarComisionServicioExterno($event.target.value)">
+                                                        <select name="Servicio_Externo" class="form-control" 
+                                                                [(ngModel)]="ServicioExternoModel.Servicio_Externo">
                                                             <option value="">Seleccione un Servicio</option>
-                                                            <option *ngFor="let ServicioExterno of ServiciosExternos"
-                                                                value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                                            <option *ngFor="let se of ListaServiciosExternos"
+                                                                value="{{se.Id_Servicio_Externo}}">{{se.Nombre}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Valor</label>
-                                                        <input type="text" class="form-control" name="Valor" ngModel
-                                                            (change)="calcularComisionServicioExterno($event.target.value)">
+                                                        <input type="text" class="form-control" name="Valor" [(ngModel)] = 'ServicioExternoModel.Valor'
+                                                            (change)="AsignarComisionServicioExterno()">
                                                     </div>
                                                 </div>
 
@@ -1668,7 +1676,7 @@
                                                     <div class="form-group">
                                                         <label>Comisión</label>
                                                         <input name="Comision" type="text" placeholder="Comisión" class="form-control"
-                                                            ngModel="{{ValorComisionServicio}}" readonly>
+                                                            [(ngModel)]="ServicioExternoModel.Comision" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1677,7 +1685,7 @@
                                                     <div class="form-group">
                                                         <label>Observaciones</label>
                                                         <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                                            ngModel=""> </textarea>
+                                                            [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1688,8 +1696,7 @@
                                     <div class="row mrg-top-5">
                                         <div class="col-md-10">
                                             <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                                (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Hacer
-                                                Servicio</button>
+                                                (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Crear Servicio</button>
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn btn-success btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
@@ -1886,6 +1893,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalHistorial" #ModalHistorial>
     <div class="app-modal-header">
         <h4>Historial Remitente</h4>
+        <button type="button" class="close basic-close" (click)="ModalHistorial.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row">
@@ -1925,6 +1935,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTrasladoEditar" #ModalTrasladoEditar>
     <div class="app-modal-header">
         <h4>Editar traslado</h4>
+        <button type="button" class="close basic-close" (click)="ModalTrasladoEditar.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row">
@@ -1932,36 +1945,36 @@
                 <form #FormTrasladoEditar="ngForm">
                     <h4>Datos del traslado</h4>
                     <div class="row">
-                        <div class="col-md-4" hidden>
+                        <!--<div class="col-md-4" hidden>
                             <div class="form-group">
                                 <input name="Id_Cajero_Origen" type="text" class="form-control" ngModel="{{Funcionario}}"
                                     required>
                                 <input name="id" type="text" class="form-control" ngModel="{{idTraslado}}" required>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Cajero Destino</label>
-                                <select name="Funcionario_Destino" class="form-control" ngModel="{{Traslado.Funcionario_Destino}}">
+                                <select name="Funcionario_Destino" class="form-control" [(ngModel)]="TrasladoModel.Funcionario_Destino">
                                     <option value="">seleccione una opción</option>
-                                    <option *ngFor="let Caja of FuncionariosCaja" value="{{Caja.Identificacion_Funcionario}}">{{Caja.Nombres}}
-                                        {{Caja.Apellidos}}</option>
+                                    <option *ngFor="let ct of CajerosTraslados" value="{{ct.Identificacion_Funcionario}}">{{ct.Nombres}}
+                                        {{ct.Apellidos}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Moneda</label>
-                                <select name="Id_Moneda" class="form-control" ngModel="{{Traslado.Id_Moneda}}">
+                                <select name="Id_Moneda" class="form-control" [(ngModel)]="TrasladoModel.Id_Moneda">
                                     <option value="">Seleccione una Opción</option>
-                                    <option *ngFor="let Moneda of Monedas" value="{{Moneda.Id_Moneda}}">{{Moneda.Nombre}}</option>
+                                    <option *ngFor="let m of MonedasTraslados" value="{{m.Id_Moneda}}">{{m.Nombre}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control" ngModel="{{Traslado.Valor}}"
+                                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control" [(ngModel)]="TrasladoModel.Valor"
                                     required>
                             </div>
                         </div>
@@ -1970,7 +1983,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Observaciones</label>
-                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Traslado.Detalle}}"
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" [(ngModel)]="TrasladoModel.Detalle"
                                     style="min-height:150px !important;"></textarea>
                             </div>
                         </div>
@@ -1980,44 +1993,51 @@
         </div>
     </div>
     <div class="app-modal-footer">
-        <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-            (confirm)="RealizarTraslado(FormTrasladoEditar,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Hacer
-            Traslado</button>
+        <div class="text-right" style="display:inline-flex;">
+            <button type="button" class="btn btn-default btn-sm" (click)="CerrarModal(ModalTrasladoEditar, 'traslados')">Cancelar</button>
+            <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="RealizarTraslado(FormTrasladoEditar,ModalTrasladoEditar)" class="btn btn-primary btn-sm btn-block">Editar
+                Traslado</button>
+        </div>
+        
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicioEditar" #ModalServicioEditar>
     <div class="app-modal-header">
         <h4>Editar Servicio</h4>
+        <button type="button" class="close basic-close" (click)="ModalServicioEditar.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row">
             <div class="col-md-12">
                 <form #FormServicio="ngForm">
                     <div class="row">
-                        <input hidden name="id" type="text" class="form-control" ngModel="{{Servicio.Id_Servicio}}"
-                            required>
+                        <!--<input hidden name="id" type="text" class="form-control" ngModel="{{Servicio.Id_Servicio}}"
+                            required>-->
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Servicio</label>
-                                <select name="Servicio_Externo" class="form-control" ngModel="{{Servicio.Servicio_Externo}}">
+                                <select name="Servicio_Externo" class="form-control" [(ngModel)]="ServicioExternoModel.Servicio_Externo">
                                     <option value="">Seleccione un Servicio</option>
-                                    <option *ngFor="let ServicioExterno of ServiciosExternos" value="{{ServicioExterno.Id_Servicio_Externo}}">{{ServicioExterno.Nombre}}</option>
+                                    <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">{{se.Nombre}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input type="text" class="form-control" name="Valor" ngModel="{{Servicio.Valor}}"
-                                    (change)="calcularComisionServicioExterno($event.target.value)">
+                                <input type="text" class="form-control" name="Valor" [(ngModel)]="ServicioExternoModel.Valor"
+                                    (change)="AsignarComisionServicioExterno()">
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comisión</label>
-                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" ngModel="{{ValorComisionServicio}}"
+                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" [(ngModel)]="ServicioExternoModel.Comision"
                                     readonly>
                             </div>
                         </div>
@@ -2026,7 +2046,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Observaciones</label>
-                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" ngModel="{{Servicio.Detalle}}"></textarea>
+                                <textarea placeholder="Observaciones" class="form-control" name="Detalle" 
+                                        [(ngModel)]="ServicioExternoModel.Detalle"></textarea>
                             </div>
                         </div>
                     </div>
@@ -2044,6 +2065,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalGiroEditar" #ModalGiroEditar>
     <div class="app-modal-header">
         <h4>Editar Giro</h4>
+        <button type="button" class="close basic-close" (click)="ModalGiroEditar.hide()">
+                <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="row">
@@ -2292,6 +2316,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
     <div class="app-modal-header">
         <h4>Editar Destinatario</h4>
+        <button type="button" class="close basic-close" (click)="ModalEditarDestinatario.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormEditarDestinatario="ngForm">
@@ -2460,6 +2487,9 @@
     #ModalCrearDestinatarioTransferencia>
     <div class="app-modal-header">
         <h4>Crear Destinatario</h4>
+        <button type="button" class="close basic-close" (click)="ModalCrearDestinatarioTransferencia.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormCrearDestinatarioTransferencia="ngForm">
@@ -2623,6 +2653,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
     <div class="app-modal-header">
         <h4>Anular Transferencia</h4>
+        <button type="button" class="close basic-close" (click)="ModalAnularTransferencia.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormAnularTransferencia="ngForm">
@@ -2649,6 +2682,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
     <div class="app-modal-header">
         <h4>Recibo </h4>
+        <button type="button" class="close basic-close" (click)="ModalVerRecibo.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <div class="table-overflow">
@@ -2767,6 +2803,9 @@
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalSaldoInicio" #ModalSaldoInicio>
     <div class="app-modal-header" style="margin: 0 auto;">
         <h4>Apertura de caja</h4>
+        <button type="button" class="close basic-close" (click)="ModalSaldoInicio.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormMontoInicial="ngForm">
@@ -2795,6 +2834,9 @@
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalAprobarGiro" #ModalAprobarGiro>
     <div class="app-modal-header" style="margin: 0 auto;">
         <h4>Información Giro</h4>
+        <button type="button" class="close basic-close" (click)="ModalAprobarGiro.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <h2>¿ Está seguro que desea realizar el giro ?</h2>
