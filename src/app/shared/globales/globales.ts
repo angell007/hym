@@ -12,6 +12,7 @@ export class Globales {
   public FuncionariosCaja:any = [];
   public CorresponsalesBancarios:any = [];
   public ServiciosExternos:any = [];
+  public Departamentos:any = [];
   //llamar de base de datos para obtener los datos de configuración
   //se declara constructor para poderlo inicalizar
   constructor(private client:HttpClient) {
@@ -22,6 +23,7 @@ export class Globales {
     this.BuscarCajerosSitema();
     this.BuscarCorresponsales();
     this.BuscarServiciosExternos();
+    this.BuscarDepartamentos();
   }
 
   BuscarMonedas():void{
@@ -65,6 +67,12 @@ export class Globales {
   BuscarServiciosExternos(){
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
       this.ServiciosExternos = data;
+    });
+  }
+
+  BuscarDepartamentos(){
+    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
+      this.Departamentos = data;
     });
   }
 
