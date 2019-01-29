@@ -21,6 +21,10 @@ export class CierrecajaComponent implements OnInit {
   public TotalRestaIngresosEgresos = [];
   public Modulos:Array<string> = ['Cambios','Transferencias','Giros','Traslados','Corresponsal Bancario','Servicios Externos'];
   public max_cel_colspan = 0;
+  public TotalEntregado:any = [];
+  public Diferencias:any = [];
+  public Funcionario:any = JSON.parse(localStorage['User']);
+  public Armado = false;
 
   constructor(public globales:Globales, private cliente:HttpClient) { }
 
@@ -51,10 +55,7 @@ export class CierrecajaComponent implements OnInit {
         this.CeldasIngresoEgresoEncabezado.push(celda_e);
         this.max_cel_colspan+=2;
       });      
-    }
-
-    console.log(this.max_cel_colspan);
-    
+    }    
 
     if (this.Modulos.length > 0) {
       this.Modulos.forEach(modulo => {
@@ -94,7 +95,8 @@ export class CierrecajaComponent implements OnInit {
 
           obj = {Valor_Ingreso:ing, Valor_Egreso:eg};
           this.CeldasIngresoEgresoValores[modulo].push(obj);
-          if (ind == 0 || ind == 2) {
+
+          if (ind % 2 == 0) {
 
             if (!this.SumatoriaTotales[ind]) {
               this.SumatoriaTotales[ind] = 0;
@@ -125,7 +127,18 @@ export class CierrecajaComponent implements OnInit {
         let resta = parseFloat(t) - parseFloat(this.TotalesEgresosMonedas[index]);
         this.TotalRestaIngresosEgresos.push(resta);
       });
+
+      this.MonedasSistema.forEach((m,i) => {
+        let obj = {Moneda:m.Id_Moneda, Entregado:0, Codigo:m.Codigo};
+        this.TotalEntregado.push(obj);
+
+        let obj1 = {Moneda:m.Id_Moneda, Diferencia:0, Codigo:m.Codigo};
+        this.Diferencias.push(obj1);
+      });  
       
+      this.Armado = true;
+    }else{
+      this.Armado = true;
     }
   }
 

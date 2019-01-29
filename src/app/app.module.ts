@@ -102,6 +102,7 @@ import { CompraseditarComponent } from './configuracion/compras/compraseditar/co
 import { cardPortletRefresh, cardPortletDelete } from './shared/directives/cards.directive';
 import { CreardestinatarioComponent } from './creardestinatario/creardestinatario.component';
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
+import { PuntosPipe } from './common/Pipes/puntos.pipe';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -146,7 +147,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
-        
+        PuntosPipe,
         AppComponent,
         CommonLayoutComponent,
         AuthenticationLayoutComponent,

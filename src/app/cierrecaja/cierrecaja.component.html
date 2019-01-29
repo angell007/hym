@@ -1,9 +1,10 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <h4>CIERRE DE CAJA - CAJERO</h4>
-    </div>
-    <div class="col-md-12">
+  <div class="card">
+    <div class="row card-body">
+      <div class="col-md-12">
+        <h4>CIERRE DE CAJA - {{Funcionario.Nombres}} {{Funcionario.Apellidos}}</h4>
+      </div>
+      <div class="col-md-12">
         <table class="table table-striped table-bordered cierre-caja-table">
           <thead>
             <tr>
@@ -19,40 +20,88 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="Armado">
             <tr *ngFor="let m of Modulos; let i = index">
               <td>{{m}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | currency}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Egreso | currency}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Ingreso | currency}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Egreso | currency}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Egreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Ingreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Egreso | number | puntos}}</td>
             </tr>
             <tr>
               <td style="text-align:right;"><b>Totales:</b></td>
-              <td style="text-align:right;" *ngFor="let rt of SumatoriaTotales">{{rt | currency}}</td>
-            </tr>
+              <td style="text-align:right;" *ngFor="let rt of SumatoriaTotales">{{rt | number | puntos}}</td>
+            </tr>           
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row card-body">
+      <div class="col-md-7">
+        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
+          <tbody>
             <tr>
-              <td></td>
-              <td [attr.colspan]="max_cel_colspan"> </td>
+              <td ><b>Monedas</b></td>
+              <td style="text-align:center;" *ngFor="let m of MonedasSistema">{{m.Nombre}}</td>
             </tr>
-            <tr>
-                <td ><b>Monedas</b></td>
-                <td style="text-align:center;" *ngFor="let m of MonedasSistema">{{m.Nombre}}</td>
-              </tr>
             <tr>
               <td style="background:#9BFFAC;">Ingreso</td>
-              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:#9BFFAC;">+{{ti | currency}}</td>
+              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:#9BFFAC;">+{{ti | number | puntos}}</td>
             </tr>
             <tr>
               <td style="background:#FF9B9B;">Egreso</td>
-              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:#FF9B9B;">-{{te | currency}}</td>
+              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:#FF9B9B;">-{{te | number | puntos}}</td>
             </tr>
             <tr>
               <td>Total a Entregar</td>
-              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta | currency}}</td>
+              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta | number | puntos}}</td>
+            </tr>
+            <tr>
+              <td>Entregado</td>
+              <td *ngFor="let t of TotalEntregado; let ind = index">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">{{t.Codigo}}</span>
+                  </div>                
+                  <input type="text" class="form-control sp-text" [(ngModel)]="t.Entregado" name="Entregado_{{i}}"  aria-describedby="basic-addon1" placeholder="0">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Diferencia</td>
+              <td *ngFor="let d of Diferencias; let ind = index">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">{{d.Codigo}}</span>
+                  </div>                
+                  <input type="text" class="form-control sp-text" [(ngModel)]="d.Diferencia" name="Diferencia_{{i}}"  aria-describedby="basic-addon1" placeholder="0">
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div>
+                  <label for="">Observaciones</label>
+              </div>              
+              <textarea name="Observaciones" id="" cols="70" rows="4"></textarea>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-8"></div>
+              <div class="col-md-4">
+                <button class="btn btn-primary">Guardar Cierre</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
