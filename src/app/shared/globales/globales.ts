@@ -13,12 +13,16 @@ export class Globales {
   public CorresponsalesBancarios:any = [];
   public ServiciosExternos:any = [];
   public Departamentos:any = [];
+  public TipoDocumentoNacionales:any = [];
+  public TiposCuenta:any = [];
   //llamar de base de datos para obtener los datos de configuración
   //se declara constructor para poderlo inicalizar
   constructor(private client:HttpClient) {
     this.BuscarMonedas();
     this.BuscarPaises();
     this.BuscarTiposDocumentos();
+    this.BuscarTiposDocumentosNacionales();
+    this.BuscarTiposCuenta();
     this.BuscarCuentasPersonales();
     this.BuscarCajerosSitema();
     this.BuscarCorresponsales();
@@ -42,6 +46,13 @@ export class Globales {
   BuscarTiposDocumentos():void{
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
       this.TipoDocumentoExtranjero = data;
+      
+    });
+  }
+
+  BuscarTiposDocumentosNacionales():void{
+    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
+      this.TipoDocumentoNacionales = data;
       
     });
   }
@@ -73,6 +84,12 @@ export class Globales {
   BuscarDepartamentos(){
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
       this.Departamentos = data;
+    });
+  }
+
+  BuscarTiposCuenta(){
+    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Cuenta' } }).subscribe((data: any) => {
+      this.TiposCuenta = data;
     });
   }
 

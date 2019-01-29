@@ -100,6 +100,8 @@ import { TableroDirective } from "./tablero/tablero.directive";
 import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
 import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
 import { cardPortletRefresh, cardPortletDelete } from './shared/directives/cards.directive';
+import { CreardestinatarioComponent } from './creardestinatario/creardestinatario.component';
+import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -210,7 +212,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ComprascrearComponent,
         CompraseditarComponent,
         cardPortletRefresh,
-        cardPortletDelete
+        cardPortletDelete,
+        CreardestinatarioComponent,
+        CierrecajaComponent
     ],
     exports:[
         ModalBasicComponent

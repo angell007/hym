@@ -1964,6 +1964,9 @@ export class TablerocajeroComponent implements OnInit {
           listaDestinatarios[i].Nombre_Destinatario = '';
           listaDestinatarios[i].Valor_Transferencia = '';
           listaDestinatarios[i].Cuentas = [];
+        }else{
+          
+          listaDestinatarios[i].Numero_Documento_Destino = modelo;
         }
       }
     }
@@ -3072,6 +3075,11 @@ export class TablerocajeroComponent implements OnInit {
         this.TransferenciasAnuladas = data;
       });
 
+      this.Destinatarios = [];
+      this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
+        this.Destinatarios = data;
+      });
+
       this.MonedasTransferencia = [];
       this.globales.Monedas.forEach(moneda => {
         if (moneda.Nombre != 'Pesos') {
@@ -3324,6 +3332,44 @@ export class TablerocajeroComponent implements OnInit {
 
   //#endregion
   
+  //#region FUNCIONES MODALES
+
+  CrearDestinatrioModal(value, pos) {
+
+    let v = this.ListaDestinatarios[pos].Numero_Documento_Destino;
+    console.log(v);
+    
+
+    if(v == ''){
+      return;
+    }
+
+    this.http.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params: {id_destinatario:v}}).subscribe((data)=>{
+      console.log(data);
+      
+      if (data == 0) {
+        var longitud = this.LongitudCarateres(v);
+        if (longitud > 6) {
+          this.IdentificacionCrearDestinatario = v;
+          this.ModalCrearDestinatarioTransferencia.show();
+          this.Id_Destinatario = v;
+          this.Lista_Destinatarios = [{
+            Id_Pais: '2',
+            Id_Banco: '',
+            Bancos: [],
+            Id_Tipo_Cuenta: '',
+            Numero_Cuenta: '',
+            Otra_Cuenta: '',
+            Observacion: ''
+          }];
+        }else if(longitud < 6){
+
+        }
+      }
+    });
+  }
+
+  //#endregion
   GuardarMontoInicial(formulario: NgForm, modal) {
 
     var peso = formulario.value.Monto_Inicio;
@@ -3364,36 +3410,7 @@ export class TablerocajeroComponent implements OnInit {
   ngAfterViewInit() {
   }
 
-  CrearDestinatrioModal(value, pos) {
-
-    let v = this.ListaDestinatarios[pos].Numero_Documento_Destino;
-
-    if(v == ''){
-      return;
-    }
-
-    this.http.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params: {id_destinatario:v}}).subscribe((data)=>{
-      if (data == 0) {
-        var longitud = this.LongitudCarateres(v);
-        if (longitud > 6) {
-          this.IdentificacionCrearDestinatario = v;
-          this.ModalCrearDestinatarioTransferencia.show();
-          this.Id_Destinatario = v;
-          this.Lista_Destinatarios = [{
-            Id_Pais: '2',
-            Id_Banco: '',
-            Bancos: [],
-            Id_Tipo_Cuenta: '',
-            Numero_Cuenta: '',
-            Otra_Cuenta: '',
-            Observacion: ''
-          }];
-        }else if(longitud < 6){
-
-        }
-      }
-    });
-  }
+  
 
   LongitudCarateres(i) {
     return parseInt(i.length);

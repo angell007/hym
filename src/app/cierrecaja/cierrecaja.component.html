@@ -1,0 +1,58 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h4>CIERRE DE CAJA - CAJERO</h4>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-striped table-bordered cierre-caja-table">
+          <thead>
+            <tr>
+              <th style="width:15%;"></th>
+              <th *ngFor="let m of MonedasSistema" style="text-align:center;" colspan="2">
+                <h4>{{m.Nombre}}</h4>
+              </th>
+            </tr>
+            <tr>
+                <th><h4>Modulos</h4></th>
+              <th *ngFor="let c of CeldasIngresoEgresoEncabezado" style="text-align:center;">
+                <h6>{{c.Nombre_Celda}}</h6>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of Modulos; let i = index">
+              <td>{{m}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | currency}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Egreso | currency}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Ingreso | currency}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Egreso | currency}}</td>
+            </tr>
+            <tr>
+              <td style="text-align:right;"><b>Totales:</b></td>
+              <td style="text-align:right;" *ngFor="let rt of SumatoriaTotales">{{rt | currency}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td [attr.colspan]="max_cel_colspan"> </td>
+            </tr>
+            <tr>
+                <td ><b>Monedas</b></td>
+                <td style="text-align:center;" *ngFor="let m of MonedasSistema">{{m.Nombre}}</td>
+              </tr>
+            <tr>
+              <td style="background:#9BFFAC;">Ingreso</td>
+              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:#9BFFAC;">+{{ti | currency}}</td>
+            </tr>
+            <tr>
+              <td style="background:#FF9B9B;">Egreso</td>
+              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:#FF9B9B;">-{{te | currency}}</td>
+            </tr>
+            <tr>
+              <td>Total a Entregar</td>
+              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>

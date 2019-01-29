@@ -530,10 +530,9 @@
                                                                         id="Destino_{{i}}" [(ngModel)]="destinatario.id_destinatario_transferencia"
                                                                         [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino"
                                                                         [inputFormatter]="formatter_destino"
-                                                                        (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios);"
-                                                                        (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios);"
-                                                                        (blur)="CrearDestinatrioModal(destinatario.id_destinatario_transferencia,i);"
-                                                                        (foucs)="CrearDestinatrioModal(destinatario.id_destinatario_transferencia,i);">
+                                                                        (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
+                                                                        (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
+                                                                        (blur)="CrearDestinatrioModal(destinatario.id_destinatario_transferencia,i)">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-3">
@@ -2226,7 +2225,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearDestinatarioTransferencia"
     #ModalCrearDestinatarioTransferencia>
-    <div class="app-modal-header">
+    <!--<div class="app-modal-header">
         <h4>Crear Destinatario</h4>
         <button type="button" class="close basic-close" (click)="ModalCrearDestinatarioTransferencia.hide()">
             <span aria-hidden="true">&times;</span>
@@ -2240,7 +2239,6 @@
                         <label>Tipo Doc.</label>
                         <select ngModel class="form-control" id="Tipo_Documento_Transferencia" name="Tipo_Documento" required
                             (change)="BuscarCNE($event.target.value)">
-                            <!--(change)="BuscarCNE($event.target.value)"-->
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoExtranjero; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2388,7 +2386,7 @@
                 (confirm)="GuardarDestinatario(FormCrearDestinatarioTransferencia, ModalCrearDestinatarioTransferencia)">Guardar
             </button>
         </div>
-    </div>
+    </div>-->
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
@@ -2645,3 +2643,7 @@
 <swal #alertSwal title="" html="" type="" text=""></swal>
 
 <!--FIN SWEET ALERTS-->
+
+<!--<ng-template app-creardestinatario-modal></ng-template>-->
+
+<!--<app-creardestinatario-modal #CrearDestModal [id_destinatario]="destId" (ControlVisibility)="ShowModal()"></app-creardestinatario-modal>-->
