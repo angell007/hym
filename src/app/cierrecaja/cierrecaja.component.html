@@ -14,7 +14,7 @@
               </th>
             </tr>
             <tr>
-                <th><h4>Modulos</h4></th>
+                <th style="text-align:center;"><h4>Modulos</h4></th>
               <th *ngFor="let c of CeldasIngresoEgresoEncabezado" style="text-align:center;">
                 <h6>{{c.Nombre_Celda}}</h6>
               </th>
@@ -23,10 +23,10 @@
           <tbody *ngIf="Armado">
             <tr *ngFor="let m of Modulos; let i = index">
               <td>{{m}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | number | puntos}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Valor_Egreso | number | puntos}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Ingreso | number | puntos}}</td>
-              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Valor_Egreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Codigo}} {{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Codigo}} {{CeldasIngresoEgresoValores[m][0].Valor_Egreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Codigo}} {{CeldasIngresoEgresoValores[m][1].Valor_Ingreso | number | puntos}}</td>
+              <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][1].Codigo}} {{CeldasIngresoEgresoValores[m][1].Valor_Egreso | number | puntos}}</td>
             </tr>
             <tr>
               <td style="text-align:right;"><b>Totales:</b></td>
@@ -64,19 +64,20 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">{{t.Codigo}}</span>
                   </div>                
-                  <input type="text" class="form-control sp-text" [(ngModel)]="t.Entregado" name="Entregado_{{i}}"  aria-describedby="basic-addon1" placeholder="0">
+                  <input type="text" class="form-control sp-text" [(ngModel)]="t.Entregado" name="Entregado_{{i}}"  aria-describedby="basic-addon1" placeholder="0" (blur)="CalcularDiferencia($event.target.value, ind)" [disabled]="FieldsDisabled[ind]">
                 </div>
               </td>
             </tr>
             <tr>
               <td>Diferencia</td>
-              <td *ngFor="let d of Diferencias; let ind = index">
-                <div class="input-group input-group-sm">
+              <td style="text-align:right;" *ngFor="let d of Diferencias; let ind = index">
+                {{d.Diferencia}}
+                <!--<div class="input-group input-group-sm">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">{{d.Codigo}}</span>
                   </div>                
                   <input type="text" class="form-control sp-text" [(ngModel)]="d.Diferencia" name="Diferencia_{{i}}"  aria-describedby="basic-addon1" placeholder="0">
-                </div>
+                </div>-->
               </td>
             </tr>
           </tbody>
@@ -89,14 +90,14 @@
               <div>
                   <label for="">Observaciones</label>
               </div>              
-              <textarea name="Observaciones" id="" cols="70" rows="4"></textarea>
+              <textarea name="Observaciones" id="" cols="70" rows="4" [(ngModel)]="CierreCajaModel.Observacion"></textarea>
             </div>
           </div>
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-8"></div>
               <div class="col-md-4">
-                <button class="btn btn-primary">Guardar Cierre</button>
+                <button class="btn btn-primary" (click)="GuardarCierre()">Guardar Cierre</button>
               </div>
             </div>
           </div>
@@ -105,3 +106,5 @@
     </div>
   </div>
 </div>
+
+<swal #alertSwal type="" title="" text=""></swal>
