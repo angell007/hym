@@ -978,3 +978,27 @@
           </div>
         </div>
       </app-modal-basic>
+
+<app-modal-basic #modalOficinaCaja>
+    <div class="app-modal-header">
+        <h4>Oficinas y Cajas</h4>
+    </div>
+    <div class="app-modal-body text-center">
+        <p>Por favor seleccione la oficina y la caja en la que se encuentre y vaya a operar</p>
+        <label for="">Oficina</label>
+        <select class="form-control" [(ngModel)]="oficina_seleccionada" (change)="ListarCajas($event.target.value)">
+            <option *ngFor="let of of Oficinas" value="{{of.Id_Oficina}}">{{c.Nombre}}</option>
+        </select>
+        <label for="">Caja</label>
+        <select class="form-control" [(ngModel)]="caja_seleccionada">
+            <option *ngFor="let c of Cajas" value="{{c.Id_Caja}}">{{c.Nombre}}</option>
+        </select>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-success btn-sm" (click)="GuardarOficinaCaja()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<swal #alertSwal type="" title="" text=""></swal>

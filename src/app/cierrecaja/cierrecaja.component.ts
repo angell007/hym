@@ -185,7 +185,6 @@ export class CierrecajaComponent implements OnInit {
     this.ArmarResumenMovimientos();
     console.log(this.ResumenMovimiento);
     
-    
     let entregado = JSON.stringify(this.TotalEntregado);
     let diferencias = JSON.stringify(this.Diferencias);
     let resumen = JSON.stringify(this.ResumenMovimiento);
@@ -199,8 +198,16 @@ export class CierrecajaComponent implements OnInit {
     data.append("resumen_movimientos", resumen);
 
     this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
-      this.LimpiarModelos();
-      this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
+
+      if (data.tipo == 'error') {
+        
+        this.ShowSwal(data.tipo, 'Error', data.mensaje);
+      }else{
+        
+        this.LimpiarModelos();
+        //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
+        this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+      }
     });
   }
 
@@ -255,7 +262,7 @@ export class CierrecajaComponent implements OnInit {
   }
 
    //MOSTRAR ALERTAS DESDE LA INSTANCIA DEL SWEET ALERT GLOBAL
-   ShowSwal(tipo:string, titulo:string, msg:string){
+  ShowSwal(tipo:string, titulo:string, msg:string){
     this.alertSwal.type = tipo;
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;

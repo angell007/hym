@@ -192,7 +192,6 @@ export class DestinatariosComponent implements OnInit {
         }
       }
     }
-
   }
 
   InicializarBool() {

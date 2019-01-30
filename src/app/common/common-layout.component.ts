@@ -6,6 +6,7 @@ import { NgForm } from '../../../node_modules/@angular/forms';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { log } from 'util';
 
 @Component({
     selector: 'app-dashboard',
@@ -50,6 +51,8 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
     @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;
     @ViewChild('ModalAjuste') ModalAjuste: any;
+    @ViewChild('modalOficinaCaja') modalOficinaCaja: any;
+    @ViewChild('alertSwal') alertSwal:any;
 
     cajero = true;
 
@@ -82,6 +85,12 @@ export class CommonLayoutComponent implements OnInit {
     egresoCambio: any = 0;
     egresoGiro: any = 0;
     egresoTraslado: any = 0;
+
+    //VARIABLES NUEVA
+    public Oficinas:any = [];
+    public Cajas:any = [];
+    public oficina_seleccionada:any = '';
+    public caja_seleccionada:any = '';
 
     fajosPesos = [
         { "BilleteEntero100": 50000, "ValorEntero100": 0, "BilleteEntero50": 50000, "ValorEntero50": 0, "BilleteSuelto": 50000, "ValorSuelto": 0, "Moneda": "Pesos" },
@@ -144,6 +153,25 @@ export class CommonLayoutComponent implements OnInit {
         console.log(localStorage);
         
         this.user = JSON.parse(localStorage.User);
+        if (localStorage.getItem("Oficina") == "") {
+            alert("vacio");
+        }
+        console.log(localStorage.getItem("Oficina"));
+        
+        this.oficina_seleccionada = localStorage.getItem("Oficina");
+        if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada===null || this.oficina_seleccionada==='') {
+            this.modalOficinaCaja.show();
+            console.log(this.oficina_seleccionada);
+        }
+        console.log(this.oficina_seleccionada);
+
+        this.caja_seleccionada = localStorage.getItem("Caja");
+        if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada===null || this.caja_seleccionada==='') {
+            this.modalOficinaCaja.show();
+            console.log(this.caja_seleccionada);
+        }
+        console.log(this.caja_seleccionada);
+        
         localStorage.setItem('Perfil', this.user.Id_Perfil);
         switch (this.user.Id_Perfil) {
             // administrador
@@ -238,8 +266,6 @@ export class CommonLayoutComponent implements OnInit {
                 this.nombreBanco = data.Nombre_Titular;
             });
         }
-
-
     }
 
     salir() {
@@ -746,4 +772,57 @@ export class CommonLayoutComponent implements OnInit {
                 modal.hide();
             });
     }
+
+    ListarOficinas(){
+
+        this.http.get(this.globales.ruta+'php/oficinas/listar_oficinas.php').subscribe((data:any)=> {
+
+            if (data.tipo == 'error') {
+        
+                this.Oficinas = [];
+                this.ShowSwal(data.tipo, 'Error', data.mensaje);
+            }else{
+                this.Oficinas = data.data;
+                //this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+            }
+        });
+    }
+
+    ListarCajas(value){
+
+        this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
+
+            if (data.tipo == 'error') {
+        
+                this.Cajas = [];
+                this.ShowSwal(data.tipo, 'Error', data.mensaje);
+            }else{
+                this.Cajas = data.data;
+                //this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+            }
+        });
+    }
+
+    GuardarOficinaCaja(){
+        if (this.oficina_seleccionada == '') {
+            this.ShowSwal('warning', 'Alerta', 'Debe escoger la oficina!');
+            return;
+        }
+
+        if (this.caja_seleccionada == '') {
+            this.ShowSwal('warning', 'Alerta', 'Debe escoger la caja!');
+            return;
+        }
+
+        localStorage.setItem("Oficina", this.oficina_seleccionada);        
+        localStorage.setItem("Caja", this.caja_seleccionada);
+        this.modalOficinaCaja.hide();
+    }
+
+    ShowSwal(tipo:string, titulo:string, msg:string){
+        this.alertSwal.type = tipo;
+        this.alertSwal.title = titulo;
+        this.alertSwal.text = msg;
+        this.alertSwal.show();
+      }
 }

@@ -5,6 +5,7 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 @Injectable()
 export class Globales {
   ruta: string = 'https://hym.corvuslab.co/';
+  public urlRiff = '';
   public Monedas:any = [];
   public Paises:any = [];
   public TipoDocumentoExtranjero:any = [];
@@ -99,6 +100,12 @@ export class Globales {
             return false;
     }
     return true;
+  }
+
+  buscarRiff() {
+    this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
+    //this.frameRiff = !this.frameRiff;
+    window.open(this.urlRiff, '_blank');
   }
   
 }
