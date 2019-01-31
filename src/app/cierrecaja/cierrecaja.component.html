@@ -14,14 +14,24 @@
               </th>
             </tr>
             <tr>
-                <th style="text-align:center;"><h4>Modulos</h4></th>
+              <th style="text-align:center;"><h4>Modulos</h4></th>
               <th *ngFor="let c of CeldasIngresoEgresoEncabezado" style="text-align:center;">
                 <h6>{{c.Nombre_Celda}}</h6>
               </th>
             </tr>
           </thead>
           <tbody *ngIf="Armado">
-            <tr *ngFor="let m of Modulos; let i = index">
+            <tr *ngFor="let m of Modulos;">
+              <td>{{m}}</td>
+              <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index">
+                  {{Totales[m][ind].Codigo}} {{ind % 2 == 0 ? Totales[m][ind].Ingreso_Total : Totales[m][ind].Egreso_Total | number | puntos}}
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:right;"><b>Totales:</b></td>
+              <td style="text-align:right;" *ngFor="let mt of MostrarTotal">{{mt}}</td> 
+            </tr>
+            <!--<tr *ngFor="let m of Modulos; let i = index">
               <td>{{m}}</td>
               <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Codigo}} {{CeldasIngresoEgresoValores[m][0].Valor_Ingreso | number | puntos}}</td>
               <td style="text-align:right;">{{CeldasIngresoEgresoValores[m][0].Codigo}} {{CeldasIngresoEgresoValores[m][0].Valor_Egreso | number | puntos}}</td>
@@ -31,7 +41,7 @@
             <tr>
               <td style="text-align:right;"><b>Totales:</b></td>
               <td style="text-align:right;" *ngFor="let rt of SumatoriaTotales">{{rt | number | puntos}}</td>
-            </tr>           
+            </tr> -->          
           </tbody>
         </table>
       </div>
@@ -46,16 +56,16 @@
               <td style="text-align:center;" *ngFor="let m of MonedasSistema">{{m.Nombre}}</td>
             </tr>
             <tr>
-              <td style="background:#9BFFAC;">Ingreso</td>
-              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:#9BFFAC;">+{{ti | number | puntos}}</td>
+              <td style="background:#9BFFAC;">Ingreso</td> 
+              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:#9BFFAC;">+{{ti}}</td>
             </tr>
             <tr>
               <td style="background:#FF9B9B;">Egreso</td>
-              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:#FF9B9B;">-{{te | number | puntos}}</td>
+              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:#FF9B9B;">-{{te}}</td>
             </tr>
             <tr>
               <td>Total a Entregar</td>
-              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta | number | puntos}}</td>
+              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta}}</td>
             </tr>
             <tr>
               <td>Entregado</td>
@@ -97,7 +107,10 @@
             <div class="row">
               <div class="col-md-8"></div>
               <div class="col-md-4">
-                <button class="btn btn-primary" (click)="GuardarCierre()">Guardar Cierre</button>
+                <button class="btn btn-primary"
+                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar el cierre de caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCierre()">Guardar Cierre
+                </button>
               </div>
             </div>
           </div>

@@ -25,7 +25,7 @@ export class CommonLayoutComponent implements OnInit {
     public sidenavSelected: any;
     public searchActived: any;
     public searchModel: any;
-    public user: any;
+    public user: any = JSON.parse(localStorage.User);
     public changePasswordMessage: string;
     public alertas: any = [];
     public alertasCajas: any = [];
@@ -51,8 +51,10 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
     @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;
     @ViewChild('ModalAjuste') ModalAjuste: any;
-    @ViewChild('modalOficinaCaja') modalOficinaCaja: any;
     @ViewChild('alertSwal') alertSwal:any;
+    
+    @ViewChild('modalOficinaCaja') modalOficinaCaja: any;
+    @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
 
     cajero = true;
 
@@ -112,6 +114,26 @@ export class CommonLayoutComponent implements OnInit {
         { "BilleteEntero100": 2, "ValorEntero100": 0, "BilleteEntero50": 2, "ValorEntero50": 0, "BilleteSuelto": 2, "ValorSuelto": 0, "Moneda": "Bolivares" }
     ]
 
+    //NUEVO CODIGO
+
+    //#region APERTURA CAJA
+
+        public MonedasSistema:any = [];
+
+        public DiarioModel:any = {
+            Id_Diario: '',
+            Id_Funcionario: this.user.Identificacion_Funcionario,
+            Caja_Apertura: this.caja_seleccionada,
+            Oficina_Apertura: this.oficina_seleccionada
+        };
+
+        public ValoresMonedasApertura:any = [
+            { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
+        ];
+
+    //#endregion
+
+
     constructor(private router: Router, private http: HttpClient, private globales: Globales, private toastyService: ToastyService) {
         this.app = {
             layout: {
@@ -150,27 +172,36 @@ export class CommonLayoutComponent implements OnInit {
     ListaBancos = [];
     nombreBanco = "";
     ngOnInit() {
+
+        setTimeout(() => {
+            this.AsignarMonedas();
+            this.AsignarMonedasApertura();
+            this.ListarOficinas();    
+        }, 1000);
+        
         console.log(localStorage);
         
-        this.user = JSON.parse(localStorage.User);
-        if (localStorage.getItem("Oficina") == "") {
-            alert("vacio");
+        //this.user = JSON.parse(localStorage.User);
+
+        if (!localStorage.getItem("Oficina")) {
+            this.modalOficinaCaja.show();
         }
-        console.log(localStorage.getItem("Oficina"));
         
         this.oficina_seleccionada = localStorage.getItem("Oficina");
         if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada===null || this.oficina_seleccionada==='') {
             this.modalOficinaCaja.show();
-            console.log(this.oficina_seleccionada);
+        }else{
+            this.ListarCajas(this.oficina_seleccionada);
         }
-        console.log(this.oficina_seleccionada);
 
         this.caja_seleccionada = localStorage.getItem("Caja");
         if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada===null || this.caja_seleccionada==='') {
             this.modalOficinaCaja.show();
-            console.log(this.caja_seleccionada);
         }
+
+        console.log(this.oficina_seleccionada);
         console.log(this.caja_seleccionada);
+        
         
         localStorage.setItem('Perfil', this.user.Id_Perfil);
         switch (this.user.Id_Perfil) {
@@ -773,8 +804,28 @@ export class CommonLayoutComponent implements OnInit {
             });
     }
 
-    ListarOficinas(){
+    //FUNCIONES NUEVAS
 
+    AsignarMonedas(){
+        console.log("asignando monedas");
+        this.MonedasSistema = this.globales.Monedas;
+        console.log(this.globales.Monedas);
+        
+    }
+
+    AsignarMonedasApertura(){
+        if (this.MonedasSistema.length > 0) {
+            
+            this.ValoresMonedasApertura = [];
+            this.MonedasSistema.forEach(moneda => {
+                let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
+                this.ValoresMonedasApertura.push(monObj);
+            });            
+        }
+    }
+
+    ListarOficinas(){
+        console.log("listando oficinas");
         this.http.get(this.globales.ruta+'php/oficinas/listar_oficinas.php').subscribe((data:any)=> {
 
             if (data.tipo == 'error') {
@@ -789,6 +840,10 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     ListarCajas(value){
+        if (value == '') {
+            this.Cajas = [];
+            return;
+        }
 
         this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
 
@@ -816,7 +871,11 @@ export class CommonLayoutComponent implements OnInit {
 
         localStorage.setItem("Oficina", this.oficina_seleccionada);        
         localStorage.setItem("Caja", this.caja_seleccionada);
+        this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
+        this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
         this.modalOficinaCaja.hide();
+        //this.ModalCambiarBanco.show();
+        this.ModalAperturaCaja.show();
     }
 
     ShowSwal(tipo:string, titulo:string, msg:string){
@@ -825,4 +884,18 @@ export class CommonLayoutComponent implements OnInit {
         this.alertSwal.text = msg;
         this.alertSwal.show();
       }
+
+      GuardarApertura(){
+          
+        let model = JSON.stringify(this.DiarioModel);
+        let valores_monedas = JSON.stringify(this.ValoresMonedasApertura);
+        let datos = new FormData();
+        datos.append("modelo", model);
+        datos.append("valores_moneda", valores_monedas);
+        this.http.post(this.globales.ruta + '/php/diario/guardar_apertura.php', datos).subscribe((data: any) => {
+
+            this.ShowSwal('success', data, 'Se aperturo la caja copn exito!');
+        });
+      }
+
 }

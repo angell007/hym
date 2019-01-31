@@ -771,6 +771,9 @@
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
     <div class="app-modal-header" style="margin: 0 auto;">
         <h4>Cambio de Cuenta</h4>
+        <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
             <form #FormCambiarBanco="ngForm">
@@ -798,6 +801,41 @@
         </div>
     </div>
 </app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-md'" id="ModalCambiarBanco" #ModalAperturaCaja>
+        <div class="app-modal-header" style="margin: 0 auto;">
+            <h4>Apertura Caja - {{user.Nombres}} {{user.Apellidos}}</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormCambiarBanco="ngForm">
+                <div class="row" *ngFor="let vma of ValoresMonedasApertura; let i = index">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label><b>{{vma.NombreMoneda}}</b></label>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">{{vma.Codigo}}</span>
+                                </div>                
+                                <input type="text" class="form-control sp-text" [(ngModel)]="vma.Valor_Moneda_Apertura" name="Valor_Moneda_Apertura_{{i}}"  aria-describedby="basic-addon1" placeholder="Introduzca inicial para {{vma.NombreMoneda}}">
+                            </div>
+                        </div>
+                        
+                        <!--<div class="form-control">
+                            <input type="text" placeholder="Introduzca el monto inicial para {{vma.Nombre}}" [(ngModel)] = "vma.Valor_Moneda_Apertura">
+                        </div>-->
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="app-modal-footer" style="margin: 0 auto;">
+            <div class="text-center">
+                <button id="btnGuardarValoresApertura" 
+                        class="btn btn-primary btn-sm" 
+                        [swal]="{title : '¿Está Seguro?', text: 'Se va a realizar la apertura esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aperturar',cancelButtonText: 'No, Dejame Comprobar!'}"
+                        (confirm)="GuardarApertura()">Aperturar Caja</button>
+            </div>
+        </div>
+    </app-modal-basic>
 
 
 <app-modal-basic [dialogClass]="'modal-xl'" id="ModalResumenCuenta" #ModalResumenCuenta>
@@ -980,19 +1018,30 @@
       </app-modal-basic>
 
 <app-modal-basic #modalOficinaCaja>
-    <div class="app-modal-header">
+    <div class="app-modal-header" [dialogClass]="'modal-lg'">
         <h4>Oficinas y Cajas</h4>
+        <button type="button" class="close basic-close" (click)="modalOficinaCaja.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body text-center">
         <p>Por favor seleccione la oficina y la caja en la que se encuentre y vaya a operar</p>
-        <label for="">Oficina</label>
-        <select class="form-control" [(ngModel)]="oficina_seleccionada" (change)="ListarCajas($event.target.value)">
-            <option *ngFor="let of of Oficinas" value="{{of.Id_Oficina}}">{{c.Nombre}}</option>
-        </select>
-        <label for="">Caja</label>
-        <select class="form-control" [(ngModel)]="caja_seleccionada">
-            <option *ngFor="let c of Cajas" value="{{c.Id_Caja}}">{{c.Nombre}}</option>
-        </select>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="">Oficina</label>
+                <select class="form-control" [(ngModel)]="oficina_seleccionada" (change)="ListarCajas($event.target.value)">
+                    <option value="" selected>Escoja la oficina</option>
+                    <option *ngFor="let ofi of Oficinas" value="{{ofi.Id_Oficina}}">{{ofi.Nombre}}</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="">Caja</label>
+                <select class="form-control" [(ngModel)]="caja_seleccionada">
+                        <option value="" selected>Escoja la caja</option>
+                    <option *ngFor="let c of Cajas" value="{{c.Id_Caja}}">{{c.Nombre}}</option>
+                </select>
+            </div>
+        </div>
     </div>
     <div class="app-modal-footer">
         <div class="text-right">

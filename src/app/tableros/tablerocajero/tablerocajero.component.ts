@@ -57,8 +57,6 @@ export class TablerocajeroComponent implements OnInit {
   public Recibe: any = "Transferencia";
   public MonedaRecibe: any = "Bolivares";
   public IdCorresponsal: number;
-  public IdOficina: number;
-  public IdCaja:string = JSON.parse(localStorage['Caja']);
   public Estado: string;
   public DetalleCorresponsal: string;
   public Detalle: any = [];
@@ -235,6 +233,8 @@ export class TablerocajeroComponent implements OnInit {
   //#region Variables Generales
 
     public funcionario_data = JSON.parse(localStorage['User']);
+    public IdOficina:string = JSON.parse(localStorage['Oficina']);
+    public IdCaja:string = JSON.parse(localStorage['Caja']);
     
     public TerceroCliente:any = [];
     public TransferenciasAnuladas:any =[];
@@ -252,8 +252,8 @@ export class TablerocajeroComponent implements OnInit {
     public CambioModel:any = {
       Id_Cambio: '',
       Tipo: '',
-      Id_Caja:  this.IdCaja == '' ? '0' : this.IdCaja,
-      Id_Oficina: '5',
+      Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
+      Id_Oficina: this.IdOficina == '' ? '0' : this.IdOficina,
       Moneda_Origen: '',
       Moneda_Destino: '',
       Tasa: '',
@@ -421,7 +421,7 @@ export class TablerocajeroComponent implements OnInit {
       Detalle: '',
       Giro_Libre: false,
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
-      Id_Oficina: 5,
+      Id_Oficina:  this.IdOficina == '' ? '0' : this.IdOficina,
       Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
     };
 
@@ -454,7 +454,7 @@ export class TablerocajeroComponent implements OnInit {
       Detalle: '',
       Id_Moneda: '',
       Estado: 'Activo',
-      Identificacion_Funcionario: '',
+      Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Aprobado: 'No'
     };
 
@@ -2236,6 +2236,8 @@ export class TablerocajeroComponent implements OnInit {
         case "Traslado": {
           this.Traslado2 = true;
           this.Traslado1 = false;
+
+          this.CargarDatosTraslados();
           break;
         }
         case "Servicio": {
@@ -2682,7 +2684,7 @@ export class TablerocajeroComponent implements OnInit {
       let datos = new FormData();
       datos.append("modulo", 'Traslado_Caja');
       datos.append("datos", info);
-      this.http.post(this.globales.ruta + 'php/traslados/guardar_traslado_caja.php', datos).subscribe((data: any) => {
+      this.http.post(this.globales.ruta + 'php/trasladocaja/guardar_traslado_caja.php', datos).subscribe((data: any) => {
         this.ShowSwal('success', 'Registro Exitoso', 'Traslado guardado satisfactoriamente!');
         this.LimpiarModeloTraslados('creacion');
         this.volverTraslado();

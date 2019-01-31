@@ -17,7 +17,7 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos:Array<string> = ['Cambios','Transferencias','Giros','Traslados','Corresponsal Bancario','Servicios Externos'];
+  public Modulos:Array<string> = ['Cambios','Transferencias','Giros','Traslados','Corresponsal','Servicios'];
   public MonedasSistema:any = [];
   public Totales:any =[];
   public CeldasIngresoEgresoEncabezado:any = [];
@@ -40,23 +40,34 @@ export class CierrecajaComponent implements OnInit {
     Observacion: ''
   };
   public entregardiferencia:any = [];
+  public MostrarTotal:any = [];
 
   constructor(public globales:Globales, private cliente:HttpClient) { }
 
   ngOnInit() {
     this.ConsultarTotalesCierre();
-
-    setTimeout(() => {
-      this.ArmarCeldasTabla();  
-    }, 1000);
-    
+      
   }
 
   ConsultarTotalesCierre(){
     this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.Funcionario.Identificacion_Funcionario}}).subscribe((data:any)=>{
       console.log(data);
       this.MonedasSistema = data.monedas;
-      this.Totales = data.totales_ingresos_egresos;
+      let t = data.totales_ingresos_egresos;
+      for (const k in t) {
+        
+        let arr = t[k];
+        this.Totales[k] = arr;
+      }
+
+      console.log(this.Totales);
+
+      setTimeout(() => {
+        console.log("ejecutando settimeout");
+        
+        this.ArmarCeldasTabla();
+      }, 1000);
+
     });
   }
 
@@ -70,84 +81,44 @@ export class CierrecajaComponent implements OnInit {
         this.CeldasIngresoEgresoEncabezado.push(celda_e);
         this.max_cel_colspan+=2;
       });      
-    }    
+    }
 
     if (this.Modulos.length > 0) {
-      this.Modulos.forEach(modulo => {
-        let ind = 0;
-        this.CeldasIngresoEgresoValores[modulo] = [];
 
-        this.MonedasSistema.forEach(moneda => {
-          
-          let totalesObj = this.Totales.filter(x => x.Modulo == modulo && x.Moneda_Id == moneda.Id_Moneda);
-          let ing = "";
-          let eg = "";
-          let obj = {};
-          
-          if (totalesObj.length > 0) {
-            if (totalesObj[0].Ingreso_Total != '') {
-              ing = totalesObj[0].Ingreso_Total;
-              //this.CeldasIngresoEgresoValores.push(ingreso);
-            }else{
-              //ing = "0";  
-              //this.CeldasIngresoEgresoValores.push(ing);
-            }
+      this.MonedasSistema.forEach((m) => {
 
-            if (totalesObj[0].Egreso_Total != '') {
-               eg = totalesObj[0].Egreso_Total;  
-              //this.CeldasIngresoEgresoValores.push(egreso);
-            }else{
-              //eg = "0";  
-              //this.CeldasIngresoEgresoValores.push(egreso);
-            }
+        this.Modulos.forEach((mod) => {
+
+          let obj = this.Totales[mod];
+          let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
+          console.log(monObj[1].Egreso_Total);
+          
+          if (!this.SumatoriaTotales[m.Nombre]) {
+
+            this.SumatoriaTotales[m.Nombre] = {Ingreso_Total: 0, Egreso_Total: 0};
+            this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
+            this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
           }else{
 
-            /*let ingreso = {Valor_Ingreso:0};
-            let egreso = {Valor_Egreso:0}; 
-            this.CeldasIngresoEgresoValores.push(ingreso);
-            this.CeldasIngresoEgresoValores.push(egreso);*/
-            ing = "0";  
-            eg = "0";  
+            this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
+            this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
           }
 
-          obj = {Valor_Ingreso:ing, Valor_Egreso:eg, Codigo:moneda.Codigo};
-          this.CeldasIngresoEgresoValores[modulo].push(obj);
-
-          if (ind % 2 == 0) {
-
-            if (!this.SumatoriaTotales[ind]) {
-              this.SumatoriaTotales[ind] = 0;
-            }
-                   
-            this.SumatoriaTotales[ind] += parseFloat(ing);
-
-            if (!this.SumatoriaTotales[(ind + 1)]) {
-              this.SumatoriaTotales[(ind + 1)] = 0;
-            }
-            this.SumatoriaTotales[(ind + 1)] += parseFloat(eg);
-          }
-
-          ind+=2;
         });
-      }); 
-      
-      this.SumatoriaTotales.forEach((total, i) => {
+      });
+
+      this.MonedasSistema.forEach(moneda => {
+        let objMoneda = this.SumatoriaTotales[moneda.Nombre];
+        this.MostrarTotal.push(objMoneda.Ingreso_Total);
+        this.MostrarTotal.push(objMoneda.Egreso_Total);
         
-        if (i % 2 == 0) {
-          this.TotalesIngresosMonedas.push(total);  
-        }else{
-          this.TotalesEgresosMonedas.push(total);
-        }        
+        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total);
+        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total);
+
+        this.TotalRestaIngresosEgresos.push(objMoneda.Ingreso_Total - objMoneda.Egreso_Total);
       });
 
-      this.TotalesIngresosMonedas.forEach((t,index) => {
-        let resta = parseFloat(t) - parseFloat(this.TotalesEgresosMonedas[index]);
-        this.TotalRestaIngresosEgresos.push(resta);
-
-        if (resta == 0) {
-          this.FieldsDisabled[index] = true;
-        }
-      });
+      console.log(this.MostrarTotal);
 
       this.MonedasSistema.forEach((m,i) => {
         let obj = {Moneda:m.Id_Moneda, Entregado:"", Codigo:m.Codigo, Nombre:m.Nombre};
@@ -155,11 +126,8 @@ export class CierrecajaComponent implements OnInit {
 
         let obj1 = {Moneda:m.Id_Moneda, Diferencia:0, Codigo:m.Codigo, Nombre:m.Nombre};
         this.Diferencias.push(obj1);
-      });      
-      console.log(this.TotalesIngresosMonedas);
-      console.log(this.TotalesEgresosMonedas);
-      console.log(this.SumatoriaTotales);
-      
+      });
+
       this.Armado = true;
       
     }else{
@@ -178,9 +146,9 @@ export class CierrecajaComponent implements OnInit {
   }
 
   GuardarCierre(){
-    /*if (!this.ValidarMontos()) {
+    if (!this.ValidarMontos()) {
       return;
-    }*/
+    }
     
     this.ArmarResumenMovimientos();
     console.log(this.ResumenMovimiento);
@@ -238,7 +206,7 @@ export class CierrecajaComponent implements OnInit {
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
     //let diferencia = this.Diferencias[pos].Diferencia;
 
-    let resta = total_entregar - value;
+    let resta = value - total_entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
 
@@ -249,10 +217,14 @@ export class CierrecajaComponent implements OnInit {
       let ind = 0;
       this.MonedasSistema.forEach(moneda => {
 
-        let ing = this.SumatoriaTotales[ind];
-        let eg = this.SumatoriaTotales[(ind + 1)];
-        let objResumen = { "Valor": ing.toString(), "Moneda": moneda.Id_Moneda, "Tipo": "Ingreso", "Modulo": modulo };
-        let objResumen2 = { "Valor": eg.toString(), "Moneda": moneda.Id_Moneda, "Tipo": "Egreso", "Modulo": modulo };
+        let obj = this.Totales[modulo];
+        let monObj = obj.filter(x => x.Moneda_Id == moneda.Id_Moneda);
+
+        /*let ing = this.SumatoriaTotales[ind];
+        let eg = this.SumatoriaTotales[(ind + 1)];*/
+
+        let objResumen = { "Valor": monObj[0].Ingreso_Total, "Moneda": moneda.Id_Moneda, "Tipo": "Ingreso", "Modulo": modulo };
+        let objResumen2 = { "Valor": monObj[1].Egreso_Total, "Moneda": moneda.Id_Moneda, "Tipo": "Egreso", "Modulo": modulo };
 
         this.ResumenMovimiento[i].push(objResumen);
         this.ResumenMovimiento[i].push(objResumen2);
@@ -261,7 +233,7 @@ export class CierrecajaComponent implements OnInit {
     });
   }
 
-   //MOSTRAR ALERTAS DESDE LA INSTANCIA DEL SWEET ALERT GLOBAL
+  //MOSTRAR ALERTAS DESDE LA INSTANCIA DEL SWEET ALERT GLOBAL
   ShowSwal(tipo:string, titulo:string, msg:string){
     this.alertSwal.type = tipo;
     this.alertSwal.title = titulo;
