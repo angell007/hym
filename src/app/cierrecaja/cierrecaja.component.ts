@@ -41,17 +41,19 @@ export class CierrecajaComponent implements OnInit {
   };
   public entregardiferencia:any = [];
   public MostrarTotal:any = [];
+  public InhabilitarBotonGuardar = true;
+  public ValoresMonedasApertura:any = [];
 
   constructor(public globales:Globales, private cliente:HttpClient) { }
 
   ngOnInit() {
-    this.ConsultarTotalesCierre();
-      
+    this.GetRegistroDiario();
+    this.ConsultarTotalesCierre();      
   }
 
   ConsultarTotalesCierre(){
     this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.Funcionario.Identificacion_Funcionario}}).subscribe((data:any)=>{
-      console.log(data);
+      
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
       for (const k in t) {
@@ -60,11 +62,7 @@ export class CierrecajaComponent implements OnInit {
         this.Totales[k] = arr;
       }
 
-      console.log(this.Totales);
-
-      setTimeout(() => {
-        console.log("ejecutando settimeout");
-        
+      setTimeout(() => {        
         this.ArmarCeldasTabla();
       }, 1000);
 
@@ -91,7 +89,6 @@ export class CierrecajaComponent implements OnInit {
 
           let obj = this.Totales[mod];
           let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
-          console.log(monObj[1].Egreso_Total);
           
           if (!this.SumatoriaTotales[m.Nombre]) {
 
@@ -107,15 +104,18 @@ export class CierrecajaComponent implements OnInit {
         });
       });
 
-      this.MonedasSistema.forEach(moneda => {
+      this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-        this.MostrarTotal.push(objMoneda.Ingreso_Total);
-        this.MostrarTotal.push(objMoneda.Egreso_Total);
+        let monto_inicial_moneda = this.ValoresMonedasApertura[i];
+        this.MostrarTotal.push(objMoneda.Ingreso_Total.toFixed(2));
+        this.MostrarTotal.push(objMoneda.Egreso_Total.toFixed(2));
         
-        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total);
-        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total);
+        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
 
-        this.TotalRestaIngresosEgresos.push(objMoneda.Ingreso_Total - objMoneda.Egreso_Total);
+        let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
+
+        this.TotalRestaIngresosEgresos.push(suma_inicial_ingreso - objMoneda.Egreso_Total);
       });
 
       console.log(this.MostrarTotal);
@@ -127,6 +127,8 @@ export class CierrecajaComponent implements OnInit {
         let obj1 = {Moneda:m.Id_Moneda, Diferencia:0, Codigo:m.Codigo, Nombre:m.Nombre};
         this.Diferencias.push(obj1);
       });
+
+      this.AsignarFieldsDisabled();
 
       this.Armado = true;
       
@@ -206,7 +208,8 @@ export class CierrecajaComponent implements OnInit {
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
     //let diferencia = this.Diferencias[pos].Diferencia;
 
-    let resta = value - total_entregar;
+    let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
+    let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
 
@@ -243,5 +246,34 @@ export class CierrecajaComponent implements OnInit {
 
   LimpiarModelos(){
 
+  }
+
+  AsignarFieldsDisabled(){
+    this.TotalRestaIngresosEgresos.forEach(valor => {
+      if (valor == 0 || valor == '') {
+        this.FieldsDisabled.push(true);
+      }
+    });
+  }
+
+  InhabilitarBoton(){
+    for (let index = 0; index < this.TotalRestaIngresosEgresos.length; index++) {
+      if (this.TotalRestaIngresosEgresos[index] != 0) {
+        this.InhabilitarBotonGuardar = false;
+      }      
+    }
+  }
+
+  GetRegistroDiario(){
+      
+    this.cliente
+      .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.Funcionario.Identificacion_Funcionario } })
+      .subscribe((data:any) => {
+        data.valores_diario.forEach((valores,i) => {
+          this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
+        });
+        console.log(this.ValoresMonedasApertura);
+        
+    });
   }
 }

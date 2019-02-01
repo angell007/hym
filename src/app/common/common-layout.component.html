@@ -397,7 +397,7 @@
                             <li class="notifications dropdown" *ngIf="OcultarCajero">
                                 <!-- NOTIFICACIONES -->
                                 <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
-                                    (click)="this.cerrarCaja(1)">
+                                    [routerLink]="['/cierrecaja']">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
 
@@ -801,42 +801,6 @@
         </div>
     </div>
 </app-modal-basic>
-
-<app-modal-basic [dialogClass]="'modal-md'" id="ModalCambiarBanco" #ModalAperturaCaja>
-        <div class="app-modal-header" style="margin: 0 auto;">
-            <h4>Apertura Caja - {{user.Nombres}} {{user.Apellidos}}</h4>
-        </div>
-        <div class="app-modal-body">
-            <form #FormCambiarBanco="ngForm">
-                <div class="row" *ngFor="let vma of ValoresMonedasApertura; let i = index">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label><b>{{vma.NombreMoneda}}</b></label>
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{vma.Codigo}}</span>
-                                </div>                
-                                <input type="text" class="form-control sp-text" [(ngModel)]="vma.Valor_Moneda_Apertura" name="Valor_Moneda_Apertura_{{i}}"  aria-describedby="basic-addon1" placeholder="Introduzca inicial para {{vma.NombreMoneda}}">
-                            </div>
-                        </div>
-                        
-                        <!--<div class="form-control">
-                            <input type="text" placeholder="Introduzca el monto inicial para {{vma.Nombre}}" [(ngModel)] = "vma.Valor_Moneda_Apertura">
-                        </div>-->
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="app-modal-footer" style="margin: 0 auto;">
-            <div class="text-center">
-                <button id="btnGuardarValoresApertura" 
-                        class="btn btn-primary btn-sm" 
-                        [swal]="{title : '¿Está Seguro?', text: 'Se va a realizar la apertura esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aperturar',cancelButtonText: 'No, Dejame Comprobar!'}"
-                        (confirm)="GuardarApertura()">Aperturar Caja</button>
-            </div>
-        </div>
-    </app-modal-basic>
-
 
 <app-modal-basic [dialogClass]="'modal-xl'" id="ModalResumenCuenta" #ModalResumenCuenta>
     <div class="app-modal-header" style="margin: 0 auto;">

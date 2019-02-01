@@ -41,7 +41,7 @@
                         <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
                         (change)="BuscarCNE($event.target.value)" [disabled]="DestinatarioModel.Id_Pais == 0">
                             <option value="">Seleccione Tipo Documento</option>
-                            <option *ngFor="let documento of TipoDocumentoFiltrados; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
+                            <option *ngFor="let documento of TiposDocumentoFiltrados; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
                     </div>
                 </div>              
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="frame" style="width:640px;height:390px">
+            <!--<div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
                         <iframe class="e2e-iframe-trusted-src" width="640" height="390" [src]="sanitizer.bypassSecurityTrustResourceUrl(urlCne)"  ></iframe>
@@ -69,7 +69,7 @@
                         <button class="btn btn-primary btn-sm" (click)="frameRiff = !frameRiff"> Ocultar página</button>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <br>
         </form>
         <br>

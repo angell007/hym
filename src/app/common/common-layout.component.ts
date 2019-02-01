@@ -188,14 +188,14 @@ export class CommonLayoutComponent implements OnInit {
         }
         
         this.oficina_seleccionada = localStorage.getItem("Oficina");
-        if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada===null || this.oficina_seleccionada==='') {
+        if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {
             this.modalOficinaCaja.show();
         }else{
             this.ListarCajas(this.oficina_seleccionada);
         }
 
         this.caja_seleccionada = localStorage.getItem("Caja");
-        if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada===null || this.caja_seleccionada==='') {
+        if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada === null || this.caja_seleccionada === '') {
             this.modalOficinaCaja.show();
         }
 
@@ -883,19 +883,8 @@ export class CommonLayoutComponent implements OnInit {
         this.alertSwal.title = titulo;
         this.alertSwal.text = msg;
         this.alertSwal.show();
-      }
+    }
 
-      GuardarApertura(){
-          
-        let model = JSON.stringify(this.DiarioModel);
-        let valores_monedas = JSON.stringify(this.ValoresMonedasApertura);
-        let datos = new FormData();
-        datos.append("modelo", model);
-        datos.append("valores_moneda", valores_monedas);
-        this.http.post(this.globales.ruta + '/php/diario/guardar_apertura.php', datos).subscribe((data: any) => {
-
-            this.ShowSwal('success', data, 'Se aperturo la caja copn exito!');
-        });
-      }
+    
 
 }

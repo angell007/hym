@@ -16,6 +16,7 @@ import { isEmpty } from 'rxjs/operator/isEmpty';
   templateUrl: './tablerocajero.component.html',
   styleUrls: ['./tablerocajero.component.scss']
 })
+
 export class TablerocajeroComponent implements OnInit {
   public IdentificacionFuncionario: any = [];
   public Destinatarios: any = [] = [];
@@ -124,6 +125,7 @@ export class TablerocajeroComponent implements OnInit {
   //SWEET ALERT FOR GENERAL ALERTS
   @ViewChild('alertSwal') alertSwal: any;
   @ViewChild("valorCambio") inputValorCambio: ElementRef;
+  @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
 
   vueltos: number;
   Venta = false;
@@ -241,8 +243,20 @@ export class TablerocajeroComponent implements OnInit {
     public RemitentesTransferencias:any = [];
     public CuentasBancarias:any = [];
     public PosicionDestinatarioActivo:any = '';
-    public TipoDocumentoNacional = [];
-    public TipoDocumentoExtranjero = [];
+    public TipoDocumentoNacional:any = [];
+    public TipoDocumentoExtranjero:any = [];
+    public TiposCuenta:any = [];
+
+    public DiarioModel:any = {
+      Id_Diario: '',
+      Id_Funcionario: this.funcionario_data.Identificacion_Funcionario,
+      Caja_Apertura: this.IdOficina,
+      Oficina_Apertura: this.IdCaja
+    };
+
+    public ValoresMonedasApertura:any = [
+      { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
+    ];
 
   //#endregion
 
@@ -528,7 +542,7 @@ export class TablerocajeroComponent implements OnInit {
   //#endregion
   //Fin nuevas variables
 
-  constructor(private http: HttpClient, private globales: Globales, public sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, public globales: Globales, public sanitizer: DomSanitizer) { }
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
 
@@ -541,30 +555,21 @@ export class TablerocajeroComponent implements OnInit {
   public boolTelefonoR:boolean = false;
 
   ngOnInit() {
+    this.AsignarMonedas();
+    this.AsignarMonedasApertura();
+    this.AsignarTipoDocumento();
+    this.AsignarTiposCuenta();
     
     this.SetDatosIniciales();
+    this.GetRegistroDiario();
+  }
 
-    //hacer la peticion si este usuario tiene un 'diario' ya registrado en la DB y si el saldo de inicio es vacio
+  ngAfterViewInit() {
+    //this.ModalAperturaCaja.show();
+  } 
 
-    this.http.get(this.globales.ruta + 'php/diario/detalle_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
-
-      if (data.hoy[0]) {
-        this.MontoInicial = data.hoy[0].MontoInicial;
-        this.MontoInicialBolivar = data.hoy[0].MontoInicialBolivar;
-        this.IdDiario = data.hoy[0].Diario;
-
-        if (data.hoy[0].MontoInicial == "0" && data.hoy[0].MontoInicialBolivar == "0") {
-          this.ModalSaldoInicio.show();
-        }
-      }
-
-      if (data.ayer[0]) {
-        this.CierreCajaAyer = data.ayer[0].MontoCierre;
-        this.CierreCajaAyerBolivares = data.ayer[0].MontoCierreBolivar
-      }
-
-
-    });
+  AbrirModalApertura(){
+    this.ModalAperturaCaja.show();
   }
 
   //#region FUNCIONES CAMBIOS
@@ -1176,7 +1181,6 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     AsignarValorTransferirDestinatario(valor){
-      console.log(valor);
       
       if (valor == '' || valor == '0') {
         this.ListaDestinatarios.array.forEach(d => {
@@ -1244,9 +1248,9 @@ export class TablerocajeroComponent implements OnInit {
         }
 
       }else{
-        console.log("entro cond normal");
+        
         if (valor > total_destinatarios) {
-          console.log("cond 1");
+          
           if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
             this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
           }
@@ -1255,7 +1259,7 @@ export class TablerocajeroComponent implements OnInit {
           this.ListaDestinatarios[(count - 1)].Valor_Transferencia = operacion.toFixed(2);
     
         }else if (valor < total_destinatarios) {
-          console.log("cond 2");
+          
           let resta = total_destinatarios;
           
           for (let index = count; index > 0; index--) {
@@ -2101,13 +2105,25 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     AutoCompletarRemitente(modelo, ind = '') {
-      console.log(modelo);
-      
-      if (modelo) {
+
+      if (typeof(modelo) == 'object') {
+        console.log(modelo);
+        
         this.TransferenciaModel.Documento_Origen=modelo.Id_Transferencia_Remitente;
         this.TransferenciaModel.Telefono_Remitente=modelo.Telefono;
         this.TransferenciaModel.Nombre_Remitente=modelo.Nombre;
-      }    
+
+      }else if(typeof(modelo) == 'string'){
+
+        if(modelo == ''){
+          this.TransferenciaModel.Documento_Origen='';
+          this.TransferenciaModel.Telefono_Remitente='';
+          this.TransferenciaModel.Nombre_Remitente='';
+        }else{
+          
+          this.TransferenciaModel.Documento_Origen=modelo;
+        }
+      }  
     }
 
     AnularTransferencia(id, formulario: NgForm) {
@@ -3291,11 +3307,7 @@ export class TablerocajeroComponent implements OnInit {
     AsignarMonedas(){
     
       this.Monedas = [];
-      this.globales.Monedas.forEach(moneda => {
-        if (moneda.Nombre != 'Pesos') {
-          this.Monedas.push(moneda);     
-        }
-      });    
+      this.Monedas = this.globales.Monedas;
     }
   
     AsignarPaises(){      
@@ -3305,6 +3317,10 @@ export class TablerocajeroComponent implements OnInit {
     AsignarTipoDocumento(){
       this.TipoDocumentoNacional = this.globales.TipoDocumentoNacionales;
       this.TipoDocumentoExtranjero = this.globales.TipoDocumentoExtranjero;
+    }
+
+    AsignarTiposCuenta(){
+      this.TiposCuenta = this.globales.TiposCuenta;
     }
   
     AsignarCuentasPersonales(){      
@@ -3327,6 +3343,52 @@ export class TablerocajeroComponent implements OnInit {
       activeModal.hide();
     }
 
+    GuardarApertura(){
+        
+      let model = JSON.stringify(this.DiarioModel);
+      let valores_monedas = JSON.stringify(this.ValoresMonedasApertura);
+      let datos = new FormData();
+      datos.append("modelo", model);
+      datos.append("valores_moneda", valores_monedas);
+      this.http.post(this.globales.ruta + '/php/diario/guardar_apertura.php', datos).subscribe((data: any) => {
+
+          this.ShowSwal('success', data, 'Se aperturo la caja copn exito!');
+      });
+    }
+
+    AsignarMonedasApertura(){
+      if (this.Monedas.length > 0) {
+          
+          this.ValoresMonedasApertura = [];
+          this.Monedas.forEach(moneda => {
+              let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
+              this.ValoresMonedasApertura.push(monObj);
+          });            
+      }
+  }
+
+    GetRegistroDiario(){
+      
+      this.http
+        .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
+        .subscribe((data:any) => {
+          if (data.DiarioNeto <= 0) {
+
+            data.valores_anteriores.forEach((valores,i) => {
+              this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            });
+
+            this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
+            this.ModalAperturaCaja.show();
+          }else{
+
+            data.valores_anteriores.forEach((valores,i) => {
+              this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            }); 
+          }
+      });
+    }
+
   //#endregion
 
   //#region TYPEAHEAD SEARCHES
@@ -3345,7 +3407,7 @@ export class TablerocajeroComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       switchMap( term => term.length < 4 ? [] :
-        this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:term}})
+        this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatario_por_id.php', {params: {id_destinatario:term, moneda:this.MonedaParaTransferencia.id}})
         .map(response => response)
         .do(data => console.log(this.tercero_credito))
       )
@@ -3358,6 +3420,18 @@ export class TablerocajeroComponent implements OnInit {
           : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
       );
     formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
+
+    search_remitente2 = (text$: Observable<string>) =>
+    text$
+    .pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap( term => term.length < 4 ? [] :
+        this.http.get(this.globales.ruta+'php/remitentes/filtrar_remitente_por_id.php', {params: {id_remitente:term}})
+        .map(response => response)
+        .do(data => console.log("llegó"))
+      )
+    );
 
     search_cuenta = (text$: Observable<string>) =>
       text$.pipe(
@@ -3384,9 +3458,9 @@ export class TablerocajeroComponent implements OnInit {
   
   //#region FUNCIONES MODALES
 
-    FiltrarDatosNacionalidad(idPais){
+  FiltrarDatosNacionalidad(idPais){
 
-      this.DestinatarioModel.Id_Destinatario = '';
+      //this.DestinatarioModel.Id_Destinatario = '';
       this.TipoDocumentoFiltrados = [];
       this.DestinatarioModel.Nombre = '';
 
@@ -3397,9 +3471,7 @@ export class TablerocajeroComponent implements OnInit {
         
         if (this.TipoDocumentoNacional.length > 0) {
           this.TipoDocumentoNacional.forEach(documentObj  => {
-            if (documentObj.Id_Pais == idPais) {
-              this.TipoDocumentoFiltrados.push(documentObj);  
-            }        
+            this.TipoDocumentoFiltrados.push(documentObj);        
           });
         }
       }else{
@@ -3431,9 +3503,10 @@ export class TablerocajeroComponent implements OnInit {
       if (data == 0) {
         var longitud = this.LongitudCarateres(v);
         if (longitud > 6) {
-          this.IdentificacionCrearDestinatario = v;
-          this.ModalCrearDestinatarioTransferencia.show();
-          this.Id_Destinatario = v;
+          this.DestinatarioModel.Id_Destinatario = v;
+          //this.IdentificacionCrearDestinatario = v;
+          this.ModalDestinatario.show();
+          /*this.Id_Destinatario = v;
           this.Lista_Destinatarios = [{
             Id_Pais: '',
             Id_Banco: '',
@@ -3442,7 +3515,7 @@ export class TablerocajeroComponent implements OnInit {
             Numero_Cuenta: '',
             Otra_Cuenta: '',
             Observacion: ''
-          }];
+          }];*/
         }else if(longitud < 6){
 
         }
@@ -3599,63 +3672,67 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   validarBanco(i, valor) {
-    setTimeout(() => {
-      
-      //var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value);
-      let ctaObject = this.Lista_Cuentas_Destinatario[i];
-      let countryObject = this.Paises.find(x => x.Id_Pais == ctaObject.Id_Pais);
-      
-      if (!this.globales.IsObjEmpty(ctaObject) && !this.globales.IsObjEmpty(countryObject)) {        
 
-        if (countryObject.Nombre == 'Venezuela') {
-          
-          if (countryObject.Cantidad_Digitos_Cuenta != 0) {
+    if (valor != '') {
+      setTimeout(() => {
+      
+        //var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value);
+        let ctaObject = this.Lista_Cuentas_Destinatario[i];
+        let countryObject = this.Paises.find(x => x.Id_Pais == ctaObject.Id_Pais);
+        
+        if (!this.globales.IsObjEmpty(ctaObject) && !this.globales.IsObjEmpty(countryObject)) {        
+  
+          if (countryObject.Nombre == 'Venezuela') {
             
-            let longitud = this.LongitudCarateres(valor);
-            if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {
-              this.botonDestinatario = false;
-              this.confirmacionSwal.title = "Alerta";
-              this.confirmacionSwal.text = "Digite la cantidad correcta de dígitos de la cuenta("+countryObject.Cantidad_Digitos_Cuenta+")";
-              this.confirmacionSwal.type = "warning";
-              this.confirmacionSwal.show();
-              this.SePuedeAgregarMasCuentas = false;
-              return;
-            }              
+            if (countryObject.Cantidad_Digitos_Cuenta != 0) {
+              
+              let longitud = this.LongitudCarateres(valor);
+              if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {
+                this.botonDestinatario = false;
+                this.confirmacionSwal.title = "Alerta";
+                this.confirmacionSwal.text = "Digite la cantidad correcta de dígitos de la cuenta("+countryObject.Cantidad_Digitos_Cuenta+")";
+                this.confirmacionSwal.type = "warning";
+                this.confirmacionSwal.show();
+                this.SePuedeAgregarMasCuentas = false;
+                return;
+              }              
+            }
+  
+            this.http.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data)=>{
+              if(data == 1){
+                this.botonDestinatario = false;
+                this.confirmacionSwal.title = "Alerta";
+                this.confirmacionSwal.text = "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!";
+                this.confirmacionSwal.type = "warning";
+                this.confirmacionSwal.show();
+                this.SePuedeAgregarMasCuentas = false;
+                this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
+              }else{
+                this.botonDestinatario = false;
+                this.SePuedeAgregarMasCuentas = true;
+              }
+            });
+          }else{
+  
+            this.http.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data)=>{
+              if(data == 1){
+                this.botonDestinatario = false;
+                this.confirmacionSwal.title = "Alerta";
+                this.confirmacionSwal.text = "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!";
+                this.confirmacionSwal.type = "warning";
+                this.confirmacionSwal.show();
+                this.SePuedeAgregarMasCuentas = false;
+                this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
+              }else{
+                this.botonDestinatario = false;
+                this.SePuedeAgregarMasCuentas = true;
+              }
+            });
           }
-
-          this.http.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data)=>{
-            if(data == 1){
-              this.botonDestinatario = false;
-              this.confirmacionSwal.title = "Alerta";
-              this.confirmacionSwal.text = "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!";
-              this.confirmacionSwal.type = "warning";
-              this.confirmacionSwal.show();
-              this.SePuedeAgregarMasCuentas = false;
-              this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
-            }else{
-              this.botonDestinatario = false;
-              this.SePuedeAgregarMasCuentas = true;
-            }
-          });
-        }else{
-
-          this.http.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data)=>{
-            if(data == 1){
-              this.botonDestinatario = false;
-              this.confirmacionSwal.title = "Alerta";
-              this.confirmacionSwal.text = "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!";
-              this.confirmacionSwal.type = "warning";
-              this.confirmacionSwal.show();
-              this.SePuedeAgregarMasCuentas = false;
-              this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
-            }else{
-              this.botonDestinatario = false;
-              this.SePuedeAgregarMasCuentas = true;
-            }
-          });
         }
-      }
-    }, 700);
+      }, 700);
+    }
+    
   }
 
   RevalidarValores(nroCuenta, index){
@@ -3719,9 +3796,6 @@ export class TablerocajeroComponent implements OnInit {
     }
 
   }
-
-  ngAfterViewInit() {
-  } 
 
   LongitudCarateres(i) {
     return parseInt(i.length);
