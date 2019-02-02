@@ -116,7 +116,7 @@ export class CierrecajaComponent implements OnInit {
 
         let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
-        this.TotalRestaIngresosEgresos.push(suma_inicial_ingreso - objMoneda.Egreso_Total);
+        this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
       });
 
       console.log(this.MostrarTotal);
@@ -211,8 +211,8 @@ export class CierrecajaComponent implements OnInit {
     //let diferencia = this.Diferencias[pos].Diferencia;
 
     let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
-    let resta = value - entregar;
-    this.Diferencias[pos].Diferencia = resta.toFixed(2);
+    let resta = (value - entregar).toFixed(2);
+    this.Diferencias[pos].Diferencia = resta;
   }
 
   ArmarResumenMovimientos(){

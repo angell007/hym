@@ -276,9 +276,9 @@ export class CommonLayoutComponent implements OnInit {
             this.ListaBancos = data;
         });
 
-        setInterval(() => {
+        /*setInterval(() => {
             this.cerrarCaja()
-        }, 30000);
+        }, 30000);*/
 
         if (localStorage['Banco']) {
             this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
