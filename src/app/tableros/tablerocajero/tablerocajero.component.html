@@ -308,9 +308,7 @@
                                     <button (click)="CambiarVista('Transferencia')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo
                                         Recibo De Transferencia</button>
                                 </div>
-
                                 <div class="col-md-12">
-
                                     <div class="card">
                                         <div class="card-block">
                                             <!-- <h4 class="card-title">Default Tabs</h4> -->
@@ -347,7 +345,7 @@
                                                                             <td>{{transferencia.CodigoRecibo}}</td>
                                                                             <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
                                                                             <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
+                                                                            <td>{{transferencia.Cantidad_Transferida }}</td>
                                                                             <td>{{transferencia.Tasa_Cambio }}</td>
                         
                                                                             <td class="text-center">
@@ -607,7 +605,6 @@
                                                                     (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')" placeholder="Tasa cambiaria">
                                                             </div>
                                                         </div>
-
                                                         <div class="col-md-4">
                                                             <div class="form-group text-center">
                                                                 <label class="transferencia">Moneda de Transferencia
@@ -2513,14 +2510,15 @@
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCambio" #ModalVerCambio>
-    <div class="app-modal-header">
+<app-modal-basic id="ModalVerCambio" #ModalVerCambio>
+    <div class="app-modal-header" style="width:100%;">
         <div class="row">
-            <div class="col-md-9">
-                <h4 *ngIf="verCambio.Tipo == 'Compra' ">Recibo de Venta Cliente </h4>
-                <h4 *ngIf="verCambio.Tipo == 'Venta' ">Recibo de Compra Cliente </h4>
+            <div class="col-md-10">
+                <!--<h4 *ngIf="verCambio.Tipo == 'Compra' ">Recibo de Venta Cliente </h4>
+                <h4 *ngIf="verCambio.Tipo == 'Venta' ">Recibo de Compra Cliente </h4>-->
+                <h4>Recibo de {{verCambio.Tipo}} Cliente </h4>
             </div>
-            <div class="col-md-3 pull-right">
+            <div class="col-md-2 pull-right">
                 <button class="btn btn-default btn-xs" type="button" style="margin:0;">
                     <i class="ti-printer"></i>
                 </button>
@@ -2529,33 +2527,30 @@
     </div>
     <div class="app-modal-body">
         <div class="table-overflow">
-            <table class="table table-hover table-sm table-striped">
+            <table class="table table-hover table-sm table-striped modified-table">
                 <thead>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Codigo Recibo</td>
+                        <td>Código Recibo</td>
                         <td>{{verCambio.Codigo}}</td>
                     </tr>
                     <tr>
-                        <td>Tipo De Cambio</td>
+                        <td>Tipo de Cambio</td>
                         <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
                     </tr>
                     <tr>
                         <td>Recibo</td>
-                        <td>{{verCambio.Valor_Origen | currency: currencyOrigen}} </td>
+                        <td>{{verCambio.Codigo_Moneda_Origen}} {{verCambio.Valor_Origen | number | puntos}} </td>
                     </tr>
-
                     <tr>
                         <td>Tasa</td>
                         <td>{{verCambio.Tasa}} </td>
                     </tr>
-
                     <tr>
                         <td>Entrego</td>
-                        <td>{{verCambio.Valor_Destino | currency: currencyDestino}} </td>
+                        <td>{{verCambio.Codigo_Moneda_Destino}} {{verCambio.Valor_Destino | number | puntos}} </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
@@ -2563,7 +2558,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-
+            <button class="btn btn-default" (click)="ModalVerCambio.hide()">Cerrar</button>
         </div>
     </div>
 </app-modal-basic>

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Globales } from '../shared/globales/globales';
 import { forEach } from '@angular/router/src/utils/collection';
 import { Funcionario } from '../shared/funcionario/funcionario.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -44,7 +45,7 @@ export class CierrecajaComponent implements OnInit {
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura:any = [];
 
-  constructor(public globales:Globales, private cliente:HttpClient) { }
+  constructor(public globales:Globales, private cliente:HttpClient, public router:Router) { }
 
   ngOnInit() {
     this.GetRegistroDiario();
@@ -177,6 +178,7 @@ export class CierrecajaComponent implements OnInit {
         this.LimpiarModelos();
         //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
         this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+        this.salir();
       }
     });
   }
@@ -210,7 +212,7 @@ export class CierrecajaComponent implements OnInit {
 
     let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
     let resta = value - entregar;
-    this.Diferencias[pos].Diferencia = resta;
+    this.Diferencias[pos].Diferencia = resta.toFixed(2);
   }
 
   ArmarResumenMovimientos(){
@@ -275,5 +277,13 @@ export class CierrecajaComponent implements OnInit {
         console.log(this.ValoresMonedasApertura);
         
     });
+  }
+
+  salir() {
+    localStorage.removeItem("Token");
+    localStorage.removeItem("User");
+    localStorage.removeItem("Banco");
+    localStorage.removeItem('Perfil');
+    this.router.navigate(["/login"]);
   }
 }

@@ -436,7 +436,8 @@ export class TablerocajeroComponent implements OnInit {
       Giro_Libre: false,
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Oficina:  this.IdOficina == '' ? '0' : this.IdOficina,
-      Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
+      Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
+      Id_Moneda: '2'
     };
 
     //VARIABLES GIRO VIEJAS
@@ -491,6 +492,7 @@ export class TablerocajeroComponent implements OnInit {
       Valor: '',
       Fecha: '',
       Hora: '',
+      Id_Moneda: '2',
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
     };
 
@@ -507,6 +509,7 @@ export class TablerocajeroComponent implements OnInit {
       Comision: '',
       Valor: '',
       Detalle: '',
+      Id_Moneda: '2',
       Estado: 'Activo',
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
@@ -801,23 +804,10 @@ export class TablerocajeroComponent implements OnInit {
     tituloCambio = "Compras o Ventas";
     VerCambio(id, modal) {
 
-      this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: id, modulo: "Cambio" } }).subscribe((data: any) => {
+      this.http.get(this.globales.ruta + '/php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
         this.verCambio = data;
 
-        if (data.Moneda_Origen == "Bolivares") {
-          this.currencyOrigen = "BsS.";
-        }
-        if (data.Moneda_Origen == "Pesos") {
-          this.currencyOrigen = "$";
-        }
 
-        if (data.Moneda_Destino == "Bolivares") {
-          this.currencyDestino = "BsS.";
-        }
-
-        if (data.Moneda_Destino == "Pesos") {
-          this.currencyDestino = "$";
-        }
         modal.show();
       });
 
@@ -1250,6 +1240,7 @@ export class TablerocajeroComponent implements OnInit {
       }else{
         
         if (valor > total_destinatarios) {
+          console.log("entro");
           
           if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
             this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
@@ -1288,10 +1279,34 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     ValidarValorTransferirDestinatario(valor, index){
-
+      console.log("entro validacion monto dest");
+      
       if (this.TransferenciaModel.Forma_Pago == 'Credito') {
         if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
           if (this.TransferenciaModel.Bolsa_Bolivares == '' || this.TransferenciaModel.Bolsa_Bolivares == '0' || this.TransferenciaModel.Bolsa_Bolivares == undefined) {
+            if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
+          
+              this.ListaDestinatarios[index].Valor_Transferencia = '';
+              this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
+              return;
+            }
+        
+            if (valor == '') {
+              this.ListaDestinatarios[index].Valor_Transferencia = '';
+              return;
+            }
+        
+            let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+            valor = parseFloat(valor).toFixed(2);
+            let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+        
+            if (total_valor_destinatarios > transferir) {
+    
+              let asignar = valor - (total_valor_destinatarios - transferir);
+              this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+    
+            }else if(total_valor_destinatarios < transferir){
+            }
           }else{
             
             if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
@@ -1350,26 +1365,6 @@ export class TablerocajeroComponent implements OnInit {
           //this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(2);
         }
       }
-
-      /*if (this.TransferenciaModel.Cantidad_Transferida != '' || this.TransferenciaModel.Cantidad_Transferida != '0' || this.TransferenciaModel.Cantidad_Transferida != undefined) {
-        
-        this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
-        return;
-      }
-
-      if (valor == '') {
-        return;
-      }
-
-      let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-      valor = parseFloat(valor);
-      let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
-
-      if (total_valor_destinatarios > transferir || total_valor_destinatarios < transferir) {
-        
-        let asignar = valor - (total_valor_destinatarios - transferir);
-        this.ListaDestinatarios[index].Valor_Transferencia = asignar.toString();
-      }*/
     }
 
     ValidarCantidadTransferidaDestinatarios(){   
@@ -2457,8 +2452,10 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     valorComision(value) {    
+console.log(value);
 
       let recibido = parseFloat(this.GiroModel.Valor_Recibido);
+      console.log(recibido);
       
       if(typeof(value) == 'boolean'){
         if(recibido == 0 || recibido == undefined || isNaN(recibido)){
@@ -2468,7 +2465,7 @@ export class TablerocajeroComponent implements OnInit {
       }
 
       if(typeof(value) == 'string'){
-        if (value == '') {
+        if (value == '' || value == '0') {
           this.GiroModel.Comision = '';
           this.GiroModel.Valor_Recibido = '';
           this.GiroModel.Comision = '';
@@ -2478,26 +2475,48 @@ export class TablerocajeroComponent implements OnInit {
         }
       }
 
-      this.GiroComision.forEach(element => {
-        if ((parseFloat(element.Valor_Minimo) < recibido) && (recibido < parseFloat(element.Valor_Maximo))) {
-          this.GiroModel.Comision = element.Comision;
+      let maxComision = this.GiroComision[(this.GiroComision.length - 1)].Comision;
 
-          var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-          
-          switch (checkeado) {
-            case true: {
-              this.GiroModel.Valor_Total = recibido;
-              this.GiroModel.Valor_Entrega = recibido + parseFloat(element.Comision);
-              break;
-            }
-            case false: {
-              this.GiroModel.Valor_Total = recibido - parseFloat(element.Comision);
-              this.GiroModel.Valor_Entrega = recibido;
-              break;
-            }
+      if (recibido > maxComision) {
+        this.GiroModel.Comision = maxComision;
+
+        var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+
+        switch (checkeado) {
+          case true: {
+            this.GiroModel.Valor_Total = recibido;
+            this.GiroModel.Valor_Entrega = recibido + parseFloat(maxComision);
+            break;
+          }
+          case false: {
+            this.GiroModel.Valor_Total = recibido - parseFloat(maxComision);
+            this.GiroModel.Valor_Entrega = recibido;
+            break;
           }
         }
-      });
+      }else{
+
+        this.GiroComision.forEach(element => {
+          if ((parseFloat(element.Valor_Minimo) <= recibido) && (recibido <= parseFloat(element.Valor_Maximo))) {
+            this.GiroModel.Comision = element.Comision;
+  
+            var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+            
+            switch (checkeado) {
+              case true: {
+                this.GiroModel.Valor_Total = recibido;
+                this.GiroModel.Valor_Entrega = recibido + parseFloat(element.Comision);
+                break;
+              }
+              case false: {
+                this.GiroModel.Valor_Total = recibido - parseFloat(element.Comision);
+                this.GiroModel.Valor_Entrega = recibido;
+                break;
+              }
+            }
+          }
+        });
+      }
     }
 
     RealizarGiro(formulario: NgForm) {
@@ -3353,6 +3372,7 @@ export class TablerocajeroComponent implements OnInit {
       this.http.post(this.globales.ruta + '/php/diario/guardar_apertura.php', datos).subscribe((data: any) => {
 
           this.ShowSwal('success', data, 'Se aperturo la caja copn exito!');
+          this.ModalAperturaCaja.hide();
       });
     }
 
