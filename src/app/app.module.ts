@@ -103,6 +103,9 @@ import { cardPortletRefresh, cardPortletDelete } from './shared/directives/cards
 import { CreardestinatarioComponent } from './creardestinatario/creardestinatario.component';
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { PuntosPipe } from './common/Pipes/puntos.pipe';
+import { InformativecardComponent } from './simplecomponents/informativecard/informativecard.component';
+import { GraficabarraComponent } from './graficabarra/graficabarra.component';
+import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -215,7 +218,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         cardPortletRefresh,
         cardPortletDelete,
         CreardestinatarioComponent,
-        CierrecajaComponent
+        CierrecajaComponent,
+        InformativecardComponent,
+        GraficabarraComponent,
+        TablatransferenciasComponent
     ],
     exports:[
         ModalBasicComponent

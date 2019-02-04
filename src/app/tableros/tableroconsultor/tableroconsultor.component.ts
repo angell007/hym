@@ -21,6 +21,7 @@ import { NgForm } from '@angular/forms';
 export class TableroconsultorComponent implements OnInit {
   public fecha = new Date();
   transferencias = [];
+  transferencias2 = ['a','b','c','d','e','f'];
   conteoTransferencias:any = {};
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
@@ -62,6 +63,8 @@ export class TableroconsultorComponent implements OnInit {
   compras = [];
   ListaBancos = [];
 
+  public cargarTabla:boolean = false;
+
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
@@ -74,7 +77,12 @@ export class TableroconsultorComponent implements OnInit {
           this.transferencias.push(element);
         }
       });
+      
       this.transferenciasRealizadas = data.realizadas;
+      setTimeout(() => {
+        this.cargarTabla = true;  
+      }, 500);
+      
 
     });
 
@@ -92,7 +100,7 @@ export class TableroconsultorComponent implements OnInit {
       }
     });
 
-    this.graficas();
+    //this.graficas();
 
   }
 

@@ -197,11 +197,7 @@ export class CommonLayoutComponent implements OnInit {
         this.caja_seleccionada = localStorage.getItem("Caja");
         if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada === null || this.caja_seleccionada === '') {
             this.modalOficinaCaja.show();
-        }
-
-        console.log(this.oficina_seleccionada);
-        console.log(this.caja_seleccionada);
-        
+        }        
         
         localStorage.setItem('Perfil', this.user.Id_Perfil);
         switch (this.user.Id_Perfil) {
