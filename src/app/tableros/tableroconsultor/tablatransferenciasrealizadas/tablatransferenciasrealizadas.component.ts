@@ -4,18 +4,16 @@ import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-tablatransferencias',
-  templateUrl: './tablatransferencias.component.html',
-  styleUrls: ['./tablatransferencias.component.scss']
+  selector: 'app-tablatransferenciasrealizadas',
+  templateUrl: './tablatransferenciasrealizadas.component.html',
+  styleUrls: ['./tablatransferenciasrealizadas.component.scss']
 })
-
-export class TablatransferenciasComponent implements OnInit {
+export class TablatransferenciasrealizadasComponent implements OnInit {
 
   @Input() MonedaConsulta:string = '1';
   @Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
 
-  @ViewChild('ModalPrueba') ModalPrueba:any;
   @ViewChild('alertSwal') alertSwal:any;
 
   public TransferenciasListar:any = [];
@@ -47,9 +45,9 @@ export class TablatransferenciasComponent implements OnInit {
   ConsultarTransferencias(){
 
     let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
-    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_realizadas_consultores.php', {params: p}).subscribe((data: any) => {
 
-      this.TransferenciasListar = data.todas;
+      this.TransferenciasListar = data.realizadas;
     });
   }
 
@@ -81,7 +79,7 @@ export class TablatransferenciasComponent implements OnInit {
       if (response.codigo == 'warning') {
         this.ShowSwal(response.codigo, 'Alerta', response.mensaje);
       }else{
-        this.ModalPrueba.show();
+        //this.ModalPrueba.show();
       }      
     });
   }
@@ -92,7 +90,7 @@ export class TablatransferenciasComponent implements OnInit {
     this.http.post(this.globales.ruta+'php/transferencias/desbloquear_transferencia_consultor.php', data).subscribe(data => {
     });
     
-    this.ModalPrueba.hide();
+    //this.ModalPrueba.hide();
   }
 
   GuardarTransferencia(modal) {
@@ -126,4 +124,5 @@ export class TablatransferenciasComponent implements OnInit {
     this.alertSwal.text = msg;
     this.alertSwal.show();
   }
+
 }

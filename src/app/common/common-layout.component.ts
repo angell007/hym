@@ -94,6 +94,15 @@ export class CommonLayoutComponent implements OnInit {
     public oficina_seleccionada:any = '';
     public caja_seleccionada:any = '';
 
+    public Paises:any = [];
+
+    public AperturaCuentaModel:any = {
+        Id_Cuenta_Bancaria: '',
+        Id_Moneda: '',
+        Valor: '',
+        Id_Bloqueo_Cuenta: ''
+    };
+
     fajosPesos = [
         { "BilleteEntero100": 50000, "ValorEntero100": 0, "BilleteEntero50": 50000, "ValorEntero50": 0, "BilleteSuelto": 50000, "ValorSuelto": 0, "Moneda": "Pesos" },
         { "BilleteEntero100": 20000, "ValorEntero100": 0, "BilleteEntero50": 20000, "ValorEntero50": 0, "BilleteSuelto": 20000, "ValorSuelto": 0, "Moneda": "Pesos" },
@@ -174,14 +183,13 @@ export class CommonLayoutComponent implements OnInit {
     ngOnInit() {
 
         setTimeout(() => {
+            this.AsignarPaises();
             this.AsignarMonedas();
             this.AsignarMonedasApertura();
             this.ListarOficinas();    
         }, 1000);
         
         console.log(localStorage);
-        
-        //this.user = JSON.parse(localStorage.User);
 
         if (!localStorage.getItem("Oficina")) {
             this.modalOficinaCaja.show();
@@ -268,9 +276,9 @@ export class CommonLayoutComponent implements OnInit {
             });
         }, 30000);
 
-        this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+        /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
             this.ListaBancos = data;
-        });
+        });*/
 
         /*setInterval(() => {
             this.cerrarCaja()
@@ -661,6 +669,29 @@ export class CommonLayoutComponent implements OnInit {
 
     }
 
+    GuardarMontoInicial2(modal) {
+        console.log(this.AperturaCuentaModel);        
+
+        let id_funcionario = this.user.Identificacion_Funcionario;
+        let info = JSON.stringify(this.AperturaCuentaModel);
+        let datos = new FormData();
+        datos.append("modelo", info);
+        datos.append("id_funcionario", id_funcionario);
+        this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
+
+            this.mensajeSwal.title = "Registro Exitoso";
+            this.mensajeSwal.text = data.mensaje;
+            this.mensajeSwal.type = data.codigo;
+            this.mensajeSwal.show();
+
+            localStorage.setItem('Cuenta_Bancaria',this.AperturaCuentaModel.Id_Cuenta_Bancaria);
+            localStorage.setItem('Moneda_Cuenta_Bancaria',this.AperturaCuentaModel.Id_Moneda);
+
+            modal.hide();
+        });
+
+    }
+
     Movimientos = [];
     MontoInicialCuenta = [];
     sumaIngresos = 0;
@@ -778,13 +809,22 @@ export class CommonLayoutComponent implements OnInit {
     SaldoInicialBanco = 0;
     IdBanco = 0;
     VerificarSaldo(value) {
+        if (value == '') {
+            this.AperturaCuentaModel.Valor = '';
+            this.AperturaCuentaModel.Id_Cuenta_Bancaria = value;
+            this.AperturaCuentaModel.Id_Moneda = '';
+            return;
+        }
+
         this.IdBanco = value;
         var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === value);
         if (index > -1) {
             this.SaldoInicialBanco = this.ListaBancos[index].Valor;
+            this.AperturaCuentaModel.Id_Moneda = this.ListaBancos[index].Id_Moneda;
+            this.AperturaCuentaModel.Id_Cuenta_Bancaria = value;
+            this.AperturaCuentaModel.Valor = this.ListaBancos[index].Valor;
             //GuardarInicio
         }
-
     }
 
     RealizarCierreDiaCuentaBancaria(modal:any = null) {
@@ -854,6 +894,10 @@ export class CommonLayoutComponent implements OnInit {
         });
     }
 
+    AsignarPaises(){
+        this.Paises = this.globales.Paises;
+    }
+
     GuardarOficinaCaja(){
         if (this.oficina_seleccionada == '') {
             this.ShowSwal('warning', 'Alerta', 'Debe escoger la oficina!');
@@ -881,6 +925,25 @@ export class CommonLayoutComponent implements OnInit {
         this.alertSwal.show();
     }
 
-    
+    CargarBancosPais(id_pais){
+        if (id_pais == '') {
+            this.LimpiarModeloCuentaBancaria();
+            this.ListaBancos = [];
+            return;
+        }
+
+        this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_por_pais.php', {params:{id_pais:id_pais}}).subscribe((data: any) => {
+            this.ListaBancos = data;
+        });
+    }
+
+    LimpiarModeloCuentaBancaria(){
+        this.AperturaCuentaModel = {
+            Id_Cuenta_Bancaria: '',
+            Id_Moneda: '',
+            Valor: '',
+            Id_Bloqueo_Cuenta: ''
+        };
+    }
 
 }

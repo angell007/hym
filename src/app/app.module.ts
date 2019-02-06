@@ -106,6 +106,8 @@ import { PuntosPipe } from './common/Pipes/puntos.pipe';
 import { InformativecardComponent } from './simplecomponents/informativecard/informativecard.component';
 import { GraficabarraComponent } from './graficabarra/graficabarra.component';
 import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
+import { TablatransferenciasrealizadasComponent } from './tableros/tableroconsultor/tablatransferenciasrealizadas/tablatransferenciasrealizadas.component';
+import { TablatransferenciasdevueltasComponent } from './tableros/tableroconsultor/tablatransferenciasdevueltas/tablatransferenciasdevueltas.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -221,7 +223,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CierrecajaComponent,
         InformativecardComponent,
         GraficabarraComponent,
-        TablatransferenciasComponent
+        TablatransferenciasComponent,
+        TablatransferenciasrealizadasComponent,
+        TablatransferenciasdevueltasComponent
     ],
     exports:[
         ModalBasicComponent

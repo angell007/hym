@@ -1,74 +1,121 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-1" style="text-align:center;">
-                            <img src="../../../assets/images/transfer.png" alt="icono_transferencia" style="width:3rem; height:3rem;">
+            <div class="row">
+                <div class="col-md-9">                    
+                    <div class="row" id="informative-cards-container">
+                        <div class="col-md-3">
+                            <app-informativecard 
+                                CantidadMostrar="0"
+                                TituloCard="Pendientes"
+                                IconoCard="ti-control-shuffle"
+                                CardClass="bg-dark">
+                            </app-informativecard>
                         </div>
-                        <div class="col-md-8" style="display:flex; align-items:center; font-size: 1.7rem;">
-                            <b>TRANSFERENCIAS</b>                                  
+                        <div class="col-md-3">
+                            <app-informativecard 
+                                CantidadMostrar="0"
+                                TituloCard="Realizadas"
+                                IconoCard="ti-control-shuffle"
+                                CardClass="bg-dark">
+                            </app-informativecard>
+                        </div>
+                        <div class="col-md-3">
+                            <app-informativecard 
+                                CantidadMostrar="0"
+                                TituloCard="Devueltas"
+                                IconoCard="ti-control-shuffle"
+                                CardClass="bg-dark">
+                            </app-informativecard>
+                        </div>
+                        <div class="col-md-3">
+                            <app-informativecard 
+                                CantidadMostrar="0"
+                                TituloCard="% Productividad"
+                                IconoCard="ti-control-shuffle"
+                                CardClass="bg-dark">
+                            </app-informativecard>
                         </div>
                     </div>
-                </div> 
-                <div class="row">
-                    <div class="col-md-9">
+                    <div class="card">
                         <div class="card-body">
-                            <div class="row" id="informative-cards-container">
-                                <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="Disponibles"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-info">
-                                    </app-informativecard>
+                            <div class="row">
+                                <div class="col-md-1" style="text-align:center;">
+                                    <img src="../../../assets/images/transfer.png" alt="icono_transferencia" style="width:3rem; height:3rem;">
+                                </div>
+                                <div class="col-md-9" style="display:flex; align-items:center; font-size: 1.7rem;">
+                                    <b>TRANSFERENCIAS</b>
                                 </div>
                                 <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="Realizadas"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-warning">
-                                    </app-informativecard>
-                                </div>
-                                <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="Pendientes"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-success">
-                                    </app-informativecard>
-                                </div>
-                                <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="Manejo de Saldo"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-danger">
-                                    </app-informativecard>
-                                </div>
-                                <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="% productividad"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-primary">
-                                    </app-informativecard>
-                                </div>
-                                <div class="col-md-2">
-                                    <app-informativecard 
-                                        CantidadMostrar="0"
-                                        TituloCard="Transferencias"
-                                        IconoCard="ti-control-shuffle"
-                                        CardClass="bg-info">
-                                    </app-informativecard>
+                                    <div class="dropdown inline-block">
+                                        <button class="btn btn-dark dropdown-toggle" data-toggle="dropdown" type="button">
+                                            <span>{{Seleccionado}} </span><i class="ti-angle-down font-size-9"></i></button>
+                                        <ul class="dropdown-menu">
+                                            <li *ngFor="let tt of TiposTransferencias"><a (click)="MostrarTabla(tt)">{{tt}}</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
+                        </div> 
+                        <!--<div class="row-fluid">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for=""></label>
+                                    <select name="" id="" class="form-control">
+                                        <option value="">Selecciones tipo</option>
+                                        <option *ngFor="let tt of TiposTransferencias">{{tt}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card-body">        
+                                    <div class="row">
+                                        <div class="col-md-12"  
+                                            *ngIf="cargarTabla">
+                                            <app-tablatransferencias 
+                                                *ngIf="TablaPendientes"
+                                                [MonedaConsulta]="MonedaCuentaConsultor" 
+                                                [CuentaConsultor]="CuentaConsultor" 
+                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario">
+                                            </app-tablatransferencias>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <app-tablatransferencias MonedaConsulta="1"></app-tablatransferencias>
+                                            <app-tablatransferenciasrealizadas
+                                                *ngIf="TablaRealizadas"
+                                                [MonedaConsulta]="MonedaCuentaConsultor" 
+                                                [CuentaConsultor]="CuentaConsultor" 
+                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario">
+                                            </app-tablatransferenciasrealizadas>
+
+                                            <app-tablatransferenciasdevueltas
+                                                *ngIf="TablaDevueltas"
+                                                [MonedaConsulta]="MonedaCuentaConsultor" 
+                                                [CuentaConsultor]="CuentaConsultor" 
+                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario">
+                                            </app-tablatransferenciasdevueltas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4>Datos cuenta en uso</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4>Grafica Torta</h4>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +126,56 @@
     </div>
 </div>
 
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Cambio de Cuenta</h4>
+        <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+            <form #FormCambiarBanco="ngForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>País</label>
+                        <select  name="Id_Pais" id="Pais" class="form-control" (change)="CargarBancosPais($event.target.value)" required>
+                            <option value="" selected> Seleccione Pais</option>
+                            <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Banco Venezolanos</label>
+                        <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" [(ngModel)] = "AperturaCuentaModel.Id_Cuenta_Bancaria" required class="form-control" (change)="VerificarSaldo($event.target.value)">
+                            <option value=""> Seleccione Banco</option>
+                            <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                                ({{banco.Numero_Cuenta}}) </option>
+                        </select>
+                    </div>
+                </div>                    
+                <hr>    
+                <div class="col-md-12 ">
+                    <label>Saldo Cuenta Bancaria</label>
+                    <input 
+                        style="width: 100%" 
+                        currencyMask type="text" 
+                        class="form-control" 
+                        name="Monto_Inicial" 
+                        [(ngModel)]="AperturaCuentaModel.Valor"
+                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" 
+                        required >
+                </div>
+    
+            </form>
+        </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button id="GuardarInicio" class="btn btn-primary btn-sm" [disabled]="!FormCambiarBanco.valid" (click)="GuardarMontoInicial2(ModalCambiarBanco)">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
 
-
+<swal title='' text='' type='' #alertSwal></swal>
 
 <!--<div class="container-fluid">
     <div class="page-title">
@@ -243,9 +338,9 @@
         </div>
     </div>
 
-</div>-->
+</div>
 
-<!--<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
 </swal>
 
 <swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">

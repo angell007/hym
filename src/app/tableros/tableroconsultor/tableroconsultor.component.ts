@@ -63,12 +63,35 @@ export class TableroconsultorComponent implements OnInit {
   compras = [];
   ListaBancos = [];
 
+  //NUEVO CODIGO  
+  @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
+  @ViewChild('alertSwal') alertSwal:any;
+
   public cargarTabla:boolean = false;
+  public funcionario:any = JSON.parse(localStorage['User']);
+
+  public AperturaCuentaModel:any = {
+    Id_Cuenta_Bancaria: '',
+    Id_Moneda: '',
+    Valor: '',
+    Id_Bloqueo_Cuenta: ''
+  };
+
+  public CuentaConsultor:any = '';
+  public MonedaCuentaConsultor:any = '';
+  public TiposTransferencias:any = ['Pendientes', 'Realizadas', 'Devueltas'];
+
+  public TablaPendientes:boolean = true;
+  public TablaRealizadas:boolean = false;
+  public TablaDevueltas:boolean = false;
+  public Seleccionado:string = 'Pendientes';
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    this.ActualizarVista();
+    console.log(this.funcionario);
+    
+    this.ActualizarVista();   
 
     this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
 
@@ -79,30 +102,160 @@ export class TableroconsultorComponent implements OnInit {
       });
       
       this.transferenciasRealizadas = data.realizadas;
+      /*setTimeout(() => {
+        this.cargarTabla = true;  
+      }, 500);*/
+    });
+
+    if (this.VerificarAperturaCuenta()) {
+      
       setTimeout(() => {
         this.cargarTabla = true;  
       }, 500);
-      
-
-    });
+    }
 
     //hym.corvuslab.co/php/consultor/lista_bancos.php
 
-    this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+    /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
       this.ListaBancos = data;
-    });
+    });*/
 
-    this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
+    /*this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
       if (data.length == 0) {
-        this.ModalSaldoInicialBanco.show();
+        //this.ModalSaldoInicialBanco.show();
       }else{
         localStorage.setItem('Banco',data[0].Id_Cuenta_Bancaria);
       }
-    });
+    });*/
 
     //this.graficas();
 
   }
+
+  //#region CODIGO NUEVO
+
+  GuardarMontoInicial2(modal) {
+    console.log(this.AperturaCuentaModel);
+
+    if (this.CuentaConsultor != '') {
+      
+      this.CerrarCuentaConsultor();
+      return;
+    }else{
+
+      let id_funcionario = this.funcionario.Id_Funcionario;
+      let info = JSON.stringify(this.AperturaCuentaModel);
+      let datos = new FormData();
+      datos.append("modelo", info);
+      datos.append("id_funcionario", id_funcionario);
+      this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
+
+        this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+
+        this.CuentaConsultor = this.AperturaCuentaModel.Id_Cuenta_Bancaria;
+        this.MonedaCuentaConsultor = this.AperturaCuentaModel.Id_Moneda;
+        //localStorage.setItem('Cuenta_Bancaria',this.AperturaCuentaModel.Id_Cuenta_Bancaria);
+        //localStorage.setItem('Moneda_Cuenta_Bancaria',this.AperturaCuentaModel.Id_Moneda);
+
+        modal.hide();   
+      });
+    }
+  }
+
+  CerrarCuentaConsultor(){
+    return;
+    let datos = '';
+    this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
+
+      this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+
+      this.CuentaConsultor = this.AperturaCuentaModel.Id_Cuenta_Bancaria;
+      this.MonedaCuentaConsultor = this.AperturaCuentaModel.Id_Moneda;
+      //localStorage.setItem('Cuenta_Bancaria',this.AperturaCuentaModel.Id_Cuenta_Bancaria);
+      //localStorage.setItem('Moneda_Cuenta_Bancaria',this.AperturaCuentaModel.Id_Moneda);
+
+      this.ModalCambiarBanco.show();   
+    });
+  }
+
+  VerificarAperturaCuenta():boolean{
+
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+
+      if (data.existe == 0) {
+        this.ModalCambiarBanco.show();
+        return false;
+      }else{
+
+        this.MonedaCuentaConsultor = data.moneda;
+        this.CuentaConsultor = data.cuenta;
+        console.log('cuenta');
+        console.log(this.CuentaConsultor);
+
+        return true;
+      }
+    });
+
+    return true;
+  }
+
+  CargarBancosPais(id_pais){
+    if (id_pais == '') {
+        this.LimpiarModeloCuentaBancaria();
+        this.ListaBancos = [];
+        return;
+    }
+
+    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_por_pais.php', {params:{id_pais:id_pais}}).subscribe((data: any) => {
+        this.ListaBancos = data;
+    });
+  }
+
+  LimpiarModeloCuentaBancaria(){
+    this.AperturaCuentaModel = {
+        Id_Cuenta_Bancaria: '',
+        Id_Moneda: '',
+        Valor: '',
+        Id_Bloqueo_Cuenta: ''
+    };
+  } 
+
+  MostrarTabla(tabla){
+    console.log(tabla);
+    this.Seleccionado = tabla;
+    
+    switch (tabla) {
+      case 'Pendientes':
+        this.TablaPendientes = true;
+        this.TablaRealizadas = false;
+        this.TablaDevueltas = false;
+        break;
+
+      case 'Realizadas':
+        this.TablaPendientes = false;
+        this.TablaRealizadas = true;
+        this.TablaDevueltas = false;
+        break;
+
+      case 'Devueltas':
+        this.TablaPendientes = false;
+        this.TablaRealizadas = false;
+        this.TablaDevueltas = true;
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  ShowSwal(tipo:string, titulo:string, msg:string){
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+
+  //#endregion
 
   Pendientes = true;
   Realizadas = false;
