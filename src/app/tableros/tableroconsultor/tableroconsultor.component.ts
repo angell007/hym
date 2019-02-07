@@ -114,6 +114,9 @@ export class TableroconsultorComponent implements OnInit {
   public TablaDevueltas:boolean = false;
   public Seleccionado:string = 'Pendientes';
 
+  public ChartData:any = [];
+  public ChartLabels = ['Realizadas', 'Devueltas'];
+
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
@@ -169,16 +172,25 @@ export class TableroconsultorComponent implements OnInit {
       datos.append("id_bloqueo_cuenta", this.IdBloqueoCuenta);
       this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
 
-        this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+        if (data.codigo == 'warning') {
+          this.ShowSwal(data.codigo, 'Alerta', data.mensaje);
+          this.cargarTabla = false;
+          this.TablaPendientes = false; 
+          this.CierreValoresModel.SaldoInicial = 0;
+          this.CierreValoresModel.SaldoFinal = 0;
 
-        if(this.VerificarAperturaCuenta()){
-          this.cargarTabla = true;
-          this.TablaPendientes = true; 
+        }else{
+
+          this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+          if(this.VerificarAperturaCuenta()){
+            this.cargarTabla = true;
+            this.TablaPendientes = true; 
+          }
+  
+          this.CierreValoresModel.SaldoInicial = parseFloat(this.MontoInicial);
+          this.CierreValoresModel.SaldoFinal = parseFloat(this.MontoInicial);
+          modal.hide();
         }
-
-        this.CierreValoresModel.SaldoInicial = this.MontoInicial;
-        this.CierreValoresModel.SaldoFinal = this.MontoInicial;
-        modal.hide();   
       });
     }
   }
@@ -233,8 +245,8 @@ export class TableroconsultorComponent implements OnInit {
         this.IdBloqueoCuenta = data.datos_apertura.Id_Bloqueo_Cuenta;
         this.CodigoMoneda = data.datos_apertura.Codigo;
         this.MontoInicial = data.datos_apertura.Valor;
-        this.CierreValoresModel.SaldoInicial = this.MontoInicial;
-        this.CierreValoresModel.SaldoFinal = this.MontoInicial;
+        this.CierreValoresModel.SaldoInicial = parseFloat(this.MontoInicial);
+        this.CierreValoresModel.SaldoFinal = parseFloat(this.MontoInicial);
 
         return true;
       }
@@ -248,6 +260,8 @@ export class TableroconsultorComponent implements OnInit {
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
+        this.ChartData.push(this.Indicadores.Realizadas);
+        this.ChartData.push(this.Indicadores.Devueltas);
       }else{
         this.Indicadores = {
           Pendiente: 0,
@@ -255,6 +269,8 @@ export class TableroconsultorComponent implements OnInit {
           Devueltas: 0,
           Productividad: 0
         };
+
+        this.ChartData = [];
       }      
     });
   }
@@ -310,15 +326,42 @@ export class TableroconsultorComponent implements OnInit {
         return;
     }
 
+    this.ConsultarValorCuenta(value);
+
     //this.IdBanco = value;
-    var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === value);
+    /*var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === value);
     if (index > -1) {
         this.SaldoInicialBanco = this.ListaBancos[index].Valor;
         this.AperturaCuentaModel.Id_Moneda = this.ListaBancos[index].Id_Moneda;
         this.AperturaCuentaModel.Id_Cuenta_Bancaria = value;
         this.AperturaCuentaModel.Valor = this.ListaBancos[index].Valor;
         //GuardarInicio
-    }
+    }*/
+  }
+
+  ConsultarValorCuenta(id_cuenta){
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/cargar_saldo_cuenta.php', {params:{id_cuenta:id_cuenta}}).subscribe((data:any) => {
+
+      if (data.codigo == "error") {
+        this.ShowSwal(data.codigo, 'Error en la cuenta', data.mensaje);
+
+        this.SaldoInicialBanco = 0;
+        this.AperturaCuentaModel.Id_Moneda = '';
+        this.AperturaCuentaModel.Id_Cuenta_Bancaria = '';
+        this.AperturaCuentaModel.Valor = '';
+
+      }else{
+
+        var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === id_cuenta);
+        if (index > -1) {
+            this.SaldoInicialBanco = this.ListaBancos[index].Valor;
+            this.AperturaCuentaModel.Id_Moneda = this.ListaBancos[index].Id_Moneda;
+            this.AperturaCuentaModel.Id_Cuenta_Bancaria = id_cuenta;
+            this.AperturaCuentaModel.Valor = data.Valor_Cuenta;
+            //GuardarInicio
+        }
+      }
+    });
   }
 
   GetMovimientosCuentaBancaria(){
@@ -344,23 +387,30 @@ export class TableroconsultorComponent implements OnInit {
   LlenarValoresCierre(valores){
     let egresos = 0;
     let ingresos = 0;
-    let saldoFinal = 0;
 
     valores.forEach((m, i) => {
-      egresos += parseFloat(m.Egreso);
-      ingresos += parseFloat(m.Ingreso);      
-      this.CierreValoresModel.SaldoFinal = (parseFloat(this.CierreValoresModel.SaldoFinal) + ingresos) - egresos;
+      let e = parseFloat(m.Egreso);
+      let ing = parseFloat(m.Ingreso);
+
+      egresos += e;
+      ingresos += ing; 
+
+      if (e != 0 && ing == 0) {
+        this.CierreValoresModel.SaldoFinal = this.CierreValoresModel.SaldoFinal - e;  
+      }else if (e == 0 && ing != 0){
+        this.CierreValoresModel.SaldoFinal = this.CierreValoresModel.SaldoFinal + ing;
+      }      
     });
 
     this.CierreValoresModel.Egresos = egresos;
-    this.CierreValoresModel.Ingresos = egresos;
+    this.CierreValoresModel.Ingresos = ingresos;
   }
 
   AsignarValoresModeloCierreCuenta(){    
 
     this.CierreCuentaModel.Id_Moneda = this.MonedaCuentaConsultor;
     this.CierreCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
-    this.CierreCuentaModel.Valor = this.CierreValoresModel.SaldoFinal;
+    this.CierreCuentaModel.Valor = this.CierreValoresModel.SaldoFinal.toString();
     this.CierreCuentaModel.Id_Bloqueo_Cuenta = this.IdBloqueoCuenta;
   }
 

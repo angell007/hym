@@ -108,6 +108,7 @@ import { GraficabarraComponent } from './graficabarra/graficabarra.component';
 import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
 import { TablatransferenciasrealizadasComponent } from './tableros/tableroconsultor/tablatransferenciasrealizadas/tablatransferenciasrealizadas.component';
 import { TablatransferenciasdevueltasComponent } from './tableros/tableroconsultor/tablatransferenciasdevueltas/tablatransferenciasdevueltas.component';
+import { DatachartComponent } from './simplecomponents/datachart/datachart.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -225,7 +226,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         GraficabarraComponent,
         TablatransferenciasComponent,
         TablatransferenciasrealizadasComponent,
-        TablatransferenciasdevueltasComponent
+        TablatransferenciasdevueltasComponent,
+        DatachartComponent
     ],
     exports:[
         ModalBasicComponent
