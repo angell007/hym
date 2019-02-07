@@ -70,7 +70,11 @@
               (confirm)="GuardarTransferencia(ModalPrueba)"
               [disabled]="!FormTransferencia.valid">Registrar
             </button>
-            <button id="CerrarModal" class="btn btn-default btn-sm" (click)="DesbloquearTransferencia()">Cerrar</button>
+            <button 
+              id="CerrarModal" 
+              class="btn btn-default btn-sm" 
+              (click)="DesbloquearTransferencia()">Cerrar
+            </button>
         </div>
     </div>
 </app-modal-basic>

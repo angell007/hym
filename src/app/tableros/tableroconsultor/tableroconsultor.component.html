@@ -6,34 +6,39 @@
                     <div class="row" id="informative-cards-container">
                         <div class="col-md-3">
                             <app-informativecard 
-                                CantidadMostrar="0"
+                                [CantidadMostrar]="Indicadores.Pendientes"
                                 TituloCard="Pendientes"
-                                IconoCard="ti-control-shuffle"
-                                CardClass="bg-dark">
+                                IconoCard="ti-receipt"
+                                CardClass="bg-danger"
+                                AdditionalText="">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">
                             <app-informativecard 
-                                CantidadMostrar="0"
+                                [CantidadMostrar]="Indicadores.Realizadas"
                                 TituloCard="Realizadas"
-                                IconoCard="ti-control-shuffle"
-                                CardClass="bg-dark">
+                                IconoCard="ti-check"
+                                CardClass="bg-success"
+                                AdditionalText="">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">
                             <app-informativecard 
-                                CantidadMostrar="0"
+                                [CantidadMostrar]="Indicadores.Devueltas"
                                 TituloCard="Devueltas"
-                                IconoCard="ti-control-shuffle"
-                                CardClass="bg-dark">
+                                IconoCard="ti-back-right"
+                                CardClass="bg-warning"
+                                AdditionalText=""
+                                TextColor="black">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">
                             <app-informativecard 
-                                CantidadMostrar="0"
+                                [CantidadMostrar]="Indicadores.Productividad"
                                 TituloCard="% Productividad"
-                                IconoCard="ti-control-shuffle"
-                                CardClass="bg-dark">
+                                IconoCard="ti-stats-up"
+                                CardClass="bg-info"
+                                AdditionalText="%">
                             </app-informativecard>
                         </div>
                     </div>
@@ -43,8 +48,10 @@
                                 <div class="col-md-1" style="text-align:center;">
                                     <img src="../../../assets/images/transfer.png" alt="icono_transferencia" style="width:3rem; height:3rem;">
                                 </div>
-                                <div class="col-md-9" style="display:flex; align-items:center; font-size: 1.7rem;">
+                                <div class="col-md-9" style="display:flex; align-items:center; justify-content:space-between; font-size: 1.7rem;">
                                     <b>TRANSFERENCIAS</b>
+                                    
+                                    <button class="btn btn-light" (click)="CambiarCuentaBancaria()"><i class="ti-reload"> Cambiar Cuenta</i></button>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="dropdown inline-block">
@@ -56,18 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
-                        <!--<div class="row-fluid">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for=""></label>
-                                    <select name="" id="" class="form-control">
-                                        <option value="">Selecciones tipo</option>
-                                        <option *ngFor="let tt of TiposTransferencias">{{tt}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>-->
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card-body">        
@@ -78,14 +74,16 @@
                                                 *ngIf="TablaPendientes"
                                                 [MonedaConsulta]="MonedaCuentaConsultor" 
                                                 [CuentaConsultor]="CuentaConsultor" 
-                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario">
+                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario"
+                                                (ActualizarIndicadores)="CargarIndicadores()">
                                             </app-tablatransferencias>
 
                                             <app-tablatransferenciasrealizadas
                                                 *ngIf="TablaRealizadas"
                                                 [MonedaConsulta]="MonedaCuentaConsultor" 
                                                 [CuentaConsultor]="CuentaConsultor" 
-                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario">
+                                                [Id_Funcionario]="funcionario.Identificacion_Funcionario"
+                                                (ActualizaIndicadores)="CargarIndicadores()">
                                             </app-tablatransferenciasrealizadas>
 
                                             <app-tablatransferenciasdevueltas
@@ -144,7 +142,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label>Banco Venezolanos</label>
+                        <label>Bancos</label>
                         <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" [(ngModel)] = "AperturaCuentaModel.Id_Cuenta_Bancaria" required class="form-control" (change)="VerificarSaldo($event.target.value)">
                             <option value=""> Seleccione Banco</option>
                             <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
@@ -170,6 +168,93 @@
     <div class="app-modal-footer" style="margin: 0 auto;">
         <div class="text-center">
             <button id="GuardarInicio" class="btn btn-primary btn-sm" [disabled]="!FormCambiarBanco.valid" (click)="GuardarMontoInicial2(ModalCambiarBanco)">Iniciar
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-xl'" id="ModalCierreCuenta" #ModalCierreCuenta>
+    <div class="app-modal-header" style="margin: 0 auto;">
+        <h4>Resumen de Cuenta</h4>
+        <button type="button" class="close basic-close" (click)="CerrarModalCierreCuenta()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCierreCuenta="ngForm">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4" style="display:flex;align-items:center;">
+                            <b>Saldo Inicial: {{CodigoMoneda}} {{MontoInicial | number | puntos}}</b>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="pull-right">
+                                <button class="btn btn-dark"><i class="ti-money"></i> Agregar ajuste</button>
+                            </div>                            
+                        </div>
+                    </div>                    
+                    <table class="table table-bordered" id="tabla-cierre">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;font-weight: bold;">Fecha</th>
+                                <th style="text-align:center;font-weight: bold;">Recibo</th>
+                                <th style="text-align:center;font-weight: bold;">Ingreso</th>
+                                <th style="text-align:center;font-weight: bold;">Egreso</th>
+                                <th style="text-align:center;font-weight: bold;">Saldo</th>
+                            </tr>
+                            <tr  *ngIf="MovimientosCuentaBancaria.length == 0">
+                                <th colspan="5" style="text-align:center;font-weight: bold;"><i class="ti-face-sad"></i> No hay movimientos en la cuenta</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="MovimientosCuentaBancaria.length > 0">
+                            <tr *ngFor="let mov of MovimientosCuentaBancaria">
+                                <td>{{mov.Fecha | date:"MMM d, y"}}</td>
+                                <td>{{mov.Recibo}}</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Ingreso | number | puntos}}</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Egreso | number | puntos}}</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Saldo | number | puntos}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width:40%; font-weight: bold;">Saldo Inicial</td>
+                                <td style="width:60%;text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.SaldoInicial | number | puntos}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Egresos</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Egresos | number | puntos}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Ingresos</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Ingresos | number | puntos}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Saldo final</td>
+                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.SaldoFinal | number | puntos}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer" style="margin: 0 auto;">
+        <div class="text-center">
+            <button 
+              id="guardarcierre" 
+              class="btn btn-primary btn-sm" 
+              [swal]="{ title : '¿Está Seguro?', text : 'Se va a guardar el cierre de cuenta' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Comprobar!' }"
+              (confirm)="CerrarCuentaConsultor()"
+              [disabled]="!FormCierreCuenta.valid">Cerrar Cuenta
+            </button>
+            <button 
+              id="cerrarmodal" 
+              class="btn btn-danger btn-sm" (click)="CerrarModalCierreCuenta()">Cerrar
             </button>
         </div>
     </div>

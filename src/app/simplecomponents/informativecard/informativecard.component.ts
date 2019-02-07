@@ -11,6 +11,8 @@ export class InformativecardComponent implements OnInit {
   @Input() TituloCard:any = 'Titulo';
   @Input() IconoCard:any = 'ti-control-shuffle';
   @Input() CardClass:any = 'bg-success';
+  @Input() TextColor:any = 'white';
+  @Input() AdditionalText:any = '';
 
   constructor() { }
 

@@ -1,16 +1,16 @@
 <div class="card" [ngClass]="CardClass">
   <div class="card-block" style="padding:5px;">
       <div class="row">
-          <div class="col-md-7">
-              <h5 class="no-mrg-top" style="color:white;">{{CantidadMostrar}}</h5>
+          <div class="col-md-9">
+              <h5 class="no-mrg-top" [style.color]="TextColor">{{CantidadMostrar}} {{AdditionalText}}</h5>
           </div>
-          <div class="col-md-5 text-center" style="display:flex; align-items:center;">
-              <i class="font-size-20 text-white" [ngClass]="IconoCard"></i>
+          <div class="col-md-3 text-center" style="display:flex; align-items:center;" [style.color]="TextColor">
+              <i class="font-size-20 pull-right" [ngClass]="IconoCard"></i>
           </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <span class="text-white" style="padding:5px 0px;">{{TituloCard}}</span>
+        <div class="col-md-12" [style.color]="TextColor">
+          <span style="padding:5px 0px;">{{TituloCard}}</span>
 
         </div>
       </div>

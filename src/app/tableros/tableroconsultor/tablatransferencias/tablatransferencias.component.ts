@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
@@ -9,11 +9,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./tablatransferencias.component.scss']
 })
 
-export class TablatransferenciasComponent implements OnInit {
+export class TablatransferenciasComponent implements OnInit, OnChanges {
 
-  @Input() MonedaConsulta:string = '1';
+  @Input() MonedaConsulta:string = '';
   @Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
+
+  @Output() ActualizarIndicadores = new EventEmitter();
 
   @ViewChild('ModalPrueba') ModalPrueba:any;
   @ViewChild('alertSwal') alertSwal:any;
@@ -39,6 +41,14 @@ export class TablatransferenciasComponent implements OnInit {
 
   constructor(private http:HttpClient, public globales:Globales) { }
 
+  ngOnChanges(changes:SimpleChanges){
+
+    if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
+      this.ConsultarTransferencias();
+      this.ConsultarCuentaConsultor();
+    }    
+  }
+
   ngOnInit() {
     this.ConsultarTransferencias();
     this.ConsultarCuentaConsultor();
@@ -46,11 +56,16 @@ export class TablatransferenciasComponent implements OnInit {
 
   ConsultarTransferencias(){
 
-    let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
-    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data: any) => {
+    if (this.MonedaConsulta == '' || this.CuentaConsultor == '') {
+      this.TransferenciasListar = [];
 
-      this.TransferenciasListar = data.todas;
-    });
+    }else{
+      let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
+      this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data: any) => {
+
+        this.TransferenciasListar = data.todas;
+      });
+    }
   }
 
   ConsultarCuentaConsultor(){
@@ -96,8 +111,7 @@ export class TablatransferenciasComponent implements OnInit {
   }
 
   GuardarTransferencia(modal) {
-    console.log(this.MovimientoBancoModel);
-    
+    console.log(this.MovimientoBancoModel);    
 
     let info = JSON.stringify(this.MovimientoBancoModel);
     let datos = new FormData();
@@ -108,6 +122,7 @@ export class TablatransferenciasComponent implements OnInit {
       
       this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
       modal.hide();
+      this.ActualizarIndicadores.emit(null);
       this.ConsultarTransferencias();
     });
   }

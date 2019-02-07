@@ -38,16 +38,16 @@ export class TablatransferenciasdevueltasComponent implements OnInit {
   constructor(private http:HttpClient, public globales:Globales) { }
 
   ngOnInit() {
-    //this.ConsultarTransferencias();
-    //this.ConsultarCuentaConsultor();
+    this.ConsultarTransferencias();
+    this.ConsultarCuentaConsultor();
   }
 
   ConsultarTransferencias(){
 
     let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
-    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_realizadas_consultores.php', {params: p}).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_devueltas_consultores.php', {params: p}).subscribe((data: any) => {
 
-      this.TransferenciasListar = data.realizadas;
+      this.TransferenciasListar = data.devueltas;
     });
   }
 
@@ -55,7 +55,7 @@ export class TablatransferenciasdevueltasComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/cuentasbancarias/cuenta_consultor.php', {params: {id_cuenta:this.CuentaConsultor}}).subscribe((data: any) => {
 
-      if (data.codigo == 'success') {
+      if (data.codigo == 'success') { 
         
         this.CuentaData = data.cuenta;
         this.NombreCuenta = this.CuentaData.Numero_Cuenta + ' - ' + this.CuentaData.Nombre_Titular + ' - ' + this.CuentaData.Nombre_Tipo_Cuenta

@@ -701,7 +701,8 @@ export class CommonLayoutComponent implements OnInit {
     ValorInicial = 0;
     CierreCuentaBancaria() {
         //JSON.parse(localStorage['Banco']);
-
+this.ModalResumenCuenta.show();
+//return;
         this.MontoInicialCuenta = [];
         this.MontoInicial = 0;
         this.sumaEgresos = 0;

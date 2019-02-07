@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
@@ -8,34 +8,37 @@ import { Observable } from 'rxjs';
   templateUrl: './tablatransferenciasrealizadas.component.html',
   styleUrls: ['./tablatransferenciasrealizadas.component.scss']
 })
-export class TablatransferenciasrealizadasComponent implements OnInit {
+export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges {
 
-  @Input() MonedaConsulta:string = '1';
+  @Input() MonedaConsulta:string = '';
   @Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
 
+  @Output() ActualizaIndicadores = new EventEmitter();
+
   @ViewChild('alertSwal') alertSwal:any;
+  @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia:any;
 
   public TransferenciasListar:any = [];
-  private TransferenciaActual:any = '';
-  public ListaBancos:any = [];
   public CuentaData:any = [];
   public NombreCuenta:string = '';
+  public valor_transferencia_devolver = 0;
 
-  public MovimientoBancoModel:any = {
-    Valor: '0',
-    Id_Cuenta_Bancaria: '0',
-    Detalle: '',
-    Tipo: 'Egreso',
-    Id_Transferencia_Destino: '',
-    Numero_Transferencia: '',
-    Ajuste: 'No'
+  public DevolucionModel:any = {
+    Motivo_Devolucion: '',
+    Id_Transferencia: ''
   };
 
-  //public CuentaConsultor:any = '';
   public MonedaCuentaConsultor:any = '';
 
   constructor(private http:HttpClient, public globales:Globales) { }
+
+  ngOnChanges(changes:SimpleChanges){
+    if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
+      this.ConsultarTransferencias();
+      this.ConsultarCuentaConsultor();
+    }  
+  }
 
   ngOnInit() {
     this.ConsultarTransferencias();
@@ -67,56 +70,40 @@ export class TablatransferenciasrealizadasComponent implements OnInit {
     });
   }
 
-  BloquearTransferencia(id_transferencia){
-
-    this.TransferenciaActual = id_transferencia;
-    this.AsginarValoresModalCrear(id_transferencia);
-    let data = new FormData();
-
-    data.append("id_funcionario", this.Id_Funcionario);
-    data.append("id_transferencia", id_transferencia);
-    this.http.post(this.globales.ruta+'php/transferencias/bloquear_transferencia_consultor.php', data).subscribe((response:any) => {
-      if (response.codigo == 'warning') {
-        this.ShowSwal(response.codigo, 'Alerta', response.mensaje);
-      }else{
-        //this.ModalPrueba.show();
-      }      
-    });
+  AbrirModalDevolucion(id_transferencia, valor){
+    this.DevolucionModel.Id_Transferencia = id_transferencia;
+    this.valor_transferencia_devolver = valor;
+    this.ModalDevolucionTransferencia.show();    
   }
 
-  DesbloquearTransferencia(){
-    let data = new FormData();
-    data.append("id_transferencia", this.TransferenciaActual);
-    this.http.post(this.globales.ruta+'php/transferencias/desbloquear_transferencia_consultor.php', data).subscribe(data => {
-    });
-    
-    //this.ModalPrueba.hide();
+  CerrarModalDevolucion(){
+    this.LimpiarModeloDevolucion();
+    this.ModalDevolucionTransferencia.hide();
   }
 
-  GuardarTransferencia(modal) {
-    console.log(this.MovimientoBancoModel);
-    
+  LimpiarModeloDevolucion(){
+    this.DevolucionModel = {
+      Motivo_Devolucion: '',
+      Id_Transferencia: ''
+    };
+  }
 
-    let info = JSON.stringify(this.MovimientoBancoModel);
+  RealizarDevolucion() {    
+    console.log(this.DevolucionModel);
+
+    let info = this.normalize(JSON.stringify(this.DevolucionModel));
     let datos = new FormData();
-    datos.append("modelo", info);
-    datos.append("cajero", this.Id_Funcionario);
+    datos.append("modelo", info); 
+    datos.append("valor", this.valor_transferencia_devolver.toString());
+    this.http.post(this.globales.ruta + 'php/transferencias/devolver_transferencia.php', datos).subscribe((data: any) => {
 
-    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
-      
-      this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
-      modal.hide();
+      this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+      this.ModalDevolucionTransferencia.hide();
+      this.LimpiarModeloDevolucion();
       this.ConsultarTransferencias();
+      this.ActualizaIndicadores.emit(null);
     });
   }
-
-  AsginarValoresModalCrear(id_transferencia){
-    let t = this.TransferenciasListar.filter(x => x.Id_Transferencia == id_transferencia);    
-
-    this.MovimientoBancoModel.Valor = t[0].Cantidad_Transferida;
-    this.MovimientoBancoModel.Id_Transferencia_Destino =  id_transferencia;
-    this.MovimientoBancoModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
-  };
 
   ShowSwal(tipo:string, titulo:string, msg:string){
     this.alertSwal.type = tipo;
@@ -124,5 +111,27 @@ export class TablatransferenciasrealizadasComponent implements OnInit {
     this.alertSwal.text = msg;
     this.alertSwal.show();
   }
+
+  normalize = (function () {
+    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
+      to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+      mapping = {};
+
+    for (var i = 0, j = from.length; i < j; i++)
+      mapping[from.charAt(i)] = to.charAt(i);
+
+    return function (str) {
+      var ret = [];
+      for (var i = 0, j = str.length; i < j; i++) {
+        var c = str.charAt(i);
+        if (mapping.hasOwnProperty(str.charAt(i)))
+          ret.push(mapping[c]);
+        else
+          ret.push(c);
+      }
+      return ret.join('');
+    }
+
+  })();
 
 }

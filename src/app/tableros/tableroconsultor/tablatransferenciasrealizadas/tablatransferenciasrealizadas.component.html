@@ -24,7 +24,7 @@
                 <div ngbDropdown class="dropdown-primary">
                   <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones <i class="ti-angle-down"></i></button>
                   <div ngbDropdownMenu>
-                    <a class="dropdown-item waves-light waves-effect caja-botones">
+                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="AbrirModalDevolucion(t.Id_Transferencia, t.Cantidad_Transferida)">
                       <i class="ti-back-right"></i> Devolución</a>
                   </div>
                 </div>
@@ -35,6 +35,44 @@
       </table>
   </div>
 </div>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalDevolucionTransferencia" #ModalDevolucionTransferencia>
+  <div class="app-modal-header">
+      <h4>Devolución Transferencia</h4>
+      <button type="button" class="close basic-close" (click)="CerrarModalDevolucion()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="app-modal-body">
+      <form #FormDevolucionTransferencia="ngForm">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Motivo Devolución</label>
+                      <textarea rows="4" cols="50" class="form-control" placeholder="Motivo de la devolucion" name="Motivo_Devolucion"
+                          [(ngModel)]="DevolucionModel.Motivo_Devolucion" required></textarea>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button 
+              id="cerrardevolucion" 
+              class="btn btn-danger btn-sm"
+              (click)="CerrarModalDevolucion()">Cerrar
+            </button>
+          <button 
+              type="submit" 
+              class="btn btn-primary btn-sm" 
+              [disabled]="!FormDevolucionTransferencia.valid" 
+              [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No, Comprobar!'}"
+              (confirm)="RealizarDevolucion()">Devolver
+          </button>
+      </div>
+  </div>
+</app-modal-basic>
 
   
 <swal title='' text='' type='' #alertSwal></swal>
