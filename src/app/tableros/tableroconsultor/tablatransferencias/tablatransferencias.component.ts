@@ -50,8 +50,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.ConsultarTransferencias();
-    this.ConsultarCuentaConsultor();
+    if (this.CuentaConsultor != '') {
+      this.ConsultarTransferencias();
+      this.ConsultarCuentaConsultor();  
+    }    
   }
 
   ConsultarTransferencias(){

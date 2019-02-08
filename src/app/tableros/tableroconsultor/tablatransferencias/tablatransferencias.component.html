@@ -1,35 +1,42 @@
-<table class="table table-striped table-bordered">
-  <thead>
-    <tr>
-      <th style="text-align:center;">Fecha</th>
-      <th style="text-align:center;">Código</th>
-      <th style="text-align:center;">Cajero</th>
-      <th style="text-align:center;">Valor</th>
-      <th style="text-align:center;">Bloqueado Por</th>
-      <th style="text-align:center;">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>                                            
-    <tr *ngFor="let t of TransferenciasListar; let i = index;">
-      <td>{{t.Fecha | date:"MMM d, y" }}</td>
-      <td>{{t.Codigo}}</td>
-      <td>{{t.NombreCajero}}</td>
-      <td style="text-align:right;">{{t.Cantidad_Transferida | currency}}</td>
-      <td>{{t.Funcionario_Bloqueo}}</td>
-      <td>
-        <div class="text-center">
-          <div ngbDropdown class="dropdown-primary">
-            <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones <i class="ti-angle-down"></i></button>
-            <div ngbDropdownMenu>
-              <a class="dropdown-item waves-light waves-effect caja-botones" (click)="BloquearTransferencia(t.Id_Transferencia)">
-                <i class="ti-lock"></i> Bloquear</a>
-            </div>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="row-fluid">
+  <div class="col-md-12">
+    <div *ngIf="TransferenciasListar.length == 0" style="text-align:center;">
+      <h2>No hay transferencias pendientes!</h2>
+    </div>
+    <table class="table table-striped table-bordered" *ngIf="TransferenciasListar.length > 0">
+        <thead>
+          <tr>
+            <th style="text-align:center;">Fecha</th>
+            <th style="text-align:center;">Código</th>
+            <th style="text-align:center;">Cajero</th>
+            <th style="text-align:center;">Valor</th>
+            <th style="text-align:center;">Bloqueado Por</th>
+            <th style="text-align:center;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>                                            
+          <tr *ngFor="let t of TransferenciasListar; let i = index;">
+            <td>{{t.Fecha | date:"MMM d, y" }}</td>
+            <td>{{t.Codigo}}</td>
+            <td>{{t.NombreCajero}}</td>
+            <td style="text-align:right;">{{t.Cantidad_Transferida | currency}}</td>
+            <td>{{t.Funcionario_Bloqueo}}</td>
+            <td>
+              <div class="text-center">
+                <div ngbDropdown class="dropdown-primary">
+                  <button ngbDropdownToggle class="btn btn-info btn-mini waves-effect waves-light " type="button">Acciones <i class="ti-angle-down"></i></button>
+                  <div ngbDropdownMenu>
+                    <a class="dropdown-item waves-light waves-effect caja-botones" (click)="BloquearTransferencia(t.Id_Transferencia)">
+                      <i class="ti-lock"></i> Bloquear</a>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalPrueba" #ModalPrueba>
     <div class="app-modal-header" style="margin: 0 auto;">

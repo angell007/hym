@@ -304,11 +304,34 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     salir() {
+        
+        if (!this.ValidateConsultorBeforeLogout()) {
+            return;
+        }
+        
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
         localStorage.removeItem("Banco");
         localStorage.removeItem('Perfil');
+        localStorage.setItem('CuentaConsultor', '');
+        localStorage.setItem('MonedaCuentaConsultor', '');
         this.router.navigate(["/login"]);
+    }
+
+    ValidateConsultorBeforeLogout(){
+        let funcionario = JSON.parse(localStorage['User']);
+
+        if (funcionario.Id_Perfil == '4') {
+            
+            let cuenta = localStorage.getItem('CuentaConsultor');
+
+            if (cuenta != '') {
+                this.ShowSwal('warning', 'Cuenta Abierta', 'Debe cerrar la cuenta en la que opera antes de cerrar la sesión!');
+                return false;
+            }
+        }
+
+        return true;
     }
 
     ngAfterViewInit() {

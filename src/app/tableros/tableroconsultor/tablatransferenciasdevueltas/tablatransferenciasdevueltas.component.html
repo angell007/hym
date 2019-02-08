@@ -11,7 +11,7 @@
             <th style="text-align:center;">Código</th>
             <th style="text-align:center;">Cajero</th>
             <th style="text-align:center;">Valor</th>
-            <th style="text-align:center;">Acciones</th>
+            <th style="text-align:center;">Observación</th>
           </tr>
         </thead>
         <tbody>                                            
@@ -20,17 +20,7 @@
             <td>{{t.Codigo}}</td>
             <td>{{t.NombreCajero}}</td>
             <td style="text-align:right;">{{t.Cantidad_Transferida | currency}}</td>
-            <td>
-              <!--<div class="text-center">
-                <div ngbDropdown class="dropdown-primary">
-                  <button ngbDropdownToggle class="btn btn-secondary btn-mini waves-effect waves-light " type="button">Acciones <i class="ti-angle-down"></i></button>
-                  <div ngbDropdownMenu>
-                    <a class="dropdown-item waves-light waves-effect caja-botones">
-                      <i class="ti-back-right"></i> Devolución</a>
-                  </div>
-                </div>
-              </div>-->
-            </td>
+            <td>{{t.Detalle}}</td>
           </tr>
         </tbody>
       </table>
