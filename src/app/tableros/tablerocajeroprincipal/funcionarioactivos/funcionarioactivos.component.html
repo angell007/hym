@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-12" id="filter-container">
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Búsqueda de funcionarios</label>
+          <input type="text" class="form-control" aria-describedby="searchFuncionarioHelp">
+          <small id="searchFuncionarioHelp" class="form-text text-muted">
+            Busqueda activa solo para funcionarios que han iniciado sesión
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-funcionarioinformativecard *ngFor="let t of test">      
+    </app-funcionarioinformativecard>
+  </div>
+</div>

@@ -109,6 +109,10 @@ import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablat
 import { TablatransferenciasrealizadasComponent } from './tableros/tableroconsultor/tablatransferenciasrealizadas/tablatransferenciasrealizadas.component';
 import { TablatransferenciasdevueltasComponent } from './tableros/tableroconsultor/tablatransferenciasdevueltas/tablatransferenciasdevueltas.component';
 import { DatachartComponent } from './simplecomponents/datachart/datachart.component';
+import { FuncionarioactivosComponent } from './tableros/tablerocajeroprincipal/funcionarioactivos/funcionarioactivos.component';
+import { TablaresumentotalizadoComponent } from './tableros/tablerocajeroprincipal/tablaresumentotalizado/tablaresumentotalizado.component';
+import { FuncionarioinformativecardComponent } from './simplecomponents/funcionarioinformativecard/funcionarioinformativecard.component';
+import { TablaresumenmunicipioComponent } from './complexcomponents/tablaresumenmunicipio/tablaresumenmunicipio.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -227,7 +231,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatransferenciasComponent,
         TablatransferenciasrealizadasComponent,
         TablatransferenciasdevueltasComponent,
-        DatachartComponent
+        DatachartComponent,
+        FuncionarioactivosComponent,
+        TablaresumentotalizadoComponent,
+        FuncionarioinformativecardComponent,
+        TablaresumenmunicipioComponent
     ],
     exports:[
         ModalBasicComponent

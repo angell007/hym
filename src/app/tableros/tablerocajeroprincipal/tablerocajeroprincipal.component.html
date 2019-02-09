@@ -1,3 +1,57 @@
-<p>
-  tablerocajeroprincipal works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row-fluid">
+            <div class="col-md-12" id="funcionarios-container">
+              <app-funcionarioactivos></app-funcionarioactivos>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 mb-4" id="filter-container">
+                      <div class="row">
+                        <div class="col-md-4" style="display:flex; align-items: center;">
+                          <i class="ti-info-alt text-info font-size-15" style="margin-right:4px;"></i><span>7 de 15 cajeros abrieron</span>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="pull-right">
+                            <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">
+                              <option value="">Seleccione departamento</option>
+                              <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12" id="table-container">
+                      <div class="row">
+                        <div class="col-md-8" style="display:flex; align-items: center;">
+                          <i class="ti-map text-primary font-size-25" style="margin-right:8px;"></i><span class="font-size-25">{{DepartamentoSeleccionado}}</span>
+                        </div>
+                      </div>
+                      <app-tablaresumentotalizado
+                        [Departamento]="DepartamentoId"
+                        [Id_Cajero]="Funcionario.Identificacion_Funcionario"
+                        ParentIndex="0">                        
+                      </app-tablaresumentotalizado>            
+                    </div>
+                  </div>
+                </div>                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
