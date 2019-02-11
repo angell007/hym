@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 
@@ -14,9 +14,12 @@ export class TablaresumentotalizadoComponent implements OnInit, OnChanges {
   @Input() Oficinas:any = [];
   @Input() Id_Cajero:string = '';
 
+  @Output() ActualizarTotalDepartamento:EventEmitter<any> = new EventEmitter();
+
   @ViewChild('alertSwal') alertSwal:any;
   
   public Monedas:any = [];
+  public MostrarTotales:Array<any> = [];
   public Hrefs:any = [];
   public TabsId:any = [];
   public AriaLabels:any = [];
@@ -34,6 +37,19 @@ export class TablaresumentotalizadoComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    console.log(this.Municipio);
+    this.ExtraerTotales();    
+  }
+
+  ExtraerTotales(){
+    let totales_monedas = this.Municipio.Total_Monedas;
+
+    this.Monedas.forEach(m => {
+      let n = m.Nombre;
+      let t = parseFloat(totales_monedas[n].Ingresos) - parseFloat(totales_monedas[n].Egresos);
+      let totalObj = { Codigo:m.Codigo, Total:t};
+      this.MostrarTotales.push(totalObj);
+    });
   }
 
   SetReferencias(){

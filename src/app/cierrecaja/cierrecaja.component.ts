@@ -5,6 +5,7 @@ import { Globales } from '../shared/globales/globales';
 import { forEach } from '@angular/router/src/utils/collection';
 import { Funcionario } from '../shared/funcionario/funcionario.model';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -14,6 +15,12 @@ import { Router } from '@angular/router';
 export class CierrecajaComponent implements OnInit {
 
   @ViewChild('alertSwal') alertSwal:any;
+
+  
+
+  id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
+  solo_ver = this.activeRoute.snapshot.params["solo_ver"];
+  public Nombre_Funcionario:string = '';
 
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
@@ -35,7 +42,7 @@ export class CierrecajaComponent implements OnInit {
   public observaciones = '';
   private ResumenMovimiento:any = [];
   public CierreCajaModel:any = {
-    Id_Funcionario: this.Funcionario.Identificacion_Funcionario,
+    Id_Funcionario: this.id_funcionario,
     Caja_Cierre: this.Id_Caja == '' ? 0 : this.Id_Caja,
     Oficina_Cierre: this.Id_Oficina == '' ? 0 : this.Id_Oficina,
     Observacion: ''
@@ -45,15 +52,31 @@ export class CierrecajaComponent implements OnInit {
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura:any = [];
 
-  constructor(public globales:Globales, private cliente:HttpClient, public router:Router) { }
+  constructor(public globales:Globales, private cliente:HttpClient, public router:Router, public activeRoute:ActivatedRoute) {
+   }
 
   ngOnInit() {
     this.GetRegistroDiario();
-    this.ConsultarTotalesCierre();      
+    this.ConsultarTotalesCierre();  
+    this.ConsultarNombreFuncionario();    
+  }
+
+  ConsultarNombreFuncionario(){
+    this.cliente.get(this.globales.ruta+'php/funcionarios/get_nombre_funcionario.php', {params: {id_funcionario:this.id_funcionario}}).subscribe((data:any)=>{
+      
+      if (data.codigo == 'success') {
+        this.Nombre_Funcionario = data.nombre_funcionario;
+        
+      }else{
+
+        this.Nombre_Funcionario = '';
+        this.ShowSwal(data.codigo, 'Error', data.mensaje);
+      }
+    });
   }
 
   ConsultarTotalesCierre(){
-    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.Funcionario.Identificacion_Funcionario}}).subscribe((data:any)=>{
+    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.id_funcionario}}).subscribe((data:any)=>{
       
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
@@ -165,7 +188,7 @@ export class CierrecajaComponent implements OnInit {
     data.append("entregado", entregado);
     data.append("diferencias", diferencias);
     data.append("modelo", model);
-    data.append("funcionario", this.Funcionario.Identificacion_Funcionario);
+    data.append("funcionario", this.id_funcionario);
     data.append("resumen_movimientos", resumen);
 
     this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
@@ -269,7 +292,7 @@ export class CierrecajaComponent implements OnInit {
   GetRegistroDiario(){
       
     this.cliente
-      .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.Funcionario.Identificacion_Funcionario } })
+      .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.id_funcionario } })
       .subscribe((data:any) => {
         data.valores_diario.forEach((valores,i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
@@ -283,7 +306,9 @@ export class CierrecajaComponent implements OnInit {
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
     localStorage.removeItem("Banco");
-    localStorage.removeItem('Perfil');
+    localStorage.removeItem('Perfil');    
+    localStorage.setItem('CuentaConsultor', '');
+    localStorage.setItem('MonedaCuentaConsultor', '');
     this.router.navigate(["/login"]);
   }
 }

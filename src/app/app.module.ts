@@ -113,6 +113,10 @@ import { FuncionarioactivosComponent } from './tableros/tablerocajeroprincipal/f
 import { TablaresumentotalizadoComponent } from './tableros/tablerocajeroprincipal/tablaresumentotalizado/tablaresumentotalizado.component';
 import { FuncionarioinformativecardComponent } from './simplecomponents/funcionarioinformativecard/funcionarioinformativecard.component';
 import { TablaresumenmunicipioComponent } from './complexcomponents/tablaresumenmunicipio/tablaresumenmunicipio.component';
+import { TablatotalesmonedasComponent } from './simplecomponents/tablatotalesmonedas/tablatotalesmonedas.component';
+
+
+import { MyDateRangePickerModule } from 'mydaterangepicker';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -153,7 +157,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
           }),
         NgxMaskModule.forRoot(),
         NgxCurrencyModule,
-        MDBBootstrapModule.forRoot()
+        MDBBootstrapModule.forRoot(),
+        MyDateRangePickerModule
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
@@ -235,7 +240,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         FuncionarioactivosComponent,
         TablaresumentotalizadoComponent,
         FuncionarioinformativecardComponent,
-        TablaresumenmunicipioComponent
+        TablaresumenmunicipioComponent,
+        TablatotalesmonedasComponent
     ],
     exports:[
         ModalBasicComponent

@@ -48,10 +48,12 @@ export class TableroComponent implements OnInit {
           break;
         //auditor
         case '5':
-          vari = TableroauditoriaComponent
+          //vari = TableroauditoriaComponent
+          vari = TablerocajeroprincipalComponent;
           break;
         case '6':
-          vari = TablerogerenciaComponent
+          //vari = TablerogerenciaComponent
+          vari = TablerocajeroprincipalComponent
           break;
       }
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(vari);

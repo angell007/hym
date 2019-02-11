@@ -265,7 +265,7 @@ export const AppRoutes: Routes = [
         children: [{ path: '', component: TransferenciaverComponent, canActivate: [AuthGuard] }]
     },
     {
-        path: 'cierrecaja', component: CommonLayoutComponent,
+        path: 'cierrecaja/:id_funcionario/:solo_ver', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
     },    
     { path: 'login', component: LoginComponent },

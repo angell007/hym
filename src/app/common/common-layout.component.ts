@@ -189,25 +189,29 @@ export class CommonLayoutComponent implements OnInit {
             this.ListarOficinas();    
         }, 1000);
         
+        localStorage.setItem('Perfil', this.user.Id_Perfil);
+        
         console.log(localStorage);
 
-        if (!localStorage.getItem("Oficina")) {
-            this.modalOficinaCaja.show();
+        if (this.user.Id_Perfil == 2) {
+            if (!localStorage.getItem("Oficina")) {
+                this.modalOficinaCaja.show();
+            }
+            
+            this.oficina_seleccionada = localStorage.getItem("Oficina");
+            if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {
+                this.modalOficinaCaja.show();
+            }else{
+                this.ListarCajas(this.oficina_seleccionada);
+            }
+    
+            this.caja_seleccionada = localStorage.getItem("Caja");
+            if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada === null || this.caja_seleccionada === '') {
+                this.modalOficinaCaja.show();
+            } 
         }
+              
         
-        this.oficina_seleccionada = localStorage.getItem("Oficina");
-        if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {
-            this.modalOficinaCaja.show();
-        }else{
-            this.ListarCajas(this.oficina_seleccionada);
-        }
-
-        this.caja_seleccionada = localStorage.getItem("Caja");
-        if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada === null || this.caja_seleccionada === '') {
-            this.modalOficinaCaja.show();
-        }        
-        
-        localStorage.setItem('Perfil', this.user.Id_Perfil);
         switch (this.user.Id_Perfil) {
             // administrador
             case "1": {
@@ -264,7 +268,7 @@ export class CommonLayoutComponent implements OnInit {
 
         });
 
-        setInterval(() => {
+        /*setInterval(() => {
             this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
                 this.alertasCajas = data;
                 if (this.alertasCajas.length > 0) {
@@ -274,7 +278,7 @@ export class CommonLayoutComponent implements OnInit {
                 }
 
             });
-        }, 30000);
+        }, 30000);*/
 
         /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
             this.ListaBancos = data;

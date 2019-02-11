@@ -273,7 +273,7 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="notifications dropdown" *ngIf="!OcultarConsultor">
+                            <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                                 <!-- NOTIFICACIONES -->
                                 <span class="counter">{{contadorTraslado}}</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -385,10 +385,10 @@
                                 </ul>
                             </li>
 
-                            <li class="notifications dropdown" *ngIf="OcultarCajero">
+                            <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                                 <!-- NOTIFICACIONES -->
                                 <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
-                                    [routerLink]="['/cierrecaja']">
+                                    [routerLink]="['/cierrecaja', user.Identificacion_Funcionario, false]">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
 

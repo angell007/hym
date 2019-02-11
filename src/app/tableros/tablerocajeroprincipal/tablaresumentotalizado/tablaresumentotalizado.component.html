@@ -1,135 +1,54 @@
-<div class="row">
-  <div class="col-md-12 text-center pt-3" *ngIf="TotalesMunicipio.length == 0">
-    <h3>NO SE ENCONTRARON RESULTADOS PARA ESTE CAJERO!</h3>
-  </div>
-  <div class="col-md-12" *ngIf="TotalesMunicipio.length > 0">
-    <div class="accordion" id="accordionExample" *ngFor="let tm of TotalesMunicipio; let ind = index">
-      <div class="card" style="padding:0px; margin-bottom: 5px;">
-        <div class="card-header" id="headingOne">
-          <div class="row">
-            <div class="col-md-4 font-size-15" style="display:flex; align-items:center;">
-              <h5 class="mb-0">
-                <button 
-                  class="btn btn-link" 
-                  type="button">{{Municipio.Nombre}}
-                </button>
-              </h5>
-            </div>
-            <div class="col-md-8">
-              <!--<div class="pull-right">
-                <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item" *ngFor="let m of Monedas; let i = index">
-                    <a class="nav-link" [ngClass]="{'active':i == 0}" data-toggle="pill" role="tab" [href]="Hrefs[i]">{{m}}</a>
-                  </li>
-                </ul>
-    
-                <div class="tab-content mt-2">
-                  <div *ngFor="let m of Monedas; let in = index"
-                    class="tab-pane fade text-center" 
-                    [ngClass]="{'show active':in == 0}"
-                    [id]="TabsId[in]" 
-                    role="tabpanel" 
-                    [attr.aria-labelledby]="AriaLabels[in]">150.000
-                  </div>
-                </div>
-              </div>-->
-
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th *ngFor="let m of Monedas" class="text-center" style="font-weight:bold;">{{m.Nombre}}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td *ngFor="let m of Municipio.Total_Monedas">{{m.Ingresos}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+<div class="accordion" id="accordionExample">
+  <div class="card" style="padding:0px; margin-bottom: 5px; background-color: #ffffff;">
+    <div class="card-header" id="headingOne">
+      <div class="row">
+        <div class="col-md-4 font-size-15" style="display:flex; align-items:center;">
+          <h5 class="mb-0">
+            {{Municipio.Nombre}}
+          </h5>
         </div>
-    
-        <!--<div [id]="idColapsable" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div class="card-body">
-            450.000
-          </div>
-        </div>-->
+        <div class="col-md-8">
+          <!--<div class="pull-right">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" *ngFor="let m of Monedas; let i = index">
+                <a class="nav-link" [ngClass]="{'active':i == 0}" data-toggle="pill" role="tab" [href]="Hrefs[i]">{{m}}</a>
+              </li>
+            </ul>
+
+            <div class="tab-content mt-2">
+              <div *ngFor="let m of Monedas; let in = index"
+                class="tab-pane fade text-center" 
+                [ngClass]="{'show active':in == 0}"
+                [id]="TabsId[in]" 
+                role="tabpanel" 
+                [attr.aria-labelledby]="AriaLabels[in]">150.000
+              </div>
+            </div>
+          </div>-->
+          <!--<table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td *ngFor="let m of Monedas" class="text-center p-0" style="font-weight:bold;">{{m.Nombre}}</td>
+              </tr>
+              <tr>
+                <td *ngFor="let t of MostrarTotales" class="text-right p-0">{{t.Codigo}} {{t.Total | number | puntos}}</td>
+              </tr>
+            </tbody>
+          </table>-->
+
+          <app-tablatotalesmonedas *ngIf="MostrarTotales.length > 0"
+              [MostrarTotales]="MostrarTotales">
+            </app-tablatotalesmonedas>
+        </div>
       </div>
     </div>
+
+    <!--<div [id]="idColapsable" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        450.000
+      </div>
+    </div>-->
   </div>
 </div>
-
-
-<!--<table class="table table-bordered table-hover">
-  <thead>
-    <tr>
-      <th style="width:15%"></th>
-      <th class="text-center" colspan="2">Bolivares Soberanos</th>
-      <th class="text-center" colspan="2">Pesos</th>
-    </tr>
-    <tr>
-      <th class="text-center">Modulos</th>
-      <th class="text-center">Ingresos</th>
-      <th class="text-center">Egresos</th>
-      <th class="text-center">Ingresos</th>
-      <th class="text-center">Egresos</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="text-center" (click)="PruebaClick($event)" style="cursor:pointer;">Cambios</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr>
-    <tr *ngIf="cambiosClick">
-      <td colspan="5">
-        <div class="row">
-          <div class="col-md-12">
-            <app-tablaresumenmunicipio>              
-            </app-tablaresumenmunicipio>
-          </div>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td class="text-center">Transferencias</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr>
-    <tr>
-      <td class="text-center">Traslados</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr>
-    <tr>
-      <td class="text-center">Giros</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr>
-    <tr>
-      <td class="text-center">Corresponsales</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr> 
-    <tr>
-      <td class="text-center">Servicios</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-      <td class="text-right">450.000</td>
-    </tr>                
-  </tbody>
-</table>-->
 
 <swal #alertSwal type="" title="" text=""></swal>

@@ -3,7 +3,14 @@
     <div class="card" style="margin-bottom:10px;">
       <div class="card-body">
         <div class="form-group">
-          <label for="">Búsqueda de funcionarios</label>
+          <div class="row">
+            <div class="col-md-10">              
+              <label for="">Búsqueda de funcionarios</label>
+            </div>
+            <!--<div class="col-md-2 text-right">
+              <a (click)=""><i class="ti-reload text-primary"></i></a>
+            </div>-->
+          </div>
           <input 
             type="text" 
             class="form-control" 
@@ -11,9 +18,9 @@
             [(ngModel)]="FuncionarioBusqueda" 
             placeholder="Nombre/apellido del funcionario"
             (keyup)="FiltrarFuncionario()">
-          <small id="searchFuncionarioHelp" class="form-text text-muted">
-            Busqueda activa solo para funcionarios que han iniciado sesión
-          </small>
+            <small id="searchFuncionarioHelp" class="form-text text-muted">
+              Busqueda activa solo para cajeros que han iniciado sesión
+            </small>
         </div>
       </div>
     </div>
@@ -23,11 +30,11 @@
   <div class="col-md-12" *ngIf="FuncionariosFiltrados.length == 0">
     <div class="card" style="margin-bottom:10px;">
       <div class="card-body text-center" style="padding:10px;">
-        <h6>La búsqueda no coincide con ningún funcionario</h6>
+        <h6>{{MensajeAlerta}}</h6>
       </div>
     </div>
   </div>
-  <div class="col-md-12" *ngIf="FuncionariosFiltrados.length > 0">
+  <div class="col-md-12" *ngIf="FuncionariosFiltrados.length > 0" style="height:550px;overflow-y: auto;">
     <app-funcionarioinformativecard *ngFor="let ff of FuncionariosFiltrados"
       [Funcionario]="ff">      
     </app-funcionarioinformativecard>
