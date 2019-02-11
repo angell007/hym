@@ -11,16 +11,12 @@
               <h5 class="mb-0">
                 <button 
                   class="btn btn-link" 
-                  type="button" 
-                  data-toggle="collapse" 
-                  [attr.data-target]="refColapsable" 
-                  aria-expanded="false" 
-                  [attr.aria-controls]="idColapsable">Arauca
+                  type="button">{{Municipio.Nombre}}
                 </button>
               </h5>
             </div>
             <div class="col-md-8">
-              <div class="pull-right">
+              <!--<div class="pull-right">
                 <ul class="nav nav-tabs" role="tablist">
                   <li class="nav-item" *ngFor="let m of Monedas; let i = index">
                     <a class="nav-link" [ngClass]="{'active':i == 0}" data-toggle="pill" role="tab" [href]="Hrefs[i]">{{m}}</a>
@@ -36,16 +32,29 @@
                     [attr.aria-labelledby]="AriaLabels[in]">150.000
                   </div>
                 </div>
-              </div>            
+              </div>-->
+
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th *ngFor="let m of Monedas" class="text-center" style="font-weight:bold;">{{m.Nombre}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td *ngFor="let m of Municipio.Total_Monedas">{{m.Ingresos}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
     
-        <div [id]="idColapsable" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <!--<div [id]="idColapsable" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
             450.000
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>

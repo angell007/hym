@@ -38,10 +38,10 @@
                           <i class="ti-map text-primary font-size-25" style="margin-right:8px;"></i><span class="font-size-25">{{DepartamentoSeleccionado}}</span>
                         </div>
                       </div>
-                      <app-tablaresumentotalizado
-                        [Departamento]="DepartamentoId"
+                      <app-tablaresumentotalizado *ngFor="let tm of TotalesMunicipio; let i = index"
+                        [Municipios]="tm"
                         [Id_Cajero]="Funcionario.Identificacion_Funcionario"
-                        ParentIndex="0">                        
+                        [ParentIndex]="i">                        
                       </app-tablaresumentotalizado>            
                     </div>
                   </div>
