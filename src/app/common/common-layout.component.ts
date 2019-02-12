@@ -252,7 +252,7 @@ export class CommonLayoutComponent implements OnInit {
         });
 
         if (this.user.Password == this.user.Username) {
-            this.ModalCambiarContrasena.show();
+            //this.ModalCambiarContrasena.show();
         }
 
         this.startTimer();

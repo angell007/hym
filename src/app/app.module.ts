@@ -18,6 +18,7 @@ import 'd3';
 import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
 import { DataTablesModule } from 'angular-datatables';
+//import { NgxSpinnerModule } from 'ngx-spinner';
 
 //Layout Modules
 import { CommonLayoutComponent } from './common/common-layout.component';
@@ -33,6 +34,11 @@ import { Globales } from './shared/globales/globales';
 // Routing Module
 import { AppRoutes } from './app.routing';
 import { AuthGuard } from './auth/auth.guard';
+
+//Services
+import { CambioService } from './shared/services/cambio.service';
+import { CompraService } from './shared/services/compra/compra.service';
+import { ProveedorService } from './shared/services/proveedor/proveedor.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -114,9 +120,8 @@ import { TablaresumentotalizadoComponent } from './tableros/tablerocajeroprincip
 import { FuncionarioinformativecardComponent } from './simplecomponents/funcionarioinformativecard/funcionarioinformativecard.component';
 import { TablaresumenmunicipioComponent } from './complexcomponents/tablaresumenmunicipio/tablaresumenmunicipio.component';
 import { TablatotalesmonedasComponent } from './simplecomponents/tablatotalesmonedas/tablatotalesmonedas.component';
-
-
 import { MyDateRangePickerModule } from 'mydaterangepicker';
+import { TablacomprasComponent } from './configuracion/compras/tablacompras/tablacompras.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -159,6 +164,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgxCurrencyModule,
         MDBBootstrapModule.forRoot(),
         MyDateRangePickerModule
+        //NgxSpinnerModule
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
@@ -241,7 +247,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablaresumentotalizadoComponent,
         FuncionarioinformativecardComponent,
         TablaresumenmunicipioComponent,
-        TablatotalesmonedasComponent
+        TablatotalesmonedasComponent,
+        TablacomprasComponent
     ],
     exports:[
         ModalBasicComponent
@@ -252,7 +259,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ThemeConstants,
         Globales,
         NgbDropdown,
-        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+        CambioService,
+        CompraService,
+        ProveedorService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
