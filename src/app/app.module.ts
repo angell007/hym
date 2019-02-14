@@ -41,10 +41,12 @@ import { AuthGuard } from './auth/auth.guard';
 
 //Services
 import { CambioService } from './shared/services/cambio.service';
+import { GrupoterceroService } from './shared/services/grupotercero.service';
 import { CompraService } from './shared/services/compra/compra.service';
 import { ProveedorService } from './shared/services/proveedor/proveedor.service';
 import { CajaService } from './shared/services/caja/caja.service';
 import { TransferenciaService } from './shared/services/transferencia/transferencia.service';
+import { GiroService } from './shared/services/giro/giro.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -129,6 +131,7 @@ import { TablatotalesmonedasComponent } from './simplecomponents/tablatotalesmon
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { TablacomprasComponent } from './configuracion/compras/tablacompras/tablacompras.component';
 import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
+import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -257,7 +260,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablaresumenmunicipioComponent,
         TablatotalesmonedasComponent,
         TablacomprasComponent,
-        ModaltestComponent
+        ModaltestComponent,
+        GrupostercerosComponent
     ],
     exports:[
         ModalBasicComponent
@@ -269,6 +273,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CajaService,
         TransferenciaService,
         FuncionarioService,
+        GiroService,
+        GrupoterceroService,
         AuthGuard,
         ThemeConstants,
         Globales,

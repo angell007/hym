@@ -195,6 +195,41 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas(); 
+
+        switch (this.user.Id_Perfil) {
+            // administrador
+            case "1": {
+                this.OcultarCajero = false;
+                this.OcultarConsultor = false;
+                break;
+            }
+            //cajero principal
+            case "2": {
+                this.OcultarCajero = true;
+                break;
+            }
+            // cajero
+            case "3": {
+                this.OcultarCajero = true;
+                break;
+            }
+            // consultor
+            case "4": {
+                this.OcultarCajero = true;
+                this.OcultarConsultor = true;
+                break;
+            }
+            // auditor 
+            case "5": {
+                break;
+            }
+            // 
+            case "6": {
+                this.OcultarCajero = false;
+                this.OcultarConsultor = false;
+                break;
+            }
+        }
         
         setTimeout(() => {
             localStorage.setItem('Perfil', this.user.Id_Perfil);
@@ -220,42 +255,6 @@ export class CommonLayoutComponent implements OnInit {
                     this.SetNombreCaja(this.caja_seleccionada);
                 }
             //}
-                
-            
-            switch (this.user.Id_Perfil) {
-                // administrador
-                case "1": {
-                    this.OcultarCajero = false;
-                    this.OcultarConsultor = false;
-                    break;
-                }
-                //cajero principal
-                case "2": {
-                    this.OcultarCajero = true;
-                    break;
-                }
-                // cajero
-                case "3": {
-                    this.OcultarCajero = true;
-                    break;
-                }
-                // consultor
-                case "4": {
-                    this.OcultarCajero = true;
-                    this.OcultarConsultor = true;
-                    break;
-                }
-                // auditor 
-                case "5": {
-                    break;
-                }
-                // 
-                case "6": {
-                    this.OcultarCajero = false;
-                    this.OcultarConsultor = false;
-                    break;
-                }
-            }
 
             this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
                 this.alertas = data;

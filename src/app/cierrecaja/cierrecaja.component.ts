@@ -58,7 +58,9 @@ export class CierrecajaComponent implements OnInit {
   ngOnInit() {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();  
-    this.ConsultarNombreFuncionario();    
+    this.ConsultarNombreFuncionario();  
+    console.log(this.solo_ver);
+      
   }
 
   ConsultarNombreFuncionario(){
@@ -306,7 +308,7 @@ export class CierrecajaComponent implements OnInit {
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
     localStorage.removeItem("Banco");
-    localStorage.removeItem('Perfil');    
+    localStorage.removeItem('Perfil');
     localStorage.setItem('CuentaConsultor', '');
     localStorage.setItem('MonedaCuentaConsultor', '');
     this.router.navigate(["/login"]);

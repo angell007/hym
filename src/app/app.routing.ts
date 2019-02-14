@@ -58,6 +58,7 @@ import { TableroComponent } from './tablero/tablero.component';
 import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
 import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
+import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -263,6 +264,10 @@ export const AppRoutes: Routes = [
     {
         path: 'transferenciaver/:id', component: CommonLayoutComponent,
         children: [{ path: '', component: TransferenciaverComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'gruposterceros', component: CommonLayoutComponent,
+        children: [{ path: '', component: GrupostercerosComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'cierrecaja/:id_funcionario/:solo_ver', component: CommonLayoutComponent,

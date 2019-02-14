@@ -13,6 +13,7 @@ import { Globales } from '../shared/globales/globales';
 import { NgForm } from '@angular/forms';
 import { Observable } from "rxjs";
 import { debounceTime, map } from 'rxjs/operators';
+import { GiroService } from '../shared/services/giro/giro.service';
 
 @Component({
   selector: 'app-giros',
@@ -22,303 +23,154 @@ import { debounceTime, map } from 'rxjs/operators';
 export class GirosComponent implements OnInit {
 
   public fecha = new Date();
-  public giros = [];
+  public Giros:Array<any> = [];
+  public Funcionario:any = JSON.parse(localStorage['User']);
+  public Cargando:boolean = false;
+  public DetalleGiro:any = {};
+  public Conteo:any = {
+    Totales:'0',
+    Realizados:'0',
+    Devueltos:'0',
+    Anulados:'0'
+  };
 
-  public Identificacion: any = [];
+  @ViewChild('alertSwal') alertSwal:any;
+  @ViewChild('ModalDetalleGiro') ModalDetalleGiro:any;
 
-  public Giro: any = [];
+  public Filtros:any = {
+    fecha:'',
+    oficina:'',
+    remitente:'',
+    destinatario:'',
+    monto:'',
+    estado:''
+  };
 
-  public Datos : any = [] = [];
-  public Origen : any = [] = [];
-  public Nombre_Remitente : any = [] = [];
-  public Documento_Remitente : any = [] = [];
-  public Telefono_Remitente : any = [] = [];
-  public Nombre_Destinatario : any = [] = [];
-  public Documento_Destinatario : any = [] = [];
-  public Telefono_Destinatario : any = [] = [];
-  public Valor_Recibido : any = [] = [];
-  public Valor_Entrega : any = [] = [];
-  public Comision : any = [] = [];
-  public Detalle : any = [] = [];
-  public Estado : any = [] = [];
-  public IdentificacionFuncionario: any = [];
-  DatosRemitenteEditarGiro:any={};
-  DatosDestinatario:any = {};
-  DatosDestinatarioEditarGiro:any = {};
-  Departamento_Remitente: any;
-  Departamento_Destinatario: any;
-  Municipios_Remitente = [];
-  Municipios_Destinatario = [];
-  Remitente:any = {};
-  Destinatario:any= {};
-  ValorEnviar: any;
-  idGiro: any;
-  public Costo: number;
-  public ValorTotal: number;
-  public ValorEntrega: number;
-
-  @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('ModalGiroEditar') ModalGiroEditar: any;  
-  @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('ModalDevolucionGiro') ModalDevolucionGiro: any;
+   //Paginación
+   public maxSize = 5;
+   public pageSize = 10;
+   public TotalItems:number = 0;
+   public page = 1;
+   public InformacionPaginacion:any = {
+     desde: 0,
+     hasta: 0,
+     total: 0
+   }
   
-  /*public Origen : any = [];
-  public Remitente : any = [];
-  public Destinatario : any = [];
-  public Monto : any = [];
-  public Estado : any = [];*/
-
-  conteoGiros:any = {};
-
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
-
-  GiroComision = [];
-  Departamentos = [];
-  IdOficina: number;
-  IdCaja: number;
-  IdentificacionGiro: any;
-
-  public RemitentesFiltrar:any = [];
-
-  //BUSQUEDA Remitentes
-  search_remitente = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.RemitentesFiltrar.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
-  );
-  formatter_remitente = (x: { Nombre: string }) => x.Nombre;
-  
-  constructor(private http: HttpClient, private globales: Globales) { }
-
-  ngOnInit() {
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-    this.IdOficina = 5;
-    this.IdCaja = 4;
-    this.http.get(this.globales.ruta + 'php/giros/lista.php').subscribe((data: any) => {
-      this.giros = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/giros/conteo.php').subscribe((data: any) => {
-      this.conteoGiros = data[0];
-    });
-    this.ActualizarVista();
-
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Comision' } }).subscribe((data: any) => {
-      this.GiroComision = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
-      this.Departamentos = data;
-    });
-
-    //AGREGAR QUERY EN BD DE LOS REMITENTES
-
+  constructor(private giroService:GiroService) { 
+    this.ConsultaFiltrada();
+    this.GetConteo();
   }
 
-  VerGiro(id, modal) {
-    this.http.get(this.globales.ruta + 'php/giros/detalle.php', {
-      params: { modulo: 'Giro', id: id }
-    }).subscribe((data: any) => {
-      this.Giro = data;
-      this.Identificacion = id;
+  ngOnInit() {   
+  }
 
-      //this.Datos=data;
-      this.Origen=data.Origen;
-      this.Nombre_Remitente=data.Nombre_Remitente;
-      this.Documento_Remitente=data.Documento_Remitente;
-      this.Telefono_Remitente=data.Telefono_Remitente;
-      this.Nombre_Destinatario=data.Nombre_Destinatario;
-      this.Documento_Destinatario=data.Documento_Destinatario;
-      this.Telefono_Destinatario=data.Telefono_Destinatario;
-      this.Valor_Recibido=data.Valor_Recibido;
-      this.Valor_Entrega=data.Valor_Entrega;
-      this.Comision=data.Comision;
-      this.Detalle=data.Detalle;
-      this.Estado=data.Estado;
-      this.Identificacion = id;
-
-      modal.show();
+  GetDetalleGiro(idGiro:string){
+    this.giroService.getDetalleGiro(idGiro).subscribe((data:any) => {
+      this.Giros = data.giros;
     });
   }
 
-
-  EditarGiro(id){
-    
-    this.http.get(this.globales.ruta + '/php/pos/detalle_giro.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
-      this.idGiro = id;
-      this.Giro = data.giro;
-      this.Remitente = data.remitente;
-      this.Destinatario = data.destinatario;
-      this.ModalGiroEditar.show();
-      this.ValorEnviar = data.giro.ValorEnviar;
-      this.valorComision(data.giro.Valor_Total);
-      this.Municipios_Departamento(data.remitente.Id_Departamento, 'Remitente');
-      this.Municipios_Departamento(data.destinatario.Id_Departamento, 'Destinatario');
-      this.Departamento_Remitente = this.Departamentos[data.remitente.Id_Departamento].Nombre;
-      this.Departamento_Destinatario = this.Departamentos[data.destinatario.Id_Departamento].Nombre;
-      this.DatosRemitenteEditarGiro = data.remitente.DatosRemitenteEditarGiro;
-      this.DatosDestinatarioEditarGiro = data.destinatario.DatosDestinatarioEditarGiro;
+  GetConteo(){
+    this.giroService.getConteoGiros().subscribe((data:any) => {
+      this.Conteo = data.conteo;
     });
   }
 
-  Municipios_Departamento(Departamento, tipo) {
-    this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
-      switch (tipo) {
-        case "Remitente": {
-          this.Municipios_Remitente = data;
-          this.Departamento_Remitente = this.Departamentos[(Departamento) - 1].Nombre;
-          break;
-        }
-        case "Destinatario": {
-          this.Municipios_Destinatario = data;
-          this.Departamento_Destinatario = this.Departamentos[(Departamento) - 1].Nombre;
-          break;
-        }
+  ActualizarTabla(){
+    this.ConsultaFiltrada();
+  }
 
-      }
+  VerDetalleGiro(idGiro:string){
+    this.giroService.getDetalleGiro(idGiro).subscribe((data:any) => {
+      this.DetalleGiro = data.query_data;      
+      this.ModalDetalleGiro.show();
     });
   }
 
-  valorComision(value) {
-    this.ValorEnviar = value;
-    this.GiroComision.forEach(element => {
-      if ((parseFloat(element.Valor_Minimo) < parseFloat(value)) && (parseFloat(value) < parseFloat(element.Valor_Maximo))) {
-        this.Costo = element.Comision;
-      }
-
-      var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-      switch (checkeado) {
-        case true: {
-          this.ValorTotal = parseFloat(value);
-          this.ValorEntrega = parseFloat(value) + parseFloat(element.Comision);
-          break;
-        }
-        case false: {
-          this.ValorTotal = parseFloat(value) - element.Comision;
-          this.ValorEntrega = parseFloat(value);
-          break;
-        }
-      }
-    });
+  CerrarModalDetalle(){
+    this.LimpiarModeloDetalleGiro();
+    this.ModalDetalleGiro.hide();
   }
 
-  ActualizarVista()
-  {
-    this.http.get(this.globales.ruta+'php/giros/lista.php').subscribe((data:any)=>{
-      this.giros= data;      
-    });
-
-    this.http.get(this.globales.ruta+'/php/giros/fecha_giro.php').subscribe((data:any)=>{
-      var chart = AmCharts.makeChart("chartdiv", {
-        "theme": "light",
-        "type": "serial",
-        "dataProvider": data,
-        "categoryField": "Mes",
-        "depth3D": 20,
-        "angle": 30,
-
-        "categoryAxis": {
-          "labelRotation": 90,
-          "gridPosition": "start"
-        },
-
-        "valueAxes": [{
-          "title": "Realizado"
-        }],
-
-        "graphs": [{
-          "valueField": "Conteo",
-          "colorField": "color",
-          "type": "column",
-          "lineAlpha": 0.1,
-          "fillAlphas": 1
-        }],
-
-        "chartCursor": {
-          "cursorAlpha": 0,
-          "zoomable": false,
-          "categoryBalloonEnabled": false
-        },
-
-        "export": {
-          "enabled": true
-        }
-      });
-
-    });   
-
-  }
-  
-  AnularGiro(id){
-    let datos = new FormData();
-    datos.append("modulo", 'Giro');
-    datos.append("id", id);
-    this.http.post(this.globales.ruta + 'php/giros/anular_giro.php', datos).subscribe((data: any) => {
-      this.confirmacionSwal.title = "Amulado con Exito";
-      this.confirmacionSwal.text = "Se ha anulado correctamente el giro"
-      this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show();
-      this.ActualizarVista();
-    });
+  LimpiarModeloDetalleGiro(){
+    this.DetalleGiro = {};
   }
 
-  anulado(estado){
-    switch(estado){
-      case "Anulada" :{ return false}
-      default: {return true}
+  SetFiltros(paginacion) {
+    let params:any = {};
+
+    params.tam = this.pageSize;
+
+    if(paginacion === true){
+      params.pag = this.page;
+    }else{        
+      this.page = 1; // Volver a la página 1 al filtrar
+      params.pag = this.page;
     }
-  }
 
-  RealizarEdicionGiro(formulario: NgForm , modal) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
-      modal.hide();
-      this.confirmacionSwal.title = "Guardado con exito";
-      this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
-      this.confirmacionSwal.type = "success"
-      this.confirmacionSwal.show();      
-      this.ActualizarVista();
-    });
-  }
+    if (this.Filtros.fecha.trim() != "") {
+      params.fecha = this.Filtros.fecha;
+    }
+    if (this.Filtros.oficina.trim() != "") {
+      params.oficina = this.Filtros.oficina;
+    }
+    if (this.Filtros.remitente.trim() != "") {
+      params.remitente = this.Filtros.remitente;
+    }
+    if (this.Filtros.destinatario.trim() != "") {
+      params.destinatario = this.Filtros.destinatario;
+    }
+    if (this.Filtros.monto.trim() != "") {
+      params.monto = this.Filtros.monto;
+    }
+    if (this.Filtros.estado.trim() != "") {
+      params.estado = this.Filtros.estado;
+    }   
 
-  RealizarGiro(id){
-    let datos = new FormData();
-    datos.append("id", id);
-    datos.append("Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    datos.append("Caja", "4");
-    datos.append("Oficina", "5");
-    datos.append("Estado", "Realizada");
-    this.http.post(this.globales.ruta + 'php/giros/estado_giro.php', datos).subscribe((data: any) => {    
-
-    });
-  }
-
-  DevolverGiro(id){
-    this.IdentificacionGiro =id;
-    this.ModalDevolucionGiro.show();
-  }
-
-  RealizarDevolucionGiro(formulario: NgForm, activeModal:any){
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("Funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    datos.append("Caja", "4");
-    datos.append("Oficina", "5");
-    datos.append("Estado", "Devuelta");
-    this.http.post(this.globales.ruta + 'php/giros/estado_giro.php', datos).subscribe((data: any) => {    
-    });
-  }
-
-  AutoCompletarRemitenteGiro(datosRemitenteGiro:any){
-    console.log(datosRemitenteGiro);
+    let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     
+    return queryString;
   }
 
+  ConsultaFiltrada(paginacion:boolean = false) {
+
+    var params = this.SetFiltros(paginacion);
+
+    if(params === ''){
+      this.ResetValues();
+      this.Cargando = false;
+      return;
+    }
+    
+    this.Cargando = true;
+    this.giroService.getGiros(params).subscribe((data:any) => {
+      this.Giros = data.query_data;
+      this.TotalItems = data.numReg;
+      this.SetInformacionPaginacion();
+      this.Cargando = false;
+    });
+  }
+
+  ResetValues(){
+    
+    this.Filtros = {
+      fecha:'',
+      oficina:'',
+      remitente:'',
+      destinatario:'',
+      monto:'',
+      estado:''
+    };
+  }
+
+  SetInformacionPaginacion(){
+    var calculoHasta = (this.page*this.pageSize);
+    var desde = calculoHasta-this.pageSize+1;
+    var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
+
+    this.InformacionPaginacion['desde'] = desde;
+    this.InformacionPaginacion['hasta'] = hasta;
+    this.InformacionPaginacion['total'] = this.TotalItems;
+  }
 }

@@ -271,33 +271,40 @@
 
             <div class="col-md-12">
                 <div id="accordion">
-                    <div class="card">
+                    <div class="card p-0">
                         <div class="card-header" id="headingOne">
                         <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="ti-user text-info font-size-15"></i> Destinatarios
+                            <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="ti-user text-info font-size-15"></i> Destinatarios
                             </button>
                         </h5>
                         </div>
                     
                         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                            <div class="card-body">
-                                <table class="table table-bordered table-sm">
+                            <div class="card-body p-1">
+                                <table class="table table-bordered table-sm" *ngIf="Destinatarios.length > 0">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Destinatario</th>
                                             <th class="text-center">Numero Cuenta</th>
                                         </tr>
-                                        <tr *ngIf="Destinatarios.length == 0">
-                                            <th colspan="2" class="text-center">
-                                                <div><i class="text-warning font-size-20 ti-alert"></i></div>
-                                                <div><h4>No hay destinatarios para mostrar!</h4></div>
-                                            </th>
-                                        </tr>
                                     </thead>
-                                    <tbody *ngIf="Destinatarios.length > 0">
+                                    <tbody>
                                         <tr *ngFor="let d of Destinatarios">
                                             <td>{{d.Nombre_Destinatario}}</td>
                                             <td>{{d.Numero_Cuenta_Destinatario}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-bordered table-sm"  *ngIf="Destinatarios.length == 0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Destinatario</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">{{DetalleTransferencia.Destinatario}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -306,29 +313,75 @@
                     </div>
                 </div>
             </div>
-            
 
-            <div class="col-md-12" *ngIf="false">
-                <table class="table table-bordered table-sm">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Fecha</th>
-                            <th class="text-center">Cajero Pago</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{DatosPago.Fecha | date:"medium" | uppercase}}</td>
-                            <td>{{DatosPago.Nombre_Cajero}}</td>
-                        </tr>
-                        <tr>
-                            <td><h3>Cuentas Pagadas</h3></td>
-                        </tr>
-                        <tr *ngFor="let cp of DatosPago.CuentasPagadas">
-                            <td class="text-center">{{cp.Numero_Cuenta}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-12" *ngIf="ShowDatosPago">
+                <div id="accordion2">
+                    <div class="card p-0">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"><i class="ti-money text-success font-size-15"></i> Detalle de pago
+                                </button>
+                            </h5>
+                        </div>
+                    
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
+                            <div class="card-body p-1">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Cajero Pago</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{DatosPago.Fecha | date:"medium" | uppercase}}</td>
+                                            <td>{{DatosPago.Nombre_Cajero}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" class="text-center"><h3>Cuentas Pagadas</h3></td>
+                                        </tr>
+                                        <tr *ngFor="let cp of CuentasPagadas">
+                                            <td colspan="2" class="text-center">{{cp.Numero_Cuenta}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12" *ngIf="ShowDatosDevolucion">
+                <div id="accordion3">
+                    <div class="card p-0">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"><i class="ti-shift-left text-danger font-size-15"></i> Detalle de devolución
+                                </button>
+                            </h5>
+                        </div>
+                    
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
+                            <div class="card-body p-1">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Datos Devolución</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{DatosDevolucion.Fecha | date:"medium" | uppercase}}</td>
+                                            <td class="text-center">{{DatosDevolucion.Motivo_Devolucion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

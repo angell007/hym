@@ -39,6 +39,7 @@ export class TransferenciasComponent implements OnInit {
   public DatosPago:any = {};
   public DatosDevolucion:any = {};
   public Destinatarios:Array<any> = [];
+  public CuentasPagadas:Array<any> = [];
 
   public ShowDatosPago:boolean = false;
   public ShowDestinatarios:boolean = false;
@@ -64,15 +65,41 @@ export class TransferenciasComponent implements OnInit {
       
       if (data.transferencia != '') {
         this.DetalleTransferencia = data.transferencia;
-
+       
         this.Destinatarios = data.transferencia.Destinatarios;
-        this.DatosPago = data.transferencia.DatosPago;
-        this.DatosDevolucion = data.transferencia.DatosDevolucion;
 
+        if (data.transferencia.Datos_Pago != '') {
+          this.DatosPago = data.transferencia.Datos_Pago; 
+          this.CuentasPagadas =  data.transferencia.Datos_Pago.Cuentas_Pagadas;
+          
+          this.ShowDatosPago = true;
+        }else{
+
+          this.DatosPago = {};
+          this.CuentasPagadas = [];
+          this.ShowDatosPago = false;
+        }
+
+        if (data.transferencia.Datos_Devolucion != '') {
+          this.DatosDevolucion = data.transferencia.Datos_Devolucion;  
+          this.ShowDatosDevolucion = true;
+        }else{
+
+          this.DatosDevolucion = {};
+          this.ShowDatosDevolucion = false;
+        }        
+        console.log(this.ShowDatosPago);
+        console.log(this.ShowDatosDevolucion);
+        
         this.ModalVerTransferencia.show();
       }else{
 
-
+        this.Destinatarios = [];
+        this.DatosPago = {};
+        this.CuentasPagadas = [];
+        this.ShowDatosPago = false;
+        this.DatosDevolucion = {};
+        this.ShowDatosDevolucion = false;
       }
       
     });
