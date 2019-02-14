@@ -53,14 +53,14 @@
                                 <span class="title">Traslados</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
+                        <!--<li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/pos']">
                                 <span class="icon-holder">
                                     <i class="ti-dashboard"></i>
                                 </span>
                                 <span class="title">POS</span>
                             </a>
-                        </li>
+                        </li>-->
                         <li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/compras']">
                                 <span class="icon-holder">
@@ -83,22 +83,6 @@
                                     <i class="ti-wallet"></i>
                                 </span>
                                 <span class="title">Giros</span>
-                            </a>
-                        </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/corresponsalesbancarios']">
-                                <span class="icon-holder">
-                                    <i class="ti-money"></i>
-                                </span>
-                                <span class="title">Corresponsales Bancarios</span>
-                            </a>
-                        </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/serviciosexternos']">
-                                <span class="icon-holder">
-                                    <i class="ti-receipt"></i>
-                                </span>
-                                <span class="title">Servicios Externos</span>
                             </a>
                         </li>
                         <!--                        
@@ -165,6 +149,12 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/bancos']">Bancos</a>
+                                </li>                                
+                                <li>
+                                    <a href="" [routerLink]="['/corresponsalesbancarios']">Corresponsales Bancarios</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/serviciosexternos']">Servicios Externos</a>
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/cuentasbancarias']">Cuentas Bancarias</a>
@@ -271,6 +261,12 @@
                                     </div>
                                 </a>
                             </li>
+                            <li>
+                                <div class="pl-2 pt-2">
+                                    <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
+                                    <label for="" style="display:block;">Caja: {{NombreCaja}}</label>
+                                </div>
+                            </li>
                         </ul>
                         <ul class="nav-right">
                             <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
@@ -343,7 +339,6 @@
                                 </ul>
                             </li>-->
 
-
                             <li class="notifications dropdown">
                                 <!-- NOTIFICACIONES -->
                                 <span class="counter">0</span>
@@ -393,7 +388,6 @@
                                 </button>
 
                             </li>
-
 
                             <li class="user-profile dropdown">
                                 <!-- PERFIL -->
@@ -500,7 +494,6 @@
 
             </div>
             <!-- Page Container END -->
-
         </div>
     </div>
 </div>

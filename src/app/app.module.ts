@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, LOCALE_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +19,10 @@ import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
 import { DataTablesModule } from 'angular-datatables';
 //import { NgxSpinnerModule } from 'ngx-spinner';
+import { registerLocaleData } from '@angular/common';
+import localeES from '@angular/common/locales/es';
+
+registerLocaleData(localeES);
 
 //Layout Modules
 import { CommonLayoutComponent } from './common/common-layout.component';
@@ -39,6 +43,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { CambioService } from './shared/services/cambio.service';
 import { CompraService } from './shared/services/compra/compra.service';
 import { ProveedorService } from './shared/services/proveedor/proveedor.service';
+import { CajaService } from './shared/services/caja/caja.service';
+import { TransferenciaService } from './shared/services/transferencia/transferencia.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -122,6 +128,7 @@ import { TablaresumenmunicipioComponent } from './complexcomponents/tablaresumen
 import { TablatotalesmonedasComponent } from './simplecomponents/tablatotalesmonedas/tablatotalesmonedas.component';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { TablacomprasComponent } from './configuracion/compras/tablacompras/tablacompras.component';
+import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -144,6 +151,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgbModule.forRoot(),
         PerfectScrollbarModule,
         HttpClientModule,
+        HttpModule,
         ReactiveFormsModule,
         //FormWizardModule,
         NgxDatatableModule,
@@ -248,21 +256,25 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         FuncionarioinformativecardComponent,
         TablaresumenmunicipioComponent,
         TablatotalesmonedasComponent,
-        TablacomprasComponent
+        TablacomprasComponent,
+        ModaltestComponent
     ],
     exports:[
         ModalBasicComponent
     ],
     providers: [
+        CambioService,
+        CompraService,
+        ProveedorService,
+        CajaService,
+        TransferenciaService,
         FuncionarioService,
         AuthGuard,
         ThemeConstants,
         Globales,
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-        CambioService,
-        CompraService,
-        ProveedorService
+        { provide: LOCALE_ID, useValue: "es" }
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

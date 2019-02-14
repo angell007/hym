@@ -7,6 +7,7 @@ import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { log } from 'util';
+import { CajaService } from '../shared/services/caja/caja.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -140,10 +141,18 @@ export class CommonLayoutComponent implements OnInit {
             { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
         ];
 
+        public NombreCaja:string = '';
+        public NombreOficina:string = '';
+
     //#endregion
 
 
-    constructor(private router: Router, private http: HttpClient, private globales: Globales, private toastyService: ToastyService) {
+    constructor(private router: Router, 
+                private http: HttpClient, 
+                private globales: Globales, 
+                private toastyService: ToastyService,
+                private cajaService:CajaService) {
+                    
         this.app = {
             layout: {
                 sidePanelOpen: false,
@@ -182,93 +191,83 @@ export class CommonLayoutComponent implements OnInit {
     nombreBanco = "";
     ngOnInit() {
 
+        this.AsignarPaises();
+        this.AsignarMonedas();
+        this.AsignarMonedasApertura();
+        this.ListarOficinas(); 
+        
         setTimeout(() => {
-            this.AsignarPaises();
-            this.AsignarMonedas();
-            this.AsignarMonedasApertura();
-            this.ListarOficinas();    
-        }, 1000);
-        
-        localStorage.setItem('Perfil', this.user.Id_Perfil);
-        
-        console.log(localStorage);
+            localStorage.setItem('Perfil', this.user.Id_Perfil);
 
-        if (this.user.Id_Perfil == 2) {
-            if (!localStorage.getItem("Oficina")) {
-                this.modalOficinaCaja.show();
-            }
+            //if (this.user.Id_Perfil == 2) {
+                if (!localStorage.getItem("Oficina")) {
+                    this.modalOficinaCaja.show();
+                }
+                
+                this.oficina_seleccionada = localStorage.getItem("Oficina");
+                
+                if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {                   
+                    this.modalOficinaCaja.show();
+                }else{
+                    this.ListarCajas(this.oficina_seleccionada);
+                    this.SetNombreOficina(this.oficina_seleccionada);
+                }
+                
+                this.caja_seleccionada = localStorage.getItem("Caja");
+                if (this.caja_seleccionada === undefined || this.caja_seleccionada === null || this.caja_seleccionada === '') {
+                    this.modalOficinaCaja.show();
+                }else{
+                    this.SetNombreCaja(this.caja_seleccionada);
+                }
+            //}
+                
             
-            this.oficina_seleccionada = localStorage.getItem("Oficina");
-            if (this.oficina_seleccionada === 'undefined' || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {
-                this.modalOficinaCaja.show();
-            }else{
-                this.ListarCajas(this.oficina_seleccionada);
-            }
-    
-            this.caja_seleccionada = localStorage.getItem("Caja");
-            if (this.caja_seleccionada === 'undefined' || this.caja_seleccionada === null || this.caja_seleccionada === '') {
-                this.modalOficinaCaja.show();
-            } 
-        }
-              
-        
-        switch (this.user.Id_Perfil) {
-            // administrador
-            case "1": {
-                this.OcultarCajero = false;
-                this.OcultarConsultor = false;
-                break;
-            }
-            //cajero principal
-            case "2": {
-                this.OcultarCajero = true;
-                break;
-            }
-            // cajero
-            case "3": {
-                this.OcultarCajero = true;
-                break;
-            }
-            // consultor
-            case "4": {
-                this.OcultarCajero = true;
-                this.OcultarConsultor = true;
-                break;
-            }
-            // auditor 
-            case "5": {
-                break;
-            }
-            // 
-            case "6": {
-                this.OcultarCajero = false;
-                this.OcultarConsultor = false;
-                break;
-            }
-        }
-
-        this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-            this.alertas = data;
-        });
-
-        if (this.user.Password == this.user.Username) {
-            //this.ModalCambiarContrasena.show();
-        }
-
-        this.startTimer();
-        //console.log(localStorage)
-
-        this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-            this.alertasCajas = data;
-            if (this.alertasCajas.length > 0) {
-                this.contadorTraslado = this.alertasCajas.length;
-            } else {
-                this.contadorTraslado = 0;
+            switch (this.user.Id_Perfil) {
+                // administrador
+                case "1": {
+                    this.OcultarCajero = false;
+                    this.OcultarConsultor = false;
+                    break;
+                }
+                //cajero principal
+                case "2": {
+                    this.OcultarCajero = true;
+                    break;
+                }
+                // cajero
+                case "3": {
+                    this.OcultarCajero = true;
+                    break;
+                }
+                // consultor
+                case "4": {
+                    this.OcultarCajero = true;
+                    this.OcultarConsultor = true;
+                    break;
+                }
+                // auditor 
+                case "5": {
+                    break;
+                }
+                // 
+                case "6": {
+                    this.OcultarCajero = false;
+                    this.OcultarConsultor = false;
+                    break;
+                }
             }
 
-        });
+            this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+                this.alertas = data;
+            });
 
-        /*setInterval(() => {
+            if (this.user.Password == this.user.Username) {
+                //this.ModalCambiarContrasena.show();
+            }
+
+            this.startTimer();
+            //console.log(localStorage)
+
             this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
                 this.alertasCajas = data;
                 if (this.alertasCajas.length > 0) {
@@ -278,33 +277,47 @@ export class CommonLayoutComponent implements OnInit {
                 }
 
             });
-        }, 30000);*/
 
-        /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
-            this.ListaBancos = data;
-        });*/
+            /*setInterval(() => {
+                this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+                    this.alertasCajas = data;
+                    if (this.alertasCajas.length > 0) {
+                        this.contadorTraslado = this.alertasCajas.length;
+                    } else {
+                        this.contadorTraslado = 0;
+                    }
 
-        /*setInterval(() => {
-            this.cerrarCaja()
-        }, 30000);*/
+                });
+            }, 30000);*/
 
-        if (localStorage['Banco']) {
-            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                params: { id: JSON.parse(localStorage['Banco']) }
-            }).subscribe((data: any) => {
-                this.Movimientos = data.lista;
-            });
-    
-            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                params: { id: JSON.parse(localStorage['Banco']) }
-            }).subscribe((data: any) => {
-                this.Movimientos = data.lista;
-            });
-    
-            this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
-                this.nombreBanco = data.Nombre_Titular;
-            });
-        }
+            /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
+                this.ListaBancos = data;
+            });*/
+
+            /*setInterval(() => {
+                this.cerrarCaja()
+            }, 30000);*/
+
+            if (localStorage['Banco']) {
+                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                    params: { id: JSON.parse(localStorage['Banco']) }
+                }).subscribe((data: any) => {
+                    this.Movimientos = data.lista;
+                });
+        
+                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                    params: { id: JSON.parse(localStorage['Banco']) }
+                }).subscribe((data: any) => {
+                    this.Movimientos = data.lista;
+                });
+        
+                this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+                    this.nombreBanco = data.Nombre_Titular;
+                });
+            }
+        }, 1200);
+        
+        
     }
 
     salir() {
@@ -319,7 +332,10 @@ export class CommonLayoutComponent implements OnInit {
         localStorage.removeItem('Perfil');
         localStorage.setItem('CuentaConsultor', '');
         localStorage.setItem('MonedaCuentaConsultor', '');
-        this.router.navigate(["/login"]);
+
+        setTimeout(() => {
+            this.router.navigate(["/login"]);    
+        }, 800);        
     }
 
     ValidateConsultorBeforeLogout(){
@@ -696,8 +712,7 @@ export class CommonLayoutComponent implements OnInit {
 
     }
 
-    GuardarMontoInicial2(modal) {
-        console.log(this.AperturaCuentaModel);        
+    GuardarMontoInicial2(modal) {      
 
         let id_funcionario = this.user.Identificacion_Funcionario;
         let info = JSON.stringify(this.AperturaCuentaModel);
@@ -871,10 +886,7 @@ this.ModalResumenCuenta.show();
     //FUNCIONES NUEVAS
 
     AsignarMonedas(){
-        console.log("asignando monedas");
-        this.MonedasSistema = this.globales.Monedas;
-        console.log(this.globales.Monedas);
-        
+        this.MonedasSistema = this.globales.Monedas;        
     }
 
     AsignarMonedasApertura(){
@@ -889,7 +901,6 @@ this.ModalResumenCuenta.show();
     }
 
     ListarOficinas(){
-        console.log("listando oficinas");
         this.http.get(this.globales.ruta+'php/oficinas/listar_oficinas.php').subscribe((data:any)=> {
 
             if (data.tipo == 'error') {
@@ -937,13 +948,24 @@ this.ModalResumenCuenta.show();
             return;
         }
 
-        localStorage.setItem("Oficina", this.oficina_seleccionada);        
-        localStorage.setItem("Caja", this.caja_seleccionada);
-        this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
-        this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
-        this.modalOficinaCaja.hide();
-        //this.ModalCambiarBanco.show();
-        this.ModalAperturaCaja.show();
+        this.cajaService.verificarCaja(this.caja_seleccionada).subscribe((data:any) => {
+
+            if (data.codigo == 'success') {
+
+                localStorage.setItem("Oficina", this.oficina_seleccionada);        
+                localStorage.setItem("Caja", this.caja_seleccionada);
+                this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
+                this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
+                this.modalOficinaCaja.hide();
+            }else{
+
+                this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+                localStorage.setItem("Oficina", '');        
+                localStorage.setItem("Caja", '');
+                this.DiarioModel.Caja_Apertura = '';
+                this.DiarioModel.Oficina_Apertura = '';
+            }
+        });        
     }
 
     ShowSwal(tipo:string, titulo:string, msg:string){
@@ -951,6 +973,17 @@ this.ModalResumenCuenta.show();
         this.alertSwal.title = titulo;
         this.alertSwal.text = msg;
         this.alertSwal.show();
+    }
+
+    SetNombreCaja(idCaja:string){
+        this.cajaService.getNombreCaja(idCaja).subscribe((data:any) => {
+            this.NombreCaja = data.caja;
+        });
+    }
+
+    SetNombreOficina(idOficina:string){
+        let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina);        
+        this.NombreOficina = oficinaObj.Nombre;
     }
 
     CargarBancosPais(id_pais){

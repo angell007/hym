@@ -1,0 +1,16 @@
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTest>
+  <div class="app-modal-header">
+      <button type="button" class="close basic-close" (click)="ModalTest.hide()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      <h4>Modal test</h4>
+  </div>
+  <div class="app-modal-body">
+    <p>THIS IS A TEST MODAL</p>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-primary">test Button</button>
+    </div>
+  </div>
+</app-modal-basic>

@@ -17,14 +17,14 @@ import { Globales } from '../shared/globales/globales';
 @Component({
   selector: 'app-traslados',
   templateUrl: './traslados.component.html',
-  styleUrls: ['./traslados.component.css']
+  styleUrls: ['./traslados.component.css', '../../style.scss']
 })
 export class TrasladosComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject();
-  user: any;
-  IdentificacionFuncionario: any;
+  user = JSON.parse(localStorage.User);
+  IdentificacionFuncionario = this.user.Identificacion_Funcionario;
 
   @ViewChild("ModalTraslado") ModalTraslado: any;
   @ViewChild("saveSwal") saveSwal: any;
@@ -59,27 +59,48 @@ export class TrasladosComponent implements OnInit {
   edicionTraslado:any = {};
   movimiento = [];
 
-  constructor(private http: HttpClient, private globales: Globales) {
+  //#region MODELOS
 
+    public TrasladoModel:any = {
+
+    };
+  //#endregion
+
+  //#region VARIABLES NUEVAS
+    
+  public Monedas:Array<any> = [];
+  //#endregion
+
+  constructor(private http: HttpClient, private globales: Globales) {
+    setTimeout(() => {
+      
+      this.AsignarMonedas();
+    }, 1000);
   }
 
   esconder = true;
   ngOnInit() {
-    var perfil = JSON.parse(localStorage.Perfil);
+    setTimeout(() => {
+      var perfil = JSON.parse(localStorage.Perfil);
 
-    switch(perfil){
-      case 5:{
-        this.esconder = false;
+      switch(perfil){
+        case 5:{
+          this.esconder = false;
+        }
+        default:{
+          this.esconder = true;
+          break;
+        }
       }
-      default:{
-        this.esconder = true;
-        break;
-      }
-    }
 
-    this.ActualizarVista();
-    this.user = JSON.parse(localStorage.User);
-    this.IdentificacionFuncionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+      this.ActualizarVista();
+    }, 1500);    
+  }
+
+  AsignarMonedas(){
+    this.Monedas = this.globales.Monedas;
+    console.log(this.Monedas);
+    console.log(this.globales.Monedas);    
   }
 
   ActualizarVista() {
@@ -365,11 +386,11 @@ export class TrasladosComponent implements OnInit {
 
   EstadoTraslado(value, estado) {
     let datos = new FormData();
-    var titulo;
-    var texto;
-    datos.append("modulo", "Traslado");
+    //var titulo;
+    //var texto;
+    //datos.append("modulo", "Traslado");
     datos.append("id", value);
-    switch (estado) {
+    /*switch (estado) {
       case "Activo": {
         datos.append("estado", "Activo");
         titulo = "Traslado Inactivado";
@@ -387,6 +408,14 @@ export class TrasladosComponent implements OnInit {
     this.http.post(this.globales.ruta + 'php/genericos/anular_generico.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = titulo;
       this.confirmacionSwal.text = texto;
+      this.confirmacionSwal.type = "success";
+      this.confirmacionSwal.show();
+      this.ActualizarVista();
+    });*/
+
+    this.http.post(this.globales.ruta + 'php/traslados/traslado_anular.php', datos).subscribe((data: any) => {
+      this.confirmacionSwal.title = 'Anulacion Exitosa';
+      this.confirmacionSwal.text = 'Se anuló el traslado correctamente';
       this.confirmacionSwal.type = "success";
       this.confirmacionSwal.show();
       this.ActualizarVista();
@@ -408,13 +437,19 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Traslado', id: id }
     }).subscribe((data: any) => {
-      //console.log(data);
+      console.log(data);
       this.Identificacion = id;
       this.edicionTraslado = data;
       this.Origen(data.Origen);
       this.Destino(data.Destino);
       modal.show();
     });
+  }
+
+  ObtenerOrigen(value, tipo:string = ''){
+    console.log(value);
+    console.log(tipo);
+    
   }
 
 }

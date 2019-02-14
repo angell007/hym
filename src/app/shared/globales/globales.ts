@@ -34,7 +34,6 @@ export class Globales {
   BuscarMonedas():void{
     this.client.get(this.ruta+'php/monedas/lista_monedas.php').subscribe((data)=>{      
       this.Monedas = data;
-      
     });
   }
 

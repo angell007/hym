@@ -27,7 +27,6 @@ export class TablacomprasComponent implements OnInit, OnChanges {
   constructor(public compraService:CompraService) { }
 
   ngOnChanges(changes:SimpleChanges){
-    console.log("tabla changes");
     
     if (changes.Id_Moneda.previousValue != undefined) {
       this.CargaInicial();
@@ -35,7 +34,6 @@ export class TablacomprasComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log("tabla init");
     this.CargaInicial();
   }
 
@@ -79,9 +77,7 @@ export class TablacomprasComponent implements OnInit, OnChanges {
     return true;
   }
 
-  SeleccionarCompra(seleccionado, idCuenta, listIndex){   
-    console.log(listIndex);
-     
+  SeleccionarCompra(seleccionado, idCuenta, listIndex){        
 
     if(seleccionado == '0'){
       this.ComprasPendientes[listIndex].Seleccionado = '1';
