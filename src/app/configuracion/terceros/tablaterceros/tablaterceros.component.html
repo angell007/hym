@@ -1,0 +1,300 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <div class="col-md-4">
+                  <h5>Todos los terceros de nuestro sistema 
+                    <span>
+                      <i class="ti-reload text-info" title="Actualizar tabla" (click)="ConsultaFiltrada()" style="cursor:pointer;"></i>
+                    </span>
+                  </h5>
+                </div>
+                <div class="col-md-8">
+                  <div class="pull-right">
+                    <button 
+                      class="btn btn-info btn-sm" style="display:flex; align-items:center;" (click)="NuevoTercero()">
+                      <i class="ti-plus font-size-15 mr-1"></i>  Nuevo Tercero
+                    </button>
+                  </div>
+                </div>
+              </div>                  
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width:15%">Identificación</th>
+                            <th class="text-center">Nombres y Apellidos</th>
+                            <th class="text-center" style="width:15%">Departamento</th>
+                            <th class="text-center" style="width:25%">Ciudad</th>
+                            <th class="text-center" style="width:10%">Tipo Tercero</th>
+                            <th class="text-center" style="width:10%;">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th>
+                              <input type="text" class="form-control form-control-sm" 
+                                    [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()"
+                                    placeholder="Cedula">
+                            </th>
+                            <th>
+                              <input type="text" class="form-control form-control-sm" 
+                                    [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
+                                    placeholder="Nombre y/o apellidos">
+                            </th>
+                            <th>
+                                <select class="custom-select form-control form-control-sm"
+                                    [(ngModel)]="Filtros.departamento" (change)="ConsultaFiltrada()">
+                                    <option value="" selected>Seleccione</option>
+                                    <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select class="custom-select form-control form-control-sm" (change)="GetMunicipiosDepartamento($event.target.value)">
+                                  <option value="" selected>Seleccione</option>
+                                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                                </select>
+
+                                <select class="custom-select form-control form-control-sm"
+                                    [(ngModel)]="Filtros.municipio" (change)="ConsultaFiltrada()">
+                                    <option value="" selected>Seleccione</option>
+                                    <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
+                                </select>
+                            </th>
+                            <th>
+                              <select class="custom-select form-control form-control-sm"
+                                  [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
+                                  <option value="" selected>Seleccione</option>
+                                  <option value="Cliente">Cliente</option>
+                                  <option value="Proveedor">Proveedor</option>
+                              </select>
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr *ngIf="Terceros.length == 0 && !Cargando">
+                          <th colspan="6" class="text-center">
+                            <div><i class="text-warning font-size-25 ti-alert"></i></div>
+                            <div><h4>No hay datos para mostrar</h4></div>
+                          </th>
+                        </tr>
+                        <tr *ngIf="Cargando">
+                          <th colspan="6" class="text-center">
+                            <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                            <h1>CARGANDO</h1>
+                          </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="Terceros.length > 0 && !Cargando">
+                        <tr *ngFor="let t of Terceros">
+                            <td>{{t.Id_Tercero}}</td>
+                            <td>{{t.Nombre}}</td>
+                            <td>{{t.Departamento}}</td>
+                            <td>{{t.Municipio}}</td>
+                            <td>{{t.Tipo_Tercero}}</td>
+                            <td>
+                              <div class="text-center">
+                                <div ngbDropdown class="dropdown-primary">
+                                  <button ngbDropdownToggle class="btn btn-xs btn-rounded btn-outline-dark waves-effect waves-light" type="button">Acciones <i class="ti-angle-down"></i></button>
+                                  <div ngbDropdownMenu>
+                                    <!--<a 
+                                      class="dropdown-item waves-light waves-effect"
+                                      style="cursor:pointer;">
+                                      <i class="ti-zoom-in text-info"></i> 
+                                      <small>Detalle</small>
+                                    </a>-->
+                                    <a 
+                                      class="dropdown-item waves-light waves-effect" 
+                                      style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
+                                      <i class="ti-pencil text-warning"></i> 
+                                      <small>Editar</small>
+                                    </a>
+                                    <!--<a 
+                                      class="dropdown-item waves-light waves-effect"
+                                      style="cursor:pointer;"
+                                      [swal]="{ title : '¿Está Seguro?', text : 'Se va a cambiar el estado de este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Actualizar', cancelButtonText : 'No, Comprobar!' }">
+                                      <i [ngClass]="{'ti-na text-danger':t.Estado == 'Activo', 'ti-back-right text-info': t.Estado=='Inactivo'}"></i> 
+                                      <small>{{t.Estado == "Activo" ? TextoInactivo : TextoActivo}}</small>
+                                    </a>-->
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="paginacion-container" *ngIf="Terceros.length > 0 && !Cargando">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>
+                                <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b>
+                            </p>
+                        </div>
+                        <div class="col-md-9">
+                        <ngb-pagination 
+                            class="pull-right" 
+                            [collectionSize]="TotalItems" 
+                            [(page)]="page" 
+                            [maxSize]="maxSize" 
+                            [pageSize]="pageSize"
+                            size="sm" 
+                            (pageChange)="ConsultaFiltrada(true)" 
+                            [boundaryLinks]="true">
+                        </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+</div>
+
+<swal #alertSwal title="" text="" type=""></swal>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalTercero" #ModalTercero>
+    <div class="app-modal-header">
+        <h4>Nuevo Tercero</h4>
+        <button type="button" class="close basic-close" (click)="CerrarModalTercero()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form #FormTercero="ngForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>T. Doc</label>
+                        <select class="form-control" required name="Id_Tipo_Documento" 
+                          [(ngModel)]="TerceroModel.Id_Tipo_Documento" [disabled]="Edicion">
+                            <option value="">Seleccione tipo de documento</option>
+                            <option *ngFor="let tp of TiposDocumento" [value]="tp.Id_Tipo_Documento">{{tp.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Identificación</label>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero"
+                            class="form-control" name="Id_Tercero" 
+                            [(ngModel)]="TerceroModel.Id_Tercero" (change)="VerificarIdentificacion()"
+                            [disabled]="Edicion">
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label>Nombre y Apellido</label>
+                        <input type="text" placeholder="Nombre y Apellido Tercero" class="form-control" name="Nombre" [(ngModel)]="TerceroModel.Nombre">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" [(ngModel)]="TerceroModel.Direccion">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Barrio</label>
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" [(ngModel)]="TerceroModel.Barrio">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <select class="form-control" required name="Id_Departamento" [(ngModel)]="TerceroModel.Id_Departamento" (change)="GetMunicipiosList($event.target.value)">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Municipio</label>
+                        <select class="form-control" required name="Id_Municipio"
+                            [(ngModel)]="TerceroModel.Id_Municipio">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let m of MunicipiosList" [value]="m.Id_Municipio">{{m.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Tercero"
+                            class="form-control" name="Telefono" [(ngModel)]="TerceroModel.Telefono">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Celular</label>
+                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Tercero"
+                            class="form-control" name="Celular" [(ngModel)]="TerceroModel.Celular">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo" [(ngModel)]="TerceroModel.Correo">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Otros Datos</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select class="form-control" [(ngModel)]="TerceroModel.Tipo_Tercero" name="Tipo">
+                            <option value="">Seleccione</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Grupo Tercero</label>
+                        <select class="form-control" [(ngModel)]="TerceroModel.Id_Grupo_Tercero" name="Id_Grupo_Tercero">
+                          <option value="">Seleccione</option>
+                          <option *ngFor="let g of Grupos" value="{{g.Id_Grupo_Tercero}}">{{g.Nombre_Grupo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Crédito</label>
+                        <select class="form-control" name="Credito" [(ngModel)]="TerceroModel.Credito" (change)="VaciarCupo()">
+                            <option selected value="No">No</option>
+                            <option value="Si">Si</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Cupo</label>
+                        <input type="text" 
+                          placeholder="Cupo de Crédito" 
+                          class="form-control" 
+                          name="Cupo" 
+                          [(ngModel)]="TerceroModel.Cupo"
+                          [disabled]="TerceroModel.Credito == 'No'">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              style="display:flex;align-items:center;"
+              [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="GuardarTercero()"
+              [disabled]="!FormTercero.valid"><i class="ti-save font-size-15 mr-1"></i> Guardar datos</button>
+        </div>
+    </div>
+</app-modal-basic>

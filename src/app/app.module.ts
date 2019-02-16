@@ -44,9 +44,14 @@ import { CambioService } from './shared/services/cambio.service';
 import { GrupoterceroService } from './shared/services/grupotercero.service';
 import { CompraService } from './shared/services/compra/compra.service';
 import { ProveedorService } from './shared/services/proveedor/proveedor.service';
+import { TerceroService } from './shared/services/tercero/tercero.service';
 import { CajaService } from './shared/services/caja/caja.service';
 import { TransferenciaService } from './shared/services/transferencia/transferencia.service';
 import { GiroService } from './shared/services/giro/giro.service';
+import { DepartamentoService } from './shared/services/departamento/departamento.service';
+import { MunicipioService } from './shared/services/municipio/municipio.service';
+import { DocumentoService } from './shared/services/documento/documento.service';
+import { GeneralService } from './shared/services/general/general.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -132,6 +137,7 @@ import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { TablacomprasComponent } from './configuracion/compras/tablacompras/tablacompras.component';
 import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
+import { TablatercerosComponent } from './configuracion/terceros/tablaterceros/tablaterceros.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -261,7 +267,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatotalesmonedasComponent,
         TablacomprasComponent,
         ModaltestComponent,
-        GrupostercerosComponent
+        GrupostercerosComponent,
+        TablatercerosComponent
     ],
     exports:[
         ModalBasicComponent
@@ -275,6 +282,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         FuncionarioService,
         GiroService,
         GrupoterceroService,
+        TerceroService,
+        DepartamentoService,
+        MunicipioService,
+        DocumentoService,
+        GeneralService,
         AuthGuard,
         ThemeConstants,
         Globales,

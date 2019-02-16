@@ -5,4 +5,5 @@ export class GrupoTerceroModel{
     public Estado:string = 'Activo';
     public Fecha_Registro:string = '';
     public Id_Funcionario:string = '';
+    public Nivel:string = '1';
 }

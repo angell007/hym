@@ -1,11 +1,12 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Terceros</h4>
-        <button class="pull-right btn btn-info" (click)="ModalTercero.show()">
-            <i class="ti-plus"></i> Agregar Nuevo Tercero</button>
+        <!--<button class="pull-right btn btn-info" (click)="ModalTercero.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Tercero</button>-->
     </div>
     <div class="clearfix"></div>
-    <div class="row">
+    <app-tablaterceros></app-tablaterceros>
+    <!--<div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-block">
@@ -48,7 +49,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTercero" #ModalTercero>

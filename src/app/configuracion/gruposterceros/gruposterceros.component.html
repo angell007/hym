@@ -10,7 +10,9 @@
                   <div class="row">
                     <div class="col-md-4">
                       <h5>Grupos Creados 
-                        <span><i class="ti-reload text-info" title="Actualizar tabla"></i></span>
+                        <span>
+                          <i class="ti-reload text-info" title="Actualizar tabla" (click)="ConsultaFiltrada()" style="cursor:pointer;"></i>
+                        </span>
                       </h5>
                     </div>
                     <div class="col-md-8">
@@ -34,23 +36,97 @@
                                 <th class="text-center">Creado el</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
-                            <tr *ngIf="Grupos.length == 0">
+                            <tr>
+                                <th>
+                                  <input type="text" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
+                                        placeholder="Nombre">
+                                </th>
+                                <th>
+                                  <input type="text" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.padre" (change)="ConsultaFiltrada()"
+                                        placeholder="Nombre padre">
+                                </th>
+                                <th>
+                                    <select class="custom-select form-control form-control-sm"
+                                        [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
+                                        <option value="" selected>Seleccione</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                </th>
+                                <th>
+                                  <input type="date" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()">
+                                </th>
+                            </tr>
+                            <tr *ngIf="Grupos.length == 0 && !Cargando">
                               <th colspan="5" class="text-center">
                                 <div><i class="text-warning font-size-25 ti-alert"></i></div>
                                 <div><h4>No hay datos para mostrar</h4></div>
                               </th>
                             </tr>
+                            <tr *ngIf="Cargando">
+                              <th colspan="6" class="text-center">
+                                <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                                <h1>CARGANDO</h1>
+                              </th>
+                            </tr>
                         </thead>
-                        <tbody *ngIf="Grupos.length > 0">
+                        <tbody *ngIf="Grupos.length > 0 && !Cargando">
                             <tr *ngFor="let g of Grupos">
                                 <td>{{g.Nombre_Grupo}}</td>
                                 <td>{{g.Grupo_Padre}}</td>
                                 <td>{{g.Estado}}</td>
                                 <td>{{g.Fecha_Registro | date:"dd-MM-yyyy"}}</td>
-                                <td></td>
+                                <td>
+                                  <div class="text-center">
+                                    <div ngbDropdown class="dropdown-primary">
+                                      <button ngbDropdownToggle class="btn btn-info btn-mini waves-effect waves-light btn-sm" type="button">Acciones <i class="ti-angle-down"></i></button>
+                                      <div ngbDropdownMenu>
+                                        <a 
+                                          class="dropdown-item waves-light waves-effect"
+                                          style="cursor:pointer;"
+                                          [swal]="{ title : '¿Está Seguro?', text : 'Se va a cambiar el estado de este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Actualizar', cancelButtonText : 'No, Comprobar!' }"
+                                          (confirm)="CambiarEstadoGrupo(g.Id_Grupo_Tercero)">
+                                          <i [ngClass]="{'ti-na text-danger':g.Estado == 'Activo', 'ti-back-right text-info': g.Estado=='Inactivo'}"></i> 
+                                          <small>{{g.Estado == "Activo" ? TextoInactivo : TextoActivo}}</small>
+                                        </a>
+                                        <a 
+                                          class="dropdown-item waves-light waves-effect" 
+                                          (click)="EditarGrupo(g.Id_Grupo_Tercero)"
+                                          style="cursor:pointer;">
+                                          <i class="ti-pencil text-warning"></i> 
+                                          <small>Editar</small>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div id="paginacion-container" *ngIf="Grupos.length > 0 && !Cargando">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p>
+                                    <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b>
+                                </p>
+                            </div>
+                            <div class="col-md-9">
+                            <ngb-pagination 
+                                class="pull-right" 
+                                [collectionSize]="TotalItems" 
+                                [(page)]="page" 
+                                [maxSize]="maxSize" 
+                                [pageSize]="pageSize"
+                                size="sm" 
+                                (pageChange)="ConsultaFiltrada(true)" 
+                                [boundaryLinks]="true">
+                            </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>            
         </div>
@@ -62,7 +138,7 @@
         <button type="button" class="close basic-close" (click)="CerrarModalGrupo()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4>Detalle Giro</h4>
+        <h4>Nuevo Grupo</h4>
     </div>
     <div class="app-modal-body">
         <div class="row">
@@ -82,7 +158,8 @@
                     <select 
                       name="Grupo_Padre" id="Grupo_Padre" 
                       [(ngModel)]="GrupoTerceroModel.Id_Grupo_Padre"
-                      class="form-control form-control-sm">
+                      class="form-control form-control-sm"
+                      (change)="SetNivelGrupo()">
                       <option value="" selected>Seleccione</option>
                       <option *ngFor="let gp of GruposPadre" [value]="gp.Id_Grupo_Tercero">{{gp.Nombre_Grupo}}</option>
                     </select>
@@ -95,7 +172,7 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button 
-                class="btn btn-primary btn-sm"
+                class="btn btn-danger btn-sm"
                 (click)="CerrarModalGrupo()">Cerrar
             </button>
             <button
