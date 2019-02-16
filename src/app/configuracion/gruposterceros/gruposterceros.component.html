@@ -18,7 +18,7 @@
                     <div class="col-md-8">
                       <div class="pull-right">
                         <button 
-                          class="btn btn-info btn-sm" style="display:flex; align-items:center;"
+                          class="btn btn-rounded btn-outline-info btn-sm" style="display:flex; align-items:center;"
                           (click)="AbrirModalGrupo()">
                           <i class="ti-plus font-size-15 mr-1"></i>  Nuevo Grupo
                         </button>
@@ -59,6 +59,7 @@
                                   <input type="date" class="form-control form-control-sm" 
                                         [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()">
                                 </th>
+                                <th></th>
                             </tr>
                             <tr *ngIf="Grupos.length == 0 && !Cargando">
                               <th colspan="5" class="text-center">
@@ -82,7 +83,9 @@
                                 <td>
                                   <div class="text-center">
                                     <div ngbDropdown class="dropdown-primary">
-                                      <button ngbDropdownToggle class="btn btn-info btn-mini waves-effect waves-light btn-sm" type="button">Acciones <i class="ti-angle-down"></i></button>
+                                      <button ngbDropdownToggle 
+                                        class="btn btn-xs btn-rounded btn-outline-dark waves-effect waves-light" 
+                                        type="button">Acciones <i class="ti-angle-down"></i></button>
                                       <div ngbDropdownMenu>
                                         <a 
                                           class="dropdown-item waves-light waves-effect"

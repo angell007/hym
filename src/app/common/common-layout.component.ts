@@ -177,6 +177,11 @@ export class CommonLayoutComponent implements OnInit {
         function changeSidenav(sidenavTheme) {
             this.sidenavSelected = sidenavTheme;
         }
+
+        this.AsignarPaises();
+        this.AsignarMonedas();
+        this.AsignarMonedasApertura();
+        this.ListarOficinas(); 
     }
 
     startTimer() {
@@ -189,12 +194,7 @@ export class CommonLayoutComponent implements OnInit {
     OcultarConsultor = false;
     ListaBancos = [];
     nombreBanco = "";
-    ngOnInit() {
-
-        this.AsignarPaises();
-        this.AsignarMonedas();
-        this.AsignarMonedasApertura();
-        this.ListarOficinas(); 
+    ngOnInit() {        
 
         switch (this.user.Id_Perfil) {
             // administrador
@@ -240,8 +240,7 @@ export class CommonLayoutComponent implements OnInit {
                 }
                 
                 this.oficina_seleccionada = localStorage.getItem("Oficina");
-                
-                if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') {                   
+                if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') { 
                     this.modalOficinaCaja.show();
                 }else{
                     this.ListarCajas(this.oficina_seleccionada);
@@ -922,7 +921,6 @@ this.ModalResumenCuenta.show();
         this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
 
             if (data.tipo == 'error') {
-        
                 this.Cajas = [];
                 this.ShowSwal(data.tipo, 'Error', data.mensaje);
             }else{
@@ -955,6 +953,8 @@ this.ModalResumenCuenta.show();
                 localStorage.setItem("Caja", this.caja_seleccionada);
                 this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
                 this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
+                this.SetNombreOficina(this.oficina_seleccionada);
+                this.SetNombreCaja(this.caja_seleccionada);
                 this.modalOficinaCaja.hide();
             }else{
 
@@ -981,7 +981,7 @@ this.ModalResumenCuenta.show();
     }
 
     SetNombreOficina(idOficina:string){
-        let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina);        
+        let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina); 
         this.NombreOficina = oficinaObj.Nombre;
     }
 

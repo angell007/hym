@@ -1,55 +1,9 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Terceros</h4>
-        <!--<button class="pull-right btn btn-info" (click)="ModalTercero.show()">
-            <i class="ti-plus"></i> Agregar Nuevo Tercero</button>-->
     </div>
     <div class="clearfix"></div>
     <app-tablaterceros></app-tablaterceros>
-    <!--<div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-block">
-                    <p>Tenemos los terceros de nuestra empresa</p>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                            <thead>
-                                <tr>
-                                    <th>Identificación</th>
-                                    <th>Nombre</th>
-                                    <th>Ciudad</th>
-                                    <th>Telefono</th>
-                                    <th>Tipo</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let tercero of terceros" class=" {{tercero.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                    <td style="vertical-align: middle;">{{tercero.Id_Tercero}}</td>
-                                    <td style="vertical-align: middle;">{{tercero.Nombre}}</td>
-                                    <td style="vertical-align: middle;">{{tercero.Municipio}}</td>
-                                    <td style="vertical-align: middle;">{{tercero.Telefono}}</td>
-                                    <td style="vertical-align: middle;" >{{tercero.Tipo_Tercero}}</td>
-                                    <td style="vertical-align: middle;" class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/tercerover',tercero.Id_Tercero]">
-                                            <i class="ti-search"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarTercero(tercero.Id_Tercero, ModalTerceroEditar)">
-                                            <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Tercero, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="EstadoTercero(tercero.Id_Tercero,tercero.Estado )">
-                                            <i class="ti-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
 </div>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTercero" #ModalTercero>

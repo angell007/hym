@@ -5,6 +5,7 @@ export class TerceroModel{
     public Barrio:string = '';
     public Telefono:string = '';
     public Correo:string = '';
+    public Celular:string = '';
     public Tercero_Desde:string = '';
     public Destacado:string = 'No';
     public Credito:string = 'No';
