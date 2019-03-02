@@ -945,9 +945,9 @@ this.ModalResumenCuenta.show();
             return;
         }
 
-        this.cajaService.verificarCaja(this.caja_seleccionada).subscribe((data:any) => {
+        /*this.cajaService.verificarCaja(this.caja_seleccionada).subscribe((data:any) => {
 
-            if (data.codigo == 'success') {
+            if (data.codigo == 'success') {*/
 
                 localStorage.setItem("Oficina", this.oficina_seleccionada);        
                 localStorage.setItem("Caja", this.caja_seleccionada);
@@ -956,7 +956,7 @@ this.ModalResumenCuenta.show();
                 this.SetNombreOficina(this.oficina_seleccionada);
                 this.SetNombreCaja(this.caja_seleccionada);
                 this.modalOficinaCaja.hide();
-            }else{
+            /*}else{
 
                 this.ShowSwal(data.codigo, data.titulo, data.mensaje);
                 localStorage.setItem("Oficina", '');        
@@ -964,7 +964,7 @@ this.ModalResumenCuenta.show();
                 this.DiarioModel.Caja_Apertura = '';
                 this.DiarioModel.Oficina_Apertura = '';
             }
-        });        
+        }); */       
     }
 
     ShowSwal(tipo:string, titulo:string, msg:string){

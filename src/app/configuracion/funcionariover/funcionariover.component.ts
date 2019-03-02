@@ -7,16 +7,29 @@ import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 //import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-funcionariover',
   templateUrl: './funcionariover.component.html',
-  styleUrls: ['./funcionariover.component.scss']
+  styleUrls: ['./funcionariover.component.scss'],
+  animations: [
+    trigger('fadeInOutTranslate', [
+      transition(':enter', [
+        style({opacity: 0}),
+        animate('400ms ease-in-out', style({opacity: 1}))
+      ]),
+      transition(':leave', [
+        style({transform: 'translate(0)'}),
+        animate('400ms ease-in-out', style({opacity: 0}))
+      ])
+    ])
+  ],
 })
 export class FuncionarioverComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
-  public funcionario : any = [] = [];
+  public funcionario : any = [];
   public Fotos: any;
   public ExisteFoto: boolean;
   public ContactoEmergencia = 
@@ -28,7 +41,7 @@ export class FuncionarioverComponent implements OnInit {
     Telefono: '',
     Direccion : ''
   };
-  public Experiencia : any = [] = [{
+  public Experiencia : any = [{
     id_Funcionario_Experiencia_Laboral : '',
     Nombre_Empresa : '',
     Cargo : '',
@@ -64,9 +77,9 @@ export class FuncionarioverComponent implements OnInit {
       Telefono: ''
     }
   ];
-  public Grupos : any = [] = [];
-  public Dependencias : any = [] = [];
-  public Cargos : any = [] = [];
+  public Grupos : any= [];
+  public Dependencias : any= [];
+  public Cargos : any= [];
   public Grupo : any = [];
   public Dependencia : any = [];
   public Cargo : any = [];    
@@ -82,7 +95,9 @@ export class FuncionarioverComponent implements OnInit {
       this.Cargo=data.Cargo;
       this.Grupo=data.Grupo;
       this.Dependencia=data.Dependencia;
-      this.ContactoEmergencia = data.Contacto_Emergencia;
+      this.ContactoEmergencia = data.Contacto_Emergencia.length == 0 ? this.ContactoEmergencia : data.Contacto_Emergencia;
+      console.log(this.ContactoEmergencia);
+      
       for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
       {               
         this.Experiencia[i] = data.Experiencia_Laboral[i];

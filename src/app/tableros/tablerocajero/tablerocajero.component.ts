@@ -19,20 +19,20 @@ import { isEmpty } from 'rxjs/operator/isEmpty';
 
 export class TablerocajeroComponent implements OnInit {
   public IdentificacionFuncionario: any = [];
-  public Destinatarios: any = [] = [];
-  public Remitentes: any = [] = [];
-  public Paises: any = [] = [];
-  public Bancos: any = [] = [];
-  public TipoCuentas: any = [] = [];
-  public Clientes: any = [] = [];
-  public DestinatariosFiltrados: any = [] = [];
-  public RemitentesFiltrados: any = [] = [];
-  public DatosRemitente: any = [] = [];
-  public Funcionarios: any = [] = [];
-  public ServiciosExternos: any = [] = [];
-  public CorresponsalesBancarios: any = [] = [];
-  public Documentos: any = [];
-  public Cuentas: any = [] = [{
+  public Destinatarios: any = [];
+  public Remitentes: any = [];
+  public Paises: any = [];
+  public Bancos: any = [];
+  public TipoCuentas: any = [];
+  public Clientes: any = [];
+  public DestinatariosFiltrados: any = [];
+  public RemitentesFiltrados: any = [];
+  public DatosRemitente: any = [];
+  public Funcionarios: any = [];
+  public ServiciosExternos: any = [];
+  public CorresponsalesBancarios: any = [];
+  public Documentos: any;
+  public Cuentas: any = [{
     Id_Destinatario: '',
     Id_Pais: "",
     Id_Banco: '',
@@ -246,6 +246,7 @@ export class TablerocajeroComponent implements OnInit {
     public TipoDocumentoNacional:any = [];
     public TipoDocumentoExtranjero:any = [];
     public TiposCuenta:any = [];
+    public DestinatarioEditar:boolean = false;
 
     public DiarioModel:any = {
       Id_Diario: '',
@@ -536,7 +537,8 @@ export class TablerocajeroComponent implements OnInit {
       Id_Banco: '',
       Bancos: [],
       Id_Tipo_Cuenta: '',
-      Numero_Cuenta: ''
+      Numero_Cuenta: '',
+      EsVenezolana: false
     }];
 
     public TipoDocumentoFiltrados:any = [];
@@ -1511,6 +1513,28 @@ export class TablerocajeroComponent implements OnInit {
       });
     }
 
+    EditarDest(id, pos) {
+      this.http.get(this.globales.ruta + 'php/destinatarios/get_detalle_destinatario.php', { params: { id_destinatario: id } })
+      .subscribe((data: any) => {
+        this.DestinatarioEditar = true;
+        this.DestinatarioModel = data.destinatario;
+        this.FiltrarDatosNacionalidad(this.DestinatarioModel.Id_Pais);
+        this.Lista_Cuentas_Destinatario = data.cuentas;
+          
+        for (var i = 0; i < this.Lista_Cuentas_Destinatario.length; i++) {
+          this.Bancos_Pais(this.Lista_Cuentas_Destinatario[i].Id_Pais, i, true);
+        }
+
+        this.SePuedeAgregarMasCuentas = true;
+  
+        this.Identificacion = id;
+        //this.AgregarFila();
+        //this.Bancos_Pais(2, 1);
+        this.ModalDestinatario.show();
+        //this.posiciontemporal = pos;
+      });
+    }
+
     LimpiarModeloTransferencia(dejarFormaPago:boolean = false, dejarTipoTransferencia:boolean = false){
       //MODELO PARA TRANSFERENCIAS
       this.TransferenciaModel = {
@@ -1974,27 +1998,31 @@ export class TablerocajeroComponent implements OnInit {
         if(validacion){
           return;
         };
-        console.log(modelo);
+        console.log(listaDestinatarios);
         
         if (modelo.Cuentas != undefined) {
           listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
           listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
           listaDestinatarios[i].Cuentas = modelo.Cuentas;
           listaDestinatarios[i].esconder = true;
+          listaDestinatarios[i].EditarVisible = true;
         } else {
           listaDestinatarios[i].esconder = false;
         }
       }else if(typeof(modelo) == 'string'){
         if(modelo == ''){
           listaDestinatarios[i].Numero_Documento_Destino = '';
-          listaDestinatarios[i].Id_Destinatario_Cuenta = '';
-          listaDestinatarios[i].Nombre_Destinatario = '';
-          listaDestinatarios[i].Valor_Transferencia = '';
-          listaDestinatarios[i].Cuentas = [];
         }else{
           
           listaDestinatarios[i].Numero_Documento_Destino = modelo;
         }
+        
+        listaDestinatarios[i].Id_Destinatario_Cuenta = '';
+        listaDestinatarios[i].Nombre_Destinatario = '';
+        listaDestinatarios[i].Valor_Transferencia = '';
+        listaDestinatarios[i].EditarVisible = false;
+        listaDestinatarios[i].Cuentas = [];
+
       }
     }
 
@@ -3409,6 +3437,57 @@ console.log(value);
       });
     }
 
+    EliminarCuentaDestinatario(posicion){
+      //console.log(posicion);
+      if (this.Lista_Cuentas_Destinatario.length == 1) {
+        this.ShowSwal('warning', 'Alerta', 'Debe existir al menos una cuenta asociada al destinatario');
+        this.SePuedeAgregarMasCuentas = false;
+        return;
+      }
+      this.Lista_Cuentas_Destinatario.splice(posicion, 1);
+      this.SePuedeAgregarMasCuentas = true;
+      //this.ShowSwal('success', 'Exito', 'Cuenta Eliminada exitosamenta');
+    }
+
+    LimpiarCuentaBancaria(posicion:string){
+      this.Lista_Cuentas_Destinatario[posicion] = {
+        Id_Pais: this.Lista_Cuentas_Destinatario[posicion].Id_Pais,
+        Id_Banco: '',
+        Bancos: [],
+        Id_Tipo_Cuenta: '',
+        Numero_Cuenta: '',
+        EsVenezolana: false
+      };
+    }
+
+    CerrarModalDestinatario(){
+      this.ModalDestinatario.hide();
+      this.ReiniciarDatosDestinatario();
+    }
+
+    ReiniciarDatosDestinatario(){
+      this.DestinatarioModel = {
+        Id_Destinatario: '',
+        Nombre: '',
+        Detalle: '',
+        Estado: 'Activo',
+        Tipo_Documento: '',
+        Id_Pais: ''
+      };
+  
+      this.Lista_Cuentas_Destinatario = [{
+        Id_Pais: '',
+        Id_Banco: '',
+        Bancos: [],
+        Id_Tipo_Cuenta: '',
+        Numero_Cuenta: '',
+        EsVenezolana: false
+      }];
+  
+      this.TipoDocumentoFiltrados = [];
+      this.SePuedeAgregarMasCuentas = false;
+    }
+
   //#endregion
 
   //#region TYPEAHEAD SEARCHES
@@ -3482,7 +3561,7 @@ console.log(value);
 
       //this.DestinatarioModel.Id_Destinatario = '';
       this.TipoDocumentoFiltrados = [];
-      this.DestinatarioModel.Nombre = '';
+      //this.DestinatarioModel.Nombre = '';
 
       let countryObject = this.Paises.find(x => x.Id_Pais == this.DestinatarioModel.Id_Pais);
 
@@ -3526,6 +3605,7 @@ console.log(value);
           this.DestinatarioModel.Id_Destinatario = v;
           //this.IdentificacionCrearDestinatario = v;
           this.ModalDestinatario.show();
+          this.DestinatarioEditar = false;
           /*this.Id_Destinatario = v;
           this.Lista_Destinatarios = [{
             Id_Pais: '',
@@ -3647,12 +3727,24 @@ console.log(value);
     }
   }
 
-  Bancos_Pais(Pais, i) {
+  Bancos_Pais(Pais, i, editar:boolean = false) {
     this.http.get(this.globales.ruta + 'php/genericos/bancos_pais.php', { params: { id: Pais } }).subscribe((data: any) => {
+
+      if (!editar) {
+        this.LimpiarCuentaBancaria(i);  
+      }
       
-      this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
-      this.Lista_Cuentas_Destinatario[i].Id_Banco = '';
-      this.Lista_Cuentas_Destinatario[i].Id_Tipo_Cuenta = '';
+      let pObj = this.Paises.find(x => x.Id_Pais == Pais);
+
+      if (!this.globales.IsObjEmpty(pObj)) {
+        if (pObj.Nombre == 'Venezuela') {
+          this.Lista_Cuentas_Destinatario[i].EsVenezolana = true;  
+        }else{
+          this.Lista_Cuentas_Destinatario[i].EsVenezolana = false;
+        }
+      }else{
+        this.Lista_Cuentas_Destinatario[i].EsVenezolana = false;
+      }
 
       if(data != ''){
         this.Lista_Cuentas_Destinatario[i].Bancos = data;
@@ -3667,21 +3759,22 @@ console.log(value);
 
     //console.log(seleccion + " , " + posicion + " , " + texto);
     let country = this.Lista_Cuentas_Destinatario[posicion].Id_Pais;
-
+    
     if (country == "2") {
       switch (texto) {
         case "check": {
-          var buscarBanco = this.Bancos.findIndex(x => x.Id_Banco === seleccion)
-          this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta = this.Bancos[buscarBanco].Identificador;
+          var buscarBanco = this.Lista_Cuentas_Destinatario[posicion].Bancos.findIndex(x => x.Id_Banco === seleccion);
+          this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta = this.Lista_Cuentas_Destinatario[posicion].Bancos[buscarBanco].Identificador;
           break;
         }
         case "input": {
 
           var cadena = seleccion.substring(0, 4);
           
-          var buscarBanco = this.Bancos.findIndex(x => x.Identificador === cadena)
+          var buscarBanco = this.Lista_Cuentas_Destinatario[posicion].Bancos.findIndex(x => x.Identificador === cadena);
+          
           if (buscarBanco > -1) {
-            this.Lista_Cuentas_Destinatario[posicion].Id_Banco = this.Bancos[buscarBanco].Id_Banco;
+            this.Lista_Cuentas_Destinatario[posicion].Id_Banco = this.Lista_Cuentas_Destinatario[posicion].Bancos[buscarBanco].Id_Banco;
           } else {
             this.Lista_Cuentas_Destinatario[posicion].Id_Banco = '';
           }
@@ -3979,12 +4072,12 @@ console.log(value);
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        modal.hide();
-        this.ShowSwal('success', 'Registro Exitoso', 'Se insertó el destinatario correctamente!');
+        this.ShowSwal('success', 'Registro Exitoso', 'Se guardaron los datos correctamente!');
         if(this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario)){
           this.PosicionDestinatarioActivo = '';
-          this.LimpiarModelos();
+          this.DestinatarioEditar = false;
         }
+        this.CerrarModalDestinatario();
       });
   }
 
@@ -3992,14 +4085,22 @@ console.log(value);
     this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id}}).subscribe((data:any)=>{
 
       if (data != '') {
+        if (this.DestinatarioEditar) {
+          console.log(data);
+          
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
+          
+        }else{
+
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.DestinatarioModel.Nombre;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = false;
+        }
         
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.DestinatarioModel.Nombre;
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
-        this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = false;
         return true;
       }else{
 
@@ -4031,7 +4132,7 @@ console.log(value);
       });
   }
 
-  EditarDestinatario(id, pos) {
+  /*EditarDestinatario(id, pos) {
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
@@ -4049,7 +4150,7 @@ console.log(value);
       this.ModalEditarDestinatario.show();
       this.posiciontemporal = pos;
     });
-  }
+  }*/
 
   /*validarBanco(i, valor) {
     var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)

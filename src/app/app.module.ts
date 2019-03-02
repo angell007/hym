@@ -14,6 +14,7 @@ import { StickyModule } from 'ng2-sticky-kit';
 import { ScrollToModule } from 'ng2-scroll-to';
 import { NgxMasonryModule } from 'ngx-masonry';
 import { ToastyModule } from 'ng2-toasty';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'd3';
 import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
@@ -155,6 +156,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 @NgModule({
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         RouterModule.forRoot(AppRoutes, { useHash: false }),
         NgbModule.forRoot(),
