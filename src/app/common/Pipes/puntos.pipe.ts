@@ -6,7 +6,7 @@ import { log } from 'util';
 })
 
 export class PuntosPipe implements PipeTransform {
-    transform(value: string, args: any[]): string {
+    transform(value: string, args: any[] = []): string {
         if(value) {
             let val = value.split('.');
             if (!val[1]) {

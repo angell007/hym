@@ -623,9 +623,30 @@
                 </div>
               </wizard-step>
               <!--FIN INFORMACION REFERENCIAS PERSONALES-->
+              <!--INICIO CUENTAS ASOCIADAS-->
+              <wizard-step [title]="'Cuentas Asociadas'">
+                <div class="content2">
+                  <div>
+                    <h5>Cuentas Asociadas</h5>
+                    <hr>
+                    <div class="form-row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="floating-label">Cuentas Asociadas</label>
+                          <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias" name="Cuentas_Asociadas" [(ngModel)]="CuentasAsociadas" [multiple]="true"></ng-select>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </wizard-step>
+              <!--FIN CUENTAS ASOCIADAS-->
               <!--INICIO INFORMACION PRIVILEGIOS-->
               <wizard-step [title]="'Privilegios'" (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
-
+                
+                <h5>Privilegios</h5>
+                <hr>
                 <div class="row m-t-30">
                   <div class="col-md-12">
                     <div class="form-group">

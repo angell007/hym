@@ -7,11 +7,12 @@ import { Globales } from '../../shared/globales/globales';
 //import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
 
 @Component({
   selector: 'app-funcionariocrear',
   templateUrl: './funcionariocrear.component.html',
-  styleUrls: ['./funcionariocrear.component.scss']
+  styleUrls: ['./funcionariocrear.component.scss', '../../../style.scss']
 })
 export class FuncionariocrearComponent implements OnInit {
   // public funcionario: any [];
@@ -106,6 +107,10 @@ export class FuncionariocrearComponent implements OnInit {
       Telefono: ''
     }
   ];
+
+  public CuentasBancarias:Array<any> = [];
+  public CuentasAsociadas:any = [];
+
   Funcionario:any = [];
   public Permisos:any = []=[];
   public Longitud:number=0;
@@ -161,7 +166,15 @@ export class FuncionariocrearComponent implements OnInit {
 
 
 
-  constructor(private http: HttpClient, private globales: Globales, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+              private http: HttpClient, 
+              private globales: Globales, 
+              private route: ActivatedRoute, 
+              private router: Router,
+              private cuentaService:CuentabancariaService) 
+{
+  this.GetCuentasBancarias();
+}
 
   CargaFoto(event) {
     let fot = document.getElementById("foto_visual") as HTMLImageElement;
@@ -232,6 +245,7 @@ export class FuncionariocrearComponent implements OnInit {
     let exper = JSON.stringify(this.experiencia);
     let refe = JSON.stringify(this.referencias);
     let modulos=JSON.stringify(this.Permisos);
+    let cuentas=JSON.stringify(this.CuentasAsociadas);
     let datos = new FormData();
     datos.append("modulo", 'Funcionario');
     datos.append("datos", info);
@@ -241,6 +255,7 @@ export class FuncionariocrearComponent implements OnInit {
     datos.append("referencias", refe);
     datos.append('modulos', modulos);
     datos.append('Foto', this.Fotos);
+    datos.append('cuentas_asociadas', cuentas);
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_guardar2.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Guardado Correctamente";
       this.confirmacionSwal.text = data.mensaje;
@@ -290,6 +305,21 @@ export class FuncionariocrearComponent implements OnInit {
      // identificacion
      (document.getElementById("identificacion") as HTMLInputElement).value = item.slice(0,10); 
     }
+  }
+
+  GetCuentasBancarias(){
+    this.cuentaService.getCuentasBancariasSelect().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.CuentasBancarias = data.query_data;
+      }else{
+
+        this.CuentasBancarias = [];
+        this.confirmacionSwal.title = "Alerta";
+        this.confirmacionSwal.text = "No se econtraron datos de cuentas bancarias!";
+        this.confirmacionSwal.type = "warning";
+        this.confirmacionSwal.show();
+      }
+    });
   }
 
 }

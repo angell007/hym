@@ -22,6 +22,7 @@ import { DataTablesModule } from 'angular-datatables';
 //import { NgxSpinnerModule } from 'ngx-spinner';
 import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
+import { SelectModule } from 'ng-select';
 
 registerLocaleData(localeES);
 
@@ -53,6 +54,7 @@ import { DepartamentoService } from './shared/services/departamento/departamento
 import { MunicipioService } from './shared/services/municipio/municipio.service';
 import { DocumentoService } from './shared/services/documento/documento.service';
 import { GeneralService } from './shared/services/general/general.service';
+import { CuentabancariaService } from './shared/services/cuentasbancarias/cuentabancaria.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -139,6 +141,7 @@ import { TablacomprasComponent } from './configuracion/compras/tablacompras/tabl
 import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 import { TablatercerosComponent } from './configuracion/terceros/tablaterceros/tablaterceros.component';
+import { ThousandSeparatorDirective } from './shared/directives/thousand-separator.directive';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -182,7 +185,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgxMaskModule.forRoot(),
         NgxCurrencyModule,
         MDBBootstrapModule.forRoot(),
-        MyDateRangePickerModule
+        MyDateRangePickerModule,
+        SelectModule
         //NgxSpinnerModule
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
@@ -270,7 +274,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablacomprasComponent,
         ModaltestComponent,
         GrupostercerosComponent,
-        TablatercerosComponent
+        TablatercerosComponent,
+        ThousandSeparatorDirective
     ],
     exports:[
         ModalBasicComponent
@@ -292,9 +297,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         AuthGuard,
         ThemeConstants,
         Globales,
+        PuntosPipe,
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-        { provide: LOCALE_ID, useValue: "es" }
+        { provide: LOCALE_ID, useValue: "es" },
+        CuentabancariaService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
