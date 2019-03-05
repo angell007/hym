@@ -14,8 +14,8 @@ import { PuntosPipe } from '../../../common/Pipes/puntos.pipe';
 
 export class TablatransferenciasComponent implements OnInit, OnChanges {
 
-  @Input() MonedaConsulta:string = '';
-  @Input() CuentaConsultor:string = '';
+ // @Input() MonedaConsulta:string = '';
+  //@Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
 
   @Output() ActualizarIndicadores = new EventEmitter();
@@ -33,6 +33,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
   public NombreCuenta:string = '';
   public CuentasBancarias:any = [];
   public ValorConFormato:string = '';
+  public Cargando:boolean = false;
 
   public MovimientoBancoModel:any = {
     Valor: '0',
@@ -52,7 +53,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     pendiente:'',
     cedula:'',
     cta_destino:'',
-    nombre_destinatario:''
+    nombre_destinatario:'',
+    estado:''
   };
 
   //Paginación
@@ -80,48 +82,53 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes:SimpleChanges){
 
-    if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
-      this.ConsultarTransferencias();
-      this.ConsultarCuentaConsultor();
-    }    
+    // if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
+    //   //this.ConsultarTransferencias();
+    //   //this.ConsultarCuentaConsultor();
+    //   this.ConsultaFiltrada();
+    // }    
+    
+    this.ConsultaFiltrada();
   }
 
   ngOnInit() {
-    if (this.CuentaConsultor != '') {
-      this.ConsultarTransferencias();
-      this.ConsultarCuentaConsultor();  
-    }    
+    // if (this.CuentaConsultor != '') {
+    //   //this.ConsultarTransferencias();
+    //   this.ConsultarCuentaConsultor();
+    //   this.ConsultaFiltrada();  
+    // }    
+    this.ConsultaFiltrada();
   }
 
-  ConsultarTransferencias(){
+  // ConsultarTransferencias(){
 
-    if (this.MonedaConsulta == '' || this.CuentaConsultor == '') {
-      this.TransferenciasListar = [];
+  //   if (this.MonedaConsulta == '' || this.CuentaConsultor == '') {
+  //     this.TransferenciasListar = [];
 
-    }else{
-      let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
-      this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data: any) => {
+  //   }else{
+  //     let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
+  //     this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data: any) => {
 
-        this.TransferenciasListar = data.todas;
-      });
-    }
-  }
+  //       this.TransferenciasListar = data.query_data;
+  //     });
+  //   }
+  // }
 
-  ConsultarCuentaConsultor(){
+  // ConsultarCuentaConsultor(){
 
-    this.http.get(this.globales.ruta + 'php/cuentasbancarias/cuenta_consultor.php', {params: {id_cuenta:this.CuentaConsultor}}).subscribe((data: any) => {
+  //   this.http.get(this.globales.ruta + 'php/cuentasbancarias/cuenta_consultor.php', {params: {id_cuenta:this.CuentaConsultor}}).subscribe((data: any) => {
 
-      if (data.codigo == 'success') {
+  //     if (data.codigo == 'success') {
         
-        this.CuentaData = data.cuenta;
-        this.NombreCuenta = this.CuentaData.Numero_Cuenta + ' - ' + this.CuentaData.Nombre_Titular + ' - ' + this.CuentaData.Nombre_Tipo_Cuenta
-      }else{
+  //       this.CuentaData = data.cuenta;
+  //       this.NombreCuenta = this.CuentaData.Numero_Cuenta + ' - ' + this.CuentaData.Nombre_Titular + ' - ' + this.CuentaData.Nombre_Tipo_Cuenta
+  //     }else{
 
-        this.CuentaData = '';
-        this.ShowSwal(data.codigo, 'Error en la cuenta', data.mensaje);
-      }      
-    });
-  }
+  //       this.CuentaData = '';
+  //       this.ShowSwal(data.codigo, 'Error en la cuenta', data.mensaje);
+  //     }      
+  //   });
+  // }
 
   GetCuentasBancarias(idFuncionario:string){
     this.cuentaService.getCuentasBancariasFuncionario(idFuncionario).subscribe((data:any) => {
@@ -159,7 +166,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     this.http.post(this.globales.ruta+'php/transferencias/desbloquear_transferencia_consultor.php', data).subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.TransferenciaModel = new TransfereciaViewModel();
-        this.ConsultarTransferencias();
+        this.ConsultaFiltrada();
       }else{
 
         this.ShowSwal(data.codigo, "Alerta", data.mensaje);
@@ -183,7 +190,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
       modal.hide();
       this.ActualizarIndicadores.emit(null);
-      this.ConsultarTransferencias();
+      this.ConsultaFiltrada();
     });
   }
 
@@ -216,8 +223,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
 
   SetFiltros(paginacion:boolean) {
     let params:any = {};
-
+    
     params.tam = this.pageSize;
+    //params.id_moneda = this.MonedaConsulta;
+    params.id_funcionario = this.Id_Funcionario;
 
     if(paginacion === true){
       params.pag = this.page;
@@ -242,32 +251,32 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       params.valor = this.Filtros.valor;
     }
 
-
     if (this.Filtros.pendiente.trim() != "") {
       params.pendiente = this.Filtros.pendiente;
     }
-
 
     if (this.Filtros.cedula.trim() != "") {
       params.cedula = this.Filtros.cedula;
     }
 
-
     if (this.Filtros.cta_destino.trim() != "") {
       params.cta_destino = this.Filtros.cta_destino;
     }
 
-
     if (this.Filtros.nombre_destinatario.trim() != "") {
       params.nombre_destinatario = this.Filtros.nombre_destinatario;
+    }
+    
+    if (this.Filtros.estado.trim() != "") {
+      params.estado = this.Filtros.estado;
     }
 
     return params;
   }
 
-  /*ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion:boolean = false) {
 
-    var p = this.SetFiltros(paginacion);
+    var p = this.SetFiltros(paginacion);    
 
     if(p === ''){
       this.ResetValues();
@@ -277,10 +286,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     this.Cargando = true;
     this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', {params: p}).subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.ActivosFijos = data.query_result;
+        this.TransferenciasListar = data.query_data;
         this.TotalItems = data.numReg;
       }else{
-        this.ActivosFijos = [];
+        this.TransferenciasListar = [];
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       }
       
@@ -298,7 +307,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       pendiente:'',
       cedula:'',
       cta_destino:'',
-      nombre_destinatario:''
+      nombre_destinatario:'',
+      estado:''
     };
   }
 
@@ -310,5 +320,5 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
-  }*/
+  }
 }

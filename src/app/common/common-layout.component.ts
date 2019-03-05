@@ -26,7 +26,7 @@ export class CommonLayoutComponent implements OnInit {
     public sidenavSelected: any;
     public searchActived: any;
     public searchModel: any;
-    public user: any = JSON.parse(localStorage.User);
+    public user: any = JSON.parse(localStorage.User); 
     public changePasswordMessage: string;
     public alertas: any = [];
     public alertasCajas: any = [];
@@ -240,9 +240,15 @@ export class CommonLayoutComponent implements OnInit {
                 }
                 
                 this.oficina_seleccionada = localStorage.getItem("Oficina");
+                if (this.oficina_seleccionada == '""') {
+                    console.log("vacio");
+                    
+                }
                 if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') { 
                     this.modalOficinaCaja.show();
                 }else{
+                    console.log(this.oficina_seleccionada);
+                    
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                 }
@@ -320,9 +326,9 @@ export class CommonLayoutComponent implements OnInit {
 
     salir() {
         
-        if (!this.ValidateConsultorBeforeLogout()) {
-            return;
-        }
+        // if (!this.ValidateConsultorBeforeLogout()) {
+        //     return;
+        // }
         
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
@@ -912,12 +918,14 @@ this.ModalResumenCuenta.show();
         });
     }
 
-    ListarCajas(value){
+    ListarCajas(value:string){
         if (value == '') {
             this.Cajas = [];
             return;
         }
-
+        console.log(value);
+        console.log("listando cajas");
+        
         this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
 
             if (data.tipo == 'error') {

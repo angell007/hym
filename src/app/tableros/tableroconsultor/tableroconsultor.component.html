@@ -54,7 +54,7 @@
                                     
                                 </div>
                                 <div class="col-md-3 text-right">
-                                    <button class="btn btn-outline-dark btn-rounded btn-xs m-auto" (click)="CambiarCuentaBancaria()"><i [ngClass]="IconoOpcionCuenta"> {{OpcionCuenta}} Cuenta</i></button>
+                                    <!--<button class="btn btn-outline-dark btn-rounded btn-xs m-auto" (click)="CambiarCuentaBancaria()"><i [ngClass]="IconoOpcionCuenta"> {{OpcionCuenta}} Cuenta</i></button>-->
                                     <div class="dropdown inline-block">
                                         <button class="btn btn-outline-dark btn-rounded btn-xs dropdown-toggle" data-toggle="dropdown" type="button">
                                             <span>{{Seleccionado}} </span><i class="ti-angle-down font-size-9"></i></button>
@@ -72,16 +72,12 @@
                                         <div class="col-md-12" *ngIf="cargarTabla">
                                             <app-tablatransferencias 
                                                 *ngIf="TablaPendientes"
-                                                [MonedaConsulta]="MonedaCuentaConsultor" 
-                                                [CuentaConsultor]="CuentaConsultor" 
                                                 [Id_Funcionario]="funcionario.Identificacion_Funcionario"
                                                 (ActualizarIndicadores)="CargarIndicadores()">
                                             </app-tablatransferencias>
 
                                             <app-tablatransferenciasrealizadas
                                                 *ngIf="TablaRealizadas"
-                                                [MonedaConsulta]="MonedaCuentaConsultor" 
-                                                [CuentaConsultor]="CuentaConsultor" 
                                                 [Id_Funcionario]="funcionario.Identificacion_Funcionario"
                                                 (ActualizaIndicadores)="CargarIndicadores()">
                                             </app-tablatransferenciasrealizadas>

@@ -234,9 +234,9 @@ export class TablerocajeroComponent implements OnInit {
 
   //#region Variables Generales
 
-    public funcionario_data = JSON.parse(localStorage['User']);
-    public IdOficina:string = JSON.parse(localStorage['Oficina']);
-    public IdCaja:string = JSON.parse(localStorage['Caja']);
+    public funcionario_data:any = JSON.parse(localStorage.getItem('User'));
+    public IdOficina:any = JSON.parse(localStorage.getItem('Oficina'));
+    public IdCaja:any = JSON.parse(localStorage.getItem('Caja'));
     
     public TerceroCliente:any = [];
     public TransferenciasAnuladas:any =[];
@@ -360,22 +360,9 @@ export class TablerocajeroComponent implements OnInit {
       Cantidad_Recibida: '',
       Cantidad_Transferida: '',
       Tasa_Cambio: '',
-      Identificacion_Funcionario: '',
+      Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
       Observacion_Transferencia:'',
-
-      //DESTINATARIOS
-      /*Destinatarios: [
-        {
-          id_destinatario_transferencia: '',
-          Numero_Documento_Destino: '',
-          Nombre_Destinatario: '',
-          Id_Destinatario_Cuenta: '',
-          Valor_Transferencia: '',
-          Cuentas: [],
-          EditarVisible: false
-        }
-      ],*/ 
 
       //DATOS REMITENTE
       Documento_Origen: '',
@@ -383,15 +370,14 @@ export class TablerocajeroComponent implements OnInit {
       Telefono_Remitente: '',
 
       //DATOS CREDITO
-      Id_Tercero: '',
       Cupo_Tercero: 0,
-      Bolsa_Bolivares: 0,
+      Bolsa_Bolivares:'',
 
       //DATOS CONSIGNACION
+      Id_Tercero_Destino: '',
       Id_Cuenta_Bancaria: '',
-
-      //DATOS PARA TRANSFERENCIAS DIRECTO A UN CLIENTE(TERCERO)
-      Id_Tercero_Destino: ''
+      Tipo_Origen:'Remitente',
+      Tipo_Destino:'Destinatario'
     };
 
     public ListaDestinatarios:any = [
@@ -1191,11 +1177,14 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     Asignar(valor, total_destinatarios, count){
-
-      if (this.TransferenciaModel.Bolsa_Bolivares != '' || this.TransferenciaModel.Bolsa_Bolivares != '0') {
+      
+      console.log(typeof(this.TransferenciaModel.Bolsa_Bolivares));
+      
+      if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
         let valor_bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
         let nuevo_valor = valor + valor_bolsa;
         console.log("entro cond bolsa bolivares");
+        console.log(this.TransferenciaModel);
         
         if (nuevo_valor > total_destinatarios) {
         
@@ -1436,7 +1425,7 @@ export class TablerocajeroComponent implements OnInit {
       switch (tipo_transferencia) {
         case 'Transferencia':
 
-          if (this.TransferenciaModel.Bolsa_Bolivares != '' || this.TransferenciaModel.Bolsa_Bolivares != '0' ) {
+          if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0' ) {
             
             if (total_suma_transferir_destinatarios < (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
               let restante_bolsa = ((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios).toFixed(2);
@@ -1486,7 +1475,6 @@ export class TablerocajeroComponent implements OnInit {
     SaveTransferencia(bolsa = ''){
       this.TransferenciaModel.Id_Tercero_Destino = '0';
     
-      this.LimpiarBancosDestinatarios(this.ListaDestinatarios);
       let info = JSON.stringify(this.TransferenciaModel);
       let destinatarios = JSON.stringify(this.ListaDestinatarios);
       //return;
@@ -1503,7 +1491,8 @@ export class TablerocajeroComponent implements OnInit {
         console.error('An error occurred:', error.error);
         this.errorSwal.show();
         return this.handleError(error);
-      }).subscribe((data: any) => {
+      }).subscribe((data: any) => {        
+        this.LimpiarBancosDestinatarios(this.ListaDestinatarios);
         this.LimpiarModeloTransferencia();
         this.SetTransferenciaDefault();
         this.transferenciaExitosaSwal.show();
@@ -1547,9 +1536,9 @@ export class TablerocajeroComponent implements OnInit {
         Cantidad_Recibida: '',
         Cantidad_Transferida: '',
         Tasa_Cambio: '',
-        Identificacion_Funcionario: '',
+        Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
         Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
-        Observacion_Transferencia:'', 
+        Observacion_Transferencia:'',
 
         //DATOS REMITENTE
         Documento_Origen: '',
@@ -1557,15 +1546,13 @@ export class TablerocajeroComponent implements OnInit {
         Telefono_Remitente: '',
 
         //DATOS CREDITO
-        Id_Tercero: '',
         Cupo_Tercero: 0,
-        Bolsa_Bolivares: 0,
+        Bolsa_Bolivares: '',
 
         //DATOS CONSIGNACION
         Id_Cuenta_Bancaria: '',
-
-        //DATOS PARA TRANSFERENCIAS DIRECTO A UN CLIENTE(TERCERO)
-        Id_Tercero_Destino: ''
+        Tipo_Origen:'Remitente',
+        Tipo_Destino:'Destinatario'
       };
 
       this.ListaDestinatarios = [
@@ -1624,10 +1611,10 @@ export class TablerocajeroComponent implements OnInit {
       
       if (typeof(datos_tercero) == 'object') {
 
-        this.TransferenciaModel.Id_Tercero = datos_tercero.Id_Tercero;
+        this.TransferenciaModel.Documento_Origen = datos_tercero.Id_Tercero;
         this.TransferenciaModel.Cupo_Tercero = datos_tercero.Cupo;
       }else{
-        this.TransferenciaModel.Id_Tercero = '';
+        this.TransferenciaModel.Documento_Origen = '';
         this.TransferenciaModel.Cupo_Tercero = '';
       }
       
@@ -1824,7 +1811,7 @@ export class TablerocajeroComponent implements OnInit {
         //VALIDAR DATOS DEL CAMBIO
         //VALIDAR DATOS DEL REMITENTE
 
-        if (this.TransferenciaModel.Id_Tercero_Destino == '' || this.TransferenciaModel.Id_Tercero_Destino == 0 || this.TransferenciaModel.Id_Tercero_Destino == undefined) {
+        if (this.TransferenciaModel.Documento_Origen == '' || this.TransferenciaModel.Documento_Origen == 0 || this.TransferenciaModel.Documento_Origen == undefined) {
           this.ShowSwal('warning', 'Alerta', 'No se ha asignado un destinatario para la transferencia!');
           return false;
         }
@@ -1856,7 +1843,7 @@ export class TablerocajeroComponent implements OnInit {
         //VALIDAR DESTINATARIOS
         //VALIDAR DATOS DEL CAMBIO
 
-        if (this.TransferenciaModel.Id_Tercero == '' || this.TransferenciaModel.Id_Tercero == 0 || this.TransferenciaModel.Id_Tercero == undefined) {
+        if (this.TransferenciaModel.Documento_Origen == '' || this.TransferenciaModel.Documento_Origen == 0 || this.TransferenciaModel.Documento_Origen == undefined) {
           this.ShowSwal('warning', 'Alerta', 'Debe agregar un tercero antes de guardar una transferencia');
           return false;
         }
@@ -2055,6 +2042,8 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     ControlarValoresSelect(valor){
+
+      this.CambiarTipoPersonas();
 
       if (valor == 'Efectivo' || valor == 'Credito' || valor == 'Consignación') {
         this.LimpiarModeloTransferencia(true, true);
@@ -3486,6 +3475,24 @@ console.log(value);
   
       this.TipoDocumentoFiltrados = [];
       this.SePuedeAgregarMasCuentas = false;
+    }
+
+    CambiarTipoPersonas(){
+      if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+        this.TransferenciaModel.Tipo_Origen = 'Tercero';
+        this.TransferenciaModel.Tipo_Destino = 'Destinatario';
+      }else{
+
+        if (this.TransferenciaModel.Tipo_Transferencia == 'Cliente') {
+          this.TransferenciaModel.Tipo_Origen = 'Remitente';
+          this.TransferenciaModel.Tipo_Destino = 'Tercero';
+        }else{
+          this.TransferenciaModel.Tipo_Origen = 'Remitente';
+          this.TransferenciaModel.Tipo_Destino = 'Destinatario';
+        }
+      }
+      console.log(this.TransferenciaModel);
+      
     }
 
   //#endregion

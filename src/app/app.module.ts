@@ -55,6 +55,7 @@ import { MunicipioService } from './shared/services/municipio/municipio.service'
 import { DocumentoService } from './shared/services/documento/documento.service';
 import { GeneralService } from './shared/services/general/general.service';
 import { CuentabancariaService } from './shared/services/cuentasbancarias/cuentabancaria.service';
+import { NavegadorService } from './shared/services/navegador/navegador.service';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -301,7 +302,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
         { provide: LOCALE_ID, useValue: "es" },
-        CuentabancariaService
+        CuentabancariaService,
+        NavegadorService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

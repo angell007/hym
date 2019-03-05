@@ -6,116 +6,136 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-tablatransferenciasdevueltas',
   templateUrl: './tablatransferenciasdevueltas.component.html',
-  styleUrls: ['./tablatransferenciasdevueltas.component.scss']
+  styleUrls: ['./tablatransferenciasdevueltas.component.scss', '../../../../style.scss']
 })
 export class TablatransferenciasdevueltasComponent implements OnInit {
 
-  @Input() MonedaConsulta:string = '1';
-  @Input() CuentaConsultor:string = '';
+  // @Input() MonedaConsulta:string = '1';
+  // @Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
 
   @ViewChild('alertSwal') alertSwal:any;
 
   public TransferenciasListar:any = [];
-  private TransferenciaActual:any = '';
-  public ListaBancos:any = [];
-  public CuentaData:any = [];
-  public NombreCuenta:string = '';
+  public Cargando:boolean = false;
 
-  public MovimientoBancoModel:any = {
-    Valor: '0',
-    Id_Cuenta_Bancaria: '0',
-    Detalle: '',
-    Tipo: 'Egreso',
-    Id_Transferencia_Destino: '',
-    Numero_Transferencia: '',
-    Ajuste: 'No'
+  public Filtros:any = {
+    fecha: '',
+    codigo:'',
+    consultor: '',
+    valor:'',
+    cedula:'',
+    cta_destino:'',
+    nombre_destinatario:''
   };
 
-  //public CuentaConsultor:any = '';
-  public MonedaCuentaConsultor:any = '';
+  //Paginación
+  public maxSize = 5;
+  public pageSize = 10;
+  public TotalItems:number;
+  public page = 1;
+  public InformacionPaginacion:any = {
+    desde: 0,
+    hasta: 0,
+    total: 0
+  }
 
   constructor(private http:HttpClient, public globales:Globales) { }
 
   ngOnInit() {
-    this.ConsultarTransferencias();
-    this.ConsultarCuentaConsultor();
+    this.ConsultaFiltrada();
   }
 
-  ConsultarTransferencias(){
-
-    let p = {id_moneda:this.MonedaConsulta, id_funcionario:this.Id_Funcionario};
-    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_devueltas_consultores.php', {params: p}).subscribe((data: any) => {
-
-      this.TransferenciasListar = data.devueltas;
-    });
-  }
-
-  ConsultarCuentaConsultor(){
-
-    this.http.get(this.globales.ruta + 'php/cuentasbancarias/cuenta_consultor.php', {params: {id_cuenta:this.CuentaConsultor}}).subscribe((data: any) => {
-
-      if (data.codigo == 'success') { 
-        
-        this.CuentaData = data.cuenta;
-        this.NombreCuenta = this.CuentaData.Numero_Cuenta + ' - ' + this.CuentaData.Nombre_Titular + ' - ' + this.CuentaData.Nombre_Tipo_Cuenta
-      }else{
-
-        this.CuentaData = '';
-        this.ShowSwal(data.codigo, 'Error en la cuenta', data.mensaje);
-      }      
-    });
-  }
-
-  BloquearTransferencia(id_transferencia){
-
-    this.TransferenciaActual = id_transferencia;
-    this.AsginarValoresModalCrear(id_transferencia);
-    let data = new FormData();
-
-    data.append("id_funcionario", this.Id_Funcionario);
-    data.append("id_transferencia", id_transferencia);
-    this.http.post(this.globales.ruta+'php/transferencias/bloquear_transferencia_consultor.php', data).subscribe((response:any) => {
-      if (response.codigo == 'warning') {
-        this.ShowSwal(response.codigo, 'Alerta', response.mensaje);
-      }else{
-        //this.ModalPrueba.show();
-      }      
-    });
-  }
-
-  DesbloquearTransferencia(){
-    let data = new FormData();
-    data.append("id_transferencia", this.TransferenciaActual);
-    this.http.post(this.globales.ruta+'php/transferencias/desbloquear_transferencia_consultor.php', data).subscribe(data => {
-    });
+  SetFiltros(paginacion:boolean) {
+    let params:any = {};
     
-    //this.ModalPrueba.hide();
+    params.tam = this.pageSize;
+    //params.id_moneda = this.MonedaConsulta;
+    params.id_funcionario = this.Id_Funcionario;
+
+    if(paginacion === true){
+      params.pag = this.page;
+    }else{        
+      this.page = 1; // Volver a la página 1 al filtrar
+      params.pag = this.page;
+    }
+
+    if (this.Filtros.fecha.trim() != "") {
+      params.fecha = this.Filtros.fecha;
+    }
+
+    if (this.Filtros.codigo.trim() != "") {
+      params.codigo = this.Filtros.codigo;
+    }
+
+    if (this.Filtros.consultor.trim() != "") {
+      params.consultor = this.Filtros.consultor;
+    }
+
+    if (this.Filtros.valor.trim() != "") {
+      params.valor = this.Filtros.valor;
+    }
+
+    if (this.Filtros.cedula.trim() != "") {
+      params.cedula = this.Filtros.cedula;
+    }
+
+    if (this.Filtros.cta_destino.trim() != "") {
+      params.cta_destino = this.Filtros.cta_destino;
+    }
+
+    if (this.Filtros.nombre_destinatario.trim() != "") {
+      params.nombre_destinatario = this.Filtros.nombre_destinatario;
+    }
+
+    return params;
   }
 
-  GuardarTransferencia(modal) {
-    console.log(this.MovimientoBancoModel);
+  ConsultaFiltrada(paginacion:boolean = false) {
 
-    let info = JSON.stringify(this.MovimientoBancoModel);
-    let datos = new FormData();
-    datos.append("modelo", info);
-    datos.append("cajero", this.Id_Funcionario);
+    var p = this.SetFiltros(paginacion);    
 
-    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+    if(p === ''){
+      this.ResetValues();
+      return;
+    }
+    
+    this.Cargando = true;
+    this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_devueltas_consultores.php', {params: p}).subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.TransferenciasListar = data.query_data;
+        this.TotalItems = data.numReg;
+      }else{
+        this.TransferenciasListar = [];
+        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+      }
       
-      this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
-      modal.hide();
-      this.ConsultarTransferencias();
+      this.Cargando = false;
+      this.SetInformacionPaginacion();
     });
   }
 
-  AsginarValoresModalCrear(id_transferencia){
-    let t = this.TransferenciasListar.filter(x => x.Id_Transferencia == id_transferencia);    
+  ResetValues(){
+    this.Filtros = {
+      fecha: '',
+      codigo:'',
+      cajero: '',
+      valor:'',
+      cedula:'',
+      cta_destino:'',
+      nombre_destinatario:''
+    };
+  }
 
-    this.MovimientoBancoModel.Valor = t[0].Cantidad_Transferida;
-    this.MovimientoBancoModel.Id_Transferencia_Destino =  id_transferencia;
-    this.MovimientoBancoModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
-  };
+  SetInformacionPaginacion(){
+    var calculoHasta = (this.page*this.pageSize);
+    var desde = calculoHasta-this.pageSize+1;
+    var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
+
+    this.InformacionPaginacion['desde'] = desde;
+    this.InformacionPaginacion['hasta'] = hasta;
+    this.InformacionPaginacion['total'] = this.TotalItems;
+  }
 
   ShowSwal(tipo:string, titulo:string, msg:string){
     this.alertSwal.type = tipo;

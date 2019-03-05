@@ -109,7 +109,7 @@ export class TableroconsultorComponent implements OnInit {
 
   ngOnInit() {
     this.AsignarPaises();
-    this.VerificarAperturaCuenta();
+    //this.VerificarAperturaCuenta();
   }
 
   CargarVista(){
@@ -386,6 +386,8 @@ export class TableroconsultorComponent implements OnInit {
 
   AsignarPaises(){
     this.Paises = this.globales.Paises;
+    this.cargar =  true;
+    this.CargarVista();
   }
 
   VerificarSaldo(value) {
