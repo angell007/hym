@@ -548,7 +548,8 @@
                                                                     <label class="transferencia">Cuenta</label>
                                                                     <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                                                         [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
-                                                                        autocomplete="off" required [disabled] = "MonedaParaTransferencia.id == ''">
+                                                                        autocomplete="off" required [disabled] = "MonedaParaTransferencia.id == ''"
+                                                                        (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
                                                                         <option value="">Seleccione una Cuenta</option>
                                                                         <option *ngFor="let c of destinatario.Cuentas"
                                                                             [value]="c.Id_Destinatario_Cuenta">{{c.Nombre}}</option>
@@ -561,13 +562,13 @@
                                                                     <div class="row">
                                                                         <div class="col-md-10">
                                                                             <input id="Valor_Transferencia_{{i}}"
-                                                                            type="number" placeholder="Valor a Transferir"
+                                                                            type="number" placeholder="Valor a Transferir" [disabled]="DeshabilitarValor"
                                                                             class="form-control alinear-derecha" name="Valor_Transferencia_{{i}}"
                                                                             [(ngModel)]="destinatario.Valor_Transferencia" required
                                                                             (blur)="ValidarValorTransferirDestinatario($event.target.value, i)">
                                                                         </div>
                                                                         <div class="col-md-2">
-                                                                            <i *ngIf="i > 0" class="ti-trash" style="color:red" (confirm)="EliminarDestinatarioTransferencia(i)"
+                                                                            <i *ngIf="i > 0" class="ti-trash" style="color:red; cursor:pointer;" (confirm)="EliminarDestinatarioTransferencia(i)"
                                                                         [swal]="{title : 'Eliminar Destinatario', text: '¿Está seguro de querer eliminar este destinatario?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
                                                                             </i>
                                                                         </div>
@@ -588,8 +589,8 @@
                                                         <div class="col-md-4">
                                                             <div class="form-group text-center">
                                                                 <label class="transferencia">Moneda Recibida</label>
-                                                                <input readonly name="Moneda_Origen" type="text" class="form-control"
-                                                                    ngModel="Pesos">
+                                                                <label class="block-element font-weight-bold">Pesos</label>
+
                                                             </div>
                                                             <div class="form-group">
                                                                 <input class="form-control alinear-derecha" id="Cantidad_Recibida" type="number" min=0 (blur)="CalcularCambioMoneda($event.target.value, 'por origen')"
@@ -599,17 +600,20 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group text-center">
-                                                                <label class="transferencia">Tasa de Cambio</label>
+                                                                <label class="transferencia">Tasa de Cambio
+                                                                    <i class="ml-1" [ngClass]="{'ti-unlock':DeshabilitarTasa, 'ti-lock':!DeshabilitarTasa}" style="cursor:pointer;" 
+                                                                        (click)="DesbloquearTasa()"></i>
+                                                                </label>
                                                                 <input id="Tasa_Cambio_Transferencia" type="text" class="form-control alinear-derecha"
                                                                     name="Tasa_Cambio" [(ngModel)]="TransferenciaModel.Tasa_Cambio"
-                                                                    (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')" placeholder="Tasa cambiaria">
+                                                                    (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')" placeholder="Tasa cambiaria" [disabled]="DeshabilitarTasa">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group text-center">
                                                                 <label class="transferencia">Moneda de Transferencia
                                                                 </label>
-                                                                <input type="text" class="form-control" disabled [(value)]="MonedaParaTransferencia.nombre" placeholder="Moneda">
+                                                                <label class="block-element font-weight-bold">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label>
                                                             </div>
                                                             <div class="form-group">
                                                                 <input id="Cantidad_Transferida" type="number" min=0
@@ -626,33 +630,51 @@
                                             <div class="row" *ngIf="ControlVisibilidadTransferencia.DatosRemitente"><!--NUEVA SECCION REMITENTE-->
                                                 <div class="col-md-12">
                                                     <hr class="mrg-top-10 mrg-btm-10">
-                                                    <h5>Datos del Remitente</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="display:flex;align-items: center;">
+                                                            <h5>Datos del Remitente</h5>
+                                                            <div class="form-group pl-2 pt-1">
+                                                                <button class="btn btn-outline-info btn-rounded btn-xs m-0 btn-pulse"
+                                                                (click)="MostrarBusqueda()" id="btn-search">
+                                                                    <i class="ti-search"></i></button>
+                                                                <input type="text" class="custom-input" placeholder="busqueda"
+                                                                    name="Numero_Documento_Origen" autocomplete="off" id="remSearch"
+                                                                    [(ngModel)]="id_remitente" [ngbTypeahead]="search_remitente2"
+                                                                    [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                                                    (ngModelChange)="AutoCompletarRemitente(id_remitente, i)"
+                                                                    style="display:none;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="row mrg-top-20">
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="transferencia">Número Documento</label>
-                                                                <input type="text" class="form-control" placeholder="Número Documento"
+                                                                <!--<input type="text" class="form-control" placeholder="Número Documento"
                                                                     name="Numero_Documento_Origen" autocomplete="off"
                                                                     [(ngModel)]="id_remitente" [ngbTypeahead]="search_remitente2"
                                                                     [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
-                                                                    (ngModelChange)="AutoCompletarRemitente(id_remitente, i)">
-
+                                                                    (ngModelChange)="AutoCompletarRemitente(id_remitente, i)"
+                                                                    required>-->
+                                                                <label style="display:block;">{{TransferenciaModel.Documento_Origen == "" ? "Documento" : TransferenciaModel.Documento_Origen}}</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="transferencia">Nombre</label>
-                                                                <input type="text" placeholder="Nombre Remitente"
+                                                                <!--<input type="text" placeholder="Nombre Remitente"
                                                                     autocomplete="off" class="form-control" name="Persona_Envia"
-                                                                    [(ngModel)]="TransferenciaModel.Nombre_Remitente">
+                                                                    [(ngModel)]="TransferenciaModel.Nombre_Remitente">-->
+                                                                <label style="display:block;">{{TransferenciaModel.Nombre_Remitente == "" ? "Documento" : TransferenciaModel.Nombre_Remitente}}</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="transferencia">Teléfono</label>
-                                                                <input type="text" placeholder="Teléfono Remitente"
+                                                                <!--<input type="text" placeholder="Teléfono Remitente"
                                                                     autocomplete="off" class="form-control" name="Telefono_Envia"
-                                                                    [(ngModel)]="TransferenciaModel.Telefono_Remitente">
+                                                                    [(ngModel)]="TransferenciaModel.Telefono_Remitente">-->
+                                                                <label style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Documento" : TransferenciaModel.Telefono_Remitente}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2271,7 +2293,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalDestinatario>
     <div class="app-modal-header">
-        <h4>Crear Destinatario</h4>
+        <h4>Destinatario</h4>
         <button type="button" class="close basic-close" (click)="CerrarModalDestinatario()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -2283,7 +2305,7 @@
                     <label>País</label>
                     <div class="form-group">
                         <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais" required
-                        (change)="FiltrarDatosNacionalidad($event.target.value)">
+                        (change)="FiltrarDatosNacionalidad($event.target.value)" [disabled]="DestinatarioEditar">
                             <option value="">Seleccione pais</option>
                             <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
                         </select>
@@ -2293,7 +2315,8 @@
                     <label>Identificación</label>
                     <div class="form-group input-group input-group-button">
                         <input class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario"
-                            type="text" placeholder="Identificación Destinatario" (blur)="ValidarCedula($event.target.value)" 
+                            type="text" placeholder="Identificación Destinatario" (blur)="ValidarCedula($event.target.value)"
+                            [disabled]="DestinatarioEditar" 
                             [(ngModel)]="DestinatarioModel.Id_Destinatario "required [disabled]="DestinatarioModel.Id_Pais == 0">
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="globales.buscarRiff()">
                             Riff
@@ -2304,8 +2327,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo Doc.</label>
-                        <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required
-                        (change)="BuscarCNE($event.target.value)" [disabled]="DestinatarioModel.Id_Pais == 0">
+                        <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE($event.target.value)" [disabled]="DestinatarioModel.Id_Pais == 0 || DestinatarioEditar">
                             <option value="">Seleccione Tipo Documento</option>
                             <option *ngFor="let documento of TipoDocumentoFiltrados; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                         </select>
@@ -2609,7 +2631,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">{{vma.Codigo}}</span>
                             </div>                
-                            <input type="text" class="form-control sp-text" [(ngModel)]="vma.Valor_Moneda_Apertura" name="Valor_Moneda_Apertura_{{i}}"  aria-describedby="basic-addon1" placeholder="Introduzca inicial para {{vma.NombreMoneda}}" required>
+                            <input type="text" class="form-control sp-text" [(ngModel)]="vma.Valor_Moneda_Apertura" name="Valor_Moneda_Apertura_{{i}}"  aria-describedby="basic-addon1" placeholder="Introduzca inicial para {{vma.NombreMoneda}}" disabled required>
                         </div>
                     </div>
                 </div>
@@ -2621,8 +2643,7 @@
             <button id="btnGuardarValoresApertura" 
                     class="btn btn-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se va a realizar la apertura esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aperturar',cancelButtonText: 'No, Dejame Comprobar!'}"
-                    (confirm)="GuardarApertura()"
-                    [disabled]="!FormAperturaCaja.valid">Aperturar Caja
+                    (confirm)="GuardarApertura()">Aperturar Caja
             </button>
         </div>
     </div>
@@ -2660,6 +2681,12 @@
         </div>
     </div>
 </app-modal-basic>
+
+<app-modalpermisojefe 
+  [AbrirModalEvent]="eventsSubject.asObservable()"
+  (MostrarSwal)="MostrarMensajeHijo($event)" 
+  (RespuestaCodigo)="DesbloquearTasaMoneda($event)">
+</app-modalpermisojefe>
 
 <!--FIN MODALES-->
 

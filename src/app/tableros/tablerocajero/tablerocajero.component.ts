@@ -10,14 +10,19 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { isEmpty } from 'rxjs/operator/isEmpty';
+import { GeneralService } from '../../shared/services/general/general.service';
 
 @Component({
   selector: 'app-tablerocajero',
   templateUrl: './tablerocajero.component.html',
-  styleUrls: ['./tablerocajero.component.scss']
+  styleUrls: ['./tablerocajero.component.scss', '../../../style.scss']
 })
 
 export class TablerocajeroComponent implements OnInit {
+
+  public eventsSubject: Subject<any> = new Subject<any>();
+
+
   public IdentificacionFuncionario: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
@@ -247,6 +252,8 @@ export class TablerocajeroComponent implements OnInit {
     public TipoDocumentoExtranjero:any = [];
     public TiposCuenta:any = [];
     public DestinatarioEditar:boolean = false;
+    public DeshabilitarValor:boolean = true;
+    public DeshabilitarTasa:boolean = true;
 
     public DiarioModel:any = {
       Id_Diario: '',
@@ -533,7 +540,10 @@ export class TablerocajeroComponent implements OnInit {
   //#endregion
   //Fin nuevas variables
 
-  constructor(private http: HttpClient, public globales: Globales, public sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, 
+              public globales: Globales, 
+              public sanitizer: DomSanitizer,
+              private generalService:GeneralService) { }
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
 
@@ -603,8 +613,7 @@ export class TablerocajeroComponent implements OnInit {
         this.ResetMonedaParaCambio();      
         this.HabilitarCamposCambio();
       }
-
-      console.log(this.CambioModel);    
+  
     }
 
     ResetMonedaParaCambio(){
@@ -1177,14 +1186,10 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     Asignar(valor, total_destinatarios, count){
-      
-      console.log(typeof(this.TransferenciaModel.Bolsa_Bolivares));
-      
+            
       if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
         let valor_bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
         let nuevo_valor = valor + valor_bolsa;
-        console.log("entro cond bolsa bolivares");
-        console.log(this.TransferenciaModel);
         
         if (nuevo_valor > total_destinatarios) {
         
@@ -1231,7 +1236,6 @@ export class TablerocajeroComponent implements OnInit {
       }else{
         
         if (valor > total_destinatarios) {
-          console.log("entro");
           
           if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
             this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
@@ -1261,7 +1265,6 @@ export class TablerocajeroComponent implements OnInit {
               }   
             
             }else if (resta == valor) {
-              console.log("cond 3");
               break;   
             }        
           }
@@ -1270,7 +1273,6 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     ValidarValorTransferirDestinatario(valor, index){
-      console.log("entro validacion monto dest");
       
       if (this.TransferenciaModel.Forma_Pago == 'Credito') {
         if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
@@ -1415,8 +1417,6 @@ export class TablerocajeroComponent implements OnInit {
       let total_a_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
       let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios(); 
       this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;  
-
-      console.log(this.TransferenciaModel);
       
       if(!this.ValidateBeforeSubmit()){
         return;
@@ -1503,12 +1503,14 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     EditarDest(id, pos) {
+
       this.http.get(this.globales.ruta + 'php/destinatarios/get_detalle_destinatario.php', { params: { id_destinatario: id } })
       .subscribe((data: any) => {
         this.DestinatarioEditar = true;
         this.DestinatarioModel = data.destinatario;
         this.FiltrarDatosNacionalidad(this.DestinatarioModel.Id_Pais);
         this.Lista_Cuentas_Destinatario = data.cuentas;
+        
           
         for (var i = 0; i < this.Lista_Cuentas_Destinatario.length; i++) {
           this.Bancos_Pais(this.Lista_Cuentas_Destinatario[i].Id_Pais, i, true);
@@ -1521,7 +1523,15 @@ export class TablerocajeroComponent implements OnInit {
         //this.Bancos_Pais(2, 1);
         this.ModalDestinatario.show();
         //this.posiciontemporal = pos;
+        
+        console.log(this.DestinatarioEditar);
       });
+    }
+
+    ValidateTransferenciaBeforeSubmit(){
+      if (this.TransferenciaModel.Documento_Origen) {
+        
+      }
     }
 
     LimpiarModeloTransferencia(dejarFormaPago:boolean = false, dejarTipoTransferencia:boolean = false){
@@ -1635,10 +1645,7 @@ export class TablerocajeroComponent implements OnInit {
         this.ShowSwal('warning', 'Alerta', 'Debe colocar un valor en este campo');
         return false;
       }
-
         
-      console.log(cupo);
-      console.log(recibido);
       if (recibido > cupo) {
         this.ShowSwal('warning', 'Alerta', 'No puede asignar un monto mayor al cupo disponible');
         this.TransferenciaModel.Cantidad_Recibida = cupo;
@@ -1712,8 +1719,17 @@ export class TablerocajeroComponent implements OnInit {
         };
         
         this.ListaDestinatarios.push(nuevoDestinatario);
+        this.HabilitarCampoValor();
       }else{
         this.ShowSwal('warning','Alerta','Debe colocar la cantidad a transferir antes de agregar destinatarios!');
+      }
+    }
+
+    HabilitarCampoValor(){
+      if (this.ListaDestinatarios.length > 1) {
+        this.DeshabilitarValor = false;
+      }else{
+        this.DeshabilitarValor = true;
       }
     }
 
@@ -1741,10 +1757,7 @@ export class TablerocajeroComponent implements OnInit {
         this.MonedaParaTransferencia.nombre = '';
         this.TransferenciaModel.Tasa_Cambio = '';
         this.InputBolsaBolivares  = false;
-      }
-      
-      console.log(this.MonedaParaTransferencia); 
-      console.log(this.TransferenciaModel);    
+      }         
     }
 
     SetMonedaDestinatarios(idMoneda){
@@ -1980,12 +1993,11 @@ export class TablerocajeroComponent implements OnInit {
 
     AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
       
-      let validacion = this.BuscarCedulaRepetida(modelo, i, listaDestinatarios);
+      //let validacion = this.BuscarCedulaRepetida(modelo, i, listaDestinatarios);
       if (typeof(modelo) == 'object') {
-        if(validacion){
-          return;
-        };
-        console.log(listaDestinatarios);
+        // if(validacion){
+        //   return;
+        // };
         
         if (modelo.Cuentas != undefined) {
           listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -2039,6 +2051,35 @@ export class TablerocajeroComponent implements OnInit {
       }
 
       return existe;
+    }
+
+    ValidarCuentaBancariaDuplicada(arrPosition:string, idCuenta:string){
+      let conteo = 0;
+
+      let count = this.ListaDestinatarios.filter(x => x.Id_Destinatario_Cuenta == idCuenta);
+
+      if (count.length >= 2) {
+        this.confirmacionSwal.title = "Atención";
+        this.confirmacionSwal.text = "Está agregando una cuenta que ya existe en la lista de destinatarios agregados!";
+        this.confirmacionSwal.type = "warning";
+        this.confirmacionSwal.show();
+      }
+
+      // for (let ind = 0; ind < this.ListaDestinatarios.length; ind++) {
+      //   if(this.ListaDestinatarios[ind].Id_Destinatario_Cuenta == idCuenta){
+          
+      //     conteo++;
+
+      //     if (conteo >= 2) {
+      //       this.confirmacionSwal.title = "Atención";
+      //       this.confirmacionSwal.text = "Está agregando una cuenta que ya existe en la lista de destinatarios agregados!";
+      //       this.confirmacionSwal.type = "warning";
+      //       this.confirmacionSwal.show();
+
+      //       break;
+      //     }
+      //   };
+      // }
     }
 
     ControlarValoresSelect(valor){
@@ -2114,12 +2155,12 @@ export class TablerocajeroComponent implements OnInit {
 
     EliminarDestinatarioTransferencia(index) {
       this.ListaDestinatarios.splice(index, 1);
+      this.HabilitarCampoValor();
     }
 
     AutoCompletarRemitente(modelo, ind = '') {
 
       if (typeof(modelo) == 'object') {
-        console.log(modelo);
         
         this.TransferenciaModel.Documento_Origen=modelo.Id_Transferencia_Remitente;
         this.TransferenciaModel.Telefono_Remitente=modelo.Telefono;
@@ -2127,14 +2168,18 @@ export class TablerocajeroComponent implements OnInit {
 
       }else if(typeof(modelo) == 'string'){
 
-        if(modelo == ''){
-          this.TransferenciaModel.Documento_Origen='';
-          this.TransferenciaModel.Telefono_Remitente='';
-          this.TransferenciaModel.Nombre_Remitente='';
-        }else{
+        this.TransferenciaModel.Documento_Origen='';
+        this.TransferenciaModel.Telefono_Remitente='';
+        this.TransferenciaModel.Nombre_Remitente='';
+
+        // if(modelo == ''){
+        //   this.TransferenciaModel.Documento_Origen='';
+        //   this.TransferenciaModel.Telefono_Remitente='';
+        //   this.TransferenciaModel.Nombre_Remitente='';
+        // }else{
           
-          this.TransferenciaModel.Documento_Origen=modelo;
-        }
+        //   this.TransferenciaModel.Documento_Origen=modelo;
+        // }
       }  
     }
 
@@ -2227,55 +2272,6 @@ export class TablerocajeroComponent implements OnInit {
       });
     }
 
-    CambiarVista(tipo) {
-
-      switch (tipo) {
-        case "Compra": {
-          this.Venta = false;
-          this.TextoBoton = "Comprar"
-          this.Tipo = "Compra";
-          this.tituloCambio = "Compras"
-          this.CambioModel.Moneda_Destino = '2';
-          break;
-        }
-        case "Venta": {
-          this.Venta = true;
-          this.TextoBoton = "Vender"
-          this.Tipo = "Venta";
-          this.tituloCambio = "Ventas"
-          this.CambioModel.Moneda_Origen = '2';
-          break;
-        }
-        case "Transferencia": {
-          this.Transferencia1 = false;
-          this.Transferencia2 = true;
-          break;
-        }
-        case "Cambio": {
-          this.Cambios2 = true;
-          this.Cambios1 = false;
-          break;
-        }
-        case "Giro": {
-          this.Giro2 = true;
-          this.Giro1 = false;
-          break;
-        }
-        case "Traslado": {
-          this.Traslado2 = true;
-          this.Traslado1 = false;
-
-          this.CargarDatosTraslados();
-          break;
-        }
-        case "Servicio": {
-          this.Servicio2 = true;
-          this.Servicio1 = false;
-          break;
-        }
-      }
-    }
-
     //EDITAR TRANSFERENCIA
     EditarTransferencia(idTransferencia, formaPago, tipoTransferencia){
       if (idTransferencia == '') {
@@ -2291,7 +2287,6 @@ export class TablerocajeroComponent implements OnInit {
       let parametros = {transferencia:idTransferencia, forma_pago:formaPago, tipo:tipoTransferencia};
 
       this.http.get(this.globales.ruta+'php/transferencias/consultar_datos_transferencia.php', {params: parametros}).subscribe((transferencia:any) => {
-        console.log(transferencia);
         
         this.TransferenciaModel = transferencia.transferencia;
         this.ListaDestinatarios = transferencia.destinatarios;
@@ -2468,11 +2463,9 @@ export class TablerocajeroComponent implements OnInit {
       }
     }
 
-    valorComision(value) {    
-console.log(value);
+    valorComision(value) {   
 
       let recibido = parseFloat(this.GiroModel.Valor_Recibido);
-      console.log(recibido);
       
       if(typeof(value) == 'boolean'){
         if(recibido == 0 || recibido == undefined || isNaN(recibido)){
@@ -2537,8 +2530,6 @@ console.log(value);
     }
 
     RealizarGiro(formulario: NgForm) {
-
-      console.log(this.GiroModel);
 
       if(!this.ValidateGiroBeforeSubmit()){
         return;
@@ -2712,7 +2703,6 @@ console.log(value);
   //#region FUNCIONES TRASLADOS
 
     SetMonedaTraslados(idMoneda){
-      //console.log(idMoneda);
 
       if (idMoneda == '') {
         this.MonedaSeleccionadaTraslado = idMoneda;
@@ -2728,9 +2718,6 @@ console.log(value);
     }
 
     RealizarTraslado(formulario: NgForm, modal) {
-      //formulario.value.Identificacion_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-      //let info = JSON.stringify(formulario.value);
-      console.log(this.TrasladoModel);
       
       let info = JSON.stringify(this.TrasladoModel);
       let datos = new FormData();
@@ -2771,7 +2758,6 @@ console.log(value);
         this.idTraslado = id;
         this.Traslado = data;
         this.TrasladoModel = data;
-        console.log(this.TrasladoModel);
         
         this.ModalTrasladoEditar.show();
       });
@@ -2898,8 +2884,6 @@ console.log(value);
         }else{
           this.CorresponsalModel = data;
         }
-        
-        console.log(this.CorresponsalModel);
         
         //(document.getElementById("GuardarCorresponsalBancario") as HTMLInputElement).disabled = false;
       });
@@ -3053,7 +3037,7 @@ console.log(value);
 
   //#endregion
 
-  //#region FUNCIONES GENERALES
+  //#region FUNCIONES GENERALES 
 
     SetDatosIniciales(){
       this.CargarDatosCambios();
@@ -3267,6 +3251,78 @@ console.log(value);
         }
       });
     }
+    
+    Municipios_Departamento_Especial(Departamento) {
+      this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
+        
+        this.Municipios_Remitente = data;
+      });
+    }
+
+    CambiarVista(tipo) {
+
+      switch (tipo) {
+        case "Compra": {
+          this.Venta = false;
+          this.TextoBoton = "Comprar"
+          this.Tipo = "Compra";
+          this.tituloCambio = "Compras"
+          this.CambioModel.Moneda_Destino = '2';
+          break;
+        }
+        case "Venta": {
+          this.Venta = true;
+          this.TextoBoton = "Vender"
+          this.Tipo = "Venta";
+          this.tituloCambio = "Ventas"
+          this.CambioModel.Moneda_Origen = '2';
+          break;
+        }
+        case "Transferencia": {
+          this.Transferencia1 = false;
+          this.Transferencia2 = true;
+          break;
+        }
+        case "Cambio": {
+          this.Cambios2 = true;
+          this.Cambios1 = false;
+          break;
+        }
+        case "Giro": {
+          this.GetDepartamentoCiudadOficina();
+          this.Giro2 = true;
+          this.Giro1 = false;
+          break;
+        }
+        case "Traslado": {
+          this.Traslado2 = true;
+          this.Traslado1 = false;
+
+          this.CargarDatosTraslados();
+          break;
+        }
+        case "Servicio": {
+          this.Servicio2 = true;
+          this.Servicio1 = false;
+          break;
+        }
+      }
+    }
+    
+    GetDepartamentoCiudadOficina(){
+      this.generalService.getDepCiuOficina(localStorage.getItem('Oficina')).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.GiroModel.Departamento_Remitente = data.query_data.Id_Departamento;
+          this.GiroModel.Municipio_Remitente = data.query_data.Id_Municipio;
+
+          this.Municipios_Departamento_Especial(this.GiroModel.Departamento_Remitente);
+        }else{
+
+          this.GiroModel.Departamento_Remitente = '';
+          this.GiroModel.Municipio_Remitente = '';
+        }
+      });
+    }
 
     CerrarModal(modal, modulo:string){
 
@@ -3427,7 +3483,6 @@ console.log(value);
     }
 
     EliminarCuentaDestinatario(posicion){
-      //console.log(posicion);
       if (this.Lista_Cuentas_Destinatario.length == 1) {
         this.ShowSwal('warning', 'Alerta', 'Debe existir al menos una cuenta asociada al destinatario');
         this.SePuedeAgregarMasCuentas = false;
@@ -3490,9 +3545,33 @@ console.log(value);
           this.TransferenciaModel.Tipo_Origen = 'Remitente';
           this.TransferenciaModel.Tipo_Destino = 'Destinatario';
         }
+      }      
+    }
+
+    MostrarMensajeHijo(msgObj:any){
+      this.ShowSwal(msgObj.type, msgObj.title, msgObj.msg);
+    }
+
+    DesbloquearTasaMoneda(deshabilitar:boolean){
+      this.DeshabilitarTasa = deshabilitar;
+    }
+
+    BloquearTasaMoneda(){
+      this.DeshabilitarTasa = true;
+    }
+
+    DesbloquearTasa(){
+      if (this.DeshabilitarTasa) {  
+        this.eventsSubject.next();
+      }else{
+        this.BloquearTasaMoneda();
       }
-      console.log(this.TransferenciaModel);
       
+    }
+
+    MostrarBusqueda(){
+      $("#remSearch").toggle("fast");
+      $("#btn-search").toggleClass("btn-pulse");
     }
 
   //#endregion
@@ -3515,7 +3594,7 @@ console.log(value);
       switchMap( term => term.length < 4 ? [] :
         this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatario_por_id.php', {params: {id_destinatario:term, moneda:this.MonedaParaTransferencia.id}})
         .map(response => response)
-        .do(data => console.log(this.tercero_credito))
+        .do(data => data)
       )
     );
 
@@ -3535,7 +3614,7 @@ console.log(value);
       switchMap( term => term.length < 4 ? [] :
         this.http.get(this.globales.ruta+'php/remitentes/filtrar_remitente_por_id.php', {params: {id_remitente:term}})
         .map(response => response)
-        .do(data => console.log("llegó"))
+        .do(data => data)
       )
     );
 
@@ -3555,7 +3634,6 @@ console.log(value);
         switchMap( term => 
           this.http.get(this.globales.ruta+'php/terceros/filtrar_terceros.php', {params: {nombre:term}})
           .map(response => response)
-          .do(data => console.log(this.tercero_credito))
         )
       );
     formatter_tercero_credito = (x: { Nombre: string }) => x.Nombre;
@@ -3597,14 +3675,12 @@ console.log(value);
 
     this.PosicionDestinatarioActivo = pos;
     let v = this.ListaDestinatarios[pos].Numero_Documento_Destino;
-    console.log(v);
 
     if(v == ''){
       return;
     }
 
     this.http.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params: {id_destinatario:v}}).subscribe((data)=>{
-      console.log(data);
       
       if (data == 0) {
         var longitud = this.LongitudCarateres(v);
@@ -3708,11 +3784,7 @@ console.log(value);
   }
 
   AgregarOtraCuenta(){
-    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
-    console.log(longitudCuentas);
-    console.log(this.SePuedeAgregarMasCuentas);
-    console.log(this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)]);
-    
+    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;    
 
     if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
       
@@ -3764,7 +3836,6 @@ console.log(value);
 
   codigoBanco(seleccion, posicion, texto) {
 
-    //console.log(seleccion + " , " + posicion + " , " + texto);
     let country = this.Lista_Cuentas_Destinatario[posicion].Id_Pais;
     
     if (country == "2") {
@@ -4065,7 +4136,7 @@ console.log(value);
       }
     });
     
-    let info = JSON.stringify(formulario.value);
+    let info = JSON.stringify(this.DestinatarioModel);
     let destinatario = JSON.stringify(this.Lista_Cuentas_Destinatario);
     let datos = new FormData();
     
@@ -4080,20 +4151,17 @@ console.log(value);
       })
       .subscribe((data: any) => {
         this.ShowSwal('success', 'Registro Exitoso', 'Se guardaron los datos correctamente!');
-        if(this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario)){
-          this.PosicionDestinatarioActivo = '';
-          this.DestinatarioEditar = false;
-        }
+        this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario);
         this.CerrarModalDestinatario();
       });
   }
 
   AsignarDatosDestinatarioNuevo(id):boolean{
-    this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id}}).subscribe((data:any)=>{
+    this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id, moneda:this.MonedaParaTransferencia.id}}).subscribe((data:any)=>{
 
       if (data != '') {
+        
         if (this.DestinatarioEditar) {
-          console.log(data);
           
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
           
@@ -4108,10 +4176,14 @@ console.log(value);
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = false;
         }
         
+        this.DestinatarioEditar = false;        
+        this.PosicionDestinatarioActivo = '';
         return true;
       }else{
 
-        this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');
+        this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');        
+        this.DestinatarioEditar = false;        
+        this.PosicionDestinatarioActivo = '';
         return false;
       }
     });
@@ -4131,7 +4203,6 @@ console.log(value);
         return this.handleError(error);
       })
       .subscribe((data: any) => {
-        //////////console.log(data);
         this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
         this.ModalRemitente.hide();
         this.remitenteCreadoSwal.show();
@@ -4143,7 +4214,6 @@ console.log(value);
     this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      ////////console.log(data.destinatario);
       this.Detalle_Destinatario = data.destinatario;
       this.Lista_Destinatarios = data.DestinatarioCuenta;
 

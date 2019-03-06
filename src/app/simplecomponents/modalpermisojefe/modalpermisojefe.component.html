@@ -1,0 +1,25 @@
+<app-modal-basic #ModalPermiso>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Introduzca su código personal</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+      <div class="form-row">
+        <div class="col-md-12">
+          <label for="consecutivo">Código personal</label>
+          <input type="text" name="Consecutivo" id="consecutivo" class="form-control form-control-sm"
+            [(ngModel)]="Codigo">
+        </div>
+      </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-xs" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-xs"
+        (click)="VerificarCodigo()" [disabled]="Codigo == ''">Comprobar</button>
+    </div>
+  </div>  
+</app-modal-basic>
+

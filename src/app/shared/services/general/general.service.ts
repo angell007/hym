@@ -35,4 +35,14 @@ export class GeneralService {
 
   })();
 
+  verifyMajorCode(codigo:string):Observable<any>{
+    let p = {codigo:codigo};
+    return this.client.get(this.globales.ruta+'php/GENERALES/VerificarCodigoPersonal.php', {params:p});
+  }
+
+  getDepCiuOficina(oficina:string):Observable<any>{
+    let p = {oficina:oficina};
+    return this.client.get(this.globales.ruta+'php/oficinas/get_departamento_ciudad_oficina.php', {params:p});
+  }
+
 }

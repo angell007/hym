@@ -118,12 +118,14 @@ export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges
     let datos = new FormData();
     datos.append("modelo", info); 
     datos.append("valor", this.valor_transferencia_devolver.toString());
+    datos.append("funcionario", this.Id_Funcionario);
     this.http.post(this.globales.ruta + 'php/transferencias/devolver_transferencia.php', datos).subscribe((data: any) => {
 
       this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
       this.ModalDevolucionTransferencia.hide();
       this.LimpiarModeloDevolucion();
       //this.ConsultarTransferencias();
+      this.ConsultaFiltrada();
       this.ActualizaIndicadores.emit(null);
     });
   }

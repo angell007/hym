@@ -13,6 +13,7 @@
             <th class="custom-thead" style="width:5%;">Cédula</th>
             <th class="custom-thead" style="width:9%;">Cta. Destino</th>
             <th class="custom-thead" style="width:12%;">Destinatario</th>
+            <th class="custom-thead" style="width:3%;"></th>
           </tr>
           <tr>
             <th class="table-filters">
@@ -43,6 +44,7 @@
               <input type="text" class="form-control form-control-sm" placeholder="Filtro dest."
                 (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.nombre_destinatario">
             </th>
+            <th class="table-filters"></th>
           </tr>
           <tr *ngIf="Cargando">
             <td colspan="11" class="text-center">
@@ -55,7 +57,7 @@
           <tr *ngIf="TransferenciasListar.length == 0 && !Cargando">
             <td colspan="11" class="text-center">
                 <i class="ti-alert font-size-20 text-warning"></i>
-                <h4>No hay transferencias devueltas</h4>
+                <h4>No hay transferencias realizadas</h4>
             </td>
           </tr>
         </thead>
@@ -64,7 +66,7 @@
             <td class="custom-cell">{{t.Fecha | date:"dd-MM-yyyy" }}</td>
             <td class="custom-cell">{{t.Codigo}}</td>
             <td class="custom-cell">{{t.Funcionario_Pago}}</td>
-            <td class="custom-cell" style="text-align:right;">{{t.Valor| currency}}</td>
+            <td class="custom-cell" style="text-align:right;">{{t.Valor| customcurrency:t.Codigo_Moneda}}</td>
             <td class="custom-cell" style="text-align:right;">{{t.Numero_Documento_Destino}}</td>
             <td class="custom-cell">{{t.Cuenta_Destino}}</td>
             <td class="custom-cell">{{t.Destinatario}}</td>

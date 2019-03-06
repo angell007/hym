@@ -55,7 +55,9 @@ import { MunicipioService } from './shared/services/municipio/municipio.service'
 import { DocumentoService } from './shared/services/documento/documento.service';
 import { GeneralService } from './shared/services/general/general.service';
 import { CuentabancariaService } from './shared/services/cuentasbancarias/cuentabancaria.service';
-import { NavegadorService } from './shared/services/navegador/navegador.service';
+
+//MODALES
+import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
 
 // App Component
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -126,6 +128,7 @@ import { cardPortletRefresh, cardPortletDelete } from './shared/directives/cards
 import { CreardestinatarioComponent } from './creardestinatario/creardestinatario.component';
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { PuntosPipe } from './common/Pipes/puntos.pipe';
+import { CustomcurrencyPipe } from './common/Pipes/customcurrency.pipe';
 import { InformativecardComponent } from './simplecomponents/informativecard/informativecard.component';
 import { GraficabarraComponent } from './graficabarra/graficabarra.component';
 import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
@@ -193,6 +196,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
         PuntosPipe,
+        CustomcurrencyPipe,
         AppComponent,
         CommonLayoutComponent,
         AuthenticationLayoutComponent,
@@ -276,7 +280,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaltestComponent,
         GrupostercerosComponent,
         TablatercerosComponent,
-        ThousandSeparatorDirective
+        ThousandSeparatorDirective,
+        ModalpermisojefeComponent
     ],
     exports:[
         ModalBasicComponent
@@ -299,11 +304,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ThemeConstants,
         Globales,
         PuntosPipe,
+        CustomcurrencyPipe,
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
         { provide: LOCALE_ID, useValue: "es" },
-        CuentabancariaService,
-        NavegadorService
+        CuentabancariaService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

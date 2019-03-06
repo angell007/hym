@@ -41,3 +41,42 @@ table.modified-table > tbody > tr > td:first-child{
 }
 
 modal-dialog modal-lg*/
+
+.custom-input{
+    box-shadow: none;
+    width: 170px !important;
+    display: inline-block;
+    border-radius: 6px;
+    // border-width: 1px;
+    border: 1px solid #e6ecf5;
+    font-size: 13px;
+    transition: all .2s ease-out;
+
+    &:focus{
+        border-color: #51b6c5;
+    }
+}
+
+.btn-pulse{
+    animation: bluepulse 2s infinite;
+
+    &:hover{
+        animation: none;
+    }
+}
+
+//ANIMACIONES
+@keyframes bluepulse {
+    0% {
+      -moz-box-shadow: 0 0 0 0 rgba(26, 128, 211, 0.4);
+      box-shadow: 0 0 0 0 rgba(26, 128, 211, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(58, 148, 221, 0);
+        box-shadow: 0 0 0 10px rgba(58, 148, 221, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
+        box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
+    }
+}
