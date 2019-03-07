@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { log } from 'util';
 import { CajaService } from '../shared/services/caja/caja.service';
+import { SwalService } from '../shared/services/swal/swal.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -151,7 +152,8 @@ export class CommonLayoutComponent implements OnInit {
                 private http: HttpClient, 
                 private globales: Globales, 
                 private toastyService: ToastyService,
-                private cajaService:CajaService) {
+                private cajaService:CajaService,
+                private swalService:SwalService) {
                     
         this.app = {
             layout: {
@@ -194,7 +196,10 @@ export class CommonLayoutComponent implements OnInit {
     OcultarConsultor = false;
     ListaBancos = [];
     nombreBanco = "";
-    ngOnInit() {        
+    ngOnInit() {
+        this.swalService.event.subscribe((data:any) => {
+            this.ShowSwal(data.type, data.title, data.msg);
+        });
 
         switch (this.user.Id_Perfil) {
             // administrador
@@ -1012,6 +1017,10 @@ this.ModalResumenCuenta.show();
             Valor: '',
             Id_Bloqueo_Cuenta: ''
         };
+    }
+
+    VerificarAntesDeCierre(){
+        
     }
 
 }

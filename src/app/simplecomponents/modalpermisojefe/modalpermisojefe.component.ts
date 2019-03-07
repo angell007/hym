@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from '../../shared/services/general/general.service';
 
@@ -7,7 +7,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
   templateUrl: './modalpermisojefe.component.html',
   styleUrls: ['./modalpermisojefe.component.scss']
 })
-export class ModalpermisojefeComponent implements OnInit {
+export class ModalpermisojefeComponent implements OnInit, OnDestroy {
 
   @Input() AbrirModalEvent:Observable<any>;
 

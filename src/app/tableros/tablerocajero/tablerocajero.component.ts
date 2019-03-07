@@ -11,6 +11,8 @@ import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { isEmpty } from 'rxjs/operator/isEmpty';
 import { GeneralService } from '../../shared/services/general/general.service';
+import { CajeroService } from '../../shared/services/cajeros/cajero.service';
+import { SwalService } from '../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -21,80 +23,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
 export class TablerocajeroComponent implements OnInit {
 
   public eventsSubject: Subject<any> = new Subject<any>();
-
-
-  public IdentificacionFuncionario: any = [];
-  public Destinatarios: any = [];
-  public Remitentes: any = [];
-  public Paises: any = [];
-  public Bancos: any = [];
-  public TipoCuentas: any = [];
-  public Clientes: any = [];
-  public DestinatariosFiltrados: any = [];
-  public RemitentesFiltrados: any = [];
-  public DatosRemitente: any = [];
-  public Funcionarios: any = [];
-  public ServiciosExternos: any = [];
-  public CorresponsalesBancarios: any = [];
-  public Documentos: any;
-  public Cuentas: any = [{
-    Id_Destinatario: '',
-    Id_Pais: "",
-    Id_Banco: '',
-    Numero_Cuenta: '',
-    Id_Tipo_Cuenta: ''
-  }];
-
-  public Envios: any = [] = [{
-    Destino: '',
-    Numero_Documento_Destino: '',
-    Nombre: '',
-    Id_Destinatario_Cuenta: '',
-    Valor_Transferencia_Bolivar: '',
-    Valor_Transferencia_Peso: '',
-    Cuentas: [],
-    esconder: false,
-    disabled: false
-  }];
-  public CuentasDestinatario: any = [];
-  public Cajas: any = [];
-  public Cambios: any = [];
-  public Monedas: any = [];
-  public Recibe: any = "Transferencia";
-  public MonedaRecibe: any = "Bolivares";
-  public IdCorresponsal: number;
-  public Estado: string;
-  public DetalleCorresponsal: string;
-  public Detalle: any = [];
-  public Indice: any = [];
-
-  public MonedaRecibida: any;
-  public Cedula: any = [];
-  public IdRemitente: any = [];
-  public FormaPago: string;
-  public Costo: number;
-  public PrecioSugeridoEfectivo: any;
-  public CantidadRecibida: number;
-  public CantidadTransferida: number;
-  public ValorTotal: number;
-  public ValorEntrega: number;
-  public ValorCorresponsal: number;
-  public CorresponsalBancario: number;
-  public ComisionServicioExterno: number;
-  public Comision: number = 0;
-  public NumeroDocumentoR: number = 0;
-
-  //Bool validaciones
-  public boolFormaPago: boolean = false;
-  public boolRecibePara: boolean = false;
-  public boolSeleccioneCliente: boolean = false;
-  public boolNumeroDocumento: boolean = false;
-
-  //Valores por defecto
-  formaPagoDefault: string = "Efectivo";
-  recibeParaDefault: string = "Transferencia";
-  seleccioneClienteDefault: string = "";
-  //numeroDocumentoDefault: string = "";
+  public openModalGiro: Subject<any> = new Subject<any>();
 
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalRemitente') ModalRemitente: any;
@@ -132,14 +61,23 @@ export class TablerocajeroComponent implements OnInit {
   @ViewChild("valorCambio") inputValorCambio: ElementRef;
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
 
+  
+
+
+  public Destinatarios: any = [];
+  public Remitentes: any = [];
+  public Paises: any = [];
+  public Clientes: any = [];
+  public CorresponsalesBancarios: any = [];  
+  public Cambios: any = [];
+  public Monedas: any = [];
   vueltos: number;
   Venta = false;
   TextoBoton = "Vender";
   entregar: any;
-  cambiar:any;
-  MonedaOrigen: any;
-  MonedaDestino: any = "Pesos";
   Tipo: string;
+
+  //CONTROL DE VISTAS
   Cambios1 = true;
   Cambios2 = false
   Transferencia = [];
@@ -147,17 +85,10 @@ export class TablerocajeroComponent implements OnInit {
   Transferencia2 = false;
   Traslado1 = true;
   Traslado2 = false;
-  LimiteOficina: any;
-  public MonedaTransferencia: any;
-  MonedaTasaCambio: boolean;
-  MonedaComision: boolean;
-  PrecioSugeridoTransferencia: any;
   Historial = false;
   HistorialCliente = [];
   Giro1 = true;
   Giro2 = false;
-
-
 
   Giros = [];
   Departamentos = [];
@@ -225,14 +156,7 @@ export class TablerocajeroComponent implements OnInit {
   EncabezadoRecibo = [];
   DestinatarioRecibo = [];
 
-  MontoInicial: any = 0;
-  CierreCajaAyer: any = 0;
-  IdDiario: any;
   verCambio:any = {};
-  currencyOrigen: any;
-  currencyDestino: any;
-  cupoTercero: any;
-  SaldoBolivar: any;
   tasaCambiaria: any;
 
   //NUEVAS VARIABLES
@@ -437,6 +361,8 @@ export class TablerocajeroComponent implements OnInit {
     //VARIABLES GIRO VIEJAS
     GirosBuscar = [];
     public Aparecer = false;
+    public EditarRemitenteGiro:boolean = false;
+    public EditarDestinatarioGiro:boolean = false;
 
     DatosRemitenteEditarGiro:any = {};
     DatosDestinatario:any = {};
@@ -543,7 +469,10 @@ export class TablerocajeroComponent implements OnInit {
   constructor(private http: HttpClient, 
               public globales: Globales, 
               public sanitizer: DomSanitizer,
-              private generalService:GeneralService) { }
+              private generalService:GeneralService,
+              private cajeroService:CajeroService,
+              private swalService:SwalService) { }
+
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
 
@@ -2393,9 +2322,16 @@ export class TablerocajeroComponent implements OnInit {
         this.AsignarValoresPersonaGiro(modelo, tipo_persona);
 
       }else if(typeof(modelo) == 'string'){
+
         if(modelo == ''){
-          this.VaciarValoresPersonaGiro(tipo_persona);
-        }
+          if (tipo_persona == 'remitente') {
+            this.EditarDestinatarioGiro = false;
+          }else{
+            this.EditarRemitenteGiro = false;
+          }
+        }        
+          
+        this.VaciarValoresPersonaGiro(tipo_persona, true);
       }
     }
 
@@ -2410,6 +2346,7 @@ export class TablerocajeroComponent implements OnInit {
 
         if (id_persona == d) {
           this.ShowSwal('warning', 'Alerta', 'El remitente y el destinatario no pueden ser la misma persona');
+          this.EditarRemitenteGiro = false;
           this.VaciarValoresPersonaGiro(tipo_persona);
           return true;
         }
@@ -2423,6 +2360,7 @@ export class TablerocajeroComponent implements OnInit {
 
         if (id_persona == r) {
           this.ShowSwal('warning', 'Alerta', 'El remitente y el destinatario no pueden ser la misma persona');
+          this.EditarDestinatarioGiro = false;
           this.VaciarValoresPersonaGiro(tipo_persona);
           return true;
         }
@@ -2437,29 +2375,33 @@ export class TablerocajeroComponent implements OnInit {
         this.GiroModel.Documento_Remitente = modelo.Id_Transferencia_Remitente;
         this.GiroModel.Nombre_Remitente = modelo.Nombre;
         this.GiroModel.Telefono_Remitente = modelo.Telefono;
+        this.EditarRemitenteGiro = true;
         
       }else if(tipo_persona == 'destinatario'){
 
         this.GiroModel.Documento_Destinatario = modelo.Id_Transferencia_Remitente;
         this.GiroModel.Nombre_Destinatario = modelo.Nombre;
         this.GiroModel.Telefono_Destinatario = modelo.Telefono;
+        this.EditarDestinatarioGiro = true;
       }
     }
 
-    VaciarValoresPersonaGiro(tipo_persona){    
+    VaciarValoresPersonaGiro(tipo_persona, conservarDestRem:boolean = false){    
 
       if (tipo_persona == 'remitente') {
         this.GiroModel.Documento_Remitente = '';
         this.GiroModel.Nombre_Remitente = '';
         this.GiroModel.Telefono_Remitente = '';
-        this.Remitente_Giro = '';
+        if (!conservarDestRem)
+          this.Remitente_Giro = '';
         
       }else if(tipo_persona == 'destinatario'){
 
         this.GiroModel.Documento_Destinatario = '';
         this.GiroModel.Nombre_Destinatario = '';
         this.GiroModel.Telefono_Destinatario = '';
-        this.Destinatario_Giro = '';
+        if (!conservarDestRem)
+          this.Destinatario_Giro = '';
       }
     }
 
@@ -2635,6 +2577,8 @@ export class TablerocajeroComponent implements OnInit {
     
         this.Remitente_Giro = '';
         this.Destinatario_Giro = '';
+        this.EditarRemitenteGiro = false;
+        this.EditarDestinatarioGiro = false;
       }
 
       if (tipo == 'edicion') {
@@ -2698,6 +2642,30 @@ export class TablerocajeroComponent implements OnInit {
       }
     }
 
+    CargarDatos(data:any){
+      console.log(data);
+      
+      if (data.tipo == 'remitente') {
+        
+        this.Remitente_Giro = data.model;
+        this.GiroModel.Documento_Remitente = data.model.Id_Transferencia_Remitente;
+        this.GiroModel.Nombre_Remitente = data.model.Nombre;
+        this.GiroModel.Telefono_Remitente = data.model.Telefono;
+        
+      }else{
+
+        this.Destinatario_Giro = data.model;
+        this.GiroModel.Documento_Destinatario = data.model.Id_Transferencia_Remitente;
+        this.GiroModel.Nombre_Destinatario = data.model.Nombre;
+        this.GiroModel.Telefono_Destinatario = data.model.Telefono;
+      }
+    }
+
+    EditarPersonaGiro(idRemitente:string, tipoPersona:string){
+      let data = {remitente:idRemitente, tipo:tipoPersona};
+      this.openModalGiro.next(data);
+    }
+
   //#endregion
 
   //#region FUNCIONES TRASLADOS
@@ -2724,11 +2692,16 @@ export class TablerocajeroComponent implements OnInit {
       datos.append("modulo", 'Traslado_Caja');
       datos.append("datos", info);
       this.http.post(this.globales.ruta + 'php/trasladocaja/guardar_traslado_caja.php', datos).subscribe((data: any) => {
-        this.ShowSwal('success', 'Registro Exitoso', 'Traslado guardado satisfactoriamente!');
-        this.LimpiarModeloTraslados('creacion');
-        this.volverTraslado();
-        modal.hide();
-        this.CargarTrasladosDiarios();
+        if (data.codigo == 'success') {
+          
+          this.LimpiarModeloTraslados('creacion');
+          this.volverTraslado();
+          modal.hide();
+          this.CargarTrasladosDiarios();
+        }
+        
+        this.swalService.ShowMessage(data);
+        
       });
     }
 
@@ -2770,7 +2743,11 @@ export class TablerocajeroComponent implements OnInit {
       datos.append("estado", valor);
 
       this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
-        //this.actualizarVista();
+        if (data.codigo == 'success') {
+          this.CargarDatosTraslados();
+        }
+
+        this.swalService.ShowMessage(data);
       });
     }
 
@@ -2838,6 +2815,19 @@ export class TablerocajeroComponent implements OnInit {
       this.Traslados = [];
       this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
         this.Traslados = data;
+      });
+    }
+
+    GetCajerosTraslados(){
+      this.cajeroService.getCajerosTraslados(this.funcionario_data.Identificacion_Funcionario).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.CajerosTraslados = [];
+          this.CajerosTraslados = data.query_data;
+        }else{
+
+          this.swalService.ShowMessage(data);
+          this.CajerosTraslados = [];
+        }
       });
     }
 
@@ -3197,12 +3187,14 @@ export class TablerocajeroComponent implements OnInit {
   
       });
 
-      this.CajerosTraslados = [];
-      this.globales.FuncionariosCaja.forEach(fc => {
-        if (fc.Nombres != this.funcionario_data.Nombres) {
-          this.CajerosTraslados.push(fc);     
-        }
-      });
+      this.GetCajerosTraslados();
+
+      // this.CajerosTraslados = [];
+      // this.globales.FuncionariosCaja.forEach(fc => {
+      //   if (fc.Nombres != this.funcionario_data.Nombres) {
+      //     this.CajerosTraslados.push(fc);     
+      //   }
+      // });
 
       this.MonedasTraslados = [];
       this.MonedasTraslados = this.globales.Monedas;      
@@ -3784,7 +3776,11 @@ export class TablerocajeroComponent implements OnInit {
   }
 
   AgregarOtraCuenta(){
-    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;    
+    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
+    console.log(this.Lista_Cuentas_Destinatario);
+    console.log(this.SePuedeAgregarMasCuentas);
+    
+        
 
     if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
       
@@ -3951,72 +3947,9 @@ export class TablerocajeroComponent implements OnInit {
 
   //#endregion
   
-  GuardarMontoInicial(formulario: NgForm, modal) {
-
-    var peso = formulario.value.Monto_Inicio;
-    var bolivares = formulario.value.Monto_Inicio_Bolivar;
-
-    if (peso > 0 && bolivares > 0) {
-      let info = JSON.stringify(formulario.value);
-      let datos = new FormData();
-      datos.append("datos", info);
-      datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-      datos.append("caja", "5");
-      datos.append("oficina", "16");
-      datos.append("idDiario", this.IdDiario);
-      this.http.post(this.globales.ruta + 'php/diario/apertura_caja.php', datos)
-        .catch(error => {
-          console.error('An error occurred:', error.error);
-          this.errorSwal.show();
-          return this.handleError(error);
-        })
-        .subscribe((data: any) => {
-          formulario.reset();
-          this.confirmacionSwal.title = "Apertura de caja";
-          this.confirmacionSwal.text = "Se ha realizado la apertura de caja exitosamente";
-          this.confirmacionSwal.type = "success";
-          this.confirmacionSwal.show();
-          modal.hide();
-
-        });
-    } else {
-      this.confirmacionSwal.title = "Ojo";
-      this.confirmacionSwal.text = "No se puede aperturar caja con los valores digitados, por favor compruebe";
-      this.confirmacionSwal.type = "warning";
-      this.confirmacionSwal.show();
-    }
-
-  }
-
   LongitudCarateres(i) {
     return parseInt(i.length);
   }
-
-  /*BuscarCNE(valor) {
-
-    var cedula = this.Id_Destinatario;
-    if (cedula == undefined) {
-      cedula = (document.getElementById("idDestinatario") as HTMLInputElement).value;
-    }
-
-    switch (valor) {
-      case "V": {
-        //this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
-        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula, '_blank');
-        break;
-      }
-      case "E": {
-        //this.frame = true;
-        this.urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
-        window.open("http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula, '_blank');
-        break;
-      }
-      default: {
-        this.frame = false;
-      }
-    }
-  }*/
 
   buscarRiff() {
     this.urlRiff = "http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp";
@@ -4024,277 +3957,7 @@ export class TablerocajeroComponent implements OnInit {
     window.open("http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp", '_blank');
   }
 
-  recargarDestinatario() {
-    this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
-      this.Destinatarios = data;
-    });
-  }
-
   handleError(error: Response) {
     return Observable.throw(error);
-  }
-
-  LlenarValoresRemitente(remitente) {
-    this.DatosRemitente = [];
-    if (remitente.length == 0) {
-      return;
-    }
-    if (remitente.length < 5 && remitente.length > 0) {
-      this.warnSwal.show();
-    }
-    else {
-      this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Transferencia_Remitente', id: remitente } }).subscribe((data: any) => {
-        if (data.length == 0) {
-          this.NumeroDocumentoR = 0;
-          this.CrearRemitente(remitente);
-        }
-        else {
-          this.DatosRemitente = data;
-        }
-      });
-    }
-  }
-
-  CrearRemitente(remitente) {
-    this.ModalRemitente.show();
-    this.IdRemitente = remitente;
-  }
-
-  CrearDestinatario(destinatario) {
-    this.Cuentas = [{
-      Id_Destinatario: '',
-      Id_Pais: "",
-      Id_Banco: '',
-      Numero_Cuenta: '',
-      Id_Tipo_Cuenta: ''
-    }];
-    this.ModalDestinatario.show();
-    for (let i = 0; i < this.Cuentas.length; ++i) {
-      this.Cuentas[i].Id_Destinatario = destinatario;
-    }
-    this.Cedula = destinatario;
-  }
-
-  recargarVistaDestinatario(identificador, i) {
-    this.http.get(this.globales.ruta + 'php/pos/detalle_lista_destinatario.php', { params: { id: identificador } }).subscribe((data: any) => {
-      this.Envios[i].Cuentas = data[0].Cuentas;
-      this.Envios[i].Numero_Documento_Destino = data[0].Id_Destinatario;
-      this.Envios[i].Nombre = data[0].Nombre;
-      this.Envios[i].esconder = true;
-    });
-  }
-
-  /*GuardarDestinatario(formulario: NgForm, modal:any = null) {
-
-    this.Lista_Destinatarios.forEach((element, index) => {
-      if (element.Numero_Cuenta == "") {
-        this.Lista_Destinatarios.splice(index, 1);
-      }
-    });
-
-    let info = JSON.stringify(formulario.value);
-    let cuentas = JSON.stringify(this.Lista_Destinatarios);
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("destinatario", cuentas);
-
-    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        //autocompletar destinatario
-        var i = this.posiciontemporal
-        this.recargarVistaDestinatario(this.IdentificacionCrearDestinatario, i);
-
-        this.destinatarioCreadoSwal.show();
-        formulario.reset();
-        modal.hide();
-        this.recargarDestinatario();
-        this.Lista_Destinatarios = [{
-          Id_Pais: '2',
-          Id_Banco: '',
-          Bancos: [],
-          Id_Tipo_Cuenta: '',
-          Numero_Cuenta: '',
-          Otra_Cuenta: '',
-          Observacion: ''
-        }];
-
-      });
-    //this.actualizarVista();
-  }*/
-
-  GuardarDestinatario(formulario: NgForm, modal: any) {
-    
-    this.Lista_Cuentas_Destinatario.forEach((element,index) => {
-      element.Bancos = [];
-      if(element.Numero_Cuenta == ""){
-        this.Lista_Cuentas_Destinatario.splice(index,1);
-      }
-    });
-    
-    let info = JSON.stringify(this.DestinatarioModel);
-    let destinatario = JSON.stringify(this.Lista_Cuentas_Destinatario);
-    let datos = new FormData();
-    
-    //datos.append("modulo",'Destinatario');
-    datos.append("datos", info);
-    datos.append("destinatario", destinatario);
-    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        this.ShowSwal('success', 'Registro Exitoso', 'Se guardaron los datos correctamente!');
-        this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario);
-        this.CerrarModalDestinatario();
-      });
-  }
-
-  AsignarDatosDestinatarioNuevo(id):boolean{
-    this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id, moneda:this.MonedaParaTransferencia.id}}).subscribe((data:any)=>{
-
-      if (data != '') {
-        
-        if (this.DestinatarioEditar) {
-          
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
-          
-        }else{
-
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.DestinatarioModel.Nombre;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = false;
-        }
-        
-        this.DestinatarioEditar = false;        
-        this.PosicionDestinatarioActivo = '';
-        return true;
-      }else{
-
-        this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');        
-        this.DestinatarioEditar = false;        
-        this.PosicionDestinatarioActivo = '';
-        return false;
-      }
-    });
-
-    return true;
-  }
-
-  GuardarRemitente(formulario: NgForm) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", "Transferencia_Remitente");
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        this.LlenarValoresRemitente(formulario.value.Id_Transferencia_Remitente);
-        this.ModalRemitente.hide();
-        this.remitenteCreadoSwal.show();
-        formulario.reset();
-      });
-  }
-
-  /*EditarDestinatario(id, pos) {
-    this.http.get(this.globales.ruta + 'php/destinatarios/editar_destinatario.php', {
-      params: { id: id }
-    }).subscribe((data: any) => {
-      this.Detalle_Destinatario = data.destinatario;
-      this.Lista_Destinatarios = data.DestinatarioCuenta;
-
-      for (var i = 0; i < this.Lista_Destinatarios.length; i++) {
-        this.Bancos_Pais(this.Lista_Destinatarios[i].Id_Pais, i);
-      }
-
-      this.Identificacion = id;
-      //this.AgregarFila();
-      this.Bancos_Pais(2, 1);
-      this.ModalEditarDestinatario.show();
-      this.posiciontemporal = pos;
-    });
-  }*/
-
-  /*validarBanco(i, valor) {
-    var idpais = ((document.getElementById("Id_Pais_Destinatario" + i) as HTMLInputElement).value)
-
-    if (parseInt(idpais) == 2) {
-      var longitud = this.LongitudCarateres(valor);
-      if (longitud != 20) {
-        this.botonDestinatario = false;
-        this.confirmacionSwal.title = "Banco no valido";
-        this.confirmacionSwal.text = "Digite correctamente el número del banco";
-        this.confirmacionSwal.type = "error"
-        this.confirmacionSwal.show();
-      }
-
-      var indice = this.DestinatarioCuenta.findIndex(x => x.Numero_Cuenta === valor);
-      if (indice > -1) {
-        this.confirmacionSwal.title = "Cuenta Repetida";
-        this.confirmacionSwal.text = "Esta cuenta fue creada anteriormente y le pertenece a " + this.DestinatarioCuenta[indice].Nombre;
-        this.confirmacionSwal.type = "error"
-        this.confirmacionSwal.show();
-        ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = true;
-      } else {
-        ((document.getElementById("BotonGuardarDestinatarioTransferencia") as HTMLInputElement).disabled) = false;
-      }
-    }
-  }*/
-
-  AgregarFila(i, valor) {
-
-    var idpais = ((document.getElementById("Id_Banco" + i) as HTMLInputElement).value)
-
-    if (valor != "" && idpais != "") {
-      var pos = parseInt(i) + 1;
-      if (this.Lista_Destinatarios[pos] == undefined) {
-        this.Lista_Destinatarios.push({
-          Id_Pais: '2',
-          Id_Banco: '',
-          Bancos: [],
-          Id_Tipo_Cuenta: '',
-          Numero_Cuenta: '',
-          Otra_Cuenta: '',
-          Observacion: ''
-        });
-
-        this.Bancos_Pais(2, pos);
-      }
-    }
-
-  }
-
-  
-
-  verificarChequeo(pos, check) {
-    var checkeo = (document.getElementById("checkeo_" + pos) as HTMLInputElement).checked;
-
-    switch (check) {
-      case true: {
-        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = false;
-        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = false;
-        break;
-      }
-      case false: {
-        ((document.getElementById("Observacion_Destinatario" + pos) as HTMLInputElement).disabled) = true;
-        ((document.getElementById("Otra_Cuenta_Destinatario" + pos) as HTMLInputElement).disabled) = true;
-        break;
-      }
-    }
-
   }
 }

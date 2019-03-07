@@ -55,6 +55,10 @@ import { MunicipioService } from './shared/services/municipio/municipio.service'
 import { DocumentoService } from './shared/services/documento/documento.service';
 import { GeneralService } from './shared/services/general/general.service';
 import { CuentabancariaService } from './shared/services/cuentasbancarias/cuentabancaria.service';
+import { SwalService } from './shared/services/swal/swal.service';
+import { RemitenteService } from './shared/services/remitentes/remitente.service';
+import { CajeroService } from './shared/services/cajeros/cajero.service';
+import { TrasladocajaService } from './shared/services/traslados_caja/trasladocaja.service';
 
 //MODALES
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
@@ -146,6 +150,7 @@ import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.compon
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 import { TablatercerosComponent } from './configuracion/terceros/tablaterceros/tablaterceros.component';
 import { ThousandSeparatorDirective } from './shared/directives/thousand-separator.directive';
+import { ModalremitenteComponent } from './simplecomponents/modalremitente/modalremitente.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -281,7 +286,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         GrupostercerosComponent,
         TablatercerosComponent,
         ThousandSeparatorDirective,
-        ModalpermisojefeComponent
+        ModalpermisojefeComponent,
+        ModalremitenteComponent
     ],
     exports:[
         ModalBasicComponent
@@ -308,7 +314,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
         { provide: LOCALE_ID, useValue: "es" },
-        CuentabancariaService
+        CuentabancariaService,
+        SwalService,
+        RemitenteService,
+        CajeroService,
+        TrasladocajaService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

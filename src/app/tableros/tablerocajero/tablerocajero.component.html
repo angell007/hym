@@ -656,7 +656,7 @@
                                                                     [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
                                                                     (ngModelChange)="AutoCompletarRemitente(id_remitente, i)"
                                                                     required>-->
-                                                                <label style="display:block;">{{TransferenciaModel.Documento_Origen == "" ? "Documento" : TransferenciaModel.Documento_Origen}}</label>
+                                                                <label style="display:block;">{{TransferenciaModel.Documento_Origen == "" ? "Documento Remitente" : TransferenciaModel.Documento_Origen}}</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -665,7 +665,7 @@
                                                                 <!--<input type="text" placeholder="Nombre Remitente"
                                                                     autocomplete="off" class="form-control" name="Persona_Envia"
                                                                     [(ngModel)]="TransferenciaModel.Nombre_Remitente">-->
-                                                                <label style="display:block;">{{TransferenciaModel.Nombre_Remitente == "" ? "Documento" : TransferenciaModel.Nombre_Remitente}}</label>
+                                                                <label style="display:block;">{{TransferenciaModel.Nombre_Remitente == "" ? "Nombre Remitente" : TransferenciaModel.Nombre_Remitente}}</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -674,7 +674,7 @@
                                                                 <!--<input type="text" placeholder="Teléfono Remitente"
                                                                     autocomplete="off" class="form-control" name="Telefono_Envia"
                                                                     [(ngModel)]="TransferenciaModel.Telefono_Remitente">-->
-                                                                <label style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Documento" : TransferenciaModel.Telefono_Remitente}}</label>
+                                                                <label style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono Remitente" : TransferenciaModel.Telefono_Remitente}}</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -945,7 +945,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <label>Número de documento</label>
+                                                                <label>Número de documento
+                                                                    <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;" *ngIf="EditarRemitenteGiro" (click)="EditarPersonaGiro(GiroModel.Documento_Remitente, 'remitente')"></i>
+                                                                </label>
                                                                 <input id="DocumentoGiroRemitente" type="text" class="form-control"
                                                                     placeholder="Número Documento" name="Documento_Remitente"
                                                                     autocomplete="off" [(ngModel)]="Remitente_Giro"
@@ -959,9 +961,10 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Nombre Completo</label>
-                                                                <input type="text" placeholder="Ejem: Pepito Perez"
+                                                                <label class="block-element">{{GiroModel.Nombre_Remitente == '' ? "Nombre" : GiroModel.Nombre_Remitente}}</label>
+                                                                <!--<input type="text" placeholder="Ejem: Pepito Perez"
                                                                     class="form-control" name="Nombre_Remitente"
-                                                                    [(ngModel)]="GiroModel.Nombre_Remitente" readonly>
+                                                                    [(ngModel)]="GiroModel.Nombre_Remitente" readonly>-->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -969,9 +972,10 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Teléfono</label>
-                                                                <input type="text" placeholder="Ejem: 318 3555555"
+                                                                <label class="block-element">{{GiroModel.Telefono_Remitente == '' ? "Telefono" : GiroModel.Telefono_Remitente}}</label>
+                                                                <!--<input type="text" placeholder="Ejem: 318 3555555"
                                                                     class="form-control" name="Telefono_Remitente"
-                                                                    [(ngModel)]="GiroModel.Telefono_Remitente" required>
+                                                                    [(ngModel)]="GiroModel.Telefono_Remitente" required>-->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1007,7 +1011,9 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="form-group">
-                                                                <label>Número de Documento</label>
+                                                                <label>Número de Documento
+                                                                    <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;" *ngIf="EditarDestinatarioGiro" (click)="EditarPersonaGiro(GiroModel.Documento_Destinatario, 'destinatario')"></i>
+                                                                </label>
                                                                 <input id="DocumentoGiroDestinatario" type="text" class="form-control"
                                                                     placeholder="Número Documento" autocomplete="off"
                                                                     name="Documento_Destinatario" [(ngModel)]="Destinatario_Giro"
@@ -1021,9 +1027,10 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Nombre Completo</label>
-                                                                <input type="text" placeholder="Ejem: Juan Sanchez"
+                                                                <label class="block-element">{{GiroModel.Nombre_Destinatario == '' ? "Nombre" : GiroModel.Nombre_Destinatario}}</label>
+                                                                <!--<input type="text" placeholder="Ejem: Juan Sanchez"
                                                                     class="form-control" name="Nombre_Destinatario"
-                                                                    [(ngModel)]="GiroModel.Nombre_Destinatario" readonly>
+                                                                    [(ngModel)]="GiroModel.Nombre_Destinatario" readonly>-->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1031,8 +1038,9 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Teléfono</label>
-                                                                <input type="text" placeholder="Ejem: 6543424" class="form-control"
-                                                                    name="Telefono_Destinatario" [(ngModel)]="GiroModel.Telefono_Destinatario" required>
+                                                                <label class="block-element">{{GiroModel.Telefono_Destinatario == '' ? "Telefono" : GiroModel.Telefono_Destinatario}}</label>
+                                                                <!--<input type="text" placeholder="Ejem: 6543424" class="form-control"
+                                                                    name="Telefono_Destinatario" [(ngModel)]="GiroModel.Telefono_Destinatario" required>-->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1042,18 +1050,19 @@
                                             <hr>
                                             <h4>Datos del giro</h4>
                                             <div class="row mrg-top-20">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label>Valor a Enviar</label>
-                                                        <input type="text" placeholder="Precio" class="form-control"
-                                                            name="Valor_Recibido" [(ngModel)]="GiroModel.Valor_Recibido" (blur)="valorComision($event.target.value)" required>
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Comisión</label>
+                                                        <label>Valor Recibido</label>
                                                         <input type="text" placeholder="Precio" class="form-control"
-                                                            name="Comision" [(ngModel)]="GiroModel.Comision" readonly required>
+                                                            name="Valor_Recibido" [(ngModel)]="GiroModel.Valor_Recibido" (change)="valorComision($event.target.value)" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Comisión</label>
+                                                        <label class="block-element">{{GiroModel.Comision == '' ? "0" : GiroModel.Comision | customcurrency}}</label>
+                                                        <!--<input type="text" placeholder="Precio" class="form-control"
+                                                            name="Comision" [(ngModel)]="GiroModel.Comision" readonly required>-->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1">
@@ -1066,15 +1075,17 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Valor a Entregar</label>
-                                                        <input type="text" placeholder="Precio" class="form-control"
-                                                            readonly name="Valor_Total" [(ngModel)]="GiroModel.Valor_Total" required>
+                                                        <label class="block-element">{{GiroModel.Valor_Total == '' ? "0" : GiroModel.Valor_Total | customcurrency}}</label>
+                                                        <!--<input type="text" placeholder="Precio" class="form-control"
+                                                            readonly name="Valor_Total" [(ngModel)]="GiroModel.Valor_Total" required>-->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Total</label>
-                                                        <input type="text" placeholder="valor" class="form-control"
-                                                            name="Valor_Entrega" [(ngModel)]="GiroModel.Valor_Entrega" readonly required>
+                                                        <label class="block-element">{{GiroModel.Valor_Entrega == '' ? "0" : GiroModel.Valor_Entrega | customcurrency}}</label>
+                                                        <!--<input type="text" placeholder="valor" class="form-control"
+                                                            name="Valor_Entrega" [(ngModel)]="GiroModel.Valor_Entrega" readonly required>-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -1152,26 +1163,23 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr *ngFor="let Traslado of Traslados" class=" {{Traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                                                    <tr *ngFor="let Traslado of Traslados" [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
                                                                         <td>{{Traslado.Valor | currency}}</td>
                                                                         <td>{{Traslado.Moneda }}
                                                                         </td>
 
-                                                                        <td class="text-center" *ngIf="esconder(Traslado.Estado,Traslado.Aprobado)">
+                                                                        <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
                                                                                 <i class="ti-pencil"></i>
                                                                             </button>
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                                (confirm)="AnularTraslado(Traslado.Id_Traslado_Caja,Traslado.Estado)">
+                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
                                                                                 <i class="ti-close"></i>
                                                                             </button>
-                                                                        </td>
-                                                                        <td *ngIf="!esconder(Traslado.Estado,Traslado.Aprobado)">
-                                                                            Este traslado fue anulado o aprobado.
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -1194,28 +1202,29 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr *ngFor="let Traslado of TrasladosRecibidos"
-                                                                        class=" {{Traslado.Aprobado == 'No' ? 'bg-danger text-white' : '' }} ">
+                                                                    [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
                                                                         <td>{{Traslado.Valor | currency}}</td>
                                                                         <td>{{Traslado.Moneda }}
                                                                         </td>
 
-                                                                        <td class="text-center" *ngIf="revisionDecision(Traslado.Aprobado)">
+                                                                        <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Si')">
+                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Aprobado')">
                                                                                 <i class="fa fa-check"></i>
                                                                             </button>
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'No')">
+                                                                                (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Negado')">
                                                                                 <i class="fa fa-times"></i>
                                                                             </button>
                                                                         </td>
-                                                                        <td class="text-center" [ngSwitch]="revisionDecisionLabel(Traslado.Aprobado)">
-                                                                            <label *ngSwitchCase="true">Aprobado</label>
-                                                                            <label *ngSwitchCase="false">Negado</label>
+                                                                        <td class="text-center" [ngSwitch]="Traslado.Estado">
+                                                                            <label *ngSwitchCase="'Aprobado'">Aprobado</label>
+                                                                            <label *ngSwitchCase="'Negado'">Negado</label>
+                                                                            <label *ngSwitchCase="'Anulado'">Anulado</label>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -1252,7 +1261,7 @@
                                                             [(ngModel)]="TrasladoModel.Funcionario_Destino" required>
                                                         <option value="">seleccione una opción</option>
                                                         <option *ngFor="let ct of CajerosTraslados" 
-                                                                value="{{ct.Identificacion_Funcionario}}">{{ct.Nombres}} {{ct.Apellidos}}
+                                                                value="{{ct.Identificacion_Funcionario}}">{{ct.Nombre}}
                                                         </option>
                                                     </select>
                                                 </div>
@@ -2687,6 +2696,11 @@
   (MostrarSwal)="MostrarMensajeHijo($event)" 
   (RespuestaCodigo)="DesbloquearTasaMoneda($event)">
 </app-modalpermisojefe>
+
+<app-modalremitente
+    [AbrirModalEvent]="openModalGiro.asObservable()"
+    (CargarDatosRemitente)="CargarDatos($event)">
+</app-modalremitente>
 
 <!--FIN MODALES-->
 
