@@ -385,8 +385,8 @@
 
                             <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                                 <!-- NOTIFICACIONES -->
-                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
-                                    [routerLink]="['/cierrecaja', user.Identificacion_Funcionario, false]">
+                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
+                                    (click)="VerificarAntesDeCierre()">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
 

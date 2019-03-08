@@ -1,5 +1,5 @@
 import { Component, Directive, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, Observable, Subscription } from 'rxjs/Rx';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { NgForm } from '../../../node_modules/@angular/forms';
@@ -9,6 +9,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { log } from 'util';
 import { CajaService } from '../shared/services/caja/caja.service';
 import { SwalService } from '../shared/services/swal/swal.service';
+import { TrasladocajaService } from '../shared/services/traslados_caja/trasladocaja.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -148,12 +149,14 @@ export class CommonLayoutComponent implements OnInit {
     //#endregion
 
 
-    constructor(private router: Router, 
+    constructor(private router: Router,
+                private activeRoute:ActivatedRoute, 
                 private http: HttpClient, 
                 private globales: Globales, 
                 private toastyService: ToastyService,
                 private cajaService:CajaService,
-                private swalService:SwalService) {
+                private swalService:SwalService,
+                private trasladoCajaService:TrasladocajaService) {
                     
         this.app = {
             layout: {
@@ -1020,7 +1023,14 @@ this.ModalResumenCuenta.show();
     }
 
     VerificarAntesDeCierre(){
-        
+        this.trasladoCajaService.getTrasladosPendientes(this.user.Identificacion_Funcionario).subscribe((data:any) => {
+            if (data.codigo != 'success') {
+                this.swalService.ShowMessage(data);
+            }else{
+
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false]);
+            }
+        });
     }
 
 }

@@ -8,9 +8,9 @@ export class TrasladocajaService {
 
   constructor(private client:HttpClient, private globales:Globales) { }
 
-  gettrasladosPendientes(idCajero:string):Observable<any>{
+  getTrasladosPendientes(idCajero:string):Observable<any>{
     let p = {id_cajero:idCajero};
-    return this.client.get(this.globales.ruta+'php/remitentes/get_traslados_pendientes.php', {params:p});
+    return this.client.get(this.globales.ruta+'php/cajeros/get_traslados_pendientes_cajero.php', {params:p});
   }
 
 }

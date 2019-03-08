@@ -65,6 +65,15 @@ modal-dialog modal-lg*/
     }
 }
 
+.card-tremor{
+    animation: none;
+
+    &:hover{
+        
+        animation: cardtremor .4.5s;         
+    }
+}
+
 //ANIMACIONES
 @keyframes bluepulse {
     0% {
@@ -78,5 +87,26 @@ modal-dialog modal-lg*/
     100% {
         -moz-box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
         box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
+    }
+}
+
+@keyframes cardtremor {
+    0% {
+      left: 5px;
+    }
+    20%{
+        left: -5px;
+    }
+    40%{
+        left: 5px;
+    }
+    60%{
+        left: -5px;
+    }
+    80%{
+        left: 5px;
+    }
+    100% {
+        left: 0;
     }
 }

@@ -188,8 +188,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonClass: 'btn btn-danger'  
+            confirmButtonClass: 'btn btn-outline-primary',
+            cancelButtonClass: 'btn btn-outline-danger'  
           }),
         NgxMaskModule.forRoot(),
         NgxCurrencyModule,
