@@ -50,7 +50,7 @@ export class CajasComponent implements OnInit {
     });
   }
 
-  @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
+  @HostListener('document:keyup', ['$event']) handleKeyUp(event:KeyboardEvent) {
     if (event.keyCode === 27) {     
       this.OcultarFormularios();
     }
@@ -60,7 +60,6 @@ export class CajasComponent implements OnInit {
   {
     this.InicializarBool();
     this.OcultarFormulario(this.ModalCaja);
-    this.OcultarFormulario(this.ModalVerCaja);
     this.OcultarFormulario(this.ModalEditarCaja);
   }
 
@@ -224,7 +223,7 @@ export class CajasComponent implements OnInit {
     this.Identificacion = null;
     this.Nombre = null;
     this.Oficina = null;
-    this.Detalles = null;
+    this.Detalles = null;    
     modal.hide();
   }
 

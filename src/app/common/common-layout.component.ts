@@ -255,7 +255,6 @@ export class CommonLayoutComponent implements OnInit {
                 if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') { 
                     this.modalOficinaCaja.show();
                 }else{
-                    console.log(this.oficina_seleccionada);
                     
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
@@ -278,7 +277,6 @@ export class CommonLayoutComponent implements OnInit {
             }
 
             this.startTimer();
-            //console.log(localStorage)
 
             this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
                 this.alertasCajas = data;
@@ -387,13 +385,11 @@ export class CommonLayoutComponent implements OnInit {
 
 
     CambiarContrasena(formulario: NgForm, modal) {
-        //console.log(formulario.value);
         let datos = new FormData();
         datos.append("clave", formulario.value.clave);
         datos.append("user", this.user.Identificacion_Funcionario);
         this.http.post(this.globales.ruta + 'php/funcionarios/cambia_clave.php', datos).subscribe((data: any) => {
             this.changePasswordMessage = data.Mensaje;
-            //console.log(this.changePasswordMessage);
             formulario.reset();
             this.ModalCambiarContrasena.hide();
             this.confirmSwal.show();
@@ -576,7 +572,6 @@ export class CommonLayoutComponent implements OnInit {
     entregadoPesos = 0;
     diferenciaPesos = 0;
     calcularFajoBilletes(valor, pos, item) {
-        //console.log(valor + " --- " +posicion + " --- " +item );
         switch (item) {
             case "ValorEntero100": {
                 this.fajosPesos[pos].ValorEntero100 = valor;
@@ -610,7 +605,6 @@ export class CommonLayoutComponent implements OnInit {
     entregadoBolivar = 0;
     diferenciaBolivar = 0;
     calcularFajoBilletesBolivar(valor, pos, item) {
-        //console.log(valor + " --- " +posicion + " --- " +item );
         switch (item) {
             case "ValorEntero100": {
                 this.fajosBolivares[pos].ValorEntero100 = valor;
@@ -931,8 +925,6 @@ this.ModalResumenCuenta.show();
             this.Cajas = [];
             return;
         }
-        console.log(value);
-        console.log("listando cajas");
         
         this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
 

@@ -66,12 +66,25 @@ modal-dialog modal-lg*/
 }
 
 .card-tremor{
-    animation: none;
+    //animation: none;
+    transition:.3s;
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -o-transition:.3s;
 
     &:hover{
-        
-        animation: cardtremor .4.5s;         
+        //left: 35px;
+        transform: translateX(15px);
+        //animation: cardchoice .4s;         
     }
+}
+
+.card-selected{
+    transform: translateX(15px);
+    transition:.3s;
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -o-transition:.3s;
 }
 
 //ANIMACIONES
@@ -108,5 +121,14 @@ modal-dialog modal-lg*/
     }
     100% {
         left: 0;
+    }
+}
+
+@keyframes cardchoice {
+    0% {
+      left: 0px;
+    }
+    100% {
+        left: 10px;
     }
 }

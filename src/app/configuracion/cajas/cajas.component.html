@@ -52,6 +52,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
     <div class="app-modal-header">
         <h4>Nueva Caja</h4>
+        <button type="button" class="close basic-close" (click)="ModalCaja.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormCajaAgregar="ngForm">
@@ -102,6 +105,9 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCaja" #ModalEditarCaja>
     <div class="app-modal-header">
        <h4>Editar Caja</h4>
+       <button type="button" class="close basic-close" (click)="ModalEditarCaja.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormEditarCaja="ngForm">

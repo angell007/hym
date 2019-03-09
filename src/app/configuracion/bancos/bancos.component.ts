@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs/Subject';
 import { log } from 'util';
+import { SwalService } from '../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-bancos',
@@ -72,7 +73,7 @@ export class BancosComponent implements OnInit {
   Venezuela = false;
   infoBanco:any = {};
 
-  constructor(private http : HttpClient, private globales : Globales) {   }
+  constructor(private http : HttpClient, public globales : Globales, private swalService:SwalService) {   }
 
   ngOnInit() {
     this.ActualizarVista();
@@ -259,6 +260,15 @@ export class BancosComponent implements OnInit {
     }else{
       this.PaisesMoneda = [];
     }    
+  }
+
+  CargarMonedasPais(){
+    if (this.BancoModel.Id_Pais == '') {
+      this.Monedas = [];
+      //this.swalService.ShowMessage(['warning', 'Alerta', 'No se encontraron moneddas asociadas al pais seleccionado!']);
+      this.swalService.ShowMessage(['warning', 'Alerta', 'Debe escoger un país para cargar las monedas disponibles!']);
+      return;
+    }
   }
 
 }

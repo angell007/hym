@@ -59,6 +59,7 @@ import { SwalService } from './shared/services/swal/swal.service';
 import { RemitenteService } from './shared/services/remitentes/remitente.service';
 import { CajeroService } from './shared/services/cajeros/cajero.service';
 import { TrasladocajaService } from './shared/services/traslados_caja/trasladocaja.service';
+import { PermisoService } from './shared/services/permisos/permiso.service';
 
 //MODALES
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
@@ -318,7 +319,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         SwalService,
         RemitenteService,
         CajeroService,
-        TrasladocajaService
+        TrasladocajaService,
+        PermisoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

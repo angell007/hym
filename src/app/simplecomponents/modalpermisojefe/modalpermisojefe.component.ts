@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from '../../shared/services/general/general.service';
+import { SwalService } from '../../shared/services/swal/swal.service';
+import { PermisoService } from '../../shared/services/permisos/permiso.service';
 
 @Component({
   selector: 'app-modalpermisojefe',
@@ -17,6 +19,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
   @ViewChild('ModalPermiso') ModalPermiso:any;  
 
   private suscripcion: any;
+  private openModalSubscription:any;
   public Codigo:string = "";
 
   public SwalDataObj:any = {
@@ -25,18 +28,23 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     msg: 'Default'
   };
 
-  constructor(private generalService:GeneralService) {
+  constructor(private generalService:GeneralService,
+              private swalService:SwalService,
+              private permisoService:PermisoService) {
   }
 
   ngOnInit(){
-    this.suscripcion = this.AbrirModalEvent.subscribe((data) => 
-    {
+    // this.suscripcion = this.AbrirModalEvent.subscribe((data) => 
+    // {
+    //   this.ModalPermiso.show(); 
+    // });
+    this.openModalSubscription = this.permisoService.openModalPermiso.subscribe(d => {
       this.ModalPermiso.show(); 
     });
   }
   
   ngOnDestroy() {
-    this.suscripcion.unsubscribe();
+    this.openModalSubscription.unsubscribe();
     this.CerrarModal();
   }
 
@@ -45,11 +53,12 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     {
       if (data.codigo == 'success') {
         this.CerrarModal();
-        this.RespuestaCodigo.emit(!data.query_data);
+        //this.RespuestaCodigo.emit(!data.query_data);
+        this.permisoService.permisoAceptado = data.query_data;
+        this.permisoService._subject.next(data.query_data);
       }else{
 
-        this.SetDatosMensaje(data);
-        this.MostrarSwal.emit(this.SwalDataObj);
+        this.swalService.ShowMessage(data);
       }
     });
   }

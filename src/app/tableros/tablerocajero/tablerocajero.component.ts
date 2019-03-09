@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../../shared/globales/globales';
@@ -13,6 +13,7 @@ import { isEmpty } from 'rxjs/operator/isEmpty';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { CajeroService } from '../../shared/services/cajeros/cajero.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
+import { PermisoService } from '../../shared/services/permisos/permiso.service';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -20,10 +21,11 @@ import { SwalService } from '../../shared/services/swal/swal.service';
   styleUrls: ['./tablerocajero.component.scss', '../../../style.scss']
 })
 
-export class TablerocajeroComponent implements OnInit {
+export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   public eventsSubject: Subject<any> = new Subject<any>();
   public openModalGiro: Subject<any> = new Subject<any>();
+  public permisoSubscription:any;
 
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalRemitente') ModalRemitente: any;
@@ -190,6 +192,14 @@ export class TablerocajeroComponent implements OnInit {
       { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
     ];
 
+    public CardSelection:any = {
+      cambios: true,
+      trans: false,
+      giros: false,
+      traslados: false,
+      corresponsal: false,
+      servicios: false,
+    }
   //#endregion
 
   //#region VARAIBLES CAMBIOS
@@ -375,6 +385,7 @@ export class TablerocajeroComponent implements OnInit {
     public Destinatario_Giro:any = '';
     public DepartamentosGiros:any = [];
     public Municipios_Remitente = [];
+    public DeshabilitarComisionGiro:boolean = true;
 
   //#endregion
 
@@ -471,7 +482,8 @@ export class TablerocajeroComponent implements OnInit {
               public sanitizer: DomSanitizer,
               private generalService:GeneralService,
               private cajeroService:CajeroService,
-              private swalService:SwalService) { }
+              private swalService:SwalService,
+              private permisoService:PermisoService) { }
 
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
@@ -485,6 +497,9 @@ export class TablerocajeroComponent implements OnInit {
   public boolTelefonoR:boolean = false;
 
   ngOnInit() {
+    console.log(this.permisoSubscription);
+    
+
     this.AsignarMonedas();
     this.AsignarMonedasApertura();
     this.AsignarTipoDocumento();
@@ -498,8 +513,18 @@ export class TablerocajeroComponent implements OnInit {
     //this.ModalAperturaCaja.show();
   } 
 
+  ngOnDestroy(){
+    if (this.permisoSubscription != undefined) {
+      this.permisoSubscription.unsubscribe();
+    }
+  }
+
   AbrirModalApertura(){
     this.ModalAperturaCaja.show();
+  }
+
+  AbrirModalPermiso(){
+    this.permisoService._openSubject.next();
   }
 
   //#region FUNCIONES CAMBIOS
@@ -2666,6 +2691,32 @@ export class TablerocajeroComponent implements OnInit {
       this.openModalGiro.next(data);
     }
 
+    HabilitarEdicionComisionGiro(){
+      if (this.GiroModel.Valor_Recibido == '') {
+        this.swalService.ShowMessage(['warning', 'Alerta', 'Debe colocar el valor recibido primero antes de editar la comisión']);
+        return;
+      }
+
+      if (this.DeshabilitarComisionGiro) {
+        if (this.permisoSubscription == undefined) {
+          this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
+            this.DeshabilitarComisionGiro = !d;
+            console.log("codigo respuesta");
+            console.log(d);
+            
+            this.permisoSubscription.unsubscribe();
+            this.permisoSubscription = undefined;
+          });  
+        }        
+  
+        this.permisoService._openSubject.next();
+        //this.DeshabilitarComisionGiro = false;
+      }else{
+
+        this.DeshabilitarComisionGiro = true;
+      }      
+    }
+
   //#endregion
 
   //#region FUNCIONES TRASLADOS
@@ -3436,7 +3487,7 @@ export class TablerocajeroComponent implements OnInit {
       datos.append("valores_moneda", valores_monedas);
       this.http.post(this.globales.ruta + '/php/diario/guardar_apertura.php', datos).subscribe((data: any) => {
 
-          this.ShowSwal('success', data, 'Se aperturo la caja copn exito!');
+          this.ShowSwal('success', data, 'Se aperturo la caja con exito!');
           this.ModalAperturaCaja.hide();
       });
     }
@@ -3553,17 +3604,35 @@ export class TablerocajeroComponent implements OnInit {
     }
 
     DesbloquearTasa(){
-      if (this.DeshabilitarTasa) {  
-        this.eventsSubject.next();
+      if (this.DeshabilitarTasa) {
+        if (this.permisoSubscription == undefined) {
+          this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
+            this.DeshabilitarTasa = !d;            
+            this.permisoSubscription.unsubscribe();
+            this.permisoSubscription = undefined;
+          });  
+        }        
+  
+        this.permisoService._openSubject.next();
       }else{
-        this.BloquearTasaMoneda();
-      }
-      
+
+        this.DeshabilitarTasa = true;
+      }      
     }
 
     MostrarBusqueda(){
       $("#remSearch").toggle("fast");
       $("#btn-search").toggleClass("btn-pulse");
+    }
+
+    ActivarCard(modulo:string){
+      for (const key in this.CardSelection) {
+        if (key == modulo) {
+          this.CardSelection[key] = true;
+        } else{
+          this.CardSelection[key] = false;
+        }
+      }
     }
 
   //#endregion
@@ -3960,4 +4029,70 @@ export class TablerocajeroComponent implements OnInit {
   handleError(error: Response) {
     return Observable.throw(error);
   }
+
+  GuardarDestinatario(formulario: NgForm, modal: any) {
+
+    this.Lista_Cuentas_Destinatario.forEach((element,index) => {
+      element.Bancos = [];
+      if(element.Numero_Cuenta == ""){
+        this.Lista_Cuentas_Destinatario.splice(index,1);
+      }
+    });
+
+    let info = JSON.stringify(this.DestinatarioModel);
+    let destinatario = JSON.stringify(this.Lista_Cuentas_Destinatario);
+    let datos = new FormData();
+
+    //datos.append("modulo",'Destinatario');
+    datos.append("datos", info);
+    datos.append("destinatario", destinatario);
+    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        this.ShowSwal('success', 'Registro Exitoso', 'Se guardaron los datos correctamente!');
+        this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario);
+        this.CerrarModalDestinatario();
+      });
+  }
+
+  AsignarDatosDestinatarioNuevo(id):boolean{
+    this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id, moneda:this.MonedaParaTransferencia.id}}).subscribe((data:any)=>{
+
+      if (data != '') {
+
+        if (this.DestinatarioEditar) {
+
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
+
+        }else{
+
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.DestinatarioModel.Nombre;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = false;
+        }
+
+        this.DestinatarioEditar = false;        
+        this.PosicionDestinatarioActivo = '';
+        return true;
+      }else{
+
+        this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');        
+        this.DestinatarioEditar = false;        
+        this.PosicionDestinatarioActivo = '';
+        return false;
+      }
+    });
+
+    return true;
+  }
 }
+
+

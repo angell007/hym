@@ -3,7 +3,8 @@
         <div class="row">
             <div class="col-md-3 ">
                 <sticky [sticky-offset-top]="105">
-                    <a href="#cambios" scrollTo class="card mrg-btm-15 m-t-15 scroll-to card-tremor" (click)="muestra_tabla('cambios')">
+                    <a href="#cambios" scrollTo class="card mrg-btm-15 m-t-15 scroll-to" 
+                        (click)="muestra_tabla('cambios'); ActivarCard('cambios')" [ngClass]="{'card-selected': CardSelection.cambios, 'card-tremor': !CardSelection.cambios}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -18,7 +19,8 @@
                             </ul>
                         </div>
                     </a>
-                    <a href="#transferencias" scrollTo class="card mrg-btm-15 scroll-to card-tremor" (click)="muestra_tabla('transferencias')">
+                    <a href="#transferencias" scrollTo class="card mrg-btm-15 scroll-to" 
+                        (click)="muestra_tabla('transferencias'); ActivarCard('trans')" [ngClass]="{'card-selected': CardSelection.trans, 'card-tremor': !CardSelection.trans}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -33,7 +35,8 @@
                             </ul>
                         </div>
                     </a>
-                    <a href="#giros" scrollTo class="card mrg-btm-15 scroll-to card-tremor" (click)="muestra_tabla('giros')">
+                    <a href="#giros" scrollTo class="card mrg-btm-15 scroll-to" 
+                        (click)="muestra_tabla('giros'); ActivarCard('giros')" [ngClass]="{'card-selected': CardSelection.giros, 'card-tremor': !CardSelection.giros}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -48,7 +51,8 @@
                             </ul>
                         </div>
                     </a>
-                    <a href="#traslados" scrollTo class="card mrg-btm-15 scroll-to card-tremor" (click)="muestra_tabla('traslados')">
+                    <a href="#traslados" scrollTo class="card mrg-btm-15 scroll-to" 
+                        (click)="muestra_tabla('traslados'); ActivarCard('traslados')" [ngClass]="{'card-selected': CardSelection.traslados, 'card-tremor': !CardSelection.traslados}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -63,7 +67,8 @@
                             </ul>
                         </div>
                     </a>
-                    <a href="#corresponsal" scrollTo class="card mrg-btm-15 scroll-to card-tremor" (click)="muestra_tabla('corresponsal')">
+                    <a href="#corresponsal" scrollTo class="card mrg-btm-15 scroll-to" 
+                        (click)="muestra_tabla('corresponsal'); ActivarCard('corresponsal')" [ngClass]="{'card-selected': CardSelection.corresponsal, 'card-tremor': !CardSelection.corresponsal}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -78,7 +83,8 @@
                             </ul>
                         </div>
                     </a>
-                    <a href="#servicios" scrollTo class="card mrg-btm-15 scroll-to card-tremor" (click)="muestra_tabla('servicios')">
+                    <a href="#servicios" scrollTo class="card mrg-btm-15 scroll-to" 
+                        (click)="muestra_tabla('servicios'); ActivarCard('servicios')" [ngClass]="{'card-selected': CardSelection.servicios, 'card-tremor': !CardSelection.servicios}">
                         <div class="card-block padding-10">
                             <ul class="list-unstyled list-info">
                                 <li>
@@ -1059,10 +1065,12 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Comisión</label>
-                                                        <label class="block-element">{{GiroModel.Comision == '' ? "0" : GiroModel.Comision | customcurrency}}</label>
-                                                        <!--<input type="text" placeholder="Precio" class="form-control"
-                                                            name="Comision" [(ngModel)]="GiroModel.Comision" readonly required>-->
+                                                        <label>Comisión
+                                                            <i class="text-info pl-2 font-size-15" [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}" style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
+                                                        </label>
+                                                        <!--<label class="block-element">{{GiroModel.Comision == '' ? "0" : GiroModel.Comision | customcurrency}}</label>-->
+                                                        <input type="text" placeholder="Comision" class="form-control form-control-sm"
+                                                            name="Comision" [(ngModel)]="GiroModel.Comision" [disabled]="DeshabilitarComisionGiro" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1">
@@ -2636,12 +2644,13 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label><b>{{vma.NombreMoneda}}</b></label>
-                        <div class="input-group input-group-sm">
+                        <label class="block-element">{{vma.Valor_Moneda_Apertura | customcurrency:vma.Codigo}}</label>
+                        <!-- <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">{{vma.Codigo}}</span>
                             </div>                
                             <input type="text" class="form-control sp-text" [(ngModel)]="vma.Valor_Moneda_Apertura" name="Valor_Moneda_Apertura_{{i}}"  aria-describedby="basic-addon1" placeholder="Introduzca inicial para {{vma.NombreMoneda}}" disabled required>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -2650,7 +2659,7 @@
     <div class="app-modal-footer" style="margin: 0 auto;">
         <div class="text-center">
             <button id="btnGuardarValoresApertura" 
-                    class="btn btn-primary btn-sm" 
+                    class="btn btn-outline-primary btn-sm" 
                     [swal]="{title : '¿Está Seguro?', text: 'Se va a realizar la apertura esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aperturar',cancelButtonText: 'No, Dejame Comprobar!'}"
                     (confirm)="GuardarApertura()">Aperturar Caja
             </button>
@@ -2691,11 +2700,11 @@
     </div>
 </app-modal-basic>
 
-<app-modalpermisojefe 
+<!-- <app-modalpermisojefe 
   [AbrirModalEvent]="eventsSubject.asObservable()"
   (MostrarSwal)="MostrarMensajeHijo($event)" 
   (RespuestaCodigo)="DesbloquearTasaMoneda($event)">
-</app-modalpermisojefe>
+</app-modalpermisojefe> -->
 
 <app-modalremitente
     [AbrirModalEvent]="openModalGiro.asObservable()"

@@ -10,7 +10,7 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-cofiguracion',
   templateUrl: './cofiguracion.component.html',
-  styleUrls: ['./cofiguracion.component.scss']
+  styleUrls: ['./cofiguracion.component.scss', '../../../style.scss']
 })
 
 export class CofiguracionComponent implements OnInit {
@@ -211,6 +211,8 @@ export class CofiguracionComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     }).subscribe((data: any) => {
+      console.log(data);
+      
       this.Identificacion = '1';
       this.configuracionGeneral = data;
     });
