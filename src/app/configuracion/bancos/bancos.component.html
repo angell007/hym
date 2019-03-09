@@ -1,15 +1,15 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Bancos</h4>
-        <button class="pull-right btn btn-primary btn-sm" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo
+        <!-- <button class="pull-right btn btn-primary btn-sm" (click)="ModalBanco.show()"><i class="ti-plus"></i> Agregar Nuevo
             Banco
-        </button>
+        </button> -->
     </div>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
+                <!-- <div class="card-block">
                     <p>Todos los bancos con los que trabajamos</p>
                     <div class="table-responsive">
                         <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
@@ -38,7 +38,8 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
+                <app-tablabancos></app-tablabancos>
             </div>
         </div>
     </div>
@@ -164,7 +165,7 @@
     </div>
 </app-modal-basic> -->
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalBanco" #ModalBanco>
+<!-- <app-modal-basic [dialogClass]="'modal-lg'" id="ModalBanco" #ModalBanco>
     <div class="app-modal-header">
         <h4>Nuevo Banco</h4>
         <button type="button" class="close basic-close" (click)="ModalBanco.hide()">
@@ -185,14 +186,14 @@
                         <label>País</label>
                         <select class="form-control" name="Id_Pais" [(ngModel)]="BancoModel.Id_Pais" required (change)="CargarMonedasPais()">
                             <option value="" selected>Seleccione un País</option>
-                            <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{Pais.Nombre}}</option>
+                            <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Moneda del Banco</label>
-                        <select class="form-control" name="Id_Moneda" [(ngModel)]="BancoModel.Id_Moneda" required (change)="SeleccionarPaisesPorMoneda($event.target.value)">
+                        <select class="form-control" name="Id_Moneda" [(ngModel)]="BancoModel.Id_Moneda" required>
                             <option value="" selected>Seleccione una moneda</option>
                             <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
                         </select>
@@ -201,7 +202,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Identificador de Cuentas</label>
-                        <input type="text" [disabled]="PaisesMoneda.length == 0" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" [(ngModel)]="BancoModel.Identificador" required>
+                        <input type="text" placeholder="Identificador - Ejem: 0134" class="form-control" name="Identificador" [(ngModel)]="BancoModel.Identificador" required>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -412,4 +413,4 @@
 <swal #deleteSwal title="Banco eliminado" text="Se ha eliminado correctamente el banco" type="success">
 </swal>
 
-<swal #confirmacionSwal title="" text="" type=""></swal>
+<swal #confirmacionSwal title="" text="" type=""></swal> -->

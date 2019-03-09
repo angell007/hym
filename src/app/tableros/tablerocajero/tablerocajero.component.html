@@ -1551,11 +1551,11 @@
         <form #FormRemitente="ngForm">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Identificación</label>
                         <input type="text" placeholder="Identificación Cliente" class="form-control" name="Id_Transferencia_Remitente"
                             ngModel="{{IdRemitente}}" (focusout)="boolIdR = true" required #identificacionR="ngModel">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -1579,8 +1579,7 @@
     </div>
     <div class="app-modal-footer" id="guardar">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                (confirm)="GuardarRemitente(FormRemitente)">Guardar</button>
+            <button class="btn btn-primary btn-sm" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
@@ -1756,7 +1755,7 @@
     </div>
 </app-modal-basic>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGiroEditar" #ModalGiroEditar>
+<!-- <app-modal-basic [dialogClass]="'modal-lg'" id="ModalGiroEditar" #ModalGiroEditar>
     <div class="app-modal-header">
         <h4>Editar Giro</h4>
         <button type="button" class="close basic-close" (click)="ModalGiroEditar.hide()">
@@ -1971,7 +1970,7 @@
             (confirm)="RealizarEdicionGiro(FormEditarGiro,ModalGiroEditar)" class="btn btn-primary btn-sm btn-block">Hacer
             Giro</button>
     </div>
-</app-modal-basic>
+</app-modal-basic> -->
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarDestinatario" #ModalEditarDestinatario>
     <div class="app-modal-header">

@@ -39,7 +39,9 @@ export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges
     valor:'',
     cedula:'',
     cta_destino:'',
-    nombre_destinatario:''
+    nombre_destinatario:'',
+    cod_transferencia: '',
+    cta_origen:''
   };
 
   //Paginación
@@ -179,6 +181,14 @@ export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges
       params.nombre_destinatario = this.Filtros.nombre_destinatario;
     }
 
+    if (this.Filtros.cod_transferencia.trim() != "") {
+      params.cod_transferencia = this.Filtros.cod_transferencia;
+    }
+
+    if (this.Filtros.cta_origen.trim() != "") {
+      params.cta_origen = this.Filtros.cta_origen;
+    }
+
     return params;
   }
 
@@ -214,7 +224,9 @@ export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges
       valor:'',
       cedula:'',
       cta_destino:'',
-      nombre_destinatario:''
+      nombre_destinatario:'',
+      cod_transferencia: '',
+      cta_origen:''
     };
   }
 

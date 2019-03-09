@@ -6,6 +6,9 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class GeneralService {
 
+  public Funcionario:any = JSON.parse(localStorage.getItem('User'));
+  public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
+
   constructor(private client:HttpClient, private globales:Globales) { }
 
   checkIdentificacion(id:string):Observable<any>{

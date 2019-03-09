@@ -60,6 +60,8 @@ import { RemitenteService } from './shared/services/remitentes/remitente.service
 import { CajeroService } from './shared/services/cajeros/cajero.service';
 import { TrasladocajaService } from './shared/services/traslados_caja/trasladocaja.service';
 import { PermisoService } from './shared/services/permisos/permiso.service';
+import { MonedaService } from './shared/services/monedas/moneda.service';
+import { BancoService } from './shared/services/bancos/banco.service';
 
 //MODALES
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
@@ -152,6 +154,8 @@ import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposte
 import { TablatercerosComponent } from './configuracion/terceros/tablaterceros/tablaterceros.component';
 import { ThousandSeparatorDirective } from './shared/directives/thousand-separator.directive';
 import { ModalremitenteComponent } from './simplecomponents/modalremitente/modalremitente.component';
+import { TablabancosComponent } from './configuracion/bancos/tablabancos/tablabancos.component';
+import { ModalbancoComponent } from './simplecomponents/modalbanco/modalbanco.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -288,7 +292,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatercerosComponent,
         ThousandSeparatorDirective,
         ModalpermisojefeComponent,
-        ModalremitenteComponent
+        ModalremitenteComponent,
+        TablabancosComponent,
+        ModalbancoComponent
     ],
     exports:[
         ModalBasicComponent
@@ -320,7 +326,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         RemitenteService,
         CajeroService,
         TrasladocajaService,
-        PermisoService
+        PermisoService,
+        MonedaService,
+        BancoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

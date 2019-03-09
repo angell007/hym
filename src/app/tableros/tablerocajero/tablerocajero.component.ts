@@ -28,7 +28,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public permisoSubscription:any;
 
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
-  @ViewChild('ModalRemitente') ModalRemitente: any;
+  //@ViewChild('ModalRemitente') ModalRemitente: any;
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('warnSwal') warnSwal: any;
   @ViewChild('warnTotalSwal') warnTotalSwal: any;
