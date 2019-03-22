@@ -1,0 +1,102 @@
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCuentaBancaria" #ModalCuentaBancaria>
+  <div class="app-modal-header">
+      <h4>Nueva Cuenta</h4>
+      <button type="button" class="close basic-close" (click)="CerrarModal()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+      <form #FormCuenta="ngForm">
+          <div class="row">
+              <div class="col-md-2">
+                  <label>Tipo Cuenta</label>
+                  <select class="form-control" name="Tipo_Cuenta" [(ngModel)]="CuentaBancariaModel.Tipo_Cuenta" required>
+                      <option value="">Seleccione Tipo</option>
+                      <option value="Empresarial">Cuenta Empresarial</option>
+                      <option value="Personal">Cuenta Personal</option>
+                  </select>
+              </div>
+              <div class="col-md-2">
+                  <label>Tipo </label>
+                  <select class="form-control" name="Tipo" [(ngModel)]="CuentaBancariaModel.Tipo" required>
+                      <option value="">Seleccione Tipo</option>
+                      <option *ngFor="let item of TiposCuenta; let i=index" [value]="item.Id_Tipo_Cuenta">{{item.Nombre}}</option>                           
+                  </select>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>País</label>
+                      <select class="form-control" name="Id_Pais" [(ngModel)]="CuentaBancariaModel.Id_Pais" (change)="GetBancosPais()"
+                          required>
+                          <option value="">Seleccione País</option>
+                          <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Banco</label>
+                      <select class="form-control" required name="Id_Banco" [(ngModel)]="CuentaBancariaModel.Id_Banco" required>
+                          <option value="">Seleccione Banco</option>
+                          <option *ngFor="let bp of BancosPais" [value]="bp.Id_Banco">{{bp.Apodo}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Cuenta</label>
+                      <input type="text" placeholder="Número de Cuenta Bancaria" class="form-control" name="Numero_Cuenta"
+                          [(ngModel)]="CuentaBancariaModel.Numero_Cuenta" required>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Titular</label>
+                      <input type="text" placeholder="Nombre Titular Cuenta" class="form-control" name="Nombre_Titular"
+                          [(ngModel)]="CuentaBancariaModel.Nombre_Titular" required>
+                  </div>
+              </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Identificación Titular</label>
+                      <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                          placeholder="" class="form-control" name="Identificacion_Titular" [(ngModel)]="CuentaBancariaModel.Identificacion_Titular" required>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label>Moneda</label>
+                      <select class="form-control" required name="Moneda" [(ngModel)]="CuentaBancariaModel.Id_Moneda" required>
+                          <option value="">Seleccione Moneda</option>
+                          <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label>Saldo Inicial</label>
+                      <input currencyMask class="form-control" name="Monto_Inicial" [(ngModel)]="CuentaBancariaModel.Monto_Inicial" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Detalles</label>
+                      <textarea rows="4" cols="50" class="form-control" placeholder="Detalles de Cuenta Bancaria"
+                          name="Detalle" [(ngModel)]="CuentaBancariaModel.Detalle" required></textarea>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
+          <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
+              (confirm)="GuardarCuenta(FormCuenta, ModalCuentaBancaria)">Guardar</button>
+      </div>
+  </div>
+</app-modal-basic>

@@ -12,6 +12,10 @@ export class BancoService {
     return this.client.get(this.globales.ruta+'php/bancos/get_lista_bancos.php', {params:p});
   }
 
+  getListaBancosByPais(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'php/bancos/get_lista_bancos_by_pais.php', {params:p});
+  }
+
   getBanco(p:any):Observable<any>{
     return this.client.get(this.globales.ruta+'php/bancos/get_banco_por_id.php', {params:p});
   }

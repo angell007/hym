@@ -62,6 +62,8 @@ import { TrasladocajaService } from './shared/services/traslados_caja/trasladoca
 import { PermisoService } from './shared/services/permisos/permiso.service';
 import { MonedaService } from './shared/services/monedas/moneda.service';
 import { BancoService } from './shared/services/bancos/banco.service';
+import { ServiciosexternosService } from './shared/services/serviciosexternos/serviciosexternos.service';
+import { ValidacionService } from './shared/services/validaciones/validacion.service';
 
 //MODALES
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
@@ -156,6 +158,12 @@ import { ThousandSeparatorDirective } from './shared/directives/thousand-separat
 import { ModalremitenteComponent } from './simplecomponents/modalremitente/modalremitente.component';
 import { TablabancosComponent } from './configuracion/bancos/tablabancos/tablabancos.component';
 import { ModalbancoComponent } from './simplecomponents/modalbanco/modalbanco.component';
+import { ModalservicioexternoComponent } from './simplecomponents/modalservicioexterno/modalservicioexterno.component';
+import { TablaserviciosexternosComponent } from './serviciosexternos/tablaserviciosexternos/tablaserviciosexternos.component';
+import { PaginadorinformativoComponent } from './simplecomponents/paginadorinformativo/paginadorinformativo.component';
+import { TablacuentasbancariasComponent } from './configuracion/cuentasbancarias/tablacuentasbancarias/tablacuentasbancarias.component';
+import { ModalcuentabancariaComponent } from './simplecomponents/modalcuentabancaria/modalcuentabancaria.component';
+import { TabladestinatariosComponent } from './configuracion/destinatarios/tabladestinatarios/tabladestinatarios.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -294,7 +302,13 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalpermisojefeComponent,
         ModalremitenteComponent,
         TablabancosComponent,
-        ModalbancoComponent
+        ModalbancoComponent,
+        TablaserviciosexternosComponent,
+        PaginadorinformativoComponent,
+        ModalservicioexternoComponent,
+        TablacuentasbancariasComponent,
+        ModalcuentabancariaComponent,
+        TabladestinatariosComponent
     ],
     exports:[
         ModalBasicComponent
@@ -328,7 +342,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TrasladocajaService,
         PermisoService,
         MonedaService,
-        BancoService
+        BancoService,
+        ServiciosexternosService,
+        ValidacionService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

@@ -48,4 +48,40 @@ export class GeneralService {
     return this.client.get(this.globales.ruta+'php/oficinas/get_departamento_ciudad_oficina.php', {params:p});
   }
 
+  getPaises(){
+    return this.globales.Paises; 
+  }
+
+  getMonedas(){
+    return this.globales.Monedas;
+  }
+
+  getTiposCuenta(){
+    return this.globales.TiposCuenta;
+  }
+
+  limpiarString(modelo:any){
+    let tipo = typeof(modelo);
+
+    switch (tipo) {
+      case 'string':
+        return modelo.trim();
+
+      case 'object':
+        let clean_model = modelo;
+        for (const key in clean_model) {          
+          if (clean_model.hasOwnProperty(key)) {
+            if (typeof(clean_model[key]) == 'string') {
+              clean_model[key] = clean_model[key].trim();              
+            }
+          }
+        }
+
+        return clean_model;
+    
+      default:
+        break;
+    }
+  }
+
 }
