@@ -7,7 +7,7 @@ import { DestinatarioService } from '../../../shared/services/destinatarios/dest
 @Component({
   selector: 'app-tabladestinatarios',
   templateUrl: './tabladestinatarios.component.html',
-  styleUrls: ['./tabladestinatarios.component.scss']
+  styleUrls: ['./tabladestinatarios.component.scss', '../../../../style.scss']
 })
 export class TabladestinatariosComponent implements OnInit {
 
@@ -54,8 +54,9 @@ export class TabladestinatariosComponent implements OnInit {
     }, 1000);
   }
 
-  AbrirModal(idDestinatario:string){
-    this.AbrirModalCrear.next(idDestinatario);
+  AbrirModal(idDestinatario:string, accion:string){
+    let objModal = {id_destinatario:idDestinatario, accion:accion};
+    this.AbrirModalCrear.next(objModal);
   }
 
   SetFiltros(paginacion:boolean) {

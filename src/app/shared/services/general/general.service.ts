@@ -11,7 +11,7 @@ export class GeneralService {
 
   constructor(private client:HttpClient, private globales:Globales) { }
 
-  checkIdentificacion(id:string):Observable<any>{
+  public checkIdentificacion(id:string):Observable<any>{
     let p = {id:id};
     return this.client.get(this.globales.ruta+'php/GENERALES/validar_numero_identificacion.php', {params:p});
   }  
@@ -38,29 +38,29 @@ export class GeneralService {
 
   })();
 
-  verifyMajorCode(codigo:string):Observable<any>{
+  public verifyMajorCode(codigo:string):Observable<any>{
     let p = {codigo:codigo};
     return this.client.get(this.globales.ruta+'php/GENERALES/VerificarCodigoPersonal.php', {params:p});
   }
 
-  getDepCiuOficina(oficina:string):Observable<any>{
+  public getDepCiuOficina(oficina:string):Observable<any>{
     let p = {oficina:oficina};
     return this.client.get(this.globales.ruta+'php/oficinas/get_departamento_ciudad_oficina.php', {params:p});
   }
 
-  getPaises(){
+  public getPaises(){
     return this.globales.Paises; 
   }
 
-  getMonedas(){
+  public getMonedas(){
     return this.globales.Monedas;
   }
 
-  getTiposCuenta(){
+  public getTiposCuenta(){
     return this.globales.TiposCuenta;
   }
 
-  limpiarString(modelo:any){
+  public limpiarString(modelo:any){
     let tipo = typeof(modelo);
 
     switch (tipo) {
@@ -84,4 +84,15 @@ export class GeneralService {
     }
   }
 
+  public IsObjEmpty(obj) {
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key))
+        return false;
+    }
+    return true;
+  }
+
+  public searchRiff(){
+    this.globales.buscarRiff();
+  }
 }

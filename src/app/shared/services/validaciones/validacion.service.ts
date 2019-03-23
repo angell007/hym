@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { SwalService } from '../swal/swal.service';
+import { HttpClient } from '@angular/common/http';
+import { Globales } from '../../globales/globales';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ValidacionService {
 
-  constructor(private swalService:SwalService) { }
+  constructor(private swalService:SwalService,
+              private client:HttpClient,
+              private globales:Globales) { }
 
-  validateNumber(value:any, campo:string):boolean{
+  public validateNumber(value:any, campo:string):boolean{
     let type = typeof(value);
 
     switch (type) {
@@ -29,7 +34,7 @@ export class ValidacionService {
     }
   }
 
-  validateString(value:string, campo:string = ''):boolean{
+  public validateString(value:string, campo:string = ''):boolean{
     
     if (value.trim() == '') {
       if (campo != '') {
@@ -44,12 +49,20 @@ export class ValidacionService {
     }
   }
 
-  _checkZeroValue(value:number, campo:string):boolean{
+  private _checkZeroValue(value:number, campo:string):boolean{
     if (value <= 0) {
       this.swalService.ShowMessage(['warning', 'Alerta', campo+' no puede ser 0, por favor verifque!']);
       return false;
     }else{
       return true;
     }
+  }
+
+  public ValidateIdentificacion(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'/php/destinatarios/validar_identificacion.php', {params:p});
+  }
+
+  public ValidateCuentaBancaria(p:any){
+    return this.client.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params:p});
   }
 }

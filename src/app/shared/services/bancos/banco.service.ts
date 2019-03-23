@@ -20,6 +20,10 @@ export class BancoService {
     return this.client.get(this.globales.ruta+'php/bancos/get_banco_por_id.php', {params:p});
   }
 
+  getIdentificadorBanco(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'/php/bancos/buscar_identificador.php', {params:p});
+  }
+
   saveBanco(data:FormData):Observable<any>{
     return this.client.post(this.globales.ruta+'php/bancos/guardar_banco.php', data);
   }

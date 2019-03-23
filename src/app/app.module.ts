@@ -65,12 +65,19 @@ import { BancoService } from './shared/services/bancos/banco.service';
 import { ServiciosexternosService } from './shared/services/serviciosexternos/serviciosexternos.service';
 import { ValidacionService } from './shared/services/validaciones/validacion.service';
 import { DestinatarioService } from './shared/services/destinatarios/destinatario.service';
+import { TipodocumentoService } from './shared/services/tiposdocumento/tipodocumento.service';
 
 //MODALES
+import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
+import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
+import { ModalremitenteComponent } from './simplecomponents/modalremitente/modalremitente.component';
+import { ModalbancoComponent } from './simplecomponents/modalbanco/modalbanco.component';
+import { ModalservicioexternoComponent } from './simplecomponents/modalservicioexterno/modalservicioexterno.component';
+import { ModalcuentabancariaComponent } from './simplecomponents/modalcuentabancaria/modalcuentabancaria.component';
+import { ModaldestinatarioComponent } from './simplecomponents/modaldestinatario/modaldestinatario.component';
 
 // App Component
-import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { CofiguracionComponent } from './configuracion/cofiguracion/cofiguracion.component';
@@ -152,18 +159,13 @@ import { TablaresumenmunicipioComponent } from './complexcomponents/tablaresumen
 import { TablatotalesmonedasComponent } from './simplecomponents/tablatotalesmonedas/tablatotalesmonedas.component';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { TablacomprasComponent } from './configuracion/compras/tablacompras/tablacompras.component';
-import { ModaltestComponent } from './modalcomponents/modaltest/modaltest.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 import { TablatercerosComponent } from './configuracion/terceros/tablaterceros/tablaterceros.component';
 import { ThousandSeparatorDirective } from './shared/directives/thousand-separator.directive';
-import { ModalremitenteComponent } from './simplecomponents/modalremitente/modalremitente.component';
 import { TablabancosComponent } from './configuracion/bancos/tablabancos/tablabancos.component';
-import { ModalbancoComponent } from './simplecomponents/modalbanco/modalbanco.component';
-import { ModalservicioexternoComponent } from './simplecomponents/modalservicioexterno/modalservicioexterno.component';
 import { TablaserviciosexternosComponent } from './serviciosexternos/tablaserviciosexternos/tablaserviciosexternos.component';
 import { PaginadorinformativoComponent } from './simplecomponents/paginadorinformativo/paginadorinformativo.component';
 import { TablacuentasbancariasComponent } from './configuracion/cuentasbancarias/tablacuentasbancarias/tablacuentasbancarias.component';
-import { ModalcuentabancariaComponent } from './simplecomponents/modalcuentabancaria/modalcuentabancaria.component';
 import { TabladestinatariosComponent } from './configuracion/destinatarios/tabladestinatarios/tabladestinatarios.component';
 
  
@@ -309,7 +311,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalservicioexternoComponent,
         TablacuentasbancariasComponent,
         ModalcuentabancariaComponent,
-        TabladestinatariosComponent
+        TabladestinatariosComponent,
+        ModaldestinatarioComponent
     ],
     exports:[
         ModalBasicComponent
@@ -346,7 +349,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         BancoService,
         ServiciosexternosService,
         ValidacionService,
-        DestinatarioService
+        DestinatarioService,
+        TipodocumentoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

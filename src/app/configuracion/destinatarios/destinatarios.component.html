@@ -1,14 +1,14 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Destinatarios</h4>
-        <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()">
-            <i class="ti-plus"></i> Agregar Nuevo Destinatario</button>
+        <!-- <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Destinatario</button> -->
     </div>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
+                <!-- <div class="card-block">
                     <p>Tenemos los destinatarios a quienes les hacemos transferencias o consignaciones</p>
 
                     <div class="table-responsive">
@@ -41,13 +41,15 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
+
+                <app-tabladestinatarios></app-tabladestinatarios>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario"
     #ModalDestinatario>
     <div class="app-modal-header">
@@ -100,16 +102,6 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="row">                
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input class="form-control" name="Nombre" type="text" placeholder="Nombre Destinatario"
-                            maxlength="40" onkeypress="return event.charCode >= 65  && event.charCode <= 90 || event.charCode >= 97 && event.charCode <= 122 || event.charCode == 32"
-                            [(ngModel)]="DestinatarioModel.Nombre" required [disabled]="DestinatarioModel.Id_Destinatario == '' && DestinatarioModel.Tipo_Documento == ''">
-                    </div>
-                </div> 
-            </div>-->
             <div class="row" *ngIf="frame" style="width:640px;height:390px">
                 <div class="col-md-12">
                     <div class="form-group">
@@ -187,32 +179,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <!--<table>
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"></th>
-                                                <th scope="col">Otra Cuenta</th>
-                                                <th scope="col">Observación</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td width="5%">
-                                                    <input type="checkbox" name="checkeo_{{i}}" id="checkeo_{{i}}"
-                                                        (change)="verificarChequeo(i,$event.target.checked)">
-                                                </td>
-                                                <td width="15%">
-                                                    <input disabled class="form-control" type="text" id="Otra_Cuenta_Destinatario{{i}}"
-                                                        name="Otra_Cuenta_Destinatario{{i}}" [(ngModel)]="item.Otra_Cuenta">
-                                                </td>
-                                                <td width="15%">
-                                                    <input disabled class="form-control" type="text" id="Observacion_Destinatario{{i}}"
-                                                        name="Observacion_Destinatario{{i}}" [(ngModel)]="item.Observacion">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                    </table>-->
                                 </td>
                             </tr>
                         </tbody>
@@ -422,4 +388,4 @@
 <swal #duplicateSwal title="Conflicto" text="La identificación utilizada ya se encuentra registrada en la base de datos."
     type="error">
 </swal>
-<swal #confirmacionSwal title="" text="" type=""></swal>
+<swal #confirmacionSwal title="" text="" type=""></swal> -->

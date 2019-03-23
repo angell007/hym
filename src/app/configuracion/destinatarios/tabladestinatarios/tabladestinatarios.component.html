@@ -6,7 +6,7 @@
       <div class="col-md-8">
         <div class="pull-right">
           <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
-            (click)="AbrirModal('0')">
+            (click)="AbrirModal('0', 'crear')">
             <i class="ti-plus font-size-15 mr-2"></i> Nuevo Destinatario
           </button>
         </div>
@@ -41,8 +41,8 @@
           <th class="table-filters">
             <select id="pais" class="form-control form-control-sm" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
               <option value="" selected>Seleccione</option>
-              <option value="Activa">Activa</option>
-              <option value="Inactiva">Inactiva</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
             </select>
           </th>
           <th class="table-filters"></th>
@@ -73,7 +73,7 @@
               <div ngbDropdown class="dropdown-primary">
                 <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
                 <div ngbDropdownMenu>
-                  <a class="dropdown-item waves-light waves-effect caja-botones accionable">
+                  <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(d.Id_Destinatario, 'editar')">
                     <i class="ti-pencil text-warning"></i> Editar</a>
                   <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoDestinatario(d.Id_Cuenta_Bancaria)"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
@@ -99,7 +99,7 @@
     </div>
   </div>
   
-  <!-- <app-modalcuentabancaria
+  <app-modaldestinatario
     [AbrirModal]="AbrirModalCrear.asObservable()"
     (ActualizarTabla)="ConsultaFiltrada()">
-  </app-modalcuentabancaria> -->
+  </app-modaldestinatario>
