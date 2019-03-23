@@ -64,6 +64,7 @@ import { MonedaService } from './shared/services/monedas/moneda.service';
 import { BancoService } from './shared/services/bancos/banco.service';
 import { ServiciosexternosService } from './shared/services/serviciosexternos/serviciosexternos.service';
 import { ValidacionService } from './shared/services/validaciones/validacion.service';
+import { DestinatarioService } from './shared/services/destinatarios/destinatario.service';
 
 //MODALES
 import { ModalpermisojefeComponent } from './simplecomponents/modalpermisojefe/modalpermisojefe.component';
@@ -344,7 +345,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         MonedaService,
         BancoService,
         ServiciosexternosService,
-        ValidacionService
+        ValidacionService,
+        DestinatarioService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

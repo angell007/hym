@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
+import { DestinatarioService } from '../../../shared/services/destinatarios/destinatario.service';
 
 @Component({
   selector: 'app-tabladestinatarios',
@@ -36,7 +37,8 @@ export class TabladestinatariosComponent implements OnInit {
   }
 
   constructor(private generalService: GeneralService,
-              private swalService:SwalService) 
+              private swalService:SwalService,
+              private destinatarioService:DestinatarioService) 
   {
     this.RutaGifCargando = generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -97,7 +99,7 @@ export class TabladestinatariosComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this.destinatarioService.getDestinatarios(p).subscribe((data:any) => {
+    this.destinatarioService.getListaDestinatarios(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.Destinatarios = data.query_data;
         this.TotalItems = data.numReg;
