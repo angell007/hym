@@ -24,7 +24,7 @@ export class DestinatarioService {
   }
 
   saveDestinatario(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'/guardar_destinatario.php', datos);
+    return this.client.post(this._rutaBase+'/guardar_destinatario_nuevo.php', datos);
   }
 
   editDestinatario(data:FormData):Observable<any>{

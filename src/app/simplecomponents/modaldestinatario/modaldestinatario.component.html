@@ -93,7 +93,7 @@
                                   <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
                                       [(ngModel)]="item.Id_Banco" required (change)="SetIdentificadorCuenta($event.target.value, i)">
                                       <option value="" selected>Seleccione Banco</option>
-                                      <option *ngFor="let bc of BancosCuentas[i].Bancos; let i=index" [value]="bc.Id_Banco">{{bc.Nombre}}</option>
+                                      <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">{{bc.Nombre}}</option>
                                   </select>
                               </td>
                               <td width="15%">
@@ -103,7 +103,7 @@
                                   </select>
                               </td>
                               <td class="text-center" style="width:5%;">
-                                      <i class="ti-trash" style="color:red" (confirm)="EliminarCuentaDestinatario(i)"
+                                      <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
                                   [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
                                       </i>
                               </td>

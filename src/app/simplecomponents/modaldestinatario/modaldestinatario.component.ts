@@ -8,6 +8,7 @@ import { DestinatarioService } from '../../shared/services/destinatarios/destina
 import { TipodocumentoService } from '../../shared/services/tiposdocumento/tipodocumento.service';
 import { BancoService } from '../../shared/services/bancos/banco.service';
 import { Position } from 'ngx-perfect-scrollbar';
+import { isArray } from 'util';
 
 @Component({
   selector: 'app-modaldestinatario',
@@ -47,7 +48,7 @@ export class ModaldestinatarioComponent implements OnInit {
   public openSubscription:any;
   public Editar:boolean = false;
   public SePuedeAgregarMasCuentas:boolean = false;
-  public TipoEdicion:string = 'Normal';
+  public accion:string = 'crear';
 
   public DestinatarioModel:DestinatarioModel = new DestinatarioModel();
 
@@ -68,7 +69,7 @@ export class ModaldestinatarioComponent implements OnInit {
       
       if (data.id_destinatario != "0" && data.accion == 'editar') {
         this.Editar = true;
-        this.TipoEdicion = data.accion;
+        this.accion = data.accion;
         let p = {id_destinatario:data.id_destinatario};
 
         this.destinatarioService.getDestinatario(p).subscribe((d:any) => {
@@ -84,7 +85,7 @@ export class ModaldestinatarioComponent implements OnInit {
         });
       }else if (data.id_destinatario != "0" && data.accion == 'editar cuentas') {
         this.Editar = true;
-        this.TipoEdicion = data.accion;
+        this.accion = data.accion;
         let p = {id_destinatario:data.id_destinatario};
         
         this.destinatarioService.getDestinatario(p).subscribe((d:any) => {
@@ -98,12 +99,14 @@ export class ModaldestinatarioComponent implements OnInit {
             this.swalService.ShowMessage(d);
           }          
         });
-      }else if (data.id_destinatario != "0" && data.accion == 'crear'){
+      }else if (data.id_destinatario != "0" && data.accion == 'crear especial'){
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
+        this.accion = data.accion;
         this.ModalDestinatario.show();
       }else if (data.id_destinatario == "0" && data.accion == 'crear'){
         this.Editar = false;
+        this.accion = data.accion;
         this.ModalDestinatario.show();
       }
     });
@@ -142,7 +145,82 @@ export class ModaldestinatarioComponent implements OnInit {
   GuardarDestinatario(){
     this.DestinatarioModel.Cuentas = this.Lista_Cuentas_Destinatario;
     console.log(this.DestinatarioModel);
+
+    if (!this.ValidateBeforeSubmit()) {
+      return;
+    }
+
+    this.LimpiarBancosModelo();
+
+    let data = new FormData();
+    let modelo = this.generalService.normalize(JSON.stringify(this.DestinatarioModel));
+    data.append('modelo', modelo);
+
+    this.destinatarioService.saveDestinatario(data).subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.CerrarModal();
+        switch (this.accion) {
+          case 'crear':
+            this.ActualizarTabla.emit();
+            break;
+
+          case 'crear especial':
+            this.IncluirDestinatarioEnTransferencia.emit();
+            break;
+
+          case 'editar':
+            this.ActualizarTabla.emit();
+            break;
+
+          case 'editar cuentas':
+            this.ActualizarCuentasDestinatario.emit();
+            break;
+        
+          default:
+            break;
+        }
+      }
+
+      this.swalService.ShowMessage(data);
+    });
     
+  }
+
+  ValidateBeforeSubmit(){
+    if (!this.validacionService.validateString(this.DestinatarioModel.Nombre, 'Nombre Destinatario')) {
+      return false;
+    }else if (!this.validacionService.validateString(this.DestinatarioModel.Tipo_Documento, 'Tipo de documento')) {
+      return false;
+    }else if (!this.validacionService.validateNumber(this.DestinatarioModel.Id_Pais, 'Pais')) {
+      return false;
+    }else if (!this.validacionService.validateString(this.DestinatarioModel.Id_Destinatario, 'Numero Identificacion')) {
+      return false;
+    }else if (!this.ValidateCuentas()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  ValidateCuentas(){
+    for (let i = 0; i < this.Lista_Cuentas_Destinatario.length; i++) {
+      for (const key in this.Lista_Cuentas_Destinatario[i]) {        
+        if (!isArray(this.Lista_Cuentas_Destinatario[i][key]) && typeof(this.Lista_Cuentas_Destinatario[i][key]) != 'boolean' ) {          
+          if (this.Lista_Cuentas_Destinatario[i][key] == '') {            
+            this.swalService.ShowMessage(['warning', 'Faltan Datos', 'Faltan datos en la(s) cuenta(s) actuales, revise por favor!']);
+            return false;
+          }
+        }
+      }      
+    }
+
+    return true;
+  }
+
+  LimpiarBancosModelo(){
+    for (let i = 0; i < this.DestinatarioModel.Cuentas.length; i++) {
+      this.DestinatarioModel.Cuentas[i].Bancos = [];      
+    }
   }
 
   CerrarModal(){
@@ -152,6 +230,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
   LimpiarModelo(){
     this.DestinatarioModel = new DestinatarioModel();
+    this.Lista_Cuentas_Destinatario = [];
   }
 
   FiltrarDatosNacionalidad(){
@@ -264,7 +343,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
   GetBancosPais(cuentaIndex:string){ 
     console.log(cuentaIndex);
-    console.log(this.BancosCuentas);
+    console.log(this.Lista_Cuentas_Destinatario);
     let index_bancos_cuenta = this.BancosCuentas.findIndex(x => x.cuenta_index == cuentaIndex);
     let id_pais = this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Pais;
 
@@ -425,7 +504,7 @@ export class ModaldestinatarioComponent implements OnInit {
       return;
     }
     
-    this.BancosCuentas[posicion].splice(posicion, 1);
+    //this.BancosCuentas[posicion].splice(posicion, 1);
     this.Lista_Cuentas_Destinatario.splice(posicion, 1);
 
     this.SePuedeAgregarMasCuentas = true;
