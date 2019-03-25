@@ -63,7 +63,7 @@
         </tr>
       </thead>
       <tbody *ngIf="!Cargando">                                            
-        <tr *ngFor="let d of Destinatarios; let i = index;" [ngClass]="{'bg-inactive':d.Estado == 'Inactiva'}">
+        <tr *ngFor="let d of Destinatarios; let i = index;" [ngClass]="{'bg-inactive':d.Estado == 'Inactivo'}">
           <td class="custom-cell">{{d.Id_Destinatario}}</td>
           <td class="custom-cell">{{d.Nombre}}</td>
           <td class="custom-cell">{{d.Nombre_Pais}}</td>
@@ -75,8 +75,8 @@
                 <div ngbDropdownMenu>
                   <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(d.Id_Destinatario, 'editar')">
                     <i class="ti-pencil text-warning"></i> Editar</a>
-                  <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoDestinatario(d.Id_Cuenta_Bancaria)"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta cuenta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                  <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoDestinatario(d.Id_Destinatario)"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
                       <i [ngClass]="{'ti-na text-danger':d.Estado == 'Activo', 'ti-back-right text-success':d.Estado == 'Inactivo'}"></i> 
                       {{d.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}</a>
                 </div>

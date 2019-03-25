@@ -47,8 +47,9 @@ export class ModaldestinatarioComponent implements OnInit {
 
   public openSubscription:any;
   public Editar:boolean = false;
-  public SePuedeAgregarMasCuentas:boolean = false;
+  public SePuedeAgregarMasCuentas:boolean = true;
   public accion:string = 'crear';
+  public MensajeGuardar:string = 'Se dispone a guardar este destinatario';
 
   public DestinatarioModel:DestinatarioModel = new DestinatarioModel();
 
@@ -65,46 +66,55 @@ export class ModaldestinatarioComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
       
       if (data.id_destinatario != "0" && data.accion == 'editar') {
         this.Editar = true;
         this.accion = data.accion;
         let p = {id_destinatario:data.id_destinatario};
+        this.MensajeGuardar = 'Se dispone a actualizar este destinatario';
 
         this.destinatarioService.getDestinatario(p).subscribe((d:any) => {
-          if (d.codigo == 'success') {
-            this.DestinatarioModel = d.query_data.destinatario;
-            this.Lista_Cuentas_Destinatario = d.query_data.cuentas;
-            this.GetBancosCuentas();
-            this.ModalDestinatario.show();  
-          }else{
-            
-            this.swalService.ShowMessage(d);
-          }          
+          setTimeout(() => {
+            if (d.codigo == 'success') {
+              this.AsignarDatosModelo(d.query_data.destinatario);
+              this.Lista_Cuentas_Destinatario = d.query_data.cuentas;
+              this.GetBancosCuentas();
+              this.SePuedeAgregarMasCuentas = true;
+              this.ModalDestinatario.show();  
+            }else{
+              
+              this.swalService.ShowMessage(d);
+            }        
+          }, 1500);              
         });
       }else if (data.id_destinatario != "0" && data.accion == 'editar cuentas') {
         this.Editar = true;
         this.accion = data.accion;
         let p = {id_destinatario:data.id_destinatario};
+        this.MensajeGuardar = 'Se dispone a actualizar este destinatario';
         
         this.destinatarioService.getDestinatario(p).subscribe((d:any) => {
-          if (d.codigo == 'success') {
-            this.DestinatarioModel = d.query_data.destinatario;
-            this.Lista_Cuentas_Destinatario = d.query_data.cuentas;
-            this.GetBancosCuentas();
-            this.ModalDestinatario.show();  
-          }else{
-            
-            this.swalService.ShowMessage(d);
-          }          
+          setTimeout(() => {
+            if (d.codigo == 'success') {
+              this.AsignarDatosModelo(d.query_data.destinatario);
+              this.Lista_Cuentas_Destinatario = d.query_data.cuentas;
+              this.GetBancosCuentas();
+              this.SePuedeAgregarMasCuentas = true;
+              this.ModalDestinatario.show();  
+            }else{
+              
+              this.swalService.ShowMessage(d);
+            } 
+          }, 1500);         
         });
       }else if (data.id_destinatario != "0" && data.accion == 'crear especial'){
+        this.MensajeGuardar = 'Se dispone a guardar este destinatario';
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
         this.accion = data.accion;
         this.ModalDestinatario.show();
       }else if (data.id_destinatario == "0" && data.accion == 'crear'){
+        this.MensajeGuardar = 'Se dispone a guardar este destinatario';
         this.Editar = false;
         this.accion = data.accion;
         this.ModalDestinatario.show();
@@ -134,55 +144,95 @@ export class ModaldestinatarioComponent implements OnInit {
 
   GetBancosCuentas(){
     if (this.Lista_Cuentas_Destinatario.length > 0) {
+      
       this.Lista_Cuentas_Destinatario.forEach((cta,i) => {
         this.GetBancosPais(i);      
-        this.CheckCuentasVenezolanas(i);
+        //this.CheckCuentasVenezolanas(i);
       });
-    }
+    }    
+  }
+
+  AsignarDatosModelo(data:any){
+    this.DestinatarioModel.Id_Destinatario = data.Id_Destinatario;
+    this.DestinatarioModel.Nombre = data.Nombre;
+    this.DestinatarioModel.Tipo_Documento = data.Tipo_Documento;
+    this.DestinatarioModel.Estado = data.Estado;
+    this.DestinatarioModel.Id_Pais = data.Id_Pais;
     
+    this.FiltrarDatosNacionalidad(true);
   }
 
   GuardarDestinatario(){
     this.DestinatarioModel.Cuentas = this.Lista_Cuentas_Destinatario;
-    console.log(this.DestinatarioModel);
 
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
 
     this.LimpiarBancosModelo();
+    this.DestinatarioModel = this.generalService.limpiarString(this.DestinatarioModel);
 
     let data = new FormData();
     let modelo = this.generalService.normalize(JSON.stringify(this.DestinatarioModel));
     data.append('modelo', modelo);
 
-    this.destinatarioService.saveDestinatario(data).subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.CerrarModal();
-        switch (this.accion) {
-          case 'crear':
-            this.ActualizarTabla.emit();
-            break;
-
-          case 'crear especial':
-            this.IncluirDestinatarioEnTransferencia.emit();
-            break;
-
-          case 'editar':
-            this.ActualizarTabla.emit();
-            break;
-
-          case 'editar cuentas':
-            this.ActualizarCuentasDestinatario.emit();
-            break;
-        
-          default:
-            break;
+    if (this.Editar) {
+      this.destinatarioService.editDestinatario(data)
+      .catch(error => { 
+        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+        return this.handleError(error);
+      })
+      .subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          switch (this.accion) {
+            case 'editar':
+              this.ActualizarTabla.emit();
+              break;
+  
+            case 'editar cuentas':
+            let objRespuesta = {willdo:"actualizar", id_destinatario:this.DestinatarioModel.Id_Destinatario};
+              this.ActualizarCuentasDestinatario.emit(objRespuesta);
+              break;
+          
+            default:
+              break;
+          }
+          
+          this.CerrarModal();
         }
-      }
+  
+        this.swalService.ShowMessage(data);
+      });
+    }else{
+      this.destinatarioService.saveDestinatario(data)
+      .catch(error => { 
+        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+        return this.handleError(error);
+      })
+      .subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          switch (this.accion) {
+            case 'crear':
+              this.ActualizarTabla.emit();
+              break;
+  
+            case 'crear especial':
+              let objRespuesta = {willdo:"actualizar", id_destinatario:this.DestinatarioModel.Id_Destinatario};
+              this.IncluirDestinatarioEnTransferencia.emit(objRespuesta);
+              break;
+          
+            default:
+              break;
+          }
+          
+          this.CerrarModal();
+        }
+  
+        this.swalService.ShowMessage(data);
+      });
+    } 
 
-      this.swalService.ShowMessage(data);
-    });
+    
     
   }
 
@@ -224,6 +274,11 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   CerrarModal(){
+    if (this.accion == 'crear especial') {
+      let objRespuesta = {willdo:"limpiar campo id dest", id_destinatario:''};
+      this.IncluirDestinatarioEnTransferencia.emit(objRespuesta);
+    }
+
     this.LimpiarModelo();
     this.ModalDestinatario.hide();
   }
@@ -231,11 +286,10 @@ export class ModaldestinatarioComponent implements OnInit {
   LimpiarModelo(){
     this.DestinatarioModel = new DestinatarioModel();
     this.Lista_Cuentas_Destinatario = [];
+    this.SePuedeAgregarMasCuentas = true;
   }
 
-  FiltrarDatosNacionalidad(){
-    console.log(this.DestinatarioModel.Id_Pais);
-    
+  FiltrarDatosNacionalidad(conservarTipoDocumento:boolean = false){    
     if (this.DestinatarioModel.Id_Pais == '') {
       this.TiposDocumento = [];
     }else{
@@ -244,7 +298,8 @@ export class ModaldestinatarioComponent implements OnInit {
       this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data:any) => {
         if (data.codigo == 'success') {
           this.TiposDocumento = data.query_data;
-          this.DestinatarioModel.Tipo_Documento = '';
+          if(!conservarTipoDocumento)
+            this.DestinatarioModel.Tipo_Documento = '';
 
         }else{
 
@@ -258,14 +313,6 @@ export class ModaldestinatarioComponent implements OnInit {
 
   ValidarCedula(){
     if (this.DestinatarioModel.Id_Destinatario != '') {
-      // let parameters = {id:this.DestinatarioModel.Id_Destinatario};
-      // this.validacionService.ValidateIdentificacion(parameters).subscribe((data:any)=>{
-      //   if(data == 1){
-      //     this.swalService.ShowMessage(['warning', 'Alerta', 'El número de identificación que intenta registrar ya se encuentra en la base de datos!']);
-      //     this.DestinatarioModel.Id_Destinatario = ''; 
-      //   }
-      // });
-
       let id = this.DestinatarioModel.Id_Destinatario;
       this.generalService.checkIdentificacion(id).subscribe((data:any) => {
         if (data.codigo != 'success') {
@@ -315,10 +362,20 @@ export class ModaldestinatarioComponent implements OnInit {
 
   AgregarOtraCuenta(){
     let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
-    console.log(this.Lista_Cuentas_Destinatario);
-    console.log(this.SePuedeAgregarMasCuentas);
 
-    if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
+    if (longitudCuentas == 0) {
+      
+      let nuevaCuenta = {
+        Id_Pais: '',
+        Id_Banco: '',
+        Id_Tipo_Cuenta: '',
+        Numero_Cuenta: '',
+        Bancos:[],
+        EsVenezolana: false
+      };      
+      this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
+
+    }else if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
       
       let nuevaCuenta = {
         Id_Pais: '',
@@ -341,10 +398,8 @@ export class ModaldestinatarioComponent implements OnInit {
     }
   }
 
-  GetBancosPais(cuentaIndex:string){ 
-    console.log(cuentaIndex);
-    console.log(this.Lista_Cuentas_Destinatario);
-    let index_bancos_cuenta = this.BancosCuentas.findIndex(x => x.cuenta_index == cuentaIndex);
+  GetBancosPais(cuentaIndex:string){
+    //let index_bancos_cuenta = this.BancosCuentas.findIndex(x => x.cuenta_index == cuentaIndex);
     let id_pais = this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Pais;
 
     if (id_pais == '') {
@@ -355,9 +410,8 @@ export class ModaldestinatarioComponent implements OnInit {
       let p = {id_pais:id_pais};
       this.bancoService.getListaBancosByPais(p).subscribe((data:any) => {
         if (data.codigo == 'success') {
-          this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = data.query_data;
-          
-          this.CheckCuentasVenezolanas();
+          this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = data.query_data;          
+          this.CheckCuentasVenezolanas(cuentaIndex);
         }else{
           this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = [];
           this.swalService.ShowMessage(data);
@@ -446,15 +500,6 @@ export class ModaldestinatarioComponent implements OnInit {
     }    
   }
 
-  // RevalidarValores(nroCuenta, index){
-  //   if(nroCuenta == ''){
-  //     if(!this.globales.IsObjEmpty(this.Lista_Cuentas_Destinatario[index])){
-  //       this.Lista_Cuentas_Destinatario[index].Id_Banco = '';
-  //       this.Lista_Cuentas_Destinatario[index].Id_Tipo_Cuenta = '';
-  //     }
-  //   }
-  // }
-
   CheckCuentasVenezolanas(ctaIndex:string = ''){
     let veObj = this.Paises.find(x => x.Nombre == 'Venezuela');
     if (!this.generalService.IsObjEmpty(veObj)) {
@@ -508,5 +553,9 @@ export class ModaldestinatarioComponent implements OnInit {
     this.Lista_Cuentas_Destinatario.splice(posicion, 1);
 
     this.SePuedeAgregarMasCuentas = true;
+  }
+
+  handleError(error: Response) {
+    return Observable.throw(error);
   }
 }

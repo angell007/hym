@@ -10,6 +10,7 @@ import { log } from 'util';
 import { CajaService } from '../shared/services/caja/caja.service';
 import { SwalService } from '../shared/services/swal/swal.service';
 import { TrasladocajaService } from '../shared/services/traslados_caja/trasladocaja.service';
+import { ToastService } from '../shared/services/toasty/toast.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -154,9 +155,11 @@ export class CommonLayoutComponent implements OnInit {
                 private http: HttpClient, 
                 private globales: Globales, 
                 private toastyService: ToastyService,
+                private toastyConfig:ToastyConfig,
                 private cajaService:CajaService,
                 private swalService:SwalService,
-                private trasladoCajaService:TrasladocajaService) {
+                private trasladoCajaService:TrasladocajaService,
+                private toastService:ToastService) {
                     
         this.app = {
             layout: {
@@ -168,6 +171,8 @@ export class CommonLayoutComponent implements OnInit {
                 searchActived: false
             }
         };
+
+        this.toastyConfig.theme = 'bootstrap';
 
         this.headerThemes = ['header-default', 'header-primary', 'header-info', 'header-success', 'header-danger', 'header-dark'];
         this.changeHeader = changeHeader;
@@ -187,6 +192,9 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas(); 
+        
+        this.SetOficina();
+        this.SetCaja();
     }
 
     startTimer() {
@@ -202,6 +210,10 @@ export class CommonLayoutComponent implements OnInit {
     ngOnInit() {
         this.swalService.event.subscribe((data:any) => {
             this.ShowSwal(data.type, data.title, data.msg);
+        });
+
+        this.toastService.event.subscribe((data:any) => {
+            this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 
         switch (this.user.Id_Perfil) {
@@ -243,25 +255,14 @@ export class CommonLayoutComponent implements OnInit {
             localStorage.setItem('Perfil', this.user.Id_Perfil);
 
             //if (this.user.Id_Perfil == 2) {
-                if (!localStorage.getItem("Oficina")) {
-                    this.modalOficinaCaja.show();
-                }
-                
-                this.oficina_seleccionada = localStorage.getItem("Oficina");
-                if (this.oficina_seleccionada == '""') {
-                    console.log("vacio");
-                    
-                }
-                if (this.oficina_seleccionada === undefined || this.oficina_seleccionada === null || this.oficina_seleccionada === '') { 
-                    this.modalOficinaCaja.show();
-                }else{
-                    
+                if (this.oficina_seleccionada == '') {
+                    this.modalOficinaCaja.show();                    
+                }else{                    
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                 }
-                
-                this.caja_seleccionada = localStorage.getItem("Caja");
-                if (this.caja_seleccionada === undefined || this.caja_seleccionada === null || this.caja_seleccionada === '') {
+
+                if (this.caja_seleccionada == '') {
                     this.modalOficinaCaja.show();
                 }else{
                     this.SetNombreCaja(this.caja_seleccionada);
@@ -982,6 +983,31 @@ this.ModalResumenCuenta.show();
         this.alertSwal.show();
     }
 
+    ShowToasty(data:Array<string>, tipo:string = 'default', duracion:number = 3000){
+
+        let toastOptions = {
+            title: data[0],
+            msg: data[1],
+            showClose: true,
+            timeout: duracion,
+            onAdd: (toast:ToastData) => {
+                console.log('Toast ' + toast.id + ' has been added!');
+            },
+            onRemove: function(toast:ToastData) {
+                console.log('Toast ' + toast.id + ' has been removed!');
+            }
+        }        
+
+        switch (tipo) {
+            case 'default': this.toastyService.default(toastOptions); break;
+            case 'info': this.toastyService.info(toastOptions); break;
+            case 'success': this.toastyService.success(toastOptions); break;
+            case 'wait': this.toastyService.wait(toastOptions); break;
+            case 'error': this.toastyService.error(toastOptions);  break;
+            case 'warning': this.toastyService.warning(toastOptions); break;
+        }
+    }
+
     SetNombreCaja(idCaja:string){
         this.cajaService.getNombreCaja(idCaja).subscribe((data:any) => {
             this.NombreCaja = data.caja;
@@ -1023,6 +1049,27 @@ this.ModalResumenCuenta.show();
                 this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false]);
             }
         });
+    }
+
+    SetOficina(){
+        if (localStorage.getItem("Oficina") && localStorage.getItem("Oficina") != '') {
+            this.oficina_seleccionada = localStorage.getItem("Oficina");          
+        }else{
+            this.oficina_seleccionada = '';
+        }
+    }
+
+    SetCaja(){
+        if (localStorage.getItem("Caja") && localStorage.getItem("Caja") != '') {
+            this.caja_seleccionada = localStorage.getItem("Caja");
+        }else{
+            this.caja_seleccionada = '';       
+        }
+    }
+
+    TestToast(){
+        let d = {textos:['Prueba', 'Mensaje Prueba'], tipo:'warning', duracion:2000};
+        this.toastService.ShowToast(d);
     }
 
 }

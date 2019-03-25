@@ -133,7 +133,7 @@ export class TabladestinatariosComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoCuenta(idDestinatario:string){
+  CambiarEstadoDestinatario(idDestinatario:string){
     let datos = new FormData();
     datos.append("id_destinatario", idDestinatario);
     this.destinatarioService.cambiarEstadoDestinatario(datos).subscribe((data:any) => {

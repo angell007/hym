@@ -66,6 +66,7 @@ import { ServiciosexternosService } from './shared/services/serviciosexternos/se
 import { ValidacionService } from './shared/services/validaciones/validacion.service';
 import { DestinatarioService } from './shared/services/destinatarios/destinatario.service';
 import { TipodocumentoService } from './shared/services/tiposdocumento/tipodocumento.service';
+import { ToastService } from './shared/services/toasty/toast.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -198,14 +199,14 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ChartsModule,
         NvD3Module,
         StickyModule,
-        ToastyModule,
+        ToastyModule.forRoot(),
         NgxMasonryModule,
         ScrollToModule.forRoot(),
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-outline-primary',
-            cancelButtonClass: 'btn btn-outline-danger'  
+            confirmButtonClass: 'btn btn-outline-primary btn-rounded',
+            cancelButtonClass: 'btn btn-outline-danger btn-rounded'  
           }),
         NgxMaskModule.forRoot(),
         NgxCurrencyModule,
@@ -350,7 +351,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ServiciosexternosService,
         ValidacionService,
         DestinatarioService,
-        TipodocumentoService
+        TipodocumentoService,
+        ToastService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

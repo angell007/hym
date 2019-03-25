@@ -117,9 +117,10 @@
   </div>
   <div class="app-modal-footer">
       <div class="text-right">
-          <button id="BotonGuardarDestinatario" class="btn btn-primary btn-sm" [disabled]="!FormCrearDestinatario.valid"
-              [swal]="{title : '¿Está Seguro?', text: 'Se dispone actualizar este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-              (confirm)="GuardarDestinatario()">Guardar
+        <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
+          <button id="BotonGuardarDestinatario" class="btn btn-outline-primary btn-rounded btn-sm" [disabled]="!FormCrearDestinatario.valid"
+              [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="GuardarDestinatario()">{{Editar ? 'Actualizar' : 'Guardar'}}
           </button>
       </div>
   </div>

@@ -755,40 +755,6 @@
 <swal #mensajeSwal title="" text="" type="">
 </swal>
 
-<!--<app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
-    <div class="app-modal-header" style="margin: 0 auto;">
-        <h4>Cambio de Cuenta</h4>
-        <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-            <form #FormCambiarBanco="ngForm">
-                <div class="col-md-12 ">
-                    <label>Banco Venezolanos</label>
-                    <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" ngModel required class="form-control" (change)="VerificarSaldo($event.target.value)">
-                        <option value=""> Seleccione Banco</option>
-                        <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
-                            ({{banco.Numero_Cuenta}}) </option>
-                    </select>
-                </div>
-                <hr>    
-                <div class="col-md-12 ">
-                    <label>Saldo Cuenta Bancaria</label>
-                    <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" ngModel="{{SaldoInicialBanco}}"
-                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
-                </div>
-    
-            </form>
-        </div>
-    <div class="app-modal-footer" style="margin: 0 auto;">
-        <div class="text-center">
-            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormCambiarBanco , ModalCambiarBanco)">Iniciar
-            </button>
-        </div>
-    </div>
-</app-modal-basic>-->
-
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
         <div class="app-modal-header" style="margin: 0 auto;">
             <h4>Cambio de Cuenta</h4>
@@ -1048,3 +1014,5 @@
 <app-modalpermisojefe></app-modalpermisojefe>
 
 <swal #alertSwal type="" title="" text=""></swal>
+
+<ng2-toasty [position]="'bottom-right'"></ng2-toasty>

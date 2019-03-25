@@ -28,11 +28,18 @@ export class DestinatarioService {
   }
 
   editDestinatario(data:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'/editar_destinatario.php', data);
+    return this.client.post(this._rutaBase+'/editar_destinatario_nuevo.php', data);
   }
 
   cambiarEstadoDestinatario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/cambiar_estado_destinatario.php', datos);
   }
 
+  filtrarDestinatario(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params:p});
+  }
+
+  validarExistenciaDestinatario(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params:p})
+  }
 }

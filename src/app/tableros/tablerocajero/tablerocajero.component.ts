@@ -14,6 +14,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
 import { CajeroService } from '../../shared/services/cajeros/cajero.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { PermisoService } from '../../shared/services/permisos/permiso.service';
+import { DestinatarioService } from '../../shared/services/destinatarios/destinatario.service';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -25,10 +26,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   public eventsSubject: Subject<any> = new Subject<any>();
   public openModalGiro: Subject<any> = new Subject<any>();
+  public AbrirModalDestinatario:Subject<any> = new Subject<any>();
   public permisoSubscription:any;
 
-  @ViewChild('ModalDestinatario') ModalDestinatario: any;
-  //@ViewChild('ModalRemitente') ModalRemitente: any;
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('warnSwal') warnSwal: any;
   @ViewChild('warnTotalSwal') warnTotalSwal: any;
@@ -483,7 +483,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               private generalService:GeneralService,
               private cajeroService:CajeroService,
               private swalService:SwalService,
-              private permisoService:PermisoService) { }
+              private permisoService:PermisoService,
+              private destinatarioService:DestinatarioService) { }
 
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
@@ -496,9 +497,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public boolNombreR:boolean = false;
   public boolTelefonoR:boolean = false;
 
-  ngOnInit() {
-    console.log(this.permisoSubscription);
-    
+  ngOnInit() {   
 
     this.AsignarMonedas();
     this.AsignarMonedasApertura();
@@ -1456,30 +1455,36 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       });
     }
 
-    EditarDest(id, pos) {
-
-      this.http.get(this.globales.ruta + 'php/destinatarios/get_detalle_destinatario.php', { params: { id_destinatario: id } })
-      .subscribe((data: any) => {
-        this.DestinatarioEditar = true;
-        this.DestinatarioModel = data.destinatario;
-        this.FiltrarDatosNacionalidad(this.DestinatarioModel.Id_Pais);
-        this.Lista_Cuentas_Destinatario = data.cuentas;
+    EditarDest2(id:string, accion:string, posicionDestinatario:string) {
+      if (accion == 'crear especial') {
         
-          
-        for (var i = 0; i < this.Lista_Cuentas_Destinatario.length; i++) {
-          this.Bancos_Pais(this.Lista_Cuentas_Destinatario[i].Id_Pais, i, true);
+        let v = this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino;
+
+        if (v == '') {
+          return;
         }
 
-        this.SePuedeAgregarMasCuentas = true;
-  
-        this.Identificacion = id;
-        //this.AgregarFila();
-        //this.Bancos_Pais(2, 1);
-        this.ModalDestinatario.show();
-        //this.posiciontemporal = pos;
-        
-        console.log(this.DestinatarioEditar);
-      });
+        let p =  {id_destinatario:v};
+        this.destinatarioService.validarExistenciaDestinatario(p).subscribe((data)=>{
+      
+          if (data == 0) {
+            var longitud = this.LongitudCarateres(v);
+            if (longitud > 6) {
+              this.PosicionDestinatarioActivo = posicionDestinatario;
+              let objModal = {id_destinatario:id, accion:accion};
+              this.AbrirModalDestinatario.next(objModal);
+
+            }else if(longitud < 6){
+    
+            }
+          }
+        });
+      }else if(accion == 'editar cuentas'){
+
+        this.PosicionDestinatarioActivo = posicionDestinatario;
+        let objModal = {id_destinatario:id, accion:accion};
+        this.AbrirModalDestinatario.next(objModal);
+      }      
     }
 
     ValidateTransferenciaBeforeSubmit(){
@@ -2667,9 +2672,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
-    CargarDatos(data:any){
-      console.log(data);
-      
+    CargarDatos(data:any){      
       if (data.tipo == 'remitente') {
         
         this.Remitente_Giro = data.model;
@@ -2701,8 +2704,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (this.permisoSubscription == undefined) {
           this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
             this.DeshabilitarComisionGiro = !d;
-            console.log("codigo respuesta");
-            console.log(d);
             
             this.permisoSubscription.unsubscribe();
             this.permisoSubscription = undefined;
@@ -2909,7 +2910,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
 
       if (id_funcionario == '') {
-        //this.ShowSwal('warning', 'Alerta', 'Seleccione un corresponsal bancario!');
         console.log("No hay funcionario asignado para corresponsal bancario!");
         return;
       }
@@ -3547,34 +3547,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       };
     }
 
-    CerrarModalDestinatario(){
-      this.ModalDestinatario.hide();
-      this.ReiniciarDatosDestinatario();
-    }
-
-    ReiniciarDatosDestinatario(){
-      this.DestinatarioModel = {
-        Id_Destinatario: '',
-        Nombre: '',
-        Detalle: '',
-        Estado: 'Activo',
-        Tipo_Documento: '',
-        Id_Pais: ''
-      };
-  
-      this.Lista_Cuentas_Destinatario = [{
-        Id_Pais: '',
-        Id_Banco: '',
-        Bancos: [],
-        Id_Tipo_Cuenta: '',
-        Numero_Cuenta: '',
-        EsVenezolana: false
-      }];
-  
-      this.TipoDocumentoFiltrados = [];
-      this.SePuedeAgregarMasCuentas = false;
-    }
-
     CambiarTipoPersonas(){
       if (this.TransferenciaModel.Forma_Pago == 'Credito') {
         this.TransferenciaModel.Tipo_Origen = 'Tercero';
@@ -3732,41 +3704,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  CrearDestinatrioModal(value, pos) {
-
-    this.PosicionDestinatarioActivo = pos;
-    let v = this.ListaDestinatarios[pos].Numero_Documento_Destino;
-
-    if(v == ''){
-      return;
-    }
-
-    this.http.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params: {id_destinatario:v}}).subscribe((data)=>{
-      
-      if (data == 0) {
-        var longitud = this.LongitudCarateres(v);
-        if (longitud > 6) {
-          this.DestinatarioModel.Id_Destinatario = v;
-          //this.IdentificacionCrearDestinatario = v;
-          this.ModalDestinatario.show();
-          this.DestinatarioEditar = false;
-          /*this.Id_Destinatario = v;
-          this.Lista_Destinatarios = [{
-            Id_Pais: '',
-            Id_Banco: '',
-            Bancos: [],
-            Id_Tipo_Cuenta: '',
-            Numero_Cuenta: '',
-            Otra_Cuenta: '',
-            Observacion: ''
-          }];*/
-        }else if(longitud < 6){
-
-        }
-      }
-    });
-  }
-
   ValidarCedula(identificacion){
     this.http.get(this.globales.ruta+'/php/destinatarios/validar_identificacion.php', {params:{id:identificacion}}).subscribe((data:any)=>{
       if(data == 1){
@@ -3846,10 +3783,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   AgregarOtraCuenta(){
     let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
-    console.log(this.Lista_Cuentas_Destinatario);
-    console.log(this.SePuedeAgregarMasCuentas);
-    
-        
 
     if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
       
@@ -4030,35 +3963,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     return Observable.throw(error);
   }
 
-  GuardarDestinatario(formulario: NgForm, modal: any) {
-
-    this.Lista_Cuentas_Destinatario.forEach((element,index) => {
-      element.Bancos = [];
-      if(element.Numero_Cuenta == ""){
-        this.Lista_Cuentas_Destinatario.splice(index,1);
-      }
-    });
-
-    let info = JSON.stringify(this.DestinatarioModel);
-    let destinatario = JSON.stringify(this.Lista_Cuentas_Destinatario);
-    let datos = new FormData();
-
-    //datos.append("modulo",'Destinatario');
-    datos.append("datos", info);
-    datos.append("destinatario", destinatario);
-    this.http.post(this.globales.ruta + 'php/destinatarios/guardar_destinatario.php', datos)
-      .catch(error => {
-        console.error('An error occurred:', error.error);
-        this.errorSwal.show();
-        return this.handleError(error);
-      })
-      .subscribe((data: any) => {
-        this.ShowSwal('success', 'Registro Exitoso', 'Se guardaron los datos correctamente!');
-        this.AsignarDatosDestinatarioNuevo(this.DestinatarioModel.Id_Destinatario);
-        this.CerrarModalDestinatario();
-      });
-  }
-
   AsignarDatosDestinatarioNuevo(id):boolean{
     this.http.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params: {id_destinatario:id, moneda:this.MonedaParaTransferencia.id}}).subscribe((data:any)=>{
 
@@ -4092,6 +3996,43 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
 
     return true;
+  }
+
+  AsignarDatosDestinatario(respuestaModal:any):void{
+    
+    if (respuestaModal.willdo == 'limpiar campo id dest') {
+      this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = '';
+
+    }else if (respuestaModal.willdo == 'actualizar') {
+      let p = {id_destinatario:respuestaModal.id_destinatario, moneda:this.MonedaParaTransferencia.id};
+      this.destinatarioService.filtrarDestinatario(p).subscribe((data:any)=>{
+
+        if (data != '') {
+
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.Nombre;
+          //this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data.Cuentas;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = true;
+        
+          this.PosicionDestinatarioActivo = '';
+        }else{
+
+          this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = [];
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
+
+          this.PosicionDestinatarioActivo = '';
+        }
+      });
+
+    }
   }
 }
 

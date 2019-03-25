@@ -76,7 +76,6 @@ export class GeneralService {
             }
           }
         }
-
         return clean_model;
     
       default:
