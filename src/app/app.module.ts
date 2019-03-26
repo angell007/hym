@@ -68,6 +68,7 @@ import { DestinatarioService } from './shared/services/destinatarios/destinatari
 import { TipodocumentoService } from './shared/services/tiposdocumento/tipodocumento.service';
 import { ToastService } from './shared/services/toasty/toast.service';
 import { CajarecaudoService } from './shared/services/cajarecaudos/cajarecaudo.service';
+import { TipocuentaService } from './shared/services/tiposcuenta/tipocuenta.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -172,6 +173,12 @@ import { TablacuentasbancariasComponent } from './configuracion/cuentasbancarias
 import { TabladestinatariosComponent } from './configuracion/destinatarios/tabladestinatarios/tabladestinatarios.component';
 import { TablacajarecaudosComponent } from './configuracion/cajarecaudos/tablacajarecaudos/tablacajarecaudos.component';
 import { TablaremitenteComponent } from './configuracion/remitente/tablaremitente/tablaremitente.component';
+import { TablatipodocumentoComponent } from './configuracion/tipodocumento/tablatipodocumento/tablatipodocumento.component';
+import { ModaltipodocumentoComponent } from './simplecomponents/modaltipodocumento/modaltipodocumento.component';
+import { ModaltipocuentaComponent } from './simplecomponents/modaltipocuenta/modaltipocuenta.component';
+import { TablatipocuentaComponent } from './configuracion/tipocuenta/tablatipocuenta/tablatipocuenta.component';
+import { TablamonedasComponent } from './configuracion/monedas/tablamonedas/tablamonedas.component';
+import { ModalmonedaComponent } from './simplecomponents/modalmoneda/modalmoneda.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -320,7 +327,13 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaldestinatarioComponent,
         TablacajarecaudosComponent,
         ModalcajarecaudoComponent,
-        TablaremitenteComponent
+        TablaremitenteComponent,
+        TablatipodocumentoComponent,
+        ModaltipodocumentoComponent,
+        ModaltipocuentaComponent,
+        TablatipocuentaComponent,
+        TablamonedasComponent,
+        ModalmonedaComponent
     ],
     exports:[
         ModalBasicComponent
@@ -359,6 +372,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ValidacionService,
         DestinatarioService,
         TipodocumentoService,
+        TipocuentaService,
         ToastService,
         CajarecaudoService
     ],

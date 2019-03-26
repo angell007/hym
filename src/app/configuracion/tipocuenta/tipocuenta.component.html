@@ -1,106 +1,13 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Tipos de cuenta</h4>
-        <button class="pull-right btn btn-info" (click)="ModalCuenta.show()">
-            <i class="ti-plus"></i> Agregar Nueva cuenta</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
-                    <p>Tenemos los tipos de cuenta de nuestra empresa</p>
-                    <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th style="width:80px;"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let tipoCuenta of tiposCuenta">
-                                    <td style="vertical-align: middle;">{{tipoCuenta.Nombre}}</td>
-                                    <td style="vertical-align: middle;" class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCuenta(tipoCuenta.Id_Tipo_Cuenta, ModalEditarCuenta)">
-                                            <i class="ti-pencil"></i>
-                                        </button>                                       
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <app-tablatipocuenta></app-tablatipocuenta>
             </div>
         </div>
     </div>
   </div>
-  
-  <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCuenta" #ModalCuenta>
-    <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
-        <h4>Nuevo Cuenta</h4>
-    </div>
-    <div class="app-modal-body" >
-        <form #FormCuenta="ngForm">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre de la Cuenta" class="form-control" name="Nombre" ngModel required>
-                        
-                    </div>
-                </div>
-                
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormCuenta.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCuenta(FormCuenta, ModalCuenta)">Guardar</button>
-        </div>
-    </div>
-  </app-modal-basic>
- 
-  <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarCuenta" #ModalEditarCuenta>
-    <div class="app-modal-header">
-        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
-            (click)="OcultarFormularios()">X</button>
-        <h4>Editar Cuenta</h4>
-    </div>
-    <div class="app-modal-body">
-        <form #FormEditarCuenta="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre del Cuenta" class="form-control" name="Nombre" ngModel="{{Nombre}}" required>
-                     </div>
-                </div>             
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" [disabled]="!FormEditarCuenta.valid" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este Cuenta' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
-                (confirm)="GuardarCuenta(FormEditarCuenta, ModalEditarCuenta)">Guardar</button>
-        </div>
-    </div>
-  </app-modal-basic>
-  
-  <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el Cuenta" type="error">
-  </swal>
-  
-  <swal #saveSwal title="Cuenta guardado" text="Se ha guardado correctamente el Cuenta" type="success">
-  </swal>
-  
-  <swal #deleteSwal title="Cuenta eliminado" text="Se ha eliminado correctamente el Cuenta" type="success">
-  </swal>

@@ -6,11 +6,14 @@ import { MunicipioService } from '../../../shared/services/municipio/municipio.s
 import { DocumentoService } from '../../../shared/services/documento/documento.service';
 import { GrupoterceroService } from '../../../shared/services/grupotercero.service';
 import { GeneralService } from '../../../shared/services/general/general.service';
+import { SwalService } from '../../../shared/services/swal/swal.service';
+import { ToastService } from '../../../shared/services/toasty/toast.service';
+import { ValidacionService } from '../../../shared/services/validaciones/validacion.service';
 
 @Component({
   selector: 'app-tablaterceros',
   templateUrl: './tablaterceros.component.html',
-  styleUrls: ['./tablaterceros.component.scss']
+  styleUrls: ['./tablaterceros.component.scss', '../../../../style.scss']
 })
 export class TablatercerosComponent implements OnInit {
   
@@ -28,13 +31,15 @@ export class TablatercerosComponent implements OnInit {
   public TextoInactivo:string = 'Inactivar';
   public TextoActivo:string = 'Activar';
   public Cargando:boolean = false;
+  public MensajeGuardar:string = 'Se dispone a guardar este tercero';
 
   public Filtros:any = {
     id:'',
     nombre:'',
     departamento:'',
     municipio:'',
-    tipo:''
+    tipo:'',
+    estado:''
   };
 
   //Paginación
@@ -55,7 +60,10 @@ export class TablatercerosComponent implements OnInit {
               private municipioService:MunicipioService,
               private documentoService:DocumentoService,
               private gTerceroService:GrupoterceroService,
-              private generalService:GeneralService) { 
+              private generalService:GeneralService,
+              private _swalService:SwalService,
+              private _toastService:ToastService,
+              private _validacionService:ValidacionService) { 
 
     this.ConsultaFiltrada();
     this.GetDepartamentos();
@@ -87,7 +95,8 @@ export class TablatercerosComponent implements OnInit {
       return;
     }
     
-    this.municipioService.getMunicipiosDepartamento(idDepartamento).subscribe((data:any) => {
+    let p = {id_departamento:idDepartamento};
+    this.municipioService.getMunicipiosDepartamento(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
         
         this.Municipios = data.query_data;        
@@ -105,7 +114,8 @@ export class TablatercerosComponent implements OnInit {
       return;
     }
     
-    this.municipioService.getMunicipiosDepartamento(idDepartamento).subscribe((data:any) => {
+    let p = {id_departamento:idDepartamento};
+    this.municipioService.getMunicipiosDepartamento(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
         
         this.MunicipiosList = data.query_data;        
@@ -141,12 +151,14 @@ export class TablatercerosComponent implements OnInit {
   }
 
   NuevoTercero(){
-    this.Edicion = false; 
+    this.Edicion = false;     
+    this.MensajeGuardar = 'Se dispone a guardar este tercero';
     this.ModalTercero.show();
   }
 
   EditarTercero(idTercero:string){
     this.Edicion = true;
+    this.MensajeGuardar = 'Se dispone a actualizar este tercero';
     this.terceroService.getTercero(idTercero).subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.TerceroModel = data.query_data;
@@ -232,10 +244,12 @@ export class TablatercerosComponent implements OnInit {
   ResetValues(){
     
     this.Filtros = {
+      id:'',
       nombre:'',
-      padre:'',
-      estado:'',
-      fecha:''
+      departamento:'',
+      municipio:'',
+      tipo:'',
+      estado:''
     };
   }
 
@@ -266,18 +280,74 @@ export class TablatercerosComponent implements OnInit {
   }
 
   GuardarTercero():void{
+
+    if (!this.ValidateBeforeSubmit()) {
+      return;
+    }
+
     this.SetTerceroDesde();
     let info = this.normalize(JSON.stringify(this.TerceroModel));
     let datos = new FormData();
     
     datos.append("modulo",'Tercero');
     datos.append("datos",info);
-    this.terceroService.saveTercero(datos).subscribe((data:any) => {
-      this.ShowSwal('success', 'Registro Exitoso', 'Se registro el tercero exitosamente!');
-      this.LimpiarModeloTercero();      
-      this.ConsultaFiltrada();
-      this.ModalTercero.hide();
-    });
+
+    if (this.Edicion) {
+      this.terceroService.editTercero(datos).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+          //this._swalService.ShowMessage(data);
+          this.LimpiarModeloTercero();      
+          this.ConsultaFiltrada();
+          this.ModalTercero.hide();
+        }else{
+
+          this._swalService.ShowMessage(data);
+        }        
+      });
+    }else{
+
+      this.terceroService.saveTercero(datos).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+          //this._swalService.ShowMessage(data);
+          this.LimpiarModeloTercero();      
+          this.ConsultaFiltrada();
+          this.ModalTercero.hide();
+        }else{
+
+          this._swalService.ShowMessage(data);
+        }        
+      });
+    }
+    // this.terceroService.saveTercero(datos).subscribe((data:any) => {
+    //   this.ShowSwal('success', 'Registro Exitoso', 'Se registro el tercero exitosamente!');
+    //   this.LimpiarModeloTercero();      
+    //   this.ConsultaFiltrada();
+    //   this.ModalTercero.hide();
+    // });
+  }
+
+  ValidateBeforeSubmit(){
+    if (!this._validacionService.validateString(this.TerceroModel.Id_Tipo_Documento, 'Tipo documento')) {
+      return false;
+    }else if (!this._validacionService.validateNumber(this.TerceroModel.Id_Tercero, 'Identificacion')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.TerceroModel.Nombre, 'Nombre y apellido')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.TerceroModel.Id_Departamento, 'Departamento')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.TerceroModel.Id_Municipio, 'Municipio')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.TerceroModel.Correo, 'Correo')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.TerceroModel.Tipo_Tercero, 'Tipo')) {
+      return false;
+    }
+
+    return true;
   }
 
   LimpiarModeloTercero(){
@@ -315,9 +385,18 @@ export class TablatercerosComponent implements OnInit {
 
   })();
 
-  TestClick(){
-    console.log(this.TerceroModel);
-    
+  CambiarEstadoTercero(idTercero:string){
+    let datos = new FormData();
+    datos.append("id_tercero", idTercero);
+    this.terceroService.cambiarEstadoTercero(datos).subscribe((data:any) => {
+      if (data.codigo == 'success') { 
+        this.ConsultaFiltrada();
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }else{
+        this._swalService.ShowMessage(data); 
+      }
+    });
   }
 
 }

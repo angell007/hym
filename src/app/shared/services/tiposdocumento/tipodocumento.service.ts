@@ -11,7 +11,7 @@ export class TipodocumentoService {
   constructor(private client:HttpClient, private globales:Globales) { }
 
   getTipoDocumento(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'/get_tipo_documento_by_id.php', {params:p});
+    return this.client.get(this._rutaBase+'/get_tipos_documento_by_id.php', {params:p});
   }
 
   getTiposDocumentoPais(p:any):Observable<any>{
@@ -35,7 +35,7 @@ export class TipodocumentoService {
   }
 
   cambiarEstadoTipoDocumento(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'/cambiar_estado_tipo_ocumento.php', datos);
+    return this.client.post(this._rutaBase+'/cambiar_estado_tipo_documento.php', datos);
   }
 
 }

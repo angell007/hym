@@ -21,55 +21,63 @@
               </div>                  
             </div>
             <div class="card-body">
-                <table class="table table-bordered table-sm table-hover">
+                <table class="table table-bordered table-sm table-hover custom-table">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width:15%">Identificación</th>
-                            <th class="text-center">Nombres y Apellidos</th>
-                            <th class="text-center" style="width:15%">Departamento</th>
-                            <th class="text-center" style="width:25%">Ciudad</th>
-                            <th class="text-center" style="width:10%">Tipo Tercero</th>
-                            <th class="text-center" style="width:10%;">Acciones</th>
+                            <th class="custom-thead text-center" style="width:15%">Identificación</th>
+                            <th class="custom-thead text-center">Nombres y Apellidos</th>
+                            <th class="custom-thead text-center" style="width:15%">Departamento</th>
+                            <th class="custom-thead text-center" style="width:25%">Ciudad</th>
+                            <th class="custom-thead text-center" style="width:10%">Tipo Tercero</th>                            
+                            <th class="custom-thead text-center" style="width:10%">Tipo Tercero</th>
+                            <th class="custom-thead text-center" style="width:10%;">Acciones</th>
                         </tr>
                         <tr>
-                            <th>
-                              <input type="text" class="form-control form-control-sm" 
+                            <th class="table-filters">
+                              <input type="text" class="form-control" 
                                     [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()"
                                     placeholder="Cedula">
                             </th>
-                            <th>
-                              <input type="text" class="form-control form-control-sm" 
+                            <th class="table-filters">
+                              <input type="text" class="form-control" 
                                     [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
                                     placeholder="Nombre y/o apellidos">
                             </th>
-                            <th>
-                                <select class="custom-select form-control form-control-sm"
+                            <th class="table-filters">
+                                <select class="custom-select form-control"
                                     [(ngModel)]="Filtros.departamento" (change)="ConsultaFiltrada()">
                                     <option value="" selected>Seleccione</option>
                                     <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
                                 </select>
                             </th>
-                            <th>
-                                <select class="custom-select form-control form-control-sm" (change)="GetMunicipiosDepartamento($event.target.value)">
+                            <th class="table-filters">
+                                <select class="custom-select form-control" (change)="GetMunicipiosDepartamento($event.target.value)">
                                   <option value="" selected>Seleccione</option>
                                   <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
                                 </select>
 
-                                <select class="custom-select form-control form-control-sm"
+                                <select class="custom-select form-control"
                                     [(ngModel)]="Filtros.municipio" (change)="ConsultaFiltrada()">
                                     <option value="" selected>Seleccione</option>
                                     <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
                                 </select>
                             </th>
-                            <th>
-                              <select class="custom-select form-control form-control-sm"
+                            <th class="table-filters">
+                              <select class="custom-select form-control"
                                   [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
                                   <option value="" selected>Seleccione</option>
                                   <option value="Cliente">Cliente</option>
                                   <option value="Proveedor">Proveedor</option>
                               </select>
                             </th>
-                            <th></th>
+                            <th class="table-filters">
+                              <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
+                                <option value="" selected>Seleccione</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                              </select>
+                            </th>
+                            <th class="table-filters"></th>
                         </tr>
                         <tr *ngIf="Terceros.length == 0 && !Cargando">
                           <th colspan="6" class="text-center">
@@ -86,15 +94,16 @@
                     </thead>
                     <tbody *ngIf="Terceros.length > 0 && !Cargando">
                         <tr *ngFor="let t of Terceros">
-                            <td>{{t.Id_Tercero}}</td>
-                            <td>{{t.Nombre}}</td>
-                            <td>{{t.Departamento}}</td>
-                            <td>{{t.Municipio}}</td>
-                            <td>{{t.Tipo_Tercero}}</td>
-                            <td>
+                            <td class="custom-cell">{{t.Id_Tercero}}</td>
+                            <td class="custom-cell">{{t.Nombre}}</td>
+                            <td class="custom-cell">{{t.Departamento}}</td>
+                            <td class="custom-cell">{{t.Municipio}}</td>
+                            <td class="custom-cell">{{t.Tipo_Tercero}}</td>
+                            <td class="custom-cell">{{t.Estado}}</td>
+                            <td class="custom-cell">
                               <div class="text-center">
                                 <div ngbDropdown class="dropdown-primary">
-                                  <button ngbDropdownToggle class="btn btn-xs btn-rounded btn-outline-dark waves-effect waves-light" type="button">Acciones <i class="ti-angle-down"></i></button>
+                                  <button ngbDropdownToggle class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" type="button"> <i class="ti-angle-down"></i></button>
                                   <div ngbDropdownMenu>
                                     <!--<a 
                                       class="dropdown-item waves-light waves-effect"
@@ -103,18 +112,16 @@
                                       <small>Detalle</small>
                                     </a>-->
                                     <a 
-                                      class="dropdown-item waves-light waves-effect" 
-                                      style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
+                                      class="dropdown-item waves-light waves-effect" style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
                                       <i class="ti-pencil text-warning"></i> 
-                                      <small>Editar</small>
+                                      Editar
                                     </a>
-                                    <!--<a 
-                                      class="dropdown-item waves-light waves-effect"
-                                      style="cursor:pointer;"
-                                      [swal]="{ title : '¿Está Seguro?', text : 'Se va a cambiar el estado de este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Actualizar', cancelButtonText : 'No, Comprobar!' }">
-                                      <i [ngClass]="{'ti-na text-danger':t.Estado == 'Activo', 'ti-back-right text-info': t.Estado=='Inactivo'}"></i> 
-                                      <small>{{t.Estado == "Activo" ? TextoInactivo : TextoActivo}}</small>
-                                    </a>-->
+                                    <a class="dropdown-item waves-light waves-effect caja-botones accionable" 
+                                        (confirm)="CambiarEstadoTercero(t.Id_Tercero)"
+                                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este tercero' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                                        <i [ngClass]="{'ti-na text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Inactivo'}"></i> 
+                                        {{t.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}
+                                    </a>
                                   </div>
                                 </div>
                               </div>
@@ -176,13 +183,13 @@
                         <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero"
                             class="form-control" name="Id_Tercero" 
                             [(ngModel)]="TerceroModel.Id_Tercero" (change)="VerificarIdentificacion()"
-                            [disabled]="Edicion">
+                            [disabled]="Edicion" required>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Nombre y Apellido</label>
-                        <input type="text" placeholder="Nombre y Apellido Tercero" class="form-control" name="Nombre" [(ngModel)]="TerceroModel.Nombre">
+                        <input type="text" placeholder="Nombre y Apellido Tercero" class="form-control" name="Nombre" [(ngModel)]="TerceroModel.Nombre" required>
                     </div>
                 </div>
             </div>
@@ -247,7 +254,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select class="form-control" [(ngModel)]="TerceroModel.Tipo_Tercero" name="Tipo">
+                        <select class="form-control" [(ngModel)]="TerceroModel.Tipo_Tercero" name="Tipo" required>
                             <option value="">Seleccione</option>
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
@@ -289,12 +296,15 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button 
+                type="button" 
+                class="btn btn-outline-danger btn-rounded btn-sm" 
+                (click)="CerrarModalTercero()"> Cerrar</button>
+            <button 
               type="submit" 
-              class="btn btn-primary" 
-              style="display:flex;align-items:center;"
-              [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              class="btn btn-outline-primary btn-rounded btn-sm" 
+              [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
               (confirm)="GuardarTercero()"
-              [disabled]="!FormTercero.valid"><i class="ti-save font-size-15 mr-1"></i> Guardar datos</button>
+              [disabled]="!FormTercero.valid"> {{Edicion ? 'Actualizar' : 'Guardar'}}</button>
         </div>
     </div>
 </app-modal-basic>

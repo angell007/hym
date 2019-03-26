@@ -9,7 +9,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
 @Component({
   selector: 'app-modalremitente',
   templateUrl: './modalremitente.component.html',
-  styleUrls: ['./modalremitente.component.scss']
+  styleUrls: ['./modalremitente.component.scss', '../../../style.scss']
 })
 export class ModalremitenteComponent implements OnInit, OnDestroy {
 
@@ -133,7 +133,9 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
               break;
           }
           
-          this._toastService.ShowToast(data);
+          
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
           this.CerrarModal();
         }else{
           this._swalService.ShowMessage(data);
@@ -161,7 +163,9 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
               break;
           }
           
-          this._toastService.ShowToast(data);
+          
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
           this.CerrarModal();
         }else{
           this._swalService.ShowMessage(data);

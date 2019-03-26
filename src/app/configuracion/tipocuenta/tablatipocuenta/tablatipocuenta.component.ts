@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
-import { RemitenteService } from '../../../shared/services/remitentes/remitente.service';
-import { Subject } from 'rxjs';
+import { TipocuentaService } from '../../../shared/services/tiposcuenta/tipocuenta.service';
 
 @Component({
-  selector: 'app-tablaremitente',
-  templateUrl: './tablaremitente.component.html',
-  styleUrls: ['./tablaremitente.component.scss', '../../../../style.scss']
+  selector: 'app-tablatipocuenta',
+  templateUrl: './tablatipocuenta.component.html',
+  styleUrls: ['./tablatipocuenta.component.scss', '../../../../style.scss']
 })
-export class TablaremitenteComponent implements OnInit {
+export class TablatipocuentaComponent implements OnInit {
 
-  public Remitentes:Array<any> = [];
+  public TiposCuenta:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
   
-  public AbrirModalRemitente:Subject<any> = new Subject<any>();
+  public AbrirModalTipoCuenta:Subject<any> = new Subject<any>();
   
   public Filtros:any = {
     nombre:'',
@@ -34,22 +34,20 @@ export class TablaremitenteComponent implements OnInit {
     total: 0
   }
 
-  constructor(private generalService: GeneralService,
-              private swalService:SwalService,
-              private _toastyService:ToastService,
-              private _remitenteService:RemitenteService) 
+  constructor(private _generalService: GeneralService,
+              private _swalService:SwalService,
+              private _toastService:ToastService,
+              private _tipoCuentaService:TipocuentaService) 
   {
-    this.RutaGifCargando = generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
   }
 
   ngOnInit() {
   }
 
-  AbrirModal(idRemitente:string, accion:string){
-    
-    let modalObj = {id_remitente:idRemitente, accion:accion};
-    this.AbrirModalRemitente.next(modalObj);
+  AbrirModal(idTipoCuenta:string){
+    this.AbrirModalTipoCuenta.next(idTipoCuenta);
   }
 
   SetFiltros(paginacion:boolean) {
@@ -85,13 +83,13 @@ export class TablaremitenteComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this._remitenteService.getListaRemitentes(p).subscribe((data:any) => {
+    this._tipoCuentaService.getListaTiposCuenta(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Remitentes = data.query_data;
+        this.TiposCuenta = data.query_data;
         this.TotalItems = data.numReg;
       }else{
-        this.Remitentes = [];
-        this.swalService.ShowMessage(data);
+        this.TiposCuenta = [];
+        this._swalService.ShowMessage(data);
       }
       
       this.Cargando = false;
@@ -116,16 +114,16 @@ export class TablaremitenteComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoRemitente(idRemitente:string){
+  CambiarEstadoTipoCuenta(idTipoCuenta:string){
     let datos = new FormData();
-    datos.append("id_remitente", idRemitente);
-    this._remitenteService.cambiarEstadoRemitente(datos).subscribe((data:any) => {
+    datos.append("id_tipo_cuenta", idTipoCuenta);
+    this._tipoCuentaService.cambiarEstadoTipoCuenta(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastyService.ShowToast(toastObj);
+        this._toastService.ShowToast(toastObj);
       }else{
-        this.swalService.ShowMessage(data); 
+        this._swalService.ShowMessage(data); 
       }
     });
   }
