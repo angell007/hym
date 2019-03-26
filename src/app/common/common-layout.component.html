@@ -392,6 +392,13 @@
 
                             </li>
 
+                            <!-- <li class="notifications dropdown">
+                                <button class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
+                                    (click)="TestToast()">
+                                    <i class="fa fa-lock"> Toasty</i>
+                                </button>
+                            </li> -->
+
                             <li class="user-profile dropdown">
                                 <!-- PERFIL -->
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -1015,4 +1022,4 @@
 
 <swal #alertSwal type="" title="" text=""></swal>
 
-<ng2-toasty [position]="'bottom-right'"></ng2-toasty>
+<ng2-toasty *ngIf="MostrarToasty" [position]="'bottom-right'"></ng2-toasty>

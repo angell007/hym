@@ -2689,8 +2689,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
-    EditarPersonaGiro(idRemitente:string, tipoPersona:string){
-      let data = {remitente:idRemitente, tipo:tipoPersona};
+    EditarPersonaGiro(idRemitente:string, tipoPersona:string, accion:string){
+      let data = {id_remitente:idRemitente, tipo:tipoPersona, accion:accion};
       this.openModalGiro.next(data);
     }
 

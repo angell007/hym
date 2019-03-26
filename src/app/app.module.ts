@@ -67,6 +67,7 @@ import { ValidacionService } from './shared/services/validaciones/validacion.ser
 import { DestinatarioService } from './shared/services/destinatarios/destinatario.service';
 import { TipodocumentoService } from './shared/services/tiposdocumento/tipodocumento.service';
 import { ToastService } from './shared/services/toasty/toast.service';
+import { CajarecaudoService } from './shared/services/cajarecaudos/cajarecaudo.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -77,6 +78,7 @@ import { ModalbancoComponent } from './simplecomponents/modalbanco/modalbanco.co
 import { ModalservicioexternoComponent } from './simplecomponents/modalservicioexterno/modalservicioexterno.component';
 import { ModalcuentabancariaComponent } from './simplecomponents/modalcuentabancaria/modalcuentabancaria.component';
 import { ModaldestinatarioComponent } from './simplecomponents/modaldestinatario/modaldestinatario.component';
+import { ModalcajarecaudoComponent } from './simplecomponents/modalcajarecaudo/modalcajarecaudo.component';
 
 // App Component
 import { AppComponent } from './app.component';
@@ -168,6 +170,8 @@ import { TablaserviciosexternosComponent } from './serviciosexternos/tablaservic
 import { PaginadorinformativoComponent } from './simplecomponents/paginadorinformativo/paginadorinformativo.component';
 import { TablacuentasbancariasComponent } from './configuracion/cuentasbancarias/tablacuentasbancarias/tablacuentasbancarias.component';
 import { TabladestinatariosComponent } from './configuracion/destinatarios/tabladestinatarios/tabladestinatarios.component';
+import { TablacajarecaudosComponent } from './configuracion/cajarecaudos/tablacajarecaudos/tablacajarecaudos.component';
+import { TablaremitenteComponent } from './configuracion/remitente/tablaremitente/tablaremitente.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -313,7 +317,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablacuentasbancariasComponent,
         ModalcuentabancariaComponent,
         TabladestinatariosComponent,
-        ModaldestinatarioComponent
+        ModaldestinatarioComponent,
+        TablacajarecaudosComponent,
+        ModalcajarecaudoComponent,
+        TablaremitenteComponent
     ],
     exports:[
         ModalBasicComponent
@@ -352,7 +359,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ValidacionService,
         DestinatarioService,
         TipodocumentoService,
-        ToastService
+        ToastService,
+        CajarecaudoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

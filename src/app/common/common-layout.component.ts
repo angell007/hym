@@ -15,7 +15,7 @@ import { ToastService } from '../shared/services/toasty/toast.service';
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
-    styleUrls: ['./common-layout.component.scss']
+    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css']
 })
 
 export class CommonLayoutComponent implements OnInit {
@@ -129,6 +129,8 @@ export class CommonLayoutComponent implements OnInit {
 
     //NUEVO CODIGO
 
+    public MostrarToasty:boolean = false;
+
     //#region APERTURA CAJA
 
         public MonedasSistema:any = [];
@@ -191,8 +193,7 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarPaises();
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
-        this.ListarOficinas(); 
-        
+        this.ListarOficinas();
         this.SetOficina();
         this.SetCaja();
     }
@@ -212,7 +213,7 @@ export class CommonLayoutComponent implements OnInit {
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
-        this.toastService.event.subscribe((data:any) => {
+        this.toastService.event.subscribe((data:any) => {            
             this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 
@@ -909,7 +910,7 @@ this.ModalResumenCuenta.show();
 
     ListarOficinas(){
         this.http.get(this.globales.ruta+'php/oficinas/listar_oficinas.php').subscribe((data:any)=> {
-
+            
             if (data.tipo == 'error') {
         
                 this.Oficinas = [];
@@ -991,9 +992,11 @@ this.ModalResumenCuenta.show();
             showClose: true,
             timeout: duracion,
             onAdd: (toast:ToastData) => {
+                this.MostrarToasty = true;
                 console.log('Toast ' + toast.id + ' has been added!');
             },
             onRemove: function(toast:ToastData) {
+                this.MostrarToasty = false;
                 console.log('Toast ' + toast.id + ' has been removed!');
             }
         }        
@@ -1015,8 +1018,11 @@ this.ModalResumenCuenta.show();
     }
 
     SetNombreOficina(idOficina:string){
-        let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina); 
-        this.NombreOficina = oficinaObj.Nombre;
+        
+        if (this.Oficinas.length > 0) {
+            let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina); 
+            this.NombreOficina = oficinaObj.Nombre;    
+        }        
     }
 
     CargarBancosPais(id_pais){
@@ -1067,9 +1073,9 @@ this.ModalResumenCuenta.show();
         }
     }
 
-    TestToast(){
-        let d = {textos:['Prueba', 'Mensaje Prueba'], tipo:'warning', duracion:2000};
-        this.toastService.ShowToast(d);
-    }
+    // TestToast(){
+    //     let d = {textos:['Prueba', 'Mensaje Prueba'], tipo:'warning', duracion:2000};
+    //     this.toastService.ShowToast(d);
+    // }
 
 }

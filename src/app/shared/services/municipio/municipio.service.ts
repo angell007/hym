@@ -12,8 +12,7 @@ export class MunicipioService {
     return this.client.get(this.globales.ruta+'php/municipios/get_lista_municipios.php');
   }
 
-  getMunicipiosDepartamento(idDepartamento:string):Observable<any>{
-    let p = {id_departamento:idDepartamento};
+  getMunicipiosDepartamento(p:any):Observable<any>{
     return this.client.get(this.globales.ruta+'php/municipios/get_lista_municipios_departamento.php', {params:p});
   }
 

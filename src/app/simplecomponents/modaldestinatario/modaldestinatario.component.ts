@@ -231,9 +231,6 @@ export class ModaldestinatarioComponent implements OnInit {
         this.swalService.ShowMessage(data);
       });
     } 
-
-    
-    
   }
 
   ValidateBeforeSubmit(){

@@ -8,17 +8,26 @@ export class RemitenteService {
 
   constructor(private client:HttpClient, private globales:Globales) { }
 
-  getRemitente(idRemitente:string):Observable<any>{
-    let p = {id_remitente:idRemitente};
-    return this.client.get(this.globales.ruta+'php/remitentes/get_remitente_by_id.php', {params:p});
+  private _rutaBase:string = this.globales.ruta+'php/remitentes/';
+
+  getRemitente(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'get_remitente_by_id.php', {params:p});
+  }
+
+  getListaRemitentes(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'get_lista_remitentes.php', {params:p});
   }
 
   saveRemitente(datos:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/remitentes/guardar_remitente.php', datos);
+    return this.client.post(this._rutaBase+'guardar_remitente.php', datos);
   }
 
   editRemitente(datos:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/remitentes/editar_remitente.php', datos);
+    return this.client.post(this._rutaBase+'editar_remitente.php', datos);
+  }
+
+  cambiarEstadoRemitente(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'cambiar_estado_remitente.php', data);
   }
 
 }
