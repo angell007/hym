@@ -23,7 +23,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
   private suscripcion: any;
   private tipo_persona:string = '';
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public accion:string = 'crear';
   public MensajeGuardar:string = 'Se dispone a guardar esta caja recaudo';
 

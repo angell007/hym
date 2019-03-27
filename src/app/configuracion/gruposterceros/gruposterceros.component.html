@@ -18,7 +18,7 @@
                     <div class="col-md-8">
                       <div class="pull-right">
                         <button 
-                          class="btn btn-rounded btn-outline-info btn-sm" style="display:flex; align-items:center;"
+                          class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
                           (click)="AbrirModalGrupo()">
                           <i class="ti-plus font-size-15 mr-1"></i>  Nuevo Grupo
                         </button>
@@ -27,27 +27,27 @@
                   </div>                  
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-sm table-hover">
+                    <table class="table table-bordered table-sm table-hover custom-table">
                         <thead>
                             <tr>
-                                <th class="text-center">Nombre Grupo</th>
-                                <th class="text-center">Grupo Padre</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center">Creado el</th>
-                                <th class="text-center">Acciones</th>
+                                <th class="text-center custom-thead">Nombre Grupo</th>
+                                <th class="text-center custom-thead">Grupo Padre</th>
+                                <th class="text-center custom-thead" style="width:10%;">Estado</th>
+                                <th class="text-center custom-thead" style="width:10%;">Creado el</th>
+                                <th class="text-center custom-thead" style="width:8%;">Acciones</th>
                             </tr>
                             <tr>
-                                <th>
+                                <th class="table-filters">
                                   <input type="text" class="form-control form-control-sm" 
                                         [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
                                         placeholder="Nombre">
                                 </th>
-                                <th>
+                                <th class="table-filters">
                                   <input type="text" class="form-control form-control-sm" 
                                         [(ngModel)]="Filtros.padre" (change)="ConsultaFiltrada()"
                                         placeholder="Nombre padre">
                                 </th>
-                                <th>
+                                <th class="table-filters">
                                     <select class="custom-select form-control form-control-sm"
                                         [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
                                         <option value="" selected>Seleccione</option>
@@ -55,11 +55,11 @@
                                         <option value="Inactivo">Inactivo</option>
                                     </select>
                                 </th>
-                                <th>
-                                  <input type="date" class="form-control form-control-sm" 
-                                        [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()">
+                                <th class="table-filters">
+                                  <!-- <input type="date" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()"> -->
                                 </th>
-                                <th></th>
+                                <th class="table-filters"></th>
                             </tr>
                             <tr *ngIf="Grupos.length == 0 && !Cargando">
                               <th colspan="5" class="text-center">
@@ -76,16 +76,16 @@
                         </thead>
                         <tbody *ngIf="Grupos.length > 0 && !Cargando">
                             <tr *ngFor="let g of Grupos">
-                                <td>{{g.Nombre_Grupo}}</td>
-                                <td>{{g.Grupo_Padre}}</td>
-                                <td>{{g.Estado}}</td>
-                                <td>{{g.Fecha_Registro | date:"dd-MM-yyyy"}}</td>
-                                <td>
+                                <td class="custom-cell">{{g.Nombre_Grupo}}</td>
+                                <td class="custom-cell">{{g.Grupo_Padre}}</td>
+                                <td class="custom-cell">{{g.Estado}}</td>
+                                <td class="custom-cell">{{g.Fecha_Registro | date:"dd-MM-yyyy"}}</td>
+                                <td class="custom-cell">
                                   <div class="text-center">
                                     <div ngbDropdown class="dropdown-primary">
                                       <button ngbDropdownToggle 
-                                        class="btn btn-xs btn-rounded btn-outline-dark waves-effect waves-light" 
-                                        type="button">Acciones <i class="ti-angle-down"></i></button>
+                                        class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" 
+                                        type="button"><i class="ti-angle-down"></i></button>
                                       <div ngbDropdownMenu>
                                         <a 
                                           class="dropdown-item waves-light waves-effect"
@@ -175,11 +175,11 @@
     <div class="app-modal-footer">
         <div class="text-right">
             <button 
-                class="btn btn-danger btn-sm"
+                class="btn btn-outline-danger btn-rounded btn-sm"
                 (click)="CerrarModalGrupo()">Cerrar
             </button>
             <button
-                class="btn btn-primary btn-sm"
+                class="btn btn-outline-primary btn-rounded btn-sm"
                 [swal]="{ title : '¿Está Seguro?', text : 'Se va a guardar este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Comprobar!' }"
                 (confirm)="GuardarGrupo()"> Guardar Grupo
             </button>

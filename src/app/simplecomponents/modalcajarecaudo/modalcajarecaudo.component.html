@@ -45,7 +45,7 @@
                     <div class="form-group">
                         <label>Departamento</label>
                         <select class="form-control" required name="Id_Departamento" [(ngModel)]="CajaRecaudoModel.Id_Departamento" 
-                          (change)="GetMunicipiosDepartamento($event.target.value)">
+                          (change)="GetMunicipiosDepartamento()">
                             <option value="">Seleccione un departamento</option>
                             <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
                         </select>

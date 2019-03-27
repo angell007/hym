@@ -14,12 +14,20 @@ export class MonedaService {
     return this.client.get(this._rutaBase+'get_monedas_por_pais.php', {params: p});
   }
 
+  getMonedasExtranjeras():Observable<any>{
+    return this.client.get(this._rutaBase+'get_monedas_extranjeras.php');
+  }
+
   getListaMonedas(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_lista_monedas.php', {params: p});
   }
 
   getMoneda(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_moneda_by_id.php', {params: p});
+  }
+
+  getMonedas():Observable<any>{
+    return this.client.get(this._rutaBase+'get_monedas.php');
   }
 
   saveMoneda(data:FormData):Observable<any>{

@@ -18,7 +18,7 @@
               <div class="col-md-3">
                   <div class="form-group">
                     <label>Comisión Servicio</label>
-                    <input type="text" placeholder="$0.00" class="form-control" name="Comision" [(ngModel)]="ServicioExternoModel.Comision"
+                    <input type="text" placeholder="$0.00" class="form-control text-right" name="Comision" [(ngModel)]="ServicioExternoModel.Comision"
                     required>
                   </div>
               </div>
@@ -27,8 +27,8 @@
   </div>
   <div class="app-modal-footer">
       <div class="text-right">
-          <button class="btn btn-outline-danger btn-sm" (click)="CerrarModal()">Cerrar</button>
-          <button type="submit" class="btn btn-outline-primary btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este registro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
+          <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
+          <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este registro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
               (confirm)="GuardarServicioExterno()" [disabled]="!FormServicioExterno.valid">Guardar</button>
       </div>
   </div>

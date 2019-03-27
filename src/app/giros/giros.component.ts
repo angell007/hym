@@ -18,7 +18,7 @@ import { GiroService } from '../shared/services/giro/giro.service';
 @Component({
   selector: 'app-giros',
   templateUrl: './giros.component.html',
-  styleUrls: ['./giros.component.css']
+  styleUrls: ['./giros.component.css', '../../style.scss']
 })
 export class GirosComponent implements OnInit {
 

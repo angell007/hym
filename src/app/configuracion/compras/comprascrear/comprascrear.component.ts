@@ -10,6 +10,8 @@ import { TerceroService } from '../../../shared/services/tercero/tercero.service
 import { ProveedorService } from '../../../shared/services/proveedor/proveedor.service';
 import { CambioService } from '../../../shared/services/cambio.service';
 import { CompraService } from '../../../shared/services/compra/compra.service';
+import { MonedaService } from '../../../shared/services/monedas/moneda.service';
+import { SwalService } from '../../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-comprascrear',
@@ -50,7 +52,9 @@ export class ComprascrearComponent implements OnInit {
               private terceroService:ProveedorService,
               private cambioService:CambioService,
               private compraService:CompraService,
-              private activeRoute:ActivatedRoute) {     
+              private activeRoute:ActivatedRoute,
+              private _monedaService:MonedaService,
+              private _swalService:SwalService) {     
   }
 
   ngOnInit() {
@@ -64,9 +68,12 @@ export class ComprascrearComponent implements OnInit {
   }
 
   AsignarMonedas(){
-    this.globales.Monedas.forEach(moneda => {
-      if (moneda.Nombre != 'Pesos') {
-        this.Monedas.push(moneda);     
+    this._monedaService.getMonedasExtranjeras().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Monedas = data.query_data;
+      }else{
+        this.Monedas = [];
+        this._swalService.ShowMessage(data);
       }
     });
   }

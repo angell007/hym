@@ -69,6 +69,8 @@ import { TipodocumentoService } from './shared/services/tiposdocumento/tipodocum
 import { ToastService } from './shared/services/toasty/toast.service';
 import { CajarecaudoService } from './shared/services/cajarecaudos/cajarecaudo.service';
 import { TipocuentaService } from './shared/services/tiposcuenta/tipocuenta.service';
+import { RemitentegiroService } from './shared/services/remitentesgiros/remitentegiro.service';
+import { DestinatariogiroService } from './shared/services/destinatariosgiros/destinatariogiro.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -80,6 +82,7 @@ import { ModalservicioexternoComponent } from './simplecomponents/modalservicioe
 import { ModalcuentabancariaComponent } from './simplecomponents/modalcuentabancaria/modalcuentabancaria.component';
 import { ModaldestinatarioComponent } from './simplecomponents/modaldestinatario/modaldestinatario.component';
 import { ModalcajarecaudoComponent } from './simplecomponents/modalcajarecaudo/modalcajarecaudo.component';
+import { ModalmonedaComponent } from './simplecomponents/modalmoneda/modalmoneda.component';
 
 // App Component
 import { AppComponent } from './app.component';
@@ -178,7 +181,11 @@ import { ModaltipodocumentoComponent } from './simplecomponents/modaltipodocumen
 import { ModaltipocuentaComponent } from './simplecomponents/modaltipocuenta/modaltipocuenta.component';
 import { TablatipocuentaComponent } from './configuracion/tipocuenta/tablatipocuenta/tablatipocuenta.component';
 import { TablamonedasComponent } from './configuracion/monedas/tablamonedas/tablamonedas.component';
-import { ModalmonedaComponent } from './simplecomponents/modalmoneda/modalmoneda.component';
+import { ModalpersonasgirosComponent } from './simplecomponents/modalpersonasgiros/modalpersonasgiros.component';
+import { TablaremitentegiroComponent } from './configuracion/informaciongiros/tablaremitentegiro/tablaremitentegiro.component';
+import { TabladestinatariogiroComponent } from './configuracion/informaciongiros/tabladestinatariogiro/tabladestinatariogiro.component';
+import { ModalremitentegiroComponent } from './simplecomponents/modalremitentegiro/modalremitentegiro.component';
+import { ModaldestinatariogiroComponent } from './simplecomponents/modaldestinatariogiro/modaldestinatariogiro.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -333,7 +340,12 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaltipocuentaComponent,
         TablatipocuentaComponent,
         TablamonedasComponent,
-        ModalmonedaComponent
+        ModalmonedaComponent,
+        ModalpersonasgirosComponent,
+        TablaremitentegiroComponent,
+        TabladestinatariogiroComponent,
+        ModalremitentegiroComponent,
+        ModaldestinatariogiroComponent
     ],
     exports:[
         ModalBasicComponent
@@ -374,7 +386,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TipodocumentoService,
         TipocuentaService,
         ToastService,
-        CajarecaudoService
+        CajarecaudoService,
+        RemitentegiroService,
+        DestinatariogiroService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

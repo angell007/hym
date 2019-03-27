@@ -96,7 +96,7 @@
       <div class="text-right">
           <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
           <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
-              (confirm)="GuardarCuenta(FormCuenta, ModalCuentaBancaria)">Guardar</button>
+              (confirm)="GuardarCuenta()">Guardar</button>
       </div>
   </div>
 </app-modal-basic>

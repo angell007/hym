@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
+import { SwalService } from '../swal/swal.service';
 
 @Injectable()
 export class GeneralService {
@@ -9,7 +10,7 @@ export class GeneralService {
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
 
-  constructor(private client:HttpClient, private globales:Globales) { }
+  constructor(private client:HttpClient, private globales:Globales, private _swalService:SwalService) { }
 
   public checkIdentificacion(id:string):Observable<any>{
     let p = {id:id};
@@ -93,5 +94,28 @@ export class GeneralService {
 
   public searchRiff(){
     this.globales.buscarRiff();
+  }
+
+  public KeyboardOnlyNumbersAndDecimal($event: KeyboardEvent){
+    return $event.charCode >= 48 && $event.charCode <= 57;
+  }
+
+  FillEmptyValues(objRef:any, value:any=''){
+    let obj = objRef;
+    for (const key in obj) {
+      if (typeof(obj[key]) == 'string') {
+        if (obj[key] == '' && typeof(value) == 'string') {        
+          obj[key] = value;
+        }else{
+          this._swalService.ShowMessage(['warning', 'Alerta', 'Se intenta ingresar un valor del tipo incorrecto en '+key]);
+        }
+      }else if (typeof(obj[key]) == 'number') {
+        if (!obj[key] || obj[key]==null) {                
+          obj[key] = 0;
+        }
+      }
+    }
+      
+    return obj;
   }
 }

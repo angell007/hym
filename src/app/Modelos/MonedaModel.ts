@@ -2,10 +2,11 @@ import { ValoresMonedaModel } from './ValoresMonedaModel';
 
 export class MonedaModel{
     public Id_Moneda:string = '';
+    public Id_Pais:string = '';
     public Codigo:string = '';
     public Nombre:string = '';
-    public Estado:string = 'Activo';
-    public Orden:string = '';
+    public Estado:string = 'Activa';
+    public Orden:string = '0';
     public Compras:boolean = false;
     public Transferencias:boolean = false;
     public Gasto:boolean = false;

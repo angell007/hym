@@ -3,26 +3,25 @@ import { Subject } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
-import { MonedaService } from '../../../shared/services/monedas/moneda.service';
+import { RemitentegiroService } from '../../../shared/services/remitentesgiros/remitentegiro.service';
 
 @Component({
-  selector: 'app-tablamonedas',
-  templateUrl: './tablamonedas.component.html',
-  styleUrls: ['./tablamonedas.component.scss', '../../../../style.scss']
+  selector: 'app-tablaremitentegiro',
+  templateUrl: './tablaremitentegiro.component.html',
+  styleUrls: ['./tablaremitentegiro.component.scss', '../../../../style.scss']
 })
-export class TablamonedasComponent implements OnInit {
+export class TablaremitentegiroComponent implements OnInit {
 
-  public Monedas:Array<any> = [];
-  public Paises:Array<any> = [];
+  public RemitentesGiros:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
   
-  public AbrirModalMoneda:Subject<any> = new Subject<any>();
+  public AbrirModalAgregar:Subject<any> = new Subject<any>();
   
   public Filtros:any = {
     nombre:'',
-    codigo:'',
-    pais:'',
+    documento:'',
+    telefono:'',
     estado:''
   };
 
@@ -40,24 +39,17 @@ export class TablamonedasComponent implements OnInit {
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
               private _toastService:ToastService,
-              private _monedaService:MonedaService) 
+              private _remitenteService:RemitentegiroService) 
   {
     this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
-    this.GetPaises();
   }
 
   ngOnInit() {
   }
 
-  GetPaises(){
-    setTimeout(() => {
-      this.Paises = this._generalService.getPaises();  
-    }, 1000);
-  }
-
-  AbrirModal(idMoneda:string){
-    this.AbrirModalMoneda.next(idMoneda);
+  AbrirModal(idRemitente:string){
+    this.AbrirModalAgregar.next(idRemitente);
   }
 
   SetFiltros(paginacion:boolean) {
@@ -71,23 +63,17 @@ export class TablamonedasComponent implements OnInit {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
-    
-    // for (const key in this.Filtros) {
-    //   if (this.Filtros[key].trim() != '') {
-    //     params.key = this.Filtros.key;
-    //   }
-    // }
 
     if (this.Filtros.nombre.trim() != "") {
       params.nombre = this.Filtros.nombre;
     }
 
-    if (this.Filtros.codigo.trim() != "") {
-      params.codigo = this.Filtros.codigo;
+    if (this.Filtros.documento.trim() != "") {
+      params.documento = this.Filtros.documento;
     }
 
-    if (this.Filtros.pais.trim() != "") {
-      params.pais = this.Filtros.pais;
+    if (this.Filtros.telefono.trim() != "") {
+      params.telefono = this.Filtros.telefono;
     }
 
     if (this.Filtros.estado.trim() != "") {
@@ -107,12 +93,12 @@ export class TablamonedasComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this._monedaService.getListaMonedas(p).subscribe((data:any) => {
+    this._remitenteService.getListaRemitentes(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
+        this.RemitentesGiros = data.query_data;
         this.TotalItems = data.numReg;
       }else{
-        this.Monedas = [];
+        this.RemitentesGiros = [];
         this._swalService.ShowMessage(data);
       }
       
@@ -124,8 +110,8 @@ export class TablamonedasComponent implements OnInit {
   ResetValues(){
     this.Filtros = {
       nombre:'',
-      codigo:'',
-      pais:'',
+      documento:'',
+      telefono:'',
       estado:''
     };
   }
@@ -140,10 +126,10 @@ export class TablamonedasComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoMoneda(idMoneda:string){    
+  CambiarEstadoRemitenteGiro(idRemitente:string){
     let datos = new FormData();
-    datos.append("id_moneda", idMoneda);
-    this._monedaService.cambiarEstadoMoneda(datos).subscribe((data:any) => {
+    datos.append("id_remitente", idRemitente);
+    this._remitenteService.cambiarEstadoRemitente(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
@@ -153,5 +139,6 @@ export class TablamonedasComponent implements OnInit {
       }
     });
   }
+
 
 }

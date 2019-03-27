@@ -24,7 +24,7 @@ export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
   public openSubscription:any;
   public Departamentos:any = [];
   public Municipios:any = [];
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public VerPassWord = false;
   public PasswordType = 'password';
   public MensajeGuardar:string = 'Se dispone a guardar esta caja recaudo';

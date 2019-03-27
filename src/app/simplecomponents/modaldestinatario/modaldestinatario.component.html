@@ -34,7 +34,7 @@
               <div class="col-md-3">
                   <div class="form-group">
                       <label>Tipo Doc.</label>
-                      <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE()" [disabled]="DestinatarioModel.Id_Pais == 0 || Editar">
+                      <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required (change)="BuscarCNE()" [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
                           <option value="">Seleccione Tipo Documento</option>
                           <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">{{documento.Codigo}}</option>
                       </select>

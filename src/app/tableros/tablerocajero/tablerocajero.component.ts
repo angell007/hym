@@ -15,6 +15,8 @@ import { CajeroService } from '../../shared/services/cajeros/cajero.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { PermisoService } from '../../shared/services/permisos/permiso.service';
 import { DestinatarioService } from '../../shared/services/destinatarios/destinatario.service';
+import { MonedaService } from '../../shared/services/monedas/moneda.service';
+import { ToastService } from '../../shared/services/toasty/toast.service';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -484,7 +486,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               private cajeroService:CajeroService,
               private swalService:SwalService,
               private permisoService:PermisoService,
-              private destinatarioService:DestinatarioService) { }
+              private destinatarioService:DestinatarioService,
+              private _monedaService:MonedaService,
+              private _toastService:ToastService) { }
 
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
@@ -1693,6 +1697,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     SetMonedaTransferencia(value){
+      console.log(value);
+      console.log(this.Monedas);
+      
       this.MonedaParaTransferencia.id = value;
       this.TransferenciaModel.Moneda_Destino = value;
       this.SetMonedaDestinatarios(value);
@@ -3191,11 +3198,20 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       });
 
       this.MonedasTransferencia = [];
-      this.globales.Monedas.forEach(moneda => {
-        if (moneda.Nombre != 'Pesos') {
-          this.MonedasTransferencia.push(moneda);     
+      this._monedaService.getMonedasExtranjeras().subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.MonedasTransferencia = data.query_data;
+        }else{
+          this.MonedasTransferencia = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
         }
       });
+      // this.globales.Monedas.forEach(moneda => {
+      //   if (moneda.Nombre != 'Pesos') {
+      //     this.MonedasTransferencia.push(moneda);     
+      //   }
+      // });
 
       this.Clientes = [];
       this.http.get(this.globales.ruta + 'php/pos/lista_clientes.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
@@ -3441,8 +3457,15 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     AsignarMonedas(){
     
-      this.Monedas = [];
-      this.Monedas = this.globales.Monedas;
+      this._monedaService.getMonedas().subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.Monedas = data.query_data;
+        }else{
+          this.Monedas = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }
+      });
     }
   
     AsignarPaises(){      
@@ -3510,12 +3533,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         .subscribe((data:any) => {
           if (data.DiarioNeto <= 0) {
 
-            data.valores_anteriores.forEach((valores,i) => {
-              this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
-            });
-
-            this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
-            this.ModalAperturaCaja.show();
+            if (data.valores_anteriores.length == 0) {
+              this.ValoresMonedasApertura = [];
+              let toastObj = {textos:['Alerta', 'No se encontraron registros de apertura'], tipo:'warning', duracion:4000};
+              this._toastService.ShowToast(toastObj);
+            }else{
+              data.valores_anteriores.forEach((valores,i) => {
+                this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+              });
+  
+              this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
+              this.ModalAperturaCaja.show();
+            }
+            
           }else{
 
             data.valores_anteriores.forEach((valores,i) => {

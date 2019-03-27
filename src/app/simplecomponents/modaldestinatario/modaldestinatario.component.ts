@@ -53,7 +53,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
   public DestinatarioModel:DestinatarioModel = new DestinatarioModel();
 
-  constructor(private generalService: GeneralService,
+  constructor(public generalService: GeneralService,
               private swalService:SwalService,
               private validacionService:ValidacionService,
               private destinatarioService:DestinatarioService,

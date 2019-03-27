@@ -6,7 +6,7 @@ import { Funcionario } from '../../shared/funcionario/funcionario.model';
 @Component({
   selector: 'app-gruposterceros',
   templateUrl: './gruposterceros.component.html',
-  styleUrls: ['./gruposterceros.component.scss']
+  styleUrls: ['./gruposterceros.component.scss', '../../../style.scss']
 })
 export class GrupostercerosComponent implements OnInit {
 

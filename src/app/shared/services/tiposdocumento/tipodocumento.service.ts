@@ -22,6 +22,10 @@ export class TipodocumentoService {
     return this.client.get(this._rutaBase+'/get_tipo_documento.php');
   }
 
+  getTiposDocumentosNacionales():Observable<any>{
+    return this.client.get(this._rutaBase+'/get_tipos_documentos_nacionales.php');
+  }
+
   getListaTiposDocumento(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'/get_lista_tipo_documento.php', {params:p});
   }
