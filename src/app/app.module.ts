@@ -71,6 +71,7 @@ import { CajarecaudoService } from './shared/services/cajarecaudos/cajarecaudo.s
 import { TipocuentaService } from './shared/services/tiposcuenta/tipocuenta.service';
 import { RemitentegiroService } from './shared/services/remitentesgiros/remitentegiro.service';
 import { DestinatariogiroService } from './shared/services/destinatariosgiros/destinatariogiro.service';
+import { OficinaService } from './shared/services/oficinas/oficina.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -181,11 +182,12 @@ import { ModaltipodocumentoComponent } from './simplecomponents/modaltipodocumen
 import { ModaltipocuentaComponent } from './simplecomponents/modaltipocuenta/modaltipocuenta.component';
 import { TablatipocuentaComponent } from './configuracion/tipocuenta/tablatipocuenta/tablatipocuenta.component';
 import { TablamonedasComponent } from './configuracion/monedas/tablamonedas/tablamonedas.component';
-import { ModalpersonasgirosComponent } from './simplecomponents/modalpersonasgiros/modalpersonasgiros.component';
 import { TablaremitentegiroComponent } from './configuracion/informaciongiros/tablaremitentegiro/tablaremitentegiro.component';
 import { TabladestinatariogiroComponent } from './configuracion/informaciongiros/tabladestinatariogiro/tabladestinatariogiro.component';
 import { ModalremitentegiroComponent } from './simplecomponents/modalremitentegiro/modalremitentegiro.component';
 import { ModaldestinatariogiroComponent } from './simplecomponents/modaldestinatariogiro/modaldestinatariogiro.component';
+import { TablacajasComponent } from './configuracion/cajas/tablacajas/tablacajas.component';
+import { ModalcajaComponent } from './simplecomponents/modalcaja/modalcaja.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -341,11 +343,12 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatipocuentaComponent,
         TablamonedasComponent,
         ModalmonedaComponent,
-        ModalpersonasgirosComponent,
         TablaremitentegiroComponent,
         TabladestinatariogiroComponent,
         ModalremitentegiroComponent,
-        ModaldestinatariogiroComponent
+        ModaldestinatariogiroComponent,
+        TablacajasComponent,
+        ModalcajaComponent
     ],
     exports:[
         ModalBasicComponent
@@ -388,7 +391,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ToastService,
         CajarecaudoService,
         RemitentegiroService,
-        DestinatariogiroService
+        DestinatariogiroService,
+        OficinaService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

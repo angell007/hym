@@ -8,48 +8,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
-                    <p>Tenemos registradas todas las cajas de la compañía</p>
-                   
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                            <thead>
-                                <tr>
-                                    <th>Nombre Caja</th>
-                                    <th>Nombre Oficina</th>
-                                    <th>MAC</th>
-                                    <th>Detalle</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let caja of cajas" class=" {{caja.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                    <td>{{caja.Nombre}}</td>
-                                    <td>{{caja.Oficina}}</td>
-                                    <td>{{caja.MAC}}</td>
-                                    <td>{{caja.Detalle}}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCaja(caja.Id_Caja)">
-                                            <i class="ti-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular esta Caja, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
-                                            (confirm)="EstadoCaja(caja.Id_Caja, caja.Estado)">
-                                            <i class=" {{caja.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} " ></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                </div>
+                <app-tablacajas></app-tablacajas>
             </div>
         </div>
     </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
+<!-- <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCaja" #ModalCaja>
     <div class="app-modal-header">
         <h4>Nueva Caja</h4>
         <button type="button" class="close basic-close" (click)="ModalCaja.hide()">
@@ -169,4 +134,4 @@
 <swal #deleteSwal title="Caja eliminada" text="Se ha eliminado correctamente la caja" type="success">
 </swal>
 
-<swal #confirmacionSwal title="" text="" type=""></swal>
+<swal #confirmacionSwal title="" text="" type=""></swal> -->
