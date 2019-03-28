@@ -1,64 +1,13 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Oficinas</h4>
-        <button class="pull-right btn btn-primary btn-sm" [routerLink]="['/oficinacrear' ]">
-            <i class="ti-plus"></i> Agregar Nueva Oficina</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
-                    <p>Tenemos registradas todas las oficinas de nuestra empresa</p>
-                    <div class="table-overflow">
-                        <div class="col-md-12">
-                            <hr>
-                            <h5>Últimos Cambios Registrados</h5>
-                            <div class="table-responsive">
-                                <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Teléfono</th>
-                                            <th>Celular</th>
-                                            <th>Correo</th>
-                                            <th>Dirección</th>
-                                            <th>Departamento</th>
-                                            <th>Municipio</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let oficina of oficinas" class=" {{oficina.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
-                                            <td>{{ oficina.Nombre }}</td>
-                                            <td>{{ oficina.Telefono }}</td>
-                                            <td>{{ oficina.Celular }}</td>
-                                            <td>{{ oficina.Correo }}</td>
-                                            <td>{{ oficina.Direccion }}</td>
-                                            <td>{{ oficina.Departamento }}</td>
-                                            <td>{{ oficina.Municipio }}</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/oficinaver',oficina.Id_Oficina ]">
-                                                    <i class="ti-printer"></i>
-                                                </button>
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/oficinaeditar',oficina.Id_Oficina ]">
-                                                    <i class="ti-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a cambiar de estado en esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                                    (confirm)="EstadoOficina(oficina.Id_Oficina, oficina.Estado)">
-                                                    <i class=" {{oficina.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} " ></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <app-tablaoficinas></app-tablaoficinas>
             </div>
         </div>
     </div>
 </div>
-
-<swal #confirmacionSwal title="" text="" type=""></swal>

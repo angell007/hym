@@ -1,40 +1,43 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CajaModel } from '../../Modelos/CajaModel';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { ValidacionService } from '../../shared/services/validaciones/validacion.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
-import { CajaService } from '../../shared/services/caja/caja.service';
 import { OficinaService } from '../../shared/services/oficinas/oficina.service';
+import { OficinaModel } from '../../Modelos/OficinaModel';
+import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
+import { MunicipioService } from '../../shared/services/municipio/municipio.service';
 
 @Component({
-  selector: 'app-modalcaja',
-  templateUrl: './modalcaja.component.html',
-  styleUrls: ['./modalcaja.component.scss', '../../../style.scss']
+  selector: 'app-modaloficina',
+  templateUrl: './modaloficina.component.html',
+  styleUrls: ['./modaloficina.component.scss', '../../../style.scss']
 })
-export class ModalcajaComponent implements OnInit {
+export class ModaloficinaComponent implements OnInit {
 
   @Input() AbrirModal:Observable<any> = new Observable();
   @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
   
-  @ViewChild('ModalCaja') ModalCaja:any;
+  @ViewChild('ModalOficina') ModalOficina:any;
 
-  public Oficinas:Array<any> = [];
+  public Departamentos:Array<any> = [];
+  public Municipios:Array<any> = [];
   public openSubscription:any;
   private Editar:boolean = false;
-  public MensajeGuardar:string = 'Se dispone a guardar esta caja';
+  public MensajeGuardar:string = 'Se dispone a guardar esta oficina';
 
-  public CajaModel:CajaModel = new CajaModel();
+  public OficinaModel:OficinaModel = new OficinaModel();
 
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
               private _validacionService:ValidacionService,
               private _toastService:ToastService,
-              private _cajaService:CajaService,
-              private _oficinaService:OficinaService) 
+              private _oficinaService:OficinaService,
+              private _departamentoService:DepartamentoService,
+              private _municipioService:MunicipioService) 
   {
-    this.GetOficinas();
+    this.GetDepartamentos();
   }
 
   ngOnInit() {
@@ -42,13 +45,14 @@ export class ModalcajaComponent implements OnInit {
       
       if (data != "0") {
         this.Editar = true;
-        this.MensajeGuardar = 'Se dispone a actualizar esta caja';
-        let p = {id_caja:data};
+        this.MensajeGuardar = 'Se dispone a actualizar esta oficina';
+        let p = {id_oficina:data};
         
-        this._cajaService.getCaja(p).subscribe((d:any) => {
+        this._oficinaService.getOficina(p).subscribe((d:any) => {
           if (d.codigo == 'success') {
-            this.CajaModel = d.query_data;
-            this.ModalCaja.show();  
+            this.OficinaModel = d.query_data;
+            this.GetMunicipiosDepartamento(this.OficinaModel.Id_Departamento, true);
+            this.ModalOficina.show();  
           }else{
             
             this._swalService.ShowMessage(d);
@@ -56,9 +60,9 @@ export class ModalcajaComponent implements OnInit {
           
         });
       }else{
-        this.MensajeGuardar = 'Se dispone a guardar esta caja';
+        this.MensajeGuardar = 'Se dispone a guardar esta oficina';
         this.Editar = false;
-        this.ModalCaja.show();
+        this.ModalOficina.show();
       }
     });
   }
@@ -71,35 +75,52 @@ export class ModalcajaComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetOficinas(){
-    this._oficinaService.getOficinas().subscribe((data:any) => {
+  GetDepartamentos(){
+    this._departamentoService.getDepartamentos().subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Oficinas = data.query_data;
+        this.Departamentos = data.query_data;
       }else{
 
-        this.Oficinas = [];
+        this.Departamentos = [];
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
         this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  GuardarCaja(){
+  GetMunicipiosDepartamento(idDepartamento:string, cargaEdicion:boolean = false){
+    if (!cargaEdicion) {
+      this.OficinaModel.Id_Municipio = '';
+      this.Municipios = [];  
+    }    
+    
+    let p = {id_departamento:idDepartamento};
+    this._municipioService.getMunicipiosDepartamento(p).subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Municipios = data.query_data;
+      }else{
+
+        this.Municipios = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
+  }
+
+  GuardarOficina(){
 
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
-
-    //console.log(this.CajaModel);
     
-    this.CajaModel = this._generalService.limpiarString(this.CajaModel);
+    this.OficinaModel = this._generalService.limpiarString(this.OficinaModel);
     
-    let info = this._generalService.normalize(JSON.stringify(this.CajaModel));
+    let info = this._generalService.normalize(JSON.stringify(this.OficinaModel));
     let datos = new FormData();
     datos.append("modelo",info);
 
     if (this.Editar) {
-      this._cajaService.editCaja(datos)
+      this._oficinaService.editOficina(datos)
       .catch(error => { 
         //console.log('An error occurred:', error);
         this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -117,7 +138,7 @@ export class ModalcajaComponent implements OnInit {
         }
       });
     }else{
-      this._cajaService.saveCaja(datos)
+      this._oficinaService.saveOficina(datos)
       .catch(error => { 
         //console.log('An error occurred:', error);
         this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -138,9 +159,13 @@ export class ModalcajaComponent implements OnInit {
 
   ValidateBeforeSubmit():boolean{
     
-    if (!this._validacionService.validateString(this.CajaModel.Nombre, 'Nombre caja')) {
+    if (!this._validacionService.validateString(this.OficinaModel.Nombre, 'Nombre Oficina')) {
       return false;
-    }else if (!this._validacionService.validateString(this.CajaModel.Id_Oficina, 'Pais')) {
+    }else if (!this._validacionService.validateString(this.OficinaModel.Id_Municipio, 'Municipio')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.OficinaModel.Limite_Transferencia, 'Limite Transferencias')) {
+      return false;
+    }else if (!this._validacionService.validateString(this.OficinaModel.Nombre_Establecimiento, 'Nombre Establecimiento')) {
       return false;
     }else{
       return true;
@@ -153,11 +178,11 @@ export class ModalcajaComponent implements OnInit {
 
   CerrarModal(){
     this.LimpiarModelo();
-    this.ModalCaja.hide();
+    this.ModalOficina.hide();
   }
 
   LimpiarModelo(){
-    this.CajaModel = new CajaModel();
+    this.OficinaModel = new OficinaModel();
   }
 
 

@@ -72,6 +72,7 @@ import { TipocuentaService } from './shared/services/tiposcuenta/tipocuenta.serv
 import { RemitentegiroService } from './shared/services/remitentesgiros/remitentegiro.service';
 import { DestinatariogiroService } from './shared/services/destinatariosgiros/destinatariogiro.service';
 import { OficinaService } from './shared/services/oficinas/oficina.service';
+import { MovimientoterceroService } from './shared/services/movimientostercero/movimientotercero.service';
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -188,6 +189,11 @@ import { ModalremitentegiroComponent } from './simplecomponents/modalremitentegi
 import { ModaldestinatariogiroComponent } from './simplecomponents/modaldestinatariogiro/modaldestinatariogiro.component';
 import { TablacajasComponent } from './configuracion/cajas/tablacajas/tablacajas.component';
 import { ModalcajaComponent } from './simplecomponents/modalcaja/modalcaja.component';
+import { TablaoficinasComponent } from './configuracion/oficinas/tablaoficinas/tablaoficinas.component';
+import { ModaloficinaComponent } from './simplecomponents/modaloficina/modaloficina.component';
+import { TablaverterceroComponent } from './configuracion/terceros/tablavertercero/tablavertercero.component';
+import { TablatotalesterceroComponent } from './configuracion/terceros/tablatotalestercero/tablatotalestercero.component';
+import { TablatotalesmonedaterceroComponent } from './configuracion/terceros/tablatotalesmonedatercero/tablatotalesmonedatercero.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -348,7 +354,12 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalremitentegiroComponent,
         ModaldestinatariogiroComponent,
         TablacajasComponent,
-        ModalcajaComponent
+        ModalcajaComponent,
+        TablaoficinasComponent,
+        ModaloficinaComponent,
+        TablaverterceroComponent,
+        TablatotalesterceroComponent,
+        TablatotalesmonedaterceroComponent
     ],
     exports:[
         ModalBasicComponent
@@ -392,7 +403,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CajarecaudoService,
         RemitentegiroService,
         DestinatariogiroService,
-        OficinaService
+        OficinaService,
+        MovimientoterceroService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

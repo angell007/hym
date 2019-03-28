@@ -28,7 +28,7 @@ export class OficinaService {
   }
 
   saveOficina(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_oficina.php', datos);
+    return this.client.post(this._rutaBase+'guardar_oficina_nuevo.php', datos);
   }
 
   editOficina(datos:FormData):Observable<any>{

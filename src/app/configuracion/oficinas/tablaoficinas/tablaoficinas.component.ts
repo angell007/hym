@@ -3,18 +3,20 @@ import { Subject } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
-import { CajaService } from '../../../shared/services/caja/caja.service';
 import { OficinaService } from '../../../shared/services/oficinas/oficina.service';
+import { DepartamentoService } from '../../../shared/services/departamento/departamento.service';
+import { MunicipioService } from '../../../shared/services/municipio/municipio.service';
 
 @Component({
-  selector: 'app-tablacajas',
-  templateUrl: './tablacajas.component.html',
-  styleUrls: ['./tablacajas.component.scss', '../../../../style.scss']
+  selector: 'app-tablaoficinas',
+  templateUrl: './tablaoficinas.component.html',
+  styleUrls: ['./tablaoficinas.component.scss', '../../../../style.scss']
 })
-export class TablacajasComponent implements OnInit {
+export class TablaoficinasComponent implements OnInit {
 
-  public Cajas:Array<any> = [];
   public Oficinas:Array<any> = [];
+  public Departamentos:Array<any> = [];
+  public Municipios:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
   
@@ -22,8 +24,10 @@ export class TablacajasComponent implements OnInit {
   
   public Filtros:any = {
     nombre:'',
-    oficina:'',
-    detalle:'',
+    municipio:'',
+    departamento:'',
+    departamento_municipio:'',
+    limite_transf:'',
     estado:''
   };
 
@@ -41,32 +45,54 @@ export class TablacajasComponent implements OnInit {
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
               private _toastService:ToastService,
-              private _cajaService:CajaService,
-              private _oficinaService:OficinaService) 
+              private _oficinaService:OficinaService,
+              private _departamentoService:DepartamentoService,
+              private _municipioService:MunicipioService) 
   {
     this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
-    this.GetOficinas();
+    this.GetDepartamentos();
   }
 
   ngOnInit() {
   }
 
-  GetOficinas(){
-    this._oficinaService.getOficinas().subscribe((data:any) => {
+  GetDepartamentos(){
+    this._departamentoService.getDepartamentos().subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Oficinas = data.query_data;
+        this.Departamentos = data.query_data;
       }else{
 
-        this.Oficinas = [];
+        this.Departamentos = [];
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
         this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  AbrirModal(idCaja:string){
-    this.AbrirModalAgregar.next(idCaja);
+  GetMunicipiosDepartamento(){
+    if (this.Filtros.departamento_municipio == '') {
+      this.Filtros.municipio = '';
+      this.Municipios = [];
+      this.ConsultaFiltrada();
+    }else{
+
+      let p = {id_departamento:this.Filtros.departamento_municipio};
+      this._municipioService.getMunicipiosDepartamento(p).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.Municipios = data.query_data;
+        }else{
+
+          this.Municipios = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }
+      });
+    }    
+  }
+
+  AbrirModal(idOficina:string){
+    this.AbrirModalAgregar.next(idOficina);
   }
 
   SetFiltros(paginacion:boolean) {
@@ -85,12 +111,16 @@ export class TablacajasComponent implements OnInit {
       params.nombre = this.Filtros.nombre;
     }
 
-    if (this.Filtros.oficina.trim() != "") {
-      params.oficina = this.Filtros.oficina;
+    if (this.Filtros.departamento.trim() != "") {
+      params.departamento = this.Filtros.departamento;
     }
 
-    if (this.Filtros.detalle.trim() != "") {
-      params.detalle = this.Filtros.detalle;
+    if (this.Filtros.municipio.trim() != "") {
+      params.municipio = this.Filtros.municipio;
+    }
+
+    if (this.Filtros.limite_transf.trim() != "") {
+      params.limite_transf = this.Filtros.limite_transf;
     }
 
     if (this.Filtros.estado.trim() != "") {
@@ -110,12 +140,12 @@ export class TablacajasComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this._cajaService.getListaCajas(p).subscribe((data:any) => {
+    this._oficinaService.getListaOficinas(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Cajas = data.query_data;
+        this.Oficinas = data.query_data;
         this.TotalItems = data.numReg;
       }else{
-        this.Cajas = [];
+        this.Oficinas = [];
         this._swalService.ShowMessage(data);
       }
       
@@ -143,10 +173,10 @@ export class TablacajasComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoCaja(idCaja:string){
+  CambiarEstadoOficina(idOficina:string){
     let datos = new FormData();
-    datos.append("id_caja", idCaja);
-    this._cajaService.cambiarEstadoCaja(datos).subscribe((data:any) => {
+    datos.append("id_oficina", idOficina);
+    this._oficinaService.cambiarEstadoOficina(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};

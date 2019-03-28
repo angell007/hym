@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-primary btn-sm btn-block"><i class="ti-plus"></i>
+          Movimiento de Ajuste
+        </button>
+      </div>
+    </div>
+    <table class="table table-hover table-sm table-striped table-bordered custom-table">
+      <thead>
+        <tr>
+          <th style="width:60px !important;">Fecha</th>
+          <th>Recibo</th>
+          <th>Detalle</th>
+          <th class="text-center" style="width: 120px">Ingreso</th>
+          <th class="text-center" style="width: 120px">Egreso</th>
+          <th class="text-center" style="width: 120px">Saldo</th>
+          <th class="text-center" style="width: 50px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movimiento of MovimientosTercero ; let i = index">
+          <td>{{movimiento.Fecha | date : "dd/MM/yyyy" }}</td>
+          <td>{{movimiento.ItemDetalle}}</td>
+          <td>{{movimiento.Detalle}}</td>
+          <td>{{movimiento.ValorBolivares }}</td>
+          <td>{{movimiento.SaldoBolivarSimbolo}}</td>
+          <td></td>
+          <td>
+            <!-- <a class="text-success" [routerLink]="" (click)="editarAjuste(movimiento.Id_Movimiento_Tercero,ModalAjusteEditar)">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+            </a>
+
+            <a class="text-danger" style=" margin-left: 5px" [routerLink]="" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a eliminar este ajuste' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+              (confirm)="borrarAjuste(movimiento.Id_Movimiento_Tercero)">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </a> -->
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

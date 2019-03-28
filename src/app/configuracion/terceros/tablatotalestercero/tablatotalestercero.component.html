@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-md-12">
+    <div *ngIf="MostrarTablas">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a *ngFor="let m of Monedas; let i = index;" 
+            class="nav-item nav-link" 
+            [ngClass]="{'active': i == 0}" [id]="'nav-'+m.Codigo" 
+            data-toggle="tab" 
+            [attr.href]="'#nav-moneda'+i" 
+            (click)="CambiarValoresTabla(m.Id_Moneda)"
+            role="tab" 
+            [attr.aria-controls]="'nav-'+m.Codigo" 
+            aria-selected="true"
+            (click)="Test(m.Codigo)">{{m.Nombre}}</a>
+  
+  
+          <!-- <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+          <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+          <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> -->
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+          <!-- <div *ngFor="let m of Monedas; let i = index;" class="tab-pane fade" [ngClass]="{'active show': i == 0}" 
+          [id]="'nav-moneda'+i" role="tabpanel" [attr.aria-labelledby]="'nav-'+m.Codigo+'-tab'">
+          Funciona {{m.Nombre}}
+          <hr>
+          <app-tablatotalesmonedatercero
+            [Id_Moneda]="m.Id_Moneda">            
+          </app-tablatotalesmonedatercero>
+        </div> -->
+
+        <div *ngFor="let m of Monedas; let i = index;" class="tab-pane fade" [ngClass]="{'active show': i == 0}" 
+          [id]="'nav-moneda'+i" role="tabpanel" [attr.aria-labelledby]="'nav-'+m.Codigo+'-tab'">
+          
+        </div>
+        <!-- <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">...</div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> -->
+      </div>
+    </div>    
+    <app-tablatotalesmonedatercero
+      [Id_Moneda]="MonedaSeleccionada"
+      [Id_Tercero]="Id_Tercero">            
+    </app-tablatotalesmonedatercero>
+    
+  </div>
+</div>

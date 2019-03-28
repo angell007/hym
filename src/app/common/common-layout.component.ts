@@ -11,6 +11,7 @@ import { CajaService } from '../shared/services/caja/caja.service';
 import { SwalService } from '../shared/services/swal/swal.service';
 import { TrasladocajaService } from '../shared/services/traslados_caja/trasladocaja.service';
 import { ToastService } from '../shared/services/toasty/toast.service';
+import { OficinaService } from '../shared/services/oficinas/oficina.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -161,7 +162,9 @@ export class CommonLayoutComponent implements OnInit {
                 private cajaService:CajaService,
                 private swalService:SwalService,
                 private trasladoCajaService:TrasladocajaService,
-                private toastService:ToastService) {
+                private toastService:ToastService,
+                private _oficinaService:OficinaService,
+                private _cajaService:CajaService) {
                     
         this.app = {
             layout: {
@@ -908,16 +911,14 @@ this.ModalResumenCuenta.show();
         }
     }
 
-    ListarOficinas(){
-        this.http.get(this.globales.ruta+'php/oficinas/listar_oficinas.php').subscribe((data:any)=> {
+    ListarOficinas(){        
+        this._oficinaService.getOficinas().subscribe((data:any)=> {
             
-            if (data.tipo == 'error') {
-        
-                this.Oficinas = [];
-                this.ShowSwal(data.tipo, 'Error', data.mensaje);
+            if (data.codigo == 'success') {        
+                this.Oficinas = data.query_data;
             }else{
-                this.Oficinas = data.data;
-                //this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+                this.Oficinas = [];                
+                this.ShowSwal(data.tipo, data.titulo, data.mensaje);
             }
         });
     }

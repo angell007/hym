@@ -8,12 +8,14 @@ export class MunicipioService {
 
   constructor(private client:HttpClient, private globales:Globales) { }
 
+  private _rutaBase:string = this.globales.ruta+'php/municipios/';
+
   getMunicipios():Observable<any>{
-    return this.client.get(this.globales.ruta+'php/municipios/get_lista_municipios.php');
+    return this.client.get(this._rutaBase+'get_lista_municipios.php');
   }
 
   getMunicipiosDepartamento(p:any):Observable<any>{
-    return this.client.get(this.globales.ruta+'php/municipios/get_lista_municipios_departamento.php', {params:p});
+    return this.client.get(this._rutaBase+'get_lista_municipios_departamento.php', {params:p});
   }
 
 }
