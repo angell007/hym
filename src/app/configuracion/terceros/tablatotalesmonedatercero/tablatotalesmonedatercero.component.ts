@@ -21,36 +21,28 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
               private _swalService:SwalService,
               private _movimientoService:MovimientoterceroService) 
   {
-    this._swalService.ShowMessage(['success', 'Exito!', this.Id_Moneda]);
-    // console.log(this.Id_Moneda);
-    // this.GetMovimientos();
     
   }
 
   ngOnInit() {
-    console.log(this.Id_Moneda);
     this.GetMovimientos();
   }
 
   ngOnChanges(changes:SimpleChanges): void {
     if (changes.Id_Moneda.previousValue != undefined) {
-      this._swalService.ShowMessage(['success', 'Exito!', this.Id_Moneda]);
-      console.log(this.Id_Moneda);
       this.GetMovimientos();
     }
   }
 
   GetMovimientos(){
     if (this.Id_Moneda != '' && this.Id_Moneda != undefined) {
-      this._movimientoService.getMovimientosTercero(this.Id_Tercero).subscribe((data:any) => {
-        if (data.lista.length > 0) {
-          console.log("monedas");
-          
-          this.MovimientosTercero = data.lista;  
-          console.log(data);
-          
+      this._movimientoService.getMovimientosTercero(this.Id_Tercero, this.Id_Moneda).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.MovimientosTercero = data.query_data;            
         }else{
           this.MovimientosTercero = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
         }      
       });  
     }    

@@ -28,14 +28,11 @@ export class TablaverterceroComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.GetTercero();
-    console.log("init");
-    
-    console.log(this.Id_Tercero);
     
   }
 
   ngOnChanges(changes:SimpleChanges): void {
-    console.log("change");
+    
     if (changes.Id_Tercero.currentValue != undefined) {
       this.GetTercero();
     }
@@ -46,8 +43,6 @@ export class TablaverterceroComponent implements OnInit, OnChanges {
       this._terceroService.getTerceroVer(this.Id_Tercero).subscribe((data:any) => {
         if (data.codigo == 'success') {
           this.TerceroModel = data.query_data;
-          console.log(data);
-          console.log(TerceroModel);
           
         }else{
   

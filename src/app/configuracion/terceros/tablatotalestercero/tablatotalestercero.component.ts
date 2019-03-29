@@ -23,11 +23,7 @@ export class TablatotalesterceroComponent implements OnInit {
     this.GetMonedas();
   }
 
-  ngOnInit() {
-    console.log("id tercero totales");
-    
-    console.log(this.Id_Tercero);
-    
+  ngOnInit() {    
   }
 
   GetMonedas(){

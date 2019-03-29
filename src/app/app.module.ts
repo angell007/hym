@@ -194,6 +194,7 @@ import { ModaloficinaComponent } from './simplecomponents/modaloficina/modalofic
 import { TablaverterceroComponent } from './configuracion/terceros/tablavertercero/tablavertercero.component';
 import { TablatotalesterceroComponent } from './configuracion/terceros/tablatotalestercero/tablatotalestercero.component';
 import { TablatotalesmonedaterceroComponent } from './configuracion/terceros/tablatotalesmonedatercero/tablatotalesmonedatercero.component';
+import { ModalajusteterceroComponent } from './simplecomponents/modalajustetercero/modalajustetercero.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -359,7 +360,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaloficinaComponent,
         TablaverterceroComponent,
         TablatotalesterceroComponent,
-        TablatotalesmonedaterceroComponent
+        TablatotalesmonedaterceroComponent,
+        ModalajusteterceroComponent
     ],
     exports:[
         ModalBasicComponent
