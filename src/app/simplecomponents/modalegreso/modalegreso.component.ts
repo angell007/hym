@@ -27,7 +27,7 @@ export class ModalegresoComponent implements OnInit {
   public Grupos:Array<any> = [];
   public Terceros:Array<any> = [];
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar este egreso';
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
 

@@ -24,7 +24,7 @@ export class ModaloficinaComponent implements OnInit {
   public Departamentos:Array<any> = [];
   public Municipios:Array<any> = [];
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar esta oficina';
 
   public OficinaModel:OficinaModel = new OficinaModel();

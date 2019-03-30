@@ -18,6 +18,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   @Input() Id_Tercero:string;
 
   public MovimientosTercero:Array<any> = [];
+  public Movimientos:Array<any> = [];
   public MostrarTotales:boolean = false;
   public Balance:string = "0";
   public TotalesMonedas:Array<any> = [];
@@ -63,9 +64,11 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       this._movimientoService.getMovimientosTercero(this.Id_Tercero, this.Id_Moneda).subscribe((data:any) => {
         if (data.codigo == 'success') {
           this.MovimientosTercero = data.query_data;
+          this.Movimientos = data.query_data.movimientos;
           this.MostrarTotales = true;
         }else{
           this.MovimientosTercero = [];
+          this.Movimientos = [];
           this.MostrarTotales = false;
           let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
           this._toastService.ShowToast(toastObj);

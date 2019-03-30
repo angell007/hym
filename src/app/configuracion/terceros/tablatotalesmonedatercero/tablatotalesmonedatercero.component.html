@@ -32,7 +32,7 @@
           <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.balance">{{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
           <td class="custom-cell"></td>
         </tr>
-        <tr *ngFor="let m of MovimientosTercero.movimientos ; let i = index" 
+        <tr *ngFor="let m of Movimientos ; let i = index" 
           [ngClass]="{'bg-anulada':m.Estado == 'Anulado'}">
           <td class="text-right custom-cell">{{m.Fecha | date : "dd/MM/yyyy" }}</td>
           <td class="custom-cell">{{m.Movimiento}}</td>

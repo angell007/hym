@@ -14,6 +14,7 @@ import { EgresoService } from '../../shared/services/egresos/egreso.service';
 export class TablaegresosComponent implements OnInit {
 
   public Egresos:Array<any> = [];
+  public GruposTerceros:Array<any> = [];
   public Monedas:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;

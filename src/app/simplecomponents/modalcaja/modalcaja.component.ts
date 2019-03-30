@@ -22,7 +22,7 @@ export class ModalcajaComponent implements OnInit {
 
   public Oficinas:Array<any> = [];
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar esta caja';
 
   public CajaModel:CajaModel = new CajaModel();

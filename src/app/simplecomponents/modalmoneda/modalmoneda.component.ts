@@ -25,7 +25,7 @@ export class ModalmonedaComponent implements OnInit {
   public TiposCuenta:any = [];
 
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar esta moneda';
 
   public MonedaModel:MonedaModel = new MonedaModel();

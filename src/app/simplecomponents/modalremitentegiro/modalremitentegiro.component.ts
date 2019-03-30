@@ -22,7 +22,7 @@ export class ModalremitentegiroComponent implements OnInit {
 
   public TiposDocumento:Array<any> = [];
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar este remitente';
 
   public RemitenteModel:RemitenteGiroModel = new RemitenteGiroModel();

@@ -22,7 +22,7 @@ export class ModaldestinatariogiroComponent implements OnInit {
 
   public TiposDocumento:Array<any> = [];
   public openSubscription:any;
-  private Editar:boolean = false;
+  public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar este destinatario';
 
   public DestinatarioModel:DestinatarioGiroModel = new DestinatarioGiroModel();
