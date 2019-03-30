@@ -7,17 +7,23 @@ import { log } from 'util';
 
 export class CustomcurrencyPipe implements PipeTransform {
     transform(value: string, currency_symbol:string = "$"): string {
-        if(value) {
-        //     let val = value.split('.');
-        //     if (!val[1]) {
-        //         val[1] = '00';
-        //     }
+        if(value !== '') {
             
-        //   return currency_symbol+" "+val[0].replace(/\,/g,'.')+','+val[1];
-
-        return currency_symbol+" "+this.formatMoney(value, 2, ".", ",");
+            if (value == '0') {
+                let val = '00';
+                // let val = value.split('.');
+                // if (!val[1]) {
+                //     val[1] = '00';
+                // }
+                
+              return currency_symbol+" "+value+'.'+val;
+            }else{
+                
+                return currency_symbol+" "+this.formatMoney(value, 2, ".", ",");
+            }
+        }else{
+            return '';
         }
-        return '';
     }
 
     formatMoney(n, c, d, t) {

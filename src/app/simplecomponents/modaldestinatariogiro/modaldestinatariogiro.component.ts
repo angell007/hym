@@ -43,7 +43,7 @@ export class ModaldestinatariogiroComponent implements OnInit {
       if (data != "0") {
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este destinatario';
-        let p = {id_moneda:data};
+        let p = {id_destinatario:data};
         
         this._DestinatarioService.getDestinatario(p).subscribe((d:any) => {
           if (d.codigo == 'success') {

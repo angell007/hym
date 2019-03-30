@@ -249,6 +249,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public NombreMonedaTasaCambio:string = '';
     public MonedasCambio:any = [];
     public TextoMensajeGuardar:string = 'compra';
+    public MonedaDestino:string = 'Pesos';
+    public MonedaOrigen:string = 'Pesos';
 
   //#endregion
 
@@ -504,12 +506,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   ngOnInit() {   
 
     this.AsignarMonedas();
-    this.AsignarMonedasApertura();
+    //this.AsignarMonedasApertura();
     this.AsignarTipoDocumento();
     this.AsignarTiposCuenta();
     
-    this.SetDatosIniciales();
-    this.GetRegistroDiario();
+    
+    setTimeout(() => {
+      this.SetDatosIniciales();
+      this.CheckApertura();
+    }, 1500);
+    //this.GetRegistroDiario();
   }
 
   ngAfterViewInit() {
@@ -3181,7 +3187,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.CargarCambiosDiarios();
 
       this.MonedasCambio = [];
-      this.AsignarMonedasSinMonedaLocal(this.MonedasCambio);
+      //this.AsignarMonedasSinMonedaLocal(this.MonedasCambio);
+      this._monedaService.getMonedasExtranjeras().subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.MonedasCambio = data.query_data;
+        }else{
+          this.MonedasCambio = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }
+      });
     }
 
     CargarDatosTransferencia(){
@@ -3264,7 +3279,15 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       // });
 
       this.MonedasTraslados = [];
-      this.MonedasTraslados = this.globales.Monedas;      
+      this._monedaService.getMonedas().subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.MonedasTraslados = data.query_data;
+        }else{
+          this.MonedasTraslados = [];
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }
+      });
     }
 
     CargarDatosCorresponsal(){
@@ -3460,6 +3483,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this._monedaService.getMonedas().subscribe((data:any) => {
         if (data.codigo == 'success') {
           this.Monedas = data.query_data;
+          setTimeout(() => {
+            this.AsignarMonedasApertura();  
+          }, 800);
+          
         }else{
           this.Monedas = [];
           let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
@@ -3515,14 +3542,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       });
     }
 
-    AsignarMonedasApertura(){
+    AsignarMonedasApertura(){      
       if (this.Monedas.length > 0) {
           
           this.ValoresMonedasApertura = [];
           this.Monedas.forEach(moneda => {
               let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
               this.ValoresMonedasApertura.push(monObj);
-          });            
+          });  
+          
+          //this.GetRegistroDiario();
       }
   }
 
@@ -3551,6 +3580,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             data.valores_anteriores.forEach((valores,i) => {
               this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
             }); 
+          }
+      });
+    }
+
+    CheckApertura(){
+      this.http
+        .get(this.globales.ruta + 'php/diario/verificar_apertura_diario.php', { params: { id_funcionario: this.funcionario_data.Identificacion_Funcionario } })
+        .subscribe((data:any) => {
+          if (data == '0') {
+            this.GetRegistroDiario();
           }
       });
     }

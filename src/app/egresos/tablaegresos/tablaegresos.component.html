@@ -1,0 +1,107 @@
+<div class="card-header">
+  <div class="row">
+    <div class="col-md-4" style="display:flex; align-items:flex-end;"> 
+      <h5>Egresos</h5>       
+    </div>
+    <div class="col-md-8">
+      <div class="pull-right">
+        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
+          (click)="AbrirModal('0')">
+          <i class="ti-plus font-size-15 mr-2"></i> Nueva Egreso
+        </button>
+      </div>
+    </div>
+  </div>                  
+</div>
+<div class="card-body">
+  <table class="table table-striped table-bordered custom-table">
+    <thead>
+      <tr>
+        <th class="custom-thead">Codigo</th>
+        <th class="custom-thead" style="width:10%;">Funcionario</th>
+        <th class="custom-thead" style="width:10%;">Grupo</th>
+        <th class="custom-thead" style="width:6%;">Tercero</th>
+        <th class="custom-thead" style="width:6%;">Moneda</th>
+        <th class="custom-thead" style="width:10%;">Valor Egreso</th>
+        <th class="custom-thead" style="width:6%;">Acciones</th>
+      </tr>
+      <tr>
+        <th class="table-filters">
+          <input type="text" class="form-control" placeholder="Filtro codigo"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.codigo">
+        </th>
+        <th class="table-filters">
+          <input type="text" class="form-control" placeholder="Filtro funcionario"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.funcionario">
+        </th>
+        <th class="table-filters">
+          <select id="grupo" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.grupo">
+            <option value="" selected>Seleccione</option>
+            <option *ngFor="let gt of GruposTerceros" [value]="d.Id_Grupo_Tercero">{{d.Nombre}}</option>
+          </select>
+        </th>
+        <th class="table-filters">
+          <input type="text" class="form-control" placeholder="Filtro tercero"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.tercero">
+        </th>
+        <th class="table-filters">
+          <select id="moneda" class="form-control" (change)="GetMunicipiosDepartamento()" [(ngModel)]="Filtros.moneda">
+            <option value="" selected>Seleccione</option>
+            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+          </select>
+        </th>
+        <th class="table-filters"></th>
+      </tr>
+      <tr *ngIf="Cargando">
+        <td colspan="10" class="text-center">
+          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+            <h2>CARGANDO EGRESOS</h2>
+            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="Egresos.length == 0 && !Cargando">
+        <td colspan="10" class="text-center">
+            <i class="ti-alert font-size-20 text-warning"></i>
+            <h4>No hay egresos para mostrar!</h4>
+        </td>
+      </tr>
+    </thead>
+    <tbody *ngIf="!Cargando">                                            
+      <tr *ngFor="let e of Egresos; let i = index;" [ngClass]="{'bg-inactive':e.Estado == 'Anulado'}">
+        <td class="custom-cell">{{e.Codigo}}</td>
+        <td class="custom-cell">{{e.Nombre_Funcionario}}</td>
+        <td class="custom-cell">{{e.Nombre_Grupo}}</td>
+        <td class="custom-cell">{{e.Nombre_Tercero}}</td>
+        <td class="custom-cell">{{e.Nombre_Moneda}}</td>
+        <td class="custom-cell">{{e.Valor}}</td>
+        <td class="custom-cell">
+          <div class="text-center">
+            <div ngbDropdown class="dropdown-primary">
+              <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
+              <div ngbDropdownMenu>
+                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(e.Id_Egreso)">
+                  <i class="ti-pencil text-warning"></i> Editar</a>
+                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularEgreso(e.Id_Egreso)"
+                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta oficina' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                    <i [ngClass]="{'ti-na text-danger':e.Estado == 'Activo', 'ti-back-right text-success':e.Estado == 'Anulado'}"></i> 
+                    {{e.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="paginacion-container" *ngIf="Egresos.length > 0">
+    <div class="row">
+      <div class="col-md-4">
+        <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+      </div>
+      <div class="col-md-8">
+        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+          size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>

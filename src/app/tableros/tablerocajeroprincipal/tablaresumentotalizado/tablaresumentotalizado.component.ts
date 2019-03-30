@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
+import { MonedaService } from '../../../shared/services/monedas/moneda.service';
+import { SwalService } from '../../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-tablaresumentotalizado',
@@ -29,27 +31,30 @@ export class TablaresumentotalizadoComponent implements OnInit, OnChanges {
   public QtyResult:number = 0;
   public TotalMunicipio:number = 0;
 
-  constructor(public globales:Globales, private client:HttpClient) {
-    this.AsignarMonedas();
+  constructor(public globales:Globales, private client:HttpClient, private _monedaService:MonedaService, private _swalService:SwalService) {
+    //this.AsignarMonedas();
    }
 
   ngOnChanges(changes:SimpleChanges){  
+    //this.ExtraerTotales();
+    this.AsignarMonedas();
   }
 
   ngOnInit() {
-    console.log(this.Municipio);
-    this.ExtraerTotales();    
+    //this.ExtraerTotales();    
+    this.AsignarMonedas();
   }
 
   ExtraerTotales(){
-    let totales_monedas = this.Municipio.Total_Monedas;
-
-    this.Monedas.forEach(m => {
+    let totales_monedas = this.Municipio.Total_Monedas;  
+    this.MostrarTotales = [];
+    this.Monedas.forEach(m => {      
       let n = m.Nombre;
       let t = parseFloat(totales_monedas[n].Ingresos) - parseFloat(totales_monedas[n].Egresos);
       let totalObj = { Codigo:m.Codigo, Total:t};
       this.MostrarTotales.push(totalObj);
     });
+    
   }
 
   SetReferencias(){
@@ -97,12 +102,22 @@ export class TablaresumentotalizadoComponent implements OnInit, OnChanges {
     } 
     this.idColapsable = 'colapsable'+this.ParentIndex;
     this.refColapsable = '#colapsable'+this.ParentIndex;
-    console.log(this.refColapsable);
     
   }
 
   AsignarMonedas(){
-    this.Monedas = this.globales.Monedas;
+    //this.Monedas = this.globales.Monedas;
+    this._monedaService.getMonedas().subscribe((d:any) => {
+      if (d.codigo == 'success') {
+        this.Monedas = d.query_data; 
+        this.ExtraerTotales();
+        //console.log(this.Monedas);
+      }else{
+        this.Monedas = [];
+        this._swalService.ShowMessage(d);
+      }
+      
+    });
   }
 
   ShowSwal(tipo:string, titulo:string, msg:string){

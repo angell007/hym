@@ -3,14 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
 import { SwalService } from '../swal/swal.service';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class GeneralService {
 
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
+  public FechaActual:string;
 
-  constructor(private client:HttpClient, private globales:Globales, private _swalService:SwalService) { }
+  constructor(private client:HttpClient, 
+              private globales:Globales, 
+              private _swalService:SwalService,
+              private datePipe:DatePipe) 
+  {
+    this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    console.log(this.FechaActual);
+    
+  }
 
   public checkIdentificacion(id:string):Observable<any>{
     let p = {id:id};

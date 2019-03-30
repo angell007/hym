@@ -5,7 +5,7 @@
     </tr>
     <tr>      
       <td *ngFor="let t of MostrarTotales" class="p-0 pr-1 text-right" style="width:10%">
-        <b>{{t.Codigo}}</b> {{t.Total | number | puntos}}
+        {{t.Total | customcurrency:t.Codigo}}
       </td>
     </tr>
   </tbody>

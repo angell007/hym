@@ -24,6 +24,11 @@ export class TerceroService {
     return this.client.get(this._rutaBase+'get_tercero_ver.php', {params:p});
   }
 
+  getTotalesMonedasTercero(idTercero:string):Observable<any>{
+    let p = {id_tercero:idTercero};
+    return this.client.get(this._rutaBase+'get_totales_monedas_tercero.php', {params:p});
+  }
+
   saveTercero(data:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'guardar_tercero_nuevo.php', data);
   }

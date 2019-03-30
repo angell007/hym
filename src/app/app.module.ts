@@ -20,7 +20,7 @@ import 'nvd3';
 import { NvD3Module } from 'ng2-nvd3';
 import { DataTablesModule } from 'angular-datatables';
 //import { NgxSpinnerModule } from 'ngx-spinner';
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
 
@@ -195,6 +195,10 @@ import { TablaverterceroComponent } from './configuracion/terceros/tablaverterce
 import { TablatotalesterceroComponent } from './configuracion/terceros/tablatotalestercero/tablatotalestercero.component';
 import { TablatotalesmonedaterceroComponent } from './configuracion/terceros/tablatotalesmonedatercero/tablatotalesmonedatercero.component';
 import { ModalajusteterceroComponent } from './simplecomponents/modalajustetercero/modalajustetercero.component';
+import { InformativetotalmonedatercerocardComponent } from './simplecomponents/informativetotalmonedatercerocard/informativetotalmonedatercerocard.component';
+import { ColorsaldoPipe } from './common/Pipes/colorsaldo.pipe';
+import { ColorsaldoDirective } from './common/CustomAtributeDirectives/colorsaldo.directive';
+import { TablaegresosComponent } from './egresos/tablaegresos/tablaegresos.component';
 
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -361,7 +365,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablaverterceroComponent,
         TablatotalesterceroComponent,
         TablatotalesmonedaterceroComponent,
-        ModalajusteterceroComponent
+        ModalajusteterceroComponent,
+        InformativetotalmonedatercerocardComponent,
+        ColorsaldoPipe,
+        ColorsaldoDirective,
+        TablaegresosComponent
     ],
     exports:[
         ModalBasicComponent
@@ -406,7 +414,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         RemitentegiroService,
         DestinatariogiroService,
         OficinaService,
-        MovimientoterceroService
+        MovimientoterceroService,
+        DatePipe
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

@@ -15,4 +15,21 @@ export class MovimientoterceroService {
     return this.client.get(this._rutaBase+'get_movimientos_tercero.php', {params: p});
   }
 
+  getMovimientoTercero(idMovimientoTercero:string):Observable<any>{
+    let p = {id_movimiento:idMovimientoTercero};
+    return this.client.get(this._rutaBase+'get_movimiento_tercero.php', {params: p});
+  }
+
+  saveMovimientoTercero(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'guardar_movimiento_tercero.php', data);
+  }
+
+  editMovimientoTercero(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'editar_movimiento_tercero.php', data);
+  }
+
+  anularMovimientoTercero(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'cambiar_estado_movimiento_tercero.php', data);
+  }
+
 } 

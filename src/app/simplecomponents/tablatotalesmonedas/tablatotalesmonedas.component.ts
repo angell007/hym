@@ -19,6 +19,8 @@ export class TablatotalesmonedasComponent implements OnInit, OnChanges {
   ngOnChanges(changes:SimpleChanges){
     this.MostrarTotales = [];    
     this.MostrarTotales = changes.MostrarTotales.currentValue;
+    console.log(this.MostrarTotales);
+    
   }
 
   ngOnInit() {

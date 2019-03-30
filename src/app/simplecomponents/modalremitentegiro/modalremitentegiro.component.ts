@@ -43,7 +43,7 @@ export class ModalremitentegiroComponent implements OnInit {
       if (data != "0") {
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
-        let p = {id_moneda:data};
+        let p = {id_remitente:data};
         
         this._remitenteService.getRemitente(p).subscribe((d:any) => {
           if (d.codigo == 'success') {
