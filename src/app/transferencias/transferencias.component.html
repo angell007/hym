@@ -251,7 +251,7 @@
                             <th class="text-center">Fecha</th>
                             <th class="text-center">Recibo</th>
                             <th class="text-center">Tipo Transferencia</th>
-                            <th class="text-center">Recibido</th>
+                            <!-- <th class="text-center">Recibido</th> -->
                             <th class="text-center">Transferido</th>
                             <th class="text-center">Estado</th>
                         </tr>
@@ -261,7 +261,7 @@
                             <td>{{DetalleTransferencia.Fecha | date:"medium" | uppercase}}</td>
                             <td>{{DetalleTransferencia.Recibo}}</td>
                             <td>{{DetalleTransferencia.Tipo}}</td>
-                            <td class="text-right">{{DetalleTransferencia.Codigo_Moneda_Origen}} {{DetalleTransferencia.Valor_Origen | number | puntos}}</td>
+                            <!-- <td class="text-right">{{DetalleTransferencia.Codigo_Moneda_Origen}} {{DetalleTransferencia.Valor_Origen | number | puntos}}</td> -->
                             <td class="text-right">{{DetalleTransferencia.Codigo_Moneda_Destino}} {{DetalleTransferencia.Valor_Destino | number | puntos}}</td>
                             <td>{{DetalleTransferencia.Estado}}</td>
                         </tr>
@@ -352,7 +352,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12" *ngIf="ShowDatosDevolucion">
+            <!-- <div class="col-md-12" *ngIf="ShowDatosDevolucion">
                 <div id="accordion3">
                     <div class="card p-0">
                         <div class="card-header" id="headingThree">
@@ -382,7 +382,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="app-modal-footer">

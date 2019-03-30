@@ -73,6 +73,8 @@ import { RemitentegiroService } from './shared/services/remitentesgiros/remitent
 import { DestinatariogiroService } from './shared/services/destinatariosgiros/destinatariogiro.service';
 import { OficinaService } from './shared/services/oficinas/oficina.service';
 import { MovimientoterceroService } from './shared/services/movimientostercero/movimientotercero.service';
+import { EgresoService } from './shared/services/egresos/egreso.service';
+
 
 //MODALES
 import { ModalBasicComponent } from './shared/modal-basic/modal-basic.component';
@@ -199,7 +201,8 @@ import { InformativetotalmonedatercerocardComponent } from './simplecomponents/i
 import { ColorsaldoPipe } from './common/Pipes/colorsaldo.pipe';
 import { ColorsaldoDirective } from './common/CustomAtributeDirectives/colorsaldo.directive';
 import { TablaegresosComponent } from './egresos/tablaegresos/tablaegresos.component';
-
+import { ModalegresoComponent } from './simplecomponents/modalegreso/modalegreso.component';
+import { TablacomprasrealizadasComponent } from './configuracion/compras/tablacomprasrealizadas/tablacomprasrealizadas.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -369,7 +372,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         InformativetotalmonedatercerocardComponent,
         ColorsaldoPipe,
         ColorsaldoDirective,
-        TablaegresosComponent
+        TablaegresosComponent,
+        ModalegresoComponent,
+        TablacomprasrealizadasComponent
     ],
     exports:[
         ModalBasicComponent
@@ -415,7 +420,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         DestinatariogiroService,
         OficinaService,
         MovimientoterceroService,
-        DatePipe
+        DatePipe,
+        EgresoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

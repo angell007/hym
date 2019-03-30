@@ -104,12 +104,12 @@
                                 <div ngbDropdown class="dropdown-primary">
                                   <button ngbDropdownToggle class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" type="button"> <i class="ti-angle-down"></i></button>
                                   <div ngbDropdownMenu>
-                                    <!--<a 
+                                    <a 
                                       class="dropdown-item waves-light waves-effect"
-                                      style="cursor:pointer;">
+                                      style="cursor:pointer;" [routerLink]="['/tercerover',t.Id_Tercero]">
                                       <i class="ti-zoom-in text-info"></i> 
-                                      <small>Detalle</small>
-                                    </a>-->
+                                      Detalle
+                                    </a>
                                     <a 
                                       class="dropdown-item waves-light waves-effect" style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
                                       <i class="ti-pencil text-warning"></i> 

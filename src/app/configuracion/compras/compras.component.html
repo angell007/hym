@@ -1,62 +1,13 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Compras en nuestro Sistema</h4>
-        <button class="pull-right btn btn-info" [routerLink]="['/comprascrear']">
-            <i class="ti-plus"></i> Agregar Nueva Compra</button>
     </div>
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-12">
-            <div class="widget card">
-                <div class="card-block">
-                    <p>Caja Recaudos en nuestro Sistema</p>
-                    <div class="table-overflow">
-                        <table class="table table-hover table-sm table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width:150px;">Fecha</th>
-                                    <th>Código</th>
-                                    <th>Valor</th>
-                                    <th>Tasa Cambio</th>
-                                    <th style="width:300px;" *ngIf="esconder"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let compra of compras"
-                                    [ngClass]="{'bg-anulada':compra.Estado == 'Anulada'}">
-                                    <td>{{compra.Fecha | date:"short"}}</td>
-                                    <td>{{compra.Codigo}}</td>
-                                    <td>{{compra.Valor_Compra | currency}}</td>
-                                    <td>{{compra.Tasa}}</td>
-                                    <td class="text-center" *ngIf="esconder">
-
-                                        <!--<button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCompra(compra.Id_Compra)">
-                                            <i class="ti-pencil"></i>
-                                        </button>-->
-                                        <button *ngIf="compra.Estado != 'Anulada'" class="btn btn-default btn-xs" type="button" style="margin:0;" 
-                                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No,Dejame Comprobar!'}"
-                                        (confirm)="AnularCompra(compra.Id_Compra)">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="card">
+                <app-tablacomprasrealizadas></app-tablacomprasrealizadas>
             </div>
         </div>
     </div>
 </div>
-
-
-<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
-</swal>
-
-<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
-</swal>
-
-<swal #deleteSwal title="Compra eliminada" text="Se ha Eliminado Correctamente la compra" type="success">
-</swal>
-
-<swal #mensajeSwal title="" text="" type=""></swal>

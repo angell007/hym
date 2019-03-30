@@ -16,6 +16,10 @@ export class CompraService {
     return this.client.get(this.globales.ruta+'php/compras/get_compra.php', {params:p});
   }
 
+  getListaCompra(p:any){
+    return this.client.get(this.globales.ruta+'php/compras/get_lista_compras.php', {params:p});
+  }
+
   getComprasPendientes(idMoneda:string){
     let p = {id_moneda:idMoneda}
     return this.client.get(this.globales.ruta+'php/compras/compras_pendientes.php', {params:p});

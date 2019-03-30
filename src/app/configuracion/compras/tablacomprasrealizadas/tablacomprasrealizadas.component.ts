@@ -1,32 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject } from 'rxjs';
-import { GeneralService } from '../../shared/services/general/general.service';
-import { SwalService } from '../../shared/services/swal/swal.service';
-import { ToastService } from '../../shared/services/toasty/toast.service';
-import { MonedaService } from '../../shared/services/monedas/moneda.service';
-import { EgresoService } from '../../shared/services/egresos/egreso.service';
+import { GeneralService } from '../../../shared/services/general/general.service';
+import { SwalService } from '../../../shared/services/swal/swal.service';
+import { ToastService } from '../../../shared/services/toasty/toast.service';
+import { MonedaService } from '../../../shared/services/monedas/moneda.service';
+import { CompraService } from '../../../shared/services/compra/compra.service';
 
 @Component({
-  selector: 'app-tablaegresos',
-  templateUrl: './tablaegresos.component.html',
-  styleUrls: ['./tablaegresos.component.scss', '../../../style.scss']
+  selector: 'app-tablacomprasrealizadas',
+  templateUrl: './tablacomprasrealizadas.component.html',
+  styleUrls: ['./tablacomprasrealizadas.component.scss', '../../../../style.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class TablaegresosComponent implements OnInit {
+export class TablacomprasrealizadasComponent implements OnInit {
 
-  public Egresos:Array<any> = [];
+  public Compras:Array<any> = [];
   public Monedas:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
   
-  public AbrirModalAgregar:Subject<any> = new Subject<any>();
-  
   public Filtros:any = {
+    fecha:'',
     codigo:'',
     funcionario:'',
-    grupo:'',
     tercero:'',
     moneda:'',
-    valor:''
+    valor:'',
+    tasa:'',
+    valor_peso:''
   };
 
   //Paginación
@@ -44,7 +45,7 @@ export class TablaegresosComponent implements OnInit {
               private _swalService:SwalService,
               private _toastService:ToastService,
               private _monedaService:MonedaService,
-              private _egresoService:EgresoService) 
+              private _compraService:CompraService) 
   {
     this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -67,10 +68,6 @@ export class TablaegresosComponent implements OnInit {
     });
   }
 
-  AbrirModal(idEgreso:string){
-    this.AbrirModalAgregar.next(idEgreso);
-  }
-
   SetFiltros(paginacion:boolean) {
     let params:any = {};
     
@@ -83,6 +80,10 @@ export class TablaegresosComponent implements OnInit {
       params.pag = this.page;
     }
 
+    if (this.Filtros.fecha.trim() != "") {
+      params.fecha = this.Filtros.fecha;
+    }
+    
     if (this.Filtros.codigo.trim() != "") {
       params.codigo = this.Filtros.codigo;
     }
@@ -95,16 +96,20 @@ export class TablaegresosComponent implements OnInit {
       params.tercero = this.Filtros.tercero;
     }
 
-    if (this.Filtros.grupo.trim() != "") {
-      params.grupo = this.Filtros.grupo;
+    if (this.Filtros.moneda.trim() != "") {
+      params.moneda = this.Filtros.moneda;
     }
 
     if (this.Filtros.valor.trim() != "") {
       params.valor = this.Filtros.valor;
     }
 
-    if (this.Filtros.moneda.trim() != "") {
-      params.moneda = this.Filtros.moneda;
+    if (this.Filtros.tasa.trim() != "") {
+      params.tasa = this.Filtros.tasa;
+    }
+
+    if (this.Filtros.valor_peso.trim() != "") {
+      params.valor_peso = this.Filtros.valor_peso;
     }
 
     return params;
@@ -120,12 +125,12 @@ export class TablaegresosComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this._egresoService.getListaEgresos(p).subscribe((data:any) => {
+    this._compraService.getListaCompra(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
-        this.Egresos = data.query_data;
+        this.Compras = data.query_data;
         this.TotalItems = data.numReg;
       }else{
-        this.Egresos = [];
+        this.Compras = [];
         this._swalService.ShowMessage(data);
       }
       
@@ -136,12 +141,14 @@ export class TablaegresosComponent implements OnInit {
 
   ResetValues(){
     this.Filtros = {
+      fecha:'',
       codigo:'',
       funcionario:'',
-      grupo:'',
       tercero:'',
       moneda:'',
-      valor:''
+      valor:'',
+      tasa:'',
+      valor_peso:''
     };
   }
 
@@ -155,10 +162,10 @@ export class TablaegresosComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  AnularEgreso(idEgreso:string){
+  AnularCompra(idCompra:string){
     let datos = new FormData();
-    datos.append("id_egreso", idEgreso);
-    this._egresoService.anularEgreso(datos).subscribe((data:any) => {
+    datos.append("id_compra", idCompra);
+    this._compraService.anularCompra(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
@@ -168,5 +175,7 @@ export class TablaegresosComponent implements OnInit {
       }
     });
   }
+
+
 
 }

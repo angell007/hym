@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Globales } from '../../../shared/globales/globales';
 import { CompraService } from '../../../shared/services/compra/compra.service';
 import { CambioService } from '../../../shared/services/cambio.service';
@@ -6,7 +6,8 @@ import { CambioService } from '../../../shared/services/cambio.service';
 @Component({
   selector: 'app-tablacompras',
   templateUrl: './tablacompras.component.html',
-  styleUrls: ['./tablacompras.component.scss']
+  styleUrls: ['./tablacompras.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TablacomprasComponent implements OnInit, OnChanges {
 

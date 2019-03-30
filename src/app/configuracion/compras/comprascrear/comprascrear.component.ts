@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../../shared/globales/globales';
@@ -16,7 +16,8 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 @Component({
   selector: 'app-comprascrear',
   templateUrl: './comprascrear.component.html',
-  styleUrls: ['./comprascrear.component.scss']
+  styleUrls: ['./comprascrear.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ComprascrearComponent implements OnInit {
 

@@ -14,6 +14,15 @@ export class TerceroService {
     return this.client.get(this._rutaBase+'get_lista_terceros.php?'+p);
   }
 
+  getAllTerceros(p:string):Observable<any>{
+    return this.client.get(this._rutaBase+'get_todos_terceros.php?'+p);
+  }
+
+  getTercerosGrupo(idGrupo:string):Observable<any>{
+    let p = {id_grupo:idGrupo};
+    return this.client.get(this._rutaBase+'get_terceros_grupo.php', {params:p});
+  }
+
   getTercero(idTercero:string):Observable<any>{
     let p = {id_tercero:idTercero};
     return this.client.get(this._rutaBase+'get_tercero.php', {params:p});

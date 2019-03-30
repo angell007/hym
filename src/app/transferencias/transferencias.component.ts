@@ -37,7 +37,7 @@ export class TransferenciasComponent implements OnInit {
   };
 
   public DatosPago:any = {};
-  public DatosDevolucion:any = {};
+  public DatosDevolucion:any = {Fecha:'',Motivo_Devolucion:''};
   public Destinatarios:Array<any> = [];
   public CuentasPagadas:Array<any> = [];
 
@@ -68,9 +68,9 @@ export class TransferenciasComponent implements OnInit {
        
         this.Destinatarios = data.transferencia.Destinatarios;
 
-        if (data.transferencia.Datos_Pago != '') {
-          this.DatosPago = data.transferencia.Datos_Pago; 
-          this.CuentasPagadas =  data.transferencia.Datos_Pago.Cuentas_Pagadas;
+        if (data.transferencia.Pagos != '') {
+          this.DatosPago = data.transferencia.Pagos; 
+          //this.CuentasPagadas =  data.transferencia.Pagos.Cuentas_Pagadas;
           
           this.ShowDatosPago = true;
         }else{
@@ -85,7 +85,7 @@ export class TransferenciasComponent implements OnInit {
           this.ShowDatosDevolucion = true;
         }else{
 
-          this.DatosDevolucion = {};
+          this.DatosDevolucion = {Fecha:'',Motivo_Devolucion:''};
           this.ShowDatosDevolucion = false;
         }        
         console.log(this.ShowDatosPago);
@@ -98,7 +98,7 @@ export class TransferenciasComponent implements OnInit {
         this.DatosPago = {};
         this.CuentasPagadas = [];
         this.ShowDatosPago = false;
-        this.DatosDevolucion = {};
+        this.DatosDevolucion = {Fecha:'',Motivo_Devolucion:''};
         this.ShowDatosDevolucion = false;
       }
       
