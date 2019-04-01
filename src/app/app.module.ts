@@ -74,6 +74,8 @@ import { DestinatariogiroService } from './shared/services/destinatariosgiros/de
 import { OficinaService } from './shared/services/oficinas/oficina.service';
 import { MovimientoterceroService } from './shared/services/movimientostercero/movimientotercero.service';
 import { EgresoService } from './shared/services/egresos/egreso.service';
+import { AgenteexternoService } from './shared/services/agentesexternos/agenteexterno.service';
+import { TrasladoService } from './shared/services/traslados/traslado.service';
 
 
 //MODALES
@@ -203,6 +205,10 @@ import { ColorsaldoDirective } from './common/CustomAtributeDirectives/colorsald
 import { TablaegresosComponent } from './egresos/tablaegresos/tablaegresos.component';
 import { ModalegresoComponent } from './simplecomponents/modalegreso/modalegreso.component';
 import { TablacomprasrealizadasComponent } from './configuracion/compras/tablacomprasrealizadas/tablacomprasrealizadas.component';
+import { TablaagentesexternosComponent } from './agentesexternos/tablaagentesexternos/tablaagentesexternos.component';
+import { ModalagenteexternoComponent } from './simplecomponents/modalagenteexterno/modalagenteexterno.component';
+import { ModaltrasladoComponent } from './simplecomponents/modaltraslado/modaltraslado.component';
+import { TablatrasladosComponent } from './traslados/tablatraslados/tablatraslados.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -374,7 +380,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ColorsaldoDirective,
         TablaegresosComponent,
         ModalegresoComponent,
-        TablacomprasrealizadasComponent
+        TablacomprasrealizadasComponent,
+        TablaagentesexternosComponent,
+        ModalagenteexternoComponent,
+        ModaltrasladoComponent,
+        TablatrasladosComponent
     ],
     exports:[
         ModalBasicComponent
@@ -421,7 +431,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         OficinaService,
         MovimientoterceroService,
         DatePipe,
-        EgresoService
+        EgresoService,
+        AgenteexternoService,
+        TrasladoService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

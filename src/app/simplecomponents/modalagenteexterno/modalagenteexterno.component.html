@@ -1,0 +1,69 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalAgenteExterno>
+    <div class="app-modal-header">
+      <h4 class="modal-title">Agente Externo</h4>
+      <button type="button" class="close basic-close" (click)="CerrarModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="app-modal-body">
+      <form #FormAgenteExterno="ngForm">
+        <div class="form-row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" placeholder="Nombre" class="form-control" name="Nombre" 
+                [(ngModel)]="AgenteExternoModel.Nombre" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Documento</label>
+              <input type="text" placeholder="Documento" class="form-control" name="Documento" 
+                [(ngModel)]="AgenteExternoModel.Documento" (change)="VerificarIdentificacion()" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Cupo</label>
+              <input type="text" placeholder="Cupo" class="form-control text-right" name="Cupo" 
+                [(ngModel)]="AgenteExternoModel.Cupo" (onkeypress)="SoloNumerosYDecimal($event)" required>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label>Usuario</label>
+              <input type="text" placeholder="Usuario" class="form-control" name="Usuario" 
+                [(ngModel)]="AgenteExternoModel.Username" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <div class="form-group">
+                  <label>Password</label>
+                  <div class="input-group mb-3">
+                    <input [attr.type]="PasswordType" placeholder="Contrasena" class="form-control" name="Password" 
+                      [(ngModel)]="AgenteExternoModel.Password" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text" style="padding:0 10px;">
+                        <i style="cursor:pointer;" (click)="CambiarInputType()" 
+                          class="fa font-size-12" [ngClass]="{'fa-eye': !VerPassWord, 'fa-eye-slash': VerPassWord}" ></i></span>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="app-modal-footer">
+      <div class="text-right">
+        <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+          [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+          (confirm)="GuardarAgenteExterno()" [disabled]="!FormAgenteExterno.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+        </button>
+      </div>
+    </div>  
+  </app-modal-basic>
