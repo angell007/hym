@@ -19,6 +19,11 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias.php');
   }
 
+  getFiltrarCuentasBancarias(match:string):Observable<any>{
+    let p = {match:match};
+    return this.client.get(this._rutaBase+'/filtrar_cuentas_bancarias.php', {params:p});
+  }
+
   getListaCuentasBancarias(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'/get_lista_cuentas_bancarias.php', {params:p});
   }

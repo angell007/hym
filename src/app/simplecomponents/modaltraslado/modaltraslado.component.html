@@ -1,3 +1,105 @@
-<p>
-  modaltraslado works!
-</p>
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalTraslado>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Traslado</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">    
+    <form #FormTraslado="ngForm">
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Origen</label>
+            <select id="origen" name="Origen" class="form-control" [(ngModel)]="TrasladoModel.Origen" required (change)="CambiarTipo('origen')">
+              <option value="" selected>Seleccione</option>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Destino</label>
+            <select id="destino" name="Destino" class="form-control" [(ngModel)]="TrasladoModel.Destino" required (change)="CambiarTipo('destino')">
+              <option value="" selected>Seleccione</option>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>{{TipoOrigen}} Origen</label>
+            <input type="text" name="Id_Origen" class="form-control" placeholder="origen" [disabled]="TrasladoModel.Origen == ''"              
+              [(ngModel)]="Origen"
+              [ngbTypeahead]="search_origen"
+              [resultTemplate]="rt_origenm" 
+              [inputFormatter]="formatter_origen" 
+              (ngModelChange)="CompletarOrigen(Origen)">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>{{TipoDestino}} Destino</label>
+            <input type="text" name="Id_Destino" class="form-control" placeholder="destino" [disabled]="TrasladoModel.Destino == ''"              
+              [(ngModel)]="Destino"
+              [ngbTypeahead]="search_destino"
+              [resultTemplate]="rt_destinom" 
+              [inputFormatter]="formatter_destino" 
+              (ngModelChange)="CompletarDestino(Destino)">
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Moneda</label>
+            <select id="origen" name="Moneda" class="form-control" [(ngModel)]="TrasladoModel.Moneda" required>
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="text" name="Valor" class="form-control" [(ngModel)]="TrasladoModel.Valor" placeholder="Valor" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="form-group">
+                  <strong>
+                      <label>Detalles</label>
+                  </strong>
+                  <textarea required class="form-control" placeholder="Detalles del traslado" name="Detalle" [(ngModel)]="TrasladoModel.Detalle"></textarea>
+              </div>
+          </div>
+      </div>
+      
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarTraslado()" [disabled]="!FormTraslado.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+      </button>
+    </div>
+  </div>  
+</app-modal-basic>
+
+<ng-template #rt_origenm let-r="result" let-t="term">
+    <strong>{{r.Nombre}}</strong>
+</ng-template>
+
+<ng-template #rt_destinom let-r="result" let-t="term">
+    <strong>{{r.Nombre}}</strong>
+</ng-template>

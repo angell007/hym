@@ -19,7 +19,7 @@ export class TrasladoService {
   }
 
   saveTraslado(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_traslado.php', datos);
+    return this.client.post(this._rutaBase+'guardar_traslado_nuevo.php', datos);
   }
 
   editTraslado(datos:FormData):Observable<any>{

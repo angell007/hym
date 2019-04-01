@@ -14,6 +14,11 @@ export class TerceroService {
     return this.client.get(this._rutaBase+'get_lista_terceros.php?'+p);
   }
 
+  getTercerosPorTipo(tipo:string, match:string):Observable<any>{
+    let p = {tipo_tercero:tipo, match:match};
+    return this.client.get(this._rutaBase+'get_terceros_by_tipo.php', {params:p});
+  }
+
   getAllTerceros(p:string):Observable<any>{
     return this.client.get(this._rutaBase+'get_todos_terceros.php?'+p);
   }
