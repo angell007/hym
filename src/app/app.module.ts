@@ -76,6 +76,7 @@ import { MovimientoterceroService } from './shared/services/movimientostercero/m
 import { EgresoService } from './shared/services/egresos/egreso.service';
 import { AgenteexternoService } from './shared/services/agentesexternos/agenteexterno.service';
 import { TrasladoService } from './shared/services/traslados/traslado.service';
+import { IndicadorService } from './shared/services/indicadores/indicador.service';
 
 
 //MODALES
@@ -433,7 +434,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         DatePipe,
         EgresoService,
         AgenteexternoService,
-        TrasladoService
+        TrasladoService,
+        IndicadorService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

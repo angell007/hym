@@ -11,6 +11,7 @@ export class GeneralService {
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public FechaActual:string;
+  public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
   constructor(private client:HttpClient, 
               private globales:Globales, 

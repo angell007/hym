@@ -400,6 +400,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       Id_Traslado_Caja: '',
       Funcionario_Destino: '',
       Id_Cajero_Origen: this.funcionario_data.Identificacion_Funcionario,
+      Id_Caja: this.IdCaja,
       Valor: '',
       Detalle: '',
       Id_Moneda: '',
@@ -2752,6 +2753,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     RealizarTraslado(formulario: NgForm, modal) {
       
+      this.TrasladoModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
       let info = JSON.stringify(this.TrasladoModel);
       let datos = new FormData();
       datos.append("modulo", 'Traslado_Caja');

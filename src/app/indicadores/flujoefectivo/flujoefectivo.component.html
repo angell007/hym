@@ -18,15 +18,26 @@
           <div class="form-row">
             <div class="col-md-12">
               <div class="form-group">
-                <label>Fecha</label>
-                <input type="date" id="fecha" class="form-control">
+                <label>Mes</label>
+                <select name="Mes" id="mes" class="form-control" (change)="SetMesNumerico($event.target.value)" [(ngModel)]="Filtros.mes">
+                  <option *ngFor="let me of Meses" [value]="me">{{me}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Departamento</label>
+                <select name="Departamento" id="departamento" class="form-control" [(ngModel)]="Filtros.departamento">
+                  <option value="">Todos</option>
+                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                </select>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
                 <label>Oficinas</label>
-                <select name="Oficinas" id="oficinas" class="form-control">
-                  <option value="">Seleccion</option>
+                <select name="Oficinas" id="oficinas" class="form-control" [(ngModel)]="Filtros.oficina" [disabled]="Filtros.departamento">
+                  <option value="">Todas</option>
                   <option *ngFor="let o of Oficinas" [value]="o.Id_Oficina">{{o.Nombre}}</option>
                 </select>
               </div>
@@ -34,8 +45,8 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Cajas</label>
-                <select name="Cajas" id="cajas" class="form-control">
-                  <option value="">Seleccion</option>
+                <select name="Cajas" id="cajas" class="form-control" [(ngModel)]="Filtros.caja"  [disabled]="Filtros.oficina">
+                  <option value="">Todas</option>
                   <option *ngFor="let c of Cajas" [value]="c.Id_Caja">{{c.Nombre}}</option>
                 </select>
               </div>
@@ -43,8 +54,8 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Cajero</label>
-                <select name="Cajero" id="cajero" class="form-control">
-                  <option value="">Seleccion</option>
+                <select name="Cajero" id="cajero" class="form-control" [(ngModel)]="Filtros.cajero" [disabled]="Filtros.caja">
+                  <option value="">Todos</option>
                   <option *ngFor="let ca of Cajeros" [value]="ca.Id_Cajero">{{ca.Nombre}}</option>
                 </select>
               </div>
@@ -56,7 +67,7 @@
     <div class="col-md-9">  
         <div class="card">
           <div class="card-body">
-            <div style="display: block;">
+            <div style="display: block;" *ngIf="m">
               <canvas baseChart style="height: 200px;"
                 [datasets]="lineChartData" 
                 [labels]="lineChartLabels"
