@@ -18,7 +18,7 @@ export class BalancegeneralComponent implements OnInit {
 
   ListaBalance = [];
   ngOnInit() {
-    this.http.get(this.globales.ruta + 'php/Indicadores/balancegeneral/lista_balance.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/Indicadores/balancegeneral/lista_balance_nuevo.php').subscribe((data: any) => {
       this.ListaBalance = data;
     });
   }

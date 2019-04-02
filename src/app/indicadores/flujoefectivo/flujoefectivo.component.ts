@@ -15,6 +15,9 @@ import { ThemeConstants } from '../../shared/config/theme-constant';
 import { NgForm } from '../../../../node_modules/@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from '../../../../node_modules/rxjs/Subject';
+import { CajaService } from '../../shared/services/caja/caja.service';
+import { CajeroService } from '../../shared/services/cajeros/cajero.service';
+import { OficinaService } from '../../shared/services/oficinas/oficina.service';
 
 @Component({
   selector: 'app-flujoefectivo',
@@ -23,7 +26,13 @@ import { Subject } from '../../../../node_modules/rxjs/Subject';
 })
 export class FlujoefectivoComponent implements OnInit {
 
-  constructor(private http: HttpClient, private colorConfig: ThemeConstants, private globales: Globales) { }
+  constructor(
+              private http: HttpClient, 
+              private colorConfig: ThemeConstants, 
+              private globales: Globales,
+              private _cajaService:CajaService,
+              private _cajeroService:CajeroService,
+              private _oficinaService:OficinaService) { }
 
   // ListaBalance = [];
 
@@ -58,6 +67,9 @@ export class FlujoefectivoComponent implements OnInit {
   //   }
   // ];
 
+  public Oficinas:Array<any> = [];
+  public Cajas:Array<any> = [];
+  public Cajeros:Array<any> = [];
 
   public lineChartData:Array<any> = [
     { data: [15, 32, 7], label: 'Abril' }
