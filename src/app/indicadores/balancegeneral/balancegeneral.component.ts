@@ -19,6 +19,7 @@ export class BalancegeneralComponent implements OnInit {
 
   public Monedas:Array<any> = [];
   public ArmarTabla:boolean = false;
+  public MonedasColSpan:number = 1;
 
   constructor(private _indicadorService:IndicadorService,
               private _monedaService:MonedaService,
@@ -41,6 +42,7 @@ export class BalancegeneralComponent implements OnInit {
     this._monedaService.getMonedas().subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.Monedas = data.query_data;
+        this.MonedasColSpan = this.Monedas.length + 2;
       }else{
 
         this.Monedas = [];

@@ -37,8 +37,14 @@
                         <th class="custom-thead" *ngFor="let m of Monedas">{{m.Nombre}}</th>
                         <th style="width:5%;"></th>
                       </tr>
+                      <tr>
+                        <th *ngIf="item.Terceros.lenght == 0" [attr.colspan]="MonedasColSpan">
+                          <i class="ti-alert font-size-20 text-warning"></i>
+                          <h4>No hay terceros en este grupo!</h4>
+                        </th>
+                      </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="item.Terceros.lenght > 0">
                       <tr *ngFor="let t of item.Terceros">
                         <td class="custom-cell">{{t.Nombre_Tercero}}</td>
                         <td *ngFor="let tm of t.Totales_Monedas" class="text-right custom-cell">{{tm.Total | customcurrency:tm.Codigo}}</td>
