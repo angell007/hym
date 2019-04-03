@@ -12,6 +12,7 @@ export class GeneralService {
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public FechaActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  public Anios:Array<number> = [];
 
   constructor(private client:HttpClient, 
               private globales:Globales, 
@@ -20,6 +21,7 @@ export class GeneralService {
   {
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     console.log(this.FechaActual);
+    this.BuildAniosConsulta();
     
   }
 
@@ -128,5 +130,19 @@ export class GeneralService {
     }
       
     return obj;
+  }
+
+  BuildAniosConsulta():void{
+    let currentDate = new Date();
+
+    let anioInicial = 2019;
+    let currentYear = currentDate.getFullYear();
+
+    for (let index = anioInicial; index <= currentYear; index++) {
+      this.Anios.push(index);      
+    }
+
+    console.log(this.Anios);
+    
   }
 }

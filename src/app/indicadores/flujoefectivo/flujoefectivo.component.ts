@@ -10,7 +10,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/throw';
 import { Color, BaseChartDirective } from 'ng2-charts';
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ThemeConstants } from '../../shared/config/theme-constant';
 import { NgForm } from '../../../../node_modules/@angular/forms';
@@ -30,6 +30,7 @@ import { DepartamentoService } from '../../shared/services/departamento/departam
 })
 export class FlujoefectivoComponent implements OnInit {
   
+  //@ViewChild(BaseChartDirective) charts: QueryList<BaseChartDirective>;
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
   public Meses:Array<string> = [];
@@ -37,6 +38,7 @@ export class FlujoefectivoComponent implements OnInit {
   public Oficinas:Array<any> = [];
   public Cajas:Array<any> = [];
   public Cajeros:Array<any> = [];
+  public Anios:Array<number> = [];
   private currentDate:Date = new Date();
   public m:boolean = false;
 
@@ -46,9 +48,36 @@ export class FlujoefectivoComponent implements OnInit {
     departamento: '',
     oficina: '',
     caja: '',
-    cajero: ''
+    cajero: '',
+    anio:''
   };
 
+  //VARIABLES PIE CHART
+  public pieChartOptions: any = {
+    responsive: true,
+    legend: {
+      position: 'top',
+    },
+    plugins: {
+      datalabels: {
+        formatter: (value, ctx) => {
+          const label = ctx.chart.data.labels[ctx.dataIndex];
+          return label;
+        },
+      },
+    }
+  };
+  public pieChartLabels: Array<any> = [['Download', 'Sales'], ['In', 'Store', 'Sales'], 'Mail Sales'];
+  public pieChartData: number[] = [300, 500, 100];
+  public pieChartType: string = 'pie';
+  public pieChartLegend = true;
+  public pieChartColors = [
+    {
+      backgroundColor: ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
+    },
+  ];
+
+  //VARIABLES LINE CHART
   public lineChartData:Array<any> = [
     { data: [15, 32, 7], label: 'Abril' }
   ];
@@ -121,8 +150,10 @@ export class FlujoefectivoComponent implements OnInit {
     this.Meses = this._generalService.Meses;
     this.Filtros.mes = this.Meses[this.currentDate.getMonth()];
     this.Filtros.mes_numero = (this.Meses.findIndex(x => x == this.Filtros.mes)) +1;
+    this.Filtros.anio = this.currentDate.getFullYear();
     this.GetResumenFlujoEfectivo();
     this.GetDepartamentos();
+    this.Anios = this._generalService.Anios;    
   }
 
   GetResumenFlujoEfectivo(){
@@ -135,14 +166,25 @@ export class FlujoefectivoComponent implements OnInit {
       data.Labels.forEach(l => {        
         this.lineChartLabels.push(l);
       });
+
+      // this.pieChartLabels = [];
+      // data.Totales.Ingresos_Distintivos.labels.forEach(l => {        
+      //   this.pieChartLabels.push(l);
+      // });
       
 
       this.lineChartData = [];
       this.lineChartData.push(data.Totales_Diarios.Ingresos);
       this.lineChartData.push(data.Totales_Diarios.Egresos);
 
+      // this.pieChartData = [];
+      // this.pieChartData.push(data.Totales.Ingresos_Distintivos.data);
+
+
+
       //this.m = true;
       this.refresh_chart();
+      
       
     });
   }
@@ -154,11 +196,16 @@ export class FlujoefectivoComponent implements OnInit {
             this.chart.chart.config.data.datasets = this.lineChartData;
             this.chart.chart.config.data.colors = this.lineChartColors;
             this.chart.chart.update();
+
+            // this.charts[0].chart.config.data.labels = this.pieChartLabels;
+            // this.charts[0].chart.config.data.datasets = this.pieChartData;
+            // this.charts[0].chart.update();
         }
     });
   }
 
   GetDepartamentos(){
+
     this._departamentoService.getDepartamentos().subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.Departamentos = data.query_data;
@@ -172,6 +219,11 @@ export class FlujoefectivoComponent implements OnInit {
   GetOficinasDepartamento(){
     if (this.Filtros.departamento == '') {
       this.Oficinas = [];
+      this.Cajas = [];
+      this.Cajeros = [];
+      this.Filtros.oficina = '';
+      this.Filtros.caja = '';
+      this.Filtros.cajero = '';
       this.GetResumenFlujoEfectivo();
     }else{
 
@@ -193,6 +245,8 @@ export class FlujoefectivoComponent implements OnInit {
   GetCajasOficina(){
     if (this.Filtros.oficina == '') {
       this.Cajas = [];
+      this.Cajeros = [];
+      this.Filtros.cajero = '';
       this.GetResumenFlujoEfectivo();
     }else{
 
@@ -214,6 +268,10 @@ export class FlujoefectivoComponent implements OnInit {
 
     if (this.Filtros.mes_numero != 0) {
       params.mes = this.Filtros.mes_numero;
+    }
+
+    if (this.Filtros.anio != 0) {
+      params.anio = this.Filtros.anio;
     }
 
     if (this.Filtros.departamento.trim() != "") {
@@ -245,10 +303,6 @@ export class FlujoefectivoComponent implements OnInit {
 
   pushelement(){
     this.lineChartLabels2.push('otro label');
-    console.log(this.lineChartLabels2);
-    console.log(this.chart);
-    
-    
     this.refresh_chart();
   }
 

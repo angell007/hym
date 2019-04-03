@@ -12,4 +12,8 @@ export class IndicadorService {
     return this.client.get(this.globales.ruta+'php/Indicadores/flujoefectivo/get_resumen_flujo_efectivo.php', {params:p});
   }
 
+  getBalanceGeneral():Observable<any>{
+    return this.client.get(this.globales.ruta + 'php/Indicadores/balancegeneral/lista_balance_nuevo.php');
+  }
+
 }
