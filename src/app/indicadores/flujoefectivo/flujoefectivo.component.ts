@@ -21,6 +21,7 @@ import { CajeroService } from '../../shared/services/cajeros/cajero.service';
 import { OficinaService } from '../../shared/services/oficinas/oficina.service';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { IndicadorService } from '../../shared/services/indicadores/indicador.service';
+import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
 
 @Component({
   selector: 'app-flujoefectivo',
@@ -32,6 +33,7 @@ export class FlujoefectivoComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective;
 
   public Meses:Array<string> = [];
+  public Departamentos:Array<string> = [];
   public Oficinas:Array<any> = [];
   public Cajas:Array<any> = [];
   public Cajeros:Array<any> = [];
@@ -60,16 +62,6 @@ export class FlujoefectivoComponent implements OnInit {
         {
           id: 'y-axis-0',
           position: 'left',
-        },
-        {
-          id: 'y-axis-1',
-          position: 'right',
-          gridLines: {
-            color: 'rgba(255,0,0,0.3)',
-          },
-          ticks: {
-            fontColor: 'red',
-          }
         }
       ]
     },
@@ -101,8 +93,8 @@ export class FlujoefectivoComponent implements OnInit {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     },
     { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
+      backgroundColor: 'rgba(77,83,96,0)',
+      borderColor: 'rgba(200, 80, 45,1)',
       pointBackgroundColor: 'rgba(77,83,96,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
@@ -112,11 +104,17 @@ export class FlujoefectivoComponent implements OnInit {
   public lineChartLegend = true;
   public lineChartType = 'line';
 
+  public lineChartData2:Array<any> = [
+    { data: [15, 32, 7], label: 'Prueba' }
+  ];
+  public lineChartLabels2:string[] = ['01', '02', '03'];
+
   constructor(private colorConfig: ThemeConstants, 
               private globales: Globales,
               private _cajaService:CajaService,
               private _cajeroService:CajeroService,
               private _oficinaService:OficinaService,
+              private _departamentoService:DepartamentoService, 
               private _generalService:GeneralService,
               private _indicadorService:IndicadorService) 
   {
@@ -124,30 +122,91 @@ export class FlujoefectivoComponent implements OnInit {
     this.Filtros.mes = this.Meses[this.currentDate.getMonth()];
     this.Filtros.mes_numero = (this.Meses.findIndex(x => x == this.Filtros.mes)) +1;
     this.GetResumenFlujoEfectivo();
+    this.GetDepartamentos();
   }
 
   GetResumenFlujoEfectivo(){
-    this.m = false;
+    //this.m = false;
     let parametros = this.SetFiltros();
 
     this._indicadorService.getResumenFlujoEfectivo(parametros).subscribe((data:any) => {
       //this.lineChartLabels = data.Labels;
       this.lineChartLabels = [];
-      data.Labels.forEach(l => {
-        console.log(l);
-        
+      data.Labels.forEach(l => {        
         this.lineChartLabels.push(l);
       });
-      console.log(this.lineChartLabels);
       
 
       this.lineChartData = [];
       this.lineChartData.push(data.Totales_Diarios.Ingresos);
       this.lineChartData.push(data.Totales_Diarios.Egresos);
 
-      this.m = true;
+      //this.m = true;
+      this.refresh_chart();
       
     });
+  }
+
+  refresh_chart() {
+    setTimeout(() => {
+        if (this.chart && this.chart.chart && this.chart.chart.config) {
+            this.chart.chart.config.data.labels = this.lineChartLabels;
+            this.chart.chart.config.data.datasets = this.lineChartData;
+            this.chart.chart.config.data.colors = this.lineChartColors;
+            this.chart.chart.update();
+        }
+    });
+  }
+
+  GetDepartamentos(){
+    this._departamentoService.getDepartamentos().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Departamentos = data.query_data;
+      }else{
+
+        this.Departamentos = [];
+      }
+    });
+  }
+
+  GetOficinasDepartamento(){
+    if (this.Filtros.departamento == '') {
+      this.Oficinas = [];
+      this.GetResumenFlujoEfectivo();
+    }else{
+
+      this._oficinaService.getOficinasDepartamento(this.Filtros.departamento).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.Oficinas = data.query_data;
+          
+          this.GetResumenFlujoEfectivo();
+        }else{
+  
+          this.Oficinas = [];
+          this.GetResumenFlujoEfectivo();
+        }
+      });
+    }
+    
+  }
+
+  GetCajasOficina(){
+    if (this.Filtros.oficina == '') {
+      this.Cajas = [];
+      this.GetResumenFlujoEfectivo();
+    }else{
+
+      this._cajaService.getCajasOficina(this.Filtros.oficina).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          this.Cajas = data.query_data;
+          this.GetResumenFlujoEfectivo();
+        }else{
+  
+          this.Cajas = [];          
+          this.GetResumenFlujoEfectivo();
+        }
+      });
+    }
   }
 
   SetFiltros() {
@@ -182,6 +241,15 @@ export class FlujoefectivoComponent implements OnInit {
     this.Filtros.mes_numero = (this.Meses.findIndex(x => x == mes)) +1;
 
     this.GetResumenFlujoEfectivo();
+  }
+
+  pushelement(){
+    this.lineChartLabels2.push('otro label');
+    console.log(this.lineChartLabels2);
+    console.log(this.chart);
+    
+    
+    this.refresh_chart();
   }
 
   // ListaBalance = [];

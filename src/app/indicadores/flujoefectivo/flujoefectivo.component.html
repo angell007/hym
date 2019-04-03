@@ -27,7 +27,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Departamento</label>
-                <select name="Departamento" id="departamento" class="form-control" [(ngModel)]="Filtros.departamento">
+                <select name="Departamento" id="departamento" class="form-control" (change)="GetOficinasDepartamento()" [(ngModel)]="Filtros.departamento">
                   <option value="">Todos</option>
                   <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
                 </select>
@@ -36,7 +36,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Oficinas</label>
-                <select name="Oficinas" id="oficinas" class="form-control" [(ngModel)]="Filtros.oficina" [disabled]="Filtros.departamento">
+                <select name="Oficinas" id="oficinas" (change)="GetCajasOficina()" class="form-control" [(ngModel)]="Filtros.oficina" [disabled]="Filtros.departamento == ''">
                   <option value="">Todas</option>
                   <option *ngFor="let o of Oficinas" [value]="o.Id_Oficina">{{o.Nombre}}</option>
                 </select>
@@ -45,7 +45,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Cajas</label>
-                <select name="Cajas" id="cajas" class="form-control" [(ngModel)]="Filtros.caja"  [disabled]="Filtros.oficina">
+                <select name="Cajas" id="cajas" class="form-control" (change)="GetResumenFlujoEfectivo()" [(ngModel)]="Filtros.caja"  [disabled]="Filtros.oficina == ''">
                   <option value="">Todas</option>
                   <option *ngFor="let c of Cajas" [value]="c.Id_Caja">{{c.Nombre}}</option>
                 </select>
@@ -54,7 +54,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Cajero</label>
-                <select name="Cajero" id="cajero" class="form-control" [(ngModel)]="Filtros.cajero" [disabled]="Filtros.caja">
+                <select name="Cajero" id="cajero" class="form-control" [(ngModel)]="Filtros.cajero" [disabled]="Filtros.caja == ''">
                   <option value="">Todos</option>
                   <option *ngFor="let ca of Cajeros" [value]="ca.Id_Cajero">{{ca.Nombre}}</option>
                 </select>
@@ -65,18 +65,19 @@
       </div>
     </div>
     <div class="col-md-9">  
-        <div class="card">
-          <div class="card-body">
-            <div style="display: block;" *ngIf="m">
-              <canvas baseChart style="height: 200px;"
-                [datasets]="lineChartData" 
-                [labels]="lineChartLabels"
-                [options]="lineChartOptions"
-                [colors]="lineChartColors"
-                [legend]="lineChartLegend"
-                [chartType]="lineChartType"></canvas>
-            </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="display: block;">
+            <canvas baseChart style="height: 200px;"
+              [datasets]="lineChartData" 
+              [labels]="lineChartLabels"
+              [options]="lineChartOptions"
+              [colors]="lineChartColors"
+              [legend]="lineChartLegend"
+              [chartType]="lineChartType"></canvas>
           </div>
         </div>
       </div>
+    </div>
   </div>
+</div>

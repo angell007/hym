@@ -23,6 +23,11 @@ export class OficinaService {
     return this.client.get(this._rutaBase+'get_oficinas.php');
   }
 
+  getOficinasDepartamento(idDepartamento:string):Observable<any>{
+    let p = {id_departamento:idDepartamento};
+    return this.client.get(this._rutaBase+'get_oficinas_por_departamento.php', {params:p});
+  }
+
   getListaOficinas(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_lista_oficinas.php', {params:p});
   }

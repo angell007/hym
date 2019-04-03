@@ -24,6 +24,11 @@ export class CajaService {
     return this.client.get(this._rutaBase+'get_caja_by_id.php', {params:p});
   }
 
+  getCajasOficina(idOficina:string):Observable<any>{
+    let p = {id_oficina:idOficina};
+    return this.client.get(this._rutaBase+'get_cajas_por_oficina.php', {params:p});
+  }
+
   getListaCajas(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_lista_cajas.php', {params:p});
   }
