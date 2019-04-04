@@ -77,6 +77,7 @@ import { EgresoService } from './shared/services/egresos/egreso.service';
 import { AgenteexternoService } from './shared/services/agentesexternos/agenteexterno.service';
 import { TrasladoService } from './shared/services/traslados/traslado.service';
 import { IndicadorService } from './shared/services/indicadores/indicador.service';
+import { PaisService } from './shared/services/paises/pais.service';
 
 
 //MODALES
@@ -210,6 +211,7 @@ import { TablaagentesexternosComponent } from './agentesexternos/tablaagentesext
 import { ModalagenteexternoComponent } from './simplecomponents/modalagenteexterno/modalagenteexterno.component';
 import { ModaltrasladoComponent } from './simplecomponents/modaltraslado/modaltraslado.component';
 import { TablatrasladosComponent } from './traslados/tablatraslados/tablatraslados.component';
+import { CorresponsalbancarioComponent } from './tableros/tablerocajero/corresponsalbancario/corresponsalbancario.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -385,7 +387,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablaagentesexternosComponent,
         ModalagenteexternoComponent,
         ModaltrasladoComponent,
-        TablatrasladosComponent
+        TablatrasladosComponent,
+        CorresponsalbancarioComponent
     ],
     exports:[
         ModalBasicComponent
@@ -435,7 +438,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         EgresoService,
         AgenteexternoService,
         TrasladoService,
-        IndicadorService
+        IndicadorService,
+        PaisService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

@@ -10,6 +10,7 @@ export class GeneralService {
 
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
+  public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   public Anios:Array<number> = [];

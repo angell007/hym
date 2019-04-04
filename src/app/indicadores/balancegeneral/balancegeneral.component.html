@@ -1,6 +1,16 @@
 <div class="container-fluid">
   <div class="page-title">
-    <h4 class="pull-left">Balance General</h4>
+    <h4 class="block-element text-center">Balance General</h4>
+    <div class="row">
+      <div class="col-md"  *ngFor="let tg of TotalGeneral">
+          <app-informativetotalmonedatercerocard
+            [SaldoMoneda]="tg.Totales"
+            [CodigoMoneda]="tg.Codigo"
+            [NombreMoneda]="tg.Moneda"
+            CardClass="bg-info">                
+          </app-informativetotalmonedatercerocard>
+      </div>
+    </div>
   </div>
   <div class="clearfix"></div>
   <div class="row">
@@ -38,16 +48,18 @@
                         <th style="width:5%;"></th>
                       </tr>
                       <tr>
-                        <th *ngIf="item.Terceros.lenght == 0" [attr.colspan]="MonedasColSpan">
+                        <th *ngIf="item.Terceros.length == 0" [attr.colspan]="MonedasColSpan" class="text-center">
                           <i class="ti-alert font-size-20 text-warning"></i>
                           <h4>No hay terceros en este grupo!</h4>
                         </th>
                       </tr>
                     </thead>
-                    <tbody *ngIf="item.Terceros.lenght > 0">
+                    <tbody *ngIf="item.Terceros.length > 0">
                       <tr *ngFor="let t of item.Terceros">
                         <td class="custom-cell">{{t.Nombre_Tercero}}</td>
-                        <td *ngFor="let tm of t.Totales_Monedas" class="text-right custom-cell">{{tm.Total | customcurrency:tm.Codigo}}</td>
+                        <td *ngFor="let tm of t.Totales_Monedas" 
+                          class="text-right custom-cell" appColorsaldo [value]="tm.Total">{{tm.Total | customcurrency:tm.Codigo}}
+                        </td>
                         <td>
                           <a 
                             class="btn btn-light btn-rounded btn-sm m-0"

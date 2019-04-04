@@ -33,6 +33,22 @@ export class CajaService {
     return this.client.get(this._rutaBase+'get_lista_cajas.php', {params:p});
   }
 
+  getCajasAbiertasGeneral(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'cajas_abiertas_general.php', {params:p});
+  }
+
+  getCajasAbiertasFuncionario(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'cajas_abiertas.php', {params:p});
+  }
+
+  getTotalesCajasGeneral(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'totales_cajas_general.php', {params:p});
+  }
+
+  getTotalesCajasFuncionario(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'totales_cajas.php', {params:p});
+  }
+
   saveCaja(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'guardar_caja.php', datos);
   }

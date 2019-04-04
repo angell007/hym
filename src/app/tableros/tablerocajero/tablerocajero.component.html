@@ -134,7 +134,8 @@
                                                     <th style="width:160px;">Hora</th>
                                                     <th>Código</th>
                                                     <th>Tipo</th>
-                                                    <th>Valor</th>
+                                                    <th>Recibido</th>
+                                                    <th>Entregado</th>
                                                     <th>Tasa</th>
                                                     <th></th>
                                                 </tr>
@@ -144,7 +145,8 @@
                                                     <td>{{cambio.Fecha | date:"HH:mm" }}</td>
                                                     <td>{{cambio.Codigo}}</td>
                                                     <td>{{cambio.Tipo}}</td>
-                                                    <td>{{cambio.Valor_Origen }}</td>
+                                                    <td>{{cambio.Valor_Origen | customcurrency:cambio.Codigo_Moneda_Origen}}</td>
+                                                    <td>{{cambio.Valor_Destino | customcurrency:cambio.Codigo_Moneda_Destino}}</td>
                                                     <td>{{cambio.Tasa}}</td>
 
                                                     <td class="text-center">
@@ -176,8 +178,9 @@
 
                                             <!--ESCOGER MONEDA PARA COMPRA-->
                                             <div class="col-md-6">
-                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
-                                                    que recibe</label>
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                                                    {{ !Venta ? 'Moneda que vende' : 'Moneda que recibe'}}
+                                                </label>
                                                 <select *ngIf="!Venta" class="form-control" placeholder="Origen"
                                                     ngModel="" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
                                                     required>
@@ -193,8 +196,9 @@
 
                                             <!--ESCOGER MONEDA PARA VENTA-->
                                             <div class="col-md-6">
-                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Moneda
-                                                    que entrego</label>
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                                                    {{ Venta ? 'Moneda que vende' : 'Moneda que recibe'}}
+                                                </label>
                                                 <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino"
                                                     name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);" required>
                                                     <option value=""> Seleccione Moneda</option>
@@ -206,9 +210,13 @@
                                                 <!--<input hidden name="Tipo" readonly type="text" class="form-control"
                                                     ngModel="{{Tipo}}">-->
                                             </div>
+                                        </div>
+                                        <div class="row">
 
-                                            <div class="col-md-4">
-                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Cambia</label>
+                                            <div class="col-md-4" *ngIf="!Venta">
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                                                    Vende
+                                                </label>
                                                 <input #valorCambio type="text" 
                                                     autocomplete="false" 
                                                     placeholder="Valor" class="form-control text-right" name="Valor_Origen"
@@ -217,8 +225,14 @@
                                                     currencyMask [options]="{ prefix: '' , thousands: '.', decimal: ',' }" 
                                                     [disabled]="HabilitarCampos"
                                                     required>
-
                                             </div>
+
+                                            <div class="col-md-4" *ngIf="Venta">
+                                                    <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
+                                                    <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" 
+                                                        autocomplete="false"
+                                                        id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly>
+                                                </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
@@ -230,11 +244,26 @@
                                                     id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">-->
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
+                                            <div class="col-md-4" *ngIf="!Venta">
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" autocomplete="false"
                                                     id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly>
                                             </div>
+
+                                            <div class="col-md-4" *ngIf="Venta">
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
+                                                <input #valorCambio type="text" 
+                                                    autocomplete="false" 
+                                                    placeholder="Valor" class="form-control text-right" name="Valor_Origen"
+                                                    id="Cambia" 
+                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda()" 
+                                                    currencyMask [options]="{ prefix: '' , thousands: '.', decimal: ',' }" 
+                                                    [disabled]="HabilitarCampos"
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <hr *ngIf="Venta">
+                                        <div class="row">
 
                                             <div *ngIf="Venta" class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
@@ -336,23 +365,23 @@
                                                                 <table class="table table-hover table-sm table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th >Hora</th>
+                                                                            <th>Hora</th>
                                                                             <th>Código</th>
                                                                             <th>Tipo</th>
-                                                                            <th>Valor Pesos</th>
-                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Recibido</th>
+                                                                            <th>Transferido</th>
                                                                             <th>Tasa</th>
                                                                             <th></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr *ngFor="let transferencia of Transferencia" class=" {{ transferencia.Conteo == false ? 'bg-success text-white' : '' }}">
-                                                                            <td>{{transferencia.Fecha | date:"HH:mm" }}</td>
-                                                                            <td>{{transferencia.CodigoRecibo}}</td>
-                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
-                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                                            <td>{{transferencia.Cantidad_Transferida }}</td>
-                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
+                                                                        <tr *ngFor="let t of Transferencia"  [ngClass]="{'bg-anulada':t.Estado == 'Anulada'}">
+                                                                            <td>{{t.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{t.CodigoRecibo}}</td>
+                                                                            <td>{{t.Forma_Pago}} / {{t.Tipo_Transferencia}}</td>
+                                                                            <td>{{t.Cantidad_Recibida | customcurrency:t.Codigo_Moneda_Origen}}</td>
+                                                                            <td>{{t.Cantidad_Transferida | customcurrency:t.Codigo_Moneda_Destino }}</td>
+                                                                            <td>{{t.Tasa_Cambio }}</td>
                         
                                                                             <td class="text-center">
                                                                                 <!--<button class="btn btn-default btn-xs" type="button" style="margin:0;">
@@ -360,7 +389,7 @@
                                                                                 </button>-->
                         
                                                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    (click)="verRecibo(t.Id_Recibo)">
                                                                                     <i class="fa fa-eye"></i>
                                                                                 </button>
                         
@@ -368,8 +397,8 @@
                                                                                     <i class="ti-pencil"></i>
                                                                                 </button>-->
                                                                                 
-                                                                                <button *ngIf="transferencia.Conteo" class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                                                    (click)="AnularTransferenciaModal(transferencia.Id_Transferencia, ModalAnularTransferencia,transferencia.Id_Tercero, transferencia.Id_Tercero_Destino)">
+                                                                                <button *ngIf="t.Estado != 'Anulada'" class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                                                    (click)="AnularTransferenciaModal(t.Id_Transferencia)">
                                                                                     <i class="ti-close"></i>
                                                                                 </button>
                         
@@ -386,30 +415,28 @@
                                                                 <table class="table table-hover table-sm table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th style="width:160px;">Hora</th>
+                                                                            <th>Hora</th>
                                                                             <th>Código</th>
                                                                             <th>Tipo</th>
-                                                                            <th>Valor Pesos</th>
-                                                                            <th>Valor Bolivares</th>
+                                                                            <th>Recibido</th>
+                                                                            <th>Transferido</th>
                                                                             <th>Tasa</th>
                                                                             <th></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr *ngFor="let transferencia of TransferenciasAnuladas">
-                                                                            <td>{{transferencia.Fecha | date }}</td>
-                                                                            <td>{{transferencia.CodigoRecibo}}</td>
-                                                                            <td>{{transferencia.Forma_Pago}} / {{transferencia.Tipo_Transferencia}}</td>
-                                                                            <td>{{transferencia.Cantidad_Recibida | currency}}</td>
-                                                                            <td>{{transferencia.Cantidad_Transferida | currency:"BsS." }}</td>
-                                                                            <td>{{transferencia.Tasa_Cambio }}</td>
-                        
-                                                                            <td class="text-center">
+                                                                        <tr *ngFor="let t of TransferenciasAnuladas"  [ngClass]="{'bg-anulada':t.Estado == 'Anulada'}">
+                                                                            <td>{{t.Fecha | date:"HH:mm" }}</td>
+                                                                            <td>{{t.CodigoRecibo}}</td>
+                                                                            <td>{{t.Forma_Pago}} / {{t.Tipo_Transferencia}}</td>
+                                                                            <td>{{t.Cantidad_Recibida | customcurrency:t.Codigo_Moneda_Origen}}</td>
+                                                                            <td>{{t.Cantidad_Transferida | customcurrency:t.Codigo_Moneda_Destino }}</td>
+                                                                            <td>{{t.Tasa_Cambio }}</td>                            
+                                                                            <td class="text-center">                            
                                                                                 <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                                                                                    (click)="verRecibo(transferencia.Id_Recibo)">
+                                                                                    (click)="verRecibo(t.Id_Recibo)">
                                                                                     <i class="fa fa-eye"></i>
-                                                                                </button>
-                        
+                                                                                </button>                            
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -508,7 +535,7 @@
                                                 </div>
                                             </div>
 
-                                            <!-- efectivo -->
+                                            <!-- Destinatarios -->
                                             <div class="row" *ngIf="ControlVisibilidadTransferencia.Destinatarios">
                                                 <div class="col-md-12">
                                                     <hr class="mrg-top-10 mrg-btm-10">
@@ -1769,7 +1796,7 @@
                     <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
                     <div class="form-group">
                         <label>Motivo Anulación</label>
-                        <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion" ngModel></textarea>
+                        <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion" [(ngModel)]="MotivoAnulacionTransferencia"></textarea>
                     </div>
                 </div>
             </div>

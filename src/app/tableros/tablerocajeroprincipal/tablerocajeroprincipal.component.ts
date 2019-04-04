@@ -3,6 +3,12 @@ import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { Funcionario } from '../../shared/funcionario/funcionario.model';
 import { IMyDrpOptions } from 'mydaterangepicker';
+import { GeneralService } from '../../shared/services/general/general.service';
+import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
+import { CajaService } from '../../shared/services/caja/caja.service';
+import { MonedaService } from '../../shared/services/monedas/moneda.service';
+import { PaisService } from '../../shared/services/paises/pais.service';
+import { ToastService } from '../../shared/services/toasty/toast.service';
 
 @Component({
   selector: 'app-tablerocajeroprincipal',
@@ -38,10 +44,15 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public CajerosAbiertos:number = 0;
   public CajerosTotales:number = 0;
 
-  constructor(public globales:Globales, private client:HttpClient) { 
+  constructor(private _generalService:GeneralService,
+              private _departamentoService:DepartamentoService,
+              private _cajaService:CajaService,
+              private _monedaService:MonedaService,
+              private _paisService:PaisService,
+              private _toastService:ToastService) { 
     
-    this.AsignarDepartamentos();
-    this.AsignarMonedas();
+    this.GetDepartamentos();
+    this.GetMonedas();
     this.InicializarFecha();
     this.ConteoCajeros();
   }
@@ -55,16 +66,42 @@ export class TablerocajeroprincipalComponent implements OnInit {
     this.Fecha_Consulta = d.toISOString().split("T")[0];
   }
 
-  AsignarPaises(){      
-    this.Paises = this.globales.Paises;
+  AsignarPaises(){
+    this._paisService.getAllPaises().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Paises = data.query_data;
+      }else{
+
+        this.Paises = data.query_data;
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
   }
 
-  AsignarMonedas(){      
-    this.Monedas = this.globales.Monedas;
+  GetMonedas(){
+    this._monedaService.getMonedas().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Monedas = data.query_data;
+      }else{
+
+        this.Monedas = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
   }
 
-  AsignarDepartamentos(){      
-    this.Departamentos = this.globales.Departamentos;
+  GetDepartamentos(){
+    this._departamentoService.getDepartamentos().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.Departamentos = data.query_data;
+      }else{
+        this.Departamentos = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
   }
 
   ConteoCajeros(){
@@ -73,24 +110,44 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
     if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
+      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
       p = {fecha:this.Fecha_Consulta};
+      this._cajaService.getCajasAbiertasGeneral(p).subscribe((data:any) => {
+        if (data.success) {
+          this.CajerosAbiertos = data.conteo.Activos;
+          this.CajerosTotales = data.conteo.Totales;
+        }else{
+  
+          this.CajerosAbiertos = data.conteo.Activos;
+          this.CajerosTotales = data.conteo.Totales;
+        }
+      });
     
     }else if(this.Funcionario.Id_Perfil == 2){
-      ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
+      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
       p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, fecha:this.Fecha_Consulta};
+      this._cajaService.getCajasAbiertasFuncionario(p).subscribe((data:any) => {
+        if (data.success) {
+          this.CajerosAbiertos = data.conteo.Activos;
+          this.CajerosTotales = data.conteo.Totales;
+        }else{
+  
+          this.CajerosAbiertos = data.conteo.Activos;
+          this.CajerosTotales = data.conteo.Totales;
+        }
+      });
     }
     
-    this.client.get(ruta, {params:p}).subscribe((data:any) => {
-      if (data.success) {
-        this.CajerosAbiertos = data.conteo.Activos;
-        this.CajerosTotales = data.conteo.Totales;
-      }else{
+    // this.client.get(ruta, {params:p}).subscribe((data:any) => {
+    //   if (data.success) {
+    //     this.CajerosAbiertos = data.conteo.Activos;
+    //     this.CajerosTotales = data.conteo.Totales;
+    //   }else{
 
-        this.CajerosAbiertos = data.conteo.Activos;
-        this.CajerosTotales = data.conteo.Totales;
-      }
-    });
+    //     this.CajerosAbiertos = data.conteo.Activos;
+    //     this.CajerosTotales = data.conteo.Totales;
+    //   }
+    // });
   }
 
   ConsultarTotalesDepartamento(){
@@ -109,31 +166,45 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
     if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      ruta = this.globales.ruta+'php/cajas/totales_cajas_general.php';
+      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
       p = {id_departamento:this.DepartamentoId, fecha:this.Fecha_Consulta};
+      this._cajaService.getTotalesCajasGeneral(p).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          console.log(data);
+          
+          this.TotalesMunicipio = data.totales.municipios; 
+          this.TotalesDepartamento = data.totales.departamento;
+          
+          this.MostrarTotales = [];
+          this.ExtraerTotales();
+        }else{
+  
+          this.MostrarTotales = [];
+          this.TotalesMunicipio = []; 
+          this.TotalesDepartamento = [];
+        }
+      });
     
     }else if(this.Funcionario.Id_Perfil == 2){
-      ruta = this.globales.ruta+'php/cajas/totales_cajas.php';
+      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
       p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, id_departamento:this.DepartamentoId, fecha:this.Fecha_Consulta};
+      this._cajaService.getTotalesCajasFuncionario(p).subscribe((data:any) => {
+        if (data.codigo == 'success') {
+          console.log(data);
+          
+          this.TotalesMunicipio = data.totales.municipios; 
+          this.TotalesDepartamento = data.totales.departamento;
+          
+          this.MostrarTotales = [];
+          this.ExtraerTotales();
+        }else{
+  
+          this.MostrarTotales = [];
+          this.TotalesMunicipio = []; 
+          this.TotalesDepartamento = [];
+        }
+      });
     }
-
-    this.client.get(ruta, {params:p}).subscribe((data:any) => {
-      
-      if (data.codigo == 'success') {
-        console.log(data);
-        
-        this.TotalesMunicipio = data.totales.municipios; 
-        this.TotalesDepartamento = data.totales.departamento;
-        
-        this.MostrarTotales = [];
-        this.ExtraerTotales();
-      }else{
-
-        this.MostrarTotales = [];
-        this.TotalesMunicipio = []; 
-        this.TotalesDepartamento = [];
-      }
-    });
   }
 
   AsignarDepartamentoSeleccionado(value){

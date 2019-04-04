@@ -12,6 +12,10 @@ export class PaisService {
     return this.client.get(this.globales.ruta+'php/paises/get_paises.php', {params:p});
   }
 
+  getAllPaises():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/paises/get_paises_todos.php');
+  }
+
   getServicio(p:any):Observable<any>{
     return this.client.get(this.globales.ruta+'php/paises/get_servicio_by_id.php', {params:p});
   }

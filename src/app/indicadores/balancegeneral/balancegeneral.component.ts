@@ -18,6 +18,7 @@ import { ToastService } from '../../shared/services/toasty/toast.service';
 export class BalancegeneralComponent implements OnInit {
 
   public Monedas:Array<any> = [];
+  public TotalGeneral:Array<any> = [];
   public ArmarTabla:boolean = false;
   public MonedasColSpan:number = 1;
 
@@ -25,7 +26,7 @@ export class BalancegeneralComponent implements OnInit {
               private _monedaService:MonedaService,
               private _toastService:ToastService) { }
 
-  ListaBalance = [];
+  public ListaBalance:Array<any> = [];
   ngOnInit() {
     this.GetMonedas();
     this.GetBalance();
@@ -33,7 +34,8 @@ export class BalancegeneralComponent implements OnInit {
 
   GetBalance(){
     this._indicadorService.getBalanceGeneral().subscribe((data: any) => {
-      this.ListaBalance = data;
+      this.ListaBalance = data.Valores_Tabla;
+      this.TotalGeneral = data.Total_General;
       this.ArmarTabla = true;
     });
   }
