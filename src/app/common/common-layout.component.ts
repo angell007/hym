@@ -178,6 +178,7 @@ export class CommonLayoutComponent implements OnInit {
         };
 
         this.toastyConfig.theme = 'bootstrap';
+        this.toastyConfig.limit = 1;
 
         this.headerThemes = ['header-default', 'header-primary', 'header-info', 'header-success', 'header-danger', 'header-dark'];
         this.changeHeader = changeHeader;
@@ -370,21 +371,6 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        // this._toastyConfig.theme = 'bootstrap';
-        let toastOptions: ToastOptions = {
-            title: 'title',
-            msg: 'my message',
-            showClose: true,
-            timeout: 15000,
-            theme: "bootstrap",
-            onAdd: (toast: ToastData) => {
-                //console.log('Toast ' + toast.id + ' has been added!');
-            },
-            onRemove: function (toast: ToastData) {
-                //console.log('Toast ' + toast.id + ' has been removed!');
-            }
-        };
-        this.toastyService.error(toastOptions);
     }
 
 

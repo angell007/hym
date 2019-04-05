@@ -1,0 +1,55 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalCorresponsalDiario>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Movimiento Corresponsal</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">    
+    <form #FormCorresponsalDiario="ngForm">
+      <div class="form-row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Corresponsal Bancario</label>
+            <select id="corresponsal_bancario" class="form-control" name="Id_Corresponsal_Bancario" [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario" required>
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Tipo Movimiento</label>
+            <select id="tipo_movimiento_corresponsal" class="form-control" name="Id_Tipo_Movimiento_Corresponsal" [(ngModel)]="CorresponsalModel.Id_Tipo_Movimiento_Corresponsal" required>
+              <option value="1" selected>Consignacion</option>
+              <option value="2">Retiro</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="text" placeholder="Valor" class="form-control text-right" name="Valor" [(ngModel)]="CorresponsalModel.Valor" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="block-element">Observaciones</label>
+              <textarea class="form-control" name="Detalle" id="detalle" placeholder="Observaciones para el movimiento" cols="130" rows="5" [(ngModel)]="CorresponsalModel.Detalle" required></textarea>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarCorresponsalDiario()" [disabled]="!FormCorresponsalDiario.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+      </button>
+    </div>
+  </div>  
+</app-modal-basic>

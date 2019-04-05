@@ -78,6 +78,7 @@ import { AgenteexternoService } from './shared/services/agentesexternos/agenteex
 import { TrasladoService } from './shared/services/traslados/traslado.service';
 import { IndicadorService } from './shared/services/indicadores/indicador.service';
 import { PaisService } from './shared/services/paises/pais.service';
+import { CorresponsalbancarioService } from './shared/services/corresponsalesbancarios/corresponsalbancario.service';
 
 
 //MODALES
@@ -212,6 +213,8 @@ import { ModalagenteexternoComponent } from './simplecomponents/modalagenteexter
 import { ModaltrasladoComponent } from './simplecomponents/modaltraslado/modaltraslado.component';
 import { TablatrasladosComponent } from './traslados/tablatraslados/tablatraslados.component';
 import { CorresponsalbancarioComponent } from './tableros/tablerocajero/corresponsalbancario/corresponsalbancario.component';
+import { TablamovimientoscorresponsalComponent } from './tableros/tablerocajero/tablamovimientoscorresponsal/tablamovimientoscorresponsal.component';
+import { ModalcorresponsaldiarioComponent } from './simplecomponents/modalcorresponsaldiario/modalcorresponsaldiario.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -388,7 +391,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalagenteexternoComponent,
         ModaltrasladoComponent,
         TablatrasladosComponent,
-        CorresponsalbancarioComponent
+        CorresponsalbancarioComponent,
+        TablamovimientoscorresponsalComponent,
+        ModalcorresponsaldiarioComponent
     ],
     exports:[
         ModalBasicComponent
@@ -439,7 +444,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         AgenteexternoService,
         TrasladoService,
         IndicadorService,
-        PaisService
+        PaisService,
+        CorresponsalbancarioService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

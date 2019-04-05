@@ -1,21 +1,5 @@
 <div class="row">
   <div class="col-md-12">
-    <!-- <div *ngIf="MostrarTablas">
-      <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <a *ngFor="let m of Monedas; let i = index;" 
-            class="nav-item nav-link" 
-            [ngClass]="{'active': i == 0}" [id]="'nav-'+m.Codigo" 
-            data-toggle="tab" 
-            [attr.href]="'#nav-moneda'+i" 
-            (click)="CambiarValoresTabla(m.Id_Moneda)"
-            role="tab" 
-            [attr.aria-controls]="'nav-'+m.Codigo" 
-            aria-selected="true"
-            (click)="Test(m.Codigo)">{{m.Nombre}}</a>
-        </div>
-      </nav>
-    </div>     -->
     <div class="tab-info" *ngIf="MostrarTablas">
       <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item" *ngFor="let m of Monedas; let i = index;">
@@ -29,24 +13,10 @@
               </a>
           </li>
       </ul>
-      <!-- <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <a *ngFor="let m of Monedas; let i = index;" 
-            class="nav-item nav-link" 
-            [ngClass]="{'active': i == 0}" [id]="'nav-'+m.Codigo" 
-            data-toggle="tab" 
-            [attr.href]="'#nav-moneda'+i" 
-            (click)="CambiarValoresTabla(m.Id_Moneda)"
-            role="tab" 
-            [attr.aria-controls]="'nav-'+m.Codigo" 
-            aria-selected="true">{{m.Nombre}}</a>
-        </div>
-      </nav> -->
     </div>    
     <app-tablatotalesmonedatercero
       [Id_Moneda]="MonedaSeleccionada"
       [Id_Tercero]="Id_Tercero">            
-    </app-tablatotalesmonedatercero>
-    
+    </app-tablatotalesmonedatercero>    
   </div>
 </div>
