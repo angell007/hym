@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CorresponsalDiarioModel } from '../../Modelos/CorresponsalDiarioModel';
 import { GeneralService } from '../../shared/services/general/general.service';
@@ -12,7 +12,7 @@ import { CorresponsalbancarioService } from '../../shared/services/corresponsale
   templateUrl: './modalcorresponsaldiario.component.html',
   styleUrls: ['./modalcorresponsaldiario.component.scss', '../../../style.scss']
 })
-export class ModalcorresponsaldiarioComponent implements OnInit {
+export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
 
   @Input() AbrirModal:Observable<any> = new Observable();
   @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
@@ -24,7 +24,9 @@ export class ModalcorresponsaldiarioComponent implements OnInit {
   public openSubscription:any;
   public Editar:boolean = false;
   public MensajeGuardar:string = 'Se dispone a guardar este movimiento';
-
+  public accion:string = 'crear';
+  public NombreCorresponsalBancario:string = '';
+ 
   public CorresponsalModel:CorresponsalDiarioModel = new CorresponsalDiarioModel();
 
   constructor(private _generalService: GeneralService,
@@ -37,9 +39,30 @@ export class ModalcorresponsaldiarioComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:string) => {
-      
-      if (data != "0") {
+    this.openSubscription = this.AbrirModal.subscribe((data:any) => {
+      console.log(data);
+
+      if (data.id_corresponsal_diario == '0' && data.id_corresponsal_bancario != '0') {
+        console.log(this.CorresponsalesBancarios);
+        let nombre = this.CorresponsalesBancarios.find(x => x.Id_Corresponsal_Bancario == data.id_corresponsal_bancario);
+        console.log(nombre);
+        
+        this.NombreCorresponsalBancario = nombre.Nombre;
+        this.accion = 'cargar';
+        this.CorresponsalModel.Id_Corresponsal_Bancario = data.id_corresponsal_bancario;
+        this.MensajeGuardar = 'Se dispone a guardar este movimiento';
+        this.Editar = false;
+        this.ModalCorresponsalDiario.show();
+
+      }else if (data.id_corresponsal_diario == '0' && data.id_corresponsal_bancario == '0'){
+        this.accion = 'crear';
+        this.MensajeGuardar = 'Se dispone a guardar este movimiento';
+        this.Editar = false;
+        this.ModalCorresponsalDiario.show();
+
+      }else if (data.id_corresponsal_diario != '0' && data.id_corresponsal_bancario == '0'){
+        this.accion = 'editar';
+        //this.CorresponsalModel.Id_Corresponsal_Diario = data.id_corresponsal_diario;
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este movimiento';
         let p = {id_movimiento:data};
@@ -54,10 +77,7 @@ export class ModalcorresponsaldiarioComponent implements OnInit {
         //   }
           
         // });
-      }else{
-        this.MensajeGuardar = 'Se dispone a guardar este movimiento';
-        this.Editar = false;
-        this.ModalCorresponsalDiario.show();
+
       }
     });
   }
@@ -83,56 +103,60 @@ export class ModalcorresponsaldiarioComponent implements OnInit {
     });
   }
 
-  GuardarDestinatarioGiro(){
+  GuardarCorresponsalDiario(){
 
-    // if (!this.ValidateBeforeSubmit()) {
-    //   return;
-    // }
+    this.CorresponsalModel.Identificacion_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
+    this.CorresponsalModel.Id_Oficina = this._generalService.Oficina;
+    this.CorresponsalModel.Id_Caja = this._generalService.Caja;   
+    this.CorresponsalModel.Fecha = this._generalService.FechaActual;
 
-    // //console.log(this.CorresponsalModel);
+    if (!this.ValidateBeforeSubmit()) {
+      return;
+    }
+
+    //console.log(this.CorresponsalModel);
+    this.CorresponsalModel = this._generalService.limpiarString(this.CorresponsalModel);
     
-    // this.CorresponsalModel = this._generalService.limpiarString(this.CorresponsalModel);
-    
-    // let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
-    // let datos = new FormData();
-    // datos.append("modelo",info);
+    let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
+    let datos = new FormData();
+    datos.append("modelo",info);
 
-    // if (this.Editar) {
-    //   this._corresponsalService.editDestinatario(datos)
-    //   .catch(error => { 
-    //     //console.log('An error occurred:', error);
-    //     this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-    //     return this.handleError(error);
-    //   })
-    //   .subscribe((data:any)=>{
-    //     if (data.codigo == 'success') { 
-    //       this.ActualizarTabla.emit();       
-    //       this.CerrarModal();
-    //       this.Editar = false;
-    //       let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-    //       this._toastService.ShowToast(toastObj);
-    //     }else{
-    //       this._swalService.ShowMessage(data);
-    //     }
-    //   });
-    // }else{
-    //   this._corresponsalService.saveDestinatario(datos)
-    //   .catch(error => { 
-    //     //console.log('An error occurred:', error);
-    //     this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-    //     return this.handleError(error);
-    //   })
-    //   .subscribe((data:any)=>{
-    //     if (data.codigo == 'success') { 
-    //       this.ActualizarTabla.emit();       
-    //       this.CerrarModal();
-    //       let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-    //       this._toastService.ShowToast(toastObj);
-    //     }else{
-    //       this._swalService.ShowMessage(data);
-    //     }
-    //   });
-    // }    
+    if (this.Editar) {
+      this._corresponsalService.editCorresponsalDiario(datos)
+      .catch(error => { 
+        //console.log('An error occurred:', error);
+        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+        return this.handleError(error);
+      })
+      .subscribe((data:any)=>{
+        if (data.codigo == 'success') { 
+          this.ActualizarTabla.emit();       
+          this.CerrarModal();
+          this.Editar = false;
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }else{
+          this._swalService.ShowMessage(data);
+        }
+      });
+    }else{
+      this._corresponsalService.saveCorresponsalDiario(datos)
+      .catch(error => { 
+        //console.log('An error occurred:', error);
+        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+        return this.handleError(error);
+      })
+      .subscribe((data:any)=>{
+        if (data.codigo == 'success') { 
+          this.ActualizarTabla.emit();       
+          this.CerrarModal();
+          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+        }else{
+          this._swalService.ShowMessage(data);
+        }
+      });
+    }    
   }
 
   ValidateBeforeSubmit():boolean{
@@ -163,6 +187,8 @@ export class ModalcorresponsaldiarioComponent implements OnInit {
 
   LimpiarModelo(){
     this.CorresponsalModel = new CorresponsalDiarioModel();
+    this.NombreCorresponsalBancario = '';
+    this.accion = 'crear';
   }
 
 }

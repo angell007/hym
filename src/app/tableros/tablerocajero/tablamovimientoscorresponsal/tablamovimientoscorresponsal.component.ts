@@ -14,7 +14,7 @@ export class TablamovimientoscorresponsalComponent implements OnInit {
 
   @Input() Id_Corresponsal_Bancario:string;
 
-  public TotalMovmimientos:Array<any> = [];
+  public TotalMovimientos:Array<any> = [];
   public Movimientos:Array<any> = [];
   public MostrarTotales:boolean = false;
   public Balance:string = "0";
@@ -58,28 +58,29 @@ export class TablamovimientoscorresponsalComponent implements OnInit {
   GetMovimientosCorresponsal(){
     
     if (this.Id_Corresponsal_Bancario != '' && this.Id_Corresponsal_Bancario != undefined) {
-      this._corresponsalBancarioService.getMovimientosCorresponsal(this.Id_Corresponsal_Bancario).subscribe((data:any) => {
+      this._corresponsalBancarioService.getMovimientosCorresponsal(this.Id_Corresponsal_Bancario).subscribe((data:any) => { 
         if (data.codigo == 'success') {
-          this.TotalMovmimientos = data.query_data;
+          this.TotalMovimientos = data.query_data;
           this.Movimientos = data.query_data.movimientos;
+        
+          this.ActualizarBalance(data.query_data.totales.balance);
           this.MostrarTotales = true;
         }else{
-          this.TotalMovmimientos = [];
+          this.TotalMovimientos = [];
           this.Movimientos = [];
           this.MostrarTotales = false;
           let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
           this._toastService.ShowToast(toastObj);
+          this.ActualizarBalance(0);
         }  
-        
-       this.ActualizarBalance();
       });  
     }    
   }
 
-  ActualizarBalance(){
+  ActualizarBalance(balance:any){
     if (this.Movimientos.length > 0) {       
-      this.Balance = this._customCurrency.transform(this.Movimientos[0].totales.balance);
-      this.BalanceNumero = this.Movimientos[0].totales.balance;
+      this.Balance = this._customCurrency.transform(balance);
+      this.BalanceNumero = balance;
     }else{
       this.Balance = '$ 0';
       this.BalanceNumero = 0;
@@ -87,6 +88,7 @@ export class TablamovimientoscorresponsalComponent implements OnInit {
   }
 
   AbrirModal(idCorresponsal:string){
-    this.AbrirModalAgregar.next(idCorresponsal);
+    let obj = {id_corresponsal_bancario:idCorresponsal, id_corresponsal_diario:'0'};
+    this.AbrirModalAgregar.next(obj);
   }
 }

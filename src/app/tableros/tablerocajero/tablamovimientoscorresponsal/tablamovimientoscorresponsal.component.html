@@ -7,7 +7,7 @@
         </h5>
       </div>
       <div class="col-md-3">
-        <button class="btn btn-outline-primary btn-rounded btn-sm pull-right" (click)="AbrirModal('0')"><i class="ti-plus"></i>
+        <button class="btn btn-outline-primary btn-rounded btn-sm pull-right" (click)="AbrirModal(Id_Corresponsal_Bancario)"><i class="ti-plus"></i>
           Agregar Movimiento
         </button>
       </div>
@@ -16,24 +16,26 @@
       <thead>
         <tr>
           <th class="custom-thead" style="width:8%;">Fecha</th>
+          <th class="custom-thead" >Movimiento</th>
           <th class="custom-thead" >Detalle</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Consignaciones</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Retiros</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Saldo</th>
+          <th class="custom-thead text-center" style="width:10%">Consignaciones</th>
+          <th class="custom-thead text-center" style="width:10%">Retiros</th>
+          <th class="custom-thead text-center" style="width:10%">Saldo</th>
+          <th></th>
         </tr>
         <tr *ngIf="Movimientos.length == 0">
-          <td colspan="5" class="text-center">
+          <td colspan="7" class="text-center">
               <i class="ti-alert font-size-20 text-warning"></i>
               <h4>No hay movimientos para mostrar!</h4>
           </td>
         </tr>
       </thead>
-      <tbody>
+      <tbody style="max-height: 400px; overflow-y: scroll;">
         <tr *ngIf="MostrarTotales">
           <td colspan="3" class="text-center custom-cell">Total</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimimientos.totales.consignacion">{{TotalMovimimientos.totales.consignacion | customcurrency:TotalMovimimientos.totales.codigo_moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimimientos.totales.retiro">{{TotalMovimimientos.totales.retiro | customcurrency:TotalMovimimientos.totales.codigo_moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimimientos.totales.balance">{{TotalMovimimientos.totales.balance | customcurrency:TotalMovmimientos.totales.codigo_moneda}}</td>
+          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimientos.totales.consignacion">{{TotalMovimientos.totales.consignacion | customcurrency}}</td>
+          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimientos.totales.retiro">{{TotalMovimientos.totales.retiro | customcurrency}}</td>
+          <td class="text-right custom-cell" appColorsaldo [value]="TotalMovimientos.totales.balance">{{TotalMovimientos.totales.balance | customcurrency}}</td>
           <td class="custom-cell"></td>
         </tr>
         <tr *ngFor="let m of Movimientos ; let i = index" 
@@ -45,16 +47,18 @@
           <td class="text-right custom-cell" appColorsaldo [value]="m.Retiro" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Retiro | customcurrency:m.Codigo_Moneda}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="m.Total" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
           <td>
-            <div *ngIf="m.Movimiento === 'Ajuste' && m.Estado != 'Anulado'" class="text-center">
+            <div class="text-center">
               <div ngbDropdown class="dropdown-primary">
                 <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
                 <div ngbDropdownMenu>
-                  <a *ngIf="m.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(m.Id_Movimiento_Tercero)">
+                  <a class="dropdown-item waves-light waves-effect caja-botones accionable">
+                      <i class="ti-search text-info"></i> Detalle</a>
+                  <!-- <a *ngIf="m.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(m.Id_Movimiento_Tercero)">
                     <i class="ti-pencil text-warning"></i> Editar</a>
                   <a *ngIf="m.Estado == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularMovimientoTercero(m.Id_Movimiento_Tercero)"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta oficina' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
                       <i [ngClass]="{'ti-na text-danger':m.Estado == 'Activo', 'ti-back-right text-success':m.Estado == 'Anulado'}"></i> 
-                      {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
+                      {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a> -->
                 </div>
               </div>
             </div>

@@ -19,4 +19,12 @@ export class CorresponsalbancarioService {
     return this.client.get(this.globales.ruta+'php/corresponsaldiario/get_movimientos_diarios.php', {params:p});
   }
 
+  editCorresponsalDiario(data:FormData):Observable<any>{
+    return this.client.post(this.globales.ruta+'php/corresponsaldiario/editar_movimiento_diario.php', data);
+  }
+
+  saveCorresponsalDiario(data:FormData):Observable<any>{
+    return this.client.post(this.globales.ruta+'php/corresponsaldiario/guardar_corresponsal_diario_nuevo.php', data);
+  }
+
 }

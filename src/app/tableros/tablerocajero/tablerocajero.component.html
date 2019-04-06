@@ -179,7 +179,7 @@
                                             <!--ESCOGER MONEDA PARA COMPRA-->
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
-                                                    {{ !Venta ? 'Moneda que vende' : 'Moneda que recibe'}}
+                                                    {{ !Venta ? 'Moneda que compra' : 'Moneda que recibe'}}
                                                 </label>
                                                 <select *ngIf="!Venta" class="form-control" placeholder="Origen"
                                                     ngModel="" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
@@ -197,7 +197,7 @@
                                             <!--ESCOGER MONEDA PARA VENTA-->
                                             <div class="col-md-6">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
-                                                    {{ Venta ? 'Moneda que vende' : 'Moneda que recibe'}}
+                                                    {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
                                                 </label>
                                                 <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino"
                                                     name="Destino" ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);" required>
@@ -215,7 +215,7 @@
 
                                             <div class="col-md-4" *ngIf="!Venta">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
-                                                    Vende
+                                                    Compra
                                                 </label>
                                                 <input #valorCambio type="text" 
                                                     autocomplete="false" 
@@ -245,7 +245,7 @@
                                             </div>
 
                                             <div class="col-md-4" *ngIf="!Venta">
-                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
+                                                <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" autocomplete="false"
                                                     id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly>
                                             </div>

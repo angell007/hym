@@ -9,6 +9,8 @@ import { DatePipe } from '@angular/common';
 export class GeneralService {
 
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
+  public Oficina:any = JSON.parse(localStorage.getItem('Oficina'));
+  public Caja:any = JSON.parse(localStorage.getItem('Caja'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;

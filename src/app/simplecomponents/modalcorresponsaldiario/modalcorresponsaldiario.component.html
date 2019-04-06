@@ -11,10 +11,11 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Corresponsal Bancario</label>
-            <select id="corresponsal_bancario" class="form-control" name="Id_Corresponsal_Bancario" [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario" required>
+            <select *ngIf="accion != 'cargar'" [disabled]="Editar" id="corresponsal_bancario" class="form-control" name="Id_Corresponsal_Bancario" [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario" required>
               <option value="" selected>Seleccione</option>
               <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}</option>
             </select>
+            <label class="block-element" *ngIf="accion == 'cargar'">{{NombreCorresponsalBancario}}</label>
           </div>
         </div>
         <div class="col-md-4">

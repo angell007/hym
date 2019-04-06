@@ -20,8 +20,8 @@ export class ValidacionService {
           let num = parseFloat(value);
           return this._checkZeroValue(num, campo);
         }else{
-
-          this.swalService.ShowMessage(['warning', 'Alerta', 'El valor esta vacio!']);
+          
+          this.swalService.ShowMessage(['warning', 'Alerta', 'El valor '+campo+' esta vacio!']);
           return false;
         }
 
