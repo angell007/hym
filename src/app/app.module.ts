@@ -79,6 +79,7 @@ import { TrasladoService } from './shared/services/traslados/traslado.service';
 import { IndicadorService } from './shared/services/indicadores/indicador.service';
 import { PaisService } from './shared/services/paises/pais.service';
 import { CorresponsalbancarioService } from './shared/services/corresponsalesbancarios/corresponsalbancario.service';
+import { AperturacajaService } from './shared/services/aperturacaja/aperturacaja.service';
 
 
 //MODALES
@@ -221,8 +222,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     allowNegative: false,
     allowZero: false,
     decimal: ",",
-    precision: 2,
-    prefix: " ",
+    precision: 0,
+    prefix: "",
     suffix: "",
     thousands: ".",
     nullable: false
@@ -445,7 +446,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TrasladoService,
         IndicadorService,
         PaisService,
-        CorresponsalbancarioService
+        CorresponsalbancarioService,
+        AperturacajaService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

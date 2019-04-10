@@ -4,7 +4,7 @@ import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, delay } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +18,8 @@ import { DestinatarioService } from '../../shared/services/destinatarios/destina
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
 import { TransferenciaService } from '../../shared/services/transferencia/transferencia.service';
+import { AperturacajaService } from '../../shared/services/aperturacaja/aperturacaja.service';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'app-tablerocajero',
@@ -31,6 +33,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public openModalGiro: Subject<any> = new Subject<any>();
   public AbrirModalDestinatario:Subject<any> = new Subject<any>();
   public permisoSubscription:any;
+  public aperturaSubscription:any;
+
+  public searchComisionServicio:Subject<string> = new Subject<string>();
+  public searchComisionService$ = this.searchComisionServicio.asObservable();
+  public comisionServicioSubscription:any;
 
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('warnSwal') warnSwal: any;
@@ -94,6 +101,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   HistorialCliente = [];
   Giro1 = true;
   Giro2 = false;
+  public Corresponsal:boolean = false;
 
   Giros = [];
   Departamentos = [];
@@ -380,6 +388,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public Aparecer = false;
     public EditarRemitenteGiro:boolean = false;
     public EditarDestinatarioGiro:boolean = false;
+    public CrearRemitenteGiro:boolean= false;
+    public CrearDestinatarioGiro:boolean= false;
 
     DatosRemitenteEditarGiro:any = {};
     DatosDestinatario:any = {};
@@ -495,7 +505,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               private destinatarioService:DestinatarioService,
               private _monedaService:MonedaService,
               private _toastService:ToastService,
-              private _transferenciaService:TransferenciaService) { }
+              private _transferenciaService:TransferenciaService,
+              private _aperturaCajaService:AperturacajaService) { }
 
   CierreCajaAyerBolivares = 0;
   MontoInicialBolivar = 0;
@@ -508,7 +519,20 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public boolNombreR:boolean = false;
   public boolTelefonoR:boolean = false;
 
-  ngOnInit() {   
+  ngOnInit() {
+
+    this.aperturaSubscription = this._aperturaCajaService.event.subscribe((data:any) => {
+      this.IdOficina = JSON.parse(localStorage.getItem('Oficina'));
+      this.IdCaja = JSON.parse(localStorage.getItem('Caja'));
+      this.CheckApertura();
+    });
+
+    this.comisionServicioSubscription = this.searchComisionService$.pipe(
+      debounceTime(500),
+      switchMap( value => value != '' ?
+        this.http.get(this.globales.ruta+'php/serviciosexternos/comision_servicios.php', {params: { valor: value }}) : '' 
+      )
+    ).subscribe(response => this.ServicioExternoModel.Comision = response);
 
     this.AsignarMonedas();
     //this.AsignarMonedasApertura();
@@ -518,7 +542,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     
     setTimeout(() => {
       this.SetDatosIniciales();
-      this.CheckApertura();
+      //this.CheckApertura();
     }, 1500);
     //this.GetRegistroDiario();
   }
@@ -530,6 +554,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     if (this.permisoSubscription != undefined) {
       this.permisoSubscription.unsubscribe();
+    }
+
+    if (this.aperturaSubscription != undefined) {
+      this.aperturaSubscription.unsubscribe();
+    }
+
+    if (this.comisionServicioSubscription != undefined) {
+      this.comisionServicioSubscription.unsubscribe();
     }
   }
 
@@ -566,12 +598,21 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
 
           this.HabilitarCamposCambio();
+          this.conversionMoneda();
         });
       }else{
         if (this.Venta) {          
+          this.CambioModel.Valor_Origen = '';
+          this.CambioModel.Valor_Destino = '';
+          this.CambioModel.Tasa = '';
+          this.CambioModel.TotalPago = '';
+          this.CambioModel.Vueltos = '';
           this.CambioModel.Moneda_Origen = '2';
           this.CambioModel.Moneda_Destino = value;
-        } else {         
+        } else { 
+          this.CambioModel.Valor_Origen = '';
+          this.CambioModel.Valor_Destino = '';
+          this.CambioModel.Tasa = '';
           this.CambioModel.Moneda_Origen = value;
           this.CambioModel.Moneda_Destino = '2';
         }
@@ -714,7 +755,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if(this.CambioModel.Valor_Origen == '' || this.CambioModel.Valor_Origen == 0 || this.CambioModel.Valor_Origen === undefined){
 
         this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor a cambiar!');
-        this.CambioModel.Tasa = '';
+        //this.CambioModel.Tasa = '';
         this.CambioModel.Valor_Destino = '';
         return false;
       }else{
@@ -922,6 +963,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#region FUNCIONES TRANSFERENCIAS
 
     CalcularCambioMoneda(valor:string, tipo_cambio:string){
+      console.log(valor);
+      console.log(tipo_cambio);
+      valor = valor.replace('.', '');
 
       if (this.TransferenciaModel.Moneda_Destino == '') {
         this.ShowSwal('warning', 'Alerta', 'Debe escoger la moneda antes de realizar la conversión!');
@@ -2416,7 +2460,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }];
 
     AutoCompletarDatosPersonalesGiro(modelo, tipo_persona:string) {
-
+      console.log(modelo);
+      
       if (typeof(modelo) == 'object') {
         
         let validacion = this.ValidarRemitenteDestinatario(modelo.Id_Transferencia_Remitente, tipo_persona);
@@ -2424,17 +2469,34 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           return;
         };
 
+        if (tipo_persona == 'remitente') {
+          //this.EditarDestinatarioGiro = false;
+          this.CrearDestinatarioGiro = false;
+        }else{
+          //this.EditarRemitenteGiro = false;
+          this.CrearRemitenteGiro = false;
+        }
         this.AsignarValoresPersonaGiro(modelo, tipo_persona);
 
       }else if(typeof(modelo) == 'string'){
 
         if(modelo == ''){
           if (tipo_persona == 'remitente') {
-            this.EditarDestinatarioGiro = false;
-          }else{
             this.EditarRemitenteGiro = false;
+            this.CrearRemitenteGiro = false;
+          }else{
+            this.EditarDestinatarioGiro = false;
+            this.CrearDestinatarioGiro = false;
           }
-        }        
+        }else{
+          if (tipo_persona == 'remitente') {
+            this.EditarRemitenteGiro = false;
+            this.CrearRemitenteGiro = true;
+          }else{
+            this.EditarDestinatarioGiro = false;
+            this.CrearDestinatarioGiro = true;
+          }
+        }
           
         this.VaciarValoresPersonaGiro(tipo_persona, true);
       }
@@ -2452,6 +2514,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (id_persona == d) {
           this.ShowSwal('warning', 'Alerta', 'El remitente y el destinatario no pueden ser la misma persona');
           this.EditarRemitenteGiro = false;
+          this.CrearRemitenteGiro = false;
           this.VaciarValoresPersonaGiro(tipo_persona);
           return true;
         }
@@ -2466,6 +2529,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (id_persona == r) {
           this.ShowSwal('warning', 'Alerta', 'El remitente y el destinatario no pueden ser la misma persona');
           this.EditarDestinatarioGiro = false;
+          this.CrearDestinatarioGiro = false;
           this.VaciarValoresPersonaGiro(tipo_persona);
           return true;
         }
@@ -2481,6 +2545,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.GiroModel.Nombre_Remitente = modelo.Nombre;
         this.GiroModel.Telefono_Remitente = modelo.Telefono;
         this.EditarRemitenteGiro = true;
+        this.CrearRemitenteGiro = false;
         
       }else if(tipo_persona == 'destinatario'){
 
@@ -2488,6 +2553,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.GiroModel.Nombre_Destinatario = modelo.Nombre;
         this.GiroModel.Telefono_Destinatario = modelo.Telefono;
         this.EditarDestinatarioGiro = true;
+        this.CrearDestinatarioGiro = false;
       }
     }
 
@@ -2510,8 +2576,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
-    valorComision(value) {   
-
+    valorComision(value) {
+      
       let recibido = parseFloat(this.GiroModel.Valor_Recibido);
       
       if(typeof(value) == 'boolean'){
@@ -2684,6 +2750,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Destinatario_Giro = '';
         this.EditarRemitenteGiro = false;
         this.EditarDestinatarioGiro = false;
+        this.CrearRemitenteGiro = false;
+        this.CrearDestinatarioGiro = false;
       }
 
       if (tipo == 'edicion') {
@@ -2717,6 +2785,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     
         this.Remitente_Giro = '';
         this.Destinatario_Giro = '';
+        this.CrearRemitenteGiro = false;
+        this.CrearDestinatarioGiro = false;
       }
     }
 
@@ -2765,7 +2835,24 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     EditarPersonaGiro(idRemitente:string, tipoPersona:string, accion:string){
-      let data = {id_remitente:idRemitente, tipo:tipoPersona, accion:accion};
+      let data = {};
+
+      if (tipoPersona == 'remitente') {
+        if (typeof(this.Remitente_Giro) == 'string') {
+          data = {id_remitente:idRemitente, tipo:tipoPersona, accion:'crear desde giro'};
+        }else if (typeof(this.Remitente_Giro) == 'object'){
+          data = {id_remitente:idRemitente, tipo:tipoPersona, accion:accion};
+        }
+      }else if(tipoPersona == 'destinatario'){
+        if (typeof(this.Destinatario_Giro) == 'string') {
+          data = {id_remitente:idRemitente, tipo:tipoPersona, accion:'crear desde giro'};
+        }else if (typeof(this.Destinatario_Giro) == 'object'){
+          data = {id_remitente:idRemitente, tipo:tipoPersona, accion:accion};
+        }
+      }
+      
+      
+
       this.openModalGiro.next(data);
     }
 
@@ -3101,6 +3188,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     AsignarComisionServicioExterno() {
 
       let valorAsignado = this.ServicioExternoModel.Valor;
+      console.log(this.ServicioExternoModel);
+      
 
       if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {
         this.ShowSwal('warning', 'Alerta', 'El valor no puede estar vacio ni ser 0!');
@@ -3114,6 +3203,20 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }).subscribe((data: any) => {
         this.ServicioExternoModel.Comision = data;
       });
+    }
+
+    AsignarComisionServicioExterno2() {
+
+      let valorAsignado = this.ServicioExternoModel.Valor;     
+
+      if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {
+        this.ShowSwal('warning', 'Alerta', 'El valor no puede estar vacio ni ser 0!');
+        this.ServicioExternoModel.Valor = '';
+        this.ServicioExternoModel.Comision = '';
+        return;
+      }
+      
+      this.searchComisionServicio.next(valorAsignado);
     }
 
     LimpiarModeloServicios(tipo:string){
@@ -3168,6 +3271,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       for (let i = 0; i < tot; i++) {
         var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
         document.getElementById(id2).style.display = 'none';
+        this.Corresponsal = false;
   
         this.volverCambioEfectivo();
         this.volverReciboTransferencia();
@@ -3200,6 +3304,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           break;
 
         case 'corresponsal':
+          this.Corresponsal = true;
           this.CargarDatosCorresponsal();
           break;
 
@@ -3600,6 +3705,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     GuardarApertura(){
         
+      this.DiarioModel.Id_Caja = this.IdCaja;
+      this.DiarioModel.Id_Oficina = this.IdOficina;
       let model = JSON.stringify(this.DiarioModel);
       let valores_monedas = JSON.stringify(this.ValoresMonedasApertura);
       let datos = new FormData();

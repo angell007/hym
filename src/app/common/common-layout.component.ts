@@ -12,6 +12,7 @@ import { SwalService } from '../shared/services/swal/swal.service';
 import { TrasladocajaService } from '../shared/services/traslados_caja/trasladocaja.service';
 import { ToastService } from '../shared/services/toasty/toast.service';
 import { OficinaService } from '../shared/services/oficinas/oficina.service';
+import { AperturacajaService } from '../shared/services/aperturacaja/aperturacaja.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -164,7 +165,8 @@ export class CommonLayoutComponent implements OnInit {
                 private trasladoCajaService:TrasladocajaService,
                 private toastService:ToastService,
                 private _oficinaService:OficinaService,
-                private _cajaService:CajaService) {
+                private _cajaService:CajaService,
+                private _aperturaCajaService:AperturacajaService) {
                     
         this.app = {
             layout: {
@@ -260,19 +262,21 @@ export class CommonLayoutComponent implements OnInit {
             localStorage.setItem('Perfil', this.user.Id_Perfil);
 
             //if (this.user.Id_Perfil == 2) {
-                if (this.oficina_seleccionada == '') {
-                    this.modalOficinaCaja.show();                    
-                }else{                    
-                    this.ListarCajas(this.oficina_seleccionada);
-                    this.SetNombreOficina(this.oficina_seleccionada);
-                }
+                // if (this.oficina_seleccionada == '') {
+                //     this.modalOficinaCaja.show();                    
+                // }else{                    
+                //     this.ListarCajas(this.oficina_seleccionada);
+                //     this.SetNombreOficina(this.oficina_seleccionada);
+                // }
 
-                if (this.caja_seleccionada == '') {
-                    this.modalOficinaCaja.show();
-                }else{
-                    this.SetNombreCaja(this.caja_seleccionada);
-                }
+                // if (this.caja_seleccionada == '') {
+                //     this.modalOficinaCaja.show();
+                // }else{
+                //     this.SetNombreCaja(this.caja_seleccionada);
+                // }
             //}
+
+            this.CheckCajaOficina();
 
             this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
                 this.alertas = data;
@@ -953,6 +957,7 @@ this.ModalResumenCuenta.show();
                 this.SetNombreOficina(this.oficina_seleccionada);
                 this.SetNombreCaja(this.caja_seleccionada);
                 this.modalOficinaCaja.hide();
+                this._aperturaCajaService.OpenModalApertura(null);
             /*}else{
 
                 this.ShowSwal(data.codigo, data.titulo, data.mensaje);
@@ -1000,7 +1005,8 @@ this.ModalResumenCuenta.show();
 
     SetNombreCaja(idCaja:string){
         this.cajaService.getNombreCaja(idCaja).subscribe((data:any) => {
-            this.NombreCaja = data.caja;
+            this.NombreCaja = data.caja;            
+            this._aperturaCajaService.OpenModalApertura(null);
         });
     }
 
@@ -1060,9 +1066,19 @@ this.ModalResumenCuenta.show();
         }
     }
 
-    // TestToast(){
-    //     let d = {textos:['Prueba', 'Mensaje Prueba'], tipo:'warning', duracion:2000};
-    //     this.toastService.ShowToast(d);
-    // }
+    CheckCajaOficina(){
+        if (this.oficina_seleccionada == '') {
+            this.modalOficinaCaja.show();
+        }else{                    
+            this.ListarCajas(this.oficina_seleccionada);
+            this.SetNombreOficina(this.oficina_seleccionada);
+        }
+
+        if (this.caja_seleccionada == '') {
+            this.modalOficinaCaja.show();
+        }else{
+            this.SetNombreCaja(this.caja_seleccionada);
+        }
+    }
 
 }

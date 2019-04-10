@@ -30,7 +30,9 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Valor</label>
-            <input type="text" placeholder="Valor" class="form-control text-right" name="Valor" [(ngModel)]="CorresponsalModel.Valor" required>
+            <input type="text" placeholder="Valor" class="form-control text-right" 
+              name="Valor" [(ngModel)]="CorresponsalModel.Valor" required
+              currencyMask [options]="{ thousands: '.' }" (change)="TestValue($event.target.value)" (ngModelChange)="TestV()">
           </div>
         </div>
         <div class="row">

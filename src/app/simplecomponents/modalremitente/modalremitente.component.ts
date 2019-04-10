@@ -38,6 +38,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.suscripcion = this.AbrirModalEvent.subscribe((data:any) => {
       this.accion = data.accion;
+      console.log(data);
+      
       
       if (data.id_remitente != "0" && data.accion == 'editar') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
@@ -71,11 +73,10 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
       }else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
-        this.tipo_persona = data.tipo;        
+        this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
-        this.MensajeGuardar = 'Se dispone a guardar este remitente';
-        this.Editar = false;
         this.ModalRemitente.show();
+
       }else{
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
@@ -155,14 +156,13 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
               break;
   
             case 'crear desde giro':
-              let objRespuesta = {remitente:this.RemitenteModel};
+              let objRespuesta = {tipo:this.tipo_persona, model:this.RemitenteModel};
               this.IncluirRemitenteEnGiro.emit(objRespuesta);
               break;
           
             default:
               break;
-          }
-          
+          }          
           
           let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
           this._toastService.ShowToast(toastObj);
