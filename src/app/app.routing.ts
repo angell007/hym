@@ -59,6 +59,7 @@ import { ComprascrearComponent } from './configuracion/compras/comprascrear/comp
 import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
+import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -105,9 +106,13 @@ export const AppRoutes: Routes = [
         path: 'funcionarios', component: CommonLayoutComponent,
         children: [{ path: '', component: FuncionariosComponent, canActivate: [AuthGuard] }]
     },
+    // {
+    //     path: 'funcionariocrear', component: CommonLayoutComponent,
+    //     children: [{ path: '', component: FuncionariocrearComponent, canActivate: [AuthGuard] }]
+    // },
     {
         path: 'funcionariocrear', component: CommonLayoutComponent,
-        children: [{ path: '', component: FuncionariocrearComponent, canActivate: [AuthGuard] }]
+        children: [{ path: '', component: AdministrarfuncionarioComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'clientes', component: CommonLayoutComponent,

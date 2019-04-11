@@ -5,6 +5,7 @@ import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormWizardModule } from 'angular2-wizard';
+import { ArchwizardModule } from 'ng2-archwizard';
 import { FuncionarioService } from './shared/funcionario/funcionario.service'
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
@@ -80,6 +81,11 @@ import { IndicadorService } from './shared/services/indicadores/indicador.servic
 import { PaisService } from './shared/services/paises/pais.service';
 import { CorresponsalbancarioService } from './shared/services/corresponsalesbancarios/corresponsalbancario.service';
 import { AperturacajaService } from './shared/services/aperturacaja/aperturacaja.service';
+import { NuevofuncionarioService } from './shared/services/funcionarios/nuevofuncionario.service';
+import { GrupoService } from './shared/services/gruposfuncionarios/grupo.service';
+import { DependenciaService } from './shared/services/dependencias/dependencia.service';
+import { CargoService } from './shared/services/cargos/cargo.service';
+import { PerfilService } from './shared/services/perfiles/perfil.service';
 
 
 //MODALES
@@ -216,6 +222,7 @@ import { TablatrasladosComponent } from './traslados/tablatraslados/tablatraslad
 import { CorresponsalbancarioComponent } from './tableros/tablerocajero/corresponsalbancario/corresponsalbancario.component';
 import { TablamovimientoscorresponsalComponent } from './tableros/tablerocajero/tablamovimientoscorresponsal/tablamovimientoscorresponsal.component';
 import { ModalcorresponsaldiarioComponent } from './simplecomponents/modalcorresponsaldiario/modalcorresponsaldiario.component';
+import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -240,7 +247,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         HttpClientModule,
         HttpModule,
         ReactiveFormsModule,
-        FormWizardModule,
+        //FormWizardModule,
+        ArchwizardModule,
         NgxDatatableModule,
         DataTablesModule,
         ChartsModule,
@@ -394,7 +402,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatrasladosComponent,
         CorresponsalbancarioComponent,
         TablamovimientoscorresponsalComponent,
-        ModalcorresponsaldiarioComponent
+        ModalcorresponsaldiarioComponent,
+        AdministrarfuncionarioComponent
     ],
     exports:[
         ModalBasicComponent
@@ -447,7 +456,12 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         IndicadorService,
         PaisService,
         CorresponsalbancarioService,
-        AperturacajaService
+        AperturacajaService,
+        NuevofuncionarioService,
+        GrupoService,
+        DependenciaService,
+        CargoService,
+        PerfilService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
