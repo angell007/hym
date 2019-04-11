@@ -31,6 +31,8 @@ export class FuncionariocrearComponent implements OnInit {
   public Fotos: any;
   public Perfiles:any=[];
 
+  public validForm:boolean = false;
+
   public funcionario =
     {
       Foto: '',
@@ -174,6 +176,11 @@ export class FuncionariocrearComponent implements OnInit {
               private cuentaService:CuentabancariaService) 
 {
   this.GetCuentasBancarias();
+}
+
+onStepping(event){
+  console.log(event);
+  
 }
 
   CargaFoto(event) {

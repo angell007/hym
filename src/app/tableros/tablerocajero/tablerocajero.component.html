@@ -221,7 +221,7 @@
                                                     autocomplete="false" 
                                                     placeholder="Valor" class="form-control text-right" name="Valor_Origen"
                                                     id="Cambia" 
-                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda()" 
+                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda('o', 'e')" 
                                                     currencyMask [options]="{ thousands: '.' }" 
                                                     [disabled]="HabilitarCampos"
                                                     required>
@@ -230,36 +230,35 @@
                                             <div class="col-md-4" *ngIf="Venta">
                                                     <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
                                                     <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" 
-                                                        autocomplete="false"
-                                                        id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly
-                                                        currencyMask [options]="{ thousands: '.' }">
+                                                        autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino"
+                                                        currencyMask [options]="{ thousands: '.' }" (blur)="conversionMoneda('d', 'l')"
+                                                        [disabled]="HabilitarCampos" required>
                                                 </div>
 
                                             <div class="col-md-4">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                                                     Cambio</label>
-                                                <input type="text" placeholder="Cambio" class="form-control" autocomplete="false"
-                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">
+                                                <input type="text" placeholder="Tasa" class="form-control" autocomplete="false"
+                                                    id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa" 
+                                                    (blur)="conversionMoneda('o', 'e')" [disabled]="HabilitarCampos" required>
                                                 <!--<input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
                                                     id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">-->
                                             </div>
 
                                             <div class="col-md-4" *ngIf="!Venta">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
-                                                <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" autocomplete="false"
-                                                    id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" readonly
-                                                    currencyMask [options]="{ thousands: '.' }">
+                                                <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" 
+                                                    autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" 
+                                                    [disabled]="HabilitarCampos" currencyMask [options]="{ thousands: '.' }"
+                                                    (blur)="conversionMoneda('d', 'l')" required>
                                             </div>
 
                                             <div class="col-md-4" *ngIf="Venta">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
                                                 <input #valorCambio type="text" 
-                                                    autocomplete="false" 
-                                                    placeholder="Valor" class="form-control text-right" name="Valor_Origen"
-                                                    id="Cambia" 
-                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda()" 
-                                                    currencyMask [options]="{ thousands: '.' }"
-                                                    [disabled]="HabilitarCampos"
+                                                    autocomplete="false" placeholder="Valor" class="form-control text-right" name="Valor_Origen"
+                                                    id="Cambia" [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda('o', 'e')" 
+                                                    currencyMask [options]="{ thousands: '.' }" [disabled]="HabilitarCampos"
                                                     required>
                                             </div>
                                         </div>

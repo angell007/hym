@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule, Http } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-//import { FormWizardModule } from 'angular2-wizard';
+import { FormWizardModule } from 'angular2-wizard';
 import { FuncionarioService } from './shared/funcionario/funcionario.service'
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
@@ -240,7 +240,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         HttpClientModule,
         HttpModule,
         ReactiveFormsModule,
-        //FormWizardModule,
+        FormWizardModule,
         NgxDatatableModule,
         DataTablesModule,
         ChartsModule,

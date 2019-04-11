@@ -598,7 +598,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
 
           this.HabilitarCamposCambio();
-          this.conversionMoneda();
+          //this.conversionMoneda();
         });
       }else{
         if (this.Venta) {          
@@ -735,19 +735,144 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }*/
     }
 
-    conversionMoneda() {
-      
-      if(this.ValidacionTasaCambio()){
+    conversionMoneda(tipo_cambio:string, tipo_moneda_origen:string) {
+      //Tipo cambio posee 2 valores
+      //o para origen, es decir que el cambio es desde la moneda local a moneda extranjera
+      //e para extranjera, es decir que el cambio es desde moneda extrajera a moneda local
 
-        if (this.Venta == false) {
-          
-          var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = cambio;
-        } else {
+      //Tipo moneda origen posee 2 valores
+      //l para local, es decir que el cambio es desde la moneda local a moneda extranjera
+      //e para extranjera, es decir que el cambio es desde moneda extrajera a moneda local
 
-          var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = cambio;
+      console.log(tipo_cambio);
+      console.log(tipo_moneda_origen);      
+
+      if (tipo_cambio == 'o') {
+        if (this.ValidarAntesDeConversion(tipo_cambio)) {
+          console.log("entro");
+          if (tipo_moneda_origen == 'l') {
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
+            this.CambioModel.Valor_Destino = cambio;
+          }else{
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
+            console.log(cambio);
+            
+            this.CambioModel.Valor_Destino = cambio;
+          }
         }
+      }else if (tipo_cambio == 'd') {
+        if (this.ValidarAntesDeConversion(tipo_cambio)) {
+          if (tipo_moneda_origen == 'l') {
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
+            this.CambioModel.Valor_Origen = cambio;
+          }else{
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
+            this.CambioModel.Valor_Origen = cambio;
+          }
+        }
+      }
+
+
+      // if(this.ValidacionTasaCambio()){
+
+      //   if (this.Venta == false) {
+          
+      //     var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
+      //     this.CambioModel.Valor_Destino = cambio;
+      //   } else {
+
+      //     var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
+      //     this.CambioModel.Valor_Destino = cambio;
+      //   }
+      // }
+    }
+
+    ValidarAntesDeConversion(tipo:string):boolean{
+      console.log("validando");
+      
+      if(!this.ValidacionTipoCambio(tipo))
+        return false;
+
+      if(!this.ValidacionTasa(tipo))
+        return false;
+
+      return true;
+    }
+
+    ValidacionTipoCambio(tipo:string):boolean{
+      if (tipo == 'o') {
+        console.log("entro a validar origen");
+        if(this.CambioModel.Valor_Origen == '' || this.CambioModel.Valor_Origen === undefined){
+
+          this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor a cambiar!');
+          //this.CambioModel.Tasa = '';
+          this.CambioModel.Valor_Destino = '';
+          return false;
+        }else{
+          console.log("validar origen true");
+          return true;
+        }
+      }else{
+        console.log("entro a validar destino");
+        if(this.CambioModel.Valor_Destino == '' || this.CambioModel.Valor_Destino === undefined){
+
+          this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor a cambiar!');
+          //this.CambioModel.Tasa = '';
+          this.CambioModel.Valor_Origen = '';
+          return false;
+        }else{
+          console.log("validar destino true");
+          return true;
+        }
+      }
+    }
+
+    ValidacionTasa(tipo_cambio:string):boolean{
+      console.log("entro a validar tasa");
+      if(this.CambioModel.Tasa == '' || this.CambioModel.Tasa == 0 || this.CambioModel.Tasa === undefined){
+        
+        this.ShowSwal('warning', 'Tasa incorrecta', 'No se ha establecido una tasa de cambio!');
+        this.CambioModel.Tasa = '';
+        if (tipo_cambio == 'o') {
+          this.CambioModel.Valor_Destino = '';  
+        }else{
+          this.CambioModel.Valor_Origen = '';
+        }
+        return false;
+
+      }else{
+        console.log("validando limites de tasa");
+        let tasa = parseFloat(this.CambioModel.Tasa);
+
+        if(this.Venta){
+          if(tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo) ){
+            this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
+            this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2);
+            if (tipo_cambio == 'o') {
+              this.CambioModel.Valor_Destino = '';  
+            }else{
+              this.CambioModel.Valor_Origen = '';
+            }
+            return false;
+          }else{
+            console.log("limite venta true");
+            return true;
+          }
+        }else{
+          if(tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo) ){
+            this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
+            this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo)) / 2);
+            if (tipo_cambio == 'o') {
+              this.CambioModel.Valor_Destino = '';  
+            }else{
+              this.CambioModel.Valor_Origen = '';
+            }
+            return false;
+          }else{
+            console.log("limite compra true");
+            return true;
+          }
+        }        
       }
     }
 
@@ -963,8 +1088,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#region FUNCIONES TRANSFERENCIAS
 
     CalcularCambioMoneda(valor:string, tipo_cambio:string){
-      console.log(valor);
-      console.log(tipo_cambio);
       valor = valor.replace('.', '');
 
       if (this.TransferenciaModel.Moneda_Destino == '') {
@@ -1293,6 +1416,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     ValidarValorTransferirDestinatario(valor, index){
+      console.log(this.TransferenciaModel);
       
       if (this.TransferenciaModel.Forma_Pago == 'Credito') {
         if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
@@ -3206,7 +3330,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     AsignarComisionServicioExterno2() {
-
+      
       let valorAsignado = this.ServicioExternoModel.Valor;     
 
       if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {

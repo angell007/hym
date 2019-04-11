@@ -32,9 +32,26 @@
             <label>Valor</label>
             <input type="text" placeholder="Valor" class="form-control text-right" 
               name="Valor" [(ngModel)]="CorresponsalModel.Valor" required
-              currencyMask [options]="{ thousands: '.' }" (change)="TestValue($event.target.value)" (ngModelChange)="TestV()">
+              currencyMask [options]="{ thousands: '.' }">
           </div>
         </div>
+        <!-- <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Tercero
+                <i class="pl-2 font-size-17" [ngClass]="{'ti-pencil text-info':EditarTerceroCorresponsal, 'ti-plus text-success':!EditarTerceroCorresponsal}" style="cursor:pointer;" 
+                  *ngIf="ManageTerceroCorresponsal" 
+                  (click)="AdministrarTerceroCorresponsal()"></i>
+              </label>
+              <input id="tercero_corresponsal" type="text" class="form-control"
+                  placeholder="Número Documento" name="Tercero_Corresponsal"
+                  autocomplete="off" [(ngModel)]="Tercero_Corresponsal"
+                  [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                  [inputFormatter]="formatter_remitente" 
+                  (ngModelChange)="AutoCompletarDatosPersonalesGiro(Remitente_Giro, 'remitente')" required>
+            </div>
+          </div>
+        </div> -->
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
