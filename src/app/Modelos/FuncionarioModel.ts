@@ -27,9 +27,9 @@ export class FuncionarioModel{
     public Salario:string = '';
     public Fecha_Ingreso:string = '';
     public Hijos:string = '';
-    public Ultima_Sesion:string = '';
-    public Fecha_Registrado:string = '';
-    public Tipo_Turno:string = '';
-    public Id_Turno:string = '';
-    public Foto:any = '';
+    public Ultima_Sesion:string = '2000-01-01 00:00:00';
+    public Fecha_Registrado:string = '2000-01-01 00:00:00';
+    public Tipo_Turno:string = '0';
+    public Id_Turno:string = '0';
+    public Estado:any = 'Activo';
 }

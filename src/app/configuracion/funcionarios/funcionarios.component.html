@@ -1,14 +1,15 @@
 <div class="container-fluid">
-    <div class="page-title">
+    <!-- <div class="page-title">
         <h4 class="pull-left">Funcionarios</h4>
         <button class="pull-right btn btn-primary" [routerLink]="['/funcionariocrear']">
             <i class="ti-plus"></i> Agregar Nuevo Funcionario</button>
     </div>
-    <div class="clearfix"></div>
+    <div class="clearfix"></div> -->
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-block">
+                <app-tablafuncionarios></app-tablafuncionarios>
+                <!-- <div class="card-block">
                     <p>Todos los funcionarios que laboran en nuestra compañía</p>
                     <div class="table-responsive">
                         <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
@@ -32,9 +33,6 @@
                                                                 <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">                      
                                                             </label>
                                                     </div>
-                                                    
-                                                    <!-- <img class="thumb-img img-circle" src="assets/images/user.jpg" alt=""> -->
-
 
                                                     <div class="info">
                                                         <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
@@ -67,7 +65,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

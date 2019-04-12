@@ -111,7 +111,7 @@ export const AppRoutes: Routes = [
     //     children: [{ path: '', component: FuncionariocrearComponent, canActivate: [AuthGuard] }]
     // },
     {
-        path: 'funcionariocrear', component: CommonLayoutComponent,
+        path: 'administrarfuncionario/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: AdministrarfuncionarioComponent, canActivate: [AuthGuard] }]
     },
     {

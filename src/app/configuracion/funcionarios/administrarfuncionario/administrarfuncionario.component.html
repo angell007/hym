@@ -18,7 +18,7 @@
                             class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
                         </label>
                         <div class="col-md-6">
-                          <input name="Foto" id="Foto" [(ngModel)]="FuncionarioModel.Foto" type="file" accept="image/png, image/jpeg"
+                          <input name="Imagen" id="imagen" [(ngModel)]="FuncionarioModel.Imagen" type="file" accept="image/png, image/jpeg"
                             class="form-control text-right f-9" style="display: none;" (change)="CargaFoto($event)">
                         </div>
                       </div>
@@ -27,9 +27,10 @@
                       <div class="row">
                         <div class="col-md-4">
                           <div class="form-group">
-                            <input type="number" min="0" name="Identificacion_Funcionario" [(ngModel)]="FuncionarioModel.Identificacion_Funcionario"
-                              class="form-control f-9" id="identificacion" required 
+                            <input type="text" name="Identificacion_Funcionario" [(ngModel)]="FuncionarioModel.Identificacion_Funcionario"
+                              class="form-control f-9" id="identificacion" required *ngIf="!Edicion" 
                               (ngModelChange)="ValidarIdentificacion()" />
+                            <label *ngIf="Edicion" class="block-element">{{FuncionarioModel.Identificacion_Funcionario}}</label>
                             <label class="floating-label">Identificación (*)</label>
 
                           </div>
@@ -213,34 +214,18 @@
                     <div class="col-md-3">
                       <div class="form-group">
                         <input type="number" name="Salario" [(ngModel)]="FuncionarioModel.Salario" class="dinero form-control"
-                          onkeypress="return event.charCode >= 48 && event.charCode <= 57"                           required  />
+                          onkeypress="return event.charCode >= 48 && event.charCode <= 57" required  />
                         <label class="floating-label">Salario (*)</label>
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
                         <input class="form-control f-9" type="date" name="Fecha_Ingreso" [(ngModel)]="FuncionarioModel.Fecha_Ingreso"
-                          required  />
+                          required *ngIf="!Edicion" />
+                        <label *ngIf="Edicion" class="block-element">{{FuncionarioModel.Fecha_Ingreso | date:'dd/MM/yyyy'}}</label>
                         <label for="floating-label">Fecha de Ingreso: (*)</label>
                       </div>
                     </div>
-
-                    <!-- <div class="col-md-3">
-                      <div class="form-group">
-                        <input class="form-control f-9" name="Saldo_Inicial_Peso" [(ngModel)]="FuncionarioModel.Saldo_Inicial_Peso"
-                          required  />
-                        <label for="floating-label">Saldo Inicial Peso</label>
-                      </div>
-                    </div>
-
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input class="form-control f-9" name="Saldo_Inicial_Bolivar" [(ngModel)]="FuncionarioModel.Saldo_Inicial_Bolivar"
-                          required  />
-                        <label for="floating-label">Saldo Inicial Bolivar</label>
-                      </div>
-                    </div> -->
-
                   </div>
                   <h5>Dotación</h5>
                   <hr>
@@ -321,7 +306,7 @@
                   </div>
                 </form>
                 <button type="button" class="btn btn-outline-primary btn-rounded btn-sm pull-right"
-                   nextStep>Siguiente</button>
+                  [disabled]="!FormInfoPersonal.valid" nextStep>Siguiente <i class="ti-arrow-right pl-2"></i></button>
               </wizard-step>
               <wizard-step stepTitle="Contacto de Emergencia" navigationSymbol="&#xf234;" navigationSymbolFontFamily="FontAwesome">
                 <form #FormContactoEmergencia="ngForm">
@@ -364,9 +349,13 @@
                     </div>
                   </div>
                 </form>                
-                <button type="button" class="btn btn-outline-danger btn-rounded btn-sm pull-left" previousStep>Regresar</button>
+                <button type="button" class="btn btn-outline-danger btn-rounded btn-sm pull-left" previousStep>
+                  <i class="ti-arrow-left pr-2"></i>Regresar
+                </button>
                 <button type="button" class="btn btn-outline-primary btn-rounded btn-sm pull-right"
-                  [disabled]="!FormContactoEmergencia.valid" nextStep>Siguiente</button>
+                  [disabled]="!FormContactoEmergencia.valid" nextStep>
+                  Siguiente <i class="ti-arrow-right pl-2"></i>
+                </button>
               </wizard-step>
               <wizard-step stepTitle="Privilegios" navigationSymbol="&#xf084;" navigationSymbolFontFamily="FontAwesome">
                 <form #FormPrivilegios="ngForm">
@@ -374,7 +363,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Perfil</label>
-                        <select class="form-control form-control-sm" (change)="BuscarPermisosPerfil()" required name="Id_Perfil"
+                        <select class="form-control form-control-sm" (change)="BuscarPermisos()" required name="Id_Perfil"
                           [(ngModel)]="FuncionarioModel.Id_Perfil">
                           <option value="">Seleccione</option>
                           <option *ngFor="let p of Perfiles; let i=index" [value]="p.Id_Perfil">{{p.Nombre}}</option>  
@@ -382,8 +371,18 @@
                       </div>
                     </div>  
                   </div>
+
+                  <div class="form-row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="floating-label">Cuentas Asociadas</label>
+                        <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias" name="Cuentas_Asociadas" [(ngModel)]="CuentasAsociadas" [multiple]="true"></ng-select>
+
+                      </div>
+                    </div>
+                  </div>
   
-                  <div class="row titulo">
+                  <div class="row titulo mt-2 mb-2">
                     <div *ngFor="let item of PerfilesPermisos; let i = index" id="fila{{i}}" class="col-md-3 borde">
                       <h5 class="m-t-15">{{item.Titulo_Modulo}}</h5>  
                       <div class="row m-t-20 m-b-10">
@@ -392,8 +391,8 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <span class="switch switch-sm">  
-                                  <input type="checkbox" name="Ver{{i}}" id="item.Ver{{i}}" (click)="CambiarVer(i)"
-                                    [checked]="item.Ver==='1' ? true : false" class="switch">
+                                  <input type="checkbox" name="Ver{{i}}" id="item.Ver{{i}}"
+                                    [checked]="item.Ver==='1' ? true : false" class="switch" (click)="CambiarValorVer(i)">
                                   <!-- <input type="hidden" name="Ver"  [(ngModel)]="item.Ver" value="0" class="switch" >-->
                                   <label for="item.Ver{{i}}"></label>
                                 </span>
@@ -408,7 +407,7 @@
                               <div class="form-group">
                                 <span class="switch switch-sm">  
                                   <input type="checkbox" name="Crear" id="item.Crear{{i}}" [checked]="item.Crear==='1' ? true : false"
-                                    class="switch" (click)="CambiarCrear(i)">
+                                    class="switch" (click)="CambiarValorCrear(i)">
                                   <label for="item.Crear{{i}}"></label>
                                 </span>
                                 <label style="text-align: center">Crear</label>
@@ -422,7 +421,7 @@
                               <div class="form-group">
                                 <span class="switch switch-sm">
                                   <input type="checkbox" name="{{item.Modulo}}-Editar" id="{{item.Modulo}}-Editar"
-                                    [checked]="item.Editar==='1' ? true : false" class="switch" (click)="CambiarEditar(i)">
+                                    [checked]="item.Editar==='1' ? true : false" class="switch" (click)="CambiarValorEditar(i)">
                                   <label for="{{item.Modulo}}-Editar"></label>
                                 </span>
                                 <label style="text-align: center">Editar</label>
@@ -436,7 +435,7 @@
                               <div class="form-group">
                                 <span class="switch switch-sm">
                                   <input type="checkbox" name="{{item.Modulo}}-Eliminar" id="{{item.Modulo}}-Eliminar"
-                                    [checked]="item.Eliminar==='1' ? true : false" class="switch" (click)="CambiarEliminar(i)">
+                                    [checked]="item.Eliminar==='1' ? true : false" class="switch" (click)="CambiarValorEliminar(i)">
                                   <label for="{{item.Modulo}}-Eliminar"></label>
                                 </span>
                                 <label style="text-align: center">Eliminar</label>
@@ -448,9 +447,14 @@
                     </div>
                   </div>
                 </form>                
-                <button type="button" class="btn btn-outline-danger btn-rounded btn-sm pull-left" previousStep>Regresar</button>
+                <button type="button" class="btn btn-outline-danger btn-rounded btn-sm pull-left" previousStep>
+                  <i class="ti-arrow-left pr-2"></i>Regresar
+                </button>
                 <button type="button" class="btn btn-outline-primary btn-rounded btn-sm pull-right"
-                  [disabled]="!FormInfoPersonal.valid">Registrar</button>
+                  [disabled]="!FormPrivilegios.valid"
+                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este funcionario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No!'}" (confirm)="GuardarFuncionario()">
+                  Registrar<i class="ti-save pl-2"></i>
+                </button>
               </wizard-step>
             </wizard>
           </form>

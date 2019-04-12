@@ -16,16 +16,30 @@ export class NuevofuncionarioService {
     return this.client.get(this._rutaBase+'verificar_identificacion_funcionario.php', {params:p});
   }
 
-  getPerfilesFuncionario(){
-    return this.client.get(this._rutaBase+'perfiles_funcionario.php');
+  getPerfilesFuncionario(idPerfil:string, idFuncionario:string){
+    let p = {id_funcionario:idFuncionario, id_perfil:idPerfil};
+    return this.client.get(this._rutaBase+'get_permisos_funcionario.php', {params:p});
   }
 
-  getListaEgresos(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'get_lista_egresos.php', {params:p});
+  getDatosFuncionario(idFuncionario:string):Observable<any>{
+    let p ={id_funcionario:idFuncionario};
+    return this.client.get(this._rutaBase+'get_funcionario_by_id.php', {params:p});
   }
 
-  saveEgreso(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_egreso.php', datos);
+  getListaFuncionarios(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'get_lista_funcionarios.php', {params:p});
+  }
+
+  saveFuncionario(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'guardar_funcionario_nuevo.php', datos);
+  }
+
+  editFuncionario(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'editar_funcionario.php', datos);
+  }
+
+  cambiarEstadoFuncionario(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'cambiar_estado_funcionario.php', datos);
   }
 
 }

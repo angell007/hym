@@ -14,6 +14,7 @@ export class GeneralService {
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;
+  public FullFechaActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   public Anios:Array<number> = [];
 
@@ -56,7 +57,9 @@ export class GeneralService {
               private datePipe:DatePipe) 
   {
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
     console.log(this.FechaActual);
+    console.log(this.FullFechaActual);
     this.BuildAniosConsulta();
     
   }

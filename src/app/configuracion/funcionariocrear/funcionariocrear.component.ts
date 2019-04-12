@@ -219,10 +219,8 @@ onStepping(event){
   }
 
   Dependencia_Grupo(Grupo) {
-    console.log(Grupo)
     this.http.get(this.globales.ruta + 'php/funcionarios/dependencias_grupo.php', { params: { id: Grupo } }).subscribe((data: any) => {
       this.Dependencias = data;
-      console.log(data)
     });
   }
 

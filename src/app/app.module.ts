@@ -223,6 +223,7 @@ import { CorresponsalbancarioComponent } from './tableros/tablerocajero/correspo
 import { TablamovimientoscorresponsalComponent } from './tableros/tablerocajero/tablamovimientoscorresponsal/tablamovimientoscorresponsal.component';
 import { ModalcorresponsaldiarioComponent } from './simplecomponents/modalcorresponsaldiario/modalcorresponsaldiario.component';
 import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
+import { TablafuncionariosComponent } from './configuracion/funcionarios/tablafuncionarios/tablafuncionarios.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -403,7 +404,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CorresponsalbancarioComponent,
         TablamovimientoscorresponsalComponent,
         ModalcorresponsaldiarioComponent,
-        AdministrarfuncionarioComponent
+        AdministrarfuncionarioComponent,
+        TablafuncionariosComponent
     ],
     exports:[
         ModalBasicComponent

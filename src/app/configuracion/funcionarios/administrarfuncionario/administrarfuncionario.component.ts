@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FuncionarioModel } from '../../../Modelos/FuncionarioModel';
 import { ContactoEmergenciaModel } from '../../../Modelos/ContactoEmergenciaModel';
 import { ExperienciaLaboralModel } from '../../../Modelos/ExperienciaLaboralModel';
@@ -16,6 +16,7 @@ import { GrupoService } from '../../../shared/services/gruposfuncionarios/grupo.
 import { DependenciaService } from '../../../shared/services/dependencias/dependencia.service';
 import { CargoService } from '../../../shared/services/cargos/cargo.service';
 import { PerfilService } from '../../../shared/services/perfiles/perfil.service';
+import { CuentabancariaService } from '../../../shared/services/cuentasbancarias/cuentabancaria.service';
 
 @Component({
   selector: 'app-administrarfuncionario',
@@ -28,7 +29,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   public ValidarIdentificaiconEvent$ = this._subjectValidarIdentificacion.asObservable();
   private _validarIdentificacionSubscription:any;
 
-  private _accion:string = this._activeRoute.snapshot.params["accion"];
+  private _idFuncionario:string = this._activeRoute.snapshot.params["id_funcionario"];
+  public Edicion:boolean = false;
   public FuncionarioModel:FuncionarioModel = new FuncionarioModel();
   public ContactoEmergenciaModel:ContactoEmergenciaModel = new ContactoEmergenciaModel();
   public ExperienciaLaboralModel:Array<ExperienciaLaboralModel> = new Array<ExperienciaLaboralModel>();
@@ -51,13 +53,21 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
               private _grupoService:GrupoService,
               private _dependenciaService:DependenciaService,
               private _cargoService:CargoService,
-              private _perfilService:PerfilService) 
+              private _perfilService:PerfilService,
+              private _cuentaService:CuentabancariaService, 
+              private router: Router) 
   { 
     this.GetGrupos();
     this.GetDependencias();
     this.GetCargos();
-    this.SetPerfiles();
+    //this.SetPerfiles();
     this.GetPerfiles();
+    this.GetCuentasBancarias();
+
+    if (this._idFuncionario != 'nuevo') {
+      this.Edicion = true;
+      this.GetDatosFuncionario();
+    }
   }
 
   ngOnInit() {
@@ -78,6 +88,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     if (this._validarIdentificacionSubscription != undefined) {
       this._validarIdentificacionSubscription.unsubscribe();
     }
+
+    this.FuncionarioModel = null;
   }
 
   GetGrupos(){
@@ -136,9 +148,98 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     this.PerfilesPermisos = this._generalService.PerfilesPermisos;
   }
 
+  GetDatosFuncionario(){
+    this._funcionarioService.getDatosFuncionario(this._idFuncionario).subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.FuncionarioModel = data.query_data;
+        this.ContactoEmergenciaModel = data.Contacto_Emergencia;
+        //this.BuscarPermisosPerfil();
+        this.BuscarPermisosFuncionario();
+      }else{
+
+        this.FuncionarioModel = new FuncionarioModel();
+        this.ContactoEmergenciaModel = new ContactoEmergenciaModel();
+        this._swalService.ShowMessage(data);
+      }      
+    });
+  }
+
+  GetCuentasBancarias(){
+    this._cuentaService.getCuentasBancariasSelect().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.CuentasBancarias = data.query_data;
+      }else{
+
+        this.CuentasBancarias = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
+  }
+
+  GuardarFuncionario() {
+
+    if (!this.Edicion) {
+      this.FuncionarioModel.Fecha_Registrado = this._generalService.FullFechaActual;
+      this.FuncionarioModel.Username = this.FuncionarioModel.Identificacion_Funcionario;
+      this.FuncionarioModel.Password = this.FuncionarioModel.Identificacion_Funcionario;
+      this.ContactoEmergenciaModel.Identificacion_Funcionario = this.FuncionarioModel.Identificacion_Funcionario;
+    }
+    
+    let funcionario = this._generalService.normalize(JSON.stringify(this.FuncionarioModel));
+    let contacto_emergencia = this._generalService.normalize(JSON.stringify(this.ContactoEmergenciaModel));
+    let permisos=this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
+    let cuentas=this._generalService.normalize(JSON.stringify(this.CuentasAsociadas));
+    let datos = new FormData();
+    datos.append("modelo", funcionario);
+    datos.append("contacto_emergencia", contacto_emergencia);
+    datos.append("permisos", permisos);
+    datos.append('cuentas_asociadas', cuentas);
+
+    if (this.Edicion) {
+      this._funcionarioService.editFuncionario(datos).subscribe((response:any) => {
+        if (response.codigo == 'success') {
+          this._swalService.ShowMessage(response);
+          this.LimpiarModelo();
+          setTimeout(() => {
+            this.router.navigate(['/funcionarios']);  
+          }, 500);        
+        }else{
+  
+          this._swalService.ShowMessage(response);
+        }
+      });
+    }else{    
+      this._funcionarioService.saveFuncionario(datos).subscribe((response:any) => {
+        if (response.codigo == 'success') {
+          this._swalService.ShowMessage(response);
+          this.LimpiarModelo();
+          setTimeout(() => {
+            this.router.navigate(['/funcionarios']);  
+          }, 500);        
+        }else{
+
+          this._swalService.ShowMessage(response);
+        }
+      });
+    }
+  }
+
+  LimpiarModelo(){
+    this.FuncionarioModel = new FuncionarioModel();
+    this.ContactoEmergenciaModel = new ContactoEmergenciaModel();
+    this.CuentasAsociadas = [];
+    this.PerfilesPermisos = [];
+  }
+
   ValidarIdentificacion(){
-    if (this.FuncionarioModel.Identificacion_Funcionario.length > 10) {
-      this._swalService.ShowMessage(['warning', 'Alerta', 'El numero de identificacion supera los 10 digitos, por favor acorte la misma a 10 digitos o menos']);
+    if (this.FuncionarioModel.Identificacion_Funcionario != '') {
+      if (this.FuncionarioModel.Identificacion_Funcionario.length > 10) {
+        this._swalService.ShowMessage(['warning', 'Alerta', 'El numero de identificacion supera los 10 digitos, por favor acorte la misma a 10 digitos o menos']);
+        return;
+      }      
+    }else{
+
       return;
     }
 
@@ -148,6 +249,14 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   AcortarIdentificacion(){
     if (this.FuncionarioModel.Identificacion_Funcionario.length > 10) {
       this.FuncionarioModel.Identificacion_Funcionario = this.FuncionarioModel.Identificacion_Funcionario.slice(0, 10);
+    }
+  }
+
+  BuscarPermisos(){
+    if (this.Edicion) {
+      this.BuscarPermisosFuncionario();
+    }else{
+      this.BuscarPermisosPerfil();
     }
   }
 
@@ -169,15 +278,74 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     });
   }
 
+  BuscarPermisosFuncionario(){
+    if (this.FuncionarioModel.Id_Perfil == '') {
+      this.PerfilesPermisos = [];
+      return;
+    }
+
+    if (this.FuncionarioModel.Identificacion_Funcionario == '') {
+      this.PerfilesPermisos = [];
+      return;
+    }
+
+    this._funcionarioService.getPerfilesFuncionario(this.FuncionarioModel.Id_Perfil, this.FuncionarioModel.Identificacion_Funcionario).subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.PerfilesPermisos = data.query_data;        
+      }else{
+
+        this.PerfilesPermisos = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }
+    });
+  }
+
   CargaFoto(event) {
     let fot = document.getElementById("foto_visual") as HTMLImageElement;
 
     if (event.target.files.length === 1) {
 
-      this.FuncionarioModel.Foto = event.target.files[0];
+      this.FuncionarioModel.Imagen = event.target.files[0];
 
       let url = URL.createObjectURL(event.target.files[0]);
       fot.src = url;
+    }
+  }
+
+  CambiarValorVer(posicion:string){
+    if (this.PerfilesPermisos[posicion].Ver == '0') {
+      this.PerfilesPermisos[posicion].Ver = '1'
+    }else{
+
+      this.PerfilesPermisos[posicion].Ver = '0'
+    }
+  }
+
+  CambiarValorCrear(posicion:string){
+    if (this.PerfilesPermisos[posicion].Crear == '0') {
+      this.PerfilesPermisos[posicion].Crear = '1'
+    }else{
+
+      this.PerfilesPermisos[posicion].Crear = '0'
+    }
+  }
+
+  CambiarValorEditar(posicion:string){
+    if (this.PerfilesPermisos[posicion].Editar == '0') {
+      this.PerfilesPermisos[posicion].Editar = '1'
+    }else{
+
+      this.PerfilesPermisos[posicion].Editar = '0'
+    }
+  }
+
+  CambiarValorEliminar(posicion:string){
+    if (this.PerfilesPermisos[posicion].Eliminar == '0') {
+      this.PerfilesPermisos[posicion].Eliminar = '1'
+    }else{
+
+      this.PerfilesPermisos[posicion].Eliminar = '0'
     }
   }
 
