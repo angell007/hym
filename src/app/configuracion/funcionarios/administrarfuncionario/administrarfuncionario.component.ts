@@ -35,6 +35,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   public ContactoEmergenciaModel:ContactoEmergenciaModel = new ContactoEmergenciaModel();
   public ExperienciaLaboralModel:Array<ExperienciaLaboralModel> = new Array<ExperienciaLaboralModel>();
   public ReferenciaLaboralModel:Array<ExperienciaLaboralModel> = new Array<ExperienciaLaboralModel>();
+  public CuentasConsultor:Array<any> = [];
+  public CuentasAsignadas:Array<any> = [];
   public CuentasAsociadas:Array<CuentaBancariaFuncionarioModel> = new Array<CuentaBancariaFuncionarioModel>();
 
   public CuentasBancarias:Array<any> = [];
@@ -43,6 +45,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   public Cargos:Array<any> = [];
   public Perfiles:Array<any> = [];
   public PerfilesPermisos:Array<any> = [];
+  public MostrarSelect:boolean = false;
+  public CuentasVaciasInicial:boolean = true;
 
   constructor(private _activeRoute:ActivatedRoute,
               private _generalService:GeneralService,
@@ -67,6 +71,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     if (this._idFuncionario != 'nuevo') {
       this.Edicion = true;
       this.GetDatosFuncionario();
+    }else{
+      this.CuentasVaciasInicial = true;
     }
   }
 
@@ -153,6 +159,16 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
       if (data.codigo == 'success') {
         this.FuncionarioModel = data.query_data;
         this.ContactoEmergenciaModel = data.Contacto_Emergencia;
+        this.CuentasConsultor = data.Cuentas_Consultor;
+        this.CuentasAsignadas = data.Cuentas_Asignadas;
+
+        if(this.CuentasAsignadas.length > 0)
+          this.CuentasVaciasInicial = false;
+        else
+          this.CuentasVaciasInicial = true;
+
+        this.RemoverCuentasAsignadasLista();
+        this.MostrarSelectCuentas();
         //this.BuscarPermisosPerfil();
         this.BuscarPermisosFuncionario();
       }else{
@@ -189,7 +205,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let funcionario = this._generalService.normalize(JSON.stringify(this.FuncionarioModel));
     let contacto_emergencia = this._generalService.normalize(JSON.stringify(this.ContactoEmergenciaModel));
     let permisos=this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
-    let cuentas=this._generalService.normalize(JSON.stringify(this.CuentasAsociadas));
+    let cuentas=this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
+    console.log(cuentas);
+    
     let datos = new FormData();
     datos.append("modelo", funcionario);
     datos.append("contacto_emergencia", contacto_emergencia);
@@ -253,6 +271,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   }
 
   BuscarPermisos(){
+    this.MostrarSelectCuentas();
+
     if (this.Edicion) {
       this.BuscarPermisosFuncionario();
     }else{
@@ -347,6 +367,39 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
       this.PerfilesPermisos[posicion].Eliminar = '0'
     }
+  }
+
+  RemoverCuentasAsignadasLista(){
+    if (this.CuentasAsignadas.length > 0) {
+      this.CuentasAsignadas.forEach(cta => {
+        let ctaIndex = this.CuentasBancarias.findIndex(x => x.value == cta);
+                
+        if (ctaIndex > -1) {
+          this.CuentasBancarias.splice(ctaIndex,1);
+        }
+      });      
+    }
+  }
+
+  MostrarSelectCuentas(){
+    if (this.FuncionarioModel.Id_Perfil == '') {
+      this.MostrarSelect = false;
+      this.CuentasAsociadas = this.CuentasVaciasInicial ? [] : this.CuentasAsociadas;
+      return;
+    }
+
+    let perfil:string = this.Perfiles.find(x => x.Id_Perfil == this.FuncionarioModel.Id_Perfil).Nombre;
+    
+    if (perfil.trim().toLowerCase() == 'consultor') {
+      this.MostrarSelect = true;
+    }else{
+      this.MostrarSelect = false;
+    }
+  }
+
+  TestSelect(){
+    console.log(this.CuentasConsultor);
+    
   }
 
 }

@@ -372,11 +372,11 @@
                     </div>  
                   </div>
 
-                  <div class="form-row">
+                  <div class="form-row" *ngIf="MostrarSelect">
                     <div class="col-md-12">
                       <div class="form-group">
                         <label class="floating-label">Cuentas Asociadas</label>
-                        <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias" name="Cuentas_Asociadas" [(ngModel)]="CuentasAsociadas" [multiple]="true"></ng-select>
+                        <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias" name="Cuentas_Asociadas" [(ngModel)]="CuentasConsultor" (focus)="TestSelect()" [loading]="true" [multiple]="true"></ng-select>
 
                       </div>
                     </div>

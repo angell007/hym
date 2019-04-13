@@ -219,7 +219,9 @@ export class CommonLayoutComponent implements OnInit {
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
-        this.toastService.event.subscribe((data:any) => {            
+        this.toastService.event.subscribe((data:any) => {   
+            console.log(data);
+                     
             this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 

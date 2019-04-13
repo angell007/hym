@@ -47,10 +47,10 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   GetTotalesMonedas(){
     this._terceroService.getTotalesMonedasTercero(this.Id_Tercero).subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.TotalesMonedas = data.query_data;
+      if (data.length > 0) {
+        this.TotalesMonedas = data;
       }else{
-        this.TotalesMonedas = [];
+        this.TotalesMonedas = [];        
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
         this._toastService.ShowToast(toastObj);
       }
