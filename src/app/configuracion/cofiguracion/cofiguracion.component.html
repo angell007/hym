@@ -1,156 +1,190 @@
 <div class="container-fluid">
-    <div class="page-title">
-        <h4>Configuración General</h4>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-block">
-                    <div class="row">     
-                        <div class="col-md-12">
-                            <form name="myForm" #FormEditarConfiguracion="ngForm">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h5>Información de la empresa</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-md-4" hidden>
-                                                <div class="form-group">
-                                                    <label>Identificación</label>
-                                                    <input readonly name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{configuracionGeneral.Id_Configuracion}}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <strong><label>Nombre Empresa</label></strong>
-                                                    <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{configuracionGeneral.Nombre_Empresa}}" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <strong><label>N.I.T.</label></strong>
-                                                    <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T."
-                                                        class="form-control" ngModel="{{configuracionGeneral.NIT}}" required>
-        
-                                                </div>
+    <div id="accordion">
+        <div class="card m-0">
+            <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Configuracion General
+                </button>
+            </h5>
+            </div>        
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <div class="row">     
+                    <div class="col-md-12">
+                        <form name="myForm" #FormEditarConfiguracion="ngForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Información de la empresa</h5>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-4" hidden>
+                                            <div class="form-group">
+                                                <label>Identificación</label>
+                                                <input readonly name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{configuracionGeneral.Id_Configuracion}}" required>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <strong><label>Teléfono</label></strong>
-                                                    <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono"
-                                                        class="form-control" ngModel="{{configuracionGeneral.Telefono}}" required>
-        
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <strong><label>Celular</label></strong>
-                                                    <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular"
-                                                        class="form-control" ngModel="{{configuracionGeneral.Celular}}" required>
-        
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <strong><label>Correo</label></strong>
-                                                    <input name="Correo" type="email" email placeholder="Correo" class="form-control" ngModel="{{configuracionGeneral.Correo}}" required>        
-                                                </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <strong><label>Nombre Empresa</label></strong>
+                                                <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control" ngModel="{{configuracionGeneral.Nombre_Empresa}}" required>
                                             </div>
                                         </div>
-                                        <div class="row">                                            
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <strong><label>Dirección</label></strong>
-                                                    <input name="Direccion" type="text" placeholder="Dirección" class="form-control" ngModel="{{configuracionGeneral.Direccion}}" required>
-        
-                                                </div>                                                
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <strong><label>N.I.T.</label></strong>
+                                                <input name="NIT" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T."
+                                                    class="form-control" ngModel="{{configuracionGeneral.NIT}}" required>
+    
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <h5>Consecutivos</h5>
-                                        <hr>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th class="custom-thead" style="width:25%;"><b>Consecutivos</b></th>
-                                                    <th class="custom-thead"><b>Prefijo</b></th>
-                                                    <th class="custom-thead" style="width:25%;"><b>Consecutivo Actual</b></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Compras</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Compra}}" name="Prefijo_Compra">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Compra}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Transferencias</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Transferencia}}" name="Prefijo_Transferencia">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Transferencia}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Giros</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Giro}}" name="Prefijo_Giro">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Giro}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Traslados</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Traslado}}" name="Prefijo_Traslado">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Traslado}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Servicios Externos</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Servicio_Externo}}" name="Prefijo_Servicio_Externo">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Servicio_Externo}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="custom-cell text-center"><b>Egresos</b></td>
-                                                    <td class="custom-cell">
-                                                        <input type="text" placeholder="" class="form-control form-control-sm" required
-                                                            ngModel="{{configuracionGeneral.Prefijo_Egreso}}" name="Prefijo_Egreso">
-                                                    </td>
-                                                    <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Egreso}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div> 
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <strong><label>Teléfono</label></strong>
+                                                <input name="Telefono" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono"
+                                                    class="form-control" ngModel="{{configuracionGeneral.Telefono}}" required>
+    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <strong><label>Celular</label></strong>
+                                                <input name="Celular" type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular"
+                                                    class="form-control" ngModel="{{configuracionGeneral.Celular}}" required>
+    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <strong><label>Correo</label></strong>
+                                                <input name="Correo" type="email" email placeholder="Correo" class="form-control" ngModel="{{configuracionGeneral.Correo}}" required>        
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">                                            
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <strong><label>Dirección</label></strong>
+                                                <input name="Direccion" type="text" placeholder="Dirección" class="form-control" ngModel="{{configuracionGeneral.Direccion}}" required>
+    
+                                            </div>                                                
+                                        </div>
+                                    </div>
                                 </div>
-                                                       
-                            </form>
-                        </div>                   
-                        
-                    </div>                    
-                    <div class="row">
-                            <div class="col-md-12 col-xs-6">
-                                <div class="text-right mrg-top-5">
-                                    <button type="submit" class="btn btn-outline-primary" [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
-                                        (confirm)="GuardarConfiguracion(FormEditarConfiguracion)">Actualizar
-                                        Información
-                                    </button>
-                                </div>
+                                <div class="col-md-6">
+                                    <h5>Consecutivos</h5>
+                                    <hr>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="custom-thead" style="width:25%;"><b>Consecutivos</b></th>
+                                                <th class="custom-thead"><b>Prefijo</b></th>
+                                                <th class="custom-thead" style="width:25%;"><b>Consecutivo Actual</b></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Compras</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Compra}}" name="Prefijo_Compra">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Compra}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Transferencias</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Transferencia}}" name="Prefijo_Transferencia">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Transferencia}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Giros</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Giro}}" name="Prefijo_Giro">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Giro}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Traslados</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Traslado}}" name="Prefijo_Traslado">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Traslado}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Servicios Externos</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Servicio_Externo}}" name="Prefijo_Servicio_Externo">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Servicio_Externo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="custom-cell text-center"><b>Egresos</b></td>
+                                                <td class="custom-cell">
+                                                    <input type="text" placeholder="" class="form-control form-control-sm" required
+                                                        ngModel="{{configuracionGeneral.Prefijo_Egreso}}" name="Prefijo_Egreso">
+                                                </td>
+                                                <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Egreso}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> 
                             </div>
+                                                    
+                        </form>
+                    </div>                   
+                    
+                </div>                    
+                <div class="row">
+                    <div class="col-md-12 col-xs-6">
+                        <div class="text-right mrg-top-5">
+                            <button type="submit" class="btn btn-outline-primary" [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
+                                (confirm)="GuardarConfiguracion(FormEditarConfiguracion)">Actualizar
+                                Información
+                            </button>
                         </div>
+                    </div>
                 </div>
             </div>
+            </div>
         </div>
+        <div class="card m-0">
+            <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Predeterminados
+                </button>
+            </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <app-managedefaults></app-managedefaults>
+            </div>
+            </div>
+        </div>
+        <div class="card m-0">
+            <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Collapsible Group Item #3
+                </button>
+            </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <h4>Monedas</h4>
             <div class="card">

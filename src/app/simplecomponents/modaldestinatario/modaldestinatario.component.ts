@@ -23,6 +23,7 @@ export class ModaldestinatarioComponent implements OnInit {
   @Output() IncluirDestinatarioEnTransferencia:EventEmitter<any> = new EventEmitter();
   
   @ViewChild('ModalDestinatario') ModalDestinatario:any;
+  @ViewChild('ModalCNE') ModalCNE:any;
 
   public 
   public BancosPais:Array<any> = [];
@@ -52,6 +53,7 @@ export class ModaldestinatarioComponent implements OnInit {
   public MensajeGuardar:string = 'Se dispone a guardar este destinatario';
 
   public DestinatarioModel:DestinatarioModel = new DestinatarioModel();
+  public urlCNE:string = '';
 
   constructor(public generalService: GeneralService,
               private swalService:SwalService,
@@ -282,7 +284,14 @@ export class ModaldestinatarioComponent implements OnInit {
 
   LimpiarModelo(){
     this.DestinatarioModel = new DestinatarioModel();
-    this.Lista_Cuentas_Destinatario = [];
+    this.Lista_Cuentas_Destinatario = [{
+      Id_Pais: '',
+      Id_Banco: '',
+      Id_Tipo_Cuenta: '',
+      Numero_Cuenta: '',
+      Bancos:[],
+      EsVenezolana: false
+    }];
     this.SePuedeAgregarMasCuentas = true;
   }
 
@@ -341,13 +350,18 @@ export class ModaldestinatarioComponent implements OnInit {
         
         switch (tipo_doc) {
           case "V": {
-            let urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula;
-            window.open(urlCne, '_blank');
+            let urlCne = "http://www.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=V&cedula=" + cedula+ "&output=embed";
+            this.urlCNE = urlCne;
+            this.ModalCNE.show();
+            //window.open(urlCne, '_blank');
+
             break;
           }
           case "E": {
-            let urlCne = "http://www4.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula;
-            window.open(urlCne, '_blank');
+            let urlCne = "http://www.cne.gob.ve/web/registro_electoral/ce.php?nacionalidad=E&cedula=" + cedula+ "&output=embed";
+            this.urlCNE = urlCne;
+            this.ModalCNE.show();
+            // window.open(urlCne, '_blank');
             break;
           }
           default: {
@@ -438,6 +452,8 @@ export class ModaldestinatarioComponent implements OnInit {
             this.Lista_Cuentas_Destinatario[posicion].Id_Banco = this.Lista_Cuentas_Destinatario[posicion].Bancos[buscarBanco].Id_Banco;
           } else {
             this.Lista_Cuentas_Destinatario[posicion].Id_Banco = '';
+            this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta = '';
+            this.swalService.ShowMessage(['warning', "Alerta", "Este banco no se encuentra registrado!"]);
           }
           break;
         }

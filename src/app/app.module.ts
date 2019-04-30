@@ -86,6 +86,7 @@ import { GrupoService } from './shared/services/gruposfuncionarios/grupo.service
 import { DependenciaService } from './shared/services/dependencias/dependencia.service';
 import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
+import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
 
 
 //MODALES
@@ -169,6 +170,7 @@ import { CreardestinatarioComponent } from './creardestinatario/creardestinatari
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { PuntosPipe } from './common/Pipes/puntos.pipe';
 import { CustomcurrencyPipe } from './common/Pipes/customcurrency.pipe';
+import { SafePipe } from './common/Pipes/safe.pipe';
 import { InformativecardComponent } from './simplecomponents/informativecard/informativecard.component';
 import { GraficabarraComponent } from './graficabarra/graficabarra.component';
 import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
@@ -224,6 +226,8 @@ import { TablamovimientoscorresponsalComponent } from './tableros/tablerocajero/
 import { ModalcorresponsaldiarioComponent } from './simplecomponents/modalcorresponsaldiario/modalcorresponsaldiario.component';
 import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
 import { TablafuncionariosComponent } from './configuracion/funcionarios/tablafuncionarios/tablafuncionarios.component';
+import { ManagedefaultsComponent } from './simplecomponents/managedefaults/managedefaults.component';
+import { TablatransferenciascajeroComponent } from './pos/transferencias/tablatransferenciascajero/tablatransferenciascajero.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -394,6 +398,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         InformativetotalmonedatercerocardComponent,
         ColorsaldoPipe,
         ColorsaldoDirective,
+        SafePipe,
         TablaegresosComponent,
         ModalegresoComponent,
         TablacomprasrealizadasComponent,
@@ -405,7 +410,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablamovimientoscorresponsalComponent,
         ModalcorresponsaldiarioComponent,
         AdministrarfuncionarioComponent,
-        TablafuncionariosComponent
+        TablafuncionariosComponent,
+        ManagedefaultsComponent,
+        TablatransferenciascajeroComponent
     ],
     exports:[
         ModalBasicComponent
@@ -463,7 +470,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         GrupoService,
         DependenciaService,
         CargoService,
-        PerfilService
+        PerfilService,
+        ConfiguracionService,
+        SafePipe
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]

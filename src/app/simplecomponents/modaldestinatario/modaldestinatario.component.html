@@ -76,38 +76,37 @@
                       </thead>
                       <tbody>
                           <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
-                              <td width="20%">
-                                  <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}"
-                                      [(ngModel)]="item.Id_Pais" (change)="GetBancosPais(i);"
-                                      required>
-                                      <option value="">Seleccione País</option>
-                                      <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                                  </select>
-                              </td>
-                              <td width="20%">
-                                  <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Numero_Cuenta{{i}}" type="text"
-                                      [(ngModel)]="item.Numero_Cuenta" (blur)="codigoBanco(i,'input')"
-                                      (change)="validarBanco(i,$event.target.value)" required>                                                    
-                              </td>
-                              <td width="20%">
-                                  <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
-                                      [(ngModel)]="item.Id_Banco" required (change)="SetIdentificadorCuenta($event.target.value, i)">
-                                      <option value="" selected>Seleccione Banco</option>
-                                      <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">{{bc.Nombre}}</option>
-                                  </select>
-                              </td>
-                              <td width="15%">
-                                  <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
-                                      <option value="">Seleccione Tipo</option>
-                                      <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}</option>
-                                  </select>
-                              </td>
-                              <td class="text-center" style="width:5%;">
-                                      <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
-                                  [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
-                                      </i>
-                              </td>
-
+                            <td width="20%">
+                                <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}"
+                                    [(ngModel)]="item.Id_Pais" (change)="GetBancosPais(i);"
+                                    required>
+                                    <option value="">Seleccione País</option>
+                                    <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                                </select>
+                            </td>
+                            <td width="20%">
+                                <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Numero_Cuenta{{i}}" type="text"
+                                    [(ngModel)]="item.Numero_Cuenta" (blur)="codigoBanco(i,'input')"
+                                    (change)="validarBanco(i,$event.target.value)" required>                                                    
+                            </td>
+                            <td width="20%">
+                                <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
+                                    [(ngModel)]="item.Id_Banco" required (change)="SetIdentificadorCuenta($event.target.value, i)">
+                                    <option value="" selected>Seleccione Banco</option>
+                                    <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">{{bc.Apodo}}</option>
+                                </select>
+                            </td>
+                            <td width="15%">
+                                <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
+                                    <option value="">Seleccione Tipo</option>
+                                    <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}</option>
+                                </select>
+                            </td>
+                            <td class="text-center" style="width:5%;">
+                                    <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
+                                [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
+                                    </i>
+                            </td>
                           </tr>
                       </tbody>
                   </table>
@@ -124,4 +123,20 @@
           </button>
       </div>
   </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalCNE hideFooter="true">
+    <div class="app-modal-header">
+        <h4>CNE</h4>
+        <button type="button" class="close basic-close" (click)="ModalCNE.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <iframe [src]="urlCNE | safe" frameborder="0"  style="width:100%;border:0;" height="400" scrolling="no"></iframe>
+            </div>
+        </div>
+    </div>
 </app-modal-basic>

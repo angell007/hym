@@ -183,7 +183,7 @@
                     <div class="col-md-3">
                       <div class="form-group">
                         <select class="form-control" name="Id_Grupo" [(ngModel)]="FuncionarioModel.Id_Grupo"
-                          (change)="Dependencia_Grupo($event.target.value)" required id="grupo">
+                          (change)="Dependencia_Grupo()" required id="grupo">
                           <option value="">Seleccione Grupo</option>
                           <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                         </select>
@@ -194,7 +194,7 @@
                     <div class="col-md-3">
                       <div class="form-group">
                         <select class="form-control" name="Id_Dependencia" [(ngModel)]="FuncionarioModel.Id_Dependencia"
-                          (change)="Cargo_Dependencia($event.target.value)" id="dependencia" required >
+                          (change)="Cargo_Dependencia()" id="dependencia" required >
                           <option value="">Seleccione Dependencia</option>
                           <option *ngFor="let Dependencia of Dependencias" [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
                         </select>

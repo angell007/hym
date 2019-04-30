@@ -24,6 +24,10 @@ export class TransferenciaService {
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});
   }
 
+  getRecibosTransferenciasFuncionario2(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});
+  }
+
   verificarEstadoReciboTransferencia(idTransferencia:string){
     let p = {id_transferencia:idTransferencia};
     return this.client.get(this._rutaBase+'verificar_estado_recibo_transferencia.php', {params:p});

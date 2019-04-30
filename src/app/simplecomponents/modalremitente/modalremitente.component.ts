@@ -5,6 +5,7 @@ import { SwalService } from '../../shared/services/swal/swal.service';
 import { RemitenteService } from '../../shared/services/remitentes/remitente.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
 import { GeneralService } from '../../shared/services/general/general.service';
+import { AccionModalRemitente } from '../../shared/Enums/AccionModalRemitente';
 
 @Component({
   selector: 'app-modalremitente',
@@ -18,6 +19,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
   @Output() IncluirRemitenteEnGiro:EventEmitter<any> = new EventEmitter();
   @Output() CargarDatosRemitente:EventEmitter<object> = new EventEmitter();
+  @Output() CargarDatosRemitenteTransferencia:EventEmitter<object> = new EventEmitter();
 
   @ViewChild('ModalRemitente') ModalRemitente:any;
 
@@ -40,7 +42,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
       this.accion = data.accion;
       console.log(data);
       
-      
+
       if (data.id_remitente != "0" && data.accion == 'editar') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
@@ -70,10 +72,32 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
           }
           
         });
+      }else if (data.id_remitente != "0" && data.accion == 'editar desde transferencia') {
+        this.MensajeGuardar = 'Se dispone a actualizar este remitente';
+        this.Editar = true;
+        //this.tipo_persona = data.tipo;
+        let p = {id_remitente:data.id_remitente};
+        this._remitenteService.getRemitente(p).subscribe((d:any) => {
+          if (d.codigo == 'success') {
+            this.RemitenteModel = d.query_data;
+            this.ModalRemitente.show();  
+          }else{
+
+            this._swalService.ShowMessage(data);
+          }
+          
+        });
       }else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
         this.tipo_persona = data.tipo;
+        this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
+        this.ModalRemitente.show();
+
+      }else if (data.id_remitente != "0" && data.accion == 'crear desde transferencia') {
+        this.MensajeGuardar = 'Se dispone a guardar este remitente';
+        this.Editar = false;
+        //this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
         this.ModalRemitente.show();
 
@@ -129,6 +153,13 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
               let rem = {tipo:this.tipo_persona, model:this.RemitenteModel};
               this.CargarDatosRemitente.emit(rem);
               break;
+
+            case AccionModalRemitente.Editar_Transferencia:
+            console.log("entro editar switch");
+            
+              let remitente = {model:this.RemitenteModel};              
+              this.CargarDatosRemitenteTransferencia.emit(remitente);
+              break;
           
             default:
               break;
@@ -158,6 +189,12 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
             case 'crear desde giro':
               let objRespuesta = {tipo:this.tipo_persona, model:this.RemitenteModel};
               this.IncluirRemitenteEnGiro.emit(objRespuesta);
+              break;
+
+            case AccionModalRemitente.Crear_Transferencia:
+            console.log("entro crear switch");
+              let remitente = {model:this.RemitenteModel};
+              this.CargarDatosRemitenteTransferencia.emit(remitente);
               break;
           
             default:

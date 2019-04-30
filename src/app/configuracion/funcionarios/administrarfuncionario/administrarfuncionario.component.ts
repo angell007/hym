@@ -402,4 +402,10 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     
   }
 
+  Dependencia_Grupo(){
+
+  }
+
+  Cargo_Dependencia(){}
+
 }
