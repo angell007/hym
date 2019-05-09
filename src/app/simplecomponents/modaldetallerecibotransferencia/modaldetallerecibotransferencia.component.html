@@ -1,0 +1,163 @@
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
+  <div class="app-modal-header">
+    <h4 class="font-weight-bold">Recibo de Transferencia {{Transferencia.CodigoRecibo}}</h4>
+    <button type="button" class="close basic-close" (click)="ModalVerRecibo.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="table-overflow">
+      <div class="text-center">
+        <h4>Detalle del Recibo</h4>
+      </div>      
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="font-weight-bold">Fecha</label>
+            <label class="block-element">{{Transferencia.Fecha}}</label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="font-weight-bold">Forma de pago</label>
+            <label class="block-element">{{Transferencia.Forma_Pago}}</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="font-weight-bold">Tipo</label>
+            <label class="block-element">{{Transferencia.Tipo_Transferencia}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="font-weight-bold">Remitente</label>
+            <label class="block-element">{{Transferencia.Remitente}}</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="font-weight-bold">Hecho por:</label>
+            <label class="block-element">{{Transferencia.Cajero}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="font-weight-bold">Recibido</label>
+            <label class="block-element">{{Transferencia.Cantidad_Recibida | customcurrency:Transferencia.Codigo_Moneda_Origen}}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold">Transferido</label>
+            <label class="block-element">{{Transferencia.Cantidad_Transferida | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="font-weight-bold">Tasa</label>
+            <label class="block-element">{{Transferencia.Tasa_Cambio}}</label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="font-weight-bold">Costo Transferencia</label>
+            <label class="block-element">{{'0' | customcurrency}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-weight-bold">Observaciones</label>
+            <label class="block-element">{{Transferencia.Observacion_Transferencia}}</label>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center">
+        <h4>Destinatarios</h4>
+      </div>
+      <div *ngFor="let d of DestinatariosTransferencia" class="form-row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="font-weight-bold">Identificacion</label>
+            <label class="block-element">{{d.Id_Destinatario}}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold">Nombre</label>
+            <label class="block-element">{{d.Nombre_Destinatario}}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold">Cuenta Destino</label>
+            <label class="block-element">{{d.Numero_Cuenta_Destinatario}}</label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="font-weight-bold">Transferido</label>
+            <label class="block-element">{{d.Valor_Transferencia | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- <table class="table table-hover table-sm table-striped">
+        <thead>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of EncabezadoRecibo">
+              <td>Fecha</td>
+              <td>{{ item.Fecha }}</td>
+              <td>Tipo Transferencia </td>
+              <td colspan="3" style="text-align: center;">{{ item.Forma_Pago }} - {{ item.Tipo_Transferencia }} </td>
+          </tr>
+          <tr *ngFor="let item of EncabezadoRecibo">
+              <td>Total Pesos</td>
+              <td>{{ item.Cantidad_Recibida | currency }}</td>
+              <td>Total Bolivar</td>
+              <td>{{item.Cantidad_Transferida | currency: "BsS."}}</td>
+              <td>Al Cambio</td>
+              <td>{{ item.Tasa_Cambio}}</td>
+          </tr>
+          <tr>
+              <td> {{ TituloModalTransferencia }} </td>
+              <td colspan="5"> {{NombreTercero}} </td>
+          </tr>
+          <tr>
+              <td colspan="6"> </td>
+          </tr>
+          <tr *ngIf="itemDestinatario">
+              <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
+          </tr>
+          <tr *ngFor="let item1 of DestinatarioRecibo">
+              <td colspan="2">{{ item1.Nombre }}</td>
+              <td colspan="2">{{ item1.Numero_Cuenta }}</td>
+              <td colspan="2">{{ item1.Valor_Transferencia_Bolivar | currency: "BsS." }}</td>
+          </tr>
+          <tr>
+              <td colspan="6"> </td>
+          </tr>
+          <tr>
+              <td colspan="6" style="text-align: center;font-weight: bold;"> Observaciones del recibo </td>
+          </tr>
+          <tr *ngFor="let item of EncabezadoRecibo">
+              <td colspan="6">{{item.Observacion_Transferencia}}</td>
+          </tr>
+        </tbody>
+      </table> -->
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+
+    </div>
+  </div>
+</app-modal-basic>

@@ -13,6 +13,7 @@ import { TrasladocajaService } from '../shared/services/traslados_caja/trasladoc
 import { ToastService } from '../shared/services/toasty/toast.service';
 import { OficinaService } from '../shared/services/oficinas/oficina.service';
 import { AperturacajaService } from '../shared/services/aperturacaja/aperturacaja.service';
+import { GeneralService } from '../shared/services/general/general.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -166,7 +167,8 @@ export class CommonLayoutComponent implements OnInit {
                 private toastService:ToastService,
                 private _oficinaService:OficinaService,
                 private _cajaService:CajaService,
-                private _aperturaCajaService:AperturacajaService) {
+                private _aperturaCajaService:AperturacajaService,
+                private _generalService:GeneralService) {
                     
         this.app = {
             layout: {
@@ -200,6 +202,8 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas();
+        console.log(localStorage);
+        
         this.SetOficina();
         this.SetCaja();
     }
@@ -219,9 +223,7 @@ export class CommonLayoutComponent implements OnInit {
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
-        this.toastService.event.subscribe((data:any) => {   
-            console.log(data);
-                     
+        this.toastService.event.subscribe((data:any) => {
             this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 
@@ -952,8 +954,11 @@ this.ModalResumenCuenta.show();
 
             if (data.codigo == 'success') {*/
 
-                localStorage.setItem("Oficina", this.oficina_seleccionada);        
-                localStorage.setItem("Caja", this.caja_seleccionada);
+                this._generalService.SessionDataModel.idOficina = this.oficina_seleccionada;
+                this._generalService.SessionDataModel.idCaja = this.caja_seleccionada;
+                
+                // localStorage.setItem("Oficina", this.oficina_seleccionada);        
+                // localStorage.setItem("Caja", this.caja_seleccionada);
                 this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
                 this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
                 this.SetNombreOficina(this.oficina_seleccionada);
@@ -1054,7 +1059,8 @@ this.ModalResumenCuenta.show();
 
     SetOficina(){
         if (localStorage.getItem("Oficina") && localStorage.getItem("Oficina") != '') {
-            this.oficina_seleccionada = localStorage.getItem("Oficina");          
+            this.oficina_seleccionada = localStorage.getItem("Oficina");
+            this._generalService.SessionDataModel.idOficina = this.oficina_seleccionada;
         }else{
             this.oficina_seleccionada = '';
         }
@@ -1063,6 +1069,7 @@ this.ModalResumenCuenta.show();
     SetCaja(){
         if (localStorage.getItem("Caja") && localStorage.getItem("Caja") != '') {
             this.caja_seleccionada = localStorage.getItem("Caja");
+            this._generalService.SessionDataModel.idCaja = this.caja_seleccionada;
         }else{
             this.caja_seleccionada = '';       
         }

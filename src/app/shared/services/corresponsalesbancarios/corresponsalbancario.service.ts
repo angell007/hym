@@ -24,7 +24,7 @@ export class CorresponsalbancarioService {
   }
 
   saveCorresponsalDiario(data:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/corresponsaldiario/guardar_corresponsal_diario_nuevo.php', data);
+    return this.client.post(this.globales.ruta+'php/corresponsaldiario/guardar_corresponsal_diario_nuevo2.php', data);
   }
 
 }

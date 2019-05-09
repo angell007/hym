@@ -4,16 +4,19 @@ import { Globales } from '../../../shared/globales/globales';
 import { Observable } from 'rxjs';
 import { SwalService } from '../swal/swal.service';
 import { DatePipe } from '@angular/common';
+import { SessionDataModel } from '../../../Modelos/SessionDataModel';
 
 @Injectable()
 export class GeneralService {
 
+  public SessionDataModel:SessionDataModel = new SessionDataModel();
   public Funcionario:any = JSON.parse(localStorage.getItem('User'));
   public Oficina:any = JSON.parse(localStorage.getItem('Oficina'));
   public Caja:any = JSON.parse(localStorage.getItem('Caja'));
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;
+  public HoraActual:string;
   public FullFechaActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   public Anios:Array<number> = [];
@@ -57,7 +60,9 @@ export class GeneralService {
               private datePipe:DatePipe) 
   {
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.HoraActual = this.datePipe.transform(new Date(), 'HH:mm:ss');
     this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    console.log(this.HoraActual);
     console.log(this.FechaActual);
     console.log(this.FullFechaActual);
     this.BuildAniosConsulta();

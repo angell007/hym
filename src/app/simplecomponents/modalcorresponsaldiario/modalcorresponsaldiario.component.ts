@@ -40,12 +40,9 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
 
       if (data.id_corresponsal_diario == '0' && data.id_corresponsal_bancario != '0') {
-        console.log(this.CorresponsalesBancarios);
         let nombre = this.CorresponsalesBancarios.find(x => x.Id_Corresponsal_Bancario == data.id_corresponsal_bancario);
-        console.log(nombre);
         
         this.NombreCorresponsalBancario = nombre.Nombre;
         this.accion = 'cargar';
@@ -62,21 +59,9 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
 
       }else if (data.id_corresponsal_diario != '0' && data.id_corresponsal_bancario == '0'){
         this.accion = 'editar';
-        //this.CorresponsalModel.Id_Corresponsal_Diario = data.id_corresponsal_diario;
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este movimiento';
         let p = {id_movimiento:data};
-        
-        // this._corresponsalService.getDestinatario(p).subscribe((d:any) => {
-        //   if (d.codigo == 'success') {
-        //     this.CorresponsalModel = d.query_data;
-        //     this.ModalCorresponsalDiario.show();  
-        //   }else{
-            
-        //     this._swalService.ShowMessage(d);
-        //   }
-          
-        // });
 
       }
     });
@@ -114,7 +99,6 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //console.log(this.CorresponsalModel);
     this.CorresponsalModel = this._generalService.limpiarString(this.CorresponsalModel);
     
     let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
@@ -124,7 +108,6 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
     if (this.Editar) {
       this._corresponsalService.editCorresponsalDiario(datos)
       .catch(error => { 
-        //console.log('An error occurred:', error);
         this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })
@@ -142,7 +125,6 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
     }else{
       this._corresponsalService.saveCorresponsalDiario(datos)
       .catch(error => { 
-        //console.log('An error occurred:', error);
         this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })

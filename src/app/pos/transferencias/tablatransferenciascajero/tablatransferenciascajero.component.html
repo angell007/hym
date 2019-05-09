@@ -2,48 +2,48 @@
   <thead>
     <tr>
         <th class="custom-thead">Hora</th>
-        <th class="custom-thead">Código</th>
-        <th class="custom-thead">Tipo</th>
+        <th class="custom-thead" style="width:9%;">Código</th>
+        <th class="custom-thead">Remitente</th>
         <th class="custom-thead">Recibido</th>
         <th class="custom-thead">Transferido</th>
-        <th class="custom-thead">Tasa</th>
+        <th class="custom-thead" style="width:7%;">Tasa</th>
+        <th class="custom-thead" style="width:10%;">Estado</th>
         <th class="custom-thead"></th>
     </tr>
     <tr>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro documento"
-            >
       </th>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro nombre"
-            >
+        <input type="text" class="form-control" placeholder="Filtro recibo"
+           [(ngModel)]="Filtros.recibo" (change)="ConsultaFiltrada()">
       </th>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro nombre"
-            >
+        <input type="text" class="form-control" placeholder="Filtro remitente"
+           [(ngModel)]="Filtros.remitente" (change)="ConsultaFiltrada()">
       </th>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro nombre"
-            >
+        <input type="text" class="form-control" placeholder="Filtro recibido"
+           [(ngModel)]="Filtros.recibido" (change)="ConsultaFiltrada()">
       </th>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro nombre"
-            >
+        <input type="text" class="form-control" placeholder="Filtro transferido"
+           [(ngModel)]="Filtros.transferido" (change)="ConsultaFiltrada()">
       </th>
       <th class="table-filters">
-        <input type="text" class="form-control" placeholder="Filtro nombre"
-            >
+        <input type="text" class="form-control" placeholder="Filtro tasa"
+           [(ngModel)]="Filtros.tasa" (change)="ConsultaFiltrada()">
       </th>
       <th class="table-filters">
-        <select id="estado" class="form-control"  >
+        <select id="estado" class="form-control" [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
           <option value="" selected>Seleccione</option>
-          <option value="Activo">Activo</option>
-          <option value="Inactivo">Inactivo</option>
+          <option value="Activa">Activa</option>
+          <option value="Anulada">Anulada</option>
         </select>
       </th>
+      <th class="table-filters"></th>
     </tr>
     <tr *ngIf="Cargando">
-      <td colspan="7" class="text-center">
+      <td colspan="8" class="text-center">
         <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
           <h2>CARGANDO RECIBOS DE TRANSFERENCIA</h2>
           <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
@@ -51,7 +51,7 @@
       </td>
     </tr>
     <tr *ngIf="RecibosTransferencia.length == 0 && !Cargando">
-      <td colspan="7" class="text-center">
+      <td colspan="8" class="text-center">
           <i class="ti-alert font-size-20 text-warning"></i>
           <h4>No se han realizado recibos de transferencias hoy!</h4>
       </td>
@@ -61,21 +61,23 @@
     <tr *ngFor="let rt of RecibosTransferencia"  [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
       <td class="custom-cell">{{rt.Fecha | date:"HH:mm" }}</td>
       <td class="custom-cell">{{rt.CodigoRecibo}}</td>
-      <td class="custom-cell">{{rt.Forma_Pago}} / {{rt.Tipo_Transferencia}}</td>
-      <td class="custom-cell">{{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
-      <td class="custom-cell">{{rt.Cantidad_Transferida | customcurrency:rt.Codigo_Moneda_Destino }}</td>
-      <td class="custom-cell">{{rt.Tasa_Cambio }}</td>
+      <td class="custom-cell">{{rt.Remitente}}</td>
+      <td class="custom-cell text-right">{{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
+      <td class="custom-cell text-right">{{rt.Cantidad_Transferida | customcurrency:rt.Codigo_Moneda_Destino }}</td>
+      <td class="custom-cell text-right">{{rt.Tasa_Cambio }}</td>
+      <td class="custom-cell text-center">{{rt.Estado }}</td>
       <td class="custom-cell">
-        <div class="text-center">
+        <div *ngIf="rt.Estado != 'Anulada'" class="text-center">
           <div ngbDropdown class="dropdown-primary">
             <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
             <div ngbDropdownMenu>
-              <!-- <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(dg.Documento_Destinatario)">
-                <i class="ti-pencil text-warning"></i> Editar</a>
-              <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoDestinatarioGiro(dg.Documento_Destinatario)"
-                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                  <i [ngClass]="{'ti-na text-danger':dg.Estado == 'Activo', 'ti-back-right text-success':dg.Estado == 'Inactivo'}"></i> 
-                  {{dg.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}</a> -->
+              <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirDetalleRecibo(rt)">
+                  <i class="ti-search text-info"></i> 
+                  Detalles</a>
+              <a *ngIf="rt.Estado == 'Activa'" class="dropdown-item waves-light waves-effect caja-botones accionable" 
+                (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
+                  <i class="ti-trash text-danger"></i> 
+                  Anular</a>
             </div>
           </div>
         </div>
@@ -94,3 +96,38 @@
     </div>
   </div>
 </div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
+  <div class="app-modal-header">
+      <h4>Anular Transferencia</h4>
+      <button type="button" class="close basic-close" (click)="CerrarModalAnular()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="app-modal-body">
+      <form #FormAnularTransferencia="ngForm">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Motivo Anulación</label>
+                      <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion" [(ngModel)]="MotivoAnulacion"></textarea>
+                  </div>
+              </div>
+          </div>
+          <br>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+      <div class="text-right">
+          <button class="btn btn-primary btn-sm"
+            (confirm)="AnularTransferencia()"
+            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este recibo de transferencia!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}"
+            [disabled]="!FormAnularTransferencia.valid">Anular
+          </button>
+      </div>
+  </div>
+</app-modal-basic>
+
+<app-modaldetallerecibotransferencia
+  [AbrirModal]="AbrirModalDetalleRecibo.asObservable()">  
+</app-modaldetallerecibotransferencia>

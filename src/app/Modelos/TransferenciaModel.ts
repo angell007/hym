@@ -1,6 +1,7 @@
-export class TransfereciaModel{
+export class TransferenciaModel{
     Forma_Pago:string = '';
-    Tipo_Transferencia:string = 'Transferencia';   
+    Tipo_Transferencia:string = 'Transferencia';
+    Id_Transferencia:string = '';
 
     //DATOS DEL CAMBIO
     Moneda_Origen: '2';

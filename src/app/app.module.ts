@@ -228,6 +228,9 @@ import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/ad
 import { TablafuncionariosComponent } from './configuracion/funcionarios/tablafuncionarios/tablafuncionarios.component';
 import { ManagedefaultsComponent } from './simplecomponents/managedefaults/managedefaults.component';
 import { TablatransferenciascajeroComponent } from './pos/transferencias/tablatransferenciascajero/tablatransferenciascajero.component';
+import { DetalletransferenciaComponent } from './pos/transferencias/detalletransferencia/detalletransferencia.component';
+import { ModaldetallerecibotransferenciaComponent } from './simplecomponents/modaldetallerecibotransferencia/modaldetallerecibotransferencia.component';
+import { CorresponsalesbancarioscajeroComponent } from './pos/corresponsales/corresponsalesbancarioscajero/corresponsalesbancarioscajero.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -412,7 +415,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         AdministrarfuncionarioComponent,
         TablafuncionariosComponent,
         ManagedefaultsComponent,
-        TablatransferenciascajeroComponent
+        TablatransferenciascajeroComponent,
+        DetalletransferenciaComponent,
+        ModaldetallerecibotransferenciaComponent,
+        CorresponsalesbancarioscajeroComponent
     ],
     exports:[
         ModalBasicComponent

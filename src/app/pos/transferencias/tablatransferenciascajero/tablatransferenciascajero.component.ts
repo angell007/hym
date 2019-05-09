@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { TransferenciaService } from '../../../shared/services/transferencia/transferencia.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tablatransferenciascajero',
@@ -15,14 +15,21 @@ export class TablatransferenciascajeroComponent implements OnInit {
   @Input() ActualizarTabla:Observable<any> = new Observable();
   private _updateSubscription:any;
 
+  @ViewChild('ModalAnularTransferencia') ModalAnularTransferencia:any;
+
+  public AbrirModalDetalleRecibo:Subject<any> = new Subject();
   public RecibosTransferencia:Array<any> = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
+  public Id_Transferencia_Anular:string = '';
+  public MotivoAnulacion:string = '';
   
   public Filtros:any = {
-    nombre:'',
-    documento:'',
-    telefono:'',
+    remitente:'',
+    recibo:'',
+    recibido:'',
+    transferido:'',
+    tasa:'',
     estado:''
   };
 
@@ -53,7 +60,7 @@ export class TablatransferenciascajeroComponent implements OnInit {
   }
 
   GetRecibosTransferencias(){
-    this._transferenciaService.getRecibosTransferenciasFuncionario(this._generalService.Funcionario.Identificacion_Funcionario).subscribe(data => {
+    this._transferenciaService.getRecibosTransferenciasFuncionario(this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario).subscribe(data => {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
       }else{
@@ -66,7 +73,7 @@ export class TablatransferenciascajeroComponent implements OnInit {
     let params:any = {};
     
     params.tam = this.pageSize;
-    params.id_funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
+    params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if(paginacion === true){
       params.pag = this.page;
@@ -75,16 +82,24 @@ export class TablatransferenciascajeroComponent implements OnInit {
       params.pag = this.page;
     }
 
-    if (this.Filtros.nombre.trim() != "") {
-      params.nombre = this.Filtros.nombre;
+    if (this.Filtros.remitente.trim() != "") {
+      params.remitente = this.Filtros.remitente;
     }
 
-    if (this.Filtros.documento.trim() != "") {
-      params.documento = this.Filtros.documento;
+    if (this.Filtros.recibo.trim() != "") {
+      params.recibo = this.Filtros.recibo;
     }
 
-    if (this.Filtros.telefono.trim() != "") {
-      params.telefono = this.Filtros.telefono;
+    if (this.Filtros.recibido.trim() != "") {
+      params.recibido = this.Filtros.recibido;
+    }
+
+    if (this.Filtros.transferido.trim() != "") {
+      params.transferido = this.Filtros.transferido;
+    }
+
+    if (this.Filtros.tasa.trim() != "") {
+      params.tasa = this.Filtros.tasa;
     }
 
     if (this.Filtros.estado.trim() != "") {
@@ -120,9 +135,11 @@ export class TablatransferenciascajeroComponent implements OnInit {
 
   ResetValues(){
     this.Filtros = {
-      nombre:'',
-      documento:'',
-      telefono:'',
+      remitente:'',
+      recibo:'',
+      recibido:'',
+      transferido:'',
+      tasa:'',
       estado:''
     };
   }
@@ -135,6 +152,39 @@ export class TablatransferenciascajeroComponent implements OnInit {
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
+  }
+
+  AbrirModalAnularTransferencia(idTransferenciaAnular:string){
+    this.Id_Transferencia_Anular = idTransferenciaAnular;
+    this.ModalAnularTransferencia.show();
+  }
+
+  CerrarModalAnular(){
+    this.Id_Transferencia_Anular = '';
+    this.MotivoAnulacion = '';
+    this.ModalAnularTransferencia.hide();
+  }
+
+  AnularTransferencia() {
+    let datos = new FormData();
+    datos.append("id_transferencia", this.Id_Transferencia_Anular);
+    datos.append("motivo_anulacion", this.MotivoAnulacion);
+    this._transferenciaService.anularReciboTransferencias(datos)
+    .subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.ModalAnularTransferencia.hide();
+        this.MotivoAnulacion = '';
+        this._swalService.ShowMessage(data);
+        this.ConsultaFiltrada();
+      }else{
+
+        this._swalService.ShowMessage(data);
+      }
+    });
+  }
+
+  AbrirDetalleRecibo(transferencia:any){
+    this.AbrirModalDetalleRecibo.next(transferencia);
   }
 
 }

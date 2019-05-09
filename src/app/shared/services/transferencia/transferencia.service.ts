@@ -19,6 +19,11 @@ export class TransferenciaService {
     return this.client.get(this._rutaBase+'detalle_transferencia.php', {params:p});
   }
 
+  getDestinatariosTransferencia(idTransferencia:string):Observable<any>{
+    let p = {id_transferencia:idTransferencia};
+    return this.client.get(this._rutaBase+'get_destinatarios_transferencia.php', {params:p});
+  }
+
   getRecibosTransferenciasFuncionario(idFuncionario:string):Observable<any>{
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});

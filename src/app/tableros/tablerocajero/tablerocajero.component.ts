@@ -178,9 +178,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //#region Variables Generales
 
-    public funcionario_data:any = JSON.parse(localStorage.getItem('User'));
-    public IdOficina:any = JSON.parse(localStorage.getItem('Oficina'));
-    public IdCaja:any = JSON.parse(localStorage.getItem('Caja'));
+    public funcionario_data:any = this.generalService.SessionDataModel.funcionarioData;
+    public IdOficina:any = this.generalService.SessionDataModel.idOficina;
+    public IdCaja:any = this.generalService.SessionDataModel.idCaja;
     
     public TerceroCliente:any = [];
     public TransferenciasAnuladas:any =[];
@@ -3960,9 +3960,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     GuardarApertura(){
-        
-      this.DiarioModel.Id_Caja = this.IdCaja;
-      this.DiarioModel.Id_Oficina = this.IdOficina;
+      this.IdCaja = this.generalService.SessionDataModel.idCaja;
+      this.IdOficina = this.generalService.SessionDataModel.idOficina;
+      
+      this.DiarioModel.Caja_Apertura = this.IdCaja;
+      this.DiarioModel.Oficina_Apertura = this.IdOficina;
       let model = JSON.stringify(this.DiarioModel);
       let valores_monedas = JSON.stringify(this.ValoresMonedasApertura);
       let datos = new FormData();

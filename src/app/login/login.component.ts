@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit {
             
             localStorage.setItem('Token',data.Token);
             localStorage.setItem('User',JSON.stringify(data.Funcionario));
-            localStorage.setItem('CuentaConsultor', '');
-            localStorage.setItem('MonedaCuentaConsultor', '');
+            // localStorage.setItem('CuentaConsultor', '');
+            // localStorage.setItem('MonedaCuentaConsultor', '');
             //localStorage.setItem('Oficina',JSON.stringify(Oficina));
             //localStorage.setItem('Caja',JSON.stringify(Caja));
             localStorage.setItem('Tipo_Oficina',"Propia"); //CAMBIAR POR UNA VALIDACIÓN EN EL LOGIN
