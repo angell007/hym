@@ -85,7 +85,7 @@ export class ModalmonedaComponent implements OnInit {
       return;
     }
 
-    this.MonedaModel.ValoresMoneda = this._generalService.FillEmptyValues(this.MonedaModel.ValoresMoneda, "0");
+    //this.MonedaModel.ValoresMoneda = this._generalService.FillEmptyValues(this.MonedaModel.ValoresMoneda, "0");
     //console.log(this.MonedaModel);
     
     this.MonedaModel = this._generalService.limpiarString(this.MonedaModel);

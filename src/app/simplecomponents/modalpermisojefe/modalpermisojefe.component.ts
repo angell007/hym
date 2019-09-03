@@ -28,6 +28,10 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     msg: 'Default'
   };
 
+  private accion:string = '';
+
+  private response = {valor:'', aux_value:'', verificado:false};
+
   constructor(private generalService:GeneralService,
               private swalService:SwalService,
               private permisoService:PermisoService) {
@@ -39,6 +43,12 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     //   this.ModalPermiso.show(); 
     // });
     this.openModalSubscription = this.permisoService.openModalPermiso.subscribe(d => {
+      console.log(d);
+      
+      this.accion = d.accion;
+      if (d.accion == 'transferencia_cajero') {
+        this.response.valor = d.value;
+      }
       this.ModalPermiso.show(); 
     });
   }
@@ -55,7 +65,13 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
         this.CerrarModal();
         //this.RespuestaCodigo.emit(!data.query_data);
         this.permisoService.permisoAceptado = data.query_data;
-        this.permisoService._subject.next(data.query_data);
+
+        if (this.accion == 'transferencia_cajero') {
+          this.response.verificado = data.query_data;
+          this.permisoService._subject.next(this.response);
+        }else{
+          this.permisoService._subject.next(data.query_data);
+        }
       }else{
 
         this.swalService.ShowMessage(data);

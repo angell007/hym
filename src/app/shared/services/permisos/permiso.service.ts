@@ -6,7 +6,7 @@ export class PermisoService {
 
   constructor() { }
 
-  public _subject = new Subject<boolean>();
+  public _subject = new Subject<any>();
   public _openSubject = new Subject<any>();
 
   public permisoJefe = this._subject.asObservable();

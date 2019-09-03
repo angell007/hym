@@ -554,6 +554,21 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       //this.CheckApertura();
     }, 1500);
     //this.GetRegistroDiario();
+
+    this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
+      console.log(d);
+      
+      if (d.verificado) {
+        this.TransferenciaModel.Tasa_Cambio = d.valor;
+        let valor_recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);
+
+        if (d.valor > 0) {
+          this.CalcularCambio(valor_recibido, d.valor, 'recibido', true);
+        }else{
+          this.LimpiarCantidades();
+        }
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -1143,14 +1158,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           break;
 
         case 'por tasa':
-          if (!this.ValidarTasaCambio(tasa_cambio)) {
+          console.log("entro");
+          
+          if (!this.ValidarTasaCambioModal(tasa_cambio)) {
             return;
           }
 
           let valor_recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);
 
           if (value > 0) {
-            this.CalcularCambio(valor_recibido, value, 'recibido');
+            this.CalcularCambio(valor_recibido, tasa_cambio, 'recibido');
           }else{
             this.LimpiarCantidades();
           }
@@ -1178,6 +1195,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
       let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
       let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
+      //tasa_cambio = parseFloat(tasa_cambio);
+
+      console.log(max);
+      console.log(min);
+      console.log(sug);
+      console.log(tasa_cambio);
+      
 
       if (tasa_cambio > max || tasa_cambio < min) {
         this.TransferenciaModel.Tasa_Cambio = sug;
@@ -1185,6 +1209,28 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo("+min+")/máximo("+max+") establecido para la moneda"
         this.confirmacionSwal.type = "warning"
         this.confirmacionSwal.show();
+        return false;
+      }
+
+      return true;
+    }
+    
+    ValidarTasaCambioModal(tasa_cambio){
+      let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
+      let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
+      let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
+      //tasa_cambio = parseFloat(tasa_cambio);
+
+      console.log(max);
+      console.log(min);
+      console.log(sug);
+      console.log(tasa_cambio);
+      
+      if (tasa_cambio > max || tasa_cambio < min) {
+        this.TransferenciaModel.Tasa_Cambio = sug;
+        //ABRIR MODAL DE PERMISO PARA PROCEDER
+        let p ={accion:"transferencia_cajero", value:tasa_cambio};
+        this.permisoService._openSubject.next(p);
         return false;
       }
 
@@ -1241,7 +1287,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
-    CalcularCambio(valor:number, tasa:number, tipo:string){
+    CalcularCambio(valor:number, tasa:number, tipo:string, permisoJefe:boolean = false){
+      console.log(tasa);
+      
 
       let conversion_moneda = 0;
 
@@ -1252,9 +1300,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             return;
           }
 
-          if (!this.ValidarTasaCambio(tasa)) {
-            return;
-          }
+          if (!permisoJefe)
+            if (!this.ValidarTasaCambio(tasa)) {
+              return;
+            }
           
           conversion_moneda = Math.round(valor / tasa);
           this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
@@ -2016,9 +2065,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.MonedaParaTransferencia.nombre = c.Nombre;
 
         this.http.get(this.globales.ruta+'php/monedas/buscar_valores_moneda.php', { params: {id_moneda:value} }).subscribe((data:any) => {
-          this.MonedaParaTransferencia.Valores = data;
+          this.MonedaParaTransferencia.Valores = data.query_data;
           
-          this.TransferenciaModel.Tasa_Cambio = data.Sugerido_Compra_Efectivo;
+          this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
 
           if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
             this.InputBolsaBolivares  = true;
@@ -3141,9 +3190,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.permisoSubscription.unsubscribe();
             this.permisoSubscription = undefined;
           });  
-        }        
-  
-        this.permisoService._openSubject.next();
+        }  
+        
+        let p ={accion:"giro"};
+        this.permisoService._openSubject.next(p);
         //this.DeshabilitarComisionGiro = false;
       }else{
 

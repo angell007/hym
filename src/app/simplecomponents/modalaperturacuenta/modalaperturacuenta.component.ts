@@ -21,6 +21,7 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CuentasBancarias:Array<any> = [];
   public CuentasBancariasSeleccionadas:Array<any> = [];
   public CuentasBancariasSeleccionadasId:Array<string> = [];
+  public Cargando:boolean = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               public generalService:GeneralService,
@@ -107,6 +108,11 @@ export class ModalaperturacuentaComponent implements OnInit {
     this.CuentasBancarias = [];
     this.CuentasBancariasSeleccionadas = [];
     this.CuentasBancariasSeleccionadasId = [];
+  }
+
+  public CerrarModal(){
+    console.log("cerrando modal");
+    
   }
 
 }
