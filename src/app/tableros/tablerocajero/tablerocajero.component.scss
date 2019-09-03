@@ -10,6 +10,22 @@
     color: #b200b2	;
 }
 
+.alinear-derecha{
+    text-align: right;
+}
+
+.titulo-recibo{
+    width: 10%;
+    font-weight: bold;
+    border-right: .8px solid gray;
+}
+
+table.modified-table > tbody > tr > td:first-child{
+    width: 25%;
+    font-weight: bold;
+    border-right: .5px solid #e6ecf5;
+}
+
 
 /*.sticky{
     width: 430px !important ;
@@ -25,3 +41,94 @@
 }
 
 modal-dialog modal-lg*/
+
+.custom-input{
+    box-shadow: none;
+    width: 170px !important;
+    display: inline-block;
+    border-radius: 6px;
+    // border-width: 1px;
+    border: 1px solid #e6ecf5;
+    font-size: 13px;
+    transition: all .2s ease-out;
+
+    &:focus{
+        border-color: #51b6c5;
+    }
+}
+
+.btn-pulse{
+    animation: bluepulse 2s infinite;
+
+    &:hover{
+        animation: none;
+    }
+}
+
+.card-tremor{
+    //animation: none;
+    transition:.3s;
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -o-transition:.3s;
+
+    &:hover{
+        //left: 35px;
+        transform: translateX(15px);
+        //animation: cardchoice .4s;         
+    }
+}
+
+.card-selected{
+    transform: translateX(15px);
+    transition:.3s;
+    -webkit-transition:.3s;
+    -moz-transition:.3s;
+    -o-transition:.3s;
+}
+
+//ANIMACIONES
+@keyframes bluepulse {
+    0% {
+      -moz-box-shadow: 0 0 0 0 rgba(26, 128, 211, 0.4);
+      box-shadow: 0 0 0 0 rgba(26, 128, 211, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(58, 148, 221, 0);
+        box-shadow: 0 0 0 10px rgba(58, 148, 221, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
+        box-shadow: 0 0 0 0 rgba(58, 148, 221, 0);
+    }
+}
+
+@keyframes cardtremor {
+    0% {
+      left: 5px;
+    }
+    20%{
+        left: -5px;
+    }
+    40%{
+        left: 5px;
+    }
+    60%{
+        left: -5px;
+    }
+    80%{
+        left: 5px;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes cardchoice {
+    0% {
+      left: 0px;
+    }
+    100% {
+        left: 10px;
+    }
+}

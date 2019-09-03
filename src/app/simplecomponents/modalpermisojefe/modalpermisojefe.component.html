@@ -1,0 +1,26 @@
+<app-modal-basic #ModalPermiso>
+  <div class="app-modal-header" aria-describedby="ayudaPermiso">
+    <h4 class="modal-title">Introduzca su código personal</h4>
+    <small id="ayudaPermiso" class="form-text text-muted">El código personal es una clave única generada a los superiores para permitir acceso a quien lo necesite a determinadas áreas del sistema</small>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+      <div class="form-row">
+        <div class="col-md-12">
+          <label for="consecutivo">Código personal</label>
+          <input type="text" name="Consecutivo" id="consecutivo" class="form-control form-control-sm"
+            [(ngModel)]="Codigo">
+        </div>
+      </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-xs" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-xs"
+        (click)="VerificarCodigo()" [disabled]="Codigo == ''">Comprobar</button>
+    </div>
+  </div>  
+</app-modal-basic>
+

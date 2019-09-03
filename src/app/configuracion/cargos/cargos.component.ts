@@ -13,14 +13,14 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class CargosComponent implements OnInit {
 
-  public Grupo : any[];
-  Cargo: any[];
-  Dependencia: any[];
+  public Grupo : any = [];
+  Cargo: any = [];
+  Dependencia: any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Codigo : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Codigo : any = [];
 
   public boolNombre:boolean = false;
   public boolCodigo:boolean = false;
@@ -125,7 +125,7 @@ export class CargosComponent implements OnInit {
     return Observable.throw(error);
   }
  
-  Edicion =[];
+  Edicion:any ={};
   EditarGrupo(id, modal){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Grupo_Tercero', id:id}
@@ -195,7 +195,11 @@ export class CargosComponent implements OnInit {
   }
 
   Cerrar(modal){
-    this.OcultarFormulario(modal)
+    this.OcultarFormulario(modal);
+  }
+
+  OcultarFormularios(activeModal:any){
+    activeModal.hide();
   }
 
 }

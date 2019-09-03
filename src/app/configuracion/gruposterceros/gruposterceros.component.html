@@ -1,0 +1,190 @@
+<div class="container-fluid">
+    <div class="page-title">
+        <h4 class="pull-left">Grupos Terceros</h4>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <h5>Grupos Creados 
+                        <span>
+                          <i class="ti-reload text-info" title="Actualizar tabla" (click)="ConsultaFiltrada()" style="cursor:pointer;"></i>
+                        </span>
+                      </h5>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="pull-right">
+                        <button 
+                          class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
+                          (click)="AbrirModalGrupo()">
+                          <i class="ti-plus font-size-15 mr-1"></i>  Nuevo Grupo
+                        </button>
+                      </div>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-sm table-hover custom-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center custom-thead">Nombre Grupo</th>
+                                <th class="text-center custom-thead">Grupo Padre</th>
+                                <th class="text-center custom-thead" style="width:10%;">Estado</th>
+                                <th class="text-center custom-thead" style="width:10%;">Creado el</th>
+                                <th class="text-center custom-thead" style="width:8%;">Acciones</th>
+                            </tr>
+                            <tr>
+                                <th class="table-filters">
+                                  <input type="text" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
+                                        placeholder="Nombre">
+                                </th>
+                                <th class="table-filters">
+                                  <input type="text" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.padre" (change)="ConsultaFiltrada()"
+                                        placeholder="Nombre padre">
+                                </th>
+                                <th class="table-filters">
+                                    <select class="custom-select form-control form-control-sm"
+                                        [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
+                                        <option value="" selected>Seleccione</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                </th>
+                                <th class="table-filters">
+                                  <!-- <input type="date" class="form-control form-control-sm" 
+                                        [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()"> -->
+                                </th>
+                                <th class="table-filters"></th>
+                            </tr>
+                            <tr *ngIf="Grupos.length == 0 && !Cargando">
+                              <th colspan="5" class="text-center">
+                                <div><i class="text-warning font-size-25 ti-alert"></i></div>
+                                <div><h4>No hay datos para mostrar</h4></div>
+                              </th>
+                            </tr>
+                            <tr *ngIf="Cargando">
+                              <th colspan="6" class="text-center">
+                                <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                                <h1>CARGANDO</h1>
+                              </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="Grupos.length > 0 && !Cargando">
+                            <tr *ngFor="let g of Grupos">
+                                <td class="custom-cell">{{g.Nombre_Grupo}}</td>
+                                <td class="custom-cell">{{g.Grupo_Padre}}</td>
+                                <td class="custom-cell">{{g.Estado}}</td>
+                                <td class="custom-cell">{{g.Fecha_Registro | date:"dd-MM-yyyy"}}</td>
+                                <td class="custom-cell">
+                                  <div class="text-center">
+                                    <div ngbDropdown class="dropdown-primary">
+                                      <button ngbDropdownToggle 
+                                        class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" 
+                                        type="button"><i class="ti-angle-down"></i></button>
+                                      <div ngbDropdownMenu>
+                                        <a 
+                                          class="dropdown-item waves-light waves-effect"
+                                          style="cursor:pointer;"
+                                          [swal]="{ title : '¿Está Seguro?', text : 'Se va a cambiar el estado de este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Actualizar', cancelButtonText : 'No, Comprobar!' }"
+                                          (confirm)="CambiarEstadoGrupo(g.Id_Grupo_Tercero)">
+                                          <i [ngClass]="{'ti-na text-danger':g.Estado == 'Activo', 'ti-back-right text-info': g.Estado=='Inactivo'}"></i> 
+                                          <small>{{g.Estado == "Activo" ? TextoInactivo : TextoActivo}}</small>
+                                        </a>
+                                        <a 
+                                          class="dropdown-item waves-light waves-effect" 
+                                          (click)="EditarGrupo(g.Id_Grupo_Tercero)"
+                                          style="cursor:pointer;">
+                                          <i class="ti-pencil text-warning"></i> 
+                                          <small>Editar</small>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="paginacion-container" *ngIf="Grupos.length > 0 && !Cargando">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <p>
+                                    <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b>
+                                </p>
+                            </div>
+                            <div class="col-md-9">
+                            <ngb-pagination 
+                                class="pull-right" 
+                                [collectionSize]="TotalItems" 
+                                [(page)]="page" 
+                                [maxSize]="maxSize" 
+                                [pageSize]="pageSize"
+                                size="sm" 
+                                (pageChange)="ConsultaFiltrada(true)" 
+                                [boundaryLinks]="true">
+                            </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-sm'" id="ModalGrupo" #ModalGrupo>
+    <div class="app-modal-header">
+        <button type="button" class="close basic-close" (click)="CerrarModalGrupo()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4>Nuevo Grupo</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+              <form #FormGrupo>
+                <div class="form-row">
+                  <div class="col-md-6 mb-3">
+                    <label for="Nombre_Grupo">Nombre Grupo</label>
+                    <input 
+                      name="Nombre_Grupo" type="text" 
+                      class="form-control form-control-sm" id="Nombre_Grupo" 
+                      placeholder="Nombre" required
+                      [(ngModel)]="GrupoTerceroModel.Nombre_Grupo">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="Grupo_Padre">Padre</label>
+                    <select 
+                      name="Grupo_Padre" id="Grupo_Padre" 
+                      [(ngModel)]="GrupoTerceroModel.Id_Grupo_Padre"
+                      class="form-control form-control-sm"
+                      (change)="SetNivelGrupo()">
+                      <option value="" selected>Seleccione</option>
+                      <option *ngFor="let gp of GruposPadre" [value]="gp.Id_Grupo_Tercero">{{gp.Nombre_Grupo}}</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button 
+                class="btn btn-outline-danger btn-rounded btn-sm"
+                (click)="CerrarModalGrupo()">Cerrar
+            </button>
+            <button
+                class="btn btn-outline-primary btn-rounded btn-sm"
+                [swal]="{ title : '¿Está Seguro?', text : 'Se va a guardar este grupo' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Comprobar!' }"
+                (confirm)="GuardarGrupo()"> Guardar Grupo
+            </button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<swal #alertSwal title="" type="" text=""></swal>

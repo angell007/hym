@@ -1,7 +1,7 @@
 <style>
   #chartdiv {
     width: 100%;
-    height: 500px;
+    height: 250px;
   }
 </style>
 <div class="container-fluid">
@@ -10,64 +10,100 @@
   </div>
   <div class="clearfix"></div>
   <div class="row">
-
-    <div class="col-md-6">
-      <!--Accordion wrapper-->
-      <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-
-        <!-- Accordion card -->
-        <div class="card" *ngFor="let item of ListaBalance; let i = index">
-
-          <!-- Card header -->
-          <div class="card-header" role="tab" id="headingOne1">
-            <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}" aria-expanded="true"
-              aria-controls="collapseOne{{i}}">
-              <h5 class="mb-0"> {{ item.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
-              </h5>
-            </a>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <!-- <div class="row">
+            <div class="col-md-12">
+              <div class="chart">
+                <canvas baseChart
+                  [data]="pieChartData"
+                  [labels]="pieChartLabels"
+                  [chartType]="pieChartType"
+                  [options]="pieChartOptions"
+                  [colors]="pieChartColors"
+                  [legend]="pieChartLegend">
+                </canvas>
+              </div>
+            </div>
           </div>
-
-          <!-- Card body -->
-          <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}" data-parent="#accordionEx">
-            <div class="card-body">
-              <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
-
-                  <table class="table" style="font-size: 12px">
-                      <tr>
-                          <th ></th>
-                          <th >Ingreso</th>
-                          <th >Egreso</th>
-                        </tr>
-                        <tr *ngFor="let subitem of item.tercero; let j = index" >
-                          <td >{{subitem.Moneda_Origen}}</td>
-                          <td *ngIf="subitem.Tipo == 'Ingreso'" >{{subitem.valorFormato}}</td>
-                          <td *ngIf="subitem.Tipo == 'Ingreso'" ></td>
-                          <td *ngIf="subitem.Tipo == 'Egreso'" > </td>
-                          <td *ngIf="subitem.Tipo == 'Egreso'" > {{subitem.valorFormato}}</td>
-                        </tr>
-                       <!-- <tr>
-                          <td >BsS.<br></td>
-                          <td *ngIf="subitem.Tipo == 'Ingreso'">{{subitem.valorBolivares}}</td>
-                          <td *ngIf="subitem.Tipo == 'Ingreso'"></td>
-                          <td *ngIf="subitem.Tipo == 'Egreso'"></td>
-                          <td *ngIf="subitem.Tipo == 'Egreso'">{{subitem.valorBolivares}}</td>
-                        </tr> -->
-                    </table>
-
+          <hr> -->
+          <div class="form-row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Filtros</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Año</label>
+                <select name="Anio" id="anio" class="form-control" (change)="GetResumenFlujoEfectivo()" [(ngModel)]="Filtros.anio">
+                  <option *ngFor="let a of Anios" [value]="a">{{a}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Mes</label>
+                <select name="Mes" id="mes" class="form-control" (change)="SetMesNumerico($event.target.value)" [(ngModel)]="Filtros.mes">
+                  <option *ngFor="let me of Meses" [value]="me">{{me}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Departamento</label>
+                <select name="Departamento" id="departamento" class="form-control" (change)="GetOficinasDepartamento()" [(ngModel)]="Filtros.departamento">
+                  <option value="">Todos</option>
+                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Oficinas</label>
+                <select name="Oficinas" id="oficinas" (change)="GetCajasOficina()" class="form-control" [(ngModel)]="Filtros.oficina" [disabled]="Filtros.departamento == ''">
+                  <option value="">Todas</option>
+                  <option *ngFor="let o of Oficinas" [value]="o.Id_Oficina">{{o.Nombre}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Cajas</label>
+                <select name="Cajas" id="cajas" class="form-control" (change)="GetResumenFlujoEfectivo()" [(ngModel)]="Filtros.caja"  [disabled]="Filtros.oficina == ''">
+                  <option value="">Todas</option>
+                  <option *ngFor="let c of Cajas" [value]="c.Id_Caja">{{c.Nombre}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Cajero</label>
+                <select name="Cajero" id="cajero" class="form-control" [(ngModel)]="Filtros.cajero" [disabled]="Filtros.caja == ''">
+                  <option value="">Todos</option>
+                  <option *ngFor="let ca of Cajeros" [value]="ca.Id_Cajero">{{ca.Nombre}}</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-        <!-- Accordion card -->
-
       </div>
-      <!-- Accordion wrapper -->
     </div>
-
-    <div class="col-md-6">
-      <!--
-            <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
-            [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas> -->
-      <div id="chartdiv"></div>
+    <div class="col-md-9">  
+      <div class="card">
+        <div class="card-body">
+          <div style="display: block;">
+            <canvas baseChart style="height: 200px;"
+              [datasets]="lineChartData" 
+              [labels]="lineChartLabels"
+              [options]="lineChartOptions"
+              [colors]="lineChartColors"
+              [legend]="lineChartLegend"
+              [chartType]="lineChartType"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>

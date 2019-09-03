@@ -10,59 +10,59 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-cofiguracion',
   templateUrl: './cofiguracion.component.html',
-  styleUrls: ['./cofiguracion.component.scss']
+  styleUrls: ['./cofiguracion.component.scss', '../../../style.scss']
 })
 
 export class CofiguracionComponent implements OnInit {
 
-  public configuracion: any[];
-  public Monedas: any[];
-  public Funcionarios: any[];
+  public configuracion: any=[];
+  public Monedas: any=[];
+  public Funcionarios: any=[];
   public AtributosMonedas: { [email: string]: any; } = {};
 
   //variables del formulario configuracion
 
   public Identificacion: any;
-  public NombreEmpresa: any[];
-  public NIT: any[];
-  public Telefono: any[];
-  public Celular: any[];
-  public Direccion: any[];
-  public Correo: any[];
-  public FestivosLegales: any[];
-  public ExtrasLegales: any[];
-  public LlegadasTarde: any[];
-  public HoraInicioDia: any[];
-  public HoraFinDia: any[];
-  public SalarioBase: any[];
-  public SubsidioTransporte: any[];
-  public HoraExtraDiurna: any[];
-  public HoraExtraNocturna: any[];
-  public HoraExtraDomingoDiurna: any[];
-  public HoraExtraDomingoNocturna: any[];
-  public RecargoDiurna: any[];
-  public RecargoNocturno: any[];
-  public RecargoDominicalDiurna: any[];
-  public RecargoDominicalNocturna: any[];
-  public HoraInicioNoche: any[];
-  public HoraFinNoche: any[];
-  public Festivos: any[];
-  public Libres: any[];
+  public NombreEmpresa: any = [];
+  public NIT: any = [];
+  public Telefono: any = [];
+  public Celular: any = [];
+  public Direccion: any = [];
+  public Correo: any = [];
+  public FestivosLegales: any = [];
+  public ExtrasLegales: any = [];
+  public LlegadasTarde: any = [];
+  public HoraInicioDia: any = [];
+  public HoraFinDia: any = [];
+  public SalarioBase: any = [];
+  public SubsidioTransporte: any = [];
+  public HoraExtraDiurna: any = [];
+  public HoraExtraNocturna: any = [];
+  public HoraExtraDomingoDiurna: any = [];
+  public HoraExtraDomingoNocturna: any = [];
+  public RecargoDiurna: any = [];
+  public RecargoNocturno: any = [];
+  public RecargoDominicalDiurna: any = [];
+  public RecargoDominicalNocturna: any = [];
+  public HoraInicioNoche: any = [];
+  public HoraFinNoche: any = [];
+  public Festivos: any = [];
+  public Libres: any = [];
 
   //variables del formulario moneda
-  public MaxVentaEfectivo: any[];
-  public MinVentaEfectivo: any[];
-  public MaxVentaCuenta: any[];
-  public MinVentaCuenta: any[];
-  public SugeridoVenta: any[];
-  public SugeridoCompra: any[];
-  public PrecioVentanilla: any[];
-  public MaxCompra: any[];
-  public MinCompra: any[];
-  public MinNoCobro: any[];
-  public ComisionEfectivo: any[];
-  public PagarComisionDesde: any[];
-  public ComisionRecaudo: any[];
+  public MaxVentaEfectivo: any = [];
+  public MinVentaEfectivo: any = [];
+  public MaxVentaCuenta: any = [];
+  public MinVentaCuenta: any = [];
+  public SugeridoVenta: any = [];
+  public SugeridoCompra: any = [];
+  public PrecioVentanilla: any = [];
+  public MaxCompra: any = [];
+  public MinCompra: any = [];
+  public MinNoCobro: any = [];
+  public ComisionEfectivo: any = [];
+  public PagarComisionDesde: any = [];
+  public ComisionRecaudo: any = [];
 
   public MaxVentaEfectivoCheck: boolean;
   public MinVentaEfectivoCheck: boolean;
@@ -78,19 +78,19 @@ export class CofiguracionComponent implements OnInit {
   public PagarComisionDesdeCheck: boolean;
   public ComisionRecaudoCheck: boolean;
 
-  public MaxVentaEfectivoFuncionario: any[];
-  public MinVentaEfectivoFuncionario: any[];
-  public MaxVentaCuentaFuncionario: any[];
-  public MinVentaCuentaFuncionario: any[];
-  public SugeridoVentaFuncionario: any[];
-  public SugeridoCompraFuncionario: any[];
-  public PrecioVentanillaFuncionario: any[];
-  public MaxCompraFuncionario: any[];
-  public MinCompraFuncionario: any[];
-  public MinNoCobroFuncionario: any[];
-  public ComisionEfectivoFuncionario: any[];
-  public PagarComisionDesdeFuncionario: any[];
-  public ComisionRecaudoFuncionario: any[];
+  public MaxVentaEfectivoFuncionario: any = [];
+  public MinVentaEfectivoFuncionario: any = [];
+  public MaxVentaCuentaFuncionario: any = [];
+  public MinVentaCuentaFuncionario: any = [];
+  public SugeridoVentaFuncionario: any = [];
+  public SugeridoCompraFuncionario: any = [];
+  public PrecioVentanillaFuncionario: any = [];
+  public MaxCompraFuncionario: any = [];
+  public MinCompraFuncionario: any = [];
+  public MinNoCobroFuncionario: any = [];
+  public ComisionEfectivoFuncionario: any = [];
+  public PagarComisionDesdeFuncionario: any = [];
+  public ComisionRecaudoFuncionario: any = [];
 
   public boolNombre: boolean = false;
   public boolNit: boolean = false;
@@ -124,7 +124,7 @@ export class CofiguracionComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('confirmswal') confirmswal: any;
 
-  public configuracionGeneral = [];
+  public configuracionGeneral:any = {};
 
   public checkados = [];
   MonedaCampo= [];
@@ -211,6 +211,8 @@ export class CofiguracionComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     }).subscribe((data: any) => {
+      console.log(data);
+      
       this.Identificacion = '1';
       this.configuracionGeneral = data;
     });

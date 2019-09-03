@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class OficinaseditarComponent implements OnInit {
   Municipios: any;
-  oficina = [];
+  oficina:any = {};
   id = this.route.snapshot.params["id"];
   Departamentos: any;
   moneda1 = true;
@@ -24,6 +24,9 @@ export class OficinaseditarComponent implements OnInit {
   Campos=[];
   Monedas=[];
   ocultar = true;
+
+  public departamentoDefault:string = '';
+  public municipioDefault:string = '';
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private globales: Globales, private router: Router) { }
 

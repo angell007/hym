@@ -1,0 +1,126 @@
+<div class="card-header">
+  <div class="row">
+    <div class="col-md-4" style="display:flex; align-items:flex-end;"> 
+      <h5>Funcionarios</h5>       
+    </div>
+    <div class="col-md-8">
+      <div class="pull-right">
+        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
+          [routerLink]="['/administrarfuncionario','nuevo']">
+          <i class="ti-plus font-size-15 mr-2"></i> Nuevo funcionario
+        </button>
+      </div>
+    </div>
+  </div>                  
+</div>
+<div class="card-body">
+  <table class="table table-striped custom-table">
+    <thead>
+      <tr>
+        <th class="custom-thead" style="width:4%;"></th>
+        <th class="custom-thead" >Identificacion</th>
+        <th class="custom-thead" >Nombre</th>
+        <th class="custom-thead" style="width:9%;">Grupo</th>
+        <th class="custom-thead" style="width:9%;">Dependencia</th>
+        <th class="custom-thead" style="width:9%;">Cargo</th>
+        <th class="custom-thead" style="width:8%;">Perfil</th>
+        <th class="custom-thead" style="width:7%;">Estado</th>
+        <th class="custom-thead" style="width:8%;">Acciones</th>
+      </tr>
+      <tr>
+        <th class="table-filters"></th>
+        <th class="table-filters">
+          <input type="text" class="form-control" placeholder="Filtro identificacion"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.identificacion">
+        </th>
+        <th class="table-filters">
+          <input type="text" class="form-control" placeholder="Filtro nombre"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.nombre">
+        </th>
+        <th class="table-filters">
+          <select id="grupo" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.grupo">
+            <option value="" selected>Todos</option>
+            <option *ngFor="let g of Grupos" [value]="g.Id_Grupo">{{g.Nombre}}</option>
+          </select>
+        </th>
+        <th class="table-filters">
+          <select id="dependencia" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.dependencia">
+            <option value="" selected>Todas</option>
+            <option *ngFor="let d of Dependencias" [value]="d.Id_Dependencia">{{d.Nombre}}</option>
+          </select>
+        </th>
+        <th class="table-filters">
+          <select id="cargo" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cargo">
+            <option value="" selected>Todos</option>
+            <option *ngFor="let c of Cargos" [value]="c.Id_Cargo">{{c.Nombre}}</option>
+          </select>
+        </th>
+        <th class="table-filters"></th>
+        <th class="table-filters">
+          <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
+            <option value="" selected>Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </th>
+        <th class="table-filters"></th>
+      </tr>
+      <tr *ngIf="Cargando">
+        <td colspan="9" class="text-center">
+          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+            <h2>CARGANDO FUNCIONARIOS</h2>
+            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="Funcionarios.length == 0 && !Cargando">
+        <td colspan="9" class="text-center">
+            <i class="ti-alert font-size-20 text-warning"></i>
+            <h4>No hay funcionarios para mostrar!</h4>
+        </td>
+      </tr>
+    </thead>
+    <tbody *ngIf="!Cargando">                                            
+      <tr *ngFor="let f of Funcionarios; let i = index;" [ngClass]="{'bg-anulada':f.Estado == 'Inactivo'}">
+        <td class="custom-cell">
+          <div class="list-info text-center">
+            <img class="thumb-img" src="assets/images/user.jpg" alt="">
+          </div>
+        </td>
+        <td class="custom-cell">{{f.Identificacion_Funcionario}}</td>
+        <td class="custom-cell">{{f.Nombre_Funcionario}}</td>
+        <td class="custom-cell text-center">{{f.Grupo}}</td>
+        <td class="custom-cell text-center">{{f.Dependencia}}</td>
+        <td class="custom-cell text-center">{{f.Cargo}}</td>
+        <td class="custom-cell text-center">{{f.Perfil}}</td>
+        <td class="custom-cell text-center">{{f.Estado}}</td>
+        <td class="custom-cell" [ngClass]="{'bg-white':f.Estado == 'Inactivo'}">
+          <div class="text-center">
+            <div ngbDropdown class="dropdown-primary">
+              <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
+              <div ngbDropdownMenu>
+                <a class="dropdown-item waves-light waves-effect caja-botones accionable" [routerLink]="['/administrarfuncionario',f.Identificacion_Funcionario]">
+                  <i class="ti-pencil text-warning"></i> Editar</a>
+                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstado(f.Identificacion_Funcionario)"
+                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este funcionario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                    <i [ngClass]="{'ti-na text-danger':f.Estado == 'Activo', 'ti-back-right text-success':f.Estado == 'Inactivo'}"></i> 
+                    {{f.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}</a>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="paginacion-container" *ngIf="Funcionarios.length > 0">
+    <div class="row">
+      <div class="col-md-4">
+        <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+      </div>
+      <div class="col-md-8">
+        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+          size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+      </div>
+    </div>
+  </div>
+</div>

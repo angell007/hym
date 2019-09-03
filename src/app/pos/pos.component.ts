@@ -15,21 +15,21 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./pos.component.scss']
 })
 export class PosComponent implements OnInit {
-  public IdentificacionFuncionario: any[];
-  public Destinatarios: any[] = [];
-  public Remitentes: any[] = [];
-  public Paises: any[] = [];
-  public Bancos: any[] = [];
-  public TipoCuentas: any[] = [];
-  public Clientes: any[] = [];
-  public DestinatariosFiltrados: any[] = [];
-  public RemitentesFiltrados: any[] = [];
-  public DatosRemitente: any[] = [];
-  public Funcionarios: any[] = [];
-  public ServiciosExternos: any[] = [];
-  public CorresponsalesBancarios: any[] = [];
-  public Documentos: any[];
-  public Cuentas: any[] = [{
+  public IdentificacionFuncionario: any = [];
+  public Destinatarios: any = [] = [];
+  public Remitentes: any = [] = [];
+  public Paises: any = [] = [];
+  public Bancos: any = [] = [];
+  public TipoCuentas: any = [] = [];
+  public Clientes: any = [] = [];
+  public DestinatariosFiltrados: any = [] = [];
+  public RemitentesFiltrados: any = [] = [];
+  public DatosRemitente: any = [] = [];
+  public Funcionarios: any = [] = [];
+  public ServiciosExternos: any = [] = [];
+  public CorresponsalesBancarios: any = [] = [];
+  public Documentos: any = [];
+  public Cuentas: any = [] = [{
     Id_Destinatario: '',
     Id_Pais: "",
     Id_Banco: '',
@@ -37,7 +37,7 @@ export class PosComponent implements OnInit {
     Id_Tipo_Cuenta: ''
   }];
 
-  public Envios: any[] = [{
+  public Envios: any = [] = [{
     Destino: '',
     Numero_Documento_Destino: '',
     Nombre: '',
@@ -48,10 +48,10 @@ export class PosComponent implements OnInit {
     esconder: false,
     disabled: false
   }];
-  public CuentasDestinatario: any[];
-  public Cajas: any[];
-  public Cambios: any[];
-  public Monedas: any[];
+  public CuentasDestinatario: any = [];
+  public Cajas: any = [];
+  public Cambios: any = [];
+  public Monedas: any = [];
   public Recibe: any = "Transferencia";
   public MonedaRecibe: any = "Bolivares";
   public IdCorresponsal: number;
@@ -59,12 +59,12 @@ export class PosComponent implements OnInit {
   public IdCaja: number;
   public Estado: string;
   public DetalleCorresponsal: string;
-  public Detalle: any[];
-  public Indice: any[];
+  public Detalle: any = [];
+  public Indice: any = [];
 
   public MonedaRecibida: any;
-  public Cedula: any[];
-  public IdRemitente: any[];
+  public Cedula: any = [];
+  public IdRemitente: any = [];
   public FormaPago: string;
   public Costo: number;
   public PrecioSugeridoEfectivo: any;
@@ -160,18 +160,18 @@ export class PosComponent implements OnInit {
   Funcionario: any;
   Traslados = [];
   idTraslado: any;
-  Traslado = [];
+  Traslado:any = {};
   TrasladosRecibidos = [];
   ServicioComision = [];
   ValorComisionServicio: any;
   Servicio2 = false;
   Servicio1 = true;
   Servicios = [];
-  Servicio = [];
-  Giro = [];
+  Servicio:any = {};
+  Giro:any = {};
   idGiro: any;
-  Remitente = [];
-  Destinatario = [];
+  Remitente:any = {};
+  Destinatario:any = {};
   Tercero = [];
   CuentaBancaria = [];
   defectoDestino: string;
@@ -185,7 +185,7 @@ export class PosComponent implements OnInit {
   maximoTransferencia: any;
   minimoTransferencia: any;
   ActivarEdicion = false;
-  Detalle_Destinatario = [];
+  Detalle_Destinatario:any = {};
   Lista_Destinatarios = [{
     Id_Pais: '2',
     Id_Banco: '',
@@ -217,7 +217,7 @@ export class PosComponent implements OnInit {
   MontoInicial: any = 0;
   CierreCajaAyer: any = 0;
   IdDiario: any;
-  verCambio = [];
+  verCambio:any = {};
   currencyOrigen: any;
   currencyDestino: any;
   cupoTercero: any;
@@ -229,6 +229,12 @@ export class PosComponent implements OnInit {
   MontoInicialBolivar = 0;
 
   GirosAprobados = [];
+
+  public boolId:boolean = false;
+  public boolNombre:boolean = false;
+  public boolIdR:boolean = false;
+  public boolNombreR:boolean = false;
+  public boolTelefonoR:boolean = false;
 
   ngOnInit() {
 
@@ -675,7 +681,7 @@ export class PosComponent implements OnInit {
     });
   }
 
-  GuardarDestinatario(formulario: NgForm, modal) {
+  GuardarDestinatario(formulario: NgForm, modal:any = null) {
 
     this.Lista_Destinatarios.forEach((element, index) => {
       if (element.Numero_Cuenta == "") {
@@ -2130,9 +2136,9 @@ export class PosComponent implements OnInit {
     }
   }
 
-  DatosRemitenteEditarGiro = [];
-  DatosDestinatario = [];
-  DatosDestinatarioEditarGiro = [];
+  DatosRemitenteEditarGiro:any = {};
+  DatosDestinatario:any = {};
+  DatosDestinatarioEditarGiro:any = {};
 
   EditarGiro(id) {
 
@@ -2478,7 +2484,7 @@ export class PosComponent implements OnInit {
     }
   }
 
-  informacionGiro = [];
+  informacionGiro:any = {};
   ValorTotalGiro: any;
   ModalVerGiro(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
@@ -2634,5 +2640,11 @@ export class PosComponent implements OnInit {
     this.transferencia = true
   }
 
+  OcultarFormularios(){
 
+  }
+
+  BuscarIdentificacion(event:any){
+
+  }
 }

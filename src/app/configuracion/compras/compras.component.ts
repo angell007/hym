@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { Globales } from '../../shared/globales/globales';
 import { Router } from '@angular/router';
+import { CompraService } from '../../shared/services/compra/compra.service';
 
 @Component({
   selector: 'app-compras',
@@ -22,10 +23,10 @@ export class ComprasComponent implements OnInit {
   //variables que hacen referencia a los campos del formulario editar   
 
   public Identificacion: any;
-  public Proveedor: any[];
-  public Valor: any[];
-  public TasaCambio: any[];
-  public Funcionario: any[];
+  public Proveedor: any = [];
+  public Valor: any = [];
+  public TasaCambio: any = [];
+  public Funcionario: any = [];
 
   public boolProveedor: boolean = false;
   public boolValor: boolean = false;
@@ -46,10 +47,14 @@ export class ComprasComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('saveSwal') saveSwal: any;
+  @ViewChild('alertSwal') alertSwal: any;
   Pais = [];
   Monedas = [];
 
-  constructor(private http: HttpClient, private globales: Globales, private router: Router) { }
+  constructor(private http: HttpClient, 
+              private globales: Globales, 
+              private router: Router,
+              private compraService:CompraService) { }
 
   esconder = true;
   ngOnInit() {
@@ -67,14 +72,24 @@ export class ComprasComponent implements OnInit {
     this.ActualizarVista();
   }
 
+  ShowSwal(tipo:string, titulo:string, msg:string){
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+
+    this.alertSwal.show();
+  }
+
 
   CuentaBancaria = [];
   ComprasPendientes =[];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/compras/lista_compras.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
+      console.log(data);
+      
       this.compras = data;
     });
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
+    /*this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tercero' } }).subscribe((data: any) => {
       this.Proveedores = data;
     });
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
@@ -92,7 +107,7 @@ export class ComprasComponent implements OnInit {
 
     this.http.get(this.globales.ruta + 'php/compras/compras_no_verificadas.php').subscribe((data: any) => {
       this.ComprasPendientes = data;
-    });
+    });*/
 
   }
 
@@ -119,9 +134,10 @@ export class ComprasComponent implements OnInit {
 
   AnularCompra(valor){
     let datos = new FormData();
-    datos.append("compra", valor);
-    this.http.post(this.globales.ruta + 'php/compras/anular_compra.php', datos)
+    datos.append("id_compra", valor);
+    this.compraService.anularCompra(datos)
       .subscribe((data: any) => {
+        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
         this.ActualizarVista();
       });    
   }

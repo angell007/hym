@@ -7,7 +7,7 @@
 
     <div class="col-md-6">
       <div class="card">
-        <div class="card-block">
+        <!-- <div class="card-block">
           <button class="pull-right btn btn-info" (click)="ModalRemitente.show()">
             <i class="ti-plus"></i> Agregar Nuevo Remitente</button>
           <div class="table-responsive">
@@ -41,13 +41,15 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
+
+        <app-tablaremitentegiro></app-tablaremitentegiro>
       </div>
     </div>
 
     <div class="col-md-6">
       <div class="card">
-        <div class="card-block">
+        <!-- <div class="card-block">
           <button class="pull-right btn btn-info" (click)="ModalDestinatario.show()">
             <i class="ti-plus"></i> Agregar Nuevo Destinatario</button>
           <div class="table-responsive">
@@ -81,14 +83,15 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
+        <app-tabladestinatariogiro></app-tabladestinatariogiro>
       </div>
     </div>
 
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
+<!-- <app-modal-basic [dialogClass]="'modal-lg'" id="ModalRemitente" #ModalRemitente>
   <div class="app-modal-header">
     <h4>Nuevo Remitente</h4>
   </div>
@@ -235,4 +238,4 @@
         (confirm)="GuardarGiro(FormEditarDestinatario, ModalEditarDestinatario,'Giro_Destinatario','Destinatario')">Guardar</button>
     </div>
   </div>
-</app-modal-basic>
+</app-modal-basic> -->

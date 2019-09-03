@@ -11,25 +11,25 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class ClientesComponent implements OnInit {
 
-  public clientes : any[];
-  public Departamentos : any[];
-  public Municipios : any[];
+  public clientes : any = [];
+  public Departamentos : any = [];
+  public Municipios : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Direccion : any[];
-  public IdDepartamento : any[];
-  public IdMunicipio : any[];
-  public Telefono : any[];
-  public Celular : any[];
-  public Correo : any[];
-  public ClienteDesde : any[];
-  public Destacado : any[];
-  public Credito : any[];
-  public Cupo : any[];
-  public TipoCliente : any[];
-  public Detalle : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Direccion : any = [];
+  public IdDepartamento : any = [];
+  public IdMunicipio : any = [];
+  public Telefono : any = [];
+  public Celular : any = [];
+  public Correo : any = [];
+  public ClienteDesde : any = [];
+  public Destacado : any = [];
+  public Credito : any = [];
+  public Cupo : any = [];
+  public TipoCliente : any = [];
+  public Detalle : any = [];
 
   public ModalCliente : any = $('#ModalCliente');
   @ViewChild('deleteSwal') deleteSwal:any;

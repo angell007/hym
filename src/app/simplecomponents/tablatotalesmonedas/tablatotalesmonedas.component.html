@@ -1,0 +1,12 @@
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <td class="text-center p-0" style="font-weight: bold;" [attr.colspan]="TColspan">Totales</td>
+    </tr>
+    <tr>      
+      <td *ngFor="let t of MostrarTotales" class="p-0 pr-1 text-right" style="width:10%">
+        {{t.Total | customcurrency:t.Codigo}}
+      </td>
+    </tr>
+  </tbody>
+</table>

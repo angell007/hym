@@ -17,7 +17,7 @@ export class CompraseditarComponent implements OnInit {
   ComprasPendientes = [];
   ListarCompra = [];
   Proveedores = [];
-  CompraEditar =[];
+  CompraEditar:any ={};
 
   public id = this.route.snapshot.params["id"];
 
@@ -148,6 +148,10 @@ export class CompraseditarComponent implements OnInit {
     } else {
       this.nombre = "";
     }
+  }
+
+  ValidarValorCompra(event:any){
+
   }
 
 }

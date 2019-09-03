@@ -6,44 +6,13 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-block">
-          <p>Todos los Remitentes con los que trabajamos</p>
-          <div class="table-responsive">
-            <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
-              <thead>
-                <tr>
-                  <th>Identificación</th>
-                  <th>Nombre</th>
-                  <th>Telefono</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let remitente of Remitente">
-                  <td>{{remitente.Id_Transferencia_Remitente}}</td>
-                  <td>{{remitente.Nombre}}</td>
-                  <td>{{remitente.Telefono}}</td>
-                  <td class="text-center">
-                    <button class="btn btn-default btn-xs" type="button" (click)="EditarRemitente(remitente.Id_Transferencia_Remitente)" style="margin:0;">
-                      <i class="ti-pencil"></i>
-                    </button>
-
-                    <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a eliminar este Remitente, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, eliminar', cancelButtonText : 'No, Dejame Comprobar!' }"
-                      (confirm)="EliminarRemitente(remitente.Id_Transferencia_Remitente)">
-                      <i class="ti-close"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <app-tablaremitente></app-tablaremitente>
       </div>
     </div>
   </div>
 </div>
 
-<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarRemitente" #ModalEditarRemitente>
+<!-- <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarRemitente" #ModalEditarRemitente>
   <div class="app-modal-header">
     <h4>Editar Remitente</h4>
   </div>
@@ -78,13 +47,4 @@
         (confirm)="GuardarRemitente(FormEditarRemitente, ModalEditarRemitente)">Guardar</button>
     </div>
   </div>
-</app-modal-basic>
-
-<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el Remitente" type="error">
-</swal>
-
-<swal #saveSwal title="Remitente guardado" text="Se ha guardado correctamente el Remitente" type="success">
-</swal>
-
-<swal #deleteSwal title="Remitente eliminado" text="Se ha eliminado correctamente el Remitente" type="success">
-</swal>
+</app-modal-basic> -->

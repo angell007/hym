@@ -1,0 +1,89 @@
+<div class="row-fluid">
+  <div class="col-md-12">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th class="custom-thead" style="width:4%;">Fecha</th>
+          <th class="custom-thead" style="width:3%;">Recibo</th>
+          <th class="custom-thead" style="width:15%;">Consultor Devolución</th>
+          <th class="custom-thead">Valor Devuelto</th>
+          <th class="custom-thead" style="width:5%;">Cédula</th>
+          <th class="custom-thead" style="width:9%;">Cta. Destino</th>
+          <th class="custom-thead" style="width:12%;">Destinatario</th>
+          <th style="text-align:center;">Motivo devolucion</th>
+        </tr>
+        <tr>
+          <th class="table-filters">
+            <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro cod."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.codigo">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro caj."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.consultor">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro val."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.valor">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro ced."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cedula">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro cta."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cta_destino">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro dest."
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.nombre_destinatario">
+          </th>
+          <th class="table-filters"></th>
+        </tr>
+        <tr *ngIf="Cargando">
+          <td colspan="11" class="text-center">
+            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+              <h2>CARGANDO TRANSFERENCIAS</h2>
+              <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="CARGANDO">
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="TransferenciasListar.length == 0 && !Cargando">
+          <td colspan="11" class="text-center">
+              <i class="ti-alert font-size-20 text-warning"></i>
+              <h4>No hay transferencias devueltas</h4>
+          </td>
+        </tr>
+      </thead>
+      <tbody>                                            
+          <tr *ngFor="let t of TransferenciasListar; let i = index;">
+            <td class="custom-cell">{{t.Fecha | date:"dd-MM-yyyy" }}</td>
+            <td class="custom-cell">{{t.Codigo}}</td>
+            <td class="custom-cell">{{t.Funcionario_Devolucion}}</td>
+            <td class="custom-cell" style="text-align:right;">{{t.Valor| customcurrency:t.Codigo_Moneda}}</td>
+            <td class="custom-cell" style="text-align:right;">{{t.Numero_Documento_Destino}}</td>
+            <td class="custom-cell">{{t.Cuenta_Destino}}</td>
+            <td class="custom-cell">{{t.Destinatario}}</td>
+            <td class="custom-cell">{{t.Motivo_Devolucion}}</td>
+          </tr>
+      </tbody>
+    </table>
+    <div id="paginacion-container" *ngIf="TransferenciasListar.length > 0">
+      <div class="row">
+        <div class="col-md-3">
+          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+        </div>
+        <div class="col-md-9">
+          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+            size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+    
+  <swal title='' text='' type='' #alertSwal></swal>

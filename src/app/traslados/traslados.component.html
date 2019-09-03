@@ -2,10 +2,13 @@
     <div class="clearfix"></div>
     <div class="row">
 
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card" style="height: 500px">
+                    <div class="card">
+                        <app-tablatraslados></app-tablatraslados>
+                    </div>
+                    <!-- <div class="card" style="height: 500px">
                         <div class="card-header">
                             <h4 class="pull-left">Traslados</h4>
                             <button *ngIf="esconder"  class="pull-right btn btn-info" (click)="ModalTraslado.show();">
@@ -29,28 +32,40 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let traslado of traslados" class="{{traslado.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                        <tr *ngFor="let traslado of traslados"                                         
+                                        [ngClass]="{'bg-anulada':traslado.Estado == 'Anulado'}">
                                             <td style="font-size: 11px;">{{traslado.Fecha | date:"dd/MM/yy"}}</td>
                                             <td style="font-size: 11px;">{{traslado.Codigo}}</td>
                                             <td style="font-size: 11px;">{{traslado.Funcionario}}</td>
-                                            <td style="font-size: 11px;" >{{traslado.Origen}}</td>
+                                            <td style="font-size: 11px;">{{traslado.Origen}}</td>
                                             <td style="font-size: 11px;">{{traslado.Destino}}</td>
-                                            <td style="font-size: 11px;">{{traslado.Moneda}}</td>
-                                            <td class="text-right" style="font-size: 11px;" >{{traslado.Valor }}</td>
+                                            <td style="font-size: 11px;">{{traslado.Nombre_Moneda}}</td>
+                                            <td class="text-right" style="font-size: 11px;" >{{traslado.Codigo_Moneda}} {{traslado.Valor | number | puntos }}</td>
 
                                             <td class="text-center">
-                                                <button class="btn btn-default btn-xs" type="button" (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)"
+                                                <button class="btn btn-default btn-xs" type="button" 
+                                                    (click)="VerTraslado(traslado.Id_Traslado, ModalVerTraslado)"
                                                     style="margin:0;">
                                                     <i class="ti-search"></i>
                                                 </button>
-                                                <button class="btn btn-default btn-xs" type="button" (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)"
+                                                <button 
+                                                    *ngIf="traslado.Estado != 'Anulado'"
+                                                    class="btn btn-default btn-xs" type="button" 
+                                                    (click)="EditarTraslado(traslado.Id_Traslado, ModalEditarTraslado)"
                                                     style="margin:0;">
                                                     <i class="ti-pencil"></i>
                                                 </button>
-                                                <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                                <button 
+                                                    *ngIf="traslado.Estado != 'Anulado'"
+                                                    class="btn btn-default btn-xs" 
+                                                    type="button" 
+                                                    style="margin:0;"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Anular traslado"
                                                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Transferencia' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                                     (confirm)="EstadoTraslado(traslado.Id_Traslado,traslado.Estado )">
-                                                    <i class="ti-trash"></i>
+                                                    <i class="ti-close"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -58,15 +73,7 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="col-md-12 card min-heigth">
-                <div>
-                    <div id="chartdiv1" style="height: 500px;font-size: 11px;width: 100%;"></div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -95,7 +102,7 @@
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <option value="Caja Recaudo">Caja Recaudo</option>
+                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
                         </select>
                     </div>
                 </div>
@@ -110,7 +117,7 @@
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <option value="Caja Recaudo">Caja Recaudo</option>
+                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
                         </select>
                     </div>
                 </div>
@@ -230,9 +237,8 @@
                             <label>Moneda</label>
                         </strong>
                         <select class="form-control" name="Moneda" ngModel required>
-                            <option value="">Seleccione tipo de moneda</option>
-                            <option value="Pesos">Pesos</option>
-                            <option value="Bolivares">Bolivares</option>
+                            <option value="" selected>Seleccione tipo de moneda</option>
+                            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
                         </select>
                     </div>
                 </div>
@@ -305,8 +311,8 @@
                         <tr style="text-align: center;">
                             <td>{{verTraslado.Origen}}</td>
                             <td>{{verTraslado.Destino}}</td>
-                            <td>{{verTraslado.Moneda}}</td>
-                            <td colspan="2">{{verTraslado.Valor | currency}}</td>
+                            <td>{{verTraslado.Nombre_Moneda}}</td>
+                            <td colspan="2">{{verTraslado.Valor | number | puntos}}</td>
                         </tr>
                         <tr class="color-campos" style="text-align: center;">
                             <td><strong>Detalles: </strong></td>
@@ -326,7 +332,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTraslado" #ModalEditarTraslado>
     <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalTraslado.hide()">
+        <button type="button" class="close basic-close" (click)="ModalEditarTraslado.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
         <h4>Editar Traslado</h4>
@@ -346,7 +352,7 @@
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <option value="Caja Recaudo">Caja Recaudo</option>
+                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
                         </select>
                     </div>
                 </div>
@@ -361,7 +367,7 @@
                             <option value="Cliente">Cliente</option>
                             <option value="Proveedor">Proveedor</option>
                             <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <option value="Caja Recaudo">Caja Recaudo</option>
+                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
                         </select>
                     </div>
                 </div>
@@ -486,9 +492,8 @@
                             <label>Moneda</label>
                         </strong>
                         <select class="form-control" name="Moneda" ngModel="{{edicionTraslado.Moneda}}" required>
-                            <option value="">Seleccione tipo de moneda</option>
-                            <option value="Pesos">Pesos</option>
-                            <option value="Bolivares">Bolivares</option>
+                            <option value="">Seleccione tipo de moneda</option>                            
+                            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
                         </select>
                     </div>
                 </div>

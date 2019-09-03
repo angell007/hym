@@ -1,0 +1,75 @@
+// @import '../node_modules/ng2-toasty/bundles/style-bootstrap.css';
+
+.bg-anulada{
+    background-color: #c10000ba !important;
+    color: white;
+}
+
+.bg-inactive{
+    background-color: #ffc8c8 !important;
+}
+
+.bg-selected{
+    background-color: rgba(48, 238, 15, 0.4) !important;
+}
+
+.ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+}
+
+.table-filters{
+    padding:.5px !important;
+    font-size: 10px;
+    color: rgba(190, 190, 190, .6);
+
+    input[type="text"], input[type="date"], input[type="number"]{
+        font-size: 10px;
+        color: rgba(61, 61, 61, 0.8);
+    }
+}
+
+.custom-thead{
+    padding:4px !important;
+    font-size: 13.5px;
+    font-weight: bold;
+    color: black;
+    text-align:center;
+}
+
+.custom-cell{
+    padding:4px !important;
+    font-size: 11px;
+}
+
+.block-element{
+    display: block;
+}
+
+//ANIMACIONES
+@keyframes pulse {
+    0% {
+      -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+      box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+}
+
+.accionable{
+    cursor: pointer;
+}
+
+select{
+    width: 100% !important;
+    margin: 0 !important;
+}

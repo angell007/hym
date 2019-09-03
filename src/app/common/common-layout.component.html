@@ -53,14 +53,14 @@
                                 <span class="title">Traslados</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
+                        <!--<li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/pos']">
                                 <span class="icon-holder">
                                     <i class="ti-dashboard"></i>
                                 </span>
                                 <span class="title">POS</span>
                             </a>
-                        </li>
+                        </li>-->
                         <li clas="nav-item" routerLinkActive="active">
                             <a href="" [routerLink]="['/compras']">
                                 <span class="icon-holder">
@@ -83,22 +83,6 @@
                                     <i class="ti-wallet"></i>
                                 </span>
                                 <span class="title">Giros</span>
-                            </a>
-                        </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/corresponsalesbancarios']">
-                                <span class="icon-holder">
-                                    <i class="ti-money"></i>
-                                </span>
-                                <span class="title">Corresponsales Bancarios</span>
-                            </a>
-                        </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/serviciosexternos']">
-                                <span class="icon-holder">
-                                    <i class="ti-receipt"></i>
-                                </span>
-                                <span class="title">Servicios Externos</span>
                             </a>
                         </li>
                         <!--                        
@@ -128,7 +112,7 @@
                                 <li>
                                     <a href="" [routerLink]="['/flujoefectivo']">Flujo de efectivo</a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="" [routerLink]="['/cuentascobrar']">Cuentas por cobrar (Cartera)</a>
                                 </li>
                                 <li>
@@ -136,7 +120,7 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/cuentasterceros']">Estado de cuentas terceros</a>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
 
@@ -155,6 +139,9 @@
                                     <a href="" [routerLink]="['/configuraciongeneral']">Configuración General</a>
                                 </li>
                                 <li>
+                                    <a>Predetermiandos</a>
+                                </li>
+                                <li>
                                     <a href="" [routerLink]="['/cargo']">Cargo</a>
                                 </li>
                                 <li>
@@ -165,6 +152,15 @@
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/bancos']">Bancos</a>
+                                </li> 
+                                <li>
+                                    <a href="" [routerLink]="['/gruposterceros']">Grupos Terceros</a>
+                                </li>                                
+                                <li>
+                                    <a href="" [routerLink]="['/corresponsalesbancarios']">Corresponsales Bancarios</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/serviciosexternos']">Servicios Externos</a>
                                 </li>
                                 <li>
                                     <a href="" [routerLink]="['/cuentasbancarias']">Cuentas Bancarias</a>
@@ -271,9 +267,15 @@
                                     </div>
                                 </a>
                             </li>
+                            <li>
+                                <div class="pl-2 pt-2">
+                                    <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
+                                    <label for="" style="display:block;">Caja: {{NombreCaja}}</label>
+                                </div>
+                            </li>
                         </ul>
                         <ul class="nav-right">
-                            <li class="notifications dropdown" *ngIf="!OcultarConsultor">
+                            <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                                 <!-- NOTIFICACIONES -->
                                 <span class="counter">{{contadorTraslado}}</span>
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -319,8 +321,7 @@
                                 </ul>
                             </li>
 
-                            <li class="user-profile dropdown" *ngIf="OcultarConsultor">
-                                <!-- PERFIL -->
+                            <!--<li class="user-profile dropdown" *ngIf="OcultarConsultor">
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                     <div class="user-info">
                                         <span class="name pdd-right-5">Cierre Caja</span>
@@ -330,28 +331,19 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="" [routerLink]="" (click)="ModalCambiarBanco.show()">
-                                            <!--<i class="ti-user pdd-right-10"></i> -->
                                             <span>Cambiar Cuenta</span>
                                         </a>
                                     </li>
 
                                     <li role="separator" class="divider"></li>
-                                    <!--<li>
-                                        <a (click)="CierreCaja.show()">
-                                           <i class="ti-power-off pdd-right-10"></i> 
-                                            <span>Cierre de caja</span>
-                                        </a>
-                                    </li>-->
                                     <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="" [routerLink]="" (click)="CierreCuentaBancaria()">
-                                            <!-- <i class="ti-power-off pdd-right-10"></i> -->
                                             <span>Cierre Cuenta</span>
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-
+                            </li>-->
 
                             <li class="notifications dropdown">
                                 <!-- NOTIFICACIONES -->
@@ -394,15 +386,21 @@
                                 </ul>
                             </li>
 
-                            <li class="notifications dropdown" *ngIf="OcultarCajero">
+                            <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                                 <!-- NOTIFICACIONES -->
-                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-danger" style="margin-top: 10px"
-                                    (click)="this.cerrarCaja(1)">
+                                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
+                                    (click)="VerificarAntesDeCierre()">
                                     <i class="fa fa-lock"> Cerrar Caja</i>
                                 </button>
 
                             </li>
 
+                            <!-- <li class="notifications dropdown">
+                                <button class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
+                                    (click)="TestToast()">
+                                    <i class="fa fa-lock"> Toasty</i>
+                                </button>
+                            </li> -->
 
                             <li class="user-profile dropdown">
                                 <!-- PERFIL -->
@@ -509,7 +507,6 @@
 
             </div>
             <!-- Page Container END -->
-
         </div>
     </div>
 </div>
@@ -533,7 +530,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCaja)">Guardar</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="CambiarContrasena(FormCambiarContrasena, ModalCambiarContrasena)">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
@@ -553,11 +550,11 @@
                                     <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
                                             style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
-                                    <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "$." }}</td>
+                                    <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "Bs.S." }}</td>
                                     <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS.
                                         "}}</td>
                                     <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
-                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span></td>
+                                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Egresos</span></td>
                                     <td style="width:160px;">Cambios Efectivo</td>
                                     <td style="width:150px;text-align:center;">{{egresoCambio | currency : "$." }}</td>
                                     <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS.
@@ -701,7 +698,7 @@
                                     <td colspan="3">Monedas</td>
                                     <td colspan="3">
                                         <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]"
-                                            value="0" class="nume2" ngModel (input)="calcularFajoBilletes(0,i,'Moneda')"
+                                            value="0" class="nume2" ngModel (input)="calcularFajoBilletes(0,0,'Moneda')"
                                             style=" width: 170px !important;" /></td>
                                 </tr>
 
@@ -769,36 +766,47 @@
 </swal>
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
-    <div class="app-modal-header" style="margin: 0 auto;">
-        <h4>Cambio de Cuenta</h4>
-    </div>
-    <div class="app-modal-body">
-            <form #FormCambiarBanco="ngForm">
-                <div class="col-md-12 ">
-                    <label>Banco Venezolanos</label>
-                    <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" ngModel required class="form-control" (change)="VerificarSaldo($event.target.value)">
-                        <option value=""> Seleccione Banco</option>
-                        <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
-                            ({{banco.Numero_Cuenta}}) </option>
-                    </select>
-                </div>
-                <hr>    
-                <div class="col-md-12 ">
-                    <label>Saldo Cuenta Bancaria</label>
-                    <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" ngModel="{{SaldoInicialBanco}}"
-                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
-                </div>
-    
-            </form>
-        </div>
-    <div class="app-modal-footer" style="margin: 0 auto;">
-        <div class="text-center">
-            <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormCambiarBanco , ModalCambiarBanco)">Iniciar
+        <div class="app-modal-header" style="margin: 0 auto;">
+            <h4>Cambio de Cuenta</h4>
+            <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    </div>
+        <div class="app-modal-body">
+                <form #FormCambiarBanco="ngForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>País</label>
+                            <select  name="Id_Pais" id="Pais" class="form-control" (change)="CargarBancosPais($event.target.value)" required>
+                                <option value="" selected> Seleccione Pais</option>
+                                <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Banco Venezolanos</label>
+                            <select  name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" [(ngModel)] = "AperturaCuentaModel.Id_Cuenta_Bancaria" required class="form-control" (change)="VerificarSaldo($event.target.value)">
+                                <option value=""> Seleccione Banco</option>
+                                <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                                    ({{banco.Numero_Cuenta}}) </option>
+                            </select>
+                        </div>
+                    </div>                    
+                    <hr>    
+                    <div class="col-md-12 ">
+                        <label>Saldo Cuenta Bancaria</label>
+                        <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" [(ngModel)]="AperturaCuentaModel.Valor"
+                            [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
+                    </div>
+        
+                </form>
+            </div>
+        <div class="app-modal-footer" style="margin: 0 auto;">
+            <div class="text-center">
+                <button id="GuardarInicio" class="btn btn-primary btn-sm" [disabled]="!FormCambiarBanco.valid" (click)="GuardarMontoInicial2(ModalCambiarBanco)">Iniciar
+                </button>
+            </div>
+        </div>
 </app-modal-basic>
-
 
 <app-modal-basic [dialogClass]="'modal-xl'" id="ModalResumenCuenta" #ModalResumenCuenta>
     <div class="app-modal-header" style="margin: 0 auto;">
@@ -978,3 +986,43 @@
           </div>
         </div>
       </app-modal-basic>
+
+<app-modal-basic #modalOficinaCaja>
+    <div class="app-modal-header" [dialogClass]="'modal-lg'">
+        <h4>Oficinas y Cajas</h4>
+        <button type="button" class="close basic-close" (click)="modalOficinaCaja.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body text-center">
+        <p>Por favor seleccione la oficina y la caja en la que se encuentre y vaya a operar</p>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="">Oficina</label>
+                <select class="form-control" [(ngModel)]="oficina_seleccionada" (change)="ListarCajas($event.target.value)">
+                    <option value="" selected>Escoja la oficina</option>
+                    <option *ngFor="let ofi of Oficinas" value="{{ofi.Id_Oficina}}">{{ofi.Nombre}}</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="">Caja</label>
+                <select class="form-control" [(ngModel)]="caja_seleccionada">
+                        <option value="" selected>Escoja la caja</option>
+                    <option *ngFor="let c of Cajas" value="{{c.Id_Caja}}">{{c.Nombre}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-success btn-sm" (click)="GuardarOficinaCaja()">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<!--MODAL PARA DAR PERMISOS DE JEFES-->
+<app-modalpermisojefe></app-modalpermisojefe>
+
+<swal #alertSwal type="" title="" text=""></swal>
+
+<ng2-toasty [position]="'bottom-right'"></ng2-toasty>

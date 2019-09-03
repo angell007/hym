@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center">Titular</th>
+          <th class="text-center">Banco</th>
+          <th class="text-center">Cuenta</th>
+          <th class="text-center">Tipo Cuenta</th>
+          <th class="text-center">Valor</th>
+        </tr>
+        <tr *ngIf="Id_Moneda == ''">
+          <th colspan="5" class="text-center">
+            <div><i class="text-warning font-size-20 ti-alert"></i></div>
+            <div><h4>No hay datos para mostrar</h4></div>
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="Id_Moneda != ''">
+        <tr *ngFor="let cp of ComprasPendientes; let i = index" 
+          (click)="SeleccionarCompra(cp.Seleccionado, cp.Id_Compra_Cuenta, i)" 
+          [ngClass]="{'bg-selected': cp.Seleccionado == 1}"
+          style="cursor:pointer;">
+          <td  class="font-weight-bold">{{cp.Nombre_Titular}}</td>
+          <td  class="font-weight-bold">{{cp.Banco}}</td>
+          <td  class="font-weight-bold text-right">{{cp.Numero_Cuenta}}</td>
+          <td  class="font-weight-bold">{{cp.Tipo_Cuenta}}</td>
+          <td  class="font-weight-bold text-right">{{CodigoMoneda}} {{cp.Valor}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

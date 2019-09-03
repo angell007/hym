@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormWizardModule } from 'angular2-wizard/dist';
+//import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 
 
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class FuncionarioeditarComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
-  public funcionario: any[] = [];
+  public funcionario: any = [] = [];
   public Fotos: any;
   public ExisteFoto: boolean;
   public ContactoEmergencia =
@@ -29,7 +29,7 @@ export class FuncionarioeditarComponent implements OnInit {
       Telefono: '',
       Direccion: ''
     };
-  public Experiencia: any[] = [{
+  public Experiencia: any = [] = [{
     id_Funcionario_Experiencia_Laboral: '',
     Nombre_Empresa: '',
     Cargo: '',
@@ -65,16 +65,65 @@ export class FuncionarioeditarComponent implements OnInit {
       Telefono: ''
     }
   ];
-  public Grupos: any[] = [];
-  public Dependencias: any[] = [];
-  public Cargos: any[] = [];
+  public Grupos: any = [] = [];
+  public Dependencias: any = [] = [];
+  public Cargos: any = [] = [];
   public Grupo: any = null;
   public Dependencia: any = null;
   public Cargo: any = null;
-  public Permisos: any[] = [];
+  public Permisos: any = [] = [];
   public Longitud = 0;
   public Id_Perfil='';
-  public Perfiles:any[]=[];
+  public Perfiles:any = []=[];
+
+  public boolNombresIP:boolean = false;
+  public boolApellidosIP:boolean = false;
+  public boolNacimientoIP:boolean = false;
+  public boolLugarNacimientoIP:boolean = false;
+  public boolTipoSangreIP:boolean = false;
+  public boolTelefonoIP:boolean = false;
+  public boolCelularIP:boolean = false;
+  public boolCorreoIP:boolean = false;
+  public boolDireccionIP:boolean = false;
+  public boolEstadoCivilIP:boolean = false;
+  public boolHijosIP:boolean = false;
+  public boolGradoIP:boolean = false;
+  public boolTituloIP:boolean = false;
+  public boolGrupoIP:boolean = false;
+  public boolDependenciaIP:boolean = false;
+  public boolCargoIP:boolean = false;
+  public boolSalarioIP:boolean = false;
+  public boolIngresoIP:boolean = false;
+  public boolCamisaIP:boolean = false;
+  public boolPantalonIP:boolean = false;
+  public boolBotasIP:boolean = false;
+  public boolNombreCE:boolean = false;
+  public boolParentescoCE:boolean = false;
+  public boolCelularCE:boolean = false;
+  public boolTelefonoCE:boolean = false;
+  public boolDireccionCE:boolean = false;
+  public boolEmpresaEL1:boolean = false;
+  public boolCargoEL1:boolean = false;
+  public boolJefeEL1:boolean = false;
+  public boolFechaIngresoEL1:boolean = false;
+  public boolFechaRetiroEL1:boolean = false;
+  public boolTelefonoEL1:boolean = false;
+  public boolLaboresEL1:boolean = false;
+  public boolEmpresaEL2:boolean = false;
+  public boolCargoEL2:boolean = false;
+  public boolJefeEL2:boolean = false;
+  public boolFechaIngresoEL2:boolean = false;
+  public boolFechaRetiroEL2:boolean = false;
+  public boolTelefonoEL2:boolean = false;
+  public boolLaboresEL2:boolean = false;
+  public boolNombreRP1:boolean = false;
+  public boolProfesionRP1:boolean = false;
+  public boolTelefonoRP1:boolean = false;
+  public boolNombreRP2:boolean = false;
+  public boolProfesionRP2:boolean = false;
+  public boolEmpresaRP2:boolean = false;
+  public boolTelefonoRP2:boolean = false;
+  public boolEmpresaRP1:boolean = false;
 
   @ViewChild('saveSwal') saveSwal: any;
   @ViewChild('errorSwal') errorSwal: any;

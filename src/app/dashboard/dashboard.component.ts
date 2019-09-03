@@ -23,7 +23,7 @@ declare const AmCharts: any;
 
 export class DashboardComponent {
 
-  public oficinas: any[];
+  public oficinas: any = [];
 
   constructor(private http: HttpClient, private globales: Globales) {
 

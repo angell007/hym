@@ -10,7 +10,7 @@
           <form #FormFuncionarioCrear="ngForm">
             <form-wizard style="border:0 !important;">
               <!--INICIO INFORMACION PERSONAL-->
-              <wizard-step [title]="'Información Personal'" [isValid]="nombresInformacionPersonalEd.valid && apellidosInformacionPersonalEd.valid && nacimientoInformacionPersonalEd.valid && lugarnacimientoInformacionPersonalEd.valid && !tiposangreInformacionPersonalEd.value=='' && telefonoInformacionPersonalEd.valid && celularInformacionPersonalEd.valid && correoInformacionPersonalEd.valid && direccionInformacionPersonalEd.valid && !estadocivilInformacionPersonalEd.value=='' && !hijosInformacionPersonalEd.value=='' && !gradoInformacionPersonalEd.value=='' && tituloInformacionPersonalEd.valid && !grupoInformacionPersonalEd.value=='' && !dependenciaInformacionPersonalEd.value=='' && !cargoInformacionPersonalEd.value=='' && salarioInformacionPersonalEd.valid && ingresoInformacionPersonalEd.valid && !camisaInformacionPersonalEd.value=='' && !pantalonInformacionPersonalEd.value=='' && !botasInformacionPersonalEd.value=='' ">
+              <wizard-step [title]="'Información Personal'" >
                 <form #FormFuncionario="ngForm">
                   <div class="content2">
                     <div>
@@ -32,10 +32,10 @@
                         <div class="col-md-3">
                           <div style="text-align: center">
                             <label style="display: block" for="Foto">
-                              <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg"
+                              <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == null " src="{{globales.ruta}}/assets/images/user.jpg"
                                 style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
                                 id="foto_visual">
-                              <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
+                              <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != null" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
                                 style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
                                 id="foto_visual">
                             </label>
@@ -445,7 +445,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[0].Nombre_Empresa}}" class="form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL1 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL1 = true" 
                               #empresaExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label">Empresa</label>
 
@@ -454,7 +454,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Cargo" ngModel="{{Experiencia[0].Cargo}}" class="letras form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolCargoEL1 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolCargoEL1 = true" 
                               #cargoExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label">Cargo</label>
 
@@ -463,7 +463,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Jefe" ngModel="{{Experiencia[0].Jefe}}" class="letras form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolJefeEL1 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolJefeEL1 = true" 
                               #jefeExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label">Jefe Inmediato</label>
 
@@ -474,7 +474,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[0].Ingreso_Empresa}}"
-                              (focusout)="boolFechaIngresoEL1 = true" required #fechaingresoExperienciaLaboral1Ed="ngModel" />
+                              (focusout)="boolFechaIngresoEL1 = true"  #fechaingresoExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label" for="text-input">Fecha de ingreso:</label>
 
                           </div>
@@ -482,7 +482,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[0].Retiro_Empresa}}"
-                              (focusout)="boolFechaRetiroEL1 = true" required #fecharetiroExperienciaLaboral1Ed="ngModel" />
+                              (focusout)="boolFechaRetiroEL1 = true"  #fecharetiroExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label" for="text-input">Fecha de retiro:</label>
 
                           </div>
@@ -491,7 +491,7 @@
                           <div class="form-group">
                             <input type="text" name="Telefono" ngModel="{{Experiencia[0].Telefono}}" class="form-control"
                               onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
-                              (focusout)="boolTelefonoEL1 = true" required #telefonoExperienciaLaboral1Ed="ngModel" />
+                              (focusout)="boolTelefonoEL1 = true"  #telefonoExperienciaLaboral1Ed="ngModel" />
                             <label class="floating-label">Numero de Contacto</label>
 
                           </div>
@@ -502,7 +502,7 @@
                           <div class="form-group">
                             <textarea name="Labores" ngModel="{{Experiencia[0].Labores}}" class="autosi form-control form-control-sm"
                               cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
-                              (focus)="$event.target.select()" (focusout)="boolLaboresEL1 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolLaboresEL1 = true" 
                               #laboresExperienciaLaboral1Ed="ngModel"></textarea>
                             <label class="floating-label">Tareas Realizadas</label>
 
@@ -524,7 +524,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[1].Nombre_Empresa}}" class="form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL2 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL2 = true" 
                               #empresaExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label">Empresa</label>
 
@@ -533,7 +533,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Cargo" ngModel="{{Experiencia[1].Cargo}}" class="letras form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolCargoEL2 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolCargoEL2 = true" 
                               #cargoExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label">Cargo</label>
 
@@ -542,7 +542,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input type="text" name="Jefe" ngModel="{{Experiencia[1].Jefe}}" class="letras form-control form-control-sm"
-                              (focus)="$event.target.select()" (focusout)="boolJefeEL2 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolJefeEL2 = true" 
                               #jefeExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label">Jefe Inmediato</label>
 
@@ -553,7 +553,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[1].Ingreso_Empresa}}"
-                              (focusout)="boolFechaIngresoEL2 = true" required #fechaingresoExperienciaLaboral2Ed="ngModel" />
+                              (focusout)="boolFechaIngresoEL2 = true"  #fechaingresoExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label" for="text-input">Fecha de ingreso:</label>
 
                           </div>
@@ -561,7 +561,7 @@
                         <div class="col-md-4">
                           <div class="form-group">
                             <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[1].Retiro_Empresa}}"
-                              (focusout)="boolFechaRetiroEL2 = true" required #fecharetiroExperienciaLaboral2Ed="ngModel" />
+                              (focusout)="boolFechaRetiroEL2 = true"  #fecharetiroExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label" for="text-input">Fecha de retiro:</label>
 
                           </div>
@@ -570,7 +570,7 @@
                           <div class="form-group">
                             <input type="text" name="Telefono" ngModel="{{Experiencia[1].Telefono}}" class="form-control form-control-sm"
                               onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
-                              (focusout)="boolTelefonoEL2 = true" required #telefonoExperienciaLaboral2Ed="ngModel" />
+                              (focusout)="boolTelefonoEL2 = true"  #telefonoExperienciaLaboral2Ed="ngModel" />
                             <label class="floating-label">Número de Contacto</label>
 
                           </div>
@@ -581,7 +581,7 @@
                           <div class="form-group">
                             <textarea name="Labores" ngModel="{{Experiencia[1].Labores}}" class="autosi form-control form-control-sm"
                               cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
-                              (focus)="$event.target.select()" (focusout)="boolLaboresEL2 = true" required
+                              (focus)="$event.target.select()" (focusout)="boolLaboresEL2 = true" 
                               #laboresExperienciaLaboral2Ed="ngModel"></textarea>
                             <label class="floating-label">Tareas Realizadas</label>
 
@@ -611,7 +611,7 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <input type="text" name="Nombres" ngModel="{{Referencias[0].Nombres}}" class="letras form-control form-control-sm"
-                            (focus)="$event.target.select()" (focusout)="boolNombreRP1 = true" required
+                            (focus)="$event.target.select()" (focusout)="boolNombreRP1 = true" 
                             #nombreReferenciasPersonales1Ed="ngModel" />
                           <label class="floating-label" for="codigo">Nombre completo</label>
 
@@ -620,7 +620,7 @@
                       <div class="col-md-3">
                         <div class="form-group">
                           <input type="text" name="Profesion" ngModel="{{Referencias[0].Profesion}}" class="letras form-control form-control-sm"
-                            (focus)="$event.target.select()" (focusout)="boolProfesionRP1 = true" required
+                            (focus)="$event.target.select()" (focusout)="boolProfesionRP1 = true" 
                             #profesionReferenciasPersonales1Ed="ngModel" />
                           <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
 
@@ -629,7 +629,7 @@
                       <div class="col-md-3">
                         <div class="form-group">
                           <input type="text" name="Empresa" ngModel="{{Referencias[0].Empresa}}" class="form-control form-control-sm"
-                            (focus)="$event.target.select()" (focusout)="boolEmpresaRP1 = true" required
+                            (focus)="$event.target.select()" (focusout)="boolEmpresaRP1 = true" 
                             #empresaReferenciasPersonales1Ed="ngModel" />
                           <label class="floating-label" for="codigo">Nombre de la empresa</label>
 
@@ -639,7 +639,7 @@
                         <div class="form-group">
                           <input type="text" name="Telefono" ngModel="{{Referencias[0].Telefono}}" class="celular form-control form-control-sm"
                             onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
-                            (focusout)="boolTelefonoRP1 = true" required #telefonoReferenciasPersonales1Ed="ngModel" />
+                            (focusout)="boolTelefonoRP1 = true"  #telefonoReferenciasPersonales1Ed="ngModel" />
                           <label class="floating-label" for="codigo">Numero de contacto</label>
 
                         </div>
@@ -661,7 +661,7 @@
                     <div class="col-md-4">
                       <div class="form-group">
                         <input type="text" name="Nombres" ngModel="{{Referencias[1].Nombres}}" class="letras form-control form-control-sm"
-                          (focus)="$event.target.select()" (focusout)="boolNombreRP2 = true" required
+                          (focus)="$event.target.select()" (focusout)="boolNombreRP2 = true" 
                           #nombreReferenciasPersonales2Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre completo</label>
 
@@ -670,7 +670,7 @@
                     <div class="col-md-3">
                       <div class="form-group">
                         <input type="text" name="Profesion" ngModel="{{Referencias[1].Profesion}}" class="letras form-control form-control-sm"
-                          (focus)="$event.target.select()" (focusout)="boolProfesionRP2 = true" required
+                          (focus)="$event.target.select()" (focusout)="boolProfesionRP2 = true" 
                           #profesionReferenciasPersonales2Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
 
@@ -679,7 +679,7 @@
                     <div class="col-md-3">
                       <div class="form-group">
                         <input type="text" name="Empresa" ngModel="{{Referencias[1].Empresa}}" class="form-control form-control-sm"
-                          (focus)="$event.target.select()" (focusout)="boolEmpresaRP2 = true" required
+                          (focus)="$event.target.select()" (focusout)="boolEmpresaRP2 = true" 
                           #empresaReferenciasPersonales2Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre de empresa</label>
 
@@ -689,7 +689,7 @@
                       <div class="form-group">
                         <input type="text" name="Telefono" ngModel="{{Referencias[1].Telefono}}" class="celular form-control form-control-sm"
                           onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
-                          (focusout)="boolTelefonoRP2 = true" required #telefonoReferenciasPersonales2Ed="ngModel" />
+                          (focusout)="boolTelefonoRP2 = true"  #telefonoReferenciasPersonales2Ed="ngModel" />
                         <label class="floating-label" for="codigo">Numero de contacto</label>
 
                       </div>
@@ -707,7 +707,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Perfil</label>
-                          <select id="IdPerfil" class="form-control form-control-sm" (change)="AsignarPermisos($event.target.value)" name="Id_Perfil"
+                          <select id="IdPerfil" class="form-control form-control-sm" required (change)="AsignarPermisos($event.target.value)" name="Id_Perfil"
                             ngModel="{{Id_Perfil}}">                            
                             <option value="">Seleccione</option>
                             <option *ngFor="let Perfil of Perfiles; let i=index" [value]="Perfil.Id_Perfil">{{Perfil.Nombre}}</option>
@@ -781,6 +781,21 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-t-30">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div class="pull-right">
+                            <button class="btn btn-outline-primary btn-rounded btn-sm"
+                              [disabled]="!FormFuncionario.valid && !FormContactoEmergencia.valid && !FormPrivilegios.valid"
+                              [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este funcionario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Editar',cancelButtonText: 'No, Comprobar!'}"
+                              (confirm)="GuardarFuncionario(FormFuncionario, FormContactoEmergencia, FormExperiencia1, FormExperiencia2, FormReferencia1, FormReferencia2)">
+                              <i class="ti-save mr-2"></i> Guardar
+                            </button>
                           </div>
                         </div>
                       </div>

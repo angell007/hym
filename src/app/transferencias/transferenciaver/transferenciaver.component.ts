@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./transferenciaver.component.scss']
 })
 export class TransferenciaverComponent implements OnInit {
-  Transferencia = [];
+  Transferencia:any = {};
 
   constructor(private route: ActivatedRoute,private http : HttpClient, private globales: Globales) { }
 

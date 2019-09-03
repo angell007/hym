@@ -1,6 +1,16 @@
 <div class="container-fluid">
   <div class="page-title">
-    <h4 class="pull-left">Balance General</h4>
+    <h4 class="block-element text-center">Balance General</h4>
+    <div class="row">
+      <div class="col-md"  *ngFor="let tg of TotalGeneral">
+          <app-informativetotalmonedatercerocard
+            [SaldoMoneda]="tg.Totales"
+            [CodigoMoneda]="tg.Codigo"
+            [NombreMoneda]="tg.Moneda"
+            CardClass="bg-info">                
+          </app-informativetotalmonedatercerocard>
+      </div>
+    </div>
   </div>
   <div class="clearfix"></div>
   <div class="row">
@@ -10,13 +20,17 @@
         <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
 
           <!-- Accordion card -->
-          <div class="card" *ngFor="let item of ListaBalance; let i = index">
+          <div class="card mb-0" *ngFor="let item of ListaBalance; let i = index">
 
             <!-- Card header -->
             <div class="card-header" role="tab" id="headingOne1">
               <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}" aria-expanded="true"
                 aria-controls="collapseOne{{i}}">
-                <h5 class="mb-0"> {{ item.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
+                <h5 class="mb-0">
+                  <i class="fa fa-users text-info"></i> {{ item.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
+                  <div style="display:inline-block;" class="pull-right">
+                   <span *ngFor="let tg of item.Totales_Grupo; let ind = index">{{tg.Totales | customcurrency:tg.Codigo}} {{ind == item.Totales_Grupo.length ? '' : ' | '}}</span>
+                  </div>
                 </h5>
               </a>
             </div>
@@ -25,6 +39,38 @@
             <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}" data-parent="#accordionEx">
               <div class="card-body">
                 <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
+
+                  <table class="table table-bordered custom-table" *ngIf="ArmarTabla">
+                    <thead>
+                      <tr>
+                        <th class="custom-thead">Tercero</th>
+                        <th class="custom-thead" *ngFor="let m of Monedas">{{m.Nombre}}</th>
+                        <th style="width:5%;"></th>
+                      </tr>
+                      <tr>
+                        <th *ngIf="item.Terceros.length == 0" [attr.colspan]="MonedasColSpan" class="text-center">
+                          <i class="ti-alert font-size-20 text-warning"></i>
+                          <h4>No hay terceros en este grupo!</h4>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="item.Terceros.length > 0">
+                      <tr *ngFor="let t of item.Terceros">
+                        <td class="custom-cell">{{t.Nombre_Tercero}}</td>
+                        <td *ngFor="let tm of t.Totales_Monedas" 
+                          class="text-right custom-cell" appColorsaldo [value]="tm.Total">{{tm.Total | customcurrency:tm.Codigo}}
+                        </td>
+                        <td>
+                          <a 
+                            class="btn btn-light btn-rounded btn-sm m-0"
+                            style="cursor:pointer;" [routerLink]="['/tercerover',t.Id_Tercero]">
+                            <i class="ti-zoom-in text-info"></i> 
+                            Detalle
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
                   <!-- Accordion card 1 -->
                   <div class="card" *ngFor="let subitem of item.tercero; let j = index">

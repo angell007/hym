@@ -1,0 +1,39 @@
+<div class="card" style="margin-bottom:10px;">
+  <div class="card-body" style="padding:10px;">
+    <div class="row">
+      <div class="col-md-2" style="display:flex; align-items:center;">
+        <img *ngIf="Funcionario.Imagen == ''"
+          class="img-circle img-responsive" 
+          src="../../../assets/images/cliente.jpg" 
+          alt="funcionario-img">
+        <img *ngIf="Funcionario.Imagen != ''"
+          class="img-circle img-responsive" 
+          src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{Funcionario.Imagen}}"
+          alt="funcionario-img">
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-10">
+                <small>{{Funcionario.Nombre_Funcionario}}</small>
+              </div>
+              <div class="col-md-2">
+                  <i [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"></i>
+              </div>
+            </div>
+            <div><small>{{Funcionario.Nombre_Oficina}}</small></div>
+            <div class="row">
+              <div class="col-md-6">
+                  <i class="ti-alarm-clock text-info"></i> <small>{{Funcionario.Hora_Apertura}}</small>
+              </div>
+              <div class="col-md-6">
+                  <i class="ti-alarm-clock text-danger"></i> <small>{{Funcionario.Hora_Cierre}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

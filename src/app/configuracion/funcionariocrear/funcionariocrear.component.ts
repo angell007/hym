@@ -4,14 +4,15 @@ import { NgForm } from '@angular/forms';
 import { SwalComponent } from "@toverux/ngx-sweetalert2";
 import { CommonModule } from '@angular/common';
 import { Globales } from '../../shared/globales/globales';
-import { FormWizardModule } from 'angular2-wizard/dist';
+//import { FormWizardModule } from 'angular2-wizard/dist';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
 
 @Component({
   selector: 'app-funcionariocrear',
   templateUrl: './funcionariocrear.component.html',
-  styleUrls: ['./funcionariocrear.component.scss']
+  styleUrls: ['./funcionariocrear.component.scss', '../../../style.scss']
 })
 export class FuncionariocrearComponent implements OnInit {
   // public funcionario: any [];
@@ -21,14 +22,16 @@ export class FuncionariocrearComponent implements OnInit {
    public Id_Perfil: any [];
    public Perfil: any [];
    
-   public cargo:any[];
-   public Procesos: any[]; 
-   public Proceso: any[];*/
-  public Grupos: any[];
-  public Dependencias: any[];
-  public Cargos: any[];
+   public cargo:any = [];
+   public Procesos: any = []; 
+   public Proceso: any = [];*/
+  public Grupos: any = [];
+  public Dependencias: any = [];
+  public Cargos: any = [];
   public Fotos: any;
-  public Perfiles:any[]=[];
+  public Perfiles:any=[];
+
+  public validForm:boolean = false;
 
   public funcionario =
     {
@@ -58,7 +61,8 @@ export class FuncionariocrearComponent implements OnInit {
       Talla_Pantalon: '',
       Talla_Botas: '',
       Saldo_Inicial_Peso : '',
-      Saldo_Inicial_Bolivar: ''
+      Saldo_Inicial_Bolivar: '',
+      Tipo_Sangre: ''
     };
 
   public contacto_emergencia =
@@ -105,12 +109,79 @@ export class FuncionariocrearComponent implements OnInit {
       Telefono: ''
     }
   ];
-  Funcionario = [];
-  public Permisos:any[]=[];
-  public Longitud=0;
+
+  public CuentasBancarias:Array<any> = [];
+  public CuentasAsociadas:any = [];
+
+  Funcionario:any = [];
+  public Permisos:any = []=[];
+  public Longitud:number=0;
+
+  public boolNombresIP:boolean = false;
+  public boolApellidosIP:boolean = false;
+  public boolNacimientoIP:boolean = false;
+  public boolLugarNacimientoIP:boolean = false;
+  public boolTipoSangreIP:boolean = false;
+  public boolTelefonoIP:boolean = false;
+  public boolCelularIP:boolean = false;
+  public boolCorreoIP:boolean = false;
+  public boolDireccionIP:boolean = false;
+  public boolEstadoCivilIP:boolean = false;
+  public boolHijosIP:boolean = false;
+  public boolGradoIP:boolean = false;
+  public boolTituloIP:boolean = false;
+  public boolGrupoIP:boolean = false;
+  public boolDependenciaIP:boolean = false;
+  public boolCargoIP:boolean = false;
+  public boolSalarioIP:boolean = false;
+  public boolIngresoIP:boolean = false;
+  public boolCamisaIP:boolean = false;
+  public boolPantalonIP:boolean = false;
+  public boolBotasIP:boolean = false;
+  public boolNombreCE:boolean = false;
+  public boolParentescoCE:boolean = false;
+  public boolCelularCE:boolean = false;
+  public boolTelefonoCE:boolean = false;
+  public boolDireccionCE:boolean = false;
+  public boolEmpresaEL1:boolean = false;
+  public boolCargoEL1:boolean = false;
+  public boolJefeEL1:boolean = false;
+  public boolFechaIngresoEL1:boolean = false;
+  public boolFechaRetiroEL1:boolean = false;
+  public boolTelefonoEL1:boolean = false;
+  public boolLaboresEL1:boolean = false;
+  public boolEmpresaEL2:boolean = false;
+  public boolCargoEL2:boolean = false;
+  public boolJefeEL2:boolean = false;
+  public boolFechaIngresoEL2:boolean = false;
+  public boolFechaRetiroEL2:boolean = false;
+  public boolTelefonoEL2:boolean = false;
+  public boolLaboresEL2:boolean = false;
+  public boolNombreRP1:boolean = false;
+  public boolProfesionRP1:boolean = false;
+  public boolTelefonoRP1:boolean = false;
+  public boolNombreRP2:boolean = false;
+  public boolProfesionRP2:boolean = false;
+  public boolEmpresaRP2:boolean = false;
+  public boolTelefonoRP2:boolean = false;
+  public boolEmpresaRP1:boolean = false;
 
 
-  constructor(private http: HttpClient, private globales: Globales, private route: ActivatedRoute, private router: Router) { }
+
+  constructor(
+              private http: HttpClient, 
+              private globales: Globales, 
+              private route: ActivatedRoute, 
+              private router: Router,
+              private cuentaService:CuentabancariaService) 
+{
+  this.GetCuentasBancarias();
+}
+
+onStepping(event){
+  console.log(event);
+  
+}
 
   CargaFoto(event) {
     let fot = document.getElementById("foto_visual") as HTMLImageElement;
@@ -148,10 +219,8 @@ export class FuncionariocrearComponent implements OnInit {
   }
 
   Dependencia_Grupo(Grupo) {
-    console.log(Grupo)
     this.http.get(this.globales.ruta + 'php/funcionarios/dependencias_grupo.php', { params: { id: Grupo } }).subscribe((data: any) => {
       this.Dependencias = data;
-      console.log(data)
     });
   }
 
@@ -181,6 +250,7 @@ export class FuncionariocrearComponent implements OnInit {
     let exper = JSON.stringify(this.experiencia);
     let refe = JSON.stringify(this.referencias);
     let modulos=JSON.stringify(this.Permisos);
+    let cuentas=JSON.stringify(this.CuentasAsociadas);
     let datos = new FormData();
     datos.append("modulo", 'Funcionario');
     datos.append("datos", info);
@@ -190,6 +260,7 @@ export class FuncionariocrearComponent implements OnInit {
     datos.append("referencias", refe);
     datos.append('modulos', modulos);
     datos.append('Foto', this.Fotos);
+    datos.append('cuentas_asociadas', cuentas);
     this.http.post(this.globales.ruta + 'php/funcionarios/funcionario_guardar2.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Guardado Correctamente";
       this.confirmacionSwal.text = data.mensaje;
@@ -239,6 +310,21 @@ export class FuncionariocrearComponent implements OnInit {
      // identificacion
      (document.getElementById("identificacion") as HTMLInputElement).value = item.slice(0,10); 
     }
+  }
+
+  GetCuentasBancarias(){
+    this.cuentaService.getCuentasBancariasSelect().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.CuentasBancarias = data.query_data;
+      }else{
+
+        this.CuentasBancarias = [];
+        this.confirmacionSwal.title = "Alerta";
+        this.confirmacionSwal.text = "No se econtraron datos de cuentas bancarias!";
+        this.confirmacionSwal.type = "warning";
+        this.confirmacionSwal.show();
+      }
+    });
   }
 
 }

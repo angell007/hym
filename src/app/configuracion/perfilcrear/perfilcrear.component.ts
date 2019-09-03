@@ -19,7 +19,7 @@ export class PerfilcrearComponent implements OnInit {
   @ViewChild('saveSwal') saveSwal: any;
   @ViewChild('deleteSwal') deleteSwal: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  public Permisos: any[] = [
+  public Permisos: any = [] = [
     {
       "Titulo_Modulo": "Agentes Externos",
       "Modulo": "AgentesExternos",

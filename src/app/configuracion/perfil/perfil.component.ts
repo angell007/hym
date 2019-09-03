@@ -16,9 +16,9 @@ import { ActivatedRoute } from '@angular/router';
 export class PerfilComponent implements OnInit {
 
   public id = this.route.snapshot.params["id"];
-  public Datos:any[]=[];
-  public Permisos: any[] = [{}];
-  public Cabecera:any[]=[];
+  public Datos:any = []=[];
+  public Permisos: any = [] = [{}];
+  public Cabecera:any = []=[];
 
   constructor(private http : HttpClient, private globales : Globales, private router: Router, private route: ActivatedRoute) { }
 

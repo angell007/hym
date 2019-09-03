@@ -21,16 +21,16 @@ import { Globales } from '../shared/globales/globales';
 export class AgentesexternosComponent implements OnInit {
   public fecha = new Date();
   agentes = [];
-  conteoTransferencias = [];
+  conteoTransferencias:any = {};
   conteoTransferenciasGrafica = [];
   
   //variables de formulario
-  public Identificacion: any[];
-  public Nombre: any[];
-  public Documento: any[];
-  public Cupo: any[];
-  public Username: any[];
-  public Password: any[];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Documento: any = [];
+  public Cupo: any = [];
+  public Username: any = [];
+  public Password: any = [];
 
   public tEnero: Number;
   public tFebrero: Number;

@@ -1,0 +1,35 @@
+export class FuncionarioModel{
+    public Identificacion_Funcionario:string = '';
+    public Nombres:string = '';
+    public Apellidos:string = '';
+    public Id_Grupo:string = '';
+    public Id_Dependencia:string = '';
+    public Id_Perfil:string = '';
+    public Id_Cargo:string = '';
+    public Fecha_Nacimiento:string = '';
+    public Lugar_Nacimiento:string = '';
+    public Tipo_Sangre:string = '';
+    public Telefono:string = '';
+    public Celular:string = '';
+    public Correo:string = '';
+    public Direccion_Residencia:string = '';
+    public Estado_Civil:string = '';
+    public Grado_Instruccion:string = '';
+    public Titulo_Estudio:string = '';
+    public Talla_Pantalon:string = '';
+    public Talla_Bata:string = '';
+    public Talla_Botas:string = '';
+    public Talla_Camisa:string = '';
+    public Username:string = '';
+    public Password:string = '';
+    public Imagen:string = '';
+    public Autorizado:string = '';
+    public Salario:string = '';
+    public Fecha_Ingreso:string = '';
+    public Hijos:string = '';
+    public Ultima_Sesion:string = '2000-01-01 00:00:00';
+    public Fecha_Registrado:string = '2000-01-01 00:00:00';
+    public Tipo_Turno:string = '0';
+    public Id_Turno:string = '0';
+    public Estado:any = 'Activo';
+}

@@ -104,8 +104,8 @@
                             <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamento.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamento.value==''" style="color:green">Datos correctos!</div>
+                        <div *ngIf="departamento.value && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamento.value" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -115,8 +115,8 @@
                             <option value="">Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipio.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipio.value==''" style="color:green">Datos correctos!</div>
+                        <div *ngIf="municipio.value && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipio.value" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -364,8 +364,8 @@
                             <option>Seleccione Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamentoEd.value=='' && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamentoEd.value==''" style="color:green">Datos correctos!</div>
+                        <div *ngIf="departamentoEd.value && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamentoEd.value" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -375,8 +375,8 @@
                             <option>Seleccione Departamento</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipioEd.value=='' && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipioEd.value==''" style="color:green">Datos correctos!</div>
+                        <div *ngIf="municipioEd.value && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipioEd.value" style="color:green">Datos correctos!</div>
                     </div>
                 </div>
                 <div class="col-md-4">

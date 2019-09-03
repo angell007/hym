@@ -14,11 +14,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./perfileditar.component.scss']
 })
 export class PerfileditarComponent implements OnInit {
-  public Datos: any[] = [];
+  public Datos: any = [] = [];
   public id = this.route.snapshot.params["id"];
   public Switch:boolean;
-  public Permisos: any[] = [{}];
-  public Cabecera:any[]=[];
+  public Permisos: any = [] = [{}];
+  public Cabecera:any = []=[];
 
   @ViewChild('FormPerfil') FormPerfil: any;
   @ViewChild('errorSwal') errorSwal: any;

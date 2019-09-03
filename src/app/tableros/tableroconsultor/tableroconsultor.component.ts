@@ -12,577 +12,545 @@ import { TouchSequence } from '../../../../node_modules/@types/selenium-webdrive
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'app-tableroconsultor',
   templateUrl: './tableroconsultor.component.html',
   styleUrls: ['./tableroconsultor.component.scss']
 })
+
 export class TableroconsultorComponent implements OnInit {
-  public fecha = new Date();
-  transferencias = [];
-  conteoTransferencias = [];
-  dtOptions: DataTables.Settings = {};
-  dtTrigger = new Subject();
 
-  @ViewChild('ModalVerDestinatario') ModalVerDestinatario: any;
-  @ViewChild('ModalEditarDestinatario') ModalEditarDestinatario: any;
-  @ViewChild('ModalDestinatario') ModalDestinatario: any;
-  @ViewChild('FormDestinatario') FormDestinatario: any;
-  @ViewChild('errorSwal') errorSwal: any;
-  @ViewChild('saveSwal') saveSwal: any;
-  @ViewChild('deleteSwal') deleteSwal: any;
-  @ViewChild('bloqueoSwal') bloqueoSwal: any;
-  @ViewChild('mensajeSwal') mensajeSwal: any;
-  @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
-  @ViewChild('ModalCrearTransferenciaBanesco') ModalCrearTransferenciaBanesco: any;
-  @ViewChild('ModalCrearTransferenciaOtroBanco') ModalCrearTransferenciaOtroBanco: any;
-  @ViewChild('desbloqueoSwal') desbloqueoSwal: any;
-  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
-  @ViewChild('ModalVerCompra') ModalVerCompra: any;
-  @ViewChild('ModalSaldoInicialBanco') ModalSaldoInicialBanco: any;
+  //NUEVO CODIGO  
+  @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
+  @ViewChild('ModalCierreCuenta') ModalCierreCuenta:any;
+  @ViewChild('ModalCrearAjuste') ModalCrearAjuste:any;
+  @ViewChild('ModalCompraCuenta') ModalCompraCuenta:any;
+  @ViewChild('modalT') modalT:any;
+  @ViewChild('alertSwal') alertSwal:any;
 
-  
-  Identificacion: any;
-  CuentaDestino: any;
-  Recibe: any;
-  CedulaDestino: any;
-  Monto: any;
-  BancosEmpresa = [];
-  idTransferencia: any;
-  transferenciasRealizadas = [];
-  valorDevolverTransferencia: any;
-  PagoTransferencia: any;
-  Recibo: any;
-  Cajero: any;
-  EncabezadoRecibo = [];
-  DestinatarioRecibo = [];
-  DevolucionesRecibo = [];
-  filaRecibo = false;
-  compras = [];
-  ListaBancos = [];
+  public cargar = false;
+  public cargarTabla:boolean = false;
+  public funcionario:any = JSON.parse(localStorage['User']);
+  public Paises:any = [];
+  public ListaBancos:any = [];
+  public MovimientosCuentaBancaria:any = [];
+  public CuentasSeleccionadas:any = [];
+  public Indicadores:any = {
+    Pendientes: 0,
+    Realizadas: 0,
+    Devueltas: 0,
+    Productividad: 0,
+  };
+
+  public AperturaCuentaModel:any = {
+    Id_Cuenta_Bancaria: '',
+    Id_Moneda: '',
+    Valor: '',
+    Id_Bloqueo_Cuenta: ''
+  };
+
+  public CierreCuentaModel:any = {
+    Id_Moneda: '',
+    Id_Cuenta_Bancaria: '',
+    Valor: '',
+    Id_Bloqueo_Cuenta: ''
+  };
+
+  public CierreValoresModel:any = {
+    SaldoInicial: 0,
+    Egresos: 0,
+    Ingresos: 0,
+    SaldoFinal: 0
+  };
+
+  public DatosCuentaModel:any = {
+    Nro_Cuenta: '',
+    SaldoInicial: 0,
+    SaldoRestante: 0
+  };
+
+  public AjusteCuentaModel:any = {
+    Id_Cuenta_Bancaria: '',
+    Valor: 0,
+    Tipo: 'Ingreso',
+    Detalle: '',
+    Id_Transferencia_Destino: '0'
+  };
+
+  public CompraCuentaModel:any = {
+    Id_Cuenta_Bancaria: '',
+    Valor: '',
+    Detalle: '',
+    Id_Funcionario: ''
+  };
+
+  private Id_Movimientos_Cuenta:any = [];
+
+  public CuentaConsultor:any = localStorage.getItem("CuentaConsultor");
+  public MonedaCuentaConsultor:any = localStorage.getItem("MonedaCuentaConsultor");
+  public IdBloqueoCuenta:any = '';
+  public CodigoMoneda:string = '';
+  public MontoInicial:any = 0;
+  public TiposTransferencias:any = ['Pendientes', 'Realizadas', 'Devueltas'];
+
+  public TablaPendientes:boolean = false;
+  public TablaRealizadas:boolean = false;
+  public TablaDevueltas:boolean = false;
+  public Seleccionado:string = 'Pendientes';
+
+  public ChartData:any = [];
+  public ChartLabels = ['Realizadas', 'Devueltas'];
+
+  public OpcionCuenta:string = 'Abrir';
+  public IconoOpcionCuenta:string = 'ti-key';
+
+  public AbrirModalAperturaCuenta:Subject<any> = new Subject();
 
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
-    this.ActualizarVista();
-
-    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-
-      data.pendientes.forEach(element => {
-        if (element.Valor_Transferencia_Bolivar !== 0) {
-          this.transferencias.push(element);
-        }
-      });
-      this.transferenciasRealizadas = data.realizadas;
-
-    });
-
-    //hym.corvuslab.co/php/consultor/lista_bancos.php
-
-    this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
-      this.ListaBancos = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/consultor/verificar_banco_consultor.php', { params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario } }).subscribe((data: any) => {
-      if (data.length == 0) {
-        this.ModalSaldoInicialBanco.show();
-      }else{
-        localStorage.setItem('Banco',data[0].Id_Cuenta_Bancaria);
-      }
-    });
-
-    this.graficas();
-
+    this.AsignarPaises();
+    //this.VerificarAperturaCuenta();
+    setTimeout(() => {
+      this.AbrirModalAPerturaCuentas();      
+    }, 500);
   }
 
-  Pendientes = true;
-  Realizadas = false;
-  ComprasPendientes = false;
-
-  mostrarPendientes() {
-    this.Pendientes = true;
-    this.Realizadas = false;
-    this.ComprasPendientes = false;
+  CargarVista(){
+    if (this.cargar) {
+      this.CargarIndicadores();
+      this.cargarTabla = true; 
+      this.TablaPendientes = true;
+    };
   }
 
-  mostrarRealizadas() {
-    this.Pendientes = false;
-    this.Realizadas = true;
-    this.ComprasPendientes = false;
+  public AbrirModalAPerturaCuentas(){
+    console.log("abriendo modal apertura cuenta desde tablero");
+    this.AbrirModalAperturaCuenta.next();
   }
 
-  MostrarComprasPendientes() {
-    this.ComprasPendientes = true;
-    this.Pendientes = false;
-    this.Realizadas = false;
-
-  }
-
-  cuentasBancarias = [];
-  BancosVenezolanos = [];
-  ActualizarVista() {
-
-    this.http.get(this.globales.ruta + 'php/compras/compra_cuenta.php').subscribe((data: any) => {
-      this.cuentasBancarias = data;
-    });
-
-    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      this.conteoTransferencias = data;
-    });
-
-    this.http.get(this.globales.ruta + '/php/transferencias/listar_bancos_empresariales.php')
-      .subscribe((data: any) => {
-        this.BancosEmpresa = data;
-      });
-
-
-    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_venezolanos.php')
-      .subscribe((data: any) => {
-        this.BancosVenezolanos = data;
-      });
-
-
-      this.graficas();
-  }
-
-  refrescarVistaPrincipalConsultor() {
-    this.transferencias = [];
-    this.transferenciasRealizadas = [];
-    this.http.get(this.globales.ruta + 'php/transferencias/lista.php').subscribe((data: any) => {
-
-      data.pendientes.forEach(element => {
-        if (element.Valor_Transferencia_Bolivar !== 0) {
-          this.transferencias.push(element);
-        }
-      });
-      this.transferenciasRealizadas = data.realizadas;
-    });
-
-    this.ActualizarVista();
-  }
-
-
-  DevolucionTransferencia(id, modal, valorDevolver, idPagoTransferencia) {
-    this.Identificacion = id;
-    modal.show();
-    this.valorDevolverTransferencia = valorDevolver;
-    this.PagoTransferencia = idPagoTransferencia;
-  }
-
-  ReactivarTransferencia(id, modal) {
-    this.http.get(this.globales.ruta + '/php/genericos/detalle.php', {
-      params: { id: id, modulo: "Transferencia" }
-    }).subscribe((data: any) => {
-      this.Identificacion = data.Id_Transferencia;
-      modal.show();
-    });
-  }
-
-  RealizarReactivacion(formulario: NgForm, modal) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/transferencias/reactivar_transferencia.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.mensajeSwal.title = "Transferencia Activada"
-      this.mensajeSwal.text = "Se ha activado la transferencia"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      this.ActualizarVista();
-      modal.hide();
-    });
-  }
-
-  RealizarDevolucion(formulario: NgForm, modal) {
-    formulario.value.Id_Cuenta_Bancaria = JSON.parse(localStorage['Banco']);
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/transferencias/devolucion_transferencia.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.mensajeSwal.title = "Transferencia devuelta"
-      this.mensajeSwal.text = "Se ha devuelto la transferencia"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      this.refrescarVistaPrincipalConsultor();
-      modal.hide();
-    });
-  }
-
-  BloquearTransferencia(id, estado) {
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia_Destinatario');
-    datos.append("id", id);
-    datos.append("estado", estado);
-    datos.append("funcionario", JSON.parse(localStorage['User']).Nombres + " " + JSON.parse(localStorage['User']).Apellidos);
-    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
-      //this.bloqueoSwal.show();
-      this.refrescarVistaPrincipalConsultor();
-    });
-  }
-
-
-  BloquearTransferenciaDestinatario(id, estado) {
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia_Destinatario');
-    datos.append("id", id);
-    datos.append("estado", estado);
-    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    this.http.post(this.globales.ruta + 'php/transferencias/bloquear_transferencia.php', datos).subscribe((data: any) => {
-      /*this.bloqueoSwal.show();
-      this.ActualizarVista();*/
-    });
-  }
-
-  Bloqueado(estado, funcionario, tipo) {
-
-    if (funcionario === JSON.parse(localStorage['User']).Identificacion_Funcionario) {
-      switch (estado) {
-        case "Si": { return false }
-        case "No": { return true }
-      }
-
-    } else {
-      return true
-    }
-
-  }
-
-  Devuelto(estado) {
-    switch (estado) {
-      case "Devuelta": { return false }
-      default: { return true }
-    }
-
-  }
-
-  MarcarTransferencia(id) {
-    let datos = new FormData();
-    datos.append("modulo", 'Transferencia');
-    datos.append("id", id);
-    datos.append("funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-    this.http.post(this.globales.ruta + 'php/transferencias/transferencia_marcada.php', datos).subscribe((data: any) => {
-      this.mensajeSwal.title = "Transferencia Realizada"
-      this.mensajeSwal.text = "Se ha marcado la transferencia como realizada"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      this.ActualizarVista();
-    });
-  }
-
-  NombreBancoEmpresa = "";
-  RealizarTransferencia(id, numeroCuenta, valor, cajero, codigo) {
-    //this.BloquearTransferencia(id, "No");
-
-    this.http.get(this.globales.ruta + 'php/genericos/detalle_cuenta_bancaria.php', {
-      params: { id: id, cuentaBancaria: numeroCuenta }
-    }).subscribe((data: any) => {
-
-      this.idTransferencia = id;
-      this.CuentaDestino = data.cuenta
-      this.Recibe = data.NombreDestinatario
-      this.CedulaDestino = data.Cedula
-      this.Monto = valor;
-      this.Cajero = cajero
-      this.Recibo = codigo
-
-      // buscar id Cuenta =  JSON.parse(localStorage['Banco']);
-     
-      console.log(this.BancosVenezolanos);
-      console.log(JSON.parse(localStorage['Banco']));
-      var index = this.BancosVenezolanos.findIndex(x=>x.Id_Cuenta_Bancaria === localStorage['Banco'] );
-      console.log(index);
-      if(index > -1 ){
-        this.NombreBancoEmpresa = this.BancosEmpresa[index].Nombre_Titular;
-      }
-
-      if (numeroCuenta.substring(0, 4) == "0134") {
-        this.ModalCrearTransferenciaBanesco.show();
-      } else {
-        this.ModalCrearTransferenciaOtroBanco.show();
-      }
-
-      this.refrescarVistaPrincipalConsultor();
-
-    });
-  }
-
-  verificarBloqueo(id, numeroCuenta, valorActual, cajero, codigo) {
-    this.http.get(this.globales.ruta + 'php/transferencias/bloqueo_transferencia_destinatario.php', {
-      params: { id: id }
-    }).subscribe((data: any) => {
-      switch (data[0].Bloqueo) {//this.mensajeSwal.text="Esta transferencia fue bloqueda por "+data[0].Bloqueo_Funcionario ;
-        case "Si": { this.mensajeSwal.title = "Estado transferencia"; this.mensajeSwal.text = "Esta transferencia fue bloqueda por " + data[0].nombreFuncionario; this.mensajeSwal.type = "error"; this.mensajeSwal.show(); break; }
-        case "No": { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual, cajero, codigo); break; }
-        default: { this.BloquearTransferenciaDestinatario(id, "No"); this.RealizarTransferencia(id, numeroCuenta, valorActual, cajero, codigo); break; }
-      }
-    });
-  }
-
-  Marcado(estado) {
-    switch (estado) {
-      case "Pendiente": {
-        return true;
-      }
-      case "Devuelta": {
-        return false;
-      }
-      case "Realizada": {
-        return false;
-      }
-
-    }
-  }
-
-  CrearTransferencia(formulario: NgForm, modal) {
-    formulario.value.Id_Cuenta_Bancaria =  JSON.parse(localStorage['Banco']);
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.mensajeSwal.title = "Transferencia realizada"
-      this.mensajeSwal.text = "Se ha guardado correctamente la información"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      this.refrescarVistaPrincipalConsultor();
-      modal.hide();
-    });
-  }
-
-
-  CancelarBloqueo(id, modal, formulario) {
-    this.BloquearTransferenciaDestinatario(id, "Si");
-    this.refrescarVistaPrincipalConsultor();
-    formulario.reset();
-    modal.hide();
-  }
-
-  verRecibo(valor) {
-    this.http.get(this.globales.ruta + 'php/transferencias/ver_recibo.php', {
-      params: { id: valor }
-    }).subscribe((data: any) => {
-      this.EncabezadoRecibo = data.encabezado;
-      this.DestinatarioRecibo = data.destinatario;
-      this.DevolucionesRecibo = data.devoluciones;
-
-      if (this.DevolucionesRecibo.length > 0) {
-        this.filaRecibo = true;
-      } else {
-        this.filaRecibo = false;
-      }
-
-      this.ModalVerRecibo.show();
-    });
-  }
-
-  detalleCompra = [];
-  Pagos = [{
-    Ingreso: "",
-    Transferencia: ""
-  }]
-  Abonos = [{
-    Abono: ""
-  }]
-
-  HabilitarCobroBanesco = false;
-  idCompra: any;
-  idCuenta: any;
-  idCompraCuenta: any;
-  auditarCompra(idCompra, idCuenta, idCompraCuenta) {
-    var posCuenta = this.cuentasBancarias.findIndex(x => x.Id_Cuenta_Bancaria === idCuenta);
-
-    if (this.cuentasBancarias[posCuenta].Numero_Cuenta.substring(0, 4) == "0134") {
-      this.HabilitarCobroBanesco = true;
-    } else {
-      this.HabilitarCobroBanesco = false;
-    }
-
-    this.idCompra = idCompra;
-    this.idCuenta = idCuenta;
-    this.idCompraCuenta = idCompraCuenta;
-
-    var posCompra = this.cuentasBancarias[posCuenta].Compra.findIndex(x => x.Id_Compra == idCompra);
-    this.detalleCompra = this.cuentasBancarias[posCuenta].Compra[posCompra];
-    this.ModalVerCompra.show();
-
-  }
-
-  GuardarMovimientoCompra(formulario: NgForm, modal) {
-    //console.log(this.Pagos);
-    //console.log(this.Abonos);
-
-    this.Pagos.forEach((element, index) => {
-      if (element.Ingreso == "" || element.Transferencia == "") {
-        this.Pagos.splice(index, 1);
-      }
-    });
-
-    this.Abonos.forEach((element, index) => {
-      if (element.Abono == "") {
-        this.Abonos.splice(index, 1);
-      }
-    });
-
-    let info = JSON.stringify(formulario.value);
-    let pagos = JSON.stringify(this.Pagos);
-    let abonos = JSON.stringify(this.Abonos);
-    let datos = new FormData();
-    datos.append("datos", info);
-    datos.append("pagos", pagos);
-    datos.append("abonos", abonos);
-    this.http.post(this.globales.ruta + 'php/compras/guardar_movimiento_compra.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.mensajeSwal.title = "Compra Actualizada"
-      this.mensajeSwal.text = "Se ha Actualizado correctamente la compra"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      modal.hide();
-    });
-    //modal.hide():
-  }
-
-  agregarfilaIngresos(pos) {
-    var cuenta = this.Pagos[pos].Transferencia;
-    var valor = this.Pagos[pos].Ingreso;
-
-    if (parseInt(valor) > 0 && cuenta != "") {
-      var i = pos + 1;
-      if (this.Pagos[i] == undefined) {
-        this.Pagos.push(
-          {
-            Ingreso: "",
-            Transferencia: ""
-          });
-
-      }
-    }
-  }
-
-  agregarfilaAbonos(pos) {
-    var valor = this.Abonos[pos].Abono;
-    if (parseInt(valor) > 0) {
-      var i = pos + 1;
-      if (this.Abonos[i] == undefined) {
-        this.Abonos.push(
-          {
-            Abono: ""
-          });
-
-      }
-    }
-  }
-
-  tipoTransferencia(value, estado, funcionario) {
-    switch (value) {
-      case "Transferencia": {
-        return true;
-      }
-      case "Cliente": {
-        return false;
-      }
-    }
-  }
-
-  RealizarReporte(formulario: NgForm, modal) {
-    let info = JSON.stringify(formulario.value);
-    let datos = new FormData();
-    datos.append("datos", info);
-    this.http.post(this.globales.ruta + 'php/compras/guardar_movimiento_cuenta_compra.php', datos).subscribe((data: any) => {
-      formulario.reset();
-      this.mensajeSwal.title = "Reporte Creado"
-      this.mensajeSwal.text = "Se ha creado el reporte para este banco"
-      this.mensajeSwal.type = "success"
-      this.mensajeSwal.show();
-      modal.hide();
-    });
-  }
-
-  GuardarMontoInicial(formulario: NgForm, modal) {
-      formulario.value.Id_Funcionario = JSON.parse(localStorage['User']).Identificacion_Funcionario;
-      let info = JSON.stringify(formulario.value);
-      let datos = new FormData();
-      datos.append("datos", info);
-      this.http.post(this.globales.ruta + 'php/consultor/guardar_monto_inicial.php', datos).subscribe((data: any) => {
-        if (data != "") {
-          formulario.reset();
-          this.mensajeSwal.title = "Apertura"
-          this.mensajeSwal.text = "Se ha realizado la apertura con esta cuenta"
-          this.mensajeSwal.type = "success"
-          this.mensajeSwal.show();
-          modal.hide();
-        } else {
-          this.mensajeSwal.title = "Apertura";
-          this.mensajeSwal.text = "El banco seleccionado se le asigno a otro consultor";
-          this.mensajeSwal.type = "warning";
-          this.mensajeSwal.show();
-        }
-
-      });
-
-  }
-
-  graficas(){
-    this.http.get(this.globales.ruta + 'php/transferencias/conteo.php').subscribe((data: any) => {
-      var chart = AmCharts.makeChart( "chartdiv", {
-        "type": "serial",
-        "theme": "light",
-        "dataProvider": [ {
-          "country": "Realizadas",
-          "visits": data.TransferenciasRealizadas
-        }, {
-          "country": "Devueltas",
-          "visits": data.TransferenciasDevueltas
-        }, {
-          "country": "Revisadas",
-          "visits": data.TotalTransferencias
-        } ],
-        "valueAxes": [ {
-          "gridColor": "#FFFFFF",
-          "gridAlpha": 0.2,
-          "dashLength": 0
-        } ],
-        "gridAboveGraphs": true,
-        "startDuration": 1,
-        "graphs": [ {
-          "balloonText": "[[category]]: <b>[[value]]</b>",
-          "fillAlphas": 0.8,
-          "lineAlpha": 0.2,
-          "type": "column",
-          "valueField": "visits"
-        } ],
-        "chartCursor": {
-          "categoryBalloonEnabled": false,
-          "cursorAlpha": 0,
-          "zoomable": false
-        },
-        "categoryField": "country",
-        "categoryAxis": {
-          "gridPosition": "start",
-          "gridAlpha": 0,
-          "tickPosition": "start",
-          "tickLength": 20
-        },
-        "export": {
-          "enabled": true
-        }
+  //#region CODIGO NUEVO
+  CambiarCuentaBancaria(){
+    if (this.CuentaConsultor != '') {
       
-      } );
-    });
+      if (this.CuentaConsultor == '' || this.MonedaCuentaConsultor == '') {
+        this.ShowSwal('warning', 'Alerta', 'Debe abrir una cuenta antes de realizar un movimiento de cierre!');
+        return;
+      }else{
+        this.GetMovimientosCuentaBancaria();
+      }      
+    }else{
 
-  }
-
-  SaldoInicialBanco = 0;
-  VerificarSaldo(value){
-    var index = this.ListaBancos.findIndex(x=>x.Id_Cuenta_Bancaria === value);
-    if(index > -1 ){
-      this.SaldoInicialBanco= this.ListaBancos[index].Valor;
-      //GuardarInicio
+      if (this.CuentaConsultor != '') {
+        this.ShowSwal('warning', 'Alerta', 'Debe cerrar la cuenta actual antes de abrir otra!');
+        return;
+      }else{
+        this.ModalCambiarBanco.show();
+      }  
     }
   }
 
+  GuardarMontoInicial2(modal) {
+    let id_funcionario = this.funcionario.Identificacion_Funcionario;
+    let info = JSON.stringify(this.AperturaCuentaModel);
+    let datos = new FormData();
+    datos.append("modelo", info);
+    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_bloqueo_cuenta", this.IdBloqueoCuenta);
+    this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
 
+      if (data.codigo == 'warning') {
+        this.ShowSwal(data.codigo, 'Alerta', data.mensaje);
+        this.cargarTabla = false;
+        this.TablaPendientes = false; 
+        this.CierreValoresModel.SaldoInicial = 0;
+        this.CierreValoresModel.SaldoFinal = 0;
+        this.Id_Movimientos_Cuenta = [];
+        
+        this.LimpiarModeloDatosResumen();
+
+      }else{
+
+        this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+        this.VerificarAperturaCuenta();
+
+        this.CierreValoresModel.SaldoInicial = parseFloat(this.MontoInicial);
+        this.CierreValoresModel.SaldoFinal = parseFloat(this.MontoInicial);
+        this.OpcionCuenta = 'Cambiar';
+        this.IconoOpcionCuenta = 'ti-reload';
+        modal.hide();
+      }
+    });
+  }
+
+  CerrarCuentaConsultor(){
+    if (this.CuentaConsultor == '') {
+      this.ShowSwal('warning', 'Alerta', 'Debe abrir una cuenta antes de realizar un movimiento de cierre!');
+      return;
+    }
+    
+    let id_funcionario = this.funcionario.Identificacion_Funcionario;
+    let info = JSON.stringify(this.CierreCuentaModel);
+    let ids = JSON.stringify(this.Id_Movimientos_Cuenta);
+    let datos = new FormData();
+    datos.append("modelo", info);
+    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_movimientos", ids);
+
+    this.http.post(this.globales.ruta + '/php/cuentasbancarias/cierre_cuenta_bancaria.php', datos).subscribe((data: any) => {
+
+      this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+
+      this.CuentaConsultor = '';
+      this.MonedaCuentaConsultor = '';
+      this.IdBloqueoCuenta = '';
+      this.CodigoMoneda = '';
+      this.MontoInicial = 0;
+      this.Id_Movimientos_Cuenta = [];
+      this.LimpiarModeloCierreCuenta();
+      this.LimpiarModeloDatosResumen();
+      this.LimpiarModeloValoresCierre();
+      this.LimpiarIndicadores();
+      this.ChartData = [];
+      this.ModalCierreCuenta.hide();
+      this.ModalCambiarBanco.show();
+      localStorage.setItem('CuentaConsultor', '');
+      localStorage.setItem('MonedaCuentaConsultor', '');
+      this.OpcionCuenta = 'Abrir';
+      this.IconoOpcionCuenta = 'ti-key';
+    });
+  }
+
+  VerificarAperturaCuenta(){
+
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+
+      if (data.existe == 0) {
+        this.ModalCambiarBanco.show();
+        this.MonedaCuentaConsultor = '';
+        this.CuentaConsultor = '';
+        this.IdBloqueoCuenta = '';
+        this.CodigoMoneda = '';
+        this.MontoInicial = 0;
+        this.LimpiarModeloDatosResumen();
+        this.LimpiarIndicadores();
+        this.ChartData = [];
+        this.Id_Movimientos_Cuenta = [];
+        this.OpcionCuenta = 'Abrir';
+        this.IconoOpcionCuenta = 'ti-key';
+        this.cargar = false;
+      }else{
+        
+        
+        this.MonedaCuentaConsultor = data.datos_apertura.Id_Moneda;
+        this.CuentaConsultor = data.datos_apertura.Id_Cuenta_Bancaria;
+        this.IdBloqueoCuenta = data.datos_apertura.Id_Bloqueo_Cuenta;
+        this.CodigoMoneda = data.datos_apertura.Codigo;
+        this.MontoInicial = data.datos_apertura.Valor;
+        this.CierreValoresModel.SaldoInicial = parseFloat(this.MontoInicial);
+        this.CierreValoresModel.SaldoFinal = parseFloat(this.MontoInicial);
+        localStorage.setItem("CuentaConsultor", this.CuentaConsultor);        
+        localStorage.setItem("MonedaCuentaConsultor", this.MonedaCuentaConsultor);
+        this.OpcionCuenta = 'Cambiar';
+        this.IconoOpcionCuenta = 'ti-reload';
+
+        this.CargarIndicadores();
+        this.GetResumenCuenta();
+
+        this.cargar =  true;
+      }
+
+      this.CargarVista();
+    });
+  }
+
+  GuardarMovimientoAjuste(){
+    let info = JSON.stringify(this.AjusteCuentaModel);
+    let datos = new FormData();
+    datos.append("modelo", info);
+
+    this.http.post(this.globales.ruta + 'php/cuentasbancarias/crear_movimiento_ajuste_cuenta.php', datos).subscribe((data: any) => {
+
+      this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+      this.GetMovimientosCuentaBancaria();
+      this.ModalCrearAjuste.hide();
+      this.LimpiarModeloAjuste();
+    });
+  }
+
+  GuardarCompra(){
+    let info = JSON.stringify(this.CompraCuentaModel);
+    let datos = new FormData();
+    datos.append("modelo", info);
+
+    this.http.post(this.globales.ruta + 'php/cuentasbancarias/crear_compra_cuenta_bancaria.php', datos).subscribe((data: any) => {
+
+      this.ShowSwal(data.codigo, 'Registro Exitoso', data.mensaje);
+      this.GetMovimientosCuentaBancaria();
+      this.ModalCompraCuenta.hide();
+      this.LimpiarModeloCompra();
+    });
+  }
+
+  CargarIndicadores(){
+    this.http.get(this.globales.ruta+'php/transferencias/indicadores_transferencias.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+
+      if (data.existe == 1) {
+        this.Indicadores = data.indicadores;
+        this.ChartData = [];
+        this.ChartData.push(this.Indicadores.Realizadas);
+        this.ChartData.push(this.Indicadores.Devueltas);
+      }else{
+        this.LimpiarIndicadores();
+        this.ChartData = [];
+      }      
+    });
+  }
+
+  CargarBancosPais(id_pais){
+    if (id_pais == '') {
+        this.LimpiarModeloCuentaBancaria();
+        this.ListaBancos = [];
+        return;
+    }
+
+    this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_por_pais.php', {params:{id_pais:id_pais}}).subscribe((data: any) => {
+        this.ListaBancos = data;
+    });
+  }
+
+  AbrirModalAjuste(){
+    this.AjusteCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
+    this.ModalCrearAjuste.show();
+  }
+
+  AbrirModalCompra(){
+    this.CompraCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
+    this.CompraCuentaModel.Id_Funcionario = this.funcionario.Identificacion_Funcionario;
+    this.ModalCompraCuenta.show();
+  }
+
+  LimpiarModeloCuentaBancaria(){
+    this.AperturaCuentaModel = {
+        Id_Cuenta_Bancaria: '',
+        Id_Moneda: '',
+        Valor: '',
+        Id_Bloqueo_Cuenta: ''
+    };
+  }
+  
+  LimpiarModeloValoresCierre(){
+    this.CierreValoresModel = {
+      SaldoInicial: this.MontoInicial,
+      Egresos: 0,
+      Ingresos: 0,
+      SaldoFinal: this.MontoInicial
+    };
+  }
+
+  LimpiarModeloCierreCuenta(){
+    this.CierreCuentaModel = {
+      Id_Moneda: '',
+      Id_Cuenta_Bancaria: '',
+      Valor: '',
+      Id_Bloqueo_Cuenta: ''
+    };
+  }
+
+  LimpiarModeloDatosResumen(){
+    this.DatosCuentaModel = {
+      Nro_Cuenta: 0,
+      SaldoInicial: 0,
+      SaldoRestante: 0
+    };
+  }
+
+  LimpiarIndicadores(){
+    this.Indicadores = {
+      Pendiente: 0,
+      Realizadas: 0,
+      Devueltas: 0,
+      Productividad: 0,
+    };
+  }
+
+  LimpiarModeloAjuste(){
+    this.AjusteCuentaModel = {
+      Id_Cuenta_Bancaria: '',
+      Valor: 0,
+      Tipo: 'Ingreso',
+      Detalle: '',
+      Id_Transferencia_Destino: '0'
+    };
+  }
+
+  LimpiarModeloCompra(){
+    this.CompraCuentaModel = {
+      Id_Cuenta_Bancaria: '',
+      Valor: '',
+      Detalle: '',
+      Id_Funcionario: ''
+    };
+  }
+
+  AsignarPaises(){
+    this.Paises = this.globales.Paises;
+    this.cargar =  true;
+    this.CargarVista();
+  }
+
+  VerificarSaldo(value) {
+    if (value == '') {
+        this.AperturaCuentaModel.Valor = '';
+        this.AperturaCuentaModel.Id_Cuenta_Bancaria = value;
+        this.AperturaCuentaModel.Id_Moneda = '';
+        return;
+    }
+
+    this.ConsultarValorCuenta(value);
+  }
+
+  ConsultarValorCuenta(id_cuenta){
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/cargar_saldo_cuenta.php', {params:{id_cuenta:id_cuenta}}).subscribe((data:any) => {
+
+      if (data.codigo == "error") {
+        this.ShowSwal(data.codigo, 'Error en la cuenta', data.mensaje);
+        this.AperturaCuentaModel.Id_Moneda = '';
+        this.AperturaCuentaModel.Id_Cuenta_Bancaria = '';
+        this.AperturaCuentaModel.Valor = '';
+
+      }else{
+
+        var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === id_cuenta);
+        if (index > -1) {
+            this.AperturaCuentaModel.Id_Moneda = this.ListaBancos[index].Id_Moneda;
+            this.AperturaCuentaModel.Id_Cuenta_Bancaria = id_cuenta;
+            this.AperturaCuentaModel.Valor = data.Valor_Cuenta;
+            //GuardarInicio
+        }
+      }
+    });
+  }
+
+  GetNumeroCuenta(){
+    var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === this.CuentaConsultor);
+    if (index > -1) {
+        return this.ListaBancos[index].Numero_Cuenta;
+        //GuardarInicio
+    }
+  }
+
+  GetMovimientosCuentaBancaria(){
+    let p = { id_cuenta: this.CuentaConsultor, id_bloqueo_cuenta:this.IdBloqueoCuenta };
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/movimientos_cuenta_bancaria.php', {params:p}).subscribe((data:any) => {
+      
+      
+      this.CierreValoresModel.SaldoFinal = this.CierreValoresModel.SaldoInicial;
+
+      if (data.data[0]) {
+        
+        this.MovimientosCuentaBancaria = data.data;
+        this.Id_Movimientos_Cuenta = data.ids;
+        this.LlenarValoresCierre(this.MovimientosCuentaBancaria);
+        this.AsignarValoresModeloCierreCuenta();
+      }else{
+        this.MovimientosCuentaBancaria = [];
+        this.Id_Movimientos_Cuenta = [];
+        this.LimpiarModeloValoresCierre();
+        this.AsignarValoresModeloCierreCuenta();
+      }
+    });
+
+    this.ModalCierreCuenta.show();
+  }
+
+  LlenarValoresCierre(valores){    
+    let egresos = 0;
+    let ingresos = 0;
+
+    valores.forEach((m, i) => {
+      let e = parseFloat(m.Egreso);
+      let ing = parseFloat(m.Ingreso);
+
+      egresos += e;
+      ingresos += ing; 
+
+      if (e != 0 && ing == 0) {
+        this.CierreValoresModel.SaldoFinal = parseFloat(this.CierreValoresModel.SaldoFinal) - e;  
+      }else if (e == 0 && ing != 0){
+        this.CierreValoresModel.SaldoFinal = parseFloat(this.CierreValoresModel.SaldoFinal) + ing;
+      }
+    });
+
+    this.CierreValoresModel.Egresos = egresos;
+    this.CierreValoresModel.Ingresos = ingresos;
+  }
+
+  GetResumenCuenta(){
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/resumen_cuenta_bancaria.php', {params:{id_cuenta:this.CuentaConsultor}}).subscribe((data:any) => {
+      
+      this.DatosCuentaModel.Nro_Cuenta = data.Resumen.Numero_Cuenta;
+      this.DatosCuentaModel.SaldoInicial = data.Resumen.Saldo_Inicial;
+      this.DatosCuentaModel.SaldoRestante = data.Resumen.Saldo_Final;
+    });
+  }
+
+  AsignarValoresModeloCierreCuenta(){    
+
+    this.CierreCuentaModel.Id_Moneda = this.MonedaCuentaConsultor;
+    this.CierreCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
+    this.CierreCuentaModel.Valor = this.CierreValoresModel.SaldoFinal.toString();
+    this.CierreCuentaModel.Id_Bloqueo_Cuenta = this.IdBloqueoCuenta;
+  }
+
+  CerrarModalCierreCuenta(){
+    this.LimpiarModeloValoresCierre();
+    this.MovimientosCuentaBancaria = [];
+    this.ModalCierreCuenta.hide();
+  }
+
+  MostrarTabla(tabla){
+    
+    this.Seleccionado = tabla;
+    
+    switch (tabla) {
+      case 'Pendientes':
+        this.TablaPendientes = true;
+        this.TablaRealizadas = false;
+        this.TablaDevueltas = false;
+        break;
+
+      case 'Realizadas':
+        this.TablaPendientes = false;
+        this.TablaRealizadas = true;
+        this.TablaDevueltas = false;
+        break;
+
+      case 'Devueltas':
+        this.TablaPendientes = false;
+        this.TablaRealizadas = false;
+        this.TablaDevueltas = true;
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  ShowSwal(tipo:string, titulo:string, msg:string){
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+
+  public RecibirCuentasSeleccionadas(cuentaSeleccionadas:Array<any>){
+    console.log(cuentaSeleccionadas);
+    
+    this.CuentasSeleccionadas = cuentaSeleccionadas;
+  }
+
+  //#endregion
 }

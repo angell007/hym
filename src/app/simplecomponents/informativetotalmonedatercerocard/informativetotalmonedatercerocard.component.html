@@ -1,0 +1,16 @@
+<div class="card" [ngClass]="CardClass">
+  <div class="card-block" style="padding:10px;">
+    <div class="row">
+      <div class="col-md-12">
+        <h5 [style.color]="TextColor" class="m-0">Saldo Actual({{CodigoMoneda}})</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="no-mrg" [style.color]="TextColor">{{SaldoMoneda | customcurrency:CodigoMoneda}}</h2>
+        <small [style.color]="TextColor" class="block-element">{{NombreMoneda}}</small>
+      </div>
+    </div>
+  </div>
+</div>
+  

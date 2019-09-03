@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <h4>Corresponsal Bancario</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-info">
+          <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" *ngFor="let cb of CorresponsalesBancarios; let i = index;">
+                  <a 
+                    [attr.href]="'#nav-corresponsal-'+i" 
+                    class="nav-link" 
+                    [ngClass]="{'active': i == 0}"
+                    role="tab" 
+                    data-toggle="tab"
+                    (click)="CambiarCorresponsal(cb.Id_Corresponsal_Bancario)">{{cb.Nombre}}
+                  </a>
+              </li>
+          </ul>
+        </div>
+        <app-tablamovimientoscorresponsal
+          [Id_Corresponsal_Bancario]="CorreponsalSeleccionado">
+        </app-tablamovimientoscorresponsal>
+      </div>
+    </div>
+  </div>
+</div>

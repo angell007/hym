@@ -13,25 +13,25 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class ProveedoresComponent implements OnInit {
 
-  public proveedores : any[];
-  public Departamentos : any[];
-  public Municipios : any[];
+  public proveedores : any = [];
+  public Departamentos : any = [];
+  public Municipios : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Direccion : any[];
-  public Telefono : any[];
-  public Celular : any[];
-  public Correo : any[];
-  public Detalle : any[];
-  public Confiable : any[];
-  public Regimen : any[];
-  public IdDepartamento : any[];
-  public Departamento : any[];
-  public IdMunicipio : any[];
-  public Municipio : any[];
-  public RazonSocial : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Direccion : any = [];
+  public Telefono : any = [];
+  public Celular : any = [];
+  public Correo : any = [];
+  public Detalle : any = [];
+  public Confiable : any = [];
+  public Regimen : any = [];
+  public IdDepartamento : any = [];
+  public Departamento : any = [];
+  public IdMunicipio : any = [];
+  public Municipio : any = [];
+  public RazonSocial : any = [];
 
   public boolIdentificacion:boolean = false;
   public boolNombre:boolean = false;

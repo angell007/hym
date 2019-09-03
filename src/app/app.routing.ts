@@ -57,6 +57,9 @@ import { TransferenciaverComponent } from "./transferencias/transferenciaver/tra
 import { TableroComponent } from './tablero/tablero.component';
 import { ComprascrearComponent } from './configuracion/compras/comprascrear/comprascrear.component';
 import { CompraseditarComponent } from './configuracion/compras/compraseditar/compraseditar.component';
+import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
+import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
+import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -103,9 +106,13 @@ export const AppRoutes: Routes = [
         path: 'funcionarios', component: CommonLayoutComponent,
         children: [{ path: '', component: FuncionariosComponent, canActivate: [AuthGuard] }]
     },
+    // {
+    //     path: 'funcionariocrear', component: CommonLayoutComponent,
+    //     children: [{ path: '', component: FuncionariocrearComponent, canActivate: [AuthGuard] }]
+    // },
     {
-        path: 'funcionariocrear', component: CommonLayoutComponent,
-        children: [{ path: '', component: FuncionariocrearComponent, canActivate: [AuthGuard] }]
+        path: 'administrarfuncionario/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: AdministrarfuncionarioComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'clientes', component: CommonLayoutComponent,
@@ -262,6 +269,14 @@ export const AppRoutes: Routes = [
     {
         path: 'transferenciaver/:id', component: CommonLayoutComponent,
         children: [{ path: '', component: TransferenciaverComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'gruposterceros', component: CommonLayoutComponent,
+        children: [{ path: '', component: GrupostercerosComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'cierrecaja/:id_funcionario/:solo_ver', component: CommonLayoutComponent,
+        children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
     },    
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }

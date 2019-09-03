@@ -1,3 +1,101 @@
-<p>
-  tablerocajeroprincipal works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row-fluid">
+            <div class="col-md-12" id="funcionarios-container">
+              <app-funcionarioactivos
+                [Fecha_Consulta]="Fecha_Consulta">
+              </app-funcionarioactivos>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 mb-4" id="filter-container">
+                      <div class="row">
+                        <div class="col-md-4" style="display:flex; align-items: center;">
+                          <i class="ti-info-alt text-info font-size-15" style="margin-right:4px;"></i>
+                          <span>{{CajerosAbiertos}} cajeros abrieron de {{CajerosTotales}} totales</span>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="pull-right">
+                            <div class="form-row align-items-center">
+                              <div class="col-auto">
+                                <input 
+                                  type="date" 
+                                  placeholder="Escoja fecha" 
+                                  class="form-control form-control-sm"
+                                  [(ngModel)]="Fecha_Consulta"
+                                  (change)="onDataChange()"
+                                  [attr.max]="FechaActual">
+                                <!--<my-date-range-picker 
+                                  name="mydaterange" 
+                                  (dateRangeChanged)="dateRangeChanged($event)" 
+                                  [options]="myDateRangePickerOptions"
+                                  placeholder="Fecha">
+                                </my-date-range-picker> -->
+                              </div>
+                              <div class="col-auto">                                
+                                <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">
+                                  <option value="">Seleccione departamento</option>
+                                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12" id="table-container">
+                      <div class="row">
+                        <div class="col-md-6" style="display:flex; align-items: center;">
+                          <i class="ti-map text-primary font-size-25" style="margin-right:8px;"></i><span class="font-size-25">{{DepartamentoSeleccionado}}</span>
+                        </div>
+                        <div class="col-md-6 pull-right">
+                          <app-tablatotalesmonedas *ngIf="MostrarTotales.length > 0"
+                            [MostrarTotales]="MostrarTotales">
+                          </app-tablatotalesmonedas>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="TotalesMunicipio.length == 0 && DepartamentoId == ''">
+                        <div class="col-md-12 text-center">
+                          <h3>Escoja un departamento para realizar una búsqueda!</h3>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="TotalesMunicipio.length == 0 && DepartamentoId != ''">
+                        <div class="col-md-12 text-center">
+                          <h3>No se han encontrado datos en este departamento!</h3>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="TotalesMunicipio.length > 0">
+                        <div class="col-md-12">
+                          <app-tablaresumentotalizado *ngFor="let tm of TotalesMunicipio; let i = index"
+                            [Municipio]="tm"
+                            [Id_Cajero]="Funcionario.Identificacion_Funcionario"
+                            [ParentIndex]="i">                        
+                          </app-tablaresumentotalizado>  
+                        </div>
+                      </div>
+                      
+                                
+                    </div>
+                  </div>
+                </div>                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #alertSwal type="" title="" text=""></swal>

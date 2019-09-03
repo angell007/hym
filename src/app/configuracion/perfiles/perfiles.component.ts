@@ -13,39 +13,39 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./perfiles.component.css']
 })
 export class PerfilesComponent implements OnInit {
-  public perfiles : any[];
+  public perfiles : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Detalle : any[];
-  public TransfVer : any[];
-  public TransfEditar : any[];
-  public TransfEliminar : any[];
-  public TraslVer : any[];
-  public TraslEditar : any[];
-  public TraslEliminar : any[];
-  public CajasVer : any[];
-  public CajasEditar : any[];
-  public CajasEliminar : any[];
-  public GirosVer : any[];
-  public GirosEditar : any[];
-  public GirosEliminar : any[];
-  public CorrVer : any[];
-  public CorrEditar : any[];
-  public CorrEliminar : any[];
-  public ServVer : any[];
-  public ServEditar : any[];
-  public ServEliminar : any[];
-  public ConfVer : any[];
-  public ConfEditar : any[];
-  public ConfEliminar : any[];
-  public IndiVer : any[];
-  public IndiEditar : any[];
-  public IndiEliminar : any[];
-  public ReporVer : any[];
-  public ReporEditar : any[];
-  public ReporEliminar : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Detalle : any = [];
+  public TransfVer : any = [];
+  public TransfEditar : any = [];
+  public TransfEliminar : any = [];
+  public TraslVer : any = [];
+  public TraslEditar : any = [];
+  public TraslEliminar : any = [];
+  public CajasVer : any = [];
+  public CajasEditar : any = [];
+  public CajasEliminar : any = [];
+  public GirosVer : any = [];
+  public GirosEditar : any = [];
+  public GirosEliminar : any = [];
+  public CorrVer : any = [];
+  public CorrEditar : any = [];
+  public CorrEliminar : any = [];
+  public ServVer : any = [];
+  public ServEditar : any = [];
+  public ServEliminar : any = [];
+  public ConfVer : any = [];
+  public ConfEditar : any = [];
+  public ConfEliminar : any = [];
+  public IndiVer : any = [];
+  public IndiEditar : any = [];
+  public IndiEliminar : any = [];
+  public ReporVer : any = [];
+  public ReporEditar : any = [];
+  public ReporEliminar : any = [];
 
  
 

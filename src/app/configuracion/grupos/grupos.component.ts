@@ -14,13 +14,13 @@ import { Subject } from 'rxjs/Subject';
 })
 export class GruposComponent implements OnInit {
 
-  public grupos : any[];
+  public grupos : any = [];
 
   //variables de formulario
-  public Identificacion : any[];
-  public Nombre : any[];
-  public Detalle : any[];
-  public Padre : any[];
+  public Identificacion : any = [];
+  public Nombre : any = [];
+  public Detalle : any = [];
+  public Padre : any = [];
 
   public boolNombre:boolean = false;
 
