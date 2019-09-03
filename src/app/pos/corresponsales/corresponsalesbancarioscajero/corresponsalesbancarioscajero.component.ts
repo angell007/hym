@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { CorresponsalDiarioModel } from '../../../Modelos/CorresponsalDiarioModel';
 import { CorresponsalDiarioShortModel } from '../../../Modelos/CorresponsalDiarioShortModel';
 import { GeneralService } from '../../../shared/services/general/general.service';
@@ -6,16 +6,21 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ValidacionService } from '../../../shared/services/validaciones/validacion.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { CorresponsalbancarioService } from '../../../shared/services/corresponsalesbancarios/corresponsalbancario.service';
+import { Observable } from 'rxjs';
+import { AccionTableroCajero } from '../../../shared/Enums/AccionTableroCajero';
 
 @Component({
   selector: 'app-corresponsalesbancarioscajero',
   templateUrl: './corresponsalesbancarioscajero.component.html',
   styleUrls: ['./corresponsalesbancarioscajero.component.scss', '../../../../style.scss']
 })
-export class CorresponsalesbancarioscajeroComponent implements OnInit {
+export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy {
+
+  @Input() ManageView:Observable<any> = new Observable();
 
   public CorresponsalModel:CorresponsalDiarioShortModel = new CorresponsalDiarioShortModel();
   public CorresponsalesBancarios:Array<any> = [];
+  private _viewManagementSubscription:any;
 
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
@@ -27,6 +32,19 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._viewManagementSubscription = this.ManageView.subscribe((data:AccionTableroCajero) => {
+      if (data == AccionTableroCajero.Cerrar) {
+        console.log(data);
+        
+        this.LimpiarModeloCorresponsal();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this._viewManagementSubscription != null) {
+      this._viewManagementSubscription.unsubscribe();
+    }
   }
 
   GetCorresponsalesBancarios(){
@@ -73,9 +91,6 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit {
         this._swalService.ShowMessage(data);
       }
     });
-    // this.http.post(this.globales.ruta + 'php/corresponsaldiario/guardar_corresponsal_diario.php', datos).subscribe((data: any) => {
-    //   this.LimpiarModeloCorresponsal();
-    // });
   }
 
   private ValidateBeforeSubmit(){

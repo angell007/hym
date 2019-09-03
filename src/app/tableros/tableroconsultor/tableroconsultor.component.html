@@ -73,6 +73,7 @@
                                             <app-tablatransferencias 
                                                 *ngIf="TablaPendientes"
                                                 [Id_Funcionario]="funcionario.Identificacion_Funcionario"
+                                                [CuentasBancariasSeleccionadas]="CuentasSeleccionadas"
                                                 (ActualizarIndicadores)="CargarIndicadores()">
                                             </app-tablatransferencias>
 
@@ -387,5 +388,10 @@
             </div>
         </div>
     </app-modal-basic>
+
+<app-modalaperturacuenta
+    [AbrirModal]="AbrirModalAperturaCuenta.asObservable()"
+    (EnviarCuentasSeleccionadas)="RecibirCuentasSeleccionadas($event)">
+</app-modalaperturacuenta>
 
 <swal title='' text='' type='' #alertSwal></swal>

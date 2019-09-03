@@ -62,11 +62,7 @@ export class GeneralService {
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.HoraActual = this.datePipe.transform(new Date(), 'HH:mm:ss');
     this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    console.log(this.HoraActual);
-    console.log(this.FechaActual);
-    console.log(this.FullFechaActual);
-    this.BuildAniosConsulta();
-    
+    this.BuildAniosConsulta();    
   }
 
   public checkIdentificacion(id:string):Observable<any>{
@@ -184,9 +180,6 @@ export class GeneralService {
 
     for (let index = anioInicial; index <= currentYear; index++) {
       this.Anios.push(index);      
-    }
-
-    console.log(this.Anios);
-    
+    }    
   }
 }

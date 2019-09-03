@@ -221,7 +221,7 @@
                                                     autocomplete="false" 
                                                     placeholder="Valor" class="form-control text-right" name="Valor_Origen"
                                                     id="Cambia" 
-                                                    [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda('o', 'e')" 
+                                                    [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" 
                                                     currencyMask [options]="{ thousands: '.' }" 
                                                     [disabled]="HabilitarCampos"
                                                     required>
@@ -231,7 +231,7 @@
                                                     <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
                                                     <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" 
                                                         autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino"
-                                                        currencyMask [options]="{ thousands: '.' }" (blur)="conversionMoneda('d', 'l')"
+                                                        currencyMask [options]="{ thousands: '.' }" (ngModelChange)="conversionMoneda('d', 'l')"
                                                         [disabled]="HabilitarCampos" required>
                                                 </div>
 
@@ -250,14 +250,14 @@
                                                 <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control" 
                                                     autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" 
                                                     [disabled]="HabilitarCampos" currencyMask [options]="{ thousands: '.' }"
-                                                    (blur)="conversionMoneda('d', 'l')" required>
+                                                    (ngModelChange)="conversionMoneda('d', 'l')" required>
                                             </div>
 
                                             <div class="col-md-4" *ngIf="Venta">
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
                                                 <input #valorCambio type="text" 
                                                     autocomplete="false" placeholder="Valor" class="form-control text-right" name="Valor_Origen"
-                                                    id="Cambia" [(ngModel)]="CambioModel.Valor_Origen" (blur)="conversionMoneda('o', 'e')" 
+                                                    id="Cambia" [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" 
                                                     currencyMask [options]="{ thousands: '.' }" [disabled]="HabilitarCampos"
                                                     required>
                                             </div>
@@ -269,7 +269,7 @@
                                                 <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                                                     Con</label>
                                                 <input id="pagocon" type="text" placeholder="Paga con" class="form-control"
-                                                    name="Recibido" (blur)="ObtenerVueltos()" [(ngModel)] = "CambioModel.Recibido" [disabled]="HabilitarCampos" required>
+                                                    name="Recibido" (blur)="ObtenerVueltos()" [(ngModel)] = "CambioModel.Recibido" [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required>
                                             </div>
 
 
@@ -294,7 +294,7 @@
                                         (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>-->
                                 </div>
                                 <div class="col-md-2" style="margin-top: 50px">
-                                    <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-danger btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}">
+                                    <button (click)="volverCambioEfectivo()" class="{{ Venta === false ? 'btn btn-danger btn-block mrg-top-10' : 'btn btn-danger btn-block mrg-top-10' }}">
                                         Volver
                                     </button>
                                 </div>
@@ -1301,7 +1301,8 @@
                         <!-- <app-corresponsalbancario
                             *ngIf="Corresponsal">
                         </app-corresponsalbancario> -->
-                        <app-corresponsalesbancarioscajero>                            
+                        <app-corresponsalesbancarioscajero
+                            [ManageView]="corresponsalView.asObservable()">                            
                         </app-corresponsalesbancarioscajero>
                         <!-- <ul class="list-unstyled list-info">
                             <li>
@@ -1866,7 +1867,8 @@
                     </tr>
                     <tr>
                         <td>Tipo de Cambio</td>
-                        <td>{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
+                        <td *ngIf="verCambio.Tipo == 'Compra'">{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}} a {{verCambio.Moneda_Destino}}</td>
+                        <td *ngIf="verCambio.Tipo == 'Venta'">{{verCambio.Tipo}} de {{verCambio.Moneda_Destino}} a {{verCambio.Moneda_Origen}}</td>
                     </tr>
                     <tr>
                         <td>Recibo</td>

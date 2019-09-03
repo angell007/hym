@@ -231,6 +231,8 @@ import { TablatransferenciascajeroComponent } from './pos/transferencias/tablatr
 import { DetalletransferenciaComponent } from './pos/transferencias/detalletransferencia/detalletransferencia.component';
 import { ModaldetallerecibotransferenciaComponent } from './simplecomponents/modaldetallerecibotransferencia/modaldetallerecibotransferencia.component';
 import { CorresponsalesbancarioscajeroComponent } from './pos/corresponsales/corresponsalesbancarioscajero/corresponsalesbancarioscajero.component';
+import { ModalaperturacuentaComponent } from './simplecomponents/modalaperturacuenta/modalaperturacuenta.component';
+import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -418,7 +420,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablatransferenciascajeroComponent,
         DetalletransferenciaComponent,
         ModaldetallerecibotransferenciaComponent,
-        CorresponsalesbancarioscajeroComponent
+        CorresponsalesbancarioscajeroComponent,
+        ModalaperturacuentaComponent,
+        CierrecuentasconsultorComponent
     ],
     exports:[
         ModalBasicComponent

@@ -28,6 +28,14 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_lista_cuentas_bancarias.php', {params:p});
   }
   
+  public GetCuentasBancariasApertura():Observable<any>{
+    return this.client.get(this._rutaBase+'/get_cuentas_bancarias_apertura.php');
+  }
+  
+  public GetCuentasBancariasCierre():Observable<any>{
+    return this.client.get(this._rutaBase+'/get_cuentas_bancarias_cierre.php');
+  }
+  
   getCuentasBancariasFuncionario(idFuncionario:string):Observable<any>{
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'/get_cuentas_asociadas_funcionario.php', {params:p});
@@ -52,6 +60,10 @@ export class CuentabancariaService {
 
   cambiarEstadoCuenta(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/cambiar_estado_cuenta.php', datos);
+  }
+
+  public AperturaCuentaBancaria(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/aperturar_cuentas_bancarias.php', datos);
   }
 
 }

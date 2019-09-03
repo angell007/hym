@@ -11,4 +11,5 @@ export class CorresponsalDiarioShortModel{
     public Id_Caja:string = '';
     public Id_Oficina:string = '';
     public Total_Corresponsal:string = '0';
+    public Detalle:string = '';
 }

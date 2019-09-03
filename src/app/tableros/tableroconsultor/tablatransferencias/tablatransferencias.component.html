@@ -178,7 +178,7 @@
                 <select name="Id_Cuenta_Bancaria" id="cuenta_origen" style="width:90% !important; margin-left:0 !important;" class="form-control form-control-sm"
                   [(ngModel)] ="MovimientoBancoModel.Id_Cuenta_Bancaria" required>
                   <option value="" selected>Seleccion origen</option>
-                  <option *ngFor="let cb of CuentasBancarias" [value]="cb.Id_Cuenta_Bancaria">{{cb.Nombre_Titular}}</option>
+                  <option *ngFor="let cb of CuentasBancariasSeleccionadas" [value]="cb.Id_Cuenta_Bancaria">{{cb.Nombre_Titular}}</option>
                 </select>
               </div>
             </div>

@@ -17,6 +17,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
  // @Input() MonedaConsulta:string = '';
   //@Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
+  @Input() CuentasBancariasSeleccionadas:any = [];
 
   @Output() ActualizarIndicadores = new EventEmitter();
 
@@ -77,18 +78,28 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
               private cuentaService:CuentabancariaService,
               private puntosPipe:PuntosPipe) 
   {
-    this.GetCuentasBancarias(this.Funcionario.Identificacion_Funcionario.toString());
+    //this.GetCuentasBancarias(this.Funcionario.Identificacion_Funcionario.toString());
   }
 
   ngOnChanges(changes:SimpleChanges){
+
+    // if (changes.CuentasBancariasSeleccionadas.previousValue != undefined) {
+    //   console.log("entro en cambios");
+    //   if (this.CuentasBancariasSeleccionadas.length == 0) {   
+    //     console.log("no hay cuentas seleccionadas");     
+    //     this.TransferenciasListar = [];
+    //     this.TotalItems = 0;
+    //   }else{
+    //     console.log("hay cuentas seleccionadas");
+    //     this.ConsultaFiltrada();
+    //   }
+    // }
 
     // if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
     //   //this.ConsultarTransferencias();
     //   //this.ConsultarCuentaConsultor();
     //   this.ConsultaFiltrada();
-    // }    
-    
-    this.ConsultaFiltrada();
+    // }
   }
 
   ngOnInit() {

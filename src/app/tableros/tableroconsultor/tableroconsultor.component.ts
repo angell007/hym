@@ -36,6 +36,7 @@ export class TableroconsultorComponent implements OnInit {
   public Paises:any = [];
   public ListaBancos:any = [];
   public MovimientosCuentaBancaria:any = [];
+  public CuentasSeleccionadas:any = [];
   public Indicadores:any = {
     Pendientes: 0,
     Realizadas: 0,
@@ -105,11 +106,16 @@ export class TableroconsultorComponent implements OnInit {
   public OpcionCuenta:string = 'Abrir';
   public IconoOpcionCuenta:string = 'ti-key';
 
+  public AbrirModalAperturaCuenta:Subject<any> = new Subject();
+
   constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.AsignarPaises();
     //this.VerificarAperturaCuenta();
+    setTimeout(() => {
+      this.AbrirModalAPerturaCuentas();      
+    }, 500);
   }
 
   CargarVista(){
@@ -118,6 +124,11 @@ export class TableroconsultorComponent implements OnInit {
       this.cargarTabla = true; 
       this.TablaPendientes = true;
     };
+  }
+
+  public AbrirModalAPerturaCuentas(){
+    console.log("abriendo modal apertura cuenta desde tablero");
+    this.AbrirModalAperturaCuenta.next();
   }
 
   //#region CODIGO NUEVO
@@ -533,6 +544,12 @@ export class TableroconsultorComponent implements OnInit {
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
     this.alertSwal.show();
+  }
+
+  public RecibirCuentasSeleccionadas(cuentaSeleccionadas:Array<any>){
+    console.log(cuentaSeleccionadas);
+    
+    this.CuentasSeleccionadas = cuentaSeleccionadas;
   }
 
   //#endregion
