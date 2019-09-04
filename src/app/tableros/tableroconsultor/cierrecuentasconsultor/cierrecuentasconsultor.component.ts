@@ -20,7 +20,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
   }
 
   public GetCuentasBancariasApertura(){
-    this._cuentaBancariaService.GetCuentasBancariasApertura().subscribe((data:any) => {
+    this._cuentaBancariaService.GetCuentasBancariasCierre().subscribe((data:any) => {
       console.log(data);
       
       if (data.codigo == 'success') {
