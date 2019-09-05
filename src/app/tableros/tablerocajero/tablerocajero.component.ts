@@ -704,6 +704,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
 
           console.log(this.CambioModel);
+          this.CambioModel.Id_Caja = this.generalService.SessionDataModel.idCaja;
+          this.CambioModel.Id_Oficina = this.generalService.SessionDataModel.idOficina;
           
           let info = JSON.stringify(this.CambioModel);
           let datos = new FormData();
@@ -2059,8 +2061,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.MonedaParaTransferencia.id = value;
       this.TransferenciaModel.Moneda_Destino = value;
       this.SetMonedaDestinatarios(value);
+      // if (value != '') {         
+      //   this._actualizarCuentasDestinatarios();
+      // }else{
+      //   this._limpiarCuentasBancarias();
+      // }
 
       if(value != ''){
+        this._actualizarCuentasDestinatarios();
         let c = this.Monedas.find(x =>  x.Id_Moneda == value);
         this.MonedaParaTransferencia.nombre = c.Nombre;
 
@@ -2076,10 +2084,67 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
         });
       }else{
+        this._limpiarCuentasBancarias();
         this.MonedaParaTransferencia.nombre = '';
         this.TransferenciaModel.Tasa_Cambio = '';
         this.InputBolsaBolivares  = false;
       }         
+    }
+
+    private _actualizarCuentasDestinatarios(){
+      console.log("actualizando cuentas destinatarios por cambio de moneda");
+      
+      if (this.ListaDestinatarios.length > 0) {
+        let id_destinatarios = this._concatenarDocumentosDestinatarios();
+        if (id_destinatarios != '') {
+          let p = {moneda:this.MonedaParaTransferencia.id,ids:id_destinatarios};
+          console.log("parametros consulta", p);
+          this.destinatarioService.GetCuentasDestinatarios(p).subscribe((data:any) => {
+            console.log(data);
+
+            if (data.destinatarios.length > 0) {
+              data.destinatarios.forEach((id_dest, i) => {
+                console.log(id_dest);
+                
+                let index_dest = this.ListaDestinatarios.findIndex(x => x.Numero_Documento_Destino == id_dest);
+                this.ListaDestinatarios[index_dest].Cuentas = data.cuentas[i];
+                if (data.cuentas[i].length == 0) {
+                  this.ListaDestinatarios[index_dest].Id_Destinatario_Cuenta = '';
+                }
+              });
+            }
+            
+            // if (data.codigo == 'success') {
+              // data.query_data.forEach((cuentas,i) => {
+              //   this.ListaDestinatarios[i].Cuentas = cuentas;
+              // });
+            // }else{
+            //   this.swalService.ShowMessage(data);
+            // }
+          });
+        }        
+      }      
+    }
+
+    private _limpiarCuentasBancarias(){
+      if (this.ListaDestinatarios.length > 1) {
+        this.ListaDestinatarios.forEach((d,i) => {
+          this.ListaDestinatarios[i].Cuentas = [];
+        });
+      }
+    }
+
+    private _concatenarDocumentosDestinatarios(){
+      let ids = '';
+      this.ListaDestinatarios.forEach(d => {
+        console.log(d);
+        if (d.Numero_Documento_Destino != '') {
+          
+          ids += d.Numero_Documento_Destino+',';          
+        }
+      });
+
+      return ids;
     }
 
     SetMonedaDestinatarios(idMoneda){
@@ -2697,6 +2762,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#endregion
 
   //#region FUNCIONES GIROS  
+
+  public ActualizarTablasGiros(){
+    this.CargarGirosDiarios();
+    this.CargarGirosAprobados();
+  }
   
     ModalVerGiro(id) {
       this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { modulo: 'Giro', id: id } }).subscribe((data: any) => {
@@ -2735,16 +2805,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.confirmacionSwal.show();
           modal.hide();
 
-          this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value } }).subscribe((data: any) => {
-            this.GirosBuscar = data;
-            //this.actualizarVista();
-            if (this.GirosBuscar.length > 0) {
-              this.Aparecer = true;
-            }
-          });
-
+          this.FiltrarGiroCedula(value);
+          this.ActualizarTablasGiros();
         });
-
     }
 
     ConfirmacionGiro(valor) {
@@ -3116,6 +3179,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Giros = data;
       });
     }
+    
+    CargarGirosAprobados(){
+      this.GirosAprobados = [];
+      this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario:this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
+        this.GirosAprobados = data;
+      });
+    }
 
     AnularGiro(id) {
       let datos = new FormData();
@@ -3322,7 +3392,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           Valor: '',
           Detalle: '',
           Id_Moneda: '',
-          Estado: 'Activo',
+          Estado: 'Pendiente',
           Identificacion_Funcionario: '',
           Aprobado: 'No'
         };

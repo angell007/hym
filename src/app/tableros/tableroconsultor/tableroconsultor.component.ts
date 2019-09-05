@@ -13,6 +13,9 @@ import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { EventEmitter } from 'events';
+import { GeneralService } from '../../shared/services/general/general.service';
+import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
+import { SwalService } from '../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-tableroconsultor',
@@ -107,14 +110,17 @@ export class TableroconsultorComponent implements OnInit {
   public IconoOpcionCuenta:string = 'ti-key';
 
   public AbrirModalAperturaCuenta:Subject<any> = new Subject();
+  public Id_Funcionario:string = '';
+  public Id_Apertura:string = '';
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, private _generalService:GeneralService, private _cuentaBancariaService:CuentabancariaService, private _swalService:SwalService) { }
 
   ngOnInit() {
+    this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
     this.AsignarPaises();
     //this.VerificarAperturaCuenta();
     setTimeout(() => {
-      this.AbrirModalAPerturaCuentas();      
+      this.ConsultarAperturaFuncionario();      
     }, 500);
   }
 
@@ -124,6 +130,33 @@ export class TableroconsultorComponent implements OnInit {
       this.cargarTabla = true; 
       this.TablaPendientes = true;
     };
+  }
+
+  public ConsultarAperturaFuncionario(){
+    this._cuentaBancariaService.GetAperturaFuncionario(this._generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) =>{
+      console.log(data);
+      
+      if (!data.apertura_activa) {
+        this.AbrirModalAPerturaCuentas();
+      }else{
+        //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
+        this.Id_Apertura = data.query_data.Id_Consultor_Apertura_Cuenta;
+        this._getCuentasFuncionarioApertura();
+      }
+    });
+  }
+
+  private _getCuentasFuncionarioApertura(){
+    this._cuentaBancariaService.GetCuentasFuncionarioApertura(this.Id_Apertura).subscribe((data:any) => {
+      console.log(data);
+      
+      if (data.codigo == 'success') {
+        this.CuentasSeleccionadas = data.query_data;        
+      }else{
+        this.CuentasSeleccionadas = [];
+        this._swalService.ShowMessage(['warinig','Alerta','No se encontraron cuentas para el registro de apertura, contacte con el administrador!']);
+      }
+    });
   }
 
   public AbrirModalAPerturaCuentas(){
@@ -546,10 +579,11 @@ export class TableroconsultorComponent implements OnInit {
     this.alertSwal.show();
   }
 
-  public RecibirCuentasSeleccionadas(cuentaSeleccionadas:Array<any>){
-    console.log(cuentaSeleccionadas);
+  public RecibirCuentasSeleccionadas(datos:any){
+    console.log(datos);
     
-    this.CuentasSeleccionadas = cuentaSeleccionadas;
+    this.CuentasSeleccionadas = datos.cuentas;
+    this.Id_Apertura = datos.id_apertura;
   }
 
   //#endregion

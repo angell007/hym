@@ -14,9 +14,10 @@
               <tr>
                 <th class="custom-thead" style="width:25%;">Titular</th>
                 <th class="custom-thead" style="width:20%;">Banco</th>
-                <th class="custom-thead" style="width:30%;">Nro. Cuenta</th>
+                <th class="custom-thead" style="width:20%;">Nro. Cuenta</th>
                 <th class="custom-thead" style="width:15%;">Moneda</th>
                 <th class="custom-thead" style="width:10%;">Monto Apertura</th>
+                <th class="custom-thead" style="width:10%;">Monto Último Cierre</th>
               </tr>
               <tr *ngIf="Cargando">
                 <td colspan="11" class="text-center">
@@ -43,6 +44,7 @@
                 <td class="custom-cell">
                   <input type="number" [(ngModel)]="cb.Monto_Apertura" [disabled]="cb.Habilitar_Monto == '0'">
                 </td>
+                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Monto_Ultimo_Cierre}}</td>
               </tr>
             </tbody>
           </table>

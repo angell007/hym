@@ -23,10 +23,16 @@
             <label class="block-element">{{Transferencia.Forma_Pago}}</label>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <div class="form-group">
             <label class="font-weight-bold">Tipo</label>
             <label class="block-element">{{Transferencia.Tipo_Transferencia}}</label>
+          </div>
+        </div>
+        <div class="col-md-3" *ngIf="Transferencia.Tipo_Transferencia == 'Cliente'">
+          <div class="form-group">
+            <label class="font-weight-bold">Enviado a:</label>
+            <label class="block-element">{{Transferencia.Cliente_Transferencia}}</label>
           </div>
         </div>
       </div>

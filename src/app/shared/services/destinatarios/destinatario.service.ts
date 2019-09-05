@@ -40,6 +40,10 @@ export class DestinatarioService {
   }
 
   validarExistenciaDestinatario(p:any):Observable<any>{
-    return this.client.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params:p})
+    return this.client.get(this.globales.ruta+'php/destinatarios/validar_existencia_destinatario.php', { params:p});
+  }
+  
+  public GetCuentasDestinatarios(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'php/destinatarios/get_cuentas_destinatarios.php', { params:p});
   }
 }

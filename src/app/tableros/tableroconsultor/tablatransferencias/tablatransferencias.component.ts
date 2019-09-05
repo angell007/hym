@@ -17,6 +17,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
  // @Input() MonedaConsulta:string = '';
   //@Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario:string = '';
+  @Input() Id_Apertura:string = '';
   @Input() CuentasBancariasSeleccionadas:any = [];
 
   @Output() ActualizarIndicadores = new EventEmitter();
@@ -194,6 +195,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     let datos = new FormData();
     datos.append("modelo", info);
     datos.append("cajero", this.Id_Funcionario);
+    datos.append("id_apertura", this.Id_Apertura);
     datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
 
     this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {

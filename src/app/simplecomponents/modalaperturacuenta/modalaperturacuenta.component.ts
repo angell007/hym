@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
+import { MonedaService } from '../../shared/services/monedas/moneda.service';
 
 @Component({
   selector: 'app-modalaperturacuenta',
@@ -21,11 +22,13 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CuentasBancarias:Array<any> = [];
   public CuentasBancariasSeleccionadas:Array<any> = [];
   public CuentasBancariasSeleccionadasId:Array<string> = [];
+  public MaximoDiferencialMonedas:Array<string> = [];
   public Cargando:boolean = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               public generalService:GeneralService,
-              private _swalService:SwalService) { }
+              private _swalService:SwalService,
+              private _monedaService:MonedaService) { }
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
@@ -44,6 +47,18 @@ export class ModalaperturacuentaComponent implements OnInit {
         this.CuentasBancarias = data.query_data;
       }else{
         this.CuentasBancarias = [];
+      }
+    });
+  }
+
+  private GetDiferencialMonedas(){
+    this._monedaService.GetMaximaDiferenciaMonedas().subscribe((data:any) => {
+      console.log(data);
+      
+      if (data.codigo == 'success') {
+        this.MaximoDiferencialMonedas = data.query_data;
+      }else{
+        this.MaximoDiferencialMonedas = [];
       }
     });
   }
@@ -94,7 +109,8 @@ export class ModalaperturacuentaComponent implements OnInit {
       console.log(d);
       if (d.codigo == 'success') {
         this._swalService.ShowMessage(d);
-        this.EnviarCuentasSeleccionadas.emit(this.CuentasBancariasSeleccionadas);
+        let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
+        this.EnviarCuentasSeleccionadas.emit(p);
         this.ModalAperturaCuenta.hide();
         this._limpiarListas();
       }else{

@@ -60,6 +60,7 @@ import { CompraseditarComponent } from './configuracion/compras/compraseditar/co
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
+import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -277,6 +278,10 @@ export const AppRoutes: Routes = [
     {
         path: 'cierrecaja/:id_funcionario/:solo_ver', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'cierrecuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: CierrecuentasconsultorComponent, canActivate: [AuthGuard] }]
     },    
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }

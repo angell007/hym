@@ -540,7 +540,7 @@
                                                                     <!-- <i class="ml-1" [ngClass]="{'ti-unlock':DeshabilitarTasa, 'ti-lock':!DeshabilitarTasa}" style="cursor:pointer;" 
                                                                         (click)="DesbloquearTasa()"></i> -->
                                                                 </label>
-                                                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control alinear-derecha"
+                                                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control alinear-derecha" [disabled]="TransferenciaModel.Cantidad_Transferida == ''"
                                                                     name="Tasa_Cambio" [(ngModel)]="TransferenciaModel.Tasa_Cambio"
                                                                     (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')" placeholder="Tasa cambiaria">
                                                             </div>
@@ -675,7 +675,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button class="btn btn-primary btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
+                                                    <button class="btn btn-danger btn-sm btn-block mrg-top-10" (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                                                 </div>
                                             </div>
 
@@ -704,8 +704,9 @@
                         <div class="mrg-top-10" style="min-height: 470px;">
                             <div class="row" id="Giros1" *ngIf="Giro1">
                                 <div class="col-md-12">
-                                    <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">Nuevo
-                                        Giro</button>
+                                    <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">
+                                        Nuevo Giro
+                                    </button>
                                 </div>
 
                                 <div class="col-md-12">
@@ -715,11 +716,11 @@
                                             <!-- <h4 class="card-title">Default Tabs</h4> -->
                                             <div class="tab-success">
                                                 <ul class="nav nav-tabs" role="tablist">
-                                                    <li class="nav-item">
+                                                    <li class="nav-item" (click)="ActualizarTablasGiros()">
                                                         <a href="#default-tab-1" class="nav-link active" role="tab"
                                                             data-toggle="tab">Giros Enviados</a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <li class="nav-item" (click)="ActualizarTablasGiros()">
                                                         <a href="#default-tab-2" class="nav-link" role="tab"
                                                             data-toggle="tab">Giros Pagados</a>
                                                     </li>
@@ -751,8 +752,8 @@
                                                                             <td>{{Giro.Nombre_Remitente}}</td>
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td>{{Giro.Valor_Total | currency}}</td>
+                                                                            <td>{{Giro.Valor_Recibido | customcurrency}}</td>
+                                                                            <td>{{Giro.Valor_Total | customcurrency}}</td>
                                                                             <!--<td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
                                                                             <td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
                                                                         </tr>
@@ -1089,7 +1090,7 @@
                                                 Giro</button>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-success btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
+                                            <button class="btn btn-danger btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1288,7 +1289,7 @@
                                             Traslado</button>
                                     </div>
                                     <div class="col-md-2">
-                                        <button class="btn btn-success btn-sm btn-block" (click)="volverTraslado()">Volver</button>
+                                        <button class="btn btn-danger btn-sm btn-block" (click)="volverTraslado()">Volver</button>
                                     </div>
                                 </div>
                             </div>
@@ -1488,7 +1489,7 @@
                                                 (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Crear Servicio</button>
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-success btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
+                                            <button class="btn btn-danger btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1867,7 +1868,8 @@
                     </tr>
                     <tr>
                         <td>Tipo de Cambio</td>
-                        <td>{{verCambio.Tipo}}</td>
+                        <td *ngIf="verCambio.Tipo == 'Compra'">{{verCambio.Tipo}} de {{verCambio.Moneda_Origen}}</td>
+                        <td *ngIf="verCambio.Tipo == 'Venta'">{{verCambio.Tipo}} de {{verCambio.Moneda_Destino}}</td>
                     </tr>
                     <tr>
                         <td>Recibo</td>

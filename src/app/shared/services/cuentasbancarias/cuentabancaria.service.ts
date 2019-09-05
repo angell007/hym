@@ -32,8 +32,19 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias_apertura.php');
   }
   
-  public GetCuentasBancariasCierre():Observable<any>{
-    return this.client.get(this._rutaBase+'/get_cuentas_bancarias_cierre.php');
+  public GetCuentasBancariasCierre(idFuncionario:string):Observable<any>{
+    let p = {id_funcionario:idFuncionario};
+    return this.client.get(this._rutaBase+'/get_cuentas_bancarias_cierre.php', {params:p});
+  }
+  
+  public GetAperturaFuncionario(idFuncionario:string):Observable<any>{
+    let p = {id_funcionario:idFuncionario};
+    return this.client.get(this._rutaBase+'/consultar_apertura_cuenta_diaria.php', {params:p});
+  }
+  
+  public GetCuentasFuncionarioApertura(idApertura:string):Observable<any>{
+    let p = {id_apertura:idApertura};
+    return this.client.get(this._rutaBase+'/get_cuentas_funcionario_apertura.php', {params:p});
   }
   
   getCuentasBancariasFuncionario(idFuncionario:string):Observable<any>{
