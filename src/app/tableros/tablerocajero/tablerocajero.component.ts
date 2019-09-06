@@ -332,7 +332,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       //DATOS CREDITO
       Cupo_Tercero: 0,
-      Bolsa_Bolivares:'',
+      Bolsa_Bolivares:'0',
 
       //DATOS CONSIGNACION
       Id_Tercero_Destino: '',
@@ -1159,9 +1159,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
           break;
 
-        case 'por tasa':
-          console.log("entro");
-          
+        case 'por tasa':          
           if (!this.ValidarTasaCambioModal(tasa_cambio)) {
             return;
           }
@@ -1288,6 +1286,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     CalcularCambio(valor:number, tasa:number, tipo:string, permisoJefe:boolean = false){
 
       let conversion_moneda = 0;
+      let bolsa = 0;
+      if (this.TransferenciaModel.Bolsa_Bolivares != '0' && this.TransferenciaModel.Forma_Pago == "Credito") {
+        bolsa = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+      }
 
       switch (tipo) {
         case 'recibido':
@@ -1303,8 +1305,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           
           conversion_moneda = Math.round(valor / tasa);
           this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
+          let conversion_con_bolsa = Math.round(valor / tasa) + bolsa;
           //this.AsignarValorDestinatarios(conversion_moneda, TotalTransferenciaDestinatario, count);
-          this.AsignarValorTransferirDestinatario(conversion_moneda);
+          this.AsignarValorTransferirDestinatario(conversion_con_bolsa);
           break;
 
         case 'transferencia':
@@ -1320,7 +1323,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           conversion_moneda = Math.round(valor * tasa);
           this.TransferenciaModel.Cantidad_Recibida = Math.round(conversion_moneda);
           //this.AsignarValorDestinatarios(valor, TotalTransferenciaDestinatario, count);
-          this.AsignarValorTransferirDestinatario(valor);
+          let conversion_con_bolsa2 = valor + bolsa;          
+          this.AsignarValorTransferirDestinatario(conversion_con_bolsa2);
           
           break;
       
@@ -1485,54 +1489,58 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // }
 
     Asignar(valor, total_destinatarios, count){
-            
-      if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
-        let valor_bolsa = Math.round(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
-        let nuevo_valor = valor + valor_bolsa;
-        
-        if (nuevo_valor > total_destinatarios) {
-        
-          if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
-            this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
-          }
-          let v_transferir = Math.round(parseFloat(this.ListaDestinatarios[(count - 1)].Valor_Transferencia));
-          let operacion = v_transferir + (nuevo_valor - total_destinatarios);
-          this.ListaDestinatarios[(count - 1)].Valor_Transferencia = operacion;
-    
-        }else if (nuevo_valor < total_destinatarios) {
-    
-          let resta = total_destinatarios;
-          
-          for (let index = count; index > 0; index--) {
-            let valor_pos = Math.round(parseFloat(this.ListaDestinatarios[index - 1].Valor_Transferencia));
-            
-            resta -= Math.round(Number(valor_pos));
-    
-            if (resta > nuevo_valor) {
-              
-              this.ListaDestinatarios[index - 1].Valor_Transferencia = '0';
-    
-            }else if (resta < nuevo_valor && resta > valor) {
-              let asignar = nuevo_valor - resta;
-              this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
-              if (asignar > 0) {
-                break;
-              }   
-            
-            }else if (resta < nuevo_valor && resta < valor) {
-              let asignar = valor - resta;
-              this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
-              if (asignar > 0) {
-                break;
-              }   
-            
-            }else if (resta == nuevo_valor) {
-              break;   
-            }        
-          }
-        }
+      // if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
+      //   let valor_bolsa = Math.round(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
+      //   let nuevo_valor = valor + valor_bolsa;
 
-      }else{
+      //   console.log(valor);
+      //   console.log(valor_bolsa);
+      //   console.log(nuevo_valor);        
+      //   console.log(total_destinatarios);
+        
+      //   if (nuevo_valor > total_destinatarios) {
+        
+      //     if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
+      //       this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
+      //     }
+      //     let v_transferir = Math.round(parseFloat(this.ListaDestinatarios[(count - 1)].Valor_Transferencia));
+      //     let operacion = v_transferir + (nuevo_valor - total_destinatarios);
+      //     this.ListaDestinatarios[(count - 1)].Valor_Transferencia = operacion;
+    
+      //   }else if (nuevo_valor < total_destinatarios) {
+    
+      //     let resta = total_destinatarios;
+          
+      //     for (let index = count; index > 0; index--) {
+      //       let valor_pos = Math.round(parseFloat(this.ListaDestinatarios[index - 1].Valor_Transferencia));
+            
+      //       resta -= Math.round(Number(valor_pos));
+    
+      //       if (resta > nuevo_valor) {
+              
+      //         this.ListaDestinatarios[index - 1].Valor_Transferencia = '0';
+    
+      //       }else if (resta < nuevo_valor && resta > valor) {
+      //         let asignar = nuevo_valor - resta;
+      //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
+      //         if (asignar > 0) {
+      //           break;
+      //         }   
+            
+      //       }else if (resta < nuevo_valor && resta < valor) {
+      //         let asignar = valor - resta;
+      //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
+      //         if (asignar > 0) {
+      //           break;
+      //         }   
+            
+      //       }else if (resta == nuevo_valor) {
+      //         break;   
+      //       }        
+      //     }
+      //   }
+
+      // }else{
 
         if(this.ListaDestinatarios[0].Valor_Transferencia == ''){
           this.ListaDestinatarios[0].Valor_Transferencia = '0';
@@ -1542,8 +1550,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         let operacion = Math.round(v_transferir + (valor - total_destinatarios));
         this.ListaDestinatarios[0].Valor_Transferencia = operacion;
 
-        this.VerificarDestinatariosConTransferenciaMayorAlTotal();
-      }
+        // this.VerificarDestinatariosConTransferenciaMayorAlTotal();
+      // }
     }
 
     VerificarDestinatariosConTransferenciaMayorAlTotal(){
@@ -1596,6 +1604,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             }else if(total_valor_destinatarios < transferir){
             }
           }else{
+            console.log("asignando valor con bolsa de bolivares");
             
             if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
               this.ListaDestinatarios[index].Valor_Transferencia = '';
@@ -1668,6 +1677,86 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
+    ValidarValorTransferirDestinatario2(valor, index){
+      if (valor == '') {
+        this.ListaDestinatarios[index].Valor_Transferencia = '';
+        
+      }else if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+        if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
+          //ASIGNAR VALORES TOMANDO EN CUENTA LA BOLSA DE BOLIVARES
+          console.log("asignando valor con bolsa");
+          this._asignarValoresConBolsaBolivares(valor, index);
+        }else{
+          //ASIGNAR VALORES NORMALMENTE
+          console.log("asignando valor sin bolsa");
+          this._asignarValoresSinBolsaBolivares(valor, index);
+        }
+      }else{
+        //ASIGNAR VALORES NORMALMENTE
+        console.log("asignando valor sin bolsa");
+        this._asignarValoresSinBolsaBolivares(valor, index);
+      }
+    }
+
+    private _asignarValoresSinBolsaBolivares(valor, i){      
+      if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
+          
+        this.ListaDestinatarios[i].Valor_Transferencia = '';
+        this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir!');
+        return;
+      }
+  
+      if (valor == '') {
+        this.ListaDestinatarios[i].Valor_Transferencia = '0';
+        return;
+      }
+
+      let total_transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+      valor = parseFloat(valor.replace(/\./g, ''));
+      let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+      let total_destinatarios_real = total_valor_destinatarios - valor;
+      let conteo = this.ListaDestinatarios.length - 1;        
+      
+      if (valor > total_transferir) {
+        // this.ListaDestinatarios[index].Valor_Transferencia = '0';
+        this.ListaDestinatarios[i].Valor_Transferencia = total_transferir - total_destinatarios_real;
+        let toastObj = {textos:["Alerta", "El valor que coloco supera el total a transferir!"], tipo:"warning", duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }else if (total_valor_destinatarios > total_transferir) {
+        // this.ListaDestinatarios[i].Valor_Transferencia = '0';
+        this.ListaDestinatarios[i].Valor_Transferencia = (total_valor_destinatarios-valor) - total_transferir;
+        let toastObj = {textos:["Alerta", "El valor que coloco supera el total a transferir!"], tipo:"warning", duracion:4000};
+        this._toastService.ShowToast(toastObj);
+      }else if(total_valor_destinatarios <= total_transferir){
+        let asignar = Math.round(parseFloat(valor));
+        let asignar_siguiente = Math.round(total_transferir - total_valor_destinatarios);
+        this.ListaDestinatarios[i].Valor_Transferencia = asignar;
+
+        if (i < conteo) {
+          this.ListaDestinatarios[(i+1)].Valor_Transferencia = parseFloat(this.ListaDestinatarios[(i+1)].Valor_Transferencia) > 0 ? this.ListaDestinatarios[(i+1)].Valor_Transferencia : asignar_siguiente;  
+        }
+        
+        this.VerificarDestinatariosConTransferenciaMayorAlTotal();
+      }  
+    }
+
+    private _asignarValoresConBolsaBolivares(valor, i){      
+      let bolsa_bolivares = parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+      let transferir = (this.TransferenciaModel.Cantidad_Transferida == '' || isNaN(this.TransferenciaModel.Cantidad_Transferida)) ? 0 : parseFloat(this.TransferenciaModel.Cantidad_Transferida);
+      let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
+      let transferir_con_bolsa = bolsa_bolivares + transferir;
+      valor = parseFloat(valor.replace(/\./g, ''));
+
+      if (total_valor_destinatarios > transferir_con_bolsa) {
+  
+        let asignar = Math.round(valor - (total_valor_destinatarios - transferir_con_bolsa));
+        this.ListaDestinatarios[i].Valor_Transferencia = asignar;
+
+      }else if(total_valor_destinatarios < transferir_con_bolsa){
+        this.ListaDestinatarios[i].Valor_Transferencia = valor;
+      }      
+    }
+
     ValidarCantidadTransferidaDestinatarios(){   
 
       let totalDestinatarios = this.GetTotalTransferenciaDestinatarios();
@@ -1733,9 +1822,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       switch (tipo_transferencia) {
         case 'Transferencia':
 
-          if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0' ) {
+          if (this.TransferenciaModel.Bolsa_Bolivares != '0' ) {
+            console.log(total_suma_transferir_destinatarios);
+            console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
+            console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
+            console.log(total_a_transferir);
             
-            if (total_suma_transferir_destinatarios < (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
+            
+            if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
               let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
 
               this.SaveTransferencia(restante_bolsa);
@@ -1938,9 +2032,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
         this.TransferenciaModel.Documento_Origen = datos_tercero.Id_Tercero;
         this.TransferenciaModel.Cupo_Tercero = datos_tercero.Cupo;
+        this.TransferenciaModel.Bolsa_Bolivares = datos_tercero.Bolsa_Bolivares;
+        if (datos_tercero.Bolsa_Bolivares != '0') {
+          this.DeshabilitarValor = false;
+        }else{
+          this.DeshabilitarValor = true;
+        }
       }else{
         this.TransferenciaModel.Documento_Origen = '';
         this.TransferenciaModel.Cupo_Tercero = '';
+        this.TransferenciaModel.Bolsa_Bolivares = '0';
+
       }
       
     }
@@ -1979,6 +2081,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         
         let transferido = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
         let bolsa = (this.TransferenciaModel.Bolsa_Bolivares == '' || isNaN(this.TransferenciaModel.Bolsa_Bolivares)) ? 0 : parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+
+        console.log(bolsa);        
 
         if(bolsa == 0){
           return true;
@@ -3635,8 +3739,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     CargarServiciosDiarios(){
       this.Servicios = [];
-      this.http.get(this.globales.ruta + 'php/genericos/listar_fecha_hoy.php', { params: { modulo: 'Servicio' } }).subscribe((data: any) => {
-        this.Servicios = data;
+      this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php').subscribe((data: any) => {
+        this.Servicios = data.query_data;
       });
     }
 

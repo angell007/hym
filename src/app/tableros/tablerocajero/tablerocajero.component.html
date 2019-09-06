@@ -499,7 +499,7 @@
                                                                             type="text" placeholder="Valor a Transferir" [disabled]="DeshabilitarValor"
                                                                             class="form-control alinear-derecha" name="Valor_Transferencia_{{i}}"
                                                                             [(ngModel)]="destinatario.Valor_Transferencia" required
-                                                                            (blur)="ValidarValorTransferirDestinatario($event.target.value, i)"
+                                                                            (blur)="ValidarValorTransferirDestinatario2($event.target.value, i)"
                                                                             currencyMask [options]="{ thousands: '.' }">
                                                                         </div>
                                                                         <div class="col-md-2">
@@ -836,7 +836,7 @@
                                                                                         <td>{{Giro.Documento_Destinatario}}</td>
                                                                                         <td>{{Giro.Nombre_Destinatario}}</td>
                                                                                         <!-- <td>{{Giro.Giro_Libre == '0' ? 'No' : 'Si'}} </td> -->
-                                                                                        <td>{{Giro.Valor_Total | customcurrency}}</td>
+                                                                                        <td>{{Giro.Valor_Entrega | customcurrency}}</td>
                                                                                         <!-- <td>{{Giro.Comision | customcurrency}}</td> -->
                                                                                         <td class="text-center">
                                                                                             <button class="btn btn-default btn-xs"
@@ -1386,7 +1386,7 @@
 
                                 <div class="col-md-12">
                                     <hr>
-                                    <h5>Últimas Servicios Registrados</h5>
+                                    <h5>Últimos Servicios Registrados</h5>
                                     <div class="table-responsive">
                                         <table class="table table-hover table-sm table-striped">
                                             <thead>
@@ -1403,9 +1403,9 @@
                                                 <tr *ngFor="let Servicio of Servicios" class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                                                     <td>{{Servicio.Fecha | date:"HH:mm" }}</td>
                                                     <td>{{Servicio.Codigo}}</td>
-                                                    <td>{{Servicio.Servicio_Externo }}</td>
-                                                    <td>{{Servicio.Valor | currency}}</td>
-                                                    <td>{{Servicio.Comision | currency }}
+                                                    <td>{{Servicio.Nombre_Servicio_Externo }}</td>
+                                                    <td>{{Servicio.Valor | customcurrency}}</td>
+                                                    <td>{{Servicio.Comision | customcurrency }}
                                                     </td>
 
                                                     <td class="text-center">
@@ -1947,7 +1947,7 @@
             </tr>
             <tr>
                 <td>Valor A Entregar</td>
-                <td>{{ValorTotalGiro | currency: "$. "}}</td>
+                <td>{{informacionGiro.Valor_Entrega | customcurrency}}</td>
             </tr>
         </table>
     </div>
