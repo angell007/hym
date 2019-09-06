@@ -741,7 +741,7 @@
                                                                             <th>Enviado Por</th>
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
-                                                                            <th>Valor Recibido</th>
+                                                                            <th>Valor Recibido Real</th>
                                                                             <th>Valor Entrega</th>
                                                                         </tr>
                                                                     </thead>
@@ -752,8 +752,8 @@
                                                                             <td>{{Giro.Nombre_Remitente}}</td>
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                            <td>{{Giro.Valor_Recibido | customcurrency}}</td>
                                                                             <td>{{Giro.Valor_Total | customcurrency}}</td>
+                                                                            <td>{{Giro.Valor_Entrega | customcurrency}}</td>
                                                                             <!--<td *ngIf="Giro.Valor_Total != Giro.Valor_Recibido ; else entrego">{{Giro.Valor_Total | currency}}</td>
                                                                             <td *ngIf="Giro.Valor_Total == Giro.Valor_Recibido"  >{{Giro.Valor_Entrega | currency}}</td> -->
                                                                         </tr>
@@ -774,7 +774,7 @@
                                                                             <th>Cédula Destinatario</th>
                                                                             <th>Nombre Destinatario</th>
                                                                             <th>Valor Pagado</th>
-                                                                            <th>Comisión</th>
+                                                                            <!-- <th>Comisión</th> -->
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -784,8 +784,8 @@
                                                                             <td>{{Giro.Nombre_Remitente}}</td>
                                                                             <td>{{Giro.Documento_Destinatario}}</td>
                                                                             <td>{{Giro.Nombre_Destinatario}} </td>
-                                                                            <td>{{Giro.Valor_Recibido | currency}}</td>
-                                                                            <td>{{Giro.Comision | currency}}</td>
+                                                                            <td>{{Giro.Valor_Entrega | customcurrency}}</td>
+                                                                            <!-- <td>{{Giro.Comision | customcurrency}}</td> -->
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -816,37 +816,35 @@
                                                                             <table class="table table-hover table-sm table-striped">
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th style="width:60px;">Hora</th>
+                                                                                        <th style="width:150px;">Fecha</th>
                                                                                         <th>Código</th>
                                                                                         <th>Enviado Por</th>
                                                                                         <th>Cédula Destinatario</th>
                                                                                         <th>Nombre Destinatario</th>
-                                                                                        <th>Valor a Pagar</th>
-                                                                                        <th>Comisión</th>
+                                                                                        <!-- <th>¿Libre?</th> -->
+                                                                                        <th>Valor a Entregar</th>
+                                                                                        <!-- <th>Comisión</th> -->
                                                                                         <th style="width:160px;"></th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr *ngFor="let Giro of GirosBuscar"
                                                                                         class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
-                                                                                        <td>{{Giro.Fecha |
-                                                                                            date:"HH:mm"}}</td>
+                                                                                        <td>{{Giro.Fecha | date:"dd/MM/yyyy HH:mm:ss"}}</td>
                                                                                         <td>{{Giro.Codigo}}</td>
                                                                                         <td>{{Giro.Nombre_Remitente}}</td>
                                                                                         <td>{{Giro.Documento_Destinatario}}</td>
-                                                                                        <td>{{Giro.Nombre_Destinatario}}
-                                                                                        </td>
-                                                                                        <td>{{Giro.Valor_Recibido |
-                                                                                            currency}}</td>
-                                                                                        <td>{{Giro.Comision |
-                                                                                            currency}}</td>
+                                                                                        <td>{{Giro.Nombre_Destinatario}}</td>
+                                                                                        <!-- <td>{{Giro.Giro_Libre == '0' ? 'No' : 'Si'}} </td> -->
+                                                                                        <td>{{Giro.Valor_Total | customcurrency}}</td>
+                                                                                        <!-- <td>{{Giro.Comision | customcurrency}}</td> -->
                                                                                         <td class="text-center">
                                                                                             <button class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;"
                                                                                                 (click)="ModalVerGiro(Giro.Id_Giro)">
                                                                                                 <i class="fa fa-check"></i>
                                                                                             </button>
-                                                                                            <button class="btn btn-default btn-xs"
+                                                                                            <!-- <button class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;">
                                                                                                 <i class="ti-printer"></i>
                                                                                             </button>
@@ -855,7 +853,7 @@
                                                                                                 class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;">
                                                                                                 <i class="ti-pencil"></i>
-                                                                                            </button>
+                                                                                            </button> -->
                                                                                             <button *ngIf="anulado(Giro.Estado)"
                                                                                                 class="btn btn-default btn-xs"
                                                                                                 type="button" style="margin:0;"
@@ -869,7 +867,6 @@
                                                                             </table>
                                                                         </div>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1031,7 +1028,7 @@
                                             <div class="row mrg-top-20">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>Valor Recibido</label>
+                                                        <label>Valor a Enviar</label>
                                                         <input type="text" placeholder="Precio" class="form-control text-right"
                                                             name="Valor_Recibido" [(ngModel)]="GiroModel.Valor_Recibido" 
                                                             (blur)="valorComision($event.target.value)" required 
@@ -1058,15 +1055,15 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>Valor a Entregar</label>
-                                                        <label class="block-element">{{GiroModel.Valor_Total == '' ? "0" : GiroModel.Valor_Total | customcurrency}}</label>
+                                                        <label class="block-element">{{GiroModel.Valor_Entrega == '' ? "0" : GiroModel.Valor_Entrega | customcurrency}}</label>
                                                         <!--<input type="text" placeholder="Precio" class="form-control"
                                                             readonly name="Valor_Total" [(ngModel)]="GiroModel.Valor_Total" required>-->
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>Total</label>
-                                                        <label class="block-element">{{GiroModel.Valor_Entrega == '' ? "0" : GiroModel.Valor_Entrega | customcurrency}}</label>
+                                                        <label>Total Recibido</label>
+                                                        <label class="block-element">{{GiroModel.Valor_Total == '' ? "0" : GiroModel.Valor_Total | customcurrency}}</label>
                                                         <!--<input type="text" placeholder="valor" class="form-control"
                                                             name="Valor_Entrega" [(ngModel)]="GiroModel.Valor_Entrega" readonly required>-->
                                                     </div>
@@ -1149,7 +1146,7 @@
                                                                     <tr *ngFor="let Traslado of Traslados" [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
-                                                                        <td>{{Traslado.Valor | currency}}</td>
+                                                                        <td>{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
                                                                         <td>{{Traslado.Moneda }}
                                                                         </td>
 
@@ -1188,7 +1185,7 @@
                                                                     [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
-                                                                        <td>{{Traslado.Valor | currency}}</td>
+                                                                        <td>{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
                                                                         <td>{{Traslado.Moneda }}
                                                                         </td>
 
@@ -1641,8 +1638,7 @@
                                 <label>Cajero Destino</label>
                                 <select name="Funcionario_Destino" class="form-control" [(ngModel)]="TrasladoModel.Funcionario_Destino">
                                     <option value="">seleccione una opción</option>
-                                    <option *ngFor="let ct of CajerosTraslados" value="{{ct.Identificacion_Funcionario}}">{{ct.Nombres}}
-                                        {{ct.Apellidos}}</option>
+                                    <option *ngFor="let ct of CajerosTraslados" value="{{ct.Identificacion_Funcionario}}">{{ct.Nombre}}</option>
                                 </select>
                             </div>
                         </div>

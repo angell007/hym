@@ -1222,11 +1222,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
       let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
       //tasa_cambio = parseFloat(tasa_cambio);
-
-      console.log(max);
-      console.log(min);
-      console.log(sug);
-      console.log(tasa_cambio);
       
       if (tasa_cambio > max || tasa_cambio < min) {
         this.TransferenciaModel.Tasa_Cambio = sug;
@@ -1250,11 +1245,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         }
     
         let cupo = parseFloat(this.TransferenciaModel.Cupo_Tercero);
-        let recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);
+        let recibido = parseFloat(this.TransferenciaModel.Cantidad_Recibida);      
     
         if (cupo < recibido) {
           this.ShowSwal('warning', 'Alerta', 'El cupo disponible es menor a la cantidad recibida!');
           this.TransferenciaModel.Cantidad_Recibida = cupo;
+          this.TransferenciaModel.Cantidad_Transferida = cupo / parseFloat(this.TransferenciaModel.Tasa_Cambio);
           return false;
         }
     
@@ -1290,8 +1286,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     CalcularCambio(valor:number, tasa:number, tipo:string, permisoJefe:boolean = false){
-      console.log(tasa);
-      
 
       let conversion_moneda = 0;
 
@@ -2990,13 +2984,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
         switch (checkeado) {
           case true: {
-            this.GiroModel.Valor_Total = recibido;
-            this.GiroModel.Valor_Entrega = recibido + parseFloat(maxComision);
+            this.GiroModel.Valor_Total = recibido + parseFloat(maxComision);
+            this.GiroModel.Valor_Entrega = recibido;
             break;
           }
           case false: {
-            this.GiroModel.Valor_Total = recibido - parseFloat(maxComision);
-            this.GiroModel.Valor_Entrega = recibido;
+            this.GiroModel.Valor_Total = recibido;
+            this.GiroModel.Valor_Entrega = recibido - parseFloat(maxComision);
             break;
           }
         }
@@ -3010,13 +3004,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             
             switch (checkeado) {
               case true: {
-                this.GiroModel.Valor_Total = recibido;
-                this.GiroModel.Valor_Entrega = recibido + parseFloat(element.Comision);
+                this.GiroModel.Valor_Total = recibido + parseFloat(element.Comision);
+                this.GiroModel.Valor_Entrega = recibido;
                 break;
               }
               case false: {
-                this.GiroModel.Valor_Total = recibido - parseFloat(element.Comision);
-                this.GiroModel.Valor_Entrega = recibido;
+                this.GiroModel.Valor_Total = recibido;
+                this.GiroModel.Valor_Entrega = recibido - parseFloat(element.Comision);
                 break;
               }
             }
