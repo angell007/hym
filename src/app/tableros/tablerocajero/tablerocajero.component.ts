@@ -320,6 +320,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       Moneda_Destino: '',
       Cantidad_Recibida: '',
       Cantidad_Transferida: '',
+      Cantidad_Transferida_Con_Bolivares: '',
       Tasa_Cambio: '',
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
@@ -1747,6 +1748,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let transferir_con_bolsa = bolsa_bolivares + transferir;
       valor = parseFloat(valor.replace(/\./g, ''));
 
+      console.log(total_valor_destinatarios);
+      console.log(transferir_con_bolsa);
+      
+
       if (total_valor_destinatarios > transferir_con_bolsa) {
   
         let asignar = Math.round(valor - (total_valor_destinatarios - transferir_con_bolsa));
@@ -1811,7 +1816,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     GuardarTransferenciaEfectivo(){  
       
       let tipo_transferencia = this.TransferenciaModel.Tipo_Transferencia;
-      let total_a_transferir = Math.round(parseFloat(this.TransferenciaModel.Cantidad_Transferida));
+      let total_a_transferir = isNaN(Math.round(parseFloat(this.TransferenciaModel.Cantidad_Transferida))) ? 0 : Math.round(parseFloat(this.TransferenciaModel.Cantidad_Transferida));
       let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios(); 
       this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;  
       
@@ -1827,15 +1832,45 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
             console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
             console.log(total_a_transferir);
-            
-            
-            if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
-              let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
 
+            if (total_suma_transferir_destinatarios > 0) {
+              let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
+              if (total_suma_transferir_destinatarios < (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {                
+                this.TransferenciaModel.Cantidad_Transferida_Con_Bolivares = total_suma_transferir_destinatarios;
+              }else if(total_suma_transferir_destinatarios >= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)){
+                this.TransferenciaModel.Cantidad_Transferida_Con_Bolivares = parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir;
+              }
+              console.log(this.TransferenciaModel);
+              
               this.SaveTransferencia(restante_bolsa);
             }else{
-              this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
+              this.ShowSwal('warning', 'Alerta', 'No se han cargado valores para transferir, ya sea en los destinatarios o en los datos de la transferencia!');
             }
+            
+            // if (this.TransferenciaModel.Forma_Pago == 'Credito') {
+            //   if (total_suma_transferir_destinatarios > 0) {
+            //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();  
+            //     this.SaveTransferencia(restante_bolsa);
+            //   }else{
+            //     this.ShowSwal('warning', 'Alerta', 'No se han cargado valores para transferir, ya sea en los destinatarios o en los datos de la transferencia!');
+            //   }
+            //   if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
+            //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
+  
+            //     this.SaveTransferencia(restante_bolsa);
+            //   }else{
+            //     this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
+            //   }
+            // }else{
+            //   if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
+            //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
+  
+            //     this.SaveTransferencia(restante_bolsa);
+            //   }else{
+            //     this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
+            //   }
+            // }
+            
           }else{
 
             if(total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios){
@@ -1891,6 +1926,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
+        // this.TransferenciaModel.Cantidad_Transferida = '';
         this.errorSwal.show();
         return this.handleError(error);
       }).subscribe((data: any) => {        
@@ -1954,6 +1990,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         Moneda_Destino: '',
         Cantidad_Recibida: '',
         Cantidad_Transferida: '',
+        Cantidad_Transferida_Con_Bolivares: '',
         Tasa_Cambio: '',
         Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
         Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
@@ -1966,7 +2003,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
         //DATOS CREDITO
         Cupo_Tercero: 0,
-        Bolsa_Bolivares: '',
+        Bolsa_Bolivares: '0',
 
         //DATOS CONSIGNACION
         Id_Cuenta_Bancaria: '',
@@ -2080,7 +2117,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (moneda_cambio == 1) {
         
         let transferido = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-        let bolsa = (this.TransferenciaModel.Bolsa_Bolivares == '' || isNaN(this.TransferenciaModel.Bolsa_Bolivares)) ? 0 : parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
+        let bolsa = (this.TransferenciaModel.Bolsa_Bolivares == '0' || isNaN(this.TransferenciaModel.Bolsa_Bolivares)) ? 0 : parseFloat(this.TransferenciaModel.Bolsa_Bolivares);
 
         console.log(bolsa);        
 
@@ -2364,17 +2401,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
         });
 
-        if (this.TransferenciaModel.Cantidad_Recibida == '' || this.TransferenciaModel.Cantidad_Recibida == 0 || this.TransferenciaModel.Cantidad_Recibida == undefined) {
+        if ((this.TransferenciaModel.Cantidad_Recibida == '' || this.TransferenciaModel.Cantidad_Recibida == 0 || this.TransferenciaModel.Cantidad_Recibida == undefined) && this.TransferenciaModel.Bolsa_Bolivares == '0') {
           this.ShowSwal('warning', 'Alerta', 'La cantidad recibida no puede ser 0 o no se ha asignado!');
           return false;
         }
 
-        if (this.TransferenciaModel.Tasa_Cambio == '' || this.TransferenciaModel.Tasa_Cambio == 0 || this.TransferenciaModel.Tasa_Cambio == undefined) {
+        if ((this.TransferenciaModel.Tasa_Cambio == '' || this.TransferenciaModel.Tasa_Cambio == 0 || this.TransferenciaModel.Tasa_Cambio == undefined) && this.TransferenciaModel.Bolsa_Bolivares == '0') {
           this.ShowSwal('warning', 'Alerta', 'La tasa de cambio no ha sido asignada!');
           return false;
         }
 
-        if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == 0 || this.TransferenciaModel.Cantidad_Transferida == undefined) {
+        if ((this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == 0 || this.TransferenciaModel.Cantidad_Transferida == undefined) && this.TransferenciaModel.Bolsa_Bolivares == '0') {
           this.ShowSwal('warning', 'Alerta', 'La cantidad transferida no puede ser 0 o no se ha asignado!');
           return false;
         }
@@ -3391,6 +3428,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     RealizarTraslado(formulario: NgForm, modal) {
       
       this.TrasladoModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
+      this.TrasladoModel.Id_Caja = this.generalService.SessionDataModel.idCaja;
       let info = JSON.stringify(this.TrasladoModel);
       let datos = new FormData();
       datos.append("modulo", 'Traslado_Caja');
@@ -3436,6 +3474,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Traslado = data;
         this.TrasladoModel = data;
         
+        this.GetCajerosTraslados();
+        this._getMonedasTraslado();
         this.ModalTrasladoEditar.show();
       });
     }
@@ -3756,6 +3796,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     muestra_tabla(id) {
+      console.log(id);
+      
       var tot = document.getElementsByClassName('modulos').length;
       for (let i = 0; i < tot; i++) {
         var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
@@ -3942,6 +3984,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       //   }
       // });
 
+      this._getMonedasTraslado();
+    }
+
+    private _getMonedasTraslado(){
       this.MonedasTraslados = [];
       this._monedaService.getMonedas().subscribe((data:any) => {
         if (data.codigo == 'success') {
