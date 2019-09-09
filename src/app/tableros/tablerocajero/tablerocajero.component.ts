@@ -320,7 +320,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       Moneda_Destino: '',
       Cantidad_Recibida: '',
       Cantidad_Transferida: '',
-      Cantidad_Transferida_Con_Bolivares: '',
+      Cantidad_Transferida_Con_Bolivares: '0',
       Tasa_Cambio: '',
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
@@ -1990,7 +1990,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         Moneda_Destino: '',
         Cantidad_Recibida: '',
         Cantidad_Transferida: '',
-        Cantidad_Transferida_Con_Bolivares: '',
+        Cantidad_Transferida_Con_Bolivares: '0',
         Tasa_Cambio: '',
         Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
         Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja,
@@ -3480,6 +3480,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       });
     }
 
+    CerrarModalTrasladoEditar(){
+      this.ModalTrasladoEditar.hide();
+      this.LimpiarModeloTraslados('creacion');
+    }
+
     decisionTraslado(id, valor) {
       let datos = new FormData();
       datos.append("modulo", 'Traslado_Caja');
@@ -3714,6 +3719,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       });
     }
 
+    public CerrarModalServicioEditar(){
+      this.ModalServicioEditar.hide();
+      this.LimpiarModeloServicios('edicion');
+    }
+
     AsignarComisionServicioExterno() {
 
       let valorAsignado = this.ServicioExternoModel.Valor;
@@ -3772,7 +3782,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           Detalle: '',
           Estado: 'Activo',
           Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
-          Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
+          Id_Caja: this.generalService.SessionDataModel.idCaja
         };
       }
     }

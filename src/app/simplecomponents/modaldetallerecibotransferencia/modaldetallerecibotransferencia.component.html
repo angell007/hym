@@ -60,7 +60,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label class="font-weight-bold">Transferido</label>
-            <label class="block-element">{{Transferencia.Cantidad_Transferida | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
+            <label class="block-element">{{Transferencia.Monto_Transferido | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
           </div>
         </div>
         <div class="col-md-2">
@@ -73,6 +73,14 @@
           <div class="form-group">
             <label class="font-weight-bold">Costo Transferencia</label>
             <label class="block-element">{{'0' | customcurrency}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" *ngIf="Transferencia.Cantidad_Recibida_Bolsa_Bolivares != '0'">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="font-weight-bold">Cupo Bolivares Usado</label>
+            <label class="block-element">{{Transferencia.Cantidad_Recibida_Bolsa_Bolivares | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
           </div>
         </div>
       </div>
