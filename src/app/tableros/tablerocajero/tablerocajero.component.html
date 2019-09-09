@@ -1383,11 +1383,11 @@
                                                             type="button" style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
                                                             <i class="ti-pencil"></i>
                                                         </button>
-                                                        <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                                        <!-- <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
                                                             type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este Servicio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                                             (confirm)="AnulaServicio(Servicio.Id_Servicio,Servicio.Estado)">
                                                             <i class="ti-close"></i>
-                                                        </button>
+                                                        </button> -->
 
                                                         <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label>
 
@@ -1706,7 +1706,7 @@
     </div>
     <div class="app-modal-footer">
         <button type="button" [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)" class="btn btn-primary btn-sm btn-block">Modificar
+            (confirm)="GuardarServicio(FormServicio,ModalServicioEditar, 'edicion')" class="btn btn-primary btn-sm btn-block">Modificar
             Servicio</button>
     </div>
 </app-modal-basic>

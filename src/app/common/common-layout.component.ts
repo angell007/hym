@@ -992,11 +992,11 @@ this.ModalResumenCuenta.show();
             timeout: duracion,
             onAdd: (toast:ToastData) => {
                 this.MostrarToasty = true;
-                console.log('Toast ' + toast.id + ' has been added!');
+                // console.log('Toast ' + toast.id + ' has been added!');
             },
             onRemove: function(toast:ToastData) {
                 this.MostrarToasty = false;
-                console.log('Toast ' + toast.id + ' has been removed!');
+                // console.log('Toast ' + toast.id + ' has been removed!');
             }
         }        
 
