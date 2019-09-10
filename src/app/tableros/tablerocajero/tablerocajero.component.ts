@@ -479,6 +479,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     public ListaServiciosExternos:any = [];
     public ComisionServicio:any = [];
+    public Total_Servicio:number = 0;
     
   //#endregion
 
@@ -545,7 +546,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       switchMap( value => value != '' ?
         this.http.get(this.globales.ruta+'php/serviciosexternos/comision_servicios.php', {params: { valor: value }}) : '' 
       )
-    ).subscribe(response => this.ServicioExternoModel.Comision = response);
+    ).subscribe((response:any) => {      
+      this.ServicioExternoModel.Comision = parseInt(response);
+      this.Total_Servicio = this.ServicioExternoModel.Valor + parseInt(response);
+      console.log(this.Total_Servicio);      
+    });
 
     this.AsignarMonedas();
     //this.AsignarMonedasApertura();
@@ -3697,16 +3702,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     AsignarComisionServicioExterno2() {
       
-      let valorAsignado = this.ServicioExternoModel.Valor;     
+      let valorAsignado = this.ServicioExternoModel.Valor; 
+      console.log(valorAsignado);         
 
       if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {
         this.ShowSwal('warning', 'Alerta', 'El valor no puede estar vacio ni ser 0!');
         this.ServicioExternoModel.Valor = '';
         this.ServicioExternoModel.Comision = '';
+        this.Total_Servicio = 0;
         return;
-      }
-      
-      this.searchComisionServicio.next(valorAsignado);
+      }else{
+        this.searchComisionServicio.next(valorAsignado);
+        
+        // setTimeout(() => {
+        //   console.log(this.ServicioExternoModel);
+        //   this.Total_Servicio = valorAsignado;
+        // }, 600);
+      }      
     }
 
     LimpiarModeloServicios(tipo:string){

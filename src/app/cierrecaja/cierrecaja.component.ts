@@ -98,9 +98,10 @@ export class CierrecajaComponent implements OnInit {
   ArmarCeldasTabla(){
     
     if (this.MonedasSistema.length > 0) {
-      this.MonedasSistema.forEach(m => {
-        let celda_i = {Nombre_Celda:'Ingresos'};
-        let celda_e = {Nombre_Celda:'Egresos'};
+      this.MonedasSistema.forEach((m,i) => {
+        let color = i % 2 == 0 ? '#d3d3d3': '#ffffff';
+        let celda_i = {Nombre_Celda:'Ingresos', Color:color};
+        let celda_e = {Nombre_Celda:'Egresos', Color:color};
         this.CeldasIngresoEgresoEncabezado.push(celda_i);
         this.CeldasIngresoEgresoEncabezado.push(celda_e);
         this.max_cel_colspan+=2;
@@ -132,9 +133,12 @@ export class CierrecajaComponent implements OnInit {
 
       this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-        let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        this.MostrarTotal.push(objMoneda.Ingreso_Total.toFixed(2));
-        this.MostrarTotal.push(objMoneda.Egreso_Total.toFixed(2));
+        let monto_inicial_moneda = this.ValoresMonedasApertura[i];        
+        let color = i % 2 == 0 ? '#d3d3d3': '#ffffff';
+        let obj_total_ing = {Total:objMoneda.Ingreso_Total.toFixed(2), Color:color};
+        let obj_total_eg = {Total:objMoneda.Egreso_Total.toFixed(2), Color:color};
+        this.MostrarTotal.push(obj_total_ing);
+        this.MostrarTotal.push(obj_total_eg);
         
         this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
         this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
@@ -176,36 +180,38 @@ export class CierrecajaComponent implements OnInit {
   GuardarCierre(){
     if (!this.ValidarMontos()) {
       return;
+    }else if (this.CierreCajaModel.Observacion == '') {      
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar la observacion antes de realizar el cierre de caja!');
+    }else{
+      this.ArmarResumenMovimientos();
+      console.log(this.ResumenMovimiento);
+      
+      let entregado = JSON.stringify(this.TotalEntregado);
+      let diferencias = JSON.stringify(this.Diferencias);
+      let resumen = JSON.stringify(this.ResumenMovimiento);
+      let model = JSON.stringify(this.CierreCajaModel);
+      let data = new FormData();
+      console.log(resumen);
+      data.append("entregado", entregado);
+      data.append("diferencias", diferencias);
+      data.append("modelo", model);
+      data.append("funcionario", this.id_funcionario);
+      data.append("resumen_movimientos", resumen);
+
+      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
+
+        if (data.tipo == 'error') {
+          
+          this.ShowSwal(data.tipo, 'Error', data.mensaje);
+        }else{
+          
+          this.LimpiarModelos();
+          //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
+          this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+          this.salir();
+        }
+      });
     }
-    
-    this.ArmarResumenMovimientos();
-    console.log(this.ResumenMovimiento);
-    
-    let entregado = JSON.stringify(this.TotalEntregado);
-    let diferencias = JSON.stringify(this.Diferencias);
-    let resumen = JSON.stringify(this.ResumenMovimiento);
-    let model = JSON.stringify(this.CierreCajaModel);
-    let data = new FormData();
-    console.log(resumen);
-    data.append("entregado", entregado);
-    data.append("diferencias", diferencias);
-    data.append("modelo", model);
-    data.append("funcionario", this.id_funcionario);
-    data.append("resumen_movimientos", resumen);
-
-    this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
-
-      if (data.tipo == 'error') {
-        
-        this.ShowSwal(data.tipo, 'Error', data.mensaje);
-      }else{
-        
-        this.LimpiarModelos();
-        //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
-        this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
-        this.salir();
-      }
-    });
   }
 
   ValidarMontos(){

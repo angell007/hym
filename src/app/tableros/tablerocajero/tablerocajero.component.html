@@ -1105,6 +1105,7 @@
                                                                     <tr>
                                                                         <th style="width:60px;">Hora</th>
                                                                         <th>Código</th>
+                                                                        <th>Enviado a</th>
                                                                         <th>Valor</th>
                                                                         <th>Moneda</th>
                                                                         <th style="width:160px;"></th>
@@ -1114,9 +1115,9 @@
                                                                     <tr *ngFor="let Traslado of Traslados" [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
+                                                                        <td>{{Traslado.Cajero_Destino}}</td>
                                                                         <td>{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
-                                                                        <td>{{Traslado.Moneda }}
-                                                                        </td>
+                                                                        <td>{{Traslado.Moneda }}</td>
 
                                                                         <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
                                                                             <button class="btn btn-default btn-xs" type="button"
@@ -1128,6 +1129,9 @@
                                                                                 (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
                                                                                 <i class="ti-close"></i>
                                                                             </button>
+                                                                        </td>
+                                                                        <td class="text-center" *ngIf="Traslado.Estado == 'Aprobado'">
+                                                                            <label>{{Traslado.Estado}}</label>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -1143,6 +1147,7 @@
                                                                     <tr>
                                                                         <th style="width:60px;">Hora</th>
                                                                         <th>Código</th>
+                                                                        <th>Enviado por</th>
                                                                         <th>Valor</th>
                                                                         <th>Moneda</th>
                                                                         <th style="width:160px;"></th>
@@ -1153,6 +1158,7 @@
                                                                     [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                                                         <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                                                         <td>{{Traslado.Codigo}}</td>
+                                                                        <td>{{Traslado.Cajero_Origen}}</td>
                                                                         <td>{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
                                                                         <td>{{Traslado.Moneda }}
                                                                         </td>
@@ -1316,6 +1322,7 @@
                                                     <th>Servicio</th>
                                                     <th>Valor</th>
                                                     <th>Comision</th>
+                                                    <th>Total</th>
                                                     <th style="width:160px;"></th>
                                                 </tr>
                                             </thead>
@@ -1325,8 +1332,8 @@
                                                     <td>{{Servicio.Codigo}}</td>
                                                     <td>{{Servicio.Nombre_Servicio_Externo }}</td>
                                                     <td>{{Servicio.Valor | customcurrency}}</td>
-                                                    <td>{{Servicio.Comision | customcurrency }}
-                                                    </td>
+                                                    <td>{{Servicio.Comision | customcurrency }}</td>
+                                                    <td>{{Servicio.Total | customcurrency }}</td>
 
                                                     <td class="text-center">
 
@@ -1384,6 +1391,12 @@
                                                         <label>Comisión</label>
                                                         <input name="Comision" type="text" placeholder="Comisión" class="form-control"
                                                             [(ngModel)]="ServicioExternoModel.Comision" readonly currencyMask [options]="{ thousands: '.' }">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="block-element">Total</label>
+                                                        <label>{{Total_Servicio}}</label>
                                                     </div>
                                                 </div>
                                             </div>
