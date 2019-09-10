@@ -340,8 +340,7 @@
                         <div class="mrg-top-10" style="min-height: 470px;">
                             <div class="row" id="transferencias1" *ngIf="Transferencia1">
                                 <div class="col-md-12">
-                                    <button (click)="CambiarVista('Transferencia')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo
-                                        Recibo De Transferencia</button>
+                                    <button (click)="CambiarVista('Transferencia')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo  Recibo De Transferencia</button>
                                 </div>
                                 <div class="col-md-12">
                                     <app-tablatransferenciascajero
@@ -1265,71 +1264,23 @@
 
                 <div class="card modulos" id="corresponsal" style="display: none;">
                     <div class="card-block">
-                        <!-- <app-corresponsalbancario
-                            *ngIf="Corresponsal">
-                        </app-corresponsalbancario> -->
-                        <app-corresponsalesbancarioscajero
-                            [ManageView]="corresponsalView.asObservable()">                            
-                        </app-corresponsalesbancarioscajero>
-                        <!-- <ul class="list-unstyled list-info">
-                            <li>
-                                <span class="thumb-img pdd-top-10">
-                                    <i class="ti-money text-warning font-size-30"></i>
-                                </span>
-                                <div class="info">
-                                    <b class="text-dark font-size-22">Corresponsal Bancario</b>
-                                    <p class="no-mrg-btm">Saldo del día</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="mrg-top-30" style="min-height: 470px;">
-                            <form #FormCorresponsal="ngForm">
-                                <h4>Datos del corresponsal</h4>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Corresponsal</label>
-                                            <select name="Id_Corresponsal_Bancario" class="form-control" 
-                                                    [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario"
-                                                (change)="ConsultarCorresponsalDiario()">
-                                                <option value="">Seleccione un Corresponsal</option>
-                                                <option *ngFor="let cb of CorresponsalesBancarios"
-                                                    value="{{cb.Id_Corresponsal_Bancario}}">{{cb.Nombre}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Consignaciones</label>
-                                            <input name="Valor" type="text" placeholder="Saldo del día" class="form-control"
-                                                [(ngModel)]="CorresponsalModel.Valor">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Retiros</label>
-                                            <input name="Valor" type="text" placeholder="Saldo del día" class="form-control"
-                                                [(ngModel)]="CorresponsalModel.Valor">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mrg-top-20">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Observaciones</label>
-                                            <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                                                [(ngModel)]="CorresponsalModel.Detalle"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <button type="submit" class="btn btn-sm btn-info btn-block" (click)="GuardarCorresponsal(FormCorresponsal)">Guardar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> -->
+                        <div class="row" id="corresponsal1" *ngIf="Corresponsal1">
+                            <div class="col-md-12">
+                                <button (click)="CambiarVista('Corresponsal')" class="btn btn-warning btn-block mrg-top-10 btn-grande" style="color:black;">Nuevo Registro Corresponsal</button>
+                            </div>
+                            <div class="col-md-12">
+                                <app-tablaregistroscorresponsalesdiarios
+                                [ActualizarTabla]="ActualizarTablaCorresponsal.asObservable()">
+                                </app-tablaregistroscorresponsalesdiarios>
+                            </div>
+                        </div>
+                        <!-- <div class="row" id="corresponsal2" *ngIf="Corresponsal2"> -->
+                            <app-corresponsalesbancarioscajero *ngIf="Corresponsal2"
+                                [ManageView]="corresponsalView.asObservable()"
+                                (ActualizarRegistrosCorresponsal)="UpdateTablaCorresponsal($event)"
+                                (RegresarTablaRegistros)="volverCorresponsal()">
+                            </app-corresponsalesbancarioscajero>
+                        <!-- </div> -->
                     </div>
                 </div>
 

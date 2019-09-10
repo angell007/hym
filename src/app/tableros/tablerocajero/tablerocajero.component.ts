@@ -101,6 +101,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   Transferencia2 = false;
   Traslado1 = true;
   Traslado2 = false;
+  Corresponsal1 = true;
+  Corresponsal2 = false;
   Historial = false;
   HistorialCliente = [];
   Giro1 = true;
@@ -456,6 +458,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     };
 
     public CorresponsalesBancos:any = [];
+    public ActualizarTablaCorresponsal:Subject<any> = new Subject<any>();
 
   //#endregion
 
@@ -3606,6 +3609,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
+    public UpdateTablaCorresponsal($event){
+      this.ActualizarTablaCorresponsal.next();
+    }
+
   //#endregion
 
   //#region FUNCIONES SERVICIOS EXTERNOS
@@ -3763,6 +3770,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.volverReciboGiro();
         this.volverTraslado();
         this.volverServicio();
+        this.volverCorresponsal();
         this.volverReciboServicio();
       }
   
@@ -3960,7 +3968,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       // this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Corresponsal_Bancario' } }).subscribe((data: any) => {
       //   this.CorresponsalesBancarios = data;
       // });
-      this.corresponsalView.next(AccionTableroCajero.Iniciar);
+      this.ActualizarTablaCorresponsal.next();
     }
 
     CargarDatosServicios(){
@@ -4046,6 +4054,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.Traslado1 = false;
 
           this.CargarDatosTraslados();
+          break;
+        }
+        case "Corresponsal": {
+          this.Corresponsal2 = true;
+          this.Corresponsal1 = false;
+          
+          this.corresponsalView.next(AccionTableroCajero.Iniciar);
+          //this.CargarDatosCorresponsal();
           break;
         }
         case "Servicio": {
@@ -4142,6 +4158,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     volverReciboServicio() {
       this.Servicio1 = true;
       this.Servicio2 = false;
+    }
+    
+    public volverCorresponsal() {
+      this.Corresponsal1 = true;
+      this.Corresponsal2 = false;
     }
 
     AsignarMonedas(){

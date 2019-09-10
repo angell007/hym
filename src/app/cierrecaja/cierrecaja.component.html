@@ -29,12 +29,14 @@
             <tr *ngFor="let m of Modulos;">
               <td>{{m}}</td>
               <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index">
-                  {{Totales[m][ind].Codigo}} {{ind % 2 == 0 ? Totales[m][ind].Ingreso_Total : Totales[m][ind].Egreso_Total | number | puntos}}
+                <label *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
+                <label *ngIf="ind % 2 != 0">{{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
+                  <!-- {{Totales[m][ind].Codigo}} {{ind % 2 == 0 ? Totales[m][ind].Ingreso_Total | customcurrency : Totales[m][ind].Egreso_Total | customcurrency}} -->
               </td>
             </tr>
             <tr>
               <td style="text-align:right;"><b>Totales:</b></td>
-              <td style="text-align:right;" *ngFor="let mt of MostrarTotal">{{mt}}</td> 
+              <td style="text-align:right;" *ngFor="let mt of MostrarTotal">{{mt| customcurrency:''}}</td> 
             </tr>          
           </tbody>
         </table>

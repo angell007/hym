@@ -277,10 +277,16 @@ export class CierrecajaComponent implements OnInit {
 
   AsignarFieldsDisabled(){
     this.TotalRestaIngresosEgresos.forEach(valor => {
+      console.log(valor);
+      
       if (valor == 0 || valor == '') {
         this.FieldsDisabled.push(true);
+      }else{
+        this.FieldsDisabled.push(false);
       }
     });
+
+    console.log(this.FieldsDisabled);
   }
 
   InhabilitarBoton(){

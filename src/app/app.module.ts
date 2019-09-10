@@ -233,6 +233,7 @@ import { ModaldetallerecibotransferenciaComponent } from './simplecomponents/mod
 import { CorresponsalesbancarioscajeroComponent } from './pos/corresponsales/corresponsalesbancarioscajero/corresponsalesbancarioscajero.component';
 import { ModalaperturacuentaComponent } from './simplecomponents/modalaperturacuenta/modalaperturacuenta.component';
 import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
+import { TablaregistroscorresponsalesdiariosComponent } from './pos/corresponsales/tablaregistroscorresponsalesdiarios/tablaregistroscorresponsalesdiarios.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -422,7 +423,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaldetallerecibotransferenciaComponent,
         CorresponsalesbancarioscajeroComponent,
         ModalaperturacuentaComponent,
-        CierrecuentasconsultorComponent
+        CierrecuentasconsultorComponent,
+        TablaregistroscorresponsalesdiariosComponent
     ],
     exports:[
         ModalBasicComponent
