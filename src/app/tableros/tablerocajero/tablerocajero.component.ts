@@ -3392,9 +3392,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.volverTraslado();
           modal.hide();
           this.CargarTrasladosDiarios();
+          this.swalService.ShowMessage(data);
+        }else{
+          this.swalService.ShowMessage(data);
         }
         
-        this.swalService.ShowMessage(data);
         
       });
     }
@@ -3525,8 +3527,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.CajerosTraslados = [];
           this.CajerosTraslados = data.query_data;
         }else{
-
-          this.swalService.ShowMessage(data);
+          
+          let toastObj = {textos:[data.titulo, "No hay más cajeros abiertos en este momento!"], tipo:data.codigo, duracion:4000};
+          this._toastService.ShowToast(toastObj);
+          //this.swalService.ShowMessage(data);
           this.CajerosTraslados = [];
         }
       });
@@ -3734,6 +3738,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
           Id_Caja: this.generalService.SessionDataModel.idCaja
         };
+
+        this.Total_Servicio = 0;
       // }
 
       // if (tipo == 'edicion') {

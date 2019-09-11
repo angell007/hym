@@ -1130,7 +1130,7 @@
                                                                                 <i class="ti-close"></i>
                                                                             </button>
                                                                         </td>
-                                                                        <td class="text-center" *ngIf="Traslado.Estado == 'Aprobado'">
+                                                                        <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
                                                                             <label>{{Traslado.Estado}}</label>
                                                                         </td>
                                                                     </tr>
@@ -1396,7 +1396,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="block-element">Total</label>
-                                                        <label>{{Total_Servicio}}</label>
+                                                        <label>{{Total_Servicio | customcurrency}}</label>
                                                     </div>
                                                 </div>
                                             </div>
