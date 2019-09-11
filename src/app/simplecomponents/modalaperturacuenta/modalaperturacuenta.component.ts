@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
+import { ToastService } from '../../shared/services/toasty/toast.service';
+import { from } from 'rxjs/observable/from';
 
 @Component({
   selector: 'app-modalaperturacuenta',
@@ -22,19 +24,25 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CuentasBancarias:Array<any> = [];
   public CuentasBancariasSeleccionadas:Array<any> = [];
   public CuentasBancariasSeleccionadasId:Array<string> = [];
-  public MaximoDiferencialMonedas:Array<string> = [];
+  public DiferencialMonedas:Array<any> = [];
   public Cargando:boolean = false;
+  private _mostrarBotonRevision:BehaviorSubject<any> = new BehaviorSubject(this.CuentasBancarias);
+  private _updatedListSubscription:any;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               public generalService:GeneralService,
               private _swalService:SwalService,
-              private _monedaService:MonedaService) { }
+              private _monedaService:MonedaService,
+              private _toastService:ToastService) { }
 
   ngOnInit() {
+    this._getDiferencialMonedas();
+    this._updatedListSubscription = this._mostrarBotonRevision.subscribe(list => {
+      console.log("suscripcion cuando cambia la lista");
+      console.log(list);
+    });
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log("abriendo modal apertura cuenta");
-
-      this.GetCuentasBancariasApertura();      
+      this.GetCuentasBancariasApertura();
       this.ModalAperturaCuenta.show();
     });
   }
@@ -51,14 +59,14 @@ export class ModalaperturacuentaComponent implements OnInit {
     });
   }
 
-  private GetDiferencialMonedas(){
+  private _getDiferencialMonedas(){
     this._monedaService.GetMaximaDiferenciaMonedas().subscribe((data:any) => {
       console.log(data);
       
       if (data.codigo == 'success') {
-        this.MaximoDiferencialMonedas = data.query_data;
+        this.DiferencialMonedas = data.query_data;
       }else{
-        this.MaximoDiferencialMonedas = [];
+        this.DiferencialMonedas = [];
       }
     });
   }
@@ -129,6 +137,49 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CerrarModal(){
     console.log("cerrando modal");
     
+  }
+
+  public Validardiferencia(posCuenta:number, valor:string, idMoneda:string){
+    console.log(posCuenta);
+    console.log(valor);
+    
+    if (valor != '') {
+      let valor_apertura = parseFloat(valor);
+      let valor_ultimo_cierre = parseFloat(this.CuentasBancarias[posCuenta].Monto_Ultimo_Cierre);
+      let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
+      console.log(diferencia);
+      
+      let topes = this._getTopesMoneda(idMoneda);
+
+      if (diferencia < topes.minimo || diferencia > topes.maximo) {        
+        let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
+        this._toastService.ShowToast(toastObj);
+        this.CuentasBancarias[posCuenta].Correccion_Cuenta = '1';
+      }else{
+        this.CuentasBancarias[posCuenta].Correccion_Cuenta = '0';
+      }
+
+      setTimeout(() => {
+        this._mostrarBotonRevision.next(this.CuentasBancarias);
+      }, 500);
+    }else{
+      this.CuentasBancarias[posCuenta].Correccion_Cuenta = '0';
+      
+      setTimeout(() => {
+        this._mostrarBotonRevision.next(this.CuentasBancarias);
+      }, 500);
+    }
+    
+    
+  }
+
+  private _getTopesMoneda(idMoneda:string){
+    let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);
+    let topes = {minimo:parseFloat(moneda.Monto_Minimo_Diferencia_Transferencia), maximo:parseFloat(moneda.Monto_Maximo_Diferencia_Transferencia)};
+    console.log(moneda);
+    console.log(topes);
+    
+    return topes;
   }
 
 }

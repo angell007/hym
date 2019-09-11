@@ -1175,10 +1175,8 @@
                                                                                 <i class="fa fa-times"></i>
                                                                             </button>
                                                                         </td>
-                                                                        <td class="text-center" [ngSwitch]="Traslado.Estado">
-                                                                            <label *ngSwitchCase="'Aprobado'">Aprobado</label>
-                                                                            <label *ngSwitchCase="'Negado'">Negado</label>
-                                                                            <label *ngSwitchCase="'Anulado'">Anulado</label>
+                                                                        <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
+                                                                            <label>{{Traslado.Estado}}</label>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
