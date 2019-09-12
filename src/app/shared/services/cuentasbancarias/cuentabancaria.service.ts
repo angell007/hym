@@ -32,6 +32,11 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias_apertura.php');
   }
   
+  public GetCuentasBancariasAperturaObservable(idFuncionario:string):Observable<any>{
+    let p = {id_funcionario:idFuncionario};
+    return this.client.get(this._rutaBase+'/get_cuentas_bancarias_apertura_observable.php', {params:p});
+  }
+  
   public GetCuentasBancariasCierre(idFuncionario:string):Observable<any>{
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias_cierre.php', {params:p});
@@ -45,6 +50,11 @@ export class CuentabancariaService {
   public GetCuentasFuncionarioApertura(idApertura:string):Observable<any>{
     let p = {id_apertura:idApertura};
     return this.client.get(this._rutaBase+'/get_cuentas_funcionario_apertura.php', {params:p});
+  }
+ 
+  public GetMovimientoCuentaBancariaUltimaSesion(idCuenta:string):Observable<any>{
+    let p = {id_cuenta:idCuenta};
+    return this.client.get(this._rutaBase+'/get_movimientos_ultima_apertura.php', {params:p});
   }
   
   getCuentasBancariasFuncionario(idFuncionario:string):Observable<any>{
@@ -75,6 +85,20 @@ export class CuentabancariaService {
 
   public AperturaCuentaBancaria(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/aperturar_cuentas_bancarias.php', datos);
+  }
+  
+  public CheckEstadoAperturaCuenta(idCuenta:string):Observable<any>{
+    let p = {id_cuenta:idCuenta};
+    return this.client.get(this._rutaBase+'/verificar_estado_cuenta.php', {params:p});
+  }
+  
+  public SeleccionarCuenta(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/seleccionar_cuenta.php', {params:p});
+  }
+  
+  public DeseleccionarCuenta(idCuenta:string):Observable<any>{
+    let p = {id_cuenta:idCuenta};
+    return this.client.get(this._rutaBase+'/deseleccionar_cuenta.php', {params:p});
   }
 
 }

@@ -234,6 +234,9 @@ import { CorresponsalesbancarioscajeroComponent } from './pos/corresponsales/cor
 import { ModalaperturacuentaComponent } from './simplecomponents/modalaperturacuenta/modalaperturacuenta.component';
 import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
 import { TablaregistroscorresponsalesdiariosComponent } from './pos/corresponsales/tablaregistroscorresponsalesdiarios/tablaregistroscorresponsalesdiarios.component';
+import { AperturacuentasconsultorComponent } from './tableros/tableroconsultor/aperturacuentasconsultor/aperturacuentasconsultor.component';
+import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
+import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -424,7 +427,10 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CorresponsalesbancarioscajeroComponent,
         ModalaperturacuentaComponent,
         CierrecuentasconsultorComponent,
-        TablaregistroscorresponsalesdiariosComponent
+        TablaregistroscorresponsalesdiariosComponent,
+        AperturacuentasconsultorComponent,
+        VistaprincipalconsultorComponent,
+        CuadrecuentasconsultorComponent
     ],
     exports:[
         ModalBasicComponent
@@ -487,7 +493,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         SafePipe
     ],
     bootstrap: [AppComponent],
-    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
+    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]
 })
 
 

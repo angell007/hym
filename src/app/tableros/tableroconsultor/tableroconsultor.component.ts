@@ -119,9 +119,9 @@ export class TableroconsultorComponent implements OnInit {
     this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
     this.AsignarPaises();
     //this.VerificarAperturaCuenta();
-    setTimeout(() => {
-      this.ConsultarAperturaFuncionario();      
-    }, 500);
+    // setTimeout(() => {
+    //   this.ConsultarAperturaFuncionario();      
+    // }, 500);
   }
 
   CargarVista(){

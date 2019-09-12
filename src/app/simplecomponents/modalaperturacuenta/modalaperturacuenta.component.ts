@@ -7,6 +7,7 @@ import { SwalService } from '../../shared/services/swal/swal.service';
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
 import { from } from 'rxjs/observable/from';
+import { l } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-modalaperturacuenta',
@@ -26,6 +27,7 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CuentasBancariasSeleccionadasId:Array<string> = [];
   public DiferencialMonedas:Array<any> = [];
   public Cargando:boolean = false;
+  public MostrarBotonAjusteCuentas:boolean = false;
   private _mostrarBotonRevision:BehaviorSubject<any> = new BehaviorSubject(this.CuentasBancarias);
   private _updatedListSubscription:any;
 
@@ -40,6 +42,20 @@ export class ModalaperturacuentaComponent implements OnInit {
     this._updatedListSubscription = this._mostrarBotonRevision.subscribe(list => {
       console.log("suscripcion cuando cambia la lista");
       console.log(list);
+      for (let index = 0; index < list.length; index++) {
+        let cuenta = list[index];
+        if (cuenta.Seleccionada == '1') {
+          if (cuenta.Correccion_Cuenta == '1') {
+            this.MostrarBotonAjusteCuentas = true;
+            break;
+          }
+        }else{
+          if(index == (list.length - 1)){
+            this.MostrarBotonAjusteCuentas = false;
+            break;
+          }
+        }        
+      }
     });
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
       this.GetCuentasBancariasApertura();
@@ -72,7 +88,6 @@ export class ModalaperturacuentaComponent implements OnInit {
   }
 
   public SeleccionarCuenta(seleccionada:string, cuenta:any){
-    console.log(cuenta);
     
     if (seleccionada == '0') {
       let ind = this.CuentasBancarias.findIndex(x => x.Id_Cuenta_Bancaria == cuenta.Id_Cuenta_Bancaria);    
@@ -80,9 +95,7 @@ export class ModalaperturacuentaComponent implements OnInit {
         this.CuentasBancariasSeleccionadas.push(cuenta);
         this.CuentasBancariasSeleccionadasId.push(cuenta.Id_Cuenta_Bancaria);
         this.CuentasBancarias[ind].Seleccionada = '1';
-        this.CuentasBancarias[ind].Habilitar_Monto = '1';
-        console.log(this.CuentasBancariasSeleccionadas);
-        console.log(this.CuentasBancariasSeleccionadasId);        
+        this.CuentasBancarias[ind].Habilitar_Monto = '1';       
       }
     }else{
       let eliminar = this.CuentasBancariasSeleccionadas.findIndex(x => x.Id_Cuenta_Bancaria == cuenta.Id_Cuenta_Bancaria);
@@ -101,31 +114,33 @@ export class ModalaperturacuentaComponent implements OnInit {
         this.CuentasBancarias[ind].Habilitar_Monto = '0';
         this.CuentasBancarias[ind].Monto_Apertura = '0';
       }
-      console.log(this.CuentasBancariasSeleccionadas);
-      console.log(this.CuentasBancariasSeleccionadasId);  
     }
   }
 
   public GuardarAperturaCuentas(){
-    let data = new FormData();
-    data.append('cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadasId)));
-    data.append('modelo_cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadas)));
-    data.append('id_funcionario', this.generalService.Funcionario.Identificacion_Funcionario);
-    data.append('modulo', 'Tablero Consultor');
+    if (this.MostrarBotonAjusteCuentas) {
+      this._swalService.ShowMessage(['warning','Alerta','Hay cuentas que tienen diferencias con respecto a la ultima apertura, presione en el boton "Ajustar Cuentas" para información más detallada!']);
+    }else{
+      let data = new FormData();
+      data.append('cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadasId)));
+      data.append('modelo_cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadas)));
+      data.append('id_funcionario', this.generalService.Funcionario.Identificacion_Funcionario);
+      data.append('modulo', 'Tablero Consultor');
 
-    this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d:any) => {
-      console.log(d);
-      if (d.codigo == 'success') {
-        this._swalService.ShowMessage(d);
-        let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
-        this.EnviarCuentasSeleccionadas.emit(p);
-        this.ModalAperturaCuenta.hide();
-        this._limpiarListas();
-      }else{
-        this._swalService.ShowMessage(d);
-      }
-      
-    });
+      this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d:any) => {
+        console.log(d);
+        if (d.codigo == 'success') {
+          this._swalService.ShowMessage(d);
+          let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
+          this.EnviarCuentasSeleccionadas.emit(p);
+          this.ModalAperturaCuenta.hide();
+          this._limpiarListas();
+        }else{
+          this._swalService.ShowMessage(d);
+        }
+        
+      });
+    }    
   }
 
   private _limpiarListas(){
@@ -140,18 +155,15 @@ export class ModalaperturacuentaComponent implements OnInit {
   }
 
   public Validardiferencia(posCuenta:number, valor:string, idMoneda:string){
-    console.log(posCuenta);
-    console.log(valor);
-    
     if (valor != '') {
       let valor_apertura = parseFloat(valor);
       let valor_ultimo_cierre = parseFloat(this.CuentasBancarias[posCuenta].Monto_Ultimo_Cierre);
       let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
-      console.log(diferencia);
       
       let topes = this._getTopesMoneda(idMoneda);
 
-      if (diferencia < topes.minimo || diferencia > topes.maximo) {        
+      if (diferencia < topes.minimo || diferencia > topes.maximo) {
+        
         let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
         this._toastService.ShowToast(toastObj);
         this.CuentasBancarias[posCuenta].Correccion_Cuenta = '1';
@@ -176,10 +188,13 @@ export class ModalaperturacuentaComponent implements OnInit {
   private _getTopesMoneda(idMoneda:string){
     let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);
     let topes = {minimo:parseFloat(moneda.Monto_Minimo_Diferencia_Transferencia), maximo:parseFloat(moneda.Monto_Maximo_Diferencia_Transferencia)};
-    console.log(moneda);
-    console.log(topes);
     
     return topes;
+  }
+
+  public CargarMovimientosAperturaAnterior(){
+    console.log("abriendo movimientos anteriores!");
+    
   }
 
 }

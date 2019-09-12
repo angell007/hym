@@ -44,7 +44,7 @@
                 <td class="custom-cell">
                   <input type="number" [(ngModel)]="cb.Monto_Apertura" [disabled]="cb.Habilitar_Monto == '0'" (change)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)">
                 </td>
-                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Monto_Ultimo_Cierre}}</td>
+                <td class="text-right" (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Monto_Ultimo_Cierre}}</td>
               </tr>
             </tbody>
           </table>
@@ -54,7 +54,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" *ngIf="MostrarBotonAjusteCuentas" (click)="CargarMovimientosAperturaAnterior()">Ajustar Cuentas</button>
       <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
         [swal]="{title:'¿Está Seguro?',text : 'Se realizará la aperturar de las cuentas bancarias seleccionadas' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aperturar', cancelButtonText:'No, Comprobar!'}"
         (confirm)="GuardarAperturaCuentas()" [disabled]="CuentasBancariasSeleccionadasId.length == 0">Realizar Apertura
