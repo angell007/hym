@@ -4,6 +4,11 @@
       <div class="card">
         <div class="card-header">CUADRE DE CUENTAS - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
         <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+
+            </div>
+          </div>
           <table class="table table-hover table-sm table-striped table-bordered custom-table">
             <thead>
               <tr>
@@ -44,27 +49,13 @@
                       <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
                       <div ngbDropdownMenu>
                         <a *ngIf="m.Estado != 'Anulada'" class="dropdown-item waves-light waves-effect caja-botones accionable">
-                          <i class="ti-pencil text-warning"></i> Devolución</a>
-                        <!-- <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularMovimientoTercero(m.Id_Movimiento_Tercero)"
-                          [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta oficina' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                            <i [ngClass]="{'ti-na text-danger':m.Estado == 'Activo', 'ti-back-right text-success':m.Estado == 'Anulado'}"></i> 
-                            {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a> -->
+                          <i class="ti-back-right text-danger"></i> Devolución</a>
+                        <a class="dropdown-item waves-light waves-effect caja-botones accionable">
+                            <i class="fa fa-exchange text-primary"></i> 
+                            Transferir Movimimiento</a>
                       </div>
                     </div>
                   </div>
-                  <!-- <div *ngIf="m.Movimiento === 'Ajuste' && m.Estado != 'Anulado'" class="text-center">
-                    <div ngbDropdown class="dropdown-primary">
-                      <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
-                      <div ngbDropdownMenu>
-                        <a *ngIf="m.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(m.Id_Movimiento_Tercero)">
-                          <i class="ti-pencil text-warning"></i> Editar</a>
-                        <a *ngIf="m.Estado == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularMovimientoTercero(m.Id_Movimiento_Tercero)"
-                          [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta oficina' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                            <i [ngClass]="{'ti-na text-danger':m.Estado == 'Activo', 'ti-back-right text-success':m.Estado == 'Anulado'}"></i> 
-                            {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
-                      </div>
-                    </div>
-                  </div> -->
                 </td>
               </tr>
             </tbody>

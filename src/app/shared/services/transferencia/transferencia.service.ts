@@ -42,4 +42,21 @@ export class TransferenciaService {
     return this.client.post(this._rutaBase+'anular_transferencia_nuevo.php', data);
   }
 
+  public BloquearTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'bloquear_transferencia_parcial_consultor.php', data);
+  }
+
+  public DesbloquearTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'desbloquear_transferencia_parcial_consultor.php', data);
+  }
+  
+  public CheckEstadoAperturaTransferencia(idTransferencia:string):Observable<any>{
+    let p = {id_transferencia:idTransferencia};
+    return this.client.get(this._rutaBase+'/verificar_estado_apertura_transferencia.php', {params:p});
+  }
+
+  public GetTransferenciasConsultorObservable(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_transferencias_consultores_observable.php', {params:p});
+  }
+
 }

@@ -81,7 +81,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // this.CuentasActualizadas.unsubscribe();
+    this.CuentasActualizadas.unsubscribe();
   }
 
   public GetCuentasBancariasApertura(){
