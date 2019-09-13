@@ -6,13 +6,12 @@ import '../../../assets/charts/amchart/light.js';
 import '../../../assets/charts/amchart/ammap.js';
 import '../../../assets/charts/amchart/worldLow.js';
 import '../../../assets/charts/amchart/continentsLow.js';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../../node_modules/@types/selenium-webdriver';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { EventEmitter } from 'events';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
@@ -24,6 +23,8 @@ import { SwalService } from '../../shared/services/swal/swal.service';
 })
 
 export class TableroconsultorComponent implements OnInit {
+
+  @Output() AbrirCuentas:EventEmitter<any> = new EventEmitter();
 
   //NUEVO CODIGO  
   @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
@@ -118,6 +119,8 @@ export class TableroconsultorComponent implements OnInit {
   ngOnInit() {
     this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
     this.AsignarPaises();
+    this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
+    this._getCuentasFuncionarioApertura();
     //this.VerificarAperturaCuenta();
     // setTimeout(() => {
     //   this.ConsultarAperturaFuncionario();      
@@ -137,10 +140,10 @@ export class TableroconsultorComponent implements OnInit {
       console.log(data);
       
       if (!data.apertura_activa) {
-        this.AbrirModalAPerturaCuentas();
+        this.AbrirCuentas.emit();
       }else{
         //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
-        this.Id_Apertura = data.query_data.Id_Consultor_Apertura_Cuenta;
+        this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
         this._getCuentasFuncionarioApertura();
       }
     });

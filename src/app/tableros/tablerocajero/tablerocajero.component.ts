@@ -1889,7 +1889,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Transferencia1 = true;
         this.Transferencia2 = false;
         this.CargarTransferenciasDiarias();
-        this.ActulizarTablaRecibos.next();
       });
     }
 

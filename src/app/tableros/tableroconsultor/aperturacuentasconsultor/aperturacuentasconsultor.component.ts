@@ -25,7 +25,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   public CuentasBancariasSeleccionadas:Array<any> = [];
   public CuentasBancariasSeleccionadasId:Array<string> = [];
   public DiferencialMonedas:Array<any> = [];
-  public CuentasDescuadradas:Array<any> = JSON.parse(localStorage.getItem('CuentasDescuadradas'));
+  public CuentasDescuadradas:Array<any> = [];
   public Cargando:boolean = false;
   public MostrarBotonAjusteCuentas:boolean = false;
   private _mostrarBotonRevision:Subject<any> = new Subject();
@@ -38,39 +38,46 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
               private _toastService:ToastService,
               public router:Router) 
   {    
-    this.GetCuentasBancariasApertura();
+    // this.GetCuentasBancariasApertura();
+    localStorage.setItem('CuentasDescuadradas', "[]");
+    localStorage.setItem("Cuentas_Seleccionadas", "[]");
   }
 
   ngOnInit() {
     //Inicializa observables para actualizar cuentas cada segundo
-    // this.CuentasActualizadas=TimerObservable.create(0, 1000)
-    // .subscribe(() => {
-    //   this.GetCuentasBancariasAperturaObservable();
-    // });
-
-    this._getDiferencialMonedas();
-    this._updatedListSubscription = this._mostrarBotonRevision.subscribe(list => {
-      console.log("suscripcion cuando cambia la lista");
-      console.log(list);
-      for (let index = 0; index < list.length; index++) {
-        let cuenta = list[index];
-        if (cuenta.Seleccionada == '1') {
-          if (cuenta.Correccion_Cuenta == '1') {
-            this.MostrarBotonAjusteCuentas = true;
-            break;
-          }
-        }else{
-          if(index == (list.length - 1)){
-            this.MostrarBotonAjusteCuentas = false;
-            break;
-          }
-        }        
-      }
+    this.CuentasActualizadas=TimerObservable.create(0, 1000)
+    .subscribe(() => {
+      this.GetCuentasBancariasAperturaObservable();
     });
 
-    setTimeout(() => {      
-      this._setCuentasSeleccionadasInicial();
-    }, 1000);
+    //OBTIENE LOS VALORES MAXIMOS Y MINIMOS POR MONEDA, PERMITIDOS PARA LA COMPARACION DE MONTOS DE CADA CUENTA ANTES DE LA APERTURA
+    this._getDiferencialMonedas();
+    
+    //SETEA LAS CUENTAS SELECCIONADAS DESDE LA CONSULTA DE CUENTAS DISPONIBLES
+    setTimeout(() => {
+      this._setCuentasSeleccionadas();
+    }, 700);
+    // this._updatedListSubscription = this._mostrarBotonRevision.subscribe(list => {
+    //   for (let index = 0; index < list.length; index++) {
+    //     let cuenta = list[index];
+    //     if (cuenta.Seleccionada == '1') {
+    //       if (cuenta.Correccion_Cuenta == '1') {
+    //         this.MostrarBotonAjusteCuentas = true;
+    //         break;
+    //       }
+    //     }else{
+    //       if(index == (list.length - 1)){
+    //         this.MostrarBotonAjusteCuentas = false;
+    //         break;
+    //       }
+    //     }        
+    //   }
+    // });
+
+    //SETEA LAS CUENTAS SELECCIONADAS DESDE LA CONSULTA DE CUENTAS DISPONIBLES
+    // setTimeout(() => {      
+    //   this._setCuentasSeleccionadasInicial();
+    // }, 1000);
   }
   
   ngOnDestroy(): void {
@@ -95,6 +102,20 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
         this.CuentasBancarias = data.query_data;
       }else{
         this.CuentasBancarias = [];
+      }
+    });
+  }
+  
+  public ConsultarAperturaFuncionario(){
+    this._cuentaBancariaService.GetAperturaFuncionario(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) =>{
+      console.log(data);
+      
+      if (data.apertura_activa) {
+        //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
+        localStorage.setItem("Apertura_Consultor", data.query_data.Id_Consultor_Apertura_Cuenta);
+        this.router.navigate(['/tablero']);
+      }else{
+        localStorage.setItem("Apertura_Consultor", "");
       }
     });
   }
@@ -143,13 +164,6 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
           this._toastService.ShowToast(toastObj);
         }
       });
-      // let ind = this.CuentasBancarias.findIndex(x => x.Id_Cuenta_Bancaria == cuenta.Id_Cuenta_Bancaria);    
-      // if (ind > -1) {
-      //   this.CuentasBancariasSeleccionadas.push(cuenta);
-      //   this.CuentasBancariasSeleccionadasId.push(cuenta.Id_Cuenta_Bancaria);
-      //   this.CuentasBancarias[ind].Seleccionada = '1';
-      //   this.CuentasBancarias[ind].Habilitar_Monto = '1';       
-      // }
     }else{
       let eliminar = this.CuentasBancariasSeleccionadas.findIndex(x => x.Id_Cuenta_Bancaria == cuenta.Id_Cuenta_Bancaria);
       if (eliminar > -1) {
@@ -171,6 +185,9 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.DeseleccionarCuentaBaseDeDatos(cuenta.Id_Cuenta_Bancaria);        
       }, 500);
+
+      
+      this._setCuentasSeleccionadasStorage(800);
     }
   }
 
@@ -188,9 +205,13 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
         console.log(d);
         if (d.codigo == 'success') {
           this._swalService.ShowMessage(d);
-          let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
+          localStorage.setItem("Apertura_Consultor", d.id_apertura);
+          //let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
           //this.EnviarCuentasSeleccionadas.emit(p);
           this._limpiarListas();
+          setTimeout(() => {            
+            this.MostrarTablero.emit();
+          }, 300);
         }else{
           this._swalService.ShowMessage(d);
         }
@@ -224,37 +245,15 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
         let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
         this._toastService.ShowToast(toastObj);
         this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
-        let ind = this.CuentasDescuadradas.findIndex(x => x == id_cuenta);
-        if (ind == -1) {
-          this.CuentasDescuadradas.push(id_cuenta);
-          localStorage.setItem('CuentasDescuadradas', JSON.stringify(this.CuentasDescuadradas));
-        }
+        this._setCuentaDescuadre(id_cuenta);
       }else{
-        let ind = this.CuentasDescuadradas.findIndex(x => x == id_cuenta);
-        if (ind > -1) {
-          this.CuentasDescuadradas.splice(ind);
-          localStorage.setItem('CuentasDescuadradas', JSON.stringify(this.CuentasDescuadradas));
-        }
+        this._deleteCuentaDescuadre(id_cuenta);
         this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
       }
-
-      setTimeout(() => {
-        this._mostrarBotonRevision.next(this.CuentasBancariasSeleccionadas);
-      }, 500);
     }else{
-      let ind = this.CuentasDescuadradas.findIndex(x => x == id_cuenta);
-      if (ind > -1) {
-        this.CuentasDescuadradas.splice(ind);
-        localStorage.setItem('CuentasDescuadradas', JSON.stringify(this.CuentasDescuadradas));
-      }
+      this._deleteCuentaDescuadre(id_cuenta);
       this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
-      
-      setTimeout(() => {
-        this._mostrarBotonRevision.next(this.CuentasBancariasSeleccionadas);
-      }, 500);
     }
-    
-    
   }
 
   private _getTopesMoneda(idMoneda:string){
@@ -280,11 +279,67 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public SiguientePaso(){
     if (this.CuentasDescuadradas.length > 0) {
-      this.router.navigate(['/cuadrecuentas']);      
+      this.router.navigate(['/cuadrecuentas']);
+      this.CuentasActualizadas.unsubscribe();
     }else{
-      this.MostrarTablero.emit();
+      this.GuardarAperturaCuentas();
       // this.router.navigate(['/tablero']);
     }
+  }
+
+  private _setCuentaDescuadre(idCuenta:string){
+    let ind = this.CuentasDescuadradas.findIndex(x => x == idCuenta);
+    if (ind == -1) {
+      this.CuentasDescuadradas.push(idCuenta);
+      localStorage.setItem('CuentasDescuadradas', JSON.stringify(this.CuentasDescuadradas));
+    }
+  }
+  
+  private _deleteCuentaDescuadre(idCuenta:string){
+    let ind = this.CuentasDescuadradas.findIndex(x => x == idCuenta);
+    if (ind > -1) {
+      this.CuentasDescuadradas.splice(ind);
+      localStorage.setItem('CuentasDescuadradas', JSON.stringify(this.CuentasDescuadradas));
+    }
+  }
+
+  private _setCuentasDescuadreLista(){
+    if (this.CuentasBancariasSeleccionadas.length > 0) {
+      this.CuentasBancariasSeleccionadas.forEach(cta => {
+        if (cta.Seleccionada == '1') {
+          this._setCuentaDescuadre(cta.Id_Cuenta_Bancaria);
+        }else{
+          this._deleteCuentaDescuadre(cta.Id_Cuenta_Bancaria);
+        } 
+      });
+    }else{
+      localStorage.setItem('CuentasDescuadradas', "[]");
+    }
+    
+  }
+
+  private _setCuentasSeleccionadasStorage(time:number){
+    setTimeout(() => {
+      localStorage.setItem("Cuentas_Seleccionadas", JSON.stringify(this.CuentasBancariasSeleccionadas));
+    }, time);
+  }
+  
+  private _setCuentasSeleccionadas(){
+    if (this.CuentasBancarias.length > 0) {
+      this.CuentasBancarias.forEach(cta => {
+        if (cta.Seleccionada == '1') {
+          this.CuentasBancariasSeleccionadas.push(cta);
+          this.CuentasBancariasSeleccionadasId.push(cta.Id_Cuenta_Bancaria);
+        }else{
+          this._deleteCuentaDescuadre(cta.Id_Cuenta_Bancaria);
+        }
+      });
+    }else{
+      this.CuentasBancariasSeleccionadas = [];
+      this.CuentasBancariasSeleccionadasId = [];
+    }
+
+    this._setCuentasSeleccionadasStorage(800);
   }
 
 }

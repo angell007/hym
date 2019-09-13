@@ -57,6 +57,16 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_movimientos_ultima_apertura.php', {params:p});
   }
   
+  public GetCuentaBancariaDetalle(idCuenta:string):Observable<any>{
+    let p = {id_cuenta:idCuenta};
+    return this.client.get(this._rutaBase+'/get_cuenta_bancaria_detalle_by_id.php', {params:p});
+  }
+  
+  public GetMontoCierreCuenta(idCuenta:string):Observable<any>{
+    let p = {id_cuenta:idCuenta};
+    return this.client.get(this._rutaBase+'/get_monto_cierre_cuenta.php', {params:p});
+  }
+  
   getCuentasBancariasFuncionario(idFuncionario:string):Observable<any>{
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'/get_cuentas_asociadas_funcionario.php', {params:p});

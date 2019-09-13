@@ -15,29 +15,39 @@ export class VistaprincipalconsultorComponent implements OnInit {
               private _generalService:GeneralService) { }
 
   ngOnInit() {
+    this.ConsultarAperturaFuncionario();
   }
 
   public CambiarVista(){
     this.MostrarApertura = !this.MostrarApertura;
   }
 
+  /**
+   * COMPRUEBA SI ELFUNCIONARIO YA TIENE UNA APERTURA DE CUENTA ACTIVA
+   * SI EXISTE UNA APERTURA SE CARGA EL TABLERO NORMALMENTE, DONDE EL CONSULTOR PUEDE GESTIONAR TRANSFERENCIAS NUEVAS
+   * SI NO EXISTE UNA APERTURA SE CARGA LA VISTA DE APERTURA DE CUENTAS, DONDE EL CONSULTOR PUEDE GESTIONAR ESCOGER LAS CUENTAS CON LAS QUE VA A TRABAJAR EN EL TABLERO
+   */
   public ConsultarAperturaFuncionario(){
     this._cuentaBancariaService.GetAperturaFuncionario(this._generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) =>{
       console.log(data);
       
       if (!data.apertura_activa) {
         this.MostrarApertura = true;
+        localStorage.setItem("Apertura_Consultor", "");
       }else{
         this.MostrarApertura = false;
-        //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
-        // this.Id_Apertura = data.query_data.Id_Consultor_Apertura_Cuenta;
-        // this._getCuentasFuncionarioApertura();
+        localStorage.setItem("Apertura_Consultor", data.query_data.Id_Consultor_Apertura_Cuenta);
       }
     });
   }
 
   public ShowTablero(){
     this.MostrarApertura = false;
+  }
+
+  public ShowAperturaCuentas($event){
+    this.MostrarApertura = true;
+
   }
 
 }
