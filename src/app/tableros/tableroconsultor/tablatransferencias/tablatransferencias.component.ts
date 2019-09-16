@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { CuentabancariaService } from '../../../shared/services/cuentasbancarias/cuentabancaria.service';
 import { TransfereciaViewModel } from '../../../Modelos/TransferenciaViewModel';
 import { PuntosPipe } from '../../../common/Pipes/puntos.pipe';
@@ -9,6 +9,8 @@ import { TransferenciaService } from '../../../shared/services/transferencia/tra
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { ISubscription } from 'rxjs/Subscription';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
+import { IMyDrpOptions } from 'mydaterangepicker';
+import { SwalService } from '../../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-tablatransferencias',
@@ -31,9 +33,12 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
   @ViewChild('ModalTransferencia') ModalTransferencia:any;
   @ViewChild('alertSwal') alertSwal:any;
 
+  public AbrirModalDevolucion:Subject<any> = new Subject();
+
   public Funcionario:any = JSON.parse(localStorage['User']);
 
-  public TransferenciasListar:any = [];
+  public TransferenciasListar:Array<any> = [];
+  public TransferenciasSeleccionadas:Array<any> = [];
   private TransferenciaActual:any = '';
   public ListaBancos:any = [];
   public CuentaData:any = [];
@@ -53,7 +58,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
   };
 
   public Filtros:any = {
-    fecha: '',
+    fecha: null,
     codigo:'',
     cajero: '',
     valor:'',
@@ -75,6 +80,16 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     total: 0
   }
 
+  
+  public myDateRangePickerOptions: IMyDrpOptions = {
+    width: '100%',
+    height: '21px',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
+    selectionTxtFontSize: '10px',
+    dateFormat: 'yyyy-mm-dd',
+  };
+
   public TransferenciaModel:TransfereciaViewModel = new TransfereciaViewModel();
 
   //public CuentaConsultor:any = '';
@@ -84,7 +99,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
               private cuentaService:CuentabancariaService,
               private puntosPipe:PuntosPipe,
               private _transferenciaService:TransferenciaService,
-              private _toastService:ToastService) 
+              private _toastService:ToastService,
+              private _swalService:SwalService) 
   {
     //this.GetCuentasBancarias(this.Funcionario.Identificacion_Funcionario.toString());
   }
@@ -111,12 +127,12 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    //Inicializa observables para actualizar cuentas cada segundo
-    // this.TransferenciasActualizadas=TimerObservable.create(0, 1000)
-    // .subscribe(() => {
-    //   this.ConsultaFiltradaObservable(true);
-    // });
-    this.ConsultaFiltrada();
+    //Inicializa observables para actualizar transferencias cada segundo
+    this.TransferenciasActualizadas=TimerObservable.create(0, 1000)
+    .subscribe(() => {
+      this.ConsultaFiltradaObservable(true);
+    });
+    // this.ConsultaFiltrada();
   }
 
   GetCuentasBancarias(idFuncionario:string){
@@ -142,50 +158,97 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
 
   BloquearTransferencia(modelo:any){
 
-    this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
-      if (data == '1') {
-        this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
+    // this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
+    //   if (data == '1') {
+    //     this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
         this.AsginarValoresModalCrear(modelo);
-        let data = new FormData();
+    //     let data = new FormData();
 
-        data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
-        data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
-        this._transferenciaService.BloquearTransferencia(data).subscribe();        
+    //     data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
+    //     data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
+    //     this._transferenciaService.BloquearTransferencia(data).subscribe();        
         this.ModalTransferencia.show();
-      }
-    });
-    
-
-    // this.http.post(this.globales.ruta+'php/transferencias/bloquear_transferencia_consultor.php', data).subscribe((response:any) => {
-    //   if (response.codigo == 'warning') {
-    //     this.ShowSwal(response.codigo, 'Alerta', response.mensaje);
-    //     this.DesbloquearTransferencia();
-    //     //this.FormatValue(modelo.Valor_Transferencia);
-    //   }else{
-    //     this.ModalTransferencia.show();
-    //   }      
+    //   }
     // });
   }
 
   DesbloquearTransferencia(){
-    let data = new FormData();
-    data.append("id_transferencia", this.TransferenciaActual);
-    this._transferenciaService.DesbloquearTransferencia(data).subscribe((data:any) => {
-      this.TransferenciaActual = '';
-      this.ConsultaFiltrada();
-    });
+    // let data = new FormData();
+    // data.append("id_transferencia", this.TransferenciaActual);
+    // this._transferenciaService.DesbloquearTransferencia(data).subscribe((data:any) => {
+    //   this.TransferenciaActual = '';
+    //   this.ConsultaFiltrada();
+    // });
     this.TransferenciaModel = new TransfereciaViewModel();
     this.ModalTransferencia.hide();
-    // this.http.post(this.globales.ruta+'php/transferencias/desbloquear_transferencia_consultor.php', data).subscribe((data:any) => {
-    //   if (data.codigo == 'success') {
-    //     this.TransferenciaModel = new TransfereciaViewModel();
-    //     this.ConsultaFiltrada();
-    //   }else{
+    
+  }
+  
+  public SeleccionarTransferencia(modelo:any){
+    console.log(modelo);
+    
+    if (this.TransferenciasSeleccionadas.length == 0) {
+      if (modelo.Estado == 'Pagada') {
+        this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar una transferencia pagada!']);        
+      }else{
+        this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
+          if (data == '1') {
+            this.TransferenciasSeleccionadas.push(modelo);
+            console.log(this.TransferenciasSeleccionadas);
+            
+            // this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
+            // this.AsginarValoresModalCrear(modelo);
+            let data = new FormData();
+    
+            data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
+            data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
+            this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
+              console.log(response);
+              
+            });        
+            // this.ModalTransferencia.show();
+          }
+        });
+      }      
+    }else{
+      this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar mas de una transferencia a la vez!']);
+    }
+    
+  }
+  
+  public DeseleccionarTransferencia(idTransferenciaDestinatario:any){
 
-    //     this.ShowSwal(data.codigo, "Alerta", data.mensaje);
+    let ind = this.TransferenciasSeleccionadas.findIndex(x => x.Id_Transferencia_Destinatario == idTransferenciaDestinatario);
+    if (ind > -1) {
+      this.TransferenciasSeleccionadas.splice(ind, 1);
+    }
+
+    let data = new FormData();
+    data.append("id_transferencia", idTransferenciaDestinatario);
+    this._transferenciaService.DesbloquearTransferencia(data).subscribe((response:any) => {
+      console.log(response);
+      // this.TransferenciaActual = '';
+      // this.ConsultaFiltrada();
+    });
+
+    // this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
+    //   if (data == '1') {
+    //     this.TransferenciasSeleccionadas.push(modelo);
+    //     console.log(this.TransferenciasSeleccionadas);
+        
+    //     // this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
+    //     // this.AsginarValoresModalCrear(modelo);
+    //     let data = new FormData();
+
+    //     data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
+    //     data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
+    //     this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
+    //       console.log(response);
+          
+    //     });        
+    //     // this.ModalTransferencia.show();
     //   }
     // });
-    
   }
 
   GuardarTransferencia(modal) {
@@ -202,8 +265,9 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       
       this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
       modal.hide();
+      this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
       this.ActualizarIndicadores.emit(null);
-      this.ConsultaFiltrada();
+      // this.ConsultaFiltrada();
     });
   }
 
@@ -248,8 +312,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       params.pag = this.page;
     }
 
-    if (this.Filtros.fecha.trim() != "") {
-      params.fecha = this.Filtros.fecha;
+    if (this.Filtros.fecha != null && this.Filtros.fecha.formatted.trim() != "") {
+      params.fecha = this.Filtros.fecha.formatted;
     }
 
     if (this.Filtros.codigo.trim() != "") {
@@ -358,5 +422,19 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
+  }
+
+  public dateRangeChanged(event) {
+    if (event.formatted != "") {
+      this.Filtros.fecha = event;
+    } else {
+      this.Filtros.fecha = '';
+    }
+    
+    this.ConsultaFiltradaObservable();
+  }
+
+  public DevolverTransferencia(transferenciaModel:any){
+    this.AbrirModalDevolucion.next(transferenciaModel);
   }
 }

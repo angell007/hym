@@ -237,6 +237,8 @@ import { TablaregistroscorresponsalesdiariosComponent } from './pos/corresponsal
 import { AperturacuentasconsultorComponent } from './tableros/tableroconsultor/aperturacuentasconsultor/aperturacuentasconsultor.component';
 import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
 import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
+import { ModalpagostransferenciaComponent } from './simplecomponents/modalpagostransferencia/modalpagostransferencia.component';
+import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modaldevoluciontransferencia/modaldevoluciontransferencia.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -430,7 +432,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TablaregistroscorresponsalesdiariosComponent,
         AperturacuentasconsultorComponent,
         VistaprincipalconsultorComponent,
-        CuadrecuentasconsultorComponent
+        CuadrecuentasconsultorComponent,
+        ModalpagostransferenciaComponent,
+        ModaldevoluciontransferenciaComponent
     ],
     exports:[
         ModalBasicComponent

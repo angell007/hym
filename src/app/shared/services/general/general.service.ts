@@ -101,6 +101,10 @@ export class GeneralService {
     let p = {oficina:oficina};
     return this.client.get(this.globales.ruta+'php/oficinas/get_departamento_ciudad_oficina.php', {params:p});
   }
+  
+  public GetMotivosDevolucion():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/GENERALES/motivosdevolucion/get_motivos_devolucion.php');
+  }
 
   public getPaises(){
     return this.globales.Paises; 

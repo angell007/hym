@@ -42,7 +42,13 @@
                             </app-informativecard>
                         </div>
                     </div>
-                    <div class="card">
+                    <app-tablatransferencias 
+                        [Id_Funcionario]="funcionario.Identificacion_Funcionario"
+                        [Id_Apertura]="Id_Apertura"
+                        [CuentasBancariasSeleccionadas]="CuentasSeleccionadas"
+                        (ActualizarIndicadores)="CargarIndicadores()">
+                    </app-tablatransferencias>
+                    <!-- <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-1" style="text-align:center;">
@@ -55,7 +61,6 @@
                                     <button class="btn btn-primary btn-rounded btn-xs" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Prueba Cierre</button>
                                 </div>
                                 <div class="col-md-2 text-right">
-                                    <!--<button class="btn btn-outline-dark btn-rounded btn-xs m-auto" (click)="CambiarCuentaBancaria()"><i [ngClass]="IconoOpcionCuenta"> {{OpcionCuenta}} Cuenta</i></button>-->
                                     <div class="dropdown inline-block">
                                         <button class="btn btn-outline-dark btn-rounded btn-xs dropdown-toggle" data-toggle="dropdown" type="button">
                                             <span>{{Seleccionado}} </span><i class="ti-angle-down font-size-9"></i></button>
@@ -96,7 +101,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <!--<div class="col-md-3">
                     <div class="row">

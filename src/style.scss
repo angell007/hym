@@ -26,7 +26,7 @@
     font-size: 10px;
     color: rgba(190, 190, 190, .6);
 
-    input[type="text"], input[type="date"], input[type="number"]{
+    input{
         font-size: 10px;
         color: rgba(61, 61, 61, 0.8);
     }
@@ -72,4 +72,11 @@
 select{
     width: 100% !important;
     margin: 0 !important;
+}
+
+.form-control-sm{
+    font-size: 11px !important;
+    padding: 2px 5px !important;
+    height: 22px !important;
+    border-radius: 5px !important;
 }

@@ -59,4 +59,12 @@ export class TransferenciaService {
     return this.client.get(this._rutaBase+'/get_transferencias_consultores_observable.php', {params:p});
   }
 
+  public GetPagosTransferencias(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_pagos_transferencias.php', {params:p});
+  }
+  
+  public DevolverTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/devolver_transferencia.php', data);
+  }
+
 }
