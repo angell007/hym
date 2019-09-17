@@ -240,7 +240,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       
       let topes = this._getTopesMoneda(idMoneda);
 
-      if (diferencia < topes.minimo || diferencia > topes.maximo) {
+      if (diferencia < -topes.maximo || diferencia > topes.maximo) {
         
         let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
         this._toastService.ShowToast(toastObj);

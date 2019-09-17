@@ -84,7 +84,7 @@
                   </tr>
                 </thead>
                 <tbody *ngIf="CuentasBancariasSeleccionadas.length > 0">                                            
-                  <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;">
+                  <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;" [ngClass]="{'bg-anulada':cb.Correccion_Cuenta == '1'}">
                     <td class="custom-cell">{{cb.Apodo}}</td>               
                     <td class="custom-cell">
                       <input class="text-right" style="width:100%;" type="number" [(ngModel)]="cb.Monto_Apertura" (change)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)">

@@ -111,4 +111,8 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/deseleccionar_cuenta.php', {params:p});
   }
 
+  public GuardaCierreCuentasBancarias(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/guardar_cierre_cuentas_bancarias.php', datos);
+  }
+
 }

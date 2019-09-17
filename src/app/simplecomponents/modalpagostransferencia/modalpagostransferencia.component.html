@@ -31,7 +31,7 @@
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Recibo}}</td>
               <td class="custom-cell text-right" style="text-align:right;cursor:pointer;">{{tr.Valor_Pagado | customcurrency:tr.Codigo_Moneda}}</td>
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Destinatario}}</td>
-              <td>
+              <td class="custom-cell text-center">
                 <button *ngIf="tr.Devuelta == 'No'" class="btn btn-default btn-xs" type="button" title="Devolver Transferencia"
                   style="margin:0;" (click)="DevolverTransferencia(tr)">
                   <i class="ti-back-right text-danger"></i>

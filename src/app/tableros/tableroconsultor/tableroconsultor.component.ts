@@ -157,7 +157,7 @@ export class TableroconsultorComponent implements OnInit {
         this.CuentasSeleccionadas = data.query_data;        
       }else{
         this.CuentasSeleccionadas = [];
-        this._swalService.ShowMessage(['warinig','Alerta','No se encontraron cuentas para el registro de apertura, contacte con el administrador!']);
+        this._swalService.ShowMessage(['warning','Alerta','No se encontraron cuentas para el registro de apertura, contacte con el administrador!']);
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ViewChild, SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../shared/globales/globales';
 import { Observable, Subject } from 'rxjs';
@@ -18,7 +18,7 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
   styleUrls: ['./tablatransferencias.component.scss', '../../../../style.scss']
 })
 
-export class TablatransferenciasComponent implements OnInit, OnChanges {
+export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestroy {
 
  // @Input() MonedaConsulta:string = '';
   //@Input() CuentaConsultor:string = '';
@@ -134,6 +134,12 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
     });
     // this.ConsultaFiltrada();
   }
+  
+  ngOnDestroy(): void {
+    if (this.TransferenciasActualizadas != null) {
+      this.TransferenciasActualizadas.unsubscribe();
+    }
+  }
 
   GetCuentasBancarias(idFuncionario:string){
     this.cuentaService.getCuentasBancariasFuncionario(idFuncionario).subscribe((data:any) => {
@@ -145,43 +151,16 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       }
     });
   }
-  
-  // public GetTransferenciasObservable(){
-  //   this._transferenciaService.get(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) => {      
-  //     if (data.codigo == 'success') {
-  //       this.CuentasBancarias = data.query_data;
-  //     }else{
-  //       this.CuentasBancarias = [];
-  //     }
-  //   });
-  // }
 
   BloquearTransferencia(modelo:any){
-
-    // this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
-    //   if (data == '1') {
-    //     this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
-        this.AsginarValoresModalCrear(modelo);
-    //     let data = new FormData();
-
-    //     data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
-    //     data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
-    //     this._transferenciaService.BloquearTransferencia(data).subscribe();        
-        this.ModalTransferencia.show();
-    //   }
-    // });
+    this.AsginarValoresModalCrear(modelo);       
+    this.ModalTransferencia.show();
   }
 
   DesbloquearTransferencia(){
-    // let data = new FormData();
-    // data.append("id_transferencia", this.TransferenciaActual);
-    // this._transferenciaService.DesbloquearTransferencia(data).subscribe((data:any) => {
-    //   this.TransferenciaActual = '';
-    //   this.ConsultaFiltrada();
-    // });
     this.TransferenciaModel = new TransfereciaViewModel();
-    this.ModalTransferencia.hide();
-    
+    this._limpiarMovimientoBancoModel();
+    this.ModalTransferencia.hide();    
   }
   
   public SeleccionarTransferencia(modelo:any){
@@ -267,6 +246,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
       modal.hide();
       this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
       this.ActualizarIndicadores.emit(null);
+      this._limpiarMovimientoBancoModel();
       // this.ConsultaFiltrada();
     });
   }
@@ -436,5 +416,17 @@ export class TablatransferenciasComponent implements OnInit, OnChanges {
 
   public DevolverTransferencia(transferenciaModel:any){
     this.AbrirModalDevolucion.next(transferenciaModel);
+  }
+
+  private _limpiarMovimientoBancoModel(){
+    this.MovimientoBancoModel = {
+      Valor: '0',
+      Id_Cuenta_Bancaria: '',
+      Detalle: '',
+      Tipo: 'Egreso',
+      Id_Transferencia_Destino: '',
+      Numero_Transferencia: '',
+      Ajuste: 'No'
+    };
   }
 }
