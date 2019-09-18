@@ -5,6 +5,7 @@ import { GeneralService } from '../../../shared/services/general/general.service
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { MonedaService } from '../../../shared/services/monedas/moneda.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-cuadrecuentasconsultor',
@@ -13,6 +14,10 @@ import { ToastService } from '../../../shared/services/toasty/toast.service';
 })
 export class CuadrecuentasconsultorComponent implements OnInit {
 
+  public AbrirModalDevolucion:Subject<any> = new Subject();
+  public AbrirModalCompra:Subject<any> = new Subject();
+  public AbrirModalMoverTransferencia:Subject<any> = new Subject();
+
   public CuentasDescuadre:Array<any> = localStorage.getItem('CuentasDescuadradas') ? JSON.parse(localStorage.getItem('CuentasDescuadradas')) : [];
   private _idCuentaActual:string = '';
   public MovimientosCuentaBancaria:Array<any> = [];
@@ -20,8 +25,14 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   public DiferencialMonedas:Array<any> = [];
   public CuentasBancariasSeleccionadas:Array<any> = JSON.parse(localStorage.getItem('Cuentas_Seleccionadas'));
   public CuentasBancariasSeleccionadasId:Array<any> = [];
-  public Balance:string = "0";
-  private _montoCerreCuentaActual:number = 0;
+  public CuentasBancariasUltimaApertura:Array<any> = [];
+  public Balance:number = 0;
+  public Apertura:number = 0;
+  public MontoAperturaConsultor:number = 0;
+  public Cierre:number = 0;
+  public Diferencia:number = 0;
+  public Codigo_Moneda:string = "";
+  private _montoCierreCuentaActual:number = 0;
   public TituloBoton:string = 'Siguiente Cuenta';
   public CuentaBancariaModel:any = {
     Id_Cuenta_Bancaria: '',
@@ -41,8 +52,10 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._getDiferencialMonedas();
     this._checkCuentasDescuadradas();
     this._fillArrayIdsSelectedAccounts();
+    this.MontoAperturaConsultor = this._getMontoAperturaCuenta();
   }
 
   private _checkCuentasDescuadradas(guardarApertura:boolean = false){
@@ -55,21 +68,34 @@ export class CuadrecuentasconsultorComponent implements OnInit {
       this._idCuentaActual = this.CuentasDescuadre[0];
       console.log(this._idCuentaActual);
       
-      this._getMovimientosCuentaDescuadre();
+      this.GetMovimientosCuentaDescuadre();
       this._getInformacionCuentaBancariaActual();
     }
   }
 
-  private _getMovimientosCuentaDescuadre(){
-    this._cuentaBancariaService.GetMovimientoCuentaBancariaUltimaSesion(this._idCuentaActual).subscribe((data:any) => {
+  public GetMovimientosCuentaDescuadre(){
+    let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario};
+    this._cuentaBancariaService.GetMovimientoCuentaBancariaUltimaSesion(p).subscribe((data:any) => {
+      console.log(data);
+      
       if (data.codigo == 'success') {
         this.MovimientosCuentaBancaria = data.query_data;
         this.Movimientos = data.query_data.movimientos;
-        this.Balance = data.query_data.balance;
+        this.Balance = parseInt(data.query_data.balance);
+        this.Apertura = parseInt(data.query_data.monto_apertura);
+        this.Cierre = parseInt(data.query_data.monto_cierre);
+        this.Codigo_Moneda = data.query_data.codigo_moneda;
+        this.Diferencia = this.MontoAperturaConsultor - this.Balance;
+        this.CuentasBancariasUltimaApertura = data.cuentas_ultima_apertura;
+        this._montoCierreCuentaActual = parseInt(data.query_data.balance);
       }else{
         this.MovimientosCuentaBancaria = [];
         this.Movimientos = [];
-        this.Balance = '0';
+        this.Balance = 0;
+        this.Apertura = 0;
+        this.Cierre = 0;
+        this.Codigo_Moneda = '';
+        this._montoCierreCuentaActual = 0;
       }
     });
   }
@@ -95,7 +121,10 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   }
 
   private _getTopesMoneda(idMoneda:string){
+    console.log(idMoneda);
     let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);
+    console.log(moneda);
+    
     let topes = {minimo:parseFloat(moneda.Monto_Minimo_Diferencia_Transferencia), maximo:parseFloat(moneda.Monto_Maximo_Diferencia_Transferencia)};
     
     return topes;
@@ -165,6 +194,8 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     data.append('cuentas', this._generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadasId)));
     data.append('modelo_cuentas', this._generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadas)));
     data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
+    data.append('id_oficina', this._generalService.SessionDataModel.idOficina);
+    data.append('id_caja', this._generalService.SessionDataModel.idCaja);
     data.append('modulo', 'Tablero Consultor');
 
     this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d:any) => {
@@ -192,7 +223,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     console.log("monto apertura de al cuenta actual:",monto_apertura_cuenta_actual);
     console.log("moneda de la cuenta:",moneda_cuenta);
     
-    return this._validarDiferencia(monto_apertura_cuenta_actual, this._montoCerreCuentaActual, moneda_cuenta);
+    return this._validarDiferencia(monto_apertura_cuenta_actual, this._montoCierreCuentaActual, moneda_cuenta);
   }
 
   private _fillArrayIdsSelectedAccounts(){
@@ -210,8 +241,31 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   private _getMontoCierre(){
     this._cuentaBancariaService.GetMontoCierreCuenta(this._idCuentaActual).subscribe((data:any) => {
       console.log(data);
-      this._montoCerreCuentaActual = typeof(data) == 'string' ? parseFloat(data) : data;
+      this._montoCierreCuentaActual = typeof(data) == 'string' ? parseFloat(data) : data;
     });
+  }
+
+  private _getMontoAperturaCuenta(){
+    let cuenta = this.CuentasBancariasSeleccionadas.find(x => x.Id_Cuenta_Bancaria == this._idCuentaActual);
+    return cuenta.Monto_Apertura;
+  }
+
+  public DevolverTransferencia(transferenciaModel:any){
+    let p = {codigo_moneda:transferenciaModel.Codigo_Moneda, transferencia:transferenciaModel};
+    this.AbrirModalDevolucion.next(p);
+  }
+
+  public AbrirCompraCuenta(){
+    let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario};
+    this.AbrirModalCompra.next(p);
+  }
+
+  public MoverTransferencia(transferenciaModel:any){
+    console.log(transferenciaModel);
+    
+    let p = {id_cuenta_origen:this._idCuentaActual, id_pago_transferencia:transferenciaModel.Id_Pago_Transfenecia, id_transferencia_destinatario:transferenciaModel.Id_Transferencia_Destino, numero_transferencia:transferenciaModel.Numero_Transferencia, recibo:transferenciaModel.Recibo, valor:transferenciaModel.Egreso, codigo_moneda:this.Codigo_Moneda, cuentas_ultima_apertura:this.CuentasBancariasUltimaApertura};
+
+    this.AbrirModalMoverTransferencia.next(p);
   }
 
 }

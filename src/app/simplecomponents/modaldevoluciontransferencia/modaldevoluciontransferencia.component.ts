@@ -17,6 +17,8 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
   @Output() RecargarPagos:EventEmitter<any> = new EventEmitter();
   @Input() AbrirModal:Observable<any> = new Observable();
   private openSubscription:ISubscription;
+  
+  private Id_Apertura_Consultor:string = localStorage.getItem('Apertura_Consultor');
 
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia:any;
 
@@ -69,6 +71,7 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
     let info = this._generalService.normalize(JSON.stringify(this.DevolucionModel));
     let datos = new FormData();
     datos.append("modelo", info);
+    datos.append("id_apertura", this.Id_Apertura_Consultor);
     this._transferenciaService.DevolverTransferencia(datos).subscribe((response:any) => {
       console.log(response);
       if (response.codigo == 'success') {

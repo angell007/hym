@@ -82,4 +82,8 @@ export class CierrecuentasconsultorComponent implements OnInit {
     this._route.navigate(["/login"]);
   }
 
+  public VolverATablero(){    
+    this._route.navigate(["/tablero"]);
+  }
+
 }

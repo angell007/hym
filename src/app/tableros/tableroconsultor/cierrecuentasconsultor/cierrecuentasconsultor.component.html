@@ -56,8 +56,10 @@
             </tbody>
           </table>
         </div>
-        <div class="col-md-12" style="font-size: 1.7rem;">
-            <button class="btn btn-outline-primary btn-rounded btn-sm pull-right" type="button"
+        <div class="col-md-12 text-right" style="font-size: 1.7rem;">
+            <button class="btn btn-outline-danger btn-rounded btn-sm" type="button"
+              (click)="VolverATablero()">Volver al tablero</button>
+            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
             [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a guardar un cierre de cuentas!' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cerrar cuentas', cancelButtonText : 'No, Comprobar!' }"
               (confirm)="GuardarCierreConsultor()">Cerrar Cuentas</button>
         </div>

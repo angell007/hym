@@ -185,10 +185,9 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.DeseleccionarCuentaBaseDeDatos(cuenta.Id_Cuenta_Bancaria);        
       }, 500);
-
-      
-      this._setCuentasSeleccionadasStorage(800);
     }
+      
+    this._setCuentasSeleccionadasStorage(800);
   }
 
   public GuardarAperturaCuentas(){
@@ -199,6 +198,8 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       data.append('cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadasId)));
       data.append('modelo_cuentas', this.generalService.normalize(JSON.stringify(this.CuentasBancariasSeleccionadas)));
       data.append('id_funcionario', this.generalService.Funcionario.Identificacion_Funcionario);
+      data.append('id_oficina', this.generalService.SessionDataModel.idOficina);
+      data.append('id_caja', this.generalService.SessionDataModel.idCaja);
       data.append('modulo', 'Tablero Consultor');
 
       this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d:any) => {
@@ -254,6 +255,8 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       this._deleteCuentaDescuadre(id_cuenta);
       this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
     }
+      
+    this._setCuentasSeleccionadasStorage(800);
   }
 
   private _getTopesMoneda(idMoneda:string){
@@ -319,6 +322,8 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   private _setCuentasSeleccionadasStorage(time:number){
+    console.log(this.CuentasBancariasSeleccionadas);
+    
     setTimeout(() => {
       localStorage.setItem("Cuentas_Seleccionadas", JSON.stringify(this.CuentasBancariasSeleccionadas));
     }, time);

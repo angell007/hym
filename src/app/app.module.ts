@@ -239,6 +239,8 @@ import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vi
 import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
 import { ModalpagostransferenciaComponent } from './simplecomponents/modalpagostransferencia/modalpagostransferencia.component';
 import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modaldevoluciontransferencia/modaldevoluciontransferencia.component';
+import { ModalabonocompracuentaComponent } from './simplecomponents/modalabonocompracuenta/modalabonocompracuenta.component';
+import { ModalamovertransferenciaComponent } from './simplecomponents/modalamovertransferencia/modalamovertransferencia.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -434,7 +436,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         VistaprincipalconsultorComponent,
         CuadrecuentasconsultorComponent,
         ModalpagostransferenciaComponent,
-        ModaldevoluciontransferenciaComponent
+        ModaldevoluciontransferenciaComponent,
+        ModalabonocompracuentaComponent,
+        ModalamovertransferenciaComponent
     ],
     exports:[
         ModalBasicComponent

@@ -2,7 +2,6 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <!-- <label>Transferencias</label> -->
         <div class="row">
           <div class="col-md-1" style="text-align:center;">
             <img src="../../../../assets/images/transfer.png" alt="icono_transferencia" style="width:2rem; height:2rem;">
@@ -10,8 +9,8 @@
           <div class="col-md-9" style="display:flex; align-items:center; justify-content:space-between; font-size: 1.7rem;">
             <label>Transferencias</label>
           </div>
-          <div class="col-md-2" style="display:flex; align-items:center; justify-content:space-between; font-size: 1.7rem;">
-            <button class="btn btn-primary btn-rounded btn-xs" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Prueba Cierre</button>
+          <div class="col-md-2 text-right">
+            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Cerrar Cuentas</button>
           </div>
       </div>
       </div>
@@ -119,10 +118,6 @@
                   style="margin:0;" (click)="DevolverTransferencia(t)">
                   <i class="ti-search text-primary"></i>
                 </button>
-                <!-- <button class="btn btn-default btn-xs" type="button" title="Devolver" *ngIf="t.Estado == 'Pagada'"
-                  style="margin:0;" (click)="DevolverTransferencia(t)">
-                  <i class="ti-back-right text-danger"></i>
-                </button> -->
               </td>
             </tr>
           </tbody>
