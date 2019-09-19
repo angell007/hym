@@ -37,8 +37,8 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias_apertura_observable.php', {params:p});
   }
   
-  public GetCuentasBancariasCierre(idFuncionario:string):Observable<any>{
-    let p = {id_funcionario:idFuncionario};
+  public GetCuentasBancariasCierre(p:any):Observable<any>{
+    // let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'/get_cuentas_bancarias_cierre.php', {params:p});
   }
   
@@ -120,6 +120,10 @@ export class CuentabancariaService {
   
   public RealizarMovimientoTransferencia(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/mover_transferencia_cuenta.php', datos);
+  }
+ 
+  public ActualizarMontoCierreCuenta(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/actualizar_monto_cierre.php', datos);
   }
 
 }

@@ -3,20 +3,14 @@ import { Router } from '@angular/router';
 import { CuentabancariaService } from '../../../shared/services/cuentasbancarias/cuentabancaria.service';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
-import { MonedaService } from '../../../shared/services/monedas/moneda.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
-import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-cuadrecuentasconsultor',
-  templateUrl: './cuadrecuentasconsultor.component.html',
-  styleUrls: ['./cuadrecuentasconsultor.component.scss', '../../../../style.scss']
+  selector: 'app-detallemovimientoscuenta',
+  templateUrl: './detallemovimientoscuenta.component.html',
+  styleUrls: ['./detallemovimientoscuenta.component.scss']
 })
-export class CuadrecuentasconsultorComponent implements OnInit {
-
-  public AbrirModalDevolucion:Subject<any> = new Subject();
-  public AbrirModalCompra:Subject<any> = new Subject();
-  public AbrirModalMoverTransferencia:Subject<any> = new Subject();
+export class DetallemovimientoscuentaComponent implements OnInit {
 
   public CuentasDescuadre:Array<any> = localStorage.getItem('CuentasDescuadradas') ? JSON.parse(localStorage.getItem('CuentasDescuadradas')) : [];
   private _idCuentaActual:string = '';
@@ -46,35 +40,17 @@ export class CuadrecuentasconsultorComponent implements OnInit {
               private _cuentaBancariaService:CuentabancariaService,
               private _generalService:GeneralService,
               private _swalService:SwalService,
-              private _monedaService:MonedaService,
               private _toastService:ToastService) 
   { 
     console.log(this.CuentasDescuadre);    
   }
 
   ngOnInit() {
-    this._getDiferencialMonedas();
-    this._checkCuentasDescuadradas();
-    this._fillArrayIdsSelectedAccounts();
+    this.GetMovimientosCuenta();
     this.MontoAperturaConsultor = this._getMontoAperturaCuenta();
   }
 
-  private _checkCuentasDescuadradas(guardarApertura:boolean = false){
-    if (this.CuentasDescuadre.length == 0) {
-      if (guardarApertura) {
-        this.GuardarAperturaCuentas();
-      }
-      this.Router.navigate(['/tablero']);
-    }else{
-      this._idCuentaActual = this.CuentasDescuadre[0];
-      console.log(this._idCuentaActual);
-      
-      this.GetMovimientosCuentaDescuadre();
-      this._getInformacionCuentaBancariaActual();
-    }
-  }
-
-  public GetMovimientosCuentaDescuadre(){
+  public GetMovimientosCuenta(){
     let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario};
     this._cuentaBancariaService.GetMovimientoCuentaBancariaUltimaSesion(p).subscribe((data:any) => {
       console.log(data);
@@ -111,16 +87,6 @@ export class CuadrecuentasconsultorComponent implements OnInit {
         this.CuentaBancariaModel = data.query_data;
       }else{
         this._limpiarModelo();
-      }
-    });
-  }
-
-  private _getDiferencialMonedas(){
-    this._monedaService.GetMaximaDiferenciaMonedas().subscribe((data:any) => {      
-      if (data.codigo == 'success') {
-        this.DiferencialMonedas = data.query_data;
-      }else{
-        this.DiferencialMonedas = [];
       }
     });
   }
@@ -167,19 +133,6 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     }else{
       this.TituloBoton = 'Realizar Transferencias';
     }
-  }
-
-  public Siguiente(){
-    console.log("Tiene pendiente "+(this.CuentasDescuadre.length-1)+" por cuadrar!");
-    if(!this.ComprobarCuadre()){
-      let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra proseguir sin antes cuadrar la cuenta!'], tipo:'warning', duracion:8000};
-      this._toastService.ShowToast(toastObj)
-    }else{
-      this._actualizarMontoCierre();
-      let ind_cuenta = this.CuentasDescuadre.findIndex(x => x == this._idCuentaActual);
-      this.CuentasDescuadre.splice(ind_cuenta);
-      this._checkCuentasDescuadradas(true);
-    }    
   }
 
   public IrATransferenciasNuevas(){
@@ -245,46 +198,15 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     return this._validarDiferencia(monto_apertura_cuenta_actual, this._montoCierreCuentaActual, moneda_cuenta);
   }
 
-  private _fillArrayIdsSelectedAccounts(){
-    this.CuentasBancariasSeleccionadas.forEach(cta => {
-      this.CuentasBancariasSeleccionadasId.push(cta.Id_Cuenta_Bancaria);
-    });
-  }
-
   private _limpiarListas(){
     this.CuentasDescuadre = [];
     this.CuentasBancariasSeleccionadas = [];
     this.CuentasBancariasSeleccionadasId = [];
   }
 
-  private _getMontoCierre(){
-    this._cuentaBancariaService.GetMontoCierreCuenta(this._idCuentaActual).subscribe((data:any) => {
-      console.log(data);
-      this._montoCierreCuentaActual = typeof(data) == 'string' ? parseFloat(data) : data;
-    });
-  }
-
   private _getMontoAperturaCuenta(){
     let cuenta = this.CuentasBancariasSeleccionadas.find(x => x.Id_Cuenta_Bancaria == this._idCuentaActual);
     return cuenta.Monto_Apertura;
-  }
-
-  public DevolverTransferencia(transferenciaModel:any){
-    let p = {codigo_moneda:transferenciaModel.Codigo_Moneda, transferencia:transferenciaModel, id_apertura:this.Id_Ultima_Apertura};
-    this.AbrirModalDevolucion.next(p);
-  }
-
-  public AbrirCompraCuenta(){
-    let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario,id_apertura:this.Id_Ultima_Apertura};
-    this.AbrirModalCompra.next(p);
-  }
-
-  public MoverTransferencia(transferenciaModel:any){
-    console.log(transferenciaModel);
-    
-    let p = {id_cuenta_origen:this._idCuentaActual, id_pago_transferencia:transferenciaModel.Id_Pago_Transfenecia, id_transferencia_destinatario:transferenciaModel.Id_Transferencia_Destino, numero_transferencia:transferenciaModel.Numero_Transferencia, recibo:transferenciaModel.Recibo, valor:transferenciaModel.Egreso, codigo_moneda:this.Codigo_Moneda, cuentas_ultima_apertura:this.CuentasBancariasUltimaApertura};
-
-    this.AbrirModalMoverTransferencia.next(p);
   }
 
 }

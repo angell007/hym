@@ -29,7 +29,8 @@ export class CierrecuentasconsultorComponent implements OnInit {
 
   public GetCuentasBancariasApertura(){
     this.Cargando = true;
-    this._cuentaBancariaService.GetCuentasBancariasCierre(this.Id_Funcionario).subscribe((data:any) => {
+    let p = {id_funcionario:this.Id_Funcionario, id_apertura:this.Id_Apertura};
+    this._cuentaBancariaService.GetCuentasBancariasCierre(p).subscribe((data:any) => {
       console.log(data);
       if (data.codigo == 'success') {
         this.Cargando = false;

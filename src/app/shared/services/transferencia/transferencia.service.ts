@@ -66,5 +66,9 @@ export class TransferenciaService {
   public DevolverTransferencia(data:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/devolver_transferencia.php', data);
   }
+  
+  public GetMaximaHoraTransferencia():Observable<any>{
+    return this.client.get(this._rutaBase+'/get_maxima_hora_transferencias.php');
+  }
 
 }

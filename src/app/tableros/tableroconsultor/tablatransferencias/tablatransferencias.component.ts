@@ -11,6 +11,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { SwalService } from '../../../shared/services/swal/swal.service';
+import { GeneralService } from '../../../shared/services/general/general.service';
 
 @Component({
   selector: 'app-tablatransferencias',
@@ -28,6 +29,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
   @Output() ActualizarIndicadores = new EventEmitter();
   private  TransferenciasActualizadas:ISubscription;
+
+  public AbrirModalCompra:Subject<any> = new Subject();
 
   @ViewChild('ModalPrueba') ModalPrueba:any;
   @ViewChild('ModalTransferencia') ModalTransferencia:any;
@@ -91,6 +94,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   };
 
   public TransferenciaModel:TransfereciaViewModel = new TransfereciaViewModel();
+  public FinHoraLaboral:string = '';
 
   //public CuentaConsultor:any = '';
   public MonedaCuentaConsultor:any = '';
@@ -100,30 +104,14 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
               private puntosPipe:PuntosPipe,
               private _transferenciaService:TransferenciaService,
               private _toastService:ToastService,
-              private _swalService:SwalService) 
+              private _swalService:SwalService,
+              private _generalService:GeneralService) 
   {
     //this.GetCuentasBancarias(this.Funcionario.Identificacion_Funcionario.toString());
+    this._getMaximaHoraTransferencias();
   }
 
   ngOnChanges(changes:SimpleChanges){
-
-    // if (changes.CuentasBancariasSeleccionadas.previousValue != undefined) {
-    //   console.log("entro en cambios");
-    //   if (this.CuentasBancariasSeleccionadas.length == 0) {   
-    //     console.log("no hay cuentas seleccionadas");     
-    //     this.TransferenciasListar = [];
-    //     this.TotalItems = 0;
-    //   }else{
-    //     console.log("hay cuentas seleccionadas");
-    //     this.ConsultaFiltrada();
-    //   }
-    // }
-
-    // if (changes.MonedaConsulta.previousValue != undefined || changes.CuentaConsultor.previousValue != undefined) {
-    //   //this.ConsultarTransferencias();
-    //   //this.ConsultarCuentaConsultor();
-    //   this.ConsultaFiltrada();
-    // }
   }
 
   ngOnInit() {
@@ -152,6 +140,12 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     });
   }
 
+  private _getMaximaHoraTransferencias(){
+    this._transferenciaService.GetMaximaHoraTransferencia().subscribe((response:any) => {
+      this.FinHoraLaboral = response.query_data.Fin_Hora_Laboral;
+    });
+  }
+
   BloquearTransferencia(modelo:any){
     this.AsginarValoresModalCrear(modelo);       
     this.ModalTransferencia.show();
@@ -164,39 +158,36 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
   
   public SeleccionarTransferencia(modelo:any){
-    console.log(modelo);
-    
-    if (this.TransferenciasSeleccionadas.length == 0) {
-      if (modelo.Estado == 'Pagada') {
-        this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar una transferencia pagada!']);        
+    if(!this._validarHoraTransferencia()){
+      return;
+    }else{  
+      if (this.TransferenciasSeleccionadas.length == 0) {
+        if (modelo.Estado == 'Pagada') {
+          this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar una transferencia pagada!']);        
+        }else{
+          this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
+            if (data == '1') {
+              this.TransferenciasSeleccionadas.push(modelo);              
+              let data = new FormData();
+      
+              data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
+              data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
+              this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
+                
+              });        
+            }
+          });
+        }      
       }else{
-        this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
-          if (data == '1') {
-            this.TransferenciasSeleccionadas.push(modelo);
-            console.log(this.TransferenciasSeleccionadas);
-            
-            // this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
-            // this.AsginarValoresModalCrear(modelo);
-            let data = new FormData();
-    
-            data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
-            data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
-            this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
-              console.log(response);
-              
-            });        
-            // this.ModalTransferencia.show();
-          }
-        });
-      }      
-    }else{
-      this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar mas de una transferencia a la vez!']);
+        this._swalService.ShowMessage(['warning','Alerta','No puede seleccionar mas de una transferencia a la vez!']);
+      }
     }
+   
     
   }
   
   public DeseleccionarTransferencia(idTransferenciaDestinatario:any){
-
+    
     let ind = this.TransferenciasSeleccionadas.findIndex(x => x.Id_Transferencia_Destinatario == idTransferenciaDestinatario);
     if (ind > -1) {
       this.TransferenciasSeleccionadas.splice(ind, 1);
@@ -206,57 +197,47 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     data.append("id_transferencia", idTransferenciaDestinatario);
     this._transferenciaService.DesbloquearTransferencia(data).subscribe((response:any) => {
       console.log(response);
-      // this.TransferenciaActual = '';
-      // this.ConsultaFiltrada();
     });
-
-    // this._transferenciaService.CheckEstadoAperturaTransferencia(modelo.Id_Transferencia_Destinatario).subscribe((data:any) => {
-    //   if (data == '1') {
-    //     this.TransferenciasSeleccionadas.push(modelo);
-    //     console.log(this.TransferenciasSeleccionadas);
-        
-    //     // this.TransferenciaActual = modelo.Id_Transferencia_Destinatario;
-    //     // this.AsginarValoresModalCrear(modelo);
-    //     let data = new FormData();
-
-    //     data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
-    //     data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
-    //     this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
-    //       console.log(response);
-          
-    //     });        
-    //     // this.ModalTransferencia.show();
-    //   }
-    // });
   }
 
   GuardarTransferencia(modal) {
-    console.log(this.MovimientoBancoModel);    
+    if(!this._validarHoraTransferencia(true)){
+      return;
+    }else{
+      let info = JSON.stringify(this.MovimientoBancoModel);
+      let datos = new FormData();
+      datos.append("modelo", info);
+      datos.append("cajero", this.Id_Funcionario);
+      datos.append("id_apertura", this.Id_Apertura);
+      datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
 
-    let info = JSON.stringify(this.MovimientoBancoModel);
-    let datos = new FormData();
-    datos.append("modelo", info);
-    datos.append("cajero", this.Id_Funcionario);
-    datos.append("id_apertura", this.Id_Apertura);
-    datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
-
-    this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
-      
-      this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
-      modal.hide();
-      this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
-      this.ActualizarIndicadores.emit(null);
-      this._limpiarMovimientoBancoModel();
-      // this.ConsultaFiltrada();
-    });
+      this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+        
+        this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
+        modal.hide();
+        this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
+        this.ActualizarIndicadores.emit(null);
+        this._limpiarMovimientoBancoModel();
+        // this.ConsultaFiltrada();
+      });
+    }    
   }
 
-  FormatValue(value:string){
-    console.log(value);
-    
+  private _validarHoraTransferencia(esGuardar:boolean = false){
+    if (this._generalService.HoraActual > this.FinHoraLaboral) {
+      this._swalService.ShowMessage(['warning','Alerta','No puede seguir realizando transferencias, ya se cumplio la hora limite!']);
+      if (esGuardar) {
+        this.DesbloquearTransferencia();
+        this.DeseleccionarTransferencia(this.TransferenciasSeleccionadas[0].Id_Transferencia_Destinatario);  
+      }      
+      return false;
+    }else{
+      return true;
+    }    
+  }
+
+  FormatValue(value:string){    
     this.ValorConFormato = this.puntosPipe.transform(value);
-    console.log(this.ValorConFormato);
-    console.log(this.MovimientoBancoModel);
     // Remove or comment this line if you dont want 
     // to show the formatted amount in the textbox.
     //element.target.value = this.formattedAmount;
@@ -415,7 +396,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   public DevolverTransferencia(transferenciaModel:any){
-    this.AbrirModalDevolucion.next(transferenciaModel);
+    let p = {model:transferenciaModel, id_apertura:this.Id_Apertura};
+    this.AbrirModalDevolucion.next(p);
   }
 
   private _limpiarMovimientoBancoModel(){
@@ -428,5 +410,15 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       Numero_Transferencia: '',
       Ajuste: 'No'
     };
+  }
+
+  public AbrirModalAbono(){
+    let p = {id_cuenta:this.MovimientoBancoModel.Id_Cuenta_Bancaria, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario,id_apertura:this.Id_Apertura};
+    this.AbrirModalCompra.next(p);
+  }
+
+  public ActualizarValorCuentaBancaria(){
+    console.log("actualizando el valor real de la cuenta bancaria!");
+    
   }
 }

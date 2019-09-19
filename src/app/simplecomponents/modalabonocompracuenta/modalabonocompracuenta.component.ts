@@ -34,7 +34,7 @@ export class ModalabonocompracuentaComponent implements OnInit {
       
       this.CompraCuentaModel.Id_Cuenta_Bancaria = data.id_cuenta;
       this.CompraCuentaModel.Id_Funcionario = data.id_funcionario;
-      // this.CompraCuentaModel.Id_Consultor_Apertura = data.id_apertura;      
+      this.CompraCuentaModel.Id_Consultor_Apertura = data.id_apertura;      
       this.ModalAbonoCompraCuenta.show();
     });
   }

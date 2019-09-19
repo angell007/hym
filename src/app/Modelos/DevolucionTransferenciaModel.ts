@@ -6,4 +6,5 @@ export class DevolucionTransferenciaModel{
     public Id_Motivo_Devolucion:string = '';
     public Numero_Comprobante_Banco:string = '';
     public Id_Funcionario:string = '';
+    public Observaciones:string = '';
 }

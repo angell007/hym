@@ -241,6 +241,7 @@ import { ModalpagostransferenciaComponent } from './simplecomponents/modalpagost
 import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modaldevoluciontransferencia/modaldevoluciontransferencia.component';
 import { ModalabonocompracuentaComponent } from './simplecomponents/modalabonocompracuenta/modalabonocompracuenta.component';
 import { ModalamovertransferenciaComponent } from './simplecomponents/modalamovertransferencia/modalamovertransferencia.component';
+import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -438,7 +439,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalpagostransferenciaComponent,
         ModaldevoluciontransferenciaComponent,
         ModalabonocompracuentaComponent,
-        ModalamovertransferenciaComponent
+        ModalamovertransferenciaComponent,
+        DetallemovimientoscuentaComponent
     ],
     exports:[
         ModalBasicComponent

@@ -18,7 +18,8 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
   @Input() AbrirModal:Observable<any> = new Observable();
   private openSubscription:ISubscription;
   
-  private Id_Apertura_Consultor:string = localStorage.getItem('Apertura_Consultor');
+  // private Id_Apertura_Consultor:string = localStorage.getItem('Apertura_Consultor');
+  private Id_Apertura_Consultor:string = '';
 
   @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia:any;
 
@@ -38,6 +39,7 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
       console.log(data);
       this.CodigoMoneda = data.codigo_moneda;
       this._setDatosModelo(data.transferencia);
+      this.Id_Apertura_Consultor = data.id_apertura;
       this.ModalDevolucionTransferencia.show();
 
       setTimeout(() => {

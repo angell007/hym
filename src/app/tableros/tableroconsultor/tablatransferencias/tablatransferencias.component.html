@@ -203,9 +203,20 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group">              
               <label for="">Saldo real</label>
-              <label for="" style="display:block;"><b>{{10000000 | customcurrency}}</b></label>
+              <div class="row">
+                <div class="col-md-9">
+                  <label for="" style="display:block;"><b>{{10000000 | customcurrency}}</b></label>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-outline-success btn-xs btn-rounded" [disabled]="MovimientoBancoModel.Id_Cuenta_Bancaria == ''"
+                    (click)="AbrirModalAbono()">
+                    Abono
+                  </button>
+                </div>
+              </div>
+              
             </div>
           </div>
           <div class="form-row">
@@ -267,5 +278,10 @@
 
 <app-modalpagostransferencia
   [AbrirModal]="AbrirModalDevolucion.asObservable()"></app-modalpagostransferencia>
+
+<app-modalabonocompracuenta
+  [AbrirModal]="AbrirModalCompra.asObservable()"
+  (ActualizarDatos)="ActualizarValorCuentaBancaria()">
+</app-modalabonocompracuenta>
 
 <swal title='' text='' type='' #alertSwal></swal>

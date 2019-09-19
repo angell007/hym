@@ -20,15 +20,17 @@ export class ModalpagostransferenciaComponent implements OnInit, OnDestroy {
 
   public TransferenciaModel:any = {};
   public TransferenciasRealizadas:Array<any> = [];
+  public Id_Apertura:string = '';
 
   constructor(private _transferenciaService:TransferenciaService,
               private _generalService:GeneralService) 
   { }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((transferenciaModel:any) => {
-      console.log(transferenciaModel);
-      this.TransferenciaModel = transferenciaModel;
+    this.openSubscription = this.AbrirModal.subscribe((data:any) => {
+      console.log(data);
+      this.TransferenciaModel = data.model;
+      this.Id_Apertura = data.id_apertura;
       this.ModalPagosTransferencia.show();
 
       setTimeout(() => {
@@ -60,7 +62,7 @@ export class ModalpagostransferenciaComponent implements OnInit, OnDestroy {
   }
 
   public DevolverTransferencia(transferenciaModel:any){
-    let p = {codigo_moneda:this.TransferenciaModel.Codigo_Moneda, transferencia:transferenciaModel};
+    let p = {codigo_moneda:this.TransferenciaModel.Codigo_Moneda, transferencia:transferenciaModel, id_apertura:this.Id_Apertura};
     this.AbrirModalDevolver.next(p);
   }
 

@@ -30,22 +30,28 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="block-element">Observaciones</label>
+            <input class="form-control" required name="Observaciones" type="text" [(ngModel)]="DevolucionModel.Observaciones">
+          </div>
+        </div>
       </form>
   </div>
   <div class="app-modal-footer">
-      <div class="text-right">
-          <button 
-              id="cerrardevolucion" 
-              class="btn btn-outline-danger btn-sm btn-rounded"
-              (click)="CerrarModal()">Cancelar
-            </button>
-          <button 
-              type="submit" 
-              class="btn btn-outline-primary btn-sm btn-rounded" 
-              [disabled]="!FormDevolucionTransferencia.valid" 
-              [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Devolver',cancelButtonText: 'No, Comprobar!'}"
-              (confirm)="RealizarDevolucion()">Devolver
-          </button>
-      </div>
+    <div class="text-right">
+      <button 
+        id="cerrardevolucion" 
+        class="btn btn-outline-danger btn-sm btn-rounded"
+        (click)="CerrarModal()">Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-outline-primary btn-sm btn-rounded" 
+        [disabled]="!FormDevolucionTransferencia.valid" 
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Devolver',cancelButtonText: 'No, Comprobar!'}"
+        (confirm)="RealizarDevolucion()">Devolver
+      </button>
+    </div>
   </div>
 </app-modal-basic>
