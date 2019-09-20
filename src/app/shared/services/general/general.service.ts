@@ -114,6 +114,10 @@ export class GeneralService {
     return this.globales.Monedas;
   }
 
+  BuscarMonedas():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/monedas/get_monedas.php');
+  }
+
   public getTiposCuenta(){
     return this.globales.TiposCuenta;
   }

@@ -415,6 +415,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public DepartamentosGiros:any = [];
     public Municipios_Remitente = [];
     public DeshabilitarComisionGiro:boolean = true;
+    public CedulaBusquedaGiro:string = '';
 
   //#endregion
 
@@ -3278,10 +3279,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       datos.append("modulo", 'Giro');
       datos.append("id", id);
       this.http.post(this.globales.ruta + 'php/giros/anular_giro.php', datos).subscribe((data: any) => {
-        this.confirmacionSwal.title = "Amulado con Exito";
-        this.confirmacionSwal.text = "Se ha anulado correctamente el giro"
-        this.confirmacionSwal.type = "success"
+        this.confirmacionSwal.title = "Anulado con Exito";
+        this.confirmacionSwal.text = "Se ha anulado correctamente el giro";
+        this.confirmacionSwal.type = "success";
         this.confirmacionSwal.show();
+        
+        this.FiltrarGiroCedula(this.CedulaBusquedaGiro);
         //this.actualizarVista();
       });
     }

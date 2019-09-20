@@ -3,7 +3,7 @@
         <div class="col-md-3">
             <app-informativecard 
                 [CantidadMostrar]="Conteo.Totales"
-                TituloCard="Giros"
+                TituloCard="Giros totales"
                 IconoCard="ti-shuffle"
                 CardClass="bg-info"
                 AdditionalText="">
@@ -11,8 +11,8 @@
         </div>
         <div class="col-md-3">
             <app-informativecard 
-                [CantidadMostrar]="Conteo.Realizados"
-                TituloCard="Realizados"
+                [CantidadMostrar]="Conteo.Pendientes"
+                TituloCard="Pendientes"
                 IconoCard="ti-check"
                 CardClass="bg-success"
                 AdditionalText="">
@@ -20,8 +20,8 @@
         </div>
         <div class="col-md-3">
             <app-informativecard 
-                [CantidadMostrar]="Conteo.Devueltos"
-                TituloCard="Devueltos"
+                [CantidadMostrar]="Conteo.Pagados"
+                TituloCard="Pagados"
                 IconoCard="ti-back-right"
                 CardClass="bg-warning"
                 AdditionalText=""
@@ -43,7 +43,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5>Giros Realizados 
-                        <span><i class="ti-reload text-info" title="Actualizar tabla" (click)="ActualizarTabla()"></i></span>
+                        <span><i class="ti-reload text-info" style="cursor:pointer;" title="Actualizar tabla" (click)="ActualizarTabla()"></i></span>
                         <!--<span><i class="fa fa-refresh fa-spin text-info" (click)="ActualizarTabla()"></i></span>-->
                     </h5>
                 </div>

@@ -3,6 +3,7 @@ import { CuentabancariaService } from '../../../shared/services/cuentasbancarias
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwalService } from '../../../shared/services/swal/swal.service';
+import { NuevofuncionarioService } from '../../../shared/services/funcionarios/nuevofuncionario.service';
 
 @Component({
   selector: 'app-cierrecuentasconsultor',
@@ -21,7 +22,9 @@ export class CierrecuentasconsultorComponent implements OnInit {
               public generalService:GeneralService,
               private _activeRoute:ActivatedRoute,
               private _route:Router,
-              private _swalService:SwalService) { }
+              private _swalService:SwalService,
+              private _generalService:GeneralService,
+              private _funcionarioService:NuevofuncionarioService) { }
 
   ngOnInit() {
     this.GetCuentasBancariasApertura();
@@ -71,6 +74,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
   }
 
   private CerrarSesion() {
+    this._registrarCierreSesion();
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
     localStorage.removeItem("Banco");
@@ -86,5 +90,11 @@ export class CierrecuentasconsultorComponent implements OnInit {
   public VolverATablero(){    
     this._route.navigate(["/tablero"]);
   }
+
+  private _registrarCierreSesion(){
+    let data = new FormData();
+    data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
+    this._funcionarioService.LogCierreSesion(data).subscribe();
+}
 
 }

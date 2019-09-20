@@ -6,6 +6,8 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { Funcionario } from '../shared/funcionario/funcionario.model';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { GeneralService } from '../shared/services/general/general.service';
+import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -52,7 +54,7 @@ export class CierrecajaComponent implements OnInit {
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura:any = [];
 
-  constructor(public globales:Globales, private cliente:HttpClient, public router:Router, public activeRoute:ActivatedRoute) {
+  constructor(public globales:Globales, private cliente:HttpClient, public router:Router, public activeRoute:ActivatedRoute, private _generalService:GeneralService, private _funcionarioService:NuevofuncionarioService) {
    }
 
   ngOnInit() {
@@ -317,6 +319,7 @@ export class CierrecajaComponent implements OnInit {
   }
 
   salir() {
+    this._registrarCierreSesion();
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
     localStorage.removeItem("Banco");
@@ -325,4 +328,10 @@ export class CierrecajaComponent implements OnInit {
     localStorage.setItem('MonedaCuentaConsultor', '');
     this.router.navigate(["/login"]);
   }
+
+  private _registrarCierreSesion(){
+    let data = new FormData();
+    data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
+    this._funcionarioService.LogCierreSesion(data).subscribe();
+}
 }

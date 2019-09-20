@@ -15,7 +15,7 @@
                                 <th class="text-center">Cajero</th>
                                 <th class="text-center">Tipo Transferencia</th>
                                 <th class="text-center">Estado</th>
-                                <th class="text-center">Valor</th>
+                                <th class="text-center">Recibido</th>
                                 <th class="text-center">Realizada por</th>
                             </tr>
                         </thead>
@@ -23,13 +23,13 @@
                             <tr *ngFor="let t of transferencias"
                                 (click)="GetDetalleTransferencia(t.Id_Transferencia)"
                                 style="cursor:pointer;">
-                                <td>{{t.Fecha | date:"medium" | uppercase }}</td>
-                                <td>{{t.Recibo}}</td>
-                                <td>{{t.Nombre_Cajero}}</td>
-                                <td>{{t.Tipo}}</td>
-                                <td>{{t.Estado}}</td>
+                                <td class="text-center">{{t.Fecha | date:"medium" | uppercase }}</td>
+                                <td class="text-center">{{t.Recibo}}</td>
+                                <td class="text-center">{{t.Nombre_Cajero}}</td>
+                                <td class="text-center">{{t.Tipo}}</td>
+                                <td class="text-center">{{t.Estado}}</td>
                                 <td class="text-right">{{t.Codigo_Moneda_Origen}} {{t.Valor_Origen | number | puntos}}</td>
-                                <td>{{t.Realizada_Por}}</td>
+                                <td class="text-center">{{t.Realizada_Por}}</td>
                             </tr>
                         </tbody>
                     </table>

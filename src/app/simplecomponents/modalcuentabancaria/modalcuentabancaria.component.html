@@ -80,6 +80,12 @@
                       <input currencyMask class="form-control" name="Monto_Inicial" [(ngModel)]="CuentaBancariaModel.Monto_Inicial" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
                   </div>
               </div>
+              <div class="col-md-3">
+                  <div class="form-group">
+                      <label>Comisión Bancaria</label>
+                      <input currencyMask class="form-control" name="Comision_Bancaria" [(ngModel)]="CuentaBancariaModel.Comision_Bancaria" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                  </div>
+              </div>
           </div>
           <div class="row">
               <div class="col-md-12">

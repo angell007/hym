@@ -80,9 +80,10 @@ export class ModalcuentabancariaComponent implements OnInit, OnDestroy {
   }
 
   GetMonedas(){
-    setTimeout(() => {
-      this.Monedas = this.generalService.getMonedas();  
-    }, 1000);
+    this.generalService.BuscarMonedas().subscribe((response:any) => {
+      console.log(response);
+      this.Monedas = response.query_data; 
+    });
   }
 
   GetTiposCuenta(){

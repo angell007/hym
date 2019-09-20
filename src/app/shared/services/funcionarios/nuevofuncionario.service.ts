@@ -33,6 +33,10 @@ export class NuevofuncionarioService {
   saveFuncionario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'guardar_funcionario_nuevo.php', datos);
   }
+  
+  public LogCierreSesion(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'guardar_log_cierre_sesion.php', datos);
+  }
 
   editFuncionario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'editar_funcionario.php', datos);

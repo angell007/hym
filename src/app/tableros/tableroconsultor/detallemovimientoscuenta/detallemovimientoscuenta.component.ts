@@ -92,12 +92,8 @@ export class DetallemovimientoscuentaComponent implements OnInit {
   }
 
   private _getTopesMoneda(idMoneda:string){
-    console.log(idMoneda);
-    let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);
-    console.log(moneda);
-    
+    let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);    
     let topes = {minimo:parseFloat(moneda.Monto_Minimo_Diferencia_Transferencia), maximo:parseFloat(moneda.Monto_Maximo_Diferencia_Transferencia)};
-    
     return topes;
   }
 
