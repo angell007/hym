@@ -15,5 +15,6 @@ export class MonedaModel{
     public Traslado:boolean = false;
     public Giro:boolean = false;
     public Cambio:boolean = false;
+    public Monto_Maximo_Diferencia_Transferencia:string = '';
     public ValoresMoneda:ValoresMonedaModel = new ValoresMonedaModel();
 }

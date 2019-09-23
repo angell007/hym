@@ -4,34 +4,22 @@
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-md-6">CUADRE DE CUENTAS - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
-            <div class="col-md-6">
-              <button class="btn btn-outline-success btn-sm btn-rounded pull-right" (click)="AbrirCompraCuenta()">
-                Abono
-              </button>
+            <div class="col-md-6">MOVIMIENTOS DE CUENTA - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
+            <div *ngIf="Accion == 'Ajustar'" class="col-md-6 text-right">
+              <button class="btn btn-outline-success btn-rounded btn-sm" type="button">Compra</button>
+              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="Ajustar()">Ajuste</button>
             </div>
           </div>
         </div>
         <div class="card-body">
-          <div class="row mb-2">
-            <div class="col-md-8"></div>
-            <div class="col-md-4">
-              <table class="table table-striped custom-table">
-                <tr>
-                  <td class="custom-cell text-center font-size-13">Monto Apertura:</td>
-                  <td class="custom-cell text-right font-size-13">{{Apertura | customcurrency:Codigo_Moneda}}</td>
-                </tr>
-              </table>
-            </div>
-          </div>
           <table class="table table-hover table-sm table-striped table-bordered custom-table">
             <thead>
               <tr>
                 <th class="custom-thead" style="width:8%;">Fecha</th>
                 <th class="custom-thead" style="width:12%;">Recibo</th>
-                <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
-                <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
-                <th class="custom-thead" class="text-center" style="width:10%">Saldo</th>
+                <th class="custom-thead text-center" style="width:10%">Ingreso</th>
+                <th class="custom-thead text-center" style="width:10%">Egreso</th>
+                <th class="custom-thead text-center" style="width:10%">Saldo</th>
               </tr>
               <tr *ngIf="Movimientos.length == 0">
                 <td colspan="5" class="text-center">
@@ -59,24 +47,22 @@
                   <td class="custom-cell text-center font-size-13">Total Cuenta:</td>
                   <td class="custom-cell text-right font-size-13">{{Balance | customcurrency:Codigo_Moneda}}</td>
                 </tr>
-                <tr>
-                  <td class="custom-cell text-center font-size-13">Monto Apertura Actual:</td>
-                  <td class="custom-cell text-right font-size-13">{{MontoAperturaConsultor | customcurrency:Codigo_Moneda}}</td>
-                </tr>
-                <tr>
-                  <td class="custom-cell text-center font-size-13">Diferencia:</td>
-                  <td class="custom-cell text-right font-size-13">{{Diferencia | customcurrency:Codigo_Moneda}}</td>
-                </tr>
               </table>
             </div>
           </div>
         </div>
         <div class="card-footer">
-          <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-            (click)="Siguiente()">Cuadrar Cuenta
-          </button>
+          <div class="text-right">
+            <button type="button" class="btn btn-outline-danger btn-rounded btn-sm"
+              (click)="VolverAlCierre()">Volver
+            </button>
+          </div>          
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<app-modalajustecuenta
+  [AbrirModal]="AbrirModalAjuste.asObservable()"
+  (ActualizarTabla)="GetMovimientosCuenta()"></app-modalajustecuenta>

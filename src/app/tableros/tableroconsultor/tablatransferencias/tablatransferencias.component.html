@@ -6,11 +6,12 @@
           <div class="col-md-1" style="text-align:center;">
             <img src="../../../../assets/images/transfer.png" alt="icono_transferencia" style="width:2rem; height:2rem;">
           </div>
-          <div class="col-md-9" style="display:flex; align-items:center; justify-content:space-between; font-size: 1.7rem;">
+          <div class="col-md-7" style="display:flex; align-items:center; justify-content:space-between; font-size: 1.7rem;">
             <label>Transferencias</label>
           </div>
-          <div class="col-md-2 text-right">
-            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Cerrar Cuentas</button>
+          <div class="col-md-4 text-right">
+            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" [routerLink]="['/cuentasconsultor',Id_Funcionario]">Ver Cuentas</button> 
+            <button class="btn btn-outline-danger btn-rounded btn-sm" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Cerrar Cuentas</button>         
           </div>
       </div>
       </div>

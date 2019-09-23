@@ -62,6 +62,8 @@ import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposte
 import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
 import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
 import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
+import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
+import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -288,6 +290,14 @@ export const AppRoutes: Routes = [
         path: 'cuadrecuentas', component: CommonLayoutComponent,
         children: [{ path: '', component: CuadrecuentasconsultorComponent, canActivate: [AuthGuard] }]
     },    
+    {
+        path: 'detallemovimientoscuenta/:id_cuenta/:accion', component: CommonLayoutComponent,
+        children: [{ path: '', component: DetallemovimientoscuentaComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'cuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: CuentasconsultorComponent, canActivate: [AuthGuard] }]
+    },
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 

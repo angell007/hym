@@ -105,6 +105,10 @@ export class GeneralService {
   public GetMotivosDevolucion():Observable<any>{
     return this.client.get(this.globales.ruta+'php/GENERALES/motivosdevolucion/get_motivos_devolucion.php');
   }
+  
+  public GetTiposAjuste():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/GENERALES/tiposajuste/get_tipos_ajuste.php');
+  }
 
   public getPaises(){
     return this.globales.Paises; 

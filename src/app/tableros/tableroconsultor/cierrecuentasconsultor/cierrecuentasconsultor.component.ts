@@ -70,7 +70,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
 
   public VerMovimientos(idCuentaBancaria:string){
     console.log(idCuentaBancaria);
-    
+    this._route.navigate(['/detallemovimientoscuenta', idCuentaBancaria, 'Ver']);
   }
 
   private CerrarSesion() {

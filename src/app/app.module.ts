@@ -87,6 +87,7 @@ import { DependenciaService } from './shared/services/dependencias/dependencia.s
 import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
 import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
+import { WebnavigationService } from './shared/services/navegacionweb/webnavigation.service';
 
 
 //MODALES
@@ -242,6 +243,8 @@ import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modald
 import { ModalabonocompracuentaComponent } from './simplecomponents/modalabonocompracuenta/modalabonocompracuenta.component';
 import { ModalamovertransferenciaComponent } from './simplecomponents/modalamovertransferencia/modalamovertransferencia.component';
 import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
+import { ModalajustecuentaComponent } from './simplecomponents/modalajustecuenta/modalajustecuenta.component';
+import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -440,7 +443,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaldevoluciontransferenciaComponent,
         ModalabonocompracuentaComponent,
         ModalamovertransferenciaComponent,
-        DetallemovimientoscuentaComponent
+        DetallemovimientoscuentaComponent,
+        ModalajustecuentaComponent,
+        CuentasconsultorComponent
     ],
     exports:[
         ModalBasicComponent
@@ -500,7 +505,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CargoService,
         PerfilService,
         ConfiguracionService,
-        SafePipe
+        SafePipe,
+        WebnavigationService
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]

@@ -125,5 +125,9 @@ export class CuentabancariaService {
   public ActualizarMontoCierreCuenta(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/actualizar_monto_cierre.php', datos);
   }
+ 
+  public GuardarAjusteCuenta(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/guardar_ajuste_cuenta.php', datos);
+  }
 
 }
