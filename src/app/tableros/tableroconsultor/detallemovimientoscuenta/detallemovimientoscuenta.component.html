@@ -6,12 +6,23 @@
           <div class="row">
             <div class="col-md-6">MOVIMIENTOS DE CUENTA - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
             <div *ngIf="Accion == 'Ajustar'" class="col-md-6 text-right">
-              <button class="btn btn-outline-success btn-rounded btn-sm" type="button">Compra</button>
+              <button class="btn btn-outline-success btn-rounded btn-sm" type="button" (click)="CompraCuenta()">Compra</button>
               <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="Ajustar()">Ajuste</button>
             </div>
           </div>
         </div>
         <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+              <table class="table table-striped custom-table">
+                <tr>
+                  <td class="custom-cell text-center font-size-13">Monto Apertura:</td>
+                  <td class="custom-cell text-right font-size-13">{{Apertura | customcurrency:Codigo_Moneda}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
           <table class="table table-hover table-sm table-striped table-bordered custom-table">
             <thead>
               <tr>
@@ -65,4 +76,10 @@
 
 <app-modalajustecuenta
   [AbrirModal]="AbrirModalAjuste.asObservable()"
-  (ActualizarTabla)="GetMovimientosCuenta()"></app-modalajustecuenta>
+  (ActualizarTabla)="GetMovimientosCuenta()">
+</app-modalajustecuenta>
+
+<app-modalabonocompracuenta
+  [AbrirModal]="AbrirModalCompra.asObservable()"
+  (ActualizarDatos)="GetMovimientosCuenta()">
+</app-modalabonocompracuenta>

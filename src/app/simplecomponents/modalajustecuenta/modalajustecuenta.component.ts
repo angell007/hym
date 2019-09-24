@@ -20,7 +20,7 @@ export class ModalajustecuentaComponent implements OnInit {
 
   public openSubscription:any;
   public AjusteCuentaModel:AjusteCuentaModel = new AjusteCuentaModel();
-  public CodigMoneda:string = '';
+  public CodigoMoneda:string = '';
   public TiposAjuste:Array<any> = [];
 
   constructor(private _generalService: GeneralService,
@@ -36,6 +36,7 @@ export class ModalajustecuentaComponent implements OnInit {
       console.log(data);
       
       this.AjusteCuentaModel.Id_Cuenta_Bancaria = data.id_cuenta;
+      this.CodigoMoneda=data.codigo_moneda;
       this.ModalAjusteCuenta.show();
     });
   }

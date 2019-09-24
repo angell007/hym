@@ -15,11 +15,13 @@ import { Subject } from 'rxjs';
 export class DetallemovimientoscuentaComponent implements OnInit {
 
   public AbrirModalAjuste:Subject<any> = new Subject();
+  public AbrirModalCompra:Subject<any> = new Subject();
 
   private _idCuentaActual:string = '';
   public MovimientosCuentaBancaria:Array<any> = [];
   public Movimientos:Array<any> = [];
   public Balance:number = 0;
+  public Apertura:number = 0;
   public Codigo_Moneda:string = "";
   public CuentaBancariaModel:any = {
     Id_Cuenta_Bancaria: '',
@@ -29,6 +31,7 @@ export class DetallemovimientoscuentaComponent implements OnInit {
   };
 
   public Accion:string = '';
+  public Id_Apertura:string = localStorage.getItem('Apertura_Consultor');
 
   constructor(private _router:Router,
               private _activeRoute:ActivatedRoute,
@@ -55,12 +58,14 @@ export class DetallemovimientoscuentaComponent implements OnInit {
         this.MovimientosCuentaBancaria = data.query_data;
         this.Movimientos = data.query_data.movimientos;
         this.Balance = parseInt(data.query_data.balance);
-        this.Codigo_Moneda = data.query_data.codigo_moneda;
+        this.Codigo_Moneda = data.codigo_moneda;
+        this.Apertura = parseInt(data.query_data.monto_apertura);
       }else{
         this.MovimientosCuentaBancaria = [];
         this.Movimientos = [];
         this.Balance = 0;
-        this.Codigo_Moneda = '';        
+        this.Apertura = 0;
+        this.Codigo_Moneda = data.codigo_moneda;     
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:6000};
         this._toastService.ShowToast(toastObj);
       }
@@ -95,8 +100,13 @@ export class DetallemovimientoscuentaComponent implements OnInit {
   }
 
   public Ajustar(){
-    let p = {id_cuenta:this._idCuentaActual};
+    let p = {id_cuenta:this._idCuentaActual, codigo_moneda:this.Codigo_Moneda};
     this.AbrirModalAjuste.next(p);
+  }
+  
+  public CompraCuenta(){
+    let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario,id_apertura:this.Id_Apertura};
+    this.AbrirModalCompra.next(p);
   }
 
 }

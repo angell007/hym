@@ -39,13 +39,13 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-outline-success btn-sm" 
+      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-outline-success btn-rounded btn-sm" 
         [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar un ajuste en la cuenta!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Ajustar',cancelButtonText: 'No, Dejame Comprobar!'}"
         (confirm)="GuardarAjusteCuenta()">Crear Ajuste
       </button>
       <button 
         id="cerrarmodalajuste" 
-        class="btn btn-outline-danger btn-sm" (click)="CerrarModal()">Cerrar
+        class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar
       </button>
     </div>
   </div>
