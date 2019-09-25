@@ -226,7 +226,7 @@
         <div class="text-right">
             <button class="btn btn-outline-primary btn-sm btn-rounded" [disabled]="!corresponsalEd.valid || !cupoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCorresponsal(FormEditarCorresponsal, ModalEditarCorresponsal)">Guardar</button>
+                (confirm)="GuardarCorresponsal()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
