@@ -10,8 +10,8 @@
             <label>Transferencias</label>
           </div>
           <div class="col-md-4 text-right">
-            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" [routerLink]="['/cuentasconsultor',Id_Funcionario]">Ver Cuentas</button> 
-            <button class="btn btn-outline-danger btn-rounded btn-sm" type="button" [routerLink]="['/cierrecuentasconsultor',Id_Funcionario]">Cerrar Cuentas</button>         
+            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="VerCuentas()">Ver Cuentas</button> 
+            <button class="btn btn-outline-danger btn-rounded btn-sm" type="button" (click)="CierreCuentas()">Cerrar Cuentas</button>         
           </div>
       </div>
       </div>
@@ -197,7 +197,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="cuenta_origen">Cuenta Origen</label>
-                <select name="Id_Cuenta_Bancaria" id="cuenta_origen" style="width:90% !important; margin-left:0 !important;" class="form-control form-control-sm"
+                <select name="Id_Cuenta_Bancaria" id="cuenta_origen" style="width:90% !important; margin-left:0 !important;" class="form-control form-control-sm" (change)="ActualizarValorRealCuenta($event.target.value)"
                   [(ngModel)] ="MovimientoBancoModel.Id_Cuenta_Bancaria" required>
                   <option value="" selected>Seleccion origen</option>
                   <option *ngFor="let cb of CuentasBancariasSeleccionadas" [value]="cb.Id_Cuenta_Bancaria">{{cb.Codigo_Moneda}} - {{cb.Nombre_Titular}}</option>
@@ -207,15 +207,15 @@
             <div class="form-group">              
               <label for="">Saldo real</label>
               <div class="row">
-                <div class="col-md-9">
-                  <label for="" style="display:block;"><b>{{10000000 | customcurrency}}</b></label>
+                <div class="col-md-12">
+                  <label for="" style="display:block;"><b>{{ValorRealCuenta | customcurrency:CodigoMonedaValorReal}}</b></label>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                   <button class="btn btn-outline-success btn-xs btn-rounded" [disabled]="MovimientoBancoModel.Id_Cuenta_Bancaria == ''"
                     (click)="AbrirModalAbono()">
                     Abono
                   </button>
-                </div>
+                </div> -->
               </div>
               
             </div>
@@ -270,7 +270,7 @@
             </button>
             <button 
               id="CerrarModal" 
-              class="btn btn-outline-default btn-sm btn-rounded" 
+              class="btn btn-outline-danger btn-sm btn-rounded" 
               (click)="DesbloquearTransferencia()">Cerrar
             </button>
         </div>

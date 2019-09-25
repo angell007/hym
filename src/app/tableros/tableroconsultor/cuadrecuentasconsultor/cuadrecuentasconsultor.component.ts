@@ -17,6 +17,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   public AbrirModalDevolucion:Subject<any> = new Subject();
   public AbrirModalCompra:Subject<any> = new Subject();
   public AbrirModalMoverTransferencia:Subject<any> = new Subject();
+  public AbrirModalAjuste:Subject<any> = new Subject();
 
   public CuentasDescuadre:Array<any> = localStorage.getItem('CuentasDescuadradas') ? JSON.parse(localStorage.getItem('CuentasDescuadradas')) : [];
   private _idCuentaActual:string = '';
@@ -285,6 +286,11 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     let p = {id_cuenta_origen:this._idCuentaActual, id_pago_transferencia:transferenciaModel.Id_Pago_Transfenecia, id_transferencia_destinatario:transferenciaModel.Id_Transferencia_Destino, numero_transferencia:transferenciaModel.Numero_Transferencia, recibo:transferenciaModel.Recibo, valor:transferenciaModel.Egreso, codigo_moneda:this.Codigo_Moneda, cuentas_ultima_apertura:this.CuentasBancariasUltimaApertura};
 
     this.AbrirModalMoverTransferencia.next(p);
+  }
+
+  public Ajustar(){
+    let p = {id_cuenta:this._idCuentaActual, codigo_moneda:this.Codigo_Moneda, id_apertura:this.Id_Ultima_Apertura};
+    this.AbrirModalAjuste.next(p);
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="page-title">
         <h4 class="pull-left">Corresponsales Bancarios</h4>
-        <button class="pull-right btn btn-info" (click)="ModalCorresponsal.show()">
+        <button class="pull-right btn btn-outline-info btn-rounded" (click)="ModalCorresponsal.show()">
             <i class="ti-plus"></i> Agregar Nuevo Corresponsal Bancario</button>
     </div>
     <div class="clearfix"></div>
@@ -34,10 +34,10 @@
                                         <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarCorresponsal(corresponsal.Id_Corresponsal_Bancario, ModalEditarCorresponsal)">
                                             <i class="ti-pencil"></i>
                                         </button>
-                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Corresponsal, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        <!-- <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular este Corresponsal, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
                                             (confirm)="EliminarCorresponsal(corresponsal.Id_Corresponsal_Bancario)">
                                             <i class="ti-trash"></i>
-                                        </button>
+                                        </button> -->
                                     </td>
                                 </tr>
                             </tbody>
@@ -52,7 +52,7 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCorresponsal" #ModalCorresponsal>
     <div class="app-modal-header">
         <h4>Nuevo Corresponsal Bancario</h4>
-        <button type="button" class="close basic-close" (click)="ModalCorresponsal.hide()">
+        <button type="button" class="close basic-close" (click)="CerrarModalGuardar()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -62,19 +62,17 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         <label>Corresponsal</label>
-                        <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
-                            (focusout)="boolCorresponsal = true" required #corresponsal="ngModel">
-                        <div *ngIf="!corresponsal.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="corresponsal.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" [(ngModel)]="CorresponsalModel.Nombre" required>
+                        <!-- <div *ngIf="!corresponsal.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="corresponsal.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" placeholder="Cupo" class="form-control" name="Cupo" ngModel="" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupo="ngModel">
-                        <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div>
+                        <input type="text" placeholder="Cupo" class="form-control" name="Cupo" [(ngModel)]="CorresponsalModel.Cupo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+                        <!-- <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
             </div>
@@ -82,25 +80,23 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" name="Id_Departamento" ngModel="" (change)="Municipios_Departamento($event.target.value)" [(ngModel)]="departamentoDefault"
-                            (focus)="$event.target.select()" (focusout)="boolDepartamento = true" required #departamento="ngModel">
+                        <select class="form-control" name="Id_Departamento" [(ngModel)]="CorresponsalModel.Id_Departamento" (change)="Municipios_Departamento($event.target.value)" required>
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamento.value && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamento.value" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="departamento.value && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamento.value" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="municipioDefault" (focus)="$event.target.select()"
-                            (focusout)="boolMunicipio = true" required #municipio="ngModel">
+                        <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="CorresponsalModel.Id_Municipio" required>
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipio.value && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipio.value" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="municipio.value && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipio.value" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
             </div>
@@ -108,35 +104,29 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!corresponsal.valid || !cupo.valid || departamento.value=='' || municipio.value==''"
+            <button type="submit" class="btn btn-outline-primary btn-sm btn-rounded" [disabled]="!FormCorresponsal.valid"
                 [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                (confirm)="GuardarCorresponsal(FormCorresponsal, ModalCorresponsal)">Actualizar Información</button>
+                (confirm)="GuardarCorresponsal()">Guardar</button>
         </div>
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCorresponsal" #ModalVerCorresponsal>
     <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalVerCorresponsal.hide()">
+        <button type="button" class="close basic-close" (click)="CerrarModalVer()">
             <span aria-hidden="true">&times;</span>
         </button>
         <h4>Ver Corresponsal</h4>
     </div>
     <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
         <form #FormVerCorresponsal="ngForm">
-            <div class="col-md-4" hidden>
-                <div class="form-group">
-                    <label>Identificación</label>
-                    <input name="id" readonly type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <strong>
                             <label>Nombre:</label>
                         </strong>
-                        <label>{{Nombre}}</label>
+                        <label class="block-element">{{CorresponsalModel.Nombre}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -144,7 +134,7 @@
                         <strong>
                             <label>Cupo:</label>
                         </strong>
-                        <label>{{Cupo}}</label>
+                        <label class="block-element">{{CorresponsalModel.Cupo}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -152,7 +142,7 @@
                         <strong>
                             <label>Departamento:</label>
                         </strong>
-                        <label>{{Departamento}}</label>
+                        <label class="block-element">{{CorresponsalModel.Departamento}}</label>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -160,7 +150,7 @@
                         <strong>
                             <label>Municipio:</label>
                         </strong>
-                        <label>{{Municipio}}</label>
+                        <label class="block-element">{{CorresponsalModel.Municipio}}</label>
                     </div>
                 </div>
             </div>
@@ -173,7 +163,7 @@
         <button type="button" class="close basic-close" (click)="ModalEditarCorresponsal.hide()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <h4>Editar Cuenta Bancaria</h4>
+        <h4>Editar Corresponsal</h4>
     </div>
     <div class="app-modal-body">
         <form #FormEditarCorresponsal="ngForm">
@@ -190,8 +180,8 @@
                         <label>Corresponsal</label>
                         <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre" ngModel="{{Nombre}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                             (focus)="$event.target.select()" (focusout)="boolCorresponsal = true" required #corresponsalEd="ngModel">
-                        <div *ngIf="!corresponsalEd.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="corresponsalEd.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="!corresponsalEd.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="corresponsalEd.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -199,8 +189,8 @@
                         <label>Cupo</label>
                         <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
                             (focus)="$event.target.select()" (focusout)="boolCupo = true" required #cupoEd="ngModel">
-                        <div *ngIf="!cupoEd.valid && boolCupo==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="cupoEd.valid && boolCupo==true" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="!cupoEd.valid && boolCupo==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="cupoEd.valid && boolCupo==true" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
             </div>
@@ -213,8 +203,8 @@
                             <option value="">Seleccione un Departamento</option>
                             <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
                         </select>
-                        <div *ngIf="departamentoEd.value && boolDepartamento==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!departamentoEd.value" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="departamentoEd.value && boolDepartamento==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!departamentoEd.value" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -225,8 +215,8 @@
                             <option value="">Seleccione un Municipio</option>
                             <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
                         </select>
-                        <div *ngIf="municipioEd.value && boolMunicipio==true" style="color:red">Campo inválido</div>
-                        <div *ngIf="!municipioEd.value" style="color:green">Datos correctos!</div>
+                        <!-- <div *ngIf="municipioEd.value && boolMunicipio==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="!municipioEd.value" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
             </div>
@@ -234,7 +224,7 @@
     </div>
     <div class="app-modal-footer">
         <div class="text-right">
-            <button class="btn btn-primary btn-sm" [disabled]="!corresponsalEd.valid || !cupoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
+            <button class="btn btn-outline-primary btn-sm btn-rounded" [disabled]="!corresponsalEd.valid || !cupoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
                 [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarCorresponsal(FormEditarCorresponsal, ModalEditarCorresponsal)">Guardar</button>
         </div>

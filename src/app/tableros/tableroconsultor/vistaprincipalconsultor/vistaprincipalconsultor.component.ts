@@ -9,10 +9,15 @@ import { GeneralService } from '../../../shared/services/general/general.service
 })
 export class VistaprincipalconsultorComponent implements OnInit {
 
-  public MostrarApertura:boolean = true;
+  public MostrarApertura:boolean = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
-              private _generalService:GeneralService) { }
+              private _generalService:GeneralService) 
+  {
+    if (JSON.parse(localStorage.getItem('CuentasDescuadradas')) == []) {
+      localStorage.setItem("Volver_Apertura", "Si"); 
+    }
+  }
 
   ngOnInit() {
     this.ConsultarAperturaFuncionario();

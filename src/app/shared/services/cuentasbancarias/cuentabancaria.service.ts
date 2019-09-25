@@ -129,5 +129,13 @@ export class CuentabancariaService {
   public GuardarAjusteCuenta(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/guardar_ajuste_cuenta.php', datos);
   }
+  
+  public GetValorActualizadoCuenta(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_valor_actualizado_cuenta.php', {params:p});
+  }
+  
+  public VerificarCuentaSinApertura(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/verificar_cuenta_sin_aperturas.php', {params:p});
+  }
 
 }

@@ -5,10 +5,11 @@
         <div class="card-header">
           <div class="row">
             <div class="col-md-6">CUADRE DE CUENTAS - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
-            <div class="col-md-6">
-              <button class="btn btn-outline-success btn-sm btn-rounded pull-right" (click)="AbrirCompraCuenta()">
+            <div class="col-md-6 text-right">
+              <button class="btn btn-outline-success btn-sm btn-rounded" (click)="AbrirCompraCuenta()">
                 Abono
               </button>
+              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="Ajustar()">Ajuste</button>
             </div>
           </div>
         </div>
@@ -36,7 +37,7 @@
                 <th class="custom-thead" class="text-center" style="width:6%;"></th>
               </tr>
               <tr *ngIf="Movimientos.length == 0">
-                <td colspan="5" class="text-center">
+                <td colspan="6" class="text-center">
                   <i class="ti-alert font-size-20 text-warning"></i>
                   <h4>No se encontraron movimientos en esta cuenta!</h4>
               </td>
@@ -103,6 +104,11 @@
     </div>
   </div>
 </div>
+
+<app-modalajustecuenta
+  [AbrirModal]="AbrirModalAjuste.asObservable()"
+  (ActualizarTabla)="GetMovimientosCuentaDescuadre()">
+</app-modalajustecuenta>
 
 <app-modaldevoluciontransferencia
   [AbrirModal]="AbrirModalDevolucion.asObservable()"

@@ -30,5 +30,9 @@ export class CorresponsalbancarioService {
   saveCorresponsalDiario(data:FormData):Observable<any>{
     return this.client.post(this.globales.ruta+'php/corresponsaldiario/guardar_corresponsal_diario_nuevo2.php', data);
   }
+  
+  public GuardarCorresponsalBancario(data:FormData):Observable<any>{
+    return this.client.post(this.globales.ruta+'php/corresponsalesbancarios/guardar_corresponsal.php', data);
+  }
 
 }

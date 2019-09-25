@@ -30,6 +30,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   public MostrarBotonAjusteCuentas:boolean = false;
   private _mostrarBotonRevision:Subject<any> = new Subject();
   private _updatedListSubscription:any;
+  private volver:string = localStorage.getItem('Volver_Apertura');
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               public generalService:GeneralService,
@@ -38,9 +39,15 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
               private _toastService:ToastService,
               public router:Router) 
   {    
+    console.log(this.volver);
+    
     // this.GetCuentasBancariasApertura();
-    localStorage.setItem('CuentasDescuadradas', "[]");
-    localStorage.setItem("Cuentas_Seleccionadas", "[]");
+    if (this.volver == 'No') {      
+      this.router.navigate(['/cuadrecuentas']);
+    }else{      
+      localStorage.setItem('CuentasDescuadradas', "[]");
+      localStorage.setItem("Cuentas_Seleccionadas", "[]");
+    }
   }
 
   ngOnInit() {
@@ -234,27 +241,34 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public Validardiferencia(posCuenta:number, valor:string, idMoneda:string){
     let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
-    if (valor != '') {
-      let valor_apertura = parseFloat(valor);
-      let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
-      let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
-      
-      let topes = this._getTopesMoneda(idMoneda);
-
-      if (diferencia < -topes.maximo || diferencia > topes.maximo) {
-        
-        let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
-        this._toastService.ShowToast(toastObj);
-        this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
-        this._setCuentaDescuadre(id_cuenta);
-      }else{
-        this._deleteCuentaDescuadre(id_cuenta);
+    let p = {id_cuenta:id_cuenta};
+    this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response:any) => {
+      if (response == '0') {
         this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+      }else{
+        if (valor != '') {
+          let valor_apertura = parseFloat(valor);
+          let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
+          let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
+          
+          let topes = this._getTopesMoneda(idMoneda);
+    
+          if (diferencia < -topes.maximo || diferencia > topes.maximo) {
+            
+            let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
+            this._toastService.ShowToast(toastObj);
+            this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
+            this._setCuentaDescuadre(id_cuenta);
+          }else{
+            this._deleteCuentaDescuadre(id_cuenta);
+            this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+          }
+        }else{
+          this._deleteCuentaDescuadre(id_cuenta);
+          this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+        }
       }
-    }else{
-      this._deleteCuentaDescuadre(id_cuenta);
-      this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
-    }
+    });
       
     this._setCuentasSeleccionadasStorage(800);
   }
@@ -280,7 +294,8 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
     this._cuentaBancariaService.DeseleccionarCuenta(idCuenta).subscribe();
   }
 
-  public SiguientePaso(){
+  public SiguientePaso(){    
+    localStorage.setItem("Volver_Apertura", "No");
     if (this.CuentasDescuadradas.length > 0) {
       this.router.navigate(['/cuadrecuentas']);
       this.CuentasActualizadas.unsubscribe();

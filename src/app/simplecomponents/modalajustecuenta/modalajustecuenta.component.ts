@@ -22,6 +22,7 @@ export class ModalajustecuentaComponent implements OnInit {
   public AjusteCuentaModel:AjusteCuentaModel = new AjusteCuentaModel();
   public CodigoMoneda:string = '';
   public TiposAjuste:Array<any> = [];
+  public Id_Apertura_Cuadre:string = '';
 
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
@@ -37,6 +38,8 @@ export class ModalajustecuentaComponent implements OnInit {
       
       this.AjusteCuentaModel.Id_Cuenta_Bancaria = data.id_cuenta;
       this.CodigoMoneda=data.codigo_moneda;
+      this.Id_Apertura_Cuadre = data.id_apertura == '' ? localStorage.getItem('Apertura_Consultor') : data.id_apertura;
+      console.log(this.Id_Apertura_Cuadre);
       this.ModalAjusteCuenta.show();
     });
   }
@@ -66,7 +69,7 @@ export class ModalajustecuentaComponent implements OnInit {
     if (!this.ValidateBeforeSubmit()) {
       return;
     }else{
-      this.AjusteCuentaModel.Id_Apertura = localStorage.getItem('Apertura_Consultor');
+      this.AjusteCuentaModel.Id_Apertura = this.Id_Apertura_Cuadre == '' ? localStorage.getItem('Apertura_Consultor') : this.Id_Apertura_Cuadre;
       console.log(this.AjusteCuentaModel);
       
       let info = this._generalService.normalize(JSON.stringify(this.AjusteCuentaModel));
