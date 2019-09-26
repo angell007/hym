@@ -294,7 +294,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
     this._cuentaBancariaService.DeseleccionarCuenta(idCuenta).subscribe();
   }
 
-  public SiguientePaso(){    
+  public SiguientePaso(){
     localStorage.setItem("Volver_Apertura", "No");
     if (this.CuentasDescuadradas.length > 0) {
       this.router.navigate(['/cuadrecuentas']);

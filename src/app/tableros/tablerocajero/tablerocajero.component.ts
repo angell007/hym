@@ -793,10 +793,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (this.ValidarAntesDeConversion(tipo_cambio)) {
           console.log("entro");
           if (tipo_moneda_origen == 'l') {
-            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
             this.CambioModel.Valor_Destino = cambio;
           }else{
-            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
             console.log(cambio);
             
             this.CambioModel.Valor_Destino = cambio;
@@ -805,10 +805,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }else if (tipo_cambio == 'd') {
         if (this.ValidarAntesDeConversion(tipo_cambio)) {
           if (tipo_moneda_origen == 'l') {
-            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
             this.CambioModel.Valor_Origen = cambio;
           }else{
-            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
+            var cambio = Math.round(parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
             this.CambioModel.Valor_Origen = cambio;
           }
         }

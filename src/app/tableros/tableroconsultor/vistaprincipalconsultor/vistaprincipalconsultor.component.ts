@@ -10,13 +10,14 @@ import { GeneralService } from '../../../shared/services/general/general.service
 export class VistaprincipalconsultorComponent implements OnInit {
 
   public MostrarApertura:boolean = false;
+  public Cargado:boolean = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               private _generalService:GeneralService) 
   {
-    if (JSON.parse(localStorage.getItem('CuentasDescuadradas')) == []) {
-      localStorage.setItem("Volver_Apertura", "Si"); 
-    }
+    // if (JSON.parse(localStorage.getItem('CuentasDescuadradas')) == []) {
+      // localStorage.setItem("Volver_Apertura", "Si"); 
+    // }
   }
 
   ngOnInit() {
@@ -38,10 +39,13 @@ export class VistaprincipalconsultorComponent implements OnInit {
       
       if (!data.apertura_activa) {
         this.MostrarApertura = true;
+        this.Cargado = true;
         localStorage.setItem("Apertura_Consultor", "");
       }else{
         this.MostrarApertura = false;
-        localStorage.setItem("Apertura_Consultor", data.query_data.Id_Consultor_Apertura_Cuenta);
+        this.Cargado = true;
+        localStorage.setItem("Volver_Apertura", "No"); 
+        localStorage.setItem("Apertura_Consultor", data.query_data.Id_Diario_Consultor);
       }
     });
   }

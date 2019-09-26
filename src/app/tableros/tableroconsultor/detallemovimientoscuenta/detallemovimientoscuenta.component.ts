@@ -100,7 +100,7 @@ export class DetallemovimientoscuentaComponent implements OnInit {
   }
 
   public Ajustar(){
-    let p = {id_cuenta:this._idCuentaActual, codigo_moneda:this.Codigo_Moneda};
+    let p = {id_cuenta:this._idCuentaActual, codigo_moneda:this.Codigo_Moneda, id_apertura:''};
     this.AbrirModalAjuste.next(p);
   }
   

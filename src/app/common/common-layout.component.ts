@@ -208,6 +208,10 @@ export class CommonLayoutComponent implements OnInit {
         
         this.SetOficina();
         this.SetCaja();
+
+        if (!localStorage.getItem('Volver_Apertura')) {
+            localStorage.setItem("Volver_Apertura", "Si"); 
+        }
     }
 
     startTimer() {

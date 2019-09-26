@@ -58,6 +58,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
       if (response.codigo == 'success') {
         this.CuentasBancarias = [];
         localStorage.setItem('Apertura_Consultor', '');
+        localStorage.setItem('Volver_Apertura', 'Si');
         this._swalService.ShowMessage(response);
         setTimeout(() => {
           this.CerrarSesion();
