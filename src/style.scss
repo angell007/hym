@@ -91,6 +91,20 @@ select{
     }
 }
 
+.cell-cajero{
+    padding: 10px;
+    vertical-align: middle;
+    line-height: 1px;
+}
+
 .input-font{
     font-size: 14px;
+}
+
+.clean-btn-table{
+    margin:0;
+    padding:0;
+    background: transparent;
+    border: none;
+    color: #888da8;
 }
