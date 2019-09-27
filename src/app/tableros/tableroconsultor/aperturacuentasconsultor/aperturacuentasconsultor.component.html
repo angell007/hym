@@ -75,6 +75,7 @@
                     <th class="custom-thead" style="width:20%;">Banco</th>
                     <th class="custom-thead" style="width:10%;">Monto Apertura</th>
                     <th class="custom-thead" style="width:10%;">Monto Último Cierre</th>
+                    <th class="custom-thead" style="width:10%;">Diferencia</th>
                   </tr>
                   <tr *ngIf="CuentasBancariasSeleccionadas.length == 0">
                     <td colspan="11" class="text-center">
@@ -89,7 +90,8 @@
                     <td class="custom-cell">
                       <input class="text-right" style="width:100%;" type="number" [(ngModel)]="cb.Monto_Apertura" (change)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)">
                     </td>
-                    <td class="custom-cell text-right">{{cb.Monto_Ultimo_Cierre}}</td>
+                    <td class="custom-cell text-right">{{cb.Monto_Ultimo_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
+                    <td class="custom-cell text-right">{{cb.Diferencia | customcurrency:cb.Codigo_Moneda}}</td>
                   </tr>
                 </tbody>
               </table>

@@ -257,15 +257,18 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
             
             let toastObj = {textos:['Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!'], tipo:'warning', duracion:8000};
             this._toastService.ShowToast(toastObj);
+            this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
             this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
             this._setCuentaDescuadre(id_cuenta);
           }else{
             this._deleteCuentaDescuadre(id_cuenta);
             this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+            this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
           }
         }else{
           this._deleteCuentaDescuadre(id_cuenta);
           this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+          this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = '0';
         }
       }
     });

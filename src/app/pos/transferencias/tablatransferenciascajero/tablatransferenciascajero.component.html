@@ -1,14 +1,14 @@
-<table class="table table-striped table-bordered custom-table">
+<table class="table table-striped table-bordered tabla-cajero">
   <thead>
     <tr>
-        <th class="custom-thead">Hora</th>
-        <th class="custom-thead" style="width:9%;">Código</th>
-        <th class="custom-thead">Remitente</th>
-        <th class="custom-thead">Recibido</th>
-        <th class="custom-thead">Transferido</th>
-        <th class="custom-thead" style="width:7%;">Tasa</th>
-        <th class="custom-thead" style="width:10%;">Estado</th>
-        <th class="custom-thead"></th>
+        <th>Hora</th>
+        <th style="width:9%;">Código</th>
+        <th>Remitente</th>
+        <th>Recibido</th>
+        <th>Transferido</th>
+        <th style="width:7%;">Tasa</th>
+        <th style="width:10%;">Estado</th>
+        <th></th>
     </tr>
     <tr>
       <th class="table-filters">
@@ -59,14 +59,14 @@
   </thead>
   <tbody *ngIf="!Cargando">    
     <tr *ngFor="let rt of RecibosTransferencia"  [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
-      <td class="custom-cell">{{rt.Fecha | date:"HH:mm" }}</td>
-      <td class="custom-cell">{{rt.CodigoRecibo}}</td>
-      <td class="custom-cell">{{rt.Remitente}}</td>
-      <td class="custom-cell text-right">{{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
-      <td class="custom-cell text-right">{{rt.Monto_Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td>
-      <td class="custom-cell text-right">{{rt.Tasa_Cambio }}</td>
-      <td class="custom-cell text-center">{{rt.Estado }}</td>
-      <td class="custom-cell">
+      <td>{{rt.Fecha | date:"HH:mm" }}</td>
+      <td>{{rt.CodigoRecibo}}</td>
+      <td>{{rt.Remitente}}</td>
+      <td class=" text-right">{{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
+      <td class=" text-right">{{rt.Monto_Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td>
+      <td class=" text-right">{{rt.Tasa_Cambio }}</td>
+      <td class=" text-center">{{rt.Estado }}</td>
+      <td>
         <div *ngIf="rt.Estado != 'Anulada'" class="text-center">
           <div ngbDropdown class="dropdown-primary">
             <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>

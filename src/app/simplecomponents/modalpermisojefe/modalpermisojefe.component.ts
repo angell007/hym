@@ -30,7 +30,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
 
   private accion:string = '';
 
-  private response = {valor:'', aux_value:'', verificado:false};
+  private response = {valor:'', aux_value:'', verificado:false, accion:''};
 
   constructor(private generalService:GeneralService,
               private swalService:SwalService,
@@ -46,7 +46,10 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
       console.log(d);
       
       this.accion = d.accion;
+      this.response.accion = d.accion;
       if (d.accion == 'transferencia_cajero') {
+        this.response.valor = d.value;
+      }else if(d.accion == 'servicio_externo'){
         this.response.valor = d.value;
       }
       this.ModalPermiso.show(); 
@@ -69,6 +72,9 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
         if (this.accion == 'transferencia_cajero') {
           this.response.verificado = data.query_data;
           this.permisoService._subject.next(this.response);
+        }else if (this.accion == 'servicio_externo') {
+          this.response.verificado = data.query_data;
+          this.permisoService._subject.next(this.response);
         }else{
           this.permisoService._subject.next(data.query_data);
         }
@@ -82,6 +88,14 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
   CerrarModal(){
     this.Codigo = "";
     this.ModalPermiso.hide();
+
+    if (this.accion == 'transferencia_cajero') {
+    }else if (this.accion == 'servicio_externo') {
+      this.response.verificado = false;
+      this.permisoService._subject.next(this.response);
+    }else{
+      this.permisoService._subject.next(this.response);
+    }
   }
 
   SetDatosMensaje(data:any){

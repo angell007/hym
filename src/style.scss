@@ -27,7 +27,7 @@
     color: rgba(190, 190, 190, .6);
 
     input{
-        font-size: 10px;
+        font-size: 14px;
         color: rgba(61, 61, 61, 0.8);
     }
 }
@@ -79,4 +79,18 @@ select{
     padding: 2px 5px !important;
     height: 22px !important;
     border-radius: 5px !important;
+}
+
+.tabla-cajero{
+    font-size: 15px;
+
+    th, td{
+        padding: 10px;
+        vertical-align: middle;
+        line-height: 1px;
+    }
+}
+
+.input-font{
+    font-size: 14px;
 }
