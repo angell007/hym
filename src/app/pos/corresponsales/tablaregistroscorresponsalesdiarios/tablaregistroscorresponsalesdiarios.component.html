@@ -1,11 +1,11 @@
-<table class="table table-striped table-bordered custom-table">
+<table class="table tabla-cajero">
   <thead>
     <tr>
-        <th class="custom-thead">Hora</th>
-        <th class="custom-thead" style="width:20%;">Corresponsal</th>
-        <th class="custom-thead">Monto Consignaciones</th>
-        <th class="custom-thead">Monto Retiros</th>
-        <th class="custom-thead">Total Consignado</th>
+        <th class="text-center">Hora</th>
+        <th class="text-center" style="width:20%;">Corresponsal</th>
+        <th class="text-center">Monto Consignaciones</th>
+        <th class="text-center">Monto Retiros</th>
+        <th class="text-center">Total Consignado</th>
     </tr>
     <!-- <tr>
       <th class="table-filters"></th>
@@ -31,11 +31,11 @@
   </thead>
   <tbody *ngIf="!Cargando">    
     <tr *ngFor="let cd of RegistrosCorresponsales">
-      <td class="custom-cell text-center">{{cd.Hora}}</td>
-      <td class="custom-cell">{{cd.Nombre}}</td>
-      <td class="custom-cell text-right">{{cd.Consignacion | customcurrency}}</td>
-      <td class="custom-cell text-right">{{cd.Retiro | customcurrency}}</td>
-      <td class="custom-cell text-right">{{cd.Total_Corresponsal | customcurrency}}</td>
+      <td class=" text-center">{{cd.Hora}}</td>
+      <td class="text-center">{{cd.Nombre}}</td>
+      <td class=" text-right">{{cd.Consignacion | customcurrency}}</td>
+      <td class=" text-right">{{cd.Retiro | customcurrency}}</td>
+      <td class=" text-right">{{cd.Total_Corresponsal | customcurrency}}</td>
     </tr>
   </tbody>
 </table>

@@ -111,13 +111,13 @@ export class TableroconsultorComponent implements OnInit {
   public IconoOpcionCuenta:string = 'ti-key';
 
   public AbrirModalAperturaCuenta:Subject<any> = new Subject();
-  public Id_Funcionario:string = '';
+  public Id_Funcionario:string = JSON.parse(localStorage['User']).Identificacion_Funcionario;
   public Id_Apertura:string = '';
 
   constructor(private http: HttpClient, private globales: Globales, private _generalService:GeneralService, private _cuentaBancariaService:CuentabancariaService, private _swalService:SwalService) { }
 
   ngOnInit() {
-    this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
+    // this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
     this.AsignarPaises();
     this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
     this._getCuentasFuncionarioApertura();
@@ -136,7 +136,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   public ConsultarAperturaFuncionario(){
-    this._cuentaBancariaService.GetAperturaFuncionario(this._generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) =>{
+    this._cuentaBancariaService.GetAperturaFuncionario(this.Id_Funcionario).subscribe((data:any) =>{
       console.log(data);
       
       if (!data.apertura_activa) {
@@ -193,7 +193,7 @@ export class TableroconsultorComponent implements OnInit {
     let info = JSON.stringify(this.AperturaCuentaModel);
     let datos = new FormData();
     datos.append("modelo", info);
-    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_funcionario", this.Id_Funcionario);
     datos.append("id_bloqueo_cuenta", this.IdBloqueoCuenta);
     this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
 
@@ -232,7 +232,7 @@ export class TableroconsultorComponent implements OnInit {
     let ids = JSON.stringify(this.Id_Movimientos_Cuenta);
     let datos = new FormData();
     datos.append("modelo", info);
-    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_funcionario", this.Id_Funcionario);
     datos.append("id_movimientos", ids);
 
     this.http.post(this.globales.ruta + '/php/cuentasbancarias/cierre_cuenta_bancaria.php', datos).subscribe((data: any) => {
@@ -261,7 +261,7 @@ export class TableroconsultorComponent implements OnInit {
 
   VerificarAperturaCuenta(){
 
-    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.Id_Funcionario}}).subscribe((data:any) => {
 
       if (data.existe == 0) {
         this.ModalCambiarBanco.show();
@@ -331,7 +331,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   CargarIndicadores(){
-    this.http.get(this.globales.ruta+'php/transferencias/indicadores_transferencias.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+    this.http.get(this.globales.ruta+'php/transferencias/indicadores_transferencias.php', {params:{id_funcionario:this.Id_Funcionario}}).subscribe((data:any) => {
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
@@ -364,7 +364,7 @@ export class TableroconsultorComponent implements OnInit {
 
   AbrirModalCompra(){
     this.CompraCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
-    this.CompraCuentaModel.Id_Funcionario = this.funcionario.Identificacion_Funcionario;
+    this.CompraCuentaModel.Id_Funcionario = this.Id_Funcionario;
     this.ModalCompraCuenta.show();
   }
 

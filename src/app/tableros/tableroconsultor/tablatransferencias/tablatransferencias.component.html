@@ -86,7 +86,7 @@
           <tbody *ngIf="!Cargando">
             <tr *ngFor="let ts of TransferenciasSeleccionadas; let i = index;" style="background-color: #f7ab31;"><!--TRANSFERENCIA SELECCIONADA-->
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center" style="cursor:pointer;">
-                {{ts.Fecha | date:"dd-MM-yyyy" }}</td>
+                {{ts.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.Codigo}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">{{ts.Valor_Transferencia | customcurrency:ts.Codigo_Moneda}}({{ts.Tasa_Cambio}})</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
@@ -105,7 +105,7 @@
             <tr *ngFor="let t of TransferenciasListar; let i = index;"
               style="cursor:pointer;" [ngClass]="{'bg-selected': t.Estado == 'Pagada'}"><!--TRANSFERENCIAS DISPONIBLES-->
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell text-center">
-                <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label> {{t.Fecha | date:"dd-MM-yyyy" }}</td>
+                <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label> {{t.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Codigo}}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">{{t.Valor_Transferencia | customcurrency:t.Codigo_Moneda}}({{t.Tasa_Cambio}})</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">{{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>

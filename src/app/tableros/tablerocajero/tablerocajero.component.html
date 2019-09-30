@@ -809,18 +809,18 @@
                                                                 <div class="row" *ngIf="Aparecer">
                                                                     <div class="col-md-12" *ngIf="!CargandoGiros && GirosBuscar.length > 0">
                                                                         <div class="table-responsive">
-                                                                            <table class="table table-hover table-sm table-striped">
+                                                                            <table class="table tabla-cajero">
                                                                                 <thead>
                                                                                     <tr>
-                                                                                        <th class="cell-cajero" style="width:150px;">Fecha</th>
-                                                                                        <th class="cell-cajero">Código</th>
-                                                                                        <th class="cell-cajero">Enviado Por</th>
-                                                                                        <th class="cell-cajero">Cédula Destinatario</th>
-                                                                                        <th class="cell-cajero">Nombre Destinatario</th>
-                                                                                        <!-- <th class="cell-cajero">¿Libre?</th> -->
-                                                                                        <th class="cell-cajero">Valor a Entregar</th>
-                                                                                        <!-- <th class="cell-cajero">Comisión</th> -->
-                                                                                        <th class="cell-cajero" style="width:60px;"></th>
+                                                                                        <th style="width:150px;">Fecha</th>
+                                                                                        <th>Código</th>
+                                                                                        <th>Enviado Por</th>
+                                                                                        <th>Cédula Destinatario</th>
+                                                                                        <th>Nombre Destinatario</th>
+                                                                                        <!-- <th>¿Libre?</th> -->
+                                                                                        <th>Valor a Entregar</th>
+                                                                                        <!-- <th>Comisión</th> -->
+                                                                                        <th style="width:60px;"></th>
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -1131,23 +1131,23 @@
                                                             <table class="table tabla-cajero">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="cell-cajero" style="width:60px;">Hora</th>
-                                                                        <th class="cell-cajero">Código</th>
-                                                                        <th class="cell-cajero">Enviado a</th>
-                                                                        <th class="cell-cajero">Valor</th>
-                                                                        <th class="cell-cajero">Moneda</th>
-                                                                        <th class="cell-cajero" style="width:160px;"></th>
+                                                                        <th style="width:60px;">Hora</th>
+                                                                        <th>Código</th>
+                                                                        <th>Enviado a</th>
+                                                                        <th>Valor</th>
+                                                                        <th>Moneda</th>
+                                                                        <th style="width:160px;"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr *ngFor="let Traslado of Traslados" [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
-                                                                        <td class="cell-cajero">{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
-                                                                        <td class="cell-cajero">{{Traslado.Codigo}}</td>
-                                                                        <td class="cell-cajero">{{Traslado.Cajero_Destino}}</td>
-                                                                        <td class="cell-cajero">{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
-                                                                        <td class="cell-cajero">{{Traslado.Moneda }}</td>
+                                                                        <td>{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
+                                                                        <td>{{Traslado.Codigo}}</td>
+                                                                        <td>{{Traslado.Cajero_Destino}}</td>
+                                                                        <td>{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}</td>
+                                                                        <td>{{Traslado.Moneda }}</td>
 
-                                                                        <td class="cell-cajero" class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
+                                                                        <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
                                                                             <button class="btn btn-default btn-xs" type="button"
                                                                                 style="margin:0;" (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
                                                                                 <i class="ti-pencil"></i>
@@ -1351,7 +1351,7 @@
                                     <hr>
                                     <h5>Últimos Servicios Registrados</h5>
                                     <div class="table-responsive">
-                                        <table class="table table-hover table-sm table-striped">
+                                        <table class="table tabla-cajero">
                                             <thead>
                                                 <tr>
                                                     <th style="width:60px;">Hora</th>
@@ -1683,15 +1683,22 @@
                             <div class="form-group">
                                 <label>Valor</label>
                                 <input type="text" class="form-control" name="Valor" [(ngModel)]="ServicioExternoModel.Valor"
-                                    (change)="AsignarComisionServicioExterno()">
+                                    (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask [options]="{ thousands: '.' }">
                             </div>
                         </div>
-
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comisión</label>
-                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" [(ngModel)]="ServicioExternoModel.Comision"
-                                    readonly>
+                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" [(ngModel)]="ServicioExternoModel.Comision" currencyMask [options]="{ thousands: '.' }"
+                                [disabled]="ServicioExternoModel.Valor == ''" (blur)="AprobarCambioComision()">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="block-element">Total</label>
+                                <input name="Total" type="text" placeholder="Total" class="form-control"
+                                    [(ngModel)]="Total_Servicio" disabled currencyMask [options]="{ thousands: '.' }">
+                                <!-- <label>{{Total_Servicio | customcurrency}}</label> -->
                             </div>
                         </div>
                     </div>

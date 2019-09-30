@@ -240,6 +240,9 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   public Validardiferencia(posCuenta:number, valor:string, idMoneda:string){
+    valor = valor.replace(/\./g, '');
+    console.log(valor);
+    
     let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
     let p = {id_cuenta:id_cuenta};
     this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response:any) => {
@@ -248,6 +251,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       }else{
         if (valor != '') {
           let valor_apertura = parseFloat(valor);
+          console.log(valor_apertura);
           let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
           let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
           

@@ -1894,7 +1894,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               this.movimientoExitosoSwal.show();
               this.Transferencia1 = true;
               this.Transferencia2 = false;
-              this.CargarTransferenciasDiarias();
+              this.CargarTransferenciasDiarias();              
+              this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
+              this._getMonedasExtranjeras();
             });
           break;
       
@@ -1930,7 +1932,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.transferenciaExitosaSwal.show();
         this.Transferencia1 = true;
         this.Transferencia2 = false;
-        this.CargarTransferenciasDiarias();
+        this.CargarTransferenciasDiarias();             
+        this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
+        this._getMonedasExtranjeras();
       });
     }
 
@@ -3789,6 +3793,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         /*this.Servicio = data;
         this.ValorComisionServicio = data.Comision;*/
         this.ServicioExternoModel = data;
+        this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
         this.ModalServicioEditar.show();
       });
     }
@@ -4330,6 +4335,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     volverReciboServicio() {
       this.Servicio1 = true;
       this.Servicio2 = false;
+      this.Total_Servicio = 0;
     }
     
     public volverCorresponsal() {

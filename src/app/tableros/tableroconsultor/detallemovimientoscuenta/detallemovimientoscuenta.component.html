@@ -12,17 +12,17 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="row mb-2">
+          <!-- <div class="row mb-2">
             <div class="col-md-8"></div>
             <div class="col-md-4">
               <table class="table table-striped custom-table">
                 <tr>
-                  <td class="custom-cell text-center font-size-13">Monto Apertura:</td>
-                  <td class="custom-cell text-right font-size-13">{{Apertura | customcurrency:Codigo_Moneda}}</td>
+                  <td class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Monto Apertura:</td>
+                  <td class="custom-cell text-right font-size-16 font-weight-bold" style="color:black;">{{Apertura | customcurrency:Codigo_Moneda}}</td>
                 </tr>
               </table>
             </div>
-          </div>
+          </div> -->
           <table class="table table-hover table-sm table-striped table-bordered custom-table">
             <thead>
               <tr>
@@ -32,35 +32,45 @@
                 <th class="custom-thead text-center" style="width:10%">Egreso</th>
                 <th class="custom-thead text-center" style="width:10%">Saldo</th>
               </tr>
+              <tr>
+                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Monto Apertura:</td>
+                <td class="custom-cell text-right font-size-16 font-weight-bold text-success">{{Apertura | customcurrency:Codigo_Moneda}}</td>
+              </tr>
               <tr *ngIf="Movimientos.length == 0">
                 <td colspan="5" class="text-center">
                   <i class="ti-alert font-size-20 text-warning"></i>
                   <h4>No se encontraron movimientos en esta cuenta!</h4>
-              </td>
+                </td>
               </tr>
             </thead>
             <tbody *ngIf="Movimientos.length > 0">
               <tr *ngFor="let m of Movimientos ; let i = index" 
                 [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
-                <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy" }}</td>
+                <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
                 <td class="custom-cell text-center">{{m.Recibo}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Total" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
               </tr>
             </tbody>
+            <tfoot>              
+              <tr>
+                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Total Cuenta:</td>
+                <td class="custom-cell text-right font-size-16 font-weight-bold text-success">{{Balance | customcurrency:Codigo_Moneda}}</td>
+              </tr>
+            </tfoot>
           </table>
-          <div class="row mb-2">
+          <!-- <div class="row mb-2">
             <div class="col-md-8"></div>
             <div class="col-md-4">
               <table class="table table-striped custom-table">
                 <tr>
-                  <td class="custom-cell text-center font-size-13">Total Cuenta:</td>
-                  <td class="custom-cell text-right font-size-13">{{Balance | customcurrency:Codigo_Moneda}}</td>
+                  <td class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Total Cuenta:</td>
+                  <td class="custom-cell text-right font-size-16 font-weight-bold" style="color:black;">{{Balance | customcurrency:Codigo_Moneda}}</td>
                 </tr>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="card-footer">
           <div class="text-right">
