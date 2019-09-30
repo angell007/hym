@@ -4018,7 +4018,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Destinatarios = data;
       });
 
-      this._getMonedas();
+      this._getMonedasExtranjeras();
       // this.globales.Monedas.forEach(moneda => {
       //   if (moneda.Nombre != 'Pesos') {
       //     this.MonedasTransferencia.push(moneda);     

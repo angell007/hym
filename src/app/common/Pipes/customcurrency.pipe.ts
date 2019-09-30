@@ -16,10 +16,10 @@ export class CustomcurrencyPipe implements PipeTransform {
                 //     val[1] = '00';
                 // }
                 
-              return currency_symbol+" "+this.formatMoney(value, decimal_places, ".", ",");
+              return currency_symbol+" "+this.formatMoney(value, decimal_places, ",", ".");
             }else{
                 
-                return currency_symbol+" "+this.formatMoney(value, decimal_places, ".", ",");
+                return currency_symbol+" "+this.formatMoney(value, decimal_places, ",", ".");
             }
         }else{
             return '';
