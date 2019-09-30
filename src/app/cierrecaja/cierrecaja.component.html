@@ -35,8 +35,8 @@
               </td>
             </tr>
             <tr>
-              <td class="font-weight-bold font-size-12" style="text-align:right;color:black;"><b>Totales:</b></td>
-              <td class="font-weight-bold font-size-12" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal" [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td> 
+              <td class="font-weight-bold" style="text-align:right;color:black;"><b>Totales:</b></td>
+              <td class="font-weight-bold" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal" [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td> 
             </tr>          
           </tbody>
         </table>

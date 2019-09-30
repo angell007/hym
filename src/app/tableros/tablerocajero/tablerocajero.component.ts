@@ -1880,7 +1880,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           
           let info = this.generalService.normalize(JSON.stringify(this.TransferenciaModel));
           let datos = new FormData();
-          datos.append("datos", info); 
+          datos.append("datos", info);
+          console.log(info);
+          
           this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
           //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
             .catch(error => {
@@ -3872,7 +3874,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     CargarServiciosDiarios(){
       this.Servicios = [];
-      this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php').subscribe((data: any) => {
+      this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', {params:{id_funcionario:this.funcionario_data.Identificacion_Funcionario}}).subscribe((data: any) => {
         this.Servicios = data.query_data;
       });
     }

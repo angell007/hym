@@ -57,19 +57,19 @@
             <label class="block-element">{{Transferencia.Cantidad_Recibida | customcurrency:Transferencia.Codigo_Moneda_Origen}}</label>
           </div>
         </div>
-        <div class="col-md-4" *ngIf="Transferencia.Tipo_Transferencia != 'Cliente'">
+        <div class="col-md-4" *ngIf="Transferencia.Codigo_Moneda_Destino != '$'">
           <div class="form-group">
             <label class="font-weight-bold">Transferido</label>
             <label class="block-element">{{Transferencia.Monto_Transferido | customcurrency:Transferencia.Codigo_Moneda_Destino}}</label>
           </div>
         </div>
-        <div class="col-md-2" *ngIf="Transferencia.Tipo_Transferencia != 'Cliente'">
+        <div class="col-md-2" *ngIf="Transferencia.Codigo_Moneda_Destino != '$'">
           <div class="form-group">
             <label class="font-weight-bold">Tasa</label>
             <label class="block-element">{{Transferencia.Tasa_Cambio}}</label>
           </div>
         </div>
-        <div class="col-md-3" *ngIf="Transferencia.Tipo_Transferencia != 'Cliente'">
+        <div class="col-md-3" *ngIf="Transferencia.Codigo_Moneda_Destino != '$'">
           <div class="form-group">
             <label class="font-weight-bold">Costo Transferencia</label>
             <label class="block-element">{{'0' | customcurrency}}</label>

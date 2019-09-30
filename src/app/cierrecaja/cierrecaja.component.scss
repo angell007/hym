@@ -1,14 +1,22 @@
 table.cierre-caja-table > tbody > tr > td{
-    height: 12px;
-    font-size: 13px;    
+    height: 15px;
+    font-size: 14px;    
     font-weight: bold;
+    padding: 0 1px !important;
+    margin: 0;
+    vertical-align: middle;
+    text-align: center;
 }
 
 table.cierre-caja-table > thead > tr > th{
-    height: 14px;
+    height: 15px;
     font-size: 14px;
     font-weight: bold;
     color: white;
+    padding: 0 1px !important;
+    margin: 0;
+    vertical-align: middle;
+    text-align: center;
 }
 
 input.sp-text{
