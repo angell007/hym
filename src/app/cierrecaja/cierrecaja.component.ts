@@ -182,6 +182,8 @@ export class CierrecajaComponent implements OnInit {
   GuardarCierre(){
     if (!this.ValidarMontos()) {
       return;
+    }else if (!this.ValidarDiferencias()) {
+      return;
     }else if (this.CierreCajaModel.Observacion == '') {      
       this.ShowSwal('warning', 'Alerta', 'Debe colocar la observacion antes de realizar el cierre de caja!');
     }else{
@@ -231,6 +233,18 @@ export class CierrecajaComponent implements OnInit {
     return true;
   }
 
+  ValidarDiferencias(){
+
+    for (let index = 0; index < this.Diferencias.length; index++) {
+      if (this.Diferencias[index].Diferencia < 0) {
+        this.ShowSwal('warning', 'Alerta', 'No puede tener diferencias negativas!');
+        return false;
+      }      
+    }
+
+    return true;
+  }
+
   CalcularDiferencia(value, pos){   
 
     if (value == '') {
@@ -244,7 +258,7 @@ export class CierrecajaComponent implements OnInit {
     //let diferencia = this.Diferencias[pos].Diferencia;
 
     let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
-    let resta = (value - entregar).toFixed(2);
+    let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
 
