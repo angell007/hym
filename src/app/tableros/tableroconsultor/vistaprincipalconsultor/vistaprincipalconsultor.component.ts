@@ -41,6 +41,7 @@ export class VistaprincipalconsultorComponent implements OnInit {
         this.MostrarApertura = true;
         this.Cargado = true;
         localStorage.setItem("Apertura_Consultor", "");
+        localStorage.setItem("Volver_Apertura", "Si"); 
       }else{
         this.MostrarApertura = false;
         this.Cargado = true;

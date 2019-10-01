@@ -526,6 +526,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               private _aperturaCajaService:AperturacajaService) 
   {     
     this.RutaGifCargando = generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    this.AsignarMonedas();
   }
 
   CierreCajaAyerBolivares = 0;
@@ -559,7 +560,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       console.log(this.Total_Servicio);      
     });
 
-    this.AsignarMonedas();
     //this.AsignarMonedasApertura();
     this.AsignarTipoDocumento();
     this.AsignarTiposCuenta();
@@ -4352,7 +4352,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.Monedas = data.query_data;
           setTimeout(() => {
             this.AsignarMonedasApertura();  
-          }, 800);
+          }, 200);
           
         }else{
           this.Monedas = [];
@@ -4438,6 +4438,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               let toastObj = {textos:['Alerta', 'No se encontraron registros de apertura'], tipo:'warning', duracion:4000};
               this._toastService.ShowToast(toastObj);
             }else{
+              console.log(this.ValoresMonedasApertura);
+              
               data.valores_anteriores.forEach((valores,i) => {
                 this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
               });

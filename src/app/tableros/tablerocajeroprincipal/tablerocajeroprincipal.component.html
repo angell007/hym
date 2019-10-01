@@ -3,7 +3,8 @@
     <div class="col-md-12">
       <div class="row">
         <div class="col-md-3">
-          <div class="row-fluid">
+          <!-- <app-flujoefectivo></app-flujoefectivo> -->
+          <div class="row">
             <div class="col-md-12" id="funcionarios-container">
               <app-funcionarioactivos
                 [Fecha_Consulta]="Fecha_Consulta">
@@ -41,19 +42,19 @@
                                   placeholder="Fecha">
                                 </my-date-range-picker> -->
                               </div>
-                              <div class="col-auto">                                
+                              <!-- <div class="col-auto">                                
                                 <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">
                                   <option value="">Seleccione departamento</option>
                                   <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
                                 </select>
-                              </div>
+                              </div> -->
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col-md-12" id="table-container">
                       <div class="row">
                         <div class="col-md-6" style="display:flex; align-items: center;">
@@ -84,10 +85,8 @@
                           </app-tablaresumentotalizado>  
                         </div>
                       </div>
-                      
-                                
                     </div>
-                  </div>
+                  </div> -->
                 </div>                
               </div>
             </div>
