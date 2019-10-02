@@ -28,19 +28,19 @@
                           <div class="pull-right">
                             <div class="form-row align-items-center">
                               <div class="col-auto">
-                                <input 
+                                <!-- <input 
                                   type="date" 
                                   placeholder="Escoja fecha" 
                                   class="form-control form-control-sm"
                                   [(ngModel)]="Fecha_Consulta"
                                   (change)="onDataChange()"
-                                  [attr.max]="FechaActual">
-                                <!--<my-date-range-picker 
+                                  [attr.max]="FechaActual"> -->
+                                <my-date-range-picker 
                                   name="mydaterange" 
                                   (dateRangeChanged)="dateRangeChanged($event)" 
                                   [options]="myDateRangePickerOptions"
                                   placeholder="Fecha">
-                                </my-date-range-picker> -->
+                                </my-date-range-picker>
                               </div>
                               <!-- <div class="col-auto">                                
                                 <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">
@@ -52,6 +52,32 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="Totales.length > 0">
+                    <div class="col-md-12" style="margin-top: 15px;" *ngFor="let t of Totales">
+                      <span class="font-size-19 font-weight-bold" style="color: black;">{{t.Nombre}}</span>
+                      <span class="pull-right font-size-19 font-weight-bold" style="color: black; margin-right: 10px;">{{t.Total | customcurrency:'$'}}</span>
+                        <table class="table table-striped" *ngFor="let o of t.Oficinas">
+                          <thead>
+                            <tr style="background-color: #e1e1e1;">
+                              <th class="custom-th">{{o.Nombre}}</th>
+                              <th class="text-right custom-th" appColorsaldo [value]="o.Total">{{o.Total | customcurrency:'$'}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let c of o.Cajeros" class="text-muted">
+                              <td class="custom-td" style="padding-left: 30px;">{{c.Nombre}}</td>
+                              <td class="text-right custom-td" appColorsaldo [value]="c.Total">{{c.Total | customcurrency:'$'}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="Totales.length == 0">
+                    <div class="col-md-12 text-center">
+                      <i class="ti-alert font-size-20 text-warning"></i>
+                      <h4>No hay datos para mostrar!</h4>
                     </div>
                   </div>
                   <!-- <div class="row">
