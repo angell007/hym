@@ -1881,6 +1881,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           let info = this.generalService.normalize(JSON.stringify(this.TransferenciaModel));
           let datos = new FormData();
           datos.append("datos", info);
+          datos.append('id_oficina', this.IdOficina);
           console.log(info);
           
           this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
@@ -1917,6 +1918,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let datos = new FormData();
       datos.append("datos", info);
       datos.append("destinatarios", destinatarios);
+      datos.append('id_oficina', this.IdOficina);
 
       if (bolsa != '') {
         datos.append("bolsa_restante", bolsa);
@@ -3505,6 +3507,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let datos = new FormData();
       datos.append("modulo", 'Traslado_Caja');
       datos.append("datos", info);
+      datos.append('id_oficina', this.IdOficina);
       this.http.post(this.globales.ruta + 'php/trasladocaja/guardar_traslado_caja.php', datos).subscribe((data: any) => {
         if (data.codigo == 'success') {
           
@@ -3759,6 +3762,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let info = this.generalService.normalize(JSON.stringify(this.ServicioExternoModel));
       let datos = new FormData();
       datos.append("modulo", 'Servicio');
+      datos.append('id_oficina', this.IdOficina);
       datos.append("datos", info);
       this.http.post(this.globales.ruta + 'php/serviciosexternos/guardar_servicio.php', datos).subscribe((data: any) => {
         this.LimpiarModeloServicios(tipo);
