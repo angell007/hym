@@ -64,6 +64,7 @@ import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cie
 import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
 import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
 import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
+import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -297,6 +298,10 @@ export const AppRoutes: Routes = [
     {
         path: 'cuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: CuentasconsultorComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'detallemovimientoscuentagerencial/:id_cuenta', component: CommonLayoutComponent,
+        children: [{ path: '', component: DetallemovimientoscuentagerenteComponent, canActivate: [AuthGuard] }]
     },
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }

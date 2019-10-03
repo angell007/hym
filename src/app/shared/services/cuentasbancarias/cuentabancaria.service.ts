@@ -56,6 +56,10 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/get_movimientos_ultima_apertura.php', {params:p});
   }
   
+  public GetMovimientosCuentaBancariaGerente(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_movimientos_cuenta_bancaria_gerente.php', {params:p});
+  }
+  
   public GetCuentaBancariaDetalle(idCuenta:string):Observable<any>{
     let p = {id_cuenta:idCuenta};
     return this.client.get(this._rutaBase+'/get_cuenta_bancaria_detalle_by_id.php', {params:p});

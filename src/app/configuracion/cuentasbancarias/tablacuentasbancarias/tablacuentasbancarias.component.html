@@ -94,6 +94,8 @@
             <div ngbDropdown class="dropdown-primary">
               <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
               <div ngbDropdownMenu>
+                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="VerMovimientos(c.Id_Cuenta_Bancaria)">
+                  <i class="ti-zoom-in text-info"></i> Ver Movimientos</a>
                 <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(c.Id_Cuenta_Bancaria)">
                   <i class="ti-pencil text-warning"></i> Editar</a>
                 <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoCuenta(c.Id_Cuenta_Bancaria)"

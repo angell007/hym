@@ -42,7 +42,7 @@ export class CajaService {
   }
 
   getTotalesCajasGeneral(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'totales_cajas_general_test.php', {params:p});
+    return this.client.get(this._rutaBase+'totales_cajas_general.php', {params:p});
   }
 
   getTotalesCajasFuncionario(p:any):Observable<any>{

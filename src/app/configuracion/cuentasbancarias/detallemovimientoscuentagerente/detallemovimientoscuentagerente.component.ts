@@ -30,8 +30,9 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
     Apodo: ''
   };
 
-  public Accion:string = '';
-  public Id_Apertura:string = localStorage.getItem('Apertura_Consultor');
+  public Mes_Consulta = '';
+  public Id_Cuenta = '';
+  public Meses:Array<any> = [];
 
   constructor(private _router:Router,
               private _activeRoute:ActivatedRoute,
@@ -41,8 +42,9 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
               private _toastService:ToastService,
               private _webNavigacionService:WebnavigationService) 
   { 
-    this._idCuentaActual =  this._activeRoute.snapshot.params["id_cuenta"];
-    this.Accion = this._activeRoute.snapshot.params['accion'];
+    this.Id_Cuenta =  this._activeRoute.snapshot.params["id_cuenta"];
+    this.Mes_Consulta = this._generalService.MesActual;
+    this.Meses = this._generalService.Meses2;
   }
 
   ngOnInit() {
@@ -51,15 +53,17 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
   }
 
   public GetMovimientosCuenta(){
-    let p = {id_cuenta:this._idCuentaActual, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario};
-    this._cuentaBancariaService.GetMovimientoCuentaBancariaUltimaSesion(p).subscribe((data:any) => {
+    let p = {id_cuenta:this.Id_Cuenta, mes:this.Mes_Consulta};
+    this._cuentaBancariaService.GetMovimientosCuentaBancariaGerente(p).subscribe((data:any) => {
+      console.log(data);
+      
       
       if (data.codigo == 'success') {
         this.MovimientosCuentaBancaria = data.query_data;
         this.Movimientos = data.query_data.movimientos;
         this.Balance = parseInt(data.query_data.balance);
         this.Codigo_Moneda = data.codigo_moneda;
-        this.Apertura = parseInt(data.query_data.monto_apertura);
+        this.Apertura = parseInt(data.query_data.monto_inicial);
       }else{
         this.MovimientosCuentaBancaria = [];
         this.Movimientos = [];
@@ -73,7 +77,7 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
   }
   
   private _getInformacionCuentaBancariaActual(){
-    this._cuentaBancariaService.GetCuentaBancariaDetalle(this._idCuentaActual).subscribe((data:any) => {
+    this._cuentaBancariaService.GetCuentaBancariaDetalle(this.Id_Cuenta).subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.CuentaBancariaModel = data.query_data;
       }else{
