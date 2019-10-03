@@ -159,53 +159,55 @@ export class TablerocajeroprincipalComponent implements OnInit {
     // }
 
     if (this.Fecha_Consulta == '') {
-      this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
+      // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
+      this.Totales = [];
       return;
-    }
+    }else{
+      let ruta = '';
+      let p = {};
 
-    let ruta = '';
-    let p = {};
-
-    if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-      p = {id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
-      this._cajaService.getTotalesCajasGeneral(p).subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          console.log(data);
-          
-          // this.TotalesMunicipio = data.totales.municipios; 
-          // this.TotalesDepartamento = data.totales.departamento;
-          
-          // this.MostrarTotales = [];
-          // this.ExtraerTotales();
-          this.Totales = data.query_data;
-        }else{
-  
-          // this.MostrarTotales = [];
-          // this.TotalesMunicipio = []; 
-          // this.TotalesDepartamento = [];
-        }
-      });
-    
-    }else if(this.Funcionario.Id_Perfil == 2){
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-      p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
-      this._cajaService.getTotalesCajasFuncionario(p).subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          console.log(data);
-          
-          // this.TotalesMunicipio = data.totales.municipios; 
-          // this.TotalesDepartamento = data.totales.departamento;
-          
-          // this.MostrarTotales = [];
-          // this.ExtraerTotales();
-        }else{
-  
-          // this.MostrarTotales = [];
-          // this.TotalesMunicipio = []; 
-          // this.TotalesDepartamento = [];
-        }
-      });
+      if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
+        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
+        p = {id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
+        this._cajaService.getTotalesCajasGeneral(p).subscribe((data:any) => {
+          if (data.codigo == 'success') {
+            console.log(data);
+            
+            // this.TotalesMunicipio = data.totales.municipios; 
+            // this.TotalesDepartamento = data.totales.departamento;
+            
+            // this.MostrarTotales = [];
+            // this.ExtraerTotales();
+            this.Totales = data.query_data;
+          }else{
+            this.Totales = [];  
+            // this.MostrarTotales = [];
+            // this.TotalesMunicipio = []; 
+            // this.TotalesDepartamento = [];
+          }
+        });
+      
+      }else if(this.Funcionario.Id_Perfil == 2){
+        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
+        p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
+        this._cajaService.getTotalesCajasFuncionario(p).subscribe((data:any) => {
+          if (data.codigo == 'success') {
+            console.log(data);
+            
+            // this.TotalesMunicipio = data.totales.municipios; 
+            // this.TotalesDepartamento = data.totales.departamento;
+            
+            // this.MostrarTotales = [];
+            // this.ExtraerTotales();
+            this.Totales = data.query_data;
+          }else{  
+            this.Totales = [];  
+            // this.MostrarTotales = [];
+            // this.TotalesMunicipio = []; 
+            // this.TotalesDepartamento = [];
+          }
+        });
+      }
     }
   }
 
