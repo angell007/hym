@@ -10,9 +10,9 @@ import { SessionDataModel } from '../../../Modelos/SessionDataModel';
 export class GeneralService {
 
   public SessionDataModel:SessionDataModel = new SessionDataModel();
-  public Funcionario:any = JSON.parse(localStorage.getItem('User'));
-  public Oficina:any = JSON.parse(localStorage.getItem('Oficina'));
-  public Caja:any = JSON.parse(localStorage.getItem('Caja'));
+  public Funcionario:any = '';
+  public Oficina:any = '';
+  public Caja:any = '';
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;
@@ -65,6 +65,11 @@ export class GeneralService {
               private _swalService:SwalService,
               private datePipe:DatePipe) 
   {
+    this.Funcionario = JSON.parse(localStorage.getItem('User'));
+    this.Oficina = JSON.parse(localStorage.getItem('Oficina'));
+    this.Caja = JSON.parse(localStorage.getItem('Caja'));
+    
+        
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.HoraActual = this.datePipe.transform(new Date(), 'HH:mm:ss');
     this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');

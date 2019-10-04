@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Globales } from '../shared/globales/globales';
 import { Funcionario } from '../shared/funcionario/funcionario.model';
 import { FuncionarioService } from '../shared/funcionario/funcionario.service';
+import { GeneralService } from '../shared/services/general/general.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   Exito: boolean = false;
   Mensaje: string = '';
 
-  constructor(private userService: FuncionarioService, private router : Router, private http: HttpClient, private globales: Globales) { }
+  constructor(private userService: FuncionarioService, private router : Router, private http: HttpClient, private globales: Globales, private _generalService:GeneralService) { }
 
   ngOnInit() {
     if(localStorage.getItem("User")){
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
             
             localStorage.setItem('Token',data.Token);
             localStorage.setItem('User',JSON.stringify(data.Funcionario));
+            this._generalService.Funcionario = data.Funcionario;
             // localStorage.setItem('CuentaConsultor', '');
             // localStorage.setItem('MonedaCuentaConsultor', '');
             //localStorage.setItem('Oficina',JSON.stringify(Oficina));
