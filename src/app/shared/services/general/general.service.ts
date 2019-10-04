@@ -19,6 +19,10 @@ export class GeneralService {
   public HoraActual:string;
   public FullFechaActual:string;
   public MesActual:string;
+  public MesActualDosDigitos:string;
+  public DiaActual:string;
+  public DiaActualDosDigitos:string;
+  public AnioActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   public Meses2:Array<any> = [{Numero:1, Mes:'Enero'},{Numero:2, Mes:'Febrero'},{Numero:3, Mes:'Marzo'}, {Numero:4, Mes:'Abril'},{Numero:5, Mes:'Mayo'},{Numero:6, Mes:'Junio'},{Numero:7, Mes:'Julio'},{Numero:8, Mes:'Agosto'},{Numero:9, Mes:'Septiembre'},{Numero:10, Mes:'Octubre'},{Numero:11, Mes:'Noviembre'},{Numero:12, Mes:'Diciembre'}];
   public Anios:Array<number> = [];
@@ -65,6 +69,10 @@ export class GeneralService {
     this.HoraActual = this.datePipe.transform(new Date(), 'HH:mm:ss');
     this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
     this.MesActual = this.datePipe.transform(new Date(), 'M');
+    this.MesActualDosDigitos = this.datePipe.transform(new Date(), 'MM');
+    this.DiaActual = this.datePipe.transform(new Date(), 'd');
+    this.DiaActualDosDigitos = this.datePipe.transform(new Date(), 'dd');
+    this.AnioActual = this.datePipe.transform(new Date(), 'y');
     this.BuildAniosConsulta();    
   }
 

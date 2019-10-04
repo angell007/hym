@@ -42,7 +42,8 @@
                                   name="mydaterange" 
                                   (dateRangeChanged)="dateRangeChanged($event)" 
                                   [options]="myDateRangePickerOptions"
-                                  placeholder="Fecha">
+                                  placeholder="Fecha"
+                                  [(ngModel)]="model">
                                 </my-date-range-picker>
                               </div>
                               <!-- <div class="col-auto">                                

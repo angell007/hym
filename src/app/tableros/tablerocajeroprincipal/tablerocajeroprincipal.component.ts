@@ -44,6 +44,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public CajerosAbiertos:number = 0;
   public CajerosTotales:number = 0;
   public Totales:Array<any> = [];
+  public model: any;
 
   constructor(private _generalService:GeneralService,
               private _departamentoService:DepartamentoService,
@@ -52,6 +53,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
               private _paisService:PaisService,
               private _toastService:ToastService) { 
     
+    this.model = {beginDate: {year: this._generalService.AnioActual, month: this._generalService.MesActualDosDigitos, day: this._generalService.DiaActual},
+    endDate: {year: this._generalService.AnioActual, month: this._generalService.MesActual, day: this._generalService.DiaActual}};    
     this.GetDepartamentos();
     this.GetMonedas();
     this.InicializarFecha();
@@ -59,12 +62,14 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ConsultarTotalesDepartamento();
   }
 
   InicializarFecha(){
-    let d = new Date();
-    this.FechaActual = d.toISOString().split("T")[0];
-    this.Fecha_Consulta = d.toISOString().split("T")[0];
+    // let d = new Date();
+    // this.FechaActual = d.toISOString().split("T")[0];
+    // this.Fecha_Consulta = d.toISOString().split("T")[0];
+    this.Fecha_Consulta = this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos+' - '+this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos;
   }
 
   AsignarPaises(){
@@ -138,25 +143,9 @@ export class TablerocajeroprincipalComponent implements OnInit {
         }
       });
     }
-    
-    // this.client.get(ruta, {params:p}).subscribe((data:any) => {
-    //   if (data.success) {
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }else{
-
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }
-    // });
   }
 
   ConsultarTotalesDepartamento(){
-
-    // if (this.DepartamentoId == '') {
-    //   //this.ShowSwal('warning', 'Alerta', 'Debe escoger le departamento para realizar una busqueda de totales!');
-    //   return;
-    // }
 
     if (this.Fecha_Consulta == '') {
       // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
