@@ -23,12 +23,12 @@
                             <tr *ngFor="let t of transferencias"
                                 (click)="GetDetalleTransferencia(t.Id_Transferencia)"
                                 style="cursor:pointer;">
-                                <td class="text-center">{{t.Fecha | date:"medium" | uppercase }}</td>
+                                <td class="text-center">{{t.Fecha | date:"dd-MM-yyyy HH:mm" | uppercase }}</td>
                                 <td class="text-center">{{t.Recibo}}</td>
                                 <td class="text-center">{{t.Nombre_Cajero}}</td>
                                 <td class="text-center">{{t.Tipo}}</td>
                                 <td class="text-center">{{t.Estado}}</td>
-                                <td class="text-right">{{t.Codigo_Moneda_Origen}} {{t.Valor_Origen | number | puntos}}</td>
+                                <td class="text-right">{{t.Valor_Origen | customcurrency}}</td>
                                 <td class="text-center">{{t.Realizada_Por}}</td>
                             </tr>
                         </tbody>
@@ -237,7 +237,7 @@
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTransferencia" #ModalVerTransferencia>
     <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalVerTransferencia.hide()">
+        <button type="button" class="close basic-close" (click)="CerrarModalDetalle()">
             <span aria-hidden="true">&times;</span>
         </button>
         <h4>Detalle transferencia</h4>
@@ -258,12 +258,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{DetalleTransferencia.Fecha | date:"medium" | uppercase}}</td>
-                            <td>{{DetalleTransferencia.Recibo}}</td>
-                            <td>{{DetalleTransferencia.Tipo}}</td>
+                            <td class="text-center">{{DetalleTransferencia.Fecha | date:"dd-MM-yyyy HH:mm"}}</td>
+                            <td class="text-center">{{DetalleTransferencia.Recibo}}</td>
+                            <td class="text-center">{{DetalleTransferencia.Tipo}}</td>
                             <!-- <td class="text-right">{{DetalleTransferencia.Codigo_Moneda_Origen}} {{DetalleTransferencia.Valor_Origen | number | puntos}}</td> -->
-                            <td class="text-right">{{DetalleTransferencia.Codigo_Moneda_Destino}} {{DetalleTransferencia.Valor_Destino | number | puntos}}</td>
-                            <td>{{DetalleTransferencia.Estado}}</td>
+                            <td class="text-right">{{DetalleTransferencia.Valor_Destino | customcurrency:DetalleTransferencia.Codigo_Moneda_Destino}}</td>
+                            <td class="text-center">{{DetalleTransferencia.Estado}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -331,19 +331,21 @@
                                         <tr>
                                             <th class="text-center">Fecha</th>
                                             <th class="text-center">Cajero Pago</th>
+                                            <th class="text-center">Monto</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>{{DatosPago.Fecha | date:"medium" | uppercase}}</td>
-                                            <td>{{DatosPago.Nombre_Cajero}}</td>
+                                        <tr *ngFor="let dp of DatosPago;">
+                                            <td class="text-center">{{dp.Fecha | date:"dd-MM-yyyy HH:mm"}}</td>
+                                            <td class="text-center">{{dp.Nombre_Funcionario_Pago}}</td>
+                                            <td class="text-right">{{dp.Valor | customcurrency:dp.Codigo_Moneda}}</td>
                                         </tr>
-                                        <tr>
+                                        <!-- <tr>
                                             <td colspan="2" class="text-center"><h3>Cuentas Pagadas</h3></td>
                                         </tr>
                                         <tr *ngFor="let cp of CuentasPagadas">
                                             <td colspan="2" class="text-center">{{cp.Numero_Cuenta}}</td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -390,7 +392,7 @@
             <button 
                 type="submit" 
                 class="btn btn-primary"
-                (click)="ModalVerTransferencia.hide()">Cerrar
+                (click)="CerrarModalDetalle()">Cerrar
             </button>
         </div>
     </div>

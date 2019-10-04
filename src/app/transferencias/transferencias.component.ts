@@ -46,11 +46,10 @@ export class TransferenciasComponent implements OnInit {
   public ShowDatosDevolucion:boolean = false;
 
   constructor(private http: HttpClient, private globales: Globales, private tService:TransferenciaService) {
-    this.GetTransferencias();
    }
 
   ngOnInit() {
-
+    this.GetTransferencias();
   }
 
   GetTransferencias(){
@@ -103,5 +102,15 @@ export class TransferenciasComponent implements OnInit {
       }
       
     });
+  }
+
+  private _esconderColapsables(){
+    $("#collapseOne").removeClass("show");
+    $("#collapseTwo").removeClass("show");
+  }
+
+  public CerrarModalDetalle(){
+    this._esconderColapsables();
+    this.ModalVerTransferencia.hide();
   }
 }
