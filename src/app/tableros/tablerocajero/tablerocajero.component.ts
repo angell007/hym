@@ -3236,21 +3236,21 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       if(!this.ValidateGiroBeforeSubmit()){
         return;
+      }else{
+        let info = this.generalService.normalize(JSON.stringify(this.GiroModel));
+        let datos = new FormData();
+        datos.append("datos", info);
+        this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
+          this.LimpiarModeloGiro('creacion');
+          this.Giro1 = true;
+          this.Giro2 = false;
+          this.confirmacionSwal.title = "Guardado con exito";
+          this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
+          this.confirmacionSwal.type = "success"
+          this.confirmacionSwal.show();
+          this.CargarGirosDiarios();
+        });
       }
-
-      let info = this.generalService.normalize(JSON.stringify(this.GiroModel));
-      let datos = new FormData();
-      datos.append("datos", info);
-      this.http.post(this.globales.ruta + 'php/pos/guardar_giro.php', datos).subscribe((data: any) => {
-        this.LimpiarModeloGiro('creacion');
-        this.Giro1 = true;
-        this.Giro2 = false;
-        this.confirmacionSwal.title = "Guardado con exito";
-        this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
-        this.confirmacionSwal.type = "success"
-        this.confirmacionSwal.show();
-        this.CargarGirosDiarios();
-      });
     }
 
     RealizarEdicionGiro(formulario: NgForm, modal) {

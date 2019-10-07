@@ -13,6 +13,10 @@ export class TransferenciaService {
   getAllTransferencias():Observable<any>{
     return this.client.get(this._rutaBase+'lista_transferencias_general.php');
   } 
+  
+  public GetAllTransferenciasFiltro(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'lista_transferencias_general.php', {params:p});
+  } 
 
   getDetalleTransferencia(idTransferencia:string):Observable<any>{
     let p = {id_transferencia:idTransferencia};

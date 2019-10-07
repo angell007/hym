@@ -15,24 +15,80 @@
                                 <th class="text-center">Cajero</th>
                                 <th class="text-center">Tipo Transferencia</th>
                                 <th class="text-center">Estado</th>
+                                <th class="text-center">Moneda</th>
                                 <th class="text-center">Recibido</th>
                                 <th class="text-center">Realizada por</th>
                             </tr>
+                            <tr>
+                                <th class="table-filters"><input type="date" class="form-control" 
+                                    [(ngModel)]="Filtros.fecha" (change)="ConsultaFiltrada()"></th>
+                                <th class="table-filters"><input type="text" class="form-control" 
+                                    [(ngModel)]="Filtros.recibo" (change)="ConsultaFiltrada()"></th>
+                                <th class="table-filters"><input type="text" class="form-control" 
+                                    [(ngModel)]="Filtros.cajero" (change)="ConsultaFiltrada()"></th>
+                                <th class="table-filters">
+                                    <select class="custom-select form-control"
+                                        [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
+                                        <option value="" selected>Todos</option>
+                                        <option value="Efectivo">Efectivo</option>
+                                        <option value="Consignacion">Consignacion</option>
+                                        <option value="Credito">Credito</option>
+                                    </select>
+                                </th>
+                                <th class="table-filters">
+                                    <select class="custom-select form-control"
+                                        [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
+                                        <option value="" selected>Todos</option>
+                                        <option value="Pendiente">Pendiente</option>
+                                        <option value="Pagada">Pagada</option>
+                                        <option value="Anulada">Anulada</option>
+                                        <option value="Devuelta">Devuelta</option>
+                                    </select>
+                                </th>
+                                <th class="table-filters"></th>
+                                <th class="table-filters"></th>
+                                <th class="table-filters"></th>
+                            </tr>
+                            <tr *ngIf="Cargando">
+                                <th colspan="8" class="text-center">
+                                    <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                                    <h1>CARGANDO</h1>
+                                </th>
+                            </tr>
+                            <tr *ngIf="transferencias.length == 0 && !Cargando">
+                              <td colspan="8" class="text-center">
+                                  <i class="ti-alert font-size-20 text-warning"></i>
+                                  <h4>No hay transferencias para mostrar!</h4>
+                              </td>
+                            </tr>
                         </thead>
-                        <tbody>
+                        <tbody *ngIf="!Cargando">
                             <tr *ngFor="let t of transferencias"
                                 (click)="GetDetalleTransferencia(t.Id_Transferencia)"
-                                style="cursor:pointer;">
+                                style="cursor:pointer;"
+                                [ngClass]="{'bg-selected': t.Estado == 'Pagada', 'bg-anulada': t.Estado == 'Anulada', 'bg-devuelta': t.Estado == 'Devuelta'}">
                                 <td class="text-center">{{t.Fecha | date:"dd-MM-yyyy HH:mm" | uppercase }}</td>
                                 <td class="text-center">{{t.Recibo}}</td>
                                 <td class="text-center">{{t.Nombre_Cajero}}</td>
                                 <td class="text-center">{{t.Tipo}}</td>
                                 <td class="text-center">{{t.Estado}}</td>
-                                <td class="text-right">{{t.Valor_Origen | customcurrency}}</td>
+                                <td class="text-center">{{t.Codigo_Moneda_Destino}}</td>
+                                <td class="text-right">{{t.Valor_Origen | customcurrency:''}}</td>
                                 <td class="text-center">{{t.Realizada_Por}}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div id="paginacion-container" *ngIf="transferencias.length > 0">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+                        </div>
+                        <div class="col-md-9">
+                          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+                            size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+                        </div>
+                      </div>
+                    </div>
                 </div>
             </div>            
         </div>
