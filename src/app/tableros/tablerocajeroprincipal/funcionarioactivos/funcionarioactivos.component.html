@@ -36,7 +36,8 @@
   </div>
   <div class="col-md-12" *ngIf="FuncionariosFiltrados.length > 0" style="height:550px;overflow-y: auto;">
     <app-funcionarioinformativecard *ngFor="let ff of FuncionariosFiltrados"
-      [Funcionario]="ff">      
+      [Funcionario]="ff"
+      [Fecha]="Fecha_Consulta">
     </app-funcionarioinformativecard>
   </div>
 </div>

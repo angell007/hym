@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
@@ -10,7 +10,7 @@ import { CorresponsalbancarioService } from '../../../shared/services/correspons
   templateUrl: './tablaregistroscorresponsalesdiarios.component.html',
   styleUrls: ['./tablaregistroscorresponsalesdiarios.component.scss', '../../../../style.scss']
 })
-export class TablaregistroscorresponsalesdiariosComponent implements OnInit {
+export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnDestroy {
 
   @Input() ActualizarTabla:Observable<any> = new Observable();
   private _updateTablaSubscription:any;
@@ -52,6 +52,12 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit {
     this._updateTablaSubscription = this.ActualizarTabla.subscribe(data => {
       this.ConsultaFiltrada();
     });
+  }
+  
+  ngOnDestroy(): void {
+    if (this._updateTablaSubscription != null) {
+      this._updateTablaSubscription.unsubscribe();
+    }
   }
 
   SetFiltros(paginacion:boolean) {

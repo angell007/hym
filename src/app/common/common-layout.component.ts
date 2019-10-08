@@ -19,7 +19,7 @@ import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofu
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
-    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css']
+    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss']
 })
 
 export class CommonLayoutComponent implements OnInit {
@@ -1066,7 +1066,7 @@ this.ModalResumenCuenta.show();
                 this.swalService.ShowMessage(data);
             }else{
 
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false]);
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
             }
         });
     }

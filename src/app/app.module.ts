@@ -247,6 +247,8 @@ import { ModalajustecuentaComponent } from './simplecomponents/modalajustecuenta
 import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
 import { TableroagenteexternoComponent } from './tableros/tableroagenteexterno/tableroagenteexterno.component';
 import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
+import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
+import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -449,7 +451,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalajustecuentaComponent,
         CuentasconsultorComponent,
         TableroagenteexternoComponent,
-        DetallemovimientoscuentagerenteComponent
+        DetallemovimientoscuentagerenteComponent,
+        TrasladoscajaComponent,
+        TablatasladoscajaComponent
     ],
     exports:[
         ModalBasicComponent

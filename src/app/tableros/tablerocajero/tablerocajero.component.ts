@@ -1445,7 +1445,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     AsignarValorTransferirDestinatario(valor){
       
       if (valor == '' || valor == '0') {
-        this.ListaDestinatarios.array.forEach(d => {
+        this.ListaDestinatarios.forEach(d => {
           d.Valor_Transferencia = '';
         });
         return;

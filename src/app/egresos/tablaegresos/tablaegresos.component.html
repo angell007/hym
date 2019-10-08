@@ -51,9 +51,10 @@
           </select>
         </th>
         <th class="table-filters"></th>
+        <th class="table-filters"></th>
       </tr>
       <tr *ngIf="Cargando">
-        <td colspan="10" class="text-center">
+        <td colspan="7" class="text-center">
           <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
             <h2>CARGANDO EGRESOS</h2>
             <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
@@ -61,7 +62,7 @@
         </td>
       </tr>
       <tr *ngIf="Egresos.length == 0 && !Cargando">
-        <td colspan="10" class="text-center">
+        <td colspan="7" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
             <h4>No hay egresos para mostrar!</h4>
         </td>

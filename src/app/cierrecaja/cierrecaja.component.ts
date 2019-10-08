@@ -21,7 +21,8 @@ export class CierrecajaComponent implements OnInit {
   
 
   id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
-  solo_ver = this.activeRoute.snapshot.params["solo_ver"];
+  public solo_ver:boolean = this.activeRoute.snapshot.params["solo_ver"];
+  public fechaSoloVer:string = this.activeRoute.snapshot.params["fechaSoloVer"];
   public Nombre_Funcionario:string = '';
 
   public Funcionario = JSON.parse(localStorage['User']);
@@ -80,7 +81,12 @@ export class CierrecajaComponent implements OnInit {
   }
 
   ConsultarTotalesCierre(){
-    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.id_funcionario}}).subscribe((data:any)=>{
+    let p:any = {id:this.id_funcionario};
+    if (this.solo_ver) {
+      p.fecha = this.fechaSoloVer;
+    }
+
+    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: p}).subscribe((data:any)=>{
       
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
