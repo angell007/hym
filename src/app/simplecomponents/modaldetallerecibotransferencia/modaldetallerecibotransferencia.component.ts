@@ -28,7 +28,6 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
       this.Transferencia = data;
       this.GetDestinatariosTransferencia();
       this.ModalVerRecibo.show();
-      console.log(data);
       console.log(this.Transferencia);
       
     });

@@ -88,7 +88,8 @@
                         <tbody *ngIf="!Cargando">
                             <tr *ngFor="let g of Giros"
                                  style="cursor:pointer;"
-                                 (click)="VerDetalleGiro(g.Id_Giro)">
+                                 (click)="VerDetalleGiro(g.Id_Giro)"
+                                 [ngClass]="{'bg-selected': g.Estado == 'Pagado', 'bg-anulada': g.Estado == 'Anulado'}">
                                 <td class="custom-cell">{{g.Fecha | date:"dd/MM/yyyy" }}</td>
                                 <td class="custom-cell">{{g.Origen}}</td>
                                 <td class="custom-cell">{{g.Nombre_Remitente}}</td>
@@ -202,7 +203,7 @@
                             <th class="text-center">Fecha</th>
                             <th class="text-center">Cajero</th>
                             <th class="text-center">Cobro</th>
-                            <th class="text-center">Enviado</th>
+                            <th class="text-center">Entregar</th>
                             <th class="text-center">Total</th>
                             <th class="text-center">Comisión</th>
                         </tr>

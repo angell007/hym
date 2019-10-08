@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-9">
         <h5 class="pt-2"><i class="fa fa-money text-success"></i> 
-          Balance: <span appColorsaldo [value]="totalObj.Total">{{ Balance }}</span>
+          Balance: <span appColorsaldo [value]="totalObj.Total">{{ Balance | customcurrency:CodigoMonedaActual}}</span>
         </h5>
       </div>
       <div class="col-md-3">
@@ -16,17 +16,53 @@
       <thead>
         <tr>
           <th class="custom-thead" style="width:12%;">Fecha</th>
-          <th class="custom-thead" style="width:12%;">Recibo</th>
+          <th class="custom-thead" style="width:12%;">Movimiento</th>
+          <th class="custom-thead" >Cajero</th>
           <th class="custom-thead" >Detalle</th>
           <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
           <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
           <th class="custom-thead" class="text-center" style="width:15%">Saldo</th>
           <th class="custom-thead" class="text-center" style="width:6%;"></th>
         </tr>
+        <tr>
+          <th class="table-filters">
+            <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro movimiento"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.movimiento">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro cajero"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cajero">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro detalle"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.detalle">
+          </th>
+          <th class="table-filters"></th>
+          <th class="table-filters"></th>
+          <th class="table-filters"></th>
+        </tr>
+        <tr *ngIf="Cargando">
+          <td colspan="7" class="text-center">
+            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+              <h2>CARGANDO MOVIMIENTOS</h2>
+              <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="Movimientos.length == 0 && !Cargando">
+          <td colspan="7" class="text-center">
+              <i class="ti-alert font-size-20 text-warning"></i>
+              <h4>No existen movimientos en esta moneda!</h4>
+          </td>
+        </tr>
       </thead>
       <tbody>
         <tr *ngIf="MostrarTotales">
-          <td colspan="5" class="text-center custom-cell font-size-17">Total</td>
+          <td colspan="6" class="text-center custom-cell font-size-17">Total</td>
           <!-- <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.ingreso">{{MovimientosTercero.totales.ingreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.egreso">{{MovimientosTercero.totales.egreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td> -->
           <td class="text-right custom-cell font-size-17" appColorsaldo [value]="MovimientosTercero.totales.balance">{{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
@@ -36,6 +72,7 @@
           [ngClass]="{'bg-anulada':m.Estado == 'Anulado'}">
           <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
           <td class="custom-cell text-center">{{m.Movimiento}}</td>
+          <td class="custom-cell text-center">{{m.Cajero}}</td>
           <td class="custom-cell">{{m.Detalle}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
@@ -57,7 +94,18 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table>    
+    <div id="paginacion-container" *ngIf="Movimientos.length > 0">
+      <div class="row">
+        <div class="col-md-3">
+          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+        </div>
+        <div class="col-md-9">
+          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+            size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

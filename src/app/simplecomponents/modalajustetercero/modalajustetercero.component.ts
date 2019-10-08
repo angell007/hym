@@ -92,53 +92,54 @@ export class ModalajusteterceroComponent implements OnInit {
 
     if (!this.ValidateBeforeSubmit()) {
       return;
-    }
-    
-    this.MovimientoTerceroModel.Id_Tipo_Movimiento = '3';
-    this.MovimientoTerceroModel.Valor_Tipo_Movimiento = '0';
-    this.MovimientoTerceroModel.Fecha = this._generalService.FechaActual;
-    this.MovimientoTerceroModel = this._generalService.limpiarString(this.MovimientoTerceroModel);
-    console.log(this.MovimientoTerceroModel);
-    
-    let info = this._generalService.normalize(JSON.stringify(this.MovimientoTerceroModel));
-    let datos = new FormData();
-    datos.append("modelo",info);
-
-    if (this.Editar) {
-      this._movimientoTerceroService.editMovimientoTercero(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Editar = false;
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
     }else{
-      this._movimientoTerceroService.saveMovimientoTercero(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
+      this.MovimientoTerceroModel.Id_Tipo_Movimiento = '3';
+      this.MovimientoTerceroModel.Valor_Tipo_Movimiento = '0';
+      this.MovimientoTerceroModel.Fecha = this._generalService.FechaActual;
+      this.MovimientoTerceroModel = this._generalService.limpiarString(this.MovimientoTerceroModel);
+      console.log(this.MovimientoTerceroModel);
+      
+      let info = this._generalService.normalize(JSON.stringify(this.MovimientoTerceroModel));
+      let datos = new FormData();
+      datos.append("modelo",info);
+      datos.append("funcionario",this._generalService.Funcionario.Identificacion_Funcionario);
+
+      if (this.Editar) {
+        this._movimientoTerceroService.editMovimientoTercero(datos)
+        .catch(error => { 
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data:any)=>{
+          if (data.codigo == 'success') { 
+            this.ActualizarTabla.emit();       
+            this.CerrarModal();
+            this.Editar = false;
+            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+            this._toastService.ShowToast(toastObj);
+          }else{
+            this._swalService.ShowMessage(data);
+          }
+        });
+      }else{
+        this._movimientoTerceroService.saveMovimientoTercero(datos)
+        .catch(error => { 
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data:any)=>{
+          if (data.codigo == 'success') { 
+            this.ActualizarTabla.emit();       
+            this.CerrarModal();
+            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+            this._toastService.ShowToast(toastObj);
+          }else{
+            this._swalService.ShowMessage(data);
+          }
+        });
+      }
     }    
   }
 

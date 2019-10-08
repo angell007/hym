@@ -25,6 +25,8 @@ export class FuncionarioinformativecardComponent implements OnInit {
   }
 
   AbrirCierreFuncionario(){
+    console.log(this.Funcionario.Identificacion_Funcionario);
+    
     this.router.navigate(['/cierrecaja', this.Funcionario.Identificacion_Funcionario, true]);
   }
 }

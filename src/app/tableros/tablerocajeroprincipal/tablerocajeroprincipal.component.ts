@@ -66,10 +66,10 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   InicializarFecha(){
-    // let d = new Date();
-    // this.FechaActual = d.toISOString().split("T")[0];
-    // this.Fecha_Consulta = d.toISOString().split("T")[0];
-    this.Fecha_Consulta = this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos+' - '+this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos;
+    let d = new Date();
+    this.FechaActual = d.toISOString().split("T")[0];
+    this.Fecha_Consulta = d.toISOString().split("T")[0];
+    // this.Fecha_Consulta = this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos+' - '+this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos;
   }
 
   AsignarPaises(){

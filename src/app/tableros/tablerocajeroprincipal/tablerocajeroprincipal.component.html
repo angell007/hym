@@ -31,20 +31,20 @@
                           <div class="pull-right">
                             <div class="form-row align-items-center">
                               <div class="col-auto">
-                                <!-- <input 
+                                <input 
                                   type="date" 
                                   placeholder="Escoja fecha" 
                                   class="form-control form-control-sm"
                                   [(ngModel)]="Fecha_Consulta"
                                   (change)="onDataChange()"
-                                  [attr.max]="FechaActual"> -->
-                                <my-date-range-picker 
+                                  [attr.max]="FechaActual">
+                                <!-- <my-date-range-picker 
                                   name="mydaterange" 
                                   (dateRangeChanged)="dateRangeChanged($event)" 
                                   [options]="myDateRangePickerOptions"
                                   placeholder="Fecha"
                                   [(ngModel)]="model">
-                                </my-date-range-picker>
+                                </my-date-range-picker> -->
                               </div>
                               <!-- <div class="col-auto">                                
                                 <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">

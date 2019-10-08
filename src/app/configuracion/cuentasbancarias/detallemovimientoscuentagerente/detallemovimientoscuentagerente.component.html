@@ -4,7 +4,12 @@
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-md-9">MOVIMIENTOS DE CUENTA - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
+            <div class="col-md-9">
+              <label class="block-element font-weight-bold" style="margin:0;color: black;">MOVIMIENTOS DE CUENTA</label>
+              <label class="block-element" style="margin:0 0 0 15px;">Banco: {{CuentaBancariaModel.Apodo}}</label>
+              <label class="block-element" style="margin:0 0 0 15px;">Cuenta: {{CuentaBancariaModel.Numero_Cuenta}}</label>
+              <label class="block-element" style="margin:0 0 0 15px;">Titular: {{CuentaBancariaModel.Nombre_Titular}}</label>              
+            </div>
             <div class="col-md-3">
               <div class="form-group">
                 <label>Mes</label>
@@ -27,16 +32,18 @@
               <tr>
                 <th class="custom-thead text-center" style="width:8%;">Fecha</th>
                 <th class="custom-thead text-center" style="width:12%;">Movimiento</th>
+                <th class="custom-thead text-center" style="width:10%;">Tipo</th>
+                <th class="custom-thead text-center" style="width:10%;">Recibe</th>
                 <th class="custom-thead text-center" style="width:10%">Ingreso</th>
                 <th class="custom-thead text-center" style="width:10%">Egreso</th>
                 <th class="custom-thead text-center" style="width:10%">Saldo</th>
               </tr>
               <tr>
-                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Saldo Inicial:</td>
+                <td colspan="6" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Saldo Inicial:</td>
                 <td class="custom-cell text-right font-size-16 font-weight-bold"  appColorsaldo [value]="Apertura">{{Apertura | customcurrency:Codigo_Moneda}}</td>
               </tr>
               <tr *ngIf="Movimientos.length == 0">
-                <td colspan="5" class="text-center">
+                <td colspan="7" class="text-center">
                   <i class="ti-alert font-size-20 text-warning"></i>
                   <h4>No se encontraron movimientos en esta cuenta!</h4>
                 </td>
@@ -47,6 +54,13 @@
                 [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
                 <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
                 <td class="custom-cell text-center">{{m.Tipo_Movimiento}}</td>
+                <td class="custom-cell text-center">{{m.Tipo}}</td>
+
+                <td *ngIf="m.Tipo == 'Transferencia'" class="custom-cell text-center">
+                  <label style="cursor: pointer;" (click)="AbrirDetalleRecibo(m.Valor_Tipo_Movimiento)">{{m.Recibe}}</label>
+                  <!-- <a style="cursor: pointer;" (click)="AbrirDetalleRecibo(m.Valor_Tipo_Movimiento)">{{m.Recibe}}</a> -->
+                </td>
+                <td *ngIf="m.Tipo != 'Transferencia'" class="custom-cell text-center">{{m.Recibe}}</td>
 
                 <td *ngIf="m.Tipo_Movimiento != 'Apertura' && m.Tipo_Movimiento != 'Cierre'" class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td *ngIf="m.Tipo_Movimiento != 'Apertura' && m.Tipo_Movimiento != 'Cierre'" class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
@@ -57,7 +71,7 @@
             </tbody>
             <tfoot>              
               <tr>
-                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Saldo Final:</td>
+                <td colspan="6" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Saldo Final:</td>
                 <td class="custom-cell text-right font-size-16 font-weight-bold" appColorsaldo [value]="Balance">{{Balance | customcurrency:Codigo_Moneda}}</td>
               </tr>
             </tfoot>
@@ -74,3 +88,7 @@
     </div>
   </div>
 </div>
+
+<app-modaldetallerecibotransferencia
+  [AbrirModal]="AbrirModalDetalleReciboTransferencia.asObservable()">  
+</app-modaldetallerecibotransferencia>

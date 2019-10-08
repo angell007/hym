@@ -32,6 +32,11 @@ export class TransferenciaService {
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});
   }
+  
+  GetReciboTransferenciaXId(idTransferencia:string):Observable<any>{
+    let p = {id_transferencia:idTransferencia};
+    return this.client.get(this._rutaBase+'get_detalle_transferencia.php', {params:p});
+  }
 
   getRecibosTransferenciasFuncionario2(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});

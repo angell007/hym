@@ -3237,6 +3237,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if(!this.ValidateGiroBeforeSubmit()){
         return;
       }else{
+        this.GiroModel.Id_Oficina = this.IdOficina;
         let info = this.generalService.normalize(JSON.stringify(this.GiroModel));
         let datos = new FormData();
         datos.append("datos", info);

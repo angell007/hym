@@ -6,16 +6,18 @@ import { GeneralService } from '../../../shared/services/general/general.service
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { WebnavigationService } from '../../../shared/services/navegacionweb/webnavigation.service';
+import { TransferenciaService } from '../../../shared/services/transferencia/transferencia.service';
 
 @Component({
   selector: 'app-detallemovimientoscuentagerente',
   templateUrl: './detallemovimientoscuentagerente.component.html',
-  styleUrls: ['./detallemovimientoscuentagerente.component.scss']
+  styleUrls: ['./detallemovimientoscuentagerente.component.scss', '../../../../style.scss']
 })
 export class DetallemovimientoscuentagerenteComponent implements OnInit {
 
   public AbrirModalAjuste:Subject<any> = new Subject();
   public AbrirModalCompra:Subject<any> = new Subject();
+  public AbrirModalDetalleReciboTransferencia:Subject<any> = new Subject();
 
   private _idCuentaActual:string = '';
   public MovimientosCuentaBancaria:Array<any> = [];
@@ -33,10 +35,12 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
   public Mes_Consulta = '';
   public Id_Cuenta = '';
   public Meses:Array<any> = [];
+  private _transferenciaVer:any;
 
   constructor(private _router:Router,
               private _activeRoute:ActivatedRoute,
               private _cuentaBancariaService:CuentabancariaService,
+              private _transferenciaService:TransferenciaService,
               private _generalService:GeneralService,
               private _swalService:SwalService,
               private _toastService:ToastService,
@@ -97,6 +101,22 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
       Numero_Cuenta: '',
       Apodo: ''
     };
+  }  
+
+  AbrirDetalleRecibo(idTransferencia:any){
+    let t = {Id_Transferencia:idTransferencia};
+    this._getDetalleTrasnferencia(idTransferencia);
+  }
+
+  private _getDetalleTrasnferencia(idTransferencia:string){
+    this._transferenciaService.GetReciboTransferenciaXId(idTransferencia).subscribe(data => {
+      if (data.codigo == 'success') {
+        this._transferenciaVer = data.query_data;
+        this.AbrirModalDetalleReciboTransferencia.next(this._transferenciaVer);
+      }else{
+        this._transferenciaVer = [];
+      }
+    });
   }
 
 }
