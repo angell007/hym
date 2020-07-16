@@ -9,6 +9,7 @@ import { CuentabancariaService } from '../../../shared/services/cuentasbancarias
 export class CierrecuentasconsultorComponent implements OnInit {
 
   public CuentasBancarias:Array<any> = [];
+  public Cargando : any = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService) { }
 

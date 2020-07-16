@@ -24,6 +24,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { registerLocaleData, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
+import { QzTrayService } from './shared/qz-tray.service';
 
 registerLocaleData(localeES);
 
@@ -428,6 +429,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalBasicComponent
     ],
     providers: [
+        QzTrayService,
         CambioService,
         CompraService,
         ProveedorService,
@@ -448,7 +450,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CustomcurrencyPipe,
         NgbDropdown,
         { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-        { provide: LOCALE_ID, useValue: "es" },
+        { provide: LOCALE_ID,  useValue: 'es-CO' },
         CuentabancariaService,
         SwalService,
         RemitenteService,

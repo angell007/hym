@@ -24,10 +24,14 @@ import { RemitenteModel } from '../../Modelos/RemitenteModel';
 import * as AccionModalRemitente from '../../shared/Enums/AccionModalRemitente';
 import { AccionTableroCajero } from '../../shared/Enums/AccionTableroCajero';
 
+import { QzTrayService } from '../../shared/qz-tray.service';
+
+
 @Component({
   selector: 'app-tablerocajero',
   templateUrl: './tablerocajero.component.html',
-  styleUrls: ['./tablerocajero.component.scss', '../../../style.scss']
+  styleUrls: ['./tablerocajero.component.scss', '../../../style.scss'],
+  providers : [ QzTrayService ]
 })
 
 export class TablerocajeroComponent implements OnInit, OnDestroy {
@@ -505,6 +509,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //Fin nuevas variables
 
   constructor(private http: HttpClient, 
+              public qz : QzTrayService,
               public globales: Globales, 
               public sanitizer: DomSanitizer,
               private generalService:GeneralService,
@@ -529,7 +534,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public boolTelefonoR:boolean = false;
 
   ngOnInit() {
-
     this.aperturaSubscription = this._aperturaCajaService.event.subscribe((data:any) => {
       this.IdOficina = JSON.parse(localStorage.getItem('Oficina'));
       this.IdCaja = JSON.parse(localStorage.getItem('Caja'));

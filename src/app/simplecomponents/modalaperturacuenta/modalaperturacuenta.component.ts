@@ -21,6 +21,7 @@ export class ModalaperturacuentaComponent implements OnInit {
   public CuentasBancarias:Array<any> = [];
   public CuentasBancariasSeleccionadas:Array<any> = [];
   public CuentasBancariasSeleccionadasId:Array<string> = [];
+  public Cargando : any = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               public generalService:GeneralService,

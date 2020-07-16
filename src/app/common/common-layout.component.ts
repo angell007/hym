@@ -15,10 +15,13 @@ import { OficinaService } from '../shared/services/oficinas/oficina.service';
 import { AperturacajaService } from '../shared/services/aperturacaja/aperturacaja.service';
 import { GeneralService } from '../shared/services/general/general.service';
 
+import { QzTrayService } from '../shared/qz-tray.service';
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
-    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css']
+    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css'],
+    providers : [ QzTrayService ]
 })
 
 export class CommonLayoutComponent implements OnInit {
@@ -157,6 +160,7 @@ export class CommonLayoutComponent implements OnInit {
 
     constructor(private router: Router,
                 private activeRoute:ActivatedRoute, 
+                public qz : QzTrayService,
                 private http: HttpClient, 
                 private globales: Globales, 
                 private toastyService: ToastyService,
@@ -1076,18 +1080,54 @@ this.ModalResumenCuenta.show();
     }
 
     CheckCajaOficina(){
-        if (this.oficina_seleccionada == '') {
-            this.modalOficinaCaja.show();
-        }else{                    
-            this.ListarCajas(this.oficina_seleccionada);
-            this.SetNombreOficina(this.oficina_seleccionada);
-        }
+        var macFormatted='';
+        this.qz.getMac().subscribe(
+            data => {                
+                for(var i = 0; i < data.macAddress.length; i++) {
+                    macFormatted += data.macAddress[i];
+                    if (i % 2 == 1 && i < data.macAddress.length - 1) {
+                        macFormatted += ":";
+                    }
+                }
+                console.log(macFormatted);
+                if (this.oficina_seleccionada == ''||this.caja_seleccionada == '') {
+                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', {params:{mac:macFormatted}}).subscribe((data: any) => {
+                        if(data.mensaje=='Se han encontrado registros!'){
+                            console.log(data.query_data.Id_Oficina)
+                            this.oficina_seleccionada = data.query_data.Id_Oficina;
+                            this.caja_seleccionada = data.query_data.Id_Caja;
+                            
+                            localStorage.setItem('Oficina', this.oficina_seleccionada);
+                            localStorage.setItem('Caja', this.caja_seleccionada);
 
-        if (this.caja_seleccionada == '') {
-            this.modalOficinaCaja.show();
-        }else{
-            this.SetNombreCaja(this.caja_seleccionada);
-        }
+                            this.SetNombreOficina(this.oficina_seleccionada);
+                            this.SetNombreCaja(this.caja_seleccionada);
+                        }else{
+                            this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
+                            setTimeout(() => {
+                                this.salir();
+                            }, 10000);
+                            
+                        }
+
+                        
+                    });
+                    //this.modalOficinaCaja.show();
+                }else{                    
+                    this.ListarCajas(this.oficina_seleccionada);
+                    this.SetNombreOficina(this.oficina_seleccionada);
+                    this.SetNombreCaja(this.caja_seleccionada);
+                }
+            },
+            err => {
+                console.log(err);
+            }
+        );
+        setTimeout(() => {
+            this.qz.removePrinter();
+        }, 10000);
+
+        
     }
 
 }
