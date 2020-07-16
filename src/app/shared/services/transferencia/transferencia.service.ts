@@ -13,6 +13,10 @@ export class TransferenciaService {
   getAllTransferencias():Observable<any>{
     return this.client.get(this._rutaBase+'lista_transferencias_general.php');
   } 
+  
+  public GetAllTransferenciasFiltro(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'lista_transferencias_general.php', {params:p});
+  } 
 
   getDetalleTransferencia(idTransferencia:string):Observable<any>{
     let p = {id_transferencia:idTransferencia};
@@ -28,6 +32,11 @@ export class TransferenciaService {
     let p = {id_funcionario:idFuncionario};
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});
   }
+  
+  GetReciboTransferenciaXId(idTransferencia:string):Observable<any>{
+    let p = {id_transferencia:idTransferencia};
+    return this.client.get(this._rutaBase+'get_detalle_transferencia.php', {params:p});
+  }
 
   getRecibosTransferenciasFuncionario2(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_recibos_transferencias_funcionario.php', {params:p});
@@ -40,6 +49,35 @@ export class TransferenciaService {
 
   anularReciboTransferencias(data:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'anular_transferencia_nuevo.php', data);
+  }
+
+  public BloquearTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'bloquear_transferencia_parcial_consultor.php', data);
+  }
+
+  public DesbloquearTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'desbloquear_transferencia_parcial_consultor.php', data);
+  }
+  
+  public CheckEstadoAperturaTransferencia(idTransferencia:string):Observable<any>{
+    let p = {id_transferencia:idTransferencia};
+    return this.client.get(this._rutaBase+'/verificar_estado_apertura_transferencia.php', {params:p});
+  }
+
+  public GetTransferenciasConsultorObservable(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_transferencias_consultores_observable.php', {params:p});
+  }
+
+  public GetPagosTransferencias(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/get_pagos_transferencias.php', {params:p});
+  }
+  
+  public DevolverTransferencia(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/devolver_transferencia.php', data);
+  }
+  
+  public GetMaximaHoraTransferencia():Observable<any>{
+    return this.client.get(this._rutaBase+'/get_maxima_hora_transferencias.php');
   }
 
 }

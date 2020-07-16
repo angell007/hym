@@ -1,13 +1,13 @@
 <div class="row">
   <div class="col-md-12">
-    <table class="table table-bordered">
+    <table class="table table-bordered custom-table">
       <thead>
         <tr>
-          <th class="text-center">Titular</th>
-          <th class="text-center">Banco</th>
-          <th class="text-center">Cuenta</th>
-          <th class="text-center">Tipo Cuenta</th>
-          <th class="text-center">Valor</th>
+          <th class="text-center custom-thead">Titular</th>
+          <th class="text-center custom-thead">Banco</th>
+          <th class="text-center custom-thead">Cuenta</th>
+          <th class="text-center custom-thead">Tipo Cuenta</th>
+          <th class="text-center custom-thead">Valor</th>
         </tr>
         <tr *ngIf="Id_Moneda == ''">
           <th colspan="5" class="text-center">
@@ -21,11 +21,11 @@
           (click)="SeleccionarCompra(cp.Seleccionado, cp.Id_Compra_Cuenta, i)" 
           [ngClass]="{'bg-selected': cp.Seleccionado == 1}"
           style="cursor:pointer;">
-          <td  class="font-weight-bold">{{cp.Nombre_Titular}}</td>
-          <td  class="font-weight-bold">{{cp.Banco}}</td>
-          <td  class="font-weight-bold text-right">{{cp.Numero_Cuenta}}</td>
-          <td  class="font-weight-bold">{{cp.Tipo_Cuenta}}</td>
-          <td  class="font-weight-bold text-right">{{CodigoMoneda}} {{cp.Valor}}</td>
+          <td class="custom-cell">{{cp.Nombre_Titular}}</td>
+          <td class="custom-cell">{{cp.Banco}}</td>
+          <td class="custom-cell text-right">{{cp.Numero_Cuenta}}</td>
+          <td class="custom-cell">{{cp.Tipo_Cuenta}}</td>
+          <td class="custom-cell text-right">{{cp.Valor | customcurrency:CodigoMoneda}}</td>
         </tr>
       </tbody>
     </table>

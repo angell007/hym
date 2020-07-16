@@ -4,7 +4,102 @@
     height: 250px;
   }
 </style>
-<div class="container-fluid">
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="form-row">
+          <!-- <div class="col-md-12">
+            <div class="form-group">
+              <label>Filtro Indicadores</label>
+            </div>
+          </div> -->
+          <!-- <div class="col-md-6">
+            <div class="form-group">
+              <label>Año</label>
+              <select name="Anio" id="anio" class="form-control full-width-select" (change)="GetResumenFlujoEfectivo()" [(ngModel)]="Filtros.anio">
+                <option *ngFor="let a of Anios" [value]="a">{{a}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Mes</label>
+              <select name="Mes" id="mes" class="form-control full-width-select" (change)="SetMesNumerico($event.target.value)" [(ngModel)]="Filtros.mes">
+                <option *ngFor="let me of Meses" [value]="me">{{me}}</option>
+              </select>
+            </div>
+          </div> -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Fecha Indicadores</label>
+              <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions"
+                 placeholder="Filtro Fechas"></my-date-range-picker>
+            </div>
+          </div>
+          <!-- <div class="col-md-12">
+            <div class="form-group">
+              <label>Departamento</label>
+              <select name="Departamento" id="departamento" class="form-control full-width-select" (change)="GetOficinasDepartamento()" [(ngModel)]="Filtros.departamento">
+                <option value="">Todos</option>
+                <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Oficinas</label>
+              <select name="Oficinas" id="oficinas" (change)="GetCajasOficina()" class="form-control full-width-select" [(ngModel)]="Filtros.oficina" [disabled]="Filtros.departamento == ''">
+                <option value="">Todas</option>
+                <option *ngFor="let o of Oficinas" [value]="o.Id_Oficina">{{o.Nombre}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Cajas</label>
+              <select name="Cajas" id="cajas" class="form-control full-width-select" (change)="GetResumenFlujoEfectivo()" [(ngModel)]="Filtros.caja"  [disabled]="Filtros.oficina == ''">
+                <option value="">Todas</option>
+                <option *ngFor="let c of Cajas" [value]="c.Id_Caja">{{c.Nombre}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Cajero</label>
+              <select name="Cajero" id="cajero" class="form-control full-width-select" [(ngModel)]="Filtros.cajero" [disabled]="Filtros.caja == ''">
+                <option value="">Todos</option>
+                <option *ngFor="let ca of Cajeros" [value]="ca.Id_Cajero">{{ca.Nombre}}</option>
+              </select>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Indicador</label>
+            </div>
+          </div>
+        </div>
+        <div style="display: block;">
+          <canvas baseChart style="height: 200px;"
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColors"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-fluid">
   <div class="page-title">
     <h4 class="pull-left">Flujo de efectivo</h4>
   </div>
@@ -13,21 +108,6 @@
     <div class="col-md-3">
       <div class="card">
         <div class="card-body">
-          <!-- <div class="row">
-            <div class="col-md-12">
-              <div class="chart">
-                <canvas baseChart
-                  [data]="pieChartData"
-                  [labels]="pieChartLabels"
-                  [chartType]="pieChartType"
-                  [options]="pieChartOptions"
-                  [colors]="pieChartColors"
-                  [legend]="pieChartLegend">
-                </canvas>
-              </div>
-            </div>
-          </div>
-          <hr> -->
           <div class="form-row">
             <div class="col-md-12">
               <div class="form-group">
@@ -106,4 +186,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

@@ -12,5 +12,9 @@ export class TrasladocajaService {
     let p = {id_cajero:idCajero};
     return this.client.get(this.globales.ruta+'php/cajeros/get_traslados_pendientes_cajero.php', {params:p});
   }
+  
+  public GetListaTrasladoCaja(p:any):Observable<any>{
+    return this.client.get(this.globales.ruta+'php/trasladocaja/get_lista_traslados_caja.php', {params:p});
+  }
 
 }

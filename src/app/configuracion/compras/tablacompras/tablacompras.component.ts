@@ -6,7 +6,7 @@ import { CambioService } from '../../../shared/services/cambio.service';
 @Component({
   selector: 'app-tablacompras',
   templateUrl: './tablacompras.component.html',
-  styleUrls: ['./tablacompras.component.scss'],
+  styleUrls: ['./tablacompras.component.scss', '../../../../style.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TablacomprasComponent implements OnInit, OnChanges {

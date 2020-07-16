@@ -29,9 +29,18 @@ export class NuevofuncionarioService {
   getListaFuncionarios(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_lista_funcionarios.php', {params:p});
   }
+  
+  public FiltrarFuncionariosXNombre(nombre:string):Observable<any>{
+    let p ={match:nombre};
+    return this.client.get(this._rutaBase+'filtrar_funcionario.php', {params:p});
+  }
 
   saveFuncionario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'guardar_funcionario_nuevo.php', datos);
+  }
+  
+  public LogCierreSesion(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'guardar_log_cierre_sesion.php', datos);
   }
 
   editFuncionario(datos:FormData):Observable<any>{

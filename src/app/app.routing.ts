@@ -60,6 +60,12 @@ import { CompraseditarComponent } from './configuracion/compras/compraseditar/co
 import { CierrecajaComponent } from './cierrecaja/cierrecaja.component';
 import { GrupostercerosComponent } from './configuracion/gruposterceros/gruposterceros.component';
 import { AdministrarfuncionarioComponent } from './configuracion/funcionarios/administrarfuncionario/administrarfuncionario.component';
+import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
+import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
+import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
+import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
+import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
+import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -137,6 +143,10 @@ export const AppRoutes: Routes = [
     {
         path: 'traslados', component: CommonLayoutComponent,
         children: [{ path: '', component: TrasladosComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'trasladoscaja', component: CommonLayoutComponent,
+        children: [{ path: '', component: TrasladoscajaComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'pos', component: CommonLayoutComponent,
@@ -275,9 +285,29 @@ export const AppRoutes: Routes = [
         children: [{ path: '', component: GrupostercerosComponent, canActivate: [AuthGuard] }]
     },
     {
-        path: 'cierrecaja/:id_funcionario/:solo_ver', component: CommonLayoutComponent,
+        path: 'cierrecaja/:id_funcionario/:solo_ver/:fechaSoloVer', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
     },    
+    {
+        path: 'cierrecuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: CierrecuentasconsultorComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'cuadrecuentas', component: CommonLayoutComponent,
+        children: [{ path: '', component: CuadrecuentasconsultorComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'detallemovimientoscuenta/:id_cuenta/:accion', component: CommonLayoutComponent,
+        children: [{ path: '', component: DetallemovimientoscuentaComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'cuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: CuentasconsultorComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'detallemovimientoscuentagerencial/:id_cuenta', component: CommonLayoutComponent,
+        children: [{ path: '', component: DetallemovimientoscuentagerenteComponent, canActivate: [AuthGuard] }]
+    },
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 

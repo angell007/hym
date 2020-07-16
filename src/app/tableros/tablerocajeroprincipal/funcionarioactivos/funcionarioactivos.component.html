@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12" id="filter-container">
+  <!-- <div class="col-md-12" id="filter-container">
     <div class="card" style="margin-bottom:10px;">
       <div class="card-body">
         <div class="form-group">
@@ -7,9 +7,6 @@
             <div class="col-md-10">              
               <label for="">Búsqueda de funcionarios</label>
             </div>
-            <!--<div class="col-md-2 text-right">
-              <a (click)=""><i class="ti-reload text-primary"></i></a>
-            </div>-->
           </div>
           <input 
             type="text" 
@@ -24,6 +21,9 @@
         </div>
       </div>
     </div>
+  </div> -->
+  <div class="col-md-12">
+    <label>Cajeros Aperturados</label>
   </div>
 </div>
 <div class="row">
@@ -36,7 +36,8 @@
   </div>
   <div class="col-md-12" *ngIf="FuncionariosFiltrados.length > 0" style="height:550px;overflow-y: auto;">
     <app-funcionarioinformativecard *ngFor="let ff of FuncionariosFiltrados"
-      [Funcionario]="ff">      
+      [Funcionario]="ff"
+      [Fecha]="Fecha_Consulta">
     </app-funcionarioinformativecard>
   </div>
 </div>

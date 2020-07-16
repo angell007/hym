@@ -10,15 +10,21 @@ import { SessionDataModel } from '../../../Modelos/SessionDataModel';
 export class GeneralService {
 
   public SessionDataModel:SessionDataModel = new SessionDataModel();
-  public Funcionario:any = JSON.parse(localStorage.getItem('User'));
-  public Oficina:any = JSON.parse(localStorage.getItem('Oficina'));
-  public Caja:any = JSON.parse(localStorage.getItem('Caja'));
+  public Funcionario:any = '';
+  public Oficina:any = '';
+  public Caja:any = '';
   public RutaImagenes:string = this.globales.ruta+"IMAGENES/";
   public RutaPrincipal:string = this.globales.ruta;
   public FechaActual:string;
   public HoraActual:string;
   public FullFechaActual:string;
+  public MesActual:string;
+  public MesActualDosDigitos:string;
+  public DiaActual:string;
+  public DiaActualDosDigitos:string;
+  public AnioActual:string;
   public Meses:Array<string> = ['Enero','Febrero','Marzo', 'Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  public Meses2:Array<any> = [{Numero:1, Mes:'Enero'},{Numero:2, Mes:'Febrero'},{Numero:3, Mes:'Marzo'}, {Numero:4, Mes:'Abril'},{Numero:5, Mes:'Mayo'},{Numero:6, Mes:'Junio'},{Numero:7, Mes:'Julio'},{Numero:8, Mes:'Agosto'},{Numero:9, Mes:'Septiembre'},{Numero:10, Mes:'Octubre'},{Numero:11, Mes:'Noviembre'},{Numero:12, Mes:'Diciembre'}];
   public Anios:Array<number> = [];
 
   public PerfilesPermisos:Array<any> = [
@@ -59,9 +65,19 @@ export class GeneralService {
               private _swalService:SwalService,
               private datePipe:DatePipe) 
   {
+    this.Funcionario = JSON.parse(localStorage.getItem('User'));
+    this.Oficina = JSON.parse(localStorage.getItem('Oficina'));
+    this.Caja = JSON.parse(localStorage.getItem('Caja'));
+    
+        
     this.FechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.HoraActual = this.datePipe.transform(new Date(), 'HH:mm:ss');
     this.FullFechaActual = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    this.MesActual = this.datePipe.transform(new Date(), 'M');
+    this.MesActualDosDigitos = this.datePipe.transform(new Date(), 'MM');
+    this.DiaActual = this.datePipe.transform(new Date(), 'd');
+    this.DiaActualDosDigitos = this.datePipe.transform(new Date(), 'dd');
+    this.AnioActual = this.datePipe.transform(new Date(), 'y');
     this.BuildAniosConsulta();    
   }
 
@@ -71,8 +87,8 @@ export class GeneralService {
   }  
 
   normalize = (function () {
-    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
-      to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç'´",
+      to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc  ",
       mapping = {};
 
     for (var i = 0, j = from.length; i < j; i++)
@@ -101,6 +117,14 @@ export class GeneralService {
     let p = {oficina:oficina};
     return this.client.get(this.globales.ruta+'php/oficinas/get_departamento_ciudad_oficina.php', {params:p});
   }
+  
+  public GetMotivosDevolucion():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/GENERALES/motivosdevolucion/get_motivos_devolucion.php');
+  }
+  
+  public GetTiposAjuste():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/GENERALES/tiposajuste/get_tipos_ajuste.php');
+  }
 
   public getPaises(){
     return this.globales.Paises; 
@@ -108,6 +132,10 @@ export class GeneralService {
 
   public getMonedas(){
     return this.globales.Monedas;
+  }
+
+  BuscarMonedas():Observable<any>{
+    return this.client.get(this.globales.ruta+'php/monedas/get_monedas.php');
   }
 
   public getTiposCuenta(){

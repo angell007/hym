@@ -20,7 +20,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   @ViewChild('alertSwal') alertSwal:any;
 
   myDateRangePickerOptions: IMyDrpOptions = {
-    width: '150px',
+    width: '250px',
     height: '21px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
@@ -43,6 +43,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public Fecha_Consulta:any = '';
   public CajerosAbiertos:number = 0;
   public CajerosTotales:number = 0;
+  public Totales:Array<any> = [];
+  public model: any;
 
   constructor(private _generalService:GeneralService,
               private _departamentoService:DepartamentoService,
@@ -51,6 +53,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
               private _paisService:PaisService,
               private _toastService:ToastService) { 
     
+    this.model = {beginDate: {year: this._generalService.AnioActual, month: this._generalService.MesActualDosDigitos, day: this._generalService.DiaActual},
+    endDate: {year: this._generalService.AnioActual, month: this._generalService.MesActual, day: this._generalService.DiaActual}};    
     this.GetDepartamentos();
     this.GetMonedas();
     this.InicializarFecha();
@@ -58,12 +62,14 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ConsultarTotalesDepartamento();
   }
 
   InicializarFecha(){
     let d = new Date();
     this.FechaActual = d.toISOString().split("T")[0];
     this.Fecha_Consulta = d.toISOString().split("T")[0];
+    // this.Fecha_Consulta = this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos+' - '+this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos;
   }
 
   AsignarPaises(){
@@ -137,73 +143,60 @@ export class TablerocajeroprincipalComponent implements OnInit {
         }
       });
     }
-    
-    // this.client.get(ruta, {params:p}).subscribe((data:any) => {
-    //   if (data.success) {
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }else{
-
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }
-    // });
   }
 
   ConsultarTotalesDepartamento(){
 
-    if (this.DepartamentoId == '') {
-      //this.ShowSwal('warning', 'Alerta', 'Debe escoger le departamento para realizar una busqueda de totales!');
-      return;
-    }
-
     if (this.Fecha_Consulta == '') {
-      this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
+      // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
+      this.Totales = [];
       return;
-    }
+    }else{
+      let ruta = '';
+      let p = {};
 
-    let ruta = '';
-    let p = {};
-
-    if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-      p = {id_departamento:this.DepartamentoId, fecha:this.Fecha_Consulta};
-      this._cajaService.getTotalesCajasGeneral(p).subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          console.log(data);
-          
-          this.TotalesMunicipio = data.totales.municipios; 
-          this.TotalesDepartamento = data.totales.departamento;
-          
-          this.MostrarTotales = [];
-          this.ExtraerTotales();
-        }else{
-  
-          this.MostrarTotales = [];
-          this.TotalesMunicipio = []; 
-          this.TotalesDepartamento = [];
-        }
-      });
-    
-    }else if(this.Funcionario.Id_Perfil == 2){
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-      p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, id_departamento:this.DepartamentoId, fecha:this.Fecha_Consulta};
-      this._cajaService.getTotalesCajasFuncionario(p).subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          console.log(data);
-          
-          this.TotalesMunicipio = data.totales.municipios; 
-          this.TotalesDepartamento = data.totales.departamento;
-          
-          this.MostrarTotales = [];
-          this.ExtraerTotales();
-        }else{
-  
-          this.MostrarTotales = [];
-          this.TotalesMunicipio = []; 
-          this.TotalesDepartamento = [];
-        }
-      });
+      if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
+        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
+        p = {id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
+        this._cajaService.getTotalesCajasGeneral(p).subscribe((data:any) => {
+          if (data.codigo == 'success') {
+            console.log(data);
+            
+            // this.TotalesMunicipio = data.totales.municipios; 
+            // this.TotalesDepartamento = data.totales.departamento;
+            
+            // this.MostrarTotales = [];
+            // this.ExtraerTotales();
+            this.Totales = data.query_data;
+          }else{
+            this.Totales = [];  
+            // this.MostrarTotales = [];
+            // this.TotalesMunicipio = []; 
+            // this.TotalesDepartamento = [];
+          }
+        });
+      
+      }else if(this.Funcionario.Id_Perfil == 2){
+        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
+        p = {id_funcionario:this.Funcionario.Identificacion_Funcionario, id_departamento:this.DepartamentoId, fechas:this.Fecha_Consulta};
+        this._cajaService.getTotalesCajasFuncionario(p).subscribe((data:any) => {
+          if (data.codigo == 'success') {
+            console.log(data);
+            
+            // this.TotalesMunicipio = data.totales.municipios; 
+            // this.TotalesDepartamento = data.totales.departamento;
+            
+            // this.MostrarTotales = [];
+            // this.ExtraerTotales();
+            this.Totales = data.query_data;
+          }else{  
+            this.Totales = [];  
+            // this.MostrarTotales = [];
+            // this.TotalesMunicipio = []; 
+            // this.TotalesDepartamento = [];
+          }
+        });
+      }
     }
   }
 

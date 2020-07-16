@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label>Corresponsal</label>
+          <label class="font-weight-bold">Corresponsal</label>
           <select required name="Id_Corresponsal_Bancario" class="form-control" 
             [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario">
             <option value="">Seleccione un Corresponsal</option>
@@ -49,19 +49,22 @@
     <div class="row mrg-top-20">
       <div class="col-md-12">
           <div class="form-group">
-              <label>Observaciones</label>
+              <label class="font-weight-bold">Observaciones</label>
               <textarea placeholder="Observaciones" class="form-control" name="Detalle" [(ngModel)]="CorresponsalModel.Detalle">
               </textarea>
           </div>
       </div>
-      <div class="col-md-12">
-        <div class="form-group">
-          <label>&nbsp;</label>
-          <button type="submit" class="btn btn-sm btn-info btn-block" [disabled]="!FormCorresponsal.valid"
-            [swal]="{title : '¿Está Seguro?', text: '¿Está Seguro?, Se va guardar los datos del corresponsal para el dia de hoy!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
-            (confirm)="GuardarCorresponsalDiario()">Guardar</button>
-        </div>
-      </div>
     </div>
   </form>
+  <div class="row">
+    <div class="col-md-10">
+      <!-- <label>&nbsp;</label> -->
+      <button type="submit" class="btn btn-sm btn-info btn-block" [disabled]="!FormCorresponsal.valid"
+        [swal]="{title : '¿Está Seguro?', text: '¿Está Seguro?, Se van guardar los datos del corresponsal para el dia de hoy!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
+        (confirm)="GuardarCorresponsalDiario()">Guardar</button>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-danger btn-sm btn-block" (click)="VolverTablaRegistros()">Volver</button>
+    </div>
+  </div>
 </div>

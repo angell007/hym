@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
   templateUrl: './tablatransferenciascajero.component.html',
   styleUrls: ['./tablatransferenciascajero.component.scss', '../../../../style.scss']
 })
-export class TablatransferenciascajeroComponent implements OnInit {
+export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
   @Input() ActualizarTabla:Observable<any> = new Observable();
   private _updateSubscription:any;
@@ -57,6 +57,12 @@ export class TablatransferenciascajeroComponent implements OnInit {
     this._updateSubscription = this.ActualizarTabla.subscribe(data => {
       this.ConsultaFiltrada();
     });
+  }
+  
+  ngOnDestroy(): void {
+    if (this._updateSubscription != null) {
+      this._updateSubscription.unsubscribe();
+    }
   }
 
   GetRecibosTransferencias(){

@@ -1,0 +1,52 @@
+<table class="table tabla-cajero">
+  <thead>
+    <tr>
+        <th class="text-center">Hora</th>
+        <th class="text-center" style="width:20%;">Corresponsal</th>
+        <th class="text-center">Monto Consignaciones</th>
+        <th class="text-center">Monto Retiros</th>
+        <th class="text-center">Total Consignado</th>
+    </tr>
+    <!-- <tr>
+      <th class="table-filters"></th>
+      <th class="table-filters"></th>
+      <th class="table-filters"></th>
+      <th class="table-filters"></th>
+      <th class="table-filters"></th>
+    </tr> -->
+    <tr *ngIf="Cargando">
+      <td colspan="5" class="text-center">
+        <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+          <h2>CARGANDO REGISTROS DE CORRESPONSALES DIARIOS</h2>
+          <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+        </div>
+      </td>
+    </tr>
+    <tr *ngIf="RegistrosCorresponsales.length == 0 && !Cargando">
+      <td colspan="5" class="text-center">
+          <i class="ti-alert font-size-20 text-warning"></i>
+          <h4>No se han registrado datos de corresponsales hoy!</h4>
+      </td>
+    </tr>
+  </thead>
+  <tbody *ngIf="!Cargando">    
+    <tr *ngFor="let cd of RegistrosCorresponsales">
+      <td class=" text-center">{{cd.Hora}}</td>
+      <td class="text-center">{{cd.Nombre}}</td>
+      <td class=" text-right">{{cd.Consignacion | customcurrency}}</td>
+      <td class=" text-right">{{cd.Retiro | customcurrency}}</td>
+      <td class=" text-right">{{cd.Total_Corresponsal | customcurrency}}</td>
+    </tr>
+  </tbody>
+</table>
+<div id="paginacion-container" *ngIf="RegistrosCorresponsales.length > 0">
+  <div class="row">
+    <div class="col-md-4">
+      <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
+    </div>
+    <div class="col-md-8">
+      <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
+        size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+    </div>
+  </div>
+</div>

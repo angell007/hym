@@ -4,6 +4,7 @@ import { GeneralService } from '../../../shared/services/general/general.service
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { CuentabancariaService } from '../../../shared/services/cuentasbancarias/cuentabancaria.service';
 import { BancoService } from '../../../shared/services/bancos/banco.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tablacuentasbancarias',
@@ -45,7 +46,8 @@ export class TablacuentasbancariasComponent implements OnInit {
   constructor(private generalService: GeneralService,
               private swalService:SwalService,
               private cuentaService:CuentabancariaService,
-              private bancoService:BancoService) 
+              private bancoService:BancoService,
+              private _router:Router) 
   {
     this.RutaGifCargando = generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -89,6 +91,10 @@ export class TablacuentasbancariasComponent implements OnInit {
 
   AbrirModal(idCuenta:string){
     this.AbrirModalCrear.next(idCuenta);
+  }
+  
+  public VerMovimientos(idCuenta:string){    
+    this._router.navigate(["/detallemovimientoscuentagerencial", idCuenta]);
   }
 
   SetFiltros(paginacion:boolean) {

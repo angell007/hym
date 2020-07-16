@@ -128,6 +128,15 @@
               [(ngModel)]="MonedaModel.ValoresMoneda.Min_No_Cobro_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
+      </div>      
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label title="Limite diferencial permitido para la apertura de cuentas con esta moneda!">Tope Diferencial</label>
+            <input type="number" class="form-control text-right" name="Monto_Maximo_Diferencia_Transferencia"
+              [(ngModel)]="MonedaModel.Monto_Maximo_Diferencia_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+          </div>
+        </div>
       </div>
     </form>
   </div>

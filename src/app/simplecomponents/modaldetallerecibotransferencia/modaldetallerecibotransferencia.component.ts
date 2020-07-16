@@ -23,10 +23,11 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
 
   ngOnInit() {
     this._abrirSubscription = this.AbrirModal.subscribe(data => {
+      console.log(data);
+      
       this.Transferencia = data;
       this.GetDestinatariosTransferencia();
       this.ModalVerRecibo.show();
-      console.log(data);
       console.log(this.Transferencia);
       
     });
