@@ -6,7 +6,7 @@ import { log } from 'util';
 })
 
 export class CustomcurrencyPipe implements PipeTransform {
-    transform(value: string, currency_symbol:string = "$"): string {
+    transform(value: string, currency_symbol:string = "$", decimal_places:number = 0): string {
         if(value !== '') {
             
             if (value == '0') {
@@ -16,10 +16,10 @@ export class CustomcurrencyPipe implements PipeTransform {
                 //     val[1] = '00';
                 // }
                 
-              return currency_symbol+" "+value+'.'+val;
+              return currency_symbol+" "+this.formatMoney(value, decimal_places, ",", ".");
             }else{
                 
-                return currency_symbol+" "+this.formatMoney(value, 2, ".", ",");
+                return currency_symbol+" "+this.formatMoney(value, decimal_places, ",", ".");
             }
         }else{
             return '';

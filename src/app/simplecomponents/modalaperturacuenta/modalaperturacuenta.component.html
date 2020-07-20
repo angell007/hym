@@ -14,9 +14,10 @@
               <tr>
                 <th class="custom-thead" style="width:25%;">Titular</th>
                 <th class="custom-thead" style="width:20%;">Banco</th>
-                <th class="custom-thead" style="width:30%;">Nro. Cuenta</th>
+                <th class="custom-thead" style="width:20%;">Nro. Cuenta</th>
                 <th class="custom-thead" style="width:15%;">Moneda</th>
                 <th class="custom-thead" style="width:10%;">Monto Apertura</th>
+                <th class="custom-thead" style="width:10%;">Monto Último Cierre</th>
               </tr>
               <tr *ngIf="Cargando">
                 <td colspan="11" class="text-center">
@@ -41,8 +42,9 @@
                 <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Numero_Cuenta}}</td>
                 <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Nombre_Moneda}}</td>                   
                 <td class="custom-cell">
-                  <input type="number" [(ngModel)]="cb.Monto_Apertura" [disabled]="cb.Habilitar_Monto == '0'">
+                  <input type="number" [(ngModel)]="cb.Monto_Apertura" [disabled]="cb.Habilitar_Monto == '0'" (change)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)">
                 </td>
+                <td class="text-right" (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Monto_Ultimo_Cierre}}</td>
               </tr>
             </tbody>
           </table>
@@ -52,7 +54,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <!-- <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button> -->
+      <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" *ngIf="MostrarBotonAjusteCuentas" (click)="CargarMovimientosAperturaAnterior()">Ajustar Cuentas</button>
       <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
         [swal]="{title:'¿Está Seguro?',text : 'Se realizará la aperturar de las cuentas bancarias seleccionadas' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aperturar', cancelButtonText:'No, Comprobar!'}"
         (confirm)="GuardarAperturaCuentas()" [disabled]="CuentasBancariasSeleccionadasId.length == 0">Realizar Apertura

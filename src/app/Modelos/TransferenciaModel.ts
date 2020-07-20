@@ -27,5 +27,7 @@ export class TransferenciaModel{
     Id_Cuenta_Bancaria: '';
 
     //DATOS PARA TRANSFERENCIAS DIRECTO A UN CLIENTE(TERCERO)
-    Id_Tercero_Destino: ''
+    Id_Tercero_Destino: '';
+    ReciboTransferenciaDetalleModel: '';
+    Cantidad_Recibida_Bolsa_Bolivares;
 }

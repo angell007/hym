@@ -150,54 +150,53 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
     if (!this.ValidateBeforeSubmit()) {
       return;
-    }
-
-    //console.log(this.TrasladoModel);
-    
-    this.TrasladoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
-    this.TrasladoModel.Fecha = this._generalService.FechaActual;
-    this.TrasladoModel = this._generalService.limpiarString(this.TrasladoModel);
-    
-    let info = this._generalService.normalize(JSON.stringify(this.TrasladoModel));
-    let datos = new FormData();
-    datos.append("modelo",info);
-
-    if (this.Editar) {
-      this._trasladoService.editTraslado(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Editar = false;
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
     }else{
-      this._trasladoService.saveTraslado(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }    
+      this.TrasladoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
+      this.TrasladoModel.Fecha = this._generalService.FechaActual;
+      this.TrasladoModel.Id_Caja = this._generalService.SessionDataModel.idCaja;
+      this.TrasladoModel = this._generalService.limpiarString(this.TrasladoModel);
+      
+      let info = this._generalService.normalize(JSON.stringify(this.TrasladoModel));
+      let datos = new FormData();
+      datos.append("modelo",info);
+  
+      if (this.Editar) {
+        this._trasladoService.editTraslado(datos)
+        .catch(error => { 
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data:any)=>{
+          if (data.codigo == 'success') { 
+            this.ActualizarTabla.emit();       
+            this.CerrarModal();
+            this.Editar = false;
+            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+            this._toastService.ShowToast(toastObj);
+          }else{
+            this._swalService.ShowMessage(data);
+          }
+        });
+      }else{
+        this._trasladoService.saveTraslado(datos)
+        .catch(error => { 
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data:any)=>{
+          if (data.codigo == 'success') { 
+            this.ActualizarTabla.emit();       
+            this.CerrarModal();
+            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+            this._toastService.ShowToast(toastObj);
+          }else{
+            this._swalService.ShowMessage(data);
+          }
+        });
+      }
+    } 
   }
 
   ValidateBeforeSubmit():boolean{

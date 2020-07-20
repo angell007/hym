@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { CorresponsalDiarioModel } from '../../../Modelos/CorresponsalDiarioModel';
 import { CorresponsalDiarioShortModel } from '../../../Modelos/CorresponsalDiarioShortModel';
 import { GeneralService } from '../../../shared/services/general/general.service';
@@ -17,6 +17,8 @@ import { AccionTableroCajero } from '../../../shared/Enums/AccionTableroCajero';
 export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy {
 
   @Input() ManageView:Observable<any> = new Observable();
+  @Output() ActualizarRegistrosCorresponsal:EventEmitter<any> = new EventEmitter();
+  @Output() RegresarTablaRegistros:EventEmitter<any> = new EventEmitter();
 
   public CorresponsalModel:CorresponsalDiarioShortModel = new CorresponsalDiarioShortModel();
   public CorresponsalesBancarios:Array<any> = [];
@@ -78,13 +80,15 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     this.CorresponsalModel.Fecha = this._generalService.FechaActual;
     this.CorresponsalModel.Hora = this._generalService.HoraActual;
 
-    let info = JSON.stringify(this.CorresponsalModel);
+    let info = this._generalService.normalize( JSON.stringify(this.CorresponsalModel));
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Diario');
     datos.append("modelo", info);
     this._corresponsalService.saveCorresponsalDiario(datos).subscribe(data => {
       if (data.codigo == 'success') {
         this.LimpiarModeloCorresponsal();
+        this.ActualizarRegistrosCorresponsal.emit(null);
+        this.RegresarTablaRegistros.emit();
         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
         this._toastService.ShowToast(toastObj);
       }else{
@@ -98,6 +102,12 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
 
   private LimpiarModeloCorresponsal(){
     this.CorresponsalModel = new CorresponsalDiarioShortModel();
+  }
+
+  public VolverTablaRegistros(){
+    this.ActualizarRegistrosCorresponsal.emit();
+    this.RegresarTablaRegistros.emit();
+    this.LimpiarModeloCorresponsal();
   }
 
 }

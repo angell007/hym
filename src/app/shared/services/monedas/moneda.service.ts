@@ -25,6 +25,10 @@ export class MonedaService {
   getMoneda(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'get_moneda_by_id.php', {params: p});
   }
+  
+  public GetMaximaDiferenciaMonedas():Observable<any>{
+    return this.client.get(this._rutaBase+'get_maximo_diferencial_monedas.php');
+  }
 
   getMonedas():Observable<any>{
     return this.client.get(this._rutaBase+'get_monedas.php');

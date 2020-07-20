@@ -10,5 +10,6 @@ export class TrasladoModel{
     public Detalle:string = '';
     public Identificacion_Funcionario:string = '';
     public Codigo:string = '';
-    public Estado:string = 'Activo'
+    public Estado:string = 'Activo';
+    public Id_Caja:string = '';
 }

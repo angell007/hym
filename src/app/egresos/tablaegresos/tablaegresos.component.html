@@ -36,8 +36,8 @@
         </th>
         <th class="table-filters">
           <select id="grupo" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.grupo">
-            <option value="" selected>Seleccione</option>
-            <option *ngFor="let gt of GruposTerceros" [value]="d.Id_Grupo_Tercero">{{d.Nombre}}</option>
+            <option value="" selected>Todos</option>
+            <option *ngFor="let gt of GruposTerceros" [value]="gt.Id_Grupo_Tercero">{{gt.Nombre_Grupo}}</option>
           </select>
         </th>
         <th class="table-filters">
@@ -46,14 +46,15 @@
         </th>
         <th class="table-filters">
           <select id="moneda" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.moneda">
-            <option value="" selected>Seleccione</option>
+            <option value="" selected>Todas</option>
             <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
           </select>
         </th>
         <th class="table-filters"></th>
+        <th class="table-filters"></th>
       </tr>
       <tr *ngIf="Cargando">
-        <td colspan="10" class="text-center">
+        <td colspan="7" class="text-center">
           <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
             <h2>CARGANDO EGRESOS</h2>
             <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
@@ -61,7 +62,7 @@
         </td>
       </tr>
       <tr *ngIf="Egresos.length == 0 && !Cargando">
-        <td colspan="10" class="text-center">
+        <td colspan="7" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
             <h4>No hay egresos para mostrar!</h4>
         </td>

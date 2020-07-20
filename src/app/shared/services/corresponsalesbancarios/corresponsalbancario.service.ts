@@ -10,6 +10,10 @@ export class CorresponsalbancarioService {
 
   private _rutaBase:string = this.globales.ruta+'php/corresponsalesbancarios/';
 
+  public GetRegistrosDiarios(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'get_registros_corresponsales_bancarios.php', {params:p});
+  }
+
   getCorresponsales():Observable<any>{
     return this.client.get(this._rutaBase+'get_corresponsales_bancarios.php');
   }
@@ -25,6 +29,10 @@ export class CorresponsalbancarioService {
 
   saveCorresponsalDiario(data:FormData):Observable<any>{
     return this.client.post(this.globales.ruta+'php/corresponsaldiario/guardar_corresponsal_diario_nuevo2.php', data);
+  }
+  
+  public GuardarCorresponsalBancario(data:FormData):Observable<any>{
+    return this.client.post(this.globales.ruta+'php/corresponsalesbancarios/guardar_corresponsal.php', data);
   }
 
 }

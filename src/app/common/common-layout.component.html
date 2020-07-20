@@ -21,73 +21,97 @@
                         </div>
                     </div>
                     <ul class="side-nav-menu scrollable">
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/tablero']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/tablero']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
-                                    <i class="ti-home"></i>
+                                    <i class="ti-stats-up"></i>
                                 </span>
                                 <span class="title">Tablero</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/agentesexternos']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/agentesexternos']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-medall"></i>
                                 </span>
                                 <span class="title">Agentes Externos</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/transferencias']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/transferencias']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-control-shuffle"></i>
                                 </span>
                                 <span class="title">Transferencias</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/traslados']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/traslados']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-reload"></i>
                                 </span>
-                                <span class="title">Traslados</span>
+                                <span class="title">Traslados Terceros</span>
                             </a>
                         </li>
-                        <!--<li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/pos']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/trasladoscaja']" routerLinkActive="menu-link-active">
+                                <span class="icon-holder" style="transform: rotate(90deg)">
+                                    <i class="ti-exchange-vertical"></i>
+                                </span>
+                                <span class="title">Traslados entre Cajas</span>
+                            </a>
+                        </li>
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/pos']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-dashboard"></i>
                                 </span>
                                 <span class="title">POS</span>
                             </a>
-                        </li>-->
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/compras']">
+                        </li>
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/compras']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-shopping-cart"></i>
                                 </span>
                                 <span class="title">Compras</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/egresos']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/egresos']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-share"></i>
                                 </span>
                                 <span class="title">Egresos</span>
                             </a>
                         </li>
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/giros']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/giros']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-wallet"></i>
                                 </span>
                                 <span class="title">Giros</span>
                             </a>
                         </li>
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/cuentasbancarias']" routerLinkActive="menu-link-active">
+                                <span class="icon-holder">
+                                    <i class="ti-home"></i>
+                                </span>
+                                <span class="title">Cuentas Bancarias</span>
+                            </a>
+                        </li>
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/terceros']" routerLinkActive="menu-link-active">
+                                <span class="icon-holder">
+                                    <i class="fa fa-users"></i>
+                                </span>
+                                <span class="title">Terceros</span>
+                            </a>
+                        </li>
                         <!--                        
-                        <li clas="nav-item" routerLinkActive="active">
-                            <a href="" [routerLink]="['/liquidacionsalario']">
+                        <li clas="nav-item">
+                            <a href="" [routerLink]="['/liquidacionsalario']" routerLinkActive="menu-link-active">
                                 <span class="icon-holder">
                                     <i class="ti-wallet"></i>
                                 </span>
@@ -107,19 +131,19 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="" [routerLink]="['/balancegeneral']">Balance General</a>
+                                    <a href="" [routerLink]="['/balancegeneral']" routerLinkActive="menu-link-active">Balance General</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/flujoefectivo']">Flujo de efectivo</a>
+                                    <a href="" [routerLink]="['/flujoefectivo']" routerLinkActive="menu-link-active">Flujo de efectivo</a>
                                 </li>
                                 <!-- <li>
-                                    <a href="" [routerLink]="['/cuentascobrar']">Cuentas por cobrar (Cartera)</a>
+                                    <a href="" [routerLink]="['/cuentascobrar']" routerLinkActive="menu-link-active">Cuentas por cobrar (Cartera)</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentaspagar']">Cuentas por pagar</a>
+                                    <a href="" [routerLink]="['/cuentaspagar']" routerLinkActive="menu-link-active">Cuentas por pagar</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/cuentasterceros']">Estado de cuentas terceros</a>
+                                    <a href="" [routerLink]="['/cuentasterceros']" routerLinkActive="menu-link-active">Estado de cuentas terceros</a>
                                 </li> -->
                             </ul>
                         </li>
@@ -136,73 +160,73 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="" [routerLink]="['/configuraciongeneral']">Configuración General</a>
-                                </li>
-                                <li>
-                                    <a>Predetermiandos</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/cargo']">Cargo</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/oficinas']">Oficinas</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/cajas']">Cajas</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/bancos']">Bancos</a>
-                                </li> 
-                                <li>
-                                    <a href="" [routerLink]="['/gruposterceros']">Grupos Terceros</a>
-                                </li>                                
-                                <li>
-                                    <a href="" [routerLink]="['/corresponsalesbancarios']">Corresponsales Bancarios</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/serviciosexternos']">Servicios Externos</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/cuentasbancarias']">Cuentas Bancarias</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/destinatarios']">Destinatarios</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/cajarecaudos']">Cajas Recaudos</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/perfiles']">Perfiles</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/remitente']">Remitente</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/funcionarios']">Funcionarios</a>
-                                </li>
-                                <li>
-                                    <a href="" [routerLink]="['/terceros']">Terceros</a>
+                                    <a href="" [routerLink]="['/configuraciongeneral']" routerLinkActive="menu-link-active">Configuración General</a>
                                 </li>
                                 <!-- <li>
-                                    <a href="" [routerLink]="['/grupos']">Grupos</a>
+                                    <a>Predeterminados</a>
                                 </li> -->
                                 <li>
-                                    <a href="" [routerLink]="['/tipodocumento']">Tipos de Documentos</a>
+                                    <a href="" [routerLink]="['/cargo']" routerLinkActive="menu-link-active">Cargo</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/tipocuenta']">Tipos de Cuentas</a>
+                                    <a href="" [routerLink]="['/oficinas']" routerLinkActive="menu-link-active">Oficinas</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/monedas']">Monedas</a>
+                                    <a href="" [routerLink]="['/cajas']" routerLinkActive="menu-link-active">Cajas</a>
                                 </li>
                                 <li>
-                                    <a href="" [routerLink]="['/informaciongiros']">Informacion Giros</a>
+                                    <a href="" [routerLink]="['/bancos']" routerLinkActive="menu-link-active">Bancos</a>
+                                </li> 
+                                <li>
+                                    <a href="" [routerLink]="['/gruposterceros']" routerLinkActive="menu-link-active">Grupos Terceros</a>
+                                </li>                                
+                                <li>
+                                    <a href="" [routerLink]="['/corresponsalesbancarios']" routerLinkActive="menu-link-active">Corresponsales Bancarios</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/serviciosexternos']" routerLinkActive="menu-link-active">Servicios Externos</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="" [routerLink]="['/cuentasbancarias']" routerLinkActive="menu-link-active">Cuentas Bancarias</a>
+                                </li> -->
+                                <li>
+                                    <a href="" [routerLink]="['/destinatarios']" routerLinkActive="menu-link-active">Destinatarios</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/cajarecaudos']" routerLinkActive="menu-link-active">Cajas Recaudos</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/perfiles']" routerLinkActive="menu-link-active">Perfiles</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/remitente']" routerLinkActive="menu-link-active">Remitente</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/funcionarios']" routerLinkActive="menu-link-active">Funcionarios</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="" [routerLink]="['/terceros']" routerLinkActive="menu-link-active">Terceros</a>
+                                </li> -->
+                                <!-- <li>
+                                    <a href="" [routerLink]="['/grupos']" routerLinkActive="menu-link-active">Grupos</a>
+                                </li> -->
+                                <li>
+                                    <a href="" [routerLink]="['/tipodocumento']" routerLinkActive="menu-link-active">Tipos de Documentos</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/tipocuenta']" routerLinkActive="menu-link-active">Tipos de Cuentas</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/monedas']" routerLinkActive="menu-link-active">Monedas</a>
+                                </li>
+                                <li>
+                                    <a href="" [routerLink]="['/informaciongiros']" routerLinkActive="menu-link-active">Informacion Giros</a>
                                 </li>
                                 <!--<li>
-                                    <a href="" [routerLink]="['/compras']">Compras</a>
+                                    <a href="" [routerLink]="['/compras']" routerLinkActive="menu-link-active">Compras</a>
                                 </li> -->
                                 <li>
-                                    <a href="" [routerLink]="['/log']">Log del Sistema</a>
+                                    <a href="" [routerLink]="['/log']" routerLinkActive="menu-link-active">Log del Sistema</a>
                                 </li>
                             </ul>
                         </li>

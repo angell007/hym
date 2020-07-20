@@ -17,7 +17,8 @@ export class FuncionarioactivosComponent implements OnInit, OnChanges {
   public MensajeAlerta:string = 'No hay registros de inicio de sesión';
 
   constructor(public globales:Globales, private client:HttpClient) {
-    
+    let d = new Date();
+    this.Fecha_Consulta = d.toISOString().split("T")[0];
     this.GetFuncionariosActivos();
   }
 

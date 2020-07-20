@@ -14,14 +14,16 @@ import { ToastService } from '../shared/services/toasty/toast.service';
 import { OficinaService } from '../shared/services/oficinas/oficina.service';
 import { AperturacajaService } from '../shared/services/aperturacaja/aperturacaja.service';
 import { GeneralService } from '../shared/services/general/general.service';
+import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
 
 import { QzTrayService } from '../shared/qz-tray.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
-    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css'],
+    styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
     providers : [ QzTrayService ]
+    
 })
 
 export class CommonLayoutComponent implements OnInit {
@@ -172,7 +174,8 @@ export class CommonLayoutComponent implements OnInit {
                 private _oficinaService:OficinaService,
                 private _cajaService:CajaService,
                 private _aperturaCajaService:AperturacajaService,
-                private _generalService:GeneralService) {
+                private _generalService:GeneralService,
+                private _funcionarioService:NuevofuncionarioService) {
                     
         this.app = {
             layout: {
@@ -210,6 +213,10 @@ export class CommonLayoutComponent implements OnInit {
         
         this.SetOficina();
         this.SetCaja();
+
+        if (!localStorage.getItem('Volver_Apertura')) {
+            localStorage.setItem("Volver_Apertura", "Si"); 
+        }
     }
 
     startTimer() {
@@ -353,6 +360,8 @@ export class CommonLayoutComponent implements OnInit {
         // if (!this.ValidateConsultorBeforeLogout()) {
         //     return;
         // }
+
+        this._registrarCierreSesion();
         
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
@@ -364,6 +373,12 @@ export class CommonLayoutComponent implements OnInit {
         setTimeout(() => {
             this.router.navigate(["/login"]);    
         }, 800);        
+    }
+
+    private _registrarCierreSesion(){
+        let data = new FormData();
+        data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
+        this._funcionarioService.LogCierreSesion(data).subscribe();
     }
 
     ValidateConsultorBeforeLogout(){
@@ -996,11 +1011,11 @@ this.ModalResumenCuenta.show();
             timeout: duracion,
             onAdd: (toast:ToastData) => {
                 this.MostrarToasty = true;
-                console.log('Toast ' + toast.id + ' has been added!');
+                // console.log('Toast ' + toast.id + ' has been added!');
             },
             onRemove: function(toast:ToastData) {
                 this.MostrarToasty = false;
-                console.log('Toast ' + toast.id + ' has been removed!');
+                // console.log('Toast ' + toast.id + ' has been removed!');
             }
         }        
 
@@ -1056,7 +1071,7 @@ this.ModalResumenCuenta.show();
                 this.swalService.ShowMessage(data);
             }else{
 
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false]);
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, true, '']);
             }
         });
     }

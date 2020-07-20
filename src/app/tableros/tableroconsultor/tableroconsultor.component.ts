@@ -6,13 +6,15 @@ import '../../../assets/charts/amchart/light.js';
 import '../../../assets/charts/amchart/ammap.js';
 import '../../../assets/charts/amchart/worldLow.js';
 import '../../../assets/charts/amchart/continentsLow.js';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TouchSequence } from '../../../../node_modules/@types/selenium-webdriver';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
 import { NgForm } from '@angular/forms';
-import { EventEmitter } from 'events';
+import { GeneralService } from '../../shared/services/general/general.service';
+import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
+import { SwalService } from '../../shared/services/swal/swal.service';
 
 @Component({
   selector: 'app-tableroconsultor',
@@ -21,6 +23,8 @@ import { EventEmitter } from 'events';
 })
 
 export class TableroconsultorComponent implements OnInit {
+
+  @Output() AbrirCuentas:EventEmitter<any> = new EventEmitter();
 
   //NUEVO CODIGO  
   @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
@@ -107,15 +111,20 @@ export class TableroconsultorComponent implements OnInit {
   public IconoOpcionCuenta:string = 'ti-key';
 
   public AbrirModalAperturaCuenta:Subject<any> = new Subject();
+  public Id_Funcionario:string = JSON.parse(localStorage['User']).Identificacion_Funcionario;
+  public Id_Apertura:string = '';
 
-  constructor(private http: HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales, private _generalService:GeneralService, private _cuentaBancariaService:CuentabancariaService, private _swalService:SwalService) { }
 
   ngOnInit() {
+    // this.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
     this.AsignarPaises();
+    this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
+    this._getCuentasFuncionarioApertura();
     //this.VerificarAperturaCuenta();
-    setTimeout(() => {
-      this.AbrirModalAPerturaCuentas();      
-    }, 500);
+    // setTimeout(() => {
+    //   this.ConsultarAperturaFuncionario();      
+    // }, 500);
   }
 
   CargarVista(){
@@ -124,6 +133,33 @@ export class TableroconsultorComponent implements OnInit {
       this.cargarTabla = true; 
       this.TablaPendientes = true;
     };
+  }
+
+  public ConsultarAperturaFuncionario(){
+    this._cuentaBancariaService.GetAperturaFuncionario(this.Id_Funcionario).subscribe((data:any) =>{
+      console.log(data);
+      
+      if (!data.apertura_activa) {
+        this.AbrirCuentas.emit();
+      }else{
+        //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
+        this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
+        this._getCuentasFuncionarioApertura();
+      }
+    });
+  }
+
+  private _getCuentasFuncionarioApertura(){
+    this._cuentaBancariaService.GetCuentasFuncionarioApertura(this.Id_Apertura).subscribe((data:any) => {
+      console.log(data);
+      
+      if (data.codigo == 'success') {
+        this.CuentasSeleccionadas = data.query_data;        
+      }else{
+        this.CuentasSeleccionadas = [];
+        this._swalService.ShowMessage(['warning','Alerta','No se encontraron cuentas para el registro de apertura, contacte con el administrador!']);
+      }
+    });
   }
 
   public AbrirModalAPerturaCuentas(){
@@ -157,7 +193,7 @@ export class TableroconsultorComponent implements OnInit {
     let info = JSON.stringify(this.AperturaCuentaModel);
     let datos = new FormData();
     datos.append("modelo", info);
-    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_funcionario", this.Id_Funcionario);
     datos.append("id_bloqueo_cuenta", this.IdBloqueoCuenta);
     this.http.post(this.globales.ruta + '/php/cuentasbancarias/apertura_cuenta_bancaria.php', datos).subscribe((data: any) => {
 
@@ -196,7 +232,7 @@ export class TableroconsultorComponent implements OnInit {
     let ids = JSON.stringify(this.Id_Movimientos_Cuenta);
     let datos = new FormData();
     datos.append("modelo", info);
-    datos.append("id_funcionario", id_funcionario);
+    datos.append("id_funcionario", this.Id_Funcionario);
     datos.append("id_movimientos", ids);
 
     this.http.post(this.globales.ruta + '/php/cuentasbancarias/cierre_cuenta_bancaria.php', datos).subscribe((data: any) => {
@@ -225,7 +261,7 @@ export class TableroconsultorComponent implements OnInit {
 
   VerificarAperturaCuenta(){
 
-    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+    this.http.get(this.globales.ruta+'php/cuentasbancarias/verificar_apertura_cuenta.php', {params:{id_funcionario:this.Id_Funcionario}}).subscribe((data:any) => {
 
       if (data.existe == 0) {
         this.ModalCambiarBanco.show();
@@ -295,7 +331,7 @@ export class TableroconsultorComponent implements OnInit {
   }
 
   CargarIndicadores(){
-    this.http.get(this.globales.ruta+'php/transferencias/indicadores_transferencias.php', {params:{id_funcionario:this.funcionario.Identificacion_Funcionario}}).subscribe((data:any) => {
+    this.http.get(this.globales.ruta+'php/transferencias/indicadores_transferencias.php', {params:{id_funcionario:this.Id_Funcionario}}).subscribe((data:any) => {
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
@@ -328,7 +364,7 @@ export class TableroconsultorComponent implements OnInit {
 
   AbrirModalCompra(){
     this.CompraCuentaModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
-    this.CompraCuentaModel.Id_Funcionario = this.funcionario.Identificacion_Funcionario;
+    this.CompraCuentaModel.Id_Funcionario = this.Id_Funcionario;
     this.ModalCompraCuenta.show();
   }
 
@@ -546,10 +582,11 @@ export class TableroconsultorComponent implements OnInit {
     this.alertSwal.show();
   }
 
-  public RecibirCuentasSeleccionadas(cuentaSeleccionadas:Array<any>){
-    console.log(cuentaSeleccionadas);
+  public RecibirCuentasSeleccionadas(datos:any){
+    console.log(datos);
     
-    this.CuentasSeleccionadas = cuentaSeleccionadas;
+    this.CuentasSeleccionadas = datos.cuentas;
+    this.Id_Apertura = datos.id_apertura;
   }
 
   //#endregion

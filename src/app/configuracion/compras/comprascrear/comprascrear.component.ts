@@ -148,39 +148,32 @@ export class ComprascrearComponent implements OnInit {
     if (this.CompraModel.Id_Moneda == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe escoger la moneda para guardar los datos!');
       return false;
-    }
-
-    if (this.CompraModel.Id_Tercero == '') {
+    }else if (this.CompraModel.Id_Tercero == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe escoger el tercero para guardar los datos!');
       return false;
-    }
-
-    if (this.CompraModel.Valor_Compra == 0) {
+    }else if (this.CompraModel.Valor_Compra == 0) {
       this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un imprevisto con el valor de la compra, verifique los datos antes de guardar!');
       return false;
-    }
-
-    if (this.CompraModel.Tasa == '') {
+    }else if (this.CompraModel.Tasa == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe colocar una tasa de cambio para guardar los datos!');
+      return false;
+    }else if (this.CompraModel.Valor_Peso == 0 || this.CompraModel.Valor_Peso == null) {
+      this.ShowSwal('warning', 'Alerta', 'El valor en pesos no puede ser 0 ni vacio!');
+      return false;
+    }else if (this.ListaComprasSeleccionadas.length == 0) {
+      this.ShowSwal('warning', 'Alerta', 'No hay compras seleccionadas para guardar los datos, verifique por favor!');
       return false;
     }else if(this.CompraModel.Tasa != ''){
       if (parseFloat(this.CompraModel.Tasa) < 0) {
         this.ShowSwal('warning', 'Alerta', 'La tasa de cambio no puede ser negativa, corrija el valor de la tasa!');
         return false; 
+      }else{
+        return true;
       }
+    }else{
+      return true;
     }
 
-    if (this.CompraModel.Valor_Peso == 0) {
-      this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un imprevisto con el valor en pesos, verifique los datos antes de guardar!');
-      return false;
-    }
-
-    if (this.ListaComprasSeleccionadas.length == 0) {
-      this.ShowSwal('warning', 'Alerta', 'No hay compras seleccionadas para guardar los datos, verifique por favor!');
-      return false;
-    }
-
-    return true;
   }
 
   GuardarCompra(){

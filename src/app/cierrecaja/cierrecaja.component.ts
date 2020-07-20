@@ -6,6 +6,8 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { Funcionario } from '../shared/funcionario/funcionario.model';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { GeneralService } from '../shared/services/general/general.service';
+import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -19,7 +21,8 @@ export class CierrecajaComponent implements OnInit {
   
 
   id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
-  solo_ver = this.activeRoute.snapshot.params["solo_ver"];
+  public solo_ver:boolean = this.activeRoute.snapshot.params["solo_ver"];
+  public fechaSoloVer:string = this.activeRoute.snapshot.params["fechaSoloVer"];
   public Nombre_Funcionario:string = '';
 
   public Funcionario = JSON.parse(localStorage['User']);
@@ -52,7 +55,7 @@ export class CierrecajaComponent implements OnInit {
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura:any = [];
 
-  constructor(public globales:Globales, private cliente:HttpClient, public router:Router, public activeRoute:ActivatedRoute) {
+  constructor(public globales:Globales, private cliente:HttpClient, public router:Router, public activeRoute:ActivatedRoute, private _generalService:GeneralService, private _funcionarioService:NuevofuncionarioService) {
    }
 
   ngOnInit() {
@@ -78,7 +81,12 @@ export class CierrecajaComponent implements OnInit {
   }
 
   ConsultarTotalesCierre(){
-    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: {id:this.id_funcionario}}).subscribe((data:any)=>{
+    let p:any = {id:this.id_funcionario};
+    if (this.solo_ver) {
+      p.fecha = this.fechaSoloVer;
+    }
+
+    this.cliente.get(this.globales.ruta+'php/cierreCaja/Cierre_Caja_Nuevo.php', {params: p}).subscribe((data:any)=>{
       
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
@@ -98,9 +106,10 @@ export class CierrecajaComponent implements OnInit {
   ArmarCeldasTabla(){
     
     if (this.MonedasSistema.length > 0) {
-      this.MonedasSistema.forEach(m => {
-        let celda_i = {Nombre_Celda:'Ingresos'};
-        let celda_e = {Nombre_Celda:'Egresos'};
+      this.MonedasSistema.forEach((m,i) => {
+        let color = i % 2 == 0 ? '#d3d3d3': '#ffffff';
+        let celda_i = {Nombre_Celda:'Ingresos', Color:color};
+        let celda_e = {Nombre_Celda:'Egresos', Color:color};
         this.CeldasIngresoEgresoEncabezado.push(celda_i);
         this.CeldasIngresoEgresoEncabezado.push(celda_e);
         this.max_cel_colspan+=2;
@@ -132,9 +141,12 @@ export class CierrecajaComponent implements OnInit {
 
       this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-        let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        this.MostrarTotal.push(objMoneda.Ingreso_Total.toFixed(2));
-        this.MostrarTotal.push(objMoneda.Egreso_Total.toFixed(2));
+        let monto_inicial_moneda = this.ValoresMonedasApertura[i];        
+        let color = i % 2 == 0 ? '#d3d3d3': '#ffffff';
+        let obj_total_ing = {Total:objMoneda.Ingreso_Total.toFixed(2), Color:color};
+        let obj_total_eg = {Total:objMoneda.Egreso_Total.toFixed(2), Color:color};
+        this.MostrarTotal.push(obj_total_ing);
+        this.MostrarTotal.push(obj_total_eg);
         
         this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
         this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
@@ -176,36 +188,40 @@ export class CierrecajaComponent implements OnInit {
   GuardarCierre(){
     if (!this.ValidarMontos()) {
       return;
+    }else if (!this.ValidarDiferencias()) {
+      return;
+    }else if (this.CierreCajaModel.Observacion == '') {      
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar la observacion antes de realizar el cierre de caja!');
+    }else{
+      this.ArmarResumenMovimientos();
+      console.log(this.ResumenMovimiento);
+      
+      let entregado = JSON.stringify(this.TotalEntregado);
+      let diferencias = JSON.stringify(this.Diferencias);
+      let resumen = JSON.stringify(this.ResumenMovimiento);
+      let model = JSON.stringify(this.CierreCajaModel);
+      let data = new FormData();
+      console.log(resumen);
+      data.append("entregado", entregado);
+      data.append("diferencias", diferencias);
+      data.append("modelo", model);
+      data.append("funcionario", this.id_funcionario);
+      data.append("resumen_movimientos", resumen);
+
+      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
+
+        if (data.tipo == 'error') {
+          
+          this.ShowSwal(data.tipo, 'Error', data.mensaje);
+        }else{
+          
+          this.LimpiarModelos();
+          //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
+          this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+          this.salir();
+        }
+      });
     }
-    
-    this.ArmarResumenMovimientos();
-    console.log(this.ResumenMovimiento);
-    
-    let entregado = JSON.stringify(this.TotalEntregado);
-    let diferencias = JSON.stringify(this.Diferencias);
-    let resumen = JSON.stringify(this.ResumenMovimiento);
-    let model = JSON.stringify(this.CierreCajaModel);
-    let data = new FormData();
-    console.log(resumen);
-    data.append("entregado", entregado);
-    data.append("diferencias", diferencias);
-    data.append("modelo", model);
-    data.append("funcionario", this.id_funcionario);
-    data.append("resumen_movimientos", resumen);
-
-    this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
-
-      if (data.tipo == 'error') {
-        
-        this.ShowSwal(data.tipo, 'Error', data.mensaje);
-      }else{
-        
-        this.LimpiarModelos();
-        //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
-        this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
-        this.salir();
-      }
-    });
   }
 
   ValidarMontos(){
@@ -217,6 +233,18 @@ export class CierrecajaComponent implements OnInit {
           this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en '+this.TotalEntregado[index].Nombre);
           return false;
         }
+      }      
+    }
+
+    return true;
+  }
+
+  ValidarDiferencias(){
+
+    for (let index = 0; index < this.Diferencias.length; index++) {
+      if (this.Diferencias[index].Diferencia < 0) {
+        this.ShowSwal('warning', 'Alerta', 'No puede tener diferencias negativas!');
+        return false;
       }      
     }
 
@@ -236,7 +264,7 @@ export class CierrecajaComponent implements OnInit {
     //let diferencia = this.Diferencias[pos].Diferencia;
 
     let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
-    let resta = (value - entregar).toFixed(2);
+    let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
 
@@ -277,10 +305,16 @@ export class CierrecajaComponent implements OnInit {
 
   AsignarFieldsDisabled(){
     this.TotalRestaIngresosEgresos.forEach(valor => {
+      console.log(valor);
+      
       if (valor == 0 || valor == '') {
         this.FieldsDisabled.push(true);
+      }else{
+        this.FieldsDisabled.push(false);
       }
     });
+
+    console.log(this.FieldsDisabled);
   }
 
   InhabilitarBoton(){
@@ -305,6 +339,7 @@ export class CierrecajaComponent implements OnInit {
   }
 
   salir() {
+    this._registrarCierreSesion();
     localStorage.removeItem("Token");
     localStorage.removeItem("User");
     localStorage.removeItem("Banco");
@@ -313,4 +348,10 @@ export class CierrecajaComponent implements OnInit {
     localStorage.setItem('MonedaCuentaConsultor', '');
     this.router.navigate(["/login"]);
   }
+
+  private _registrarCierreSesion(){
+    let data = new FormData();
+    data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
+    this._funcionarioService.LogCierreSesion(data).subscribe();
+}
 }

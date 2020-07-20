@@ -16,4 +16,5 @@ export class CuentaBancariaModel{
     public Monto_Inicial:string = '';
     public Asignada:string = 'No';
     public Detalle:string = 'Sin Detalles';
+    public Comision_Bancaria:string = '';
 }

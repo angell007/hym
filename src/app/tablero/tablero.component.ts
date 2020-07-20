@@ -8,6 +8,7 @@ import { TablerocajeroComponent } from "../tableros/tablerocajero/tablerocajero.
 import { TablerocajeroprincipalComponent } from "../tableros/tablerocajeroprincipal/tablerocajeroprincipal.component";
 import { TableroconsultorComponent } from "../tableros/tableroconsultor/tableroconsultor.component";
 import { TablerogerenciaComponent } from "../tableros/tablerogerencia/tablerogerencia.component";
+import { VistaprincipalconsultorComponent } from '../tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
 
 
 @Component({
@@ -46,7 +47,7 @@ export class TableroComponent implements OnInit {
           break;
         //consultor  
         case '4':
-          vari = TableroconsultorComponent;
+          vari = VistaprincipalconsultorComponent;
           break;
         //auditor
         case '5':

@@ -5,6 +5,7 @@ import { SwalService } from '../../shared/services/swal/swal.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { EgresoService } from '../../shared/services/egresos/egreso.service';
+import { GrupoterceroService } from '../../shared/services/grupotercero.service';
 
 @Component({
   selector: 'app-tablaegresos',
@@ -45,11 +46,13 @@ export class TablaegresosComponent implements OnInit {
               private _swalService:SwalService,
               private _toastService:ToastService,
               private _monedaService:MonedaService,
-              private _egresoService:EgresoService) 
+              private _egresoService:EgresoService,
+              private _grupoService:GrupoterceroService) 
   {
     this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
     this.GetMonedas();
+    this.GetGrupos();
   }
 
   ngOnInit() {
@@ -166,6 +169,21 @@ export class TablaegresosComponent implements OnInit {
         this._toastService.ShowToast(toastObj);
       }else{
         this._swalService.ShowMessage(data); 
+      }
+    });
+  }
+
+  
+
+  public GetGrupos(){
+    this._grupoService.getGrupos().subscribe((data:any) => {
+      if (data.codigo == 'success') {
+        this.GruposTerceros = data.query_data;
+      }else{
+
+        this.GruposTerceros = [];
+        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        this._toastService.ShowToast(toastObj);
       }
     });
   }

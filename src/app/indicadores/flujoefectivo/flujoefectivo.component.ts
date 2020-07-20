@@ -22,11 +22,12 @@ import { OficinaService } from '../../shared/services/oficinas/oficina.service';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { IndicadorService } from '../../shared/services/indicadores/indicador.service';
 import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
+import { IMyDrpOptions } from 'mydaterangepicker';
 
 @Component({
   selector: 'app-flujoefectivo',
   templateUrl: './flujoefectivo.component.html',
-  styleUrls: ['./flujoefectivo.component.scss']
+  styleUrls: ['./flujoefectivo.component.scss', '../../../style.scss']
 })
 export class FlujoefectivoComponent implements OnInit {
   
@@ -41,6 +42,15 @@ export class FlujoefectivoComponent implements OnInit {
   public Anios:Array<number> = [];
   private currentDate:Date = new Date();
   public m:boolean = false;
+
+  public myDateRangePickerOptions: IMyDrpOptions = {
+    width: '100%',
+    height: '21px',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
+    selectionTxtFontSize: '10px',
+    dateFormat: 'yyyy-mm-dd',
+  };
 
   public Filtros:any = {
     mes: '',
@@ -79,9 +89,10 @@ export class FlujoefectivoComponent implements OnInit {
 
   //VARIABLES LINE CHART
   public lineChartData:Array<any> = [
-    { data: [15, 32, 7], label: 'Abril' }
+    { data: [15, 32, 7, 20, 17, 4, 28], label: 'Ingresos($ 0)' },
+    { data: [8, 25, 19, 2, 35, 13, 9], label: 'Egresos($ 0)' }
   ];
-  public lineChartLabels:string[] = ['01', '02', '03'];
+  public lineChartLabels:string[] = ['1','2','3','4','5','6','7'];
   public lineChartOptions:any = {
     responsive: true,
     scales: {
@@ -151,7 +162,7 @@ export class FlujoefectivoComponent implements OnInit {
     this.Filtros.mes = this.Meses[this.currentDate.getMonth()];
     this.Filtros.mes_numero = (this.Meses.findIndex(x => x == this.Filtros.mes)) +1;
     this.Filtros.anio = this.currentDate.getFullYear();
-    this.GetResumenFlujoEfectivo();
+    // this.GetResumenFlujoEfectivo();
     this.GetDepartamentos();
     this.Anios = this._generalService.Anios;    
   }
@@ -304,6 +315,16 @@ export class FlujoefectivoComponent implements OnInit {
   pushelement(){
     this.lineChartLabels2.push('otro label');
     this.refresh_chart();
+  }
+
+  public dateRangeChanged(event) {
+    if (event.formatted != "") {
+      this.Filtros.fecha = event;
+    } else {
+      this.Filtros.fecha = '';
+    }
+    
+    this.GetResumenFlujoEfectivo();
   }
 
   // ListaBalance = [];

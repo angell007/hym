@@ -1,0 +1,52 @@
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearAjuste" #ModalAjusteCuenta>
+  <div class="app-modal-header">
+    <h4>Movimiento de Ajuste</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormAjusteCuenta="ngForm">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="">Concepto</label>
+          <select name="Concepto" id="concepto" [(ngModel)]="AjusteCuentaModel.Tipo" class="form-control" required>
+            <option value="Ingreso" selected>Ingreso</option>
+            <option value="Egreso">Egreso</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="">Tipo</label>
+          <select name="TIpo" id="tipo" [(ngModel)]="AjusteCuentaModel.Id_Tipo_Ajuste_Cuenta" class="form-control" required>
+            <option value="" selected>Seleccione</option>
+            <option *ngFor="let ta of TiposAjuste" [value]="ta.Id_Tipo_Ajuste_Cuenta">{{ta.Descripcion_Ajuste}}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label>Valor (en {{CodigoMoneda}})</label>
+          <input class="form-control text-right" name="Valor" type="number" min="0" [(ngModel)]="AjusteCuentaModel.Valor" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Observación</label>
+            <textarea style="width:100%;" rows="4" class="form-control" placeholder="Observaciones" name="Detalle" [(ngModel)]="AjusteCuentaModel.Detalle" required></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-outline-success btn-rounded btn-sm" 
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar un ajuste en la cuenta!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Ajustar',cancelButtonText: 'No, Dejame Comprobar!'}"
+        (confirm)="GuardarAjusteCuenta()">Crear Ajuste
+      </button>
+      <button 
+        id="cerrarmodalajuste" 
+        class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

@@ -88,6 +88,7 @@ import { DependenciaService } from './shared/services/dependencias/dependencia.s
 import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
 import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
+import { WebnavigationService } from './shared/services/navegacionweb/webnavigation.service';
 
 
 //MODALES
@@ -234,6 +235,21 @@ import { ModaldetallerecibotransferenciaComponent } from './simplecomponents/mod
 import { CorresponsalesbancarioscajeroComponent } from './pos/corresponsales/corresponsalesbancarioscajero/corresponsalesbancarioscajero.component';
 import { ModalaperturacuentaComponent } from './simplecomponents/modalaperturacuenta/modalaperturacuenta.component';
 import { CierrecuentasconsultorComponent } from './tableros/tableroconsultor/cierrecuentasconsultor/cierrecuentasconsultor.component';
+import { TablaregistroscorresponsalesdiariosComponent } from './pos/corresponsales/tablaregistroscorresponsalesdiarios/tablaregistroscorresponsalesdiarios.component';
+import { AperturacuentasconsultorComponent } from './tableros/tableroconsultor/aperturacuentasconsultor/aperturacuentasconsultor.component';
+import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
+import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
+import { ModalpagostransferenciaComponent } from './simplecomponents/modalpagostransferencia/modalpagostransferencia.component';
+import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modaldevoluciontransferencia/modaldevoluciontransferencia.component';
+import { ModalabonocompracuentaComponent } from './simplecomponents/modalabonocompracuenta/modalabonocompracuenta.component';
+import { ModalamovertransferenciaComponent } from './simplecomponents/modalamovertransferencia/modalamovertransferencia.component';
+import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/detallemovimientoscuenta/detallemovimientoscuenta.component';
+import { ModalajustecuentaComponent } from './simplecomponents/modalajustecuenta/modalajustecuenta.component';
+import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
+import { TableroagenteexternoComponent } from './tableros/tableroagenteexterno/tableroagenteexterno.component';
+import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
+import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
+import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
  
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "right",
@@ -423,7 +439,22 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModaldetallerecibotransferenciaComponent,
         CorresponsalesbancarioscajeroComponent,
         ModalaperturacuentaComponent,
-        CierrecuentasconsultorComponent
+        CierrecuentasconsultorComponent,
+        TablaregistroscorresponsalesdiariosComponent,
+        AperturacuentasconsultorComponent,
+        VistaprincipalconsultorComponent,
+        CuadrecuentasconsultorComponent,
+        ModalpagostransferenciaComponent,
+        ModaldevoluciontransferenciaComponent,
+        ModalabonocompracuentaComponent,
+        ModalamovertransferenciaComponent,
+        DetallemovimientoscuentaComponent,
+        ModalajustecuentaComponent,
+        CuentasconsultorComponent,
+        TableroagenteexternoComponent,
+        DetallemovimientoscuentagerenteComponent,
+        TrasladoscajaComponent,
+        TablatasladoscajaComponent
     ],
     exports:[
         ModalBasicComponent
@@ -484,10 +515,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CargoService,
         PerfilService,
         ConfiguracionService,
-        SafePipe
+        SafePipe,
+        WebnavigationService
     ],
     bootstrap: [AppComponent],
-    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent]
+    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]
 })
 
 
