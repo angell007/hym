@@ -644,6 +644,9 @@ export class PosComponent implements OnInit {
 
       if(value != ''){
         this.http.get(this.globales.ruta+'php/monedas/buscar_valores_moneda.php', { params: {id_moneda:value} }).subscribe((data:any) => {
+
+          console.log(data);
+
           if (data.codigo == 'success') {
             this.MonedaParaCambio.Valores = data.query_data;
             this.MonedaParaCambio.nombre = c.Nombre;
