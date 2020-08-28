@@ -25,7 +25,6 @@ export class ModaldestinatarioComponent implements OnInit {
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalCNE') ModalCNE: any;
 
-  public
   public BancosPais: Array<any> = [];
   public Paises: any = [];
   public Monedas: any = [];
@@ -55,6 +54,8 @@ export class ModaldestinatarioComponent implements OnInit {
   public DestinatarioModel: DestinatarioModel = new DestinatarioModel();
   public urlCNE: string = '';
 
+  public paisDefault: any;
+
   constructor(public generalService: GeneralService,
     private swalService: SwalService,
     private validacionService: ValidacionService,
@@ -63,6 +64,7 @@ export class ModaldestinatarioComponent implements OnInit {
     private bancoService: BancoService) {
     this.GetPaises();
     this.GetTiposCuenta();
+    this.GetDatosNacionalidad();
   }
 
   ngOnInit() {
@@ -121,6 +123,8 @@ export class ModaldestinatarioComponent implements OnInit {
         this.ModalDestinatario.show();
       }
     });
+
+    console.log('Iniciando modal');
   }
 
   ngOnDestroy() {
@@ -135,6 +139,11 @@ export class ModaldestinatarioComponent implements OnInit {
     setTimeout(() => {
       this.Paises = this.generalService.getPaises();
       // Obteniedo paises 
+      setTimeout(() => {
+        this.paisDefault = this.Paises.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
+        this.Lista_Cuentas_Destinatario[0].Id_Pais = this.paisDefault.Id_Pais
+      }, 1000);
+
       console.log(this.Paises);
     }, 1000);
   }
@@ -148,7 +157,8 @@ export class ModaldestinatarioComponent implements OnInit {
   GetBancosCuentas() {
     if (this.Lista_Cuentas_Destinatario.length > 0) {
 
-      this.Lista_Cuentas_Destinatario.forEach((cta, i) => {
+      // TODONota se ambia tipo
+      this.Lista_Cuentas_Destinatario.forEach((cta: {}, i: string) => {
         this.GetBancosPais(i);
         //this.CheckCuentasVenezolanas(i);
       });
@@ -297,25 +307,8 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   FiltrarDatosNacionalidad(conservarTipoDocumento: boolean = false) {
-    if (this.DestinatarioModel.Id_Pais == '') {
-      this.TiposDocumento = [];
-    } else {
-
-      let p = { id_pais: this.DestinatarioModel.Id_Pais };
-      this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
-        if (data.codigo == 'success') {
-          this.TiposDocumento = data.query_data;
-          if (!conservarTipoDocumento)
-            this.DestinatarioModel.Tipo_Documento = '';
-
-        } else {
-
-          this.TiposDocumento = [];
-          this.DestinatarioModel.Tipo_Documento = '';
-          this.swalService.ShowMessage(data);
-        }
-      });
-    }
+    // Custon fncion para traer datos de Naconalidad 
+    this.GetDatosNacionalidad(conservarTipoDocumento);
   }
 
   ValidarCedula() {
@@ -344,7 +337,7 @@ export class ModaldestinatarioComponent implements OnInit {
       return;
     }
 
-    let countryObject = this.Paises.find(x => x.Id_Pais == this.DestinatarioModel.Id_Pais);
+    let countryObject = this.Paises.find((x: { Id_Pais: string; }) => x.Id_Pais == this.DestinatarioModel.Id_Pais);
 
     if (!this.generalService.IsObjEmpty(countryObject)) {
       if (countryObject.Nombre == 'Venezuela') {
@@ -412,9 +405,10 @@ export class ModaldestinatarioComponent implements OnInit {
 
   //TODO No cargan bancos, Cargar por defecto  bancos venzolanos
   GetBancosPais(cuentaIndex: string) {
+    console.log('Cuena index ', cuentaIndex);
     //let index_bancos_cuenta = this.BancosCuentas.findIndex(x => x.cuenta_index == cuentaIndex);
     let id_pais = this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Pais;
-    console.log(this.Lista_Cuentas_Destinatario[cuentaIndex]);
+    console.log('En lsta cuentas inde eleccionado ', this.Lista_Cuentas_Destinatario[cuentaIndex]);
     if (id_pais == '') {
       this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = [];
       this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Banco = '';
@@ -422,11 +416,11 @@ export class ModaldestinatarioComponent implements OnInit {
 
       let p = { id_pais: id_pais };
 
-      console.log(p);
+      console.log('ID pais ', p);
 
       this.bancoService.getListaBancosByPais(p).subscribe((data: any) => {
         if (data.codigo == 'success') {
-          
+
           console.log(data);
 
           this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = data.query_data;
@@ -439,7 +433,7 @@ export class ModaldestinatarioComponent implements OnInit {
     }
   }
 
-  codigoBanco(posicion, texto) {
+  codigoBanco(posicion: string | number, texto: any) {
 
     let country = this.Lista_Cuentas_Destinatario[posicion].Id_Pais;
     let nroCuenta = this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta;
@@ -447,14 +441,14 @@ export class ModaldestinatarioComponent implements OnInit {
     if (country == "2") {
       switch (texto) {
         case "check": {
-          var buscarBanco = this.BancosCuentas[posicion].Bancos.findIndex(x => x.Id_Banco === nroCuenta);
+          var buscarBanco = this.BancosCuentas[posicion].Bancos.findIndex((x: { Id_Banco: any; }) => x.Id_Banco === nroCuenta);
           this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta = this.BancosCuentas[posicion].Bancos[buscarBanco].Identificador;
           break;
         }
         case "input": {
 
           var match = nroCuenta.substring(0, 4);
-          var buscarBanco = this.Lista_Cuentas_Destinatario[posicion].Bancos.findIndex(x => x.Identificador === match);
+          var buscarBanco = this.Lista_Cuentas_Destinatario[posicion].Bancos.findIndex((x: { Identificador: any; }) => x.Identificador === match);
 
           if (buscarBanco > -1) {
             this.Lista_Cuentas_Destinatario[posicion].Id_Banco = this.Lista_Cuentas_Destinatario[posicion].Bancos[buscarBanco].Id_Banco;
@@ -477,7 +471,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
         //var idpais = ((document.getElementById("Id_Pais" + i) as HTMLInputElement).value);
         let ctaObject = this.Lista_Cuentas_Destinatario[i];
-        let countryObject = this.Paises.find(x => x.Id_Pais == ctaObject.Id_Pais);
+        let countryObject = this.Paises.find((x: { Id_Pais: any; }) => x.Id_Pais == ctaObject.Id_Pais);
 
         if (!this.generalService.IsObjEmpty(ctaObject) && !this.generalService.IsObjEmpty(countryObject)) {
 
@@ -522,7 +516,7 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   CheckCuentasVenezolanas(ctaIndex: string = '') {
-    let veObj = this.Paises.find(x => x.Nombre == 'Venezuela');
+    let veObj = this.Paises.find((x: { Nombre: string; }) => x.Nombre == 'Venezuela');
     if (!this.generalService.IsObjEmpty(veObj)) {
       if (ctaIndex != '') {
         if (this.Lista_Cuentas_Destinatario[ctaIndex].Id_Pais == veObj.Id_Pais) {
@@ -543,14 +537,14 @@ export class ModaldestinatarioComponent implements OnInit {
         });
       }
     } else {
-      this.Lista_Cuentas_Destinatario.forEach((cta, i) => {
+      this.Lista_Cuentas_Destinatario.forEach((cta: any, i: string | number) => {
         this.Lista_Cuentas_Destinatario[i].EsVenezolana = false;
       });
       //this.swalService.ShowMessage(['warning', 'Alerta', 'Hay una incosistencia en la busqueda del pais, contacte con el administrador del sistema!']);
     }
   }
 
-  SetIdentificadorCuenta(idBanco, i) {
+  SetIdentificadorCuenta(idBanco: any, i: string | number) {
     //comprobar de que pais es el banco
     //buscar el identificador del banco si posee
 
@@ -580,5 +574,27 @@ export class ModaldestinatarioComponent implements OnInit {
 
   handleError(error: Response) {
     return Observable.throw(error);
+  }
+
+//Danilo Custom GetDatosNacionalidad para hacer default los documento de venezuela
+  GetDatosNacionalidad(conservarTipoDocumento: boolean = false) {
+    if (this.DestinatarioModel.Id_Pais == '') { this.DestinatarioModel.Id_Pais = '2'; }
+
+    let p = { id_pais: this.DestinatarioModel.Id_Pais };
+    this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.TiposDocumento = data.query_data;
+
+        if (!conservarTipoDocumento)
+          this.DestinatarioModel.Tipo_Documento = '';
+
+      } else {
+
+        this.TiposDocumento = [];
+        this.DestinatarioModel.Tipo_Documento = '';
+        this.swalService.ShowMessage(data);
+      }
+    });
+
   }
 }

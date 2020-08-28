@@ -13,12 +13,9 @@
           <div class="form-group">
             <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais"
               required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
-              <option value="">Seleccione pais</option>
-              <!-- <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option> -->
-
-              <option *ngFor=" let Pais of Paises; let i=index" Value="Pais.Id_Pais" [selected]="Pais.Id_Pais ==='2'">
-                {{Pais.Nombre}}</option>
-
+              <option value="null">Seleccione pais</option>
+              <!-- Se agrega select a  cuentas asociadas -->
+              <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
             </select>
           </div>
         </div>
@@ -42,7 +39,7 @@
               name="Tipo_Documento" required (change)="BuscarCNE()"
               [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
               <option value="">Seleccione Tipo Documento</option>
-              <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">
+              <option *ngFor="let documento of TiposDocumento; let i=index" Value="documento.Codigo">
                 {{documento.Codigo}}</option>
             </select>
           </div>
@@ -83,16 +80,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of Lista_Cuentas_Destinatario; index as i" id="fila{{i}}">
+              <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
                 <td width="20%">
+
                   <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
                     (change)="GetBancosPais(i);" required>
                     <option value="">Seleccione País</option>
-                    <!-- <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option> -->
-                    <option *ngFor=" let Pais of Paises; let i=index" Value="Pais.Id_Pais"
-                      [selected]="Pais.Id_Pais === '2'">
-                      {{Pais.Nombre}}</option>
+                    <!-- Se agrega select a  cuentas asociadas -->
+                    <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                   </select>
+
                 </td>
                 <td width="20%">
                   <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
@@ -100,8 +97,6 @@
                     (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required>
                 </td>
                 <td width="20%">
-                  <!-- TODO verificar por que si es venezuela se desabilita -->
-                  <!-- <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" -->
                   <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"
                     class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required
                     (change)="SetIdentificadorCuenta($event.target.value, i)">
