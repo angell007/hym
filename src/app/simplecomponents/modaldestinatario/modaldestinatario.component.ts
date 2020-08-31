@@ -75,7 +75,6 @@ export class ModaldestinatarioComponent implements OnInit {
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
 
-      console.log('Iniciando modal ');
       if (data.id_destinatario != "0" && data.accion == 'editar') {
         this.Editar = true;
         this.accion = data.accion;
@@ -121,7 +120,6 @@ export class ModaldestinatarioComponent implements OnInit {
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
         this.accion = data.accion;
-        // Se setean los datos por defecto a venezuela cuando se reabre el modal
         this.GetPaises();
         this.ModalDestinatario.show();
       } else if (data.id_destinatario == "0" && data.accion == 'crear') {
@@ -143,12 +141,14 @@ export class ModaldestinatarioComponent implements OnInit {
   // Solo para iniciar cuando se abre por primera vez //TODO se carga por defecto venezuela en identificacion
   /**-----------------------------------------------------------------------------------------------*/
   async GetPaises() {
-    console.log('activated ');
+
     this.Paises = await this.generalService.getPaises();
     let fullPais = await this.Paises.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
     this.paisDefault = fullPais.Id_Pais;
     this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
     this.GetBancosPais(this.rowDefault.fila);
+
+
     this.FiltrarDatosNacionalidad();
     this.GetTiposCuenta();
 
@@ -404,10 +404,6 @@ export class ModaldestinatarioComponent implements OnInit {
       };
 
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
-      this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
-      this.GetBancosPais(longitudCuentas);
-      console.log(longitudCuentas);
-      console.log(this.paisDefault);
 
     } else if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
 
@@ -420,6 +416,10 @@ export class ModaldestinatarioComponent implements OnInit {
         EsVenezolana: false
       };
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
+      this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+      this.GetBancosPais(longitudCuentas);
+      console.log(longitudCuentas);
+      console.log(this.paisDefault);
 
       //let newLength = this.Lista_Cuentas_Destinatario.length;
       //let bancosCuentaObj = {cuenta_index:(newLength - 1).toString(), Bancos:[]};

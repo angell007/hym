@@ -14,11 +14,7 @@
             <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais"
               required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
               <option value="">Seleccione pais</option>
-              <!-- <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option> -->
-
-              <option *ngFor=" let Pais of Paises; let i=index" Value="Pais.Id_Pais" [selected]="Pais.Id_Pais ==='2'">
-                {{Pais.Nombre}}</option>
-
+              <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
             </select>
           </div>
         </div>
@@ -57,120 +53,73 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="table-responsive">
-            <table class="table  invoice-detail-table">
-              <thead>
-                <tr>
-                  <th scope="col">País</th>
-                  <th colspan="2" scope="col">Numero de Cuenta</th>
-                  <th scope="col">Tipo de Cuenta</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
-                  <td width="20%">
-                    <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
-                      (change)="GetBancosPais(i);" required>
-                      <option value="">Seleccione País</option>
-                      <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                    </select>
-                  </td>
-                  <td width="20%">
-                    <!-- TODO se cambia mascara de cuenta -->
-                    <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
-                      name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
-                      (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required
-                      mask="0000-0000-0000-0000-0000">
-                  </td>
-                  <td width="20%">
-                    <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"
-                      class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required
-                      (change)="SetIdentificadorCuenta($event.target.value, i)">
-                      <option value="" selected>Seleccione Banco</option>
-                      <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index"
-                        [value]="bc.Id_Banco">{{bc.Apodo}}</option>
-                    </select>
-                  </td>
-                  <td width="15%">
-                    <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
-                      name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
-                      <option value="">Seleccione Tipo</option>
-                      <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}
-                      </option>
-                    </select>
-                  </td>
-                  <td class="text-center" style="width:5%;">
-                    <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
-                      [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
-                    </i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <br>
     </form>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="table-responsive">
-        <table class="table  invoice-detail-table">
-          <thead>
-            <tr>
-              <th scope="col">País</th>
-              <th colspan="2" scope="col">Numero de Cuenta</th>
-              <th scope="col">Tipo de Cuenta</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of Lista_Cuentas_Destinatario; index as i" id="fila{{i}}">
-              <td width="20%">
-                <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
-                  (change)="GetBancosPais(i);" required>
-                  <option value="">Seleccione País</option>
-                  <!-- <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option> -->
-                  <option *ngFor=" let Pais of Paises; let i=index" Value="Pais.Id_Pais"
-                    [selected]="Pais.Id_Pais === '2'">
-                    {{Pais.Nombre}}</option>
-                </select>
-              </td>
-              <td width="20%">
-                <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
-                  name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta" (blur)="codigoBanco(i,'input')"
-                  (change)="validarBanco(i,$event.target.value)" required>
-              </td>
-              <td width="20%">
-                <!-- TODO verificar por que si es venezuela se desabilita -->
-                <!-- <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" -->
-                <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"
-                  class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required
-                  (change)="SetIdentificadorCuenta($event.target.value, i)">
-                  <option value="" selected>Seleccione Banco</option>
-                  <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">
-                    {{bc.Apodo}}</option>
-                </select>
-              </td>
-              <td width="15%">
-                <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
-                  name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
-                  <option value="">Seleccione Tipo</option>
-                  <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}
-                  </option>
-                </select>
-              </td>
-              <td class="text-center" style="width:5%;">
-                <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
-                  [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
-                </i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Cuentas Asociadas</h3>
+      </div>
+      <div class="col-md-6" style="text-align:right;">
+        <button class="btn btn-light" (click)="AgregarOtraCuenta()">
+          Agregar Cuenta <i class="ti-plus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="table-responsive">
+          <table class="table  invoice-detail-table">
+            <thead>
+              <tr>
+                <th scope="col">País</th>
+                <th colspan="2" scope="col">Numero de Cuenta</th>
+                <th scope="col">Tipo de Cuenta</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
+                <td width="20%">
+                  <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
+                    (change)="GetBancosPais(i);" required>
+                    <option value="">Seleccione País</option>
+                    <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                  </select>
+                </td>
+                <td width="20%">
+                  <!-- TODO se cambia mascara de cuenta -->
+                  <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
+                    name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
+                    (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required
+                    mask="0000-0000-0000-0000-0000">
+                </td>
+                <td width="20%">
+                  <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"
+                    class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required
+                    (change)="SetIdentificadorCuenta($event.target.value, i)">
+                    <option value="" selected>Seleccione Banco</option>
+                    <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">
+                      {{bc.Apodo}}</option>
+                  </select>
+                </td>
+                <td width="15%">
+                  <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
+                    name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
+                    <option value="">Seleccione Tipo</option>
+                    <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}
+                    </option>
+                  </select>
+                </td>
+                <td class="text-center" style="width:5%;">
+                  <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)"
+                    [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
+                  </i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
