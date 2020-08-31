@@ -405,6 +405,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
 
+
     } else if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
 
       let nuevaCuenta = {
@@ -418,8 +419,6 @@ export class ModaldestinatarioComponent implements OnInit {
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
       this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
       this.GetBancosPais(longitudCuentas);
-      console.log(longitudCuentas);
-      console.log(this.paisDefault);
 
       //let newLength = this.Lista_Cuentas_Destinatario.length;
       //let bancosCuentaObj = {cuenta_index:(newLength - 1).toString(), Bancos:[]};
