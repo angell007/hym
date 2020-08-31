@@ -120,6 +120,7 @@ export class ModaldestinatarioComponent implements OnInit {
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
         this.accion = data.accion;
+        this.GetPaises();
         this.ModalDestinatario.show();
       } else if (data.id_destinatario == "0" && data.accion == 'crear') {
         this.MensajeGuardar = 'Se dispone a guardar este destinatario';
@@ -403,10 +404,7 @@ export class ModaldestinatarioComponent implements OnInit {
       };
 
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
-      this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
-      this.GetBancosPais(longitudCuentas);
-      console.log(longitudCuentas);
-      console.log( this.paisDefault);
+    
 
     } else if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
 
@@ -419,6 +417,8 @@ export class ModaldestinatarioComponent implements OnInit {
         EsVenezolana: false
       };
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
+      this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+      this.GetBancosPais(longitudCuentas);
 
       //let newLength = this.Lista_Cuentas_Destinatario.length;
       //let bancosCuentaObj = {cuenta_index:(newLength - 1).toString(), Bancos:[]};
