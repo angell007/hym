@@ -121,6 +121,7 @@ export class ModaldestinatarioComponent implements OnInit {
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
         this.accion = data.accion;
+        // Se setean los datos por defecto a venezuela cuando se reabre el modal
         this.GetPaises();
         this.ModalDestinatario.show();
       } else if (data.id_destinatario == "0" && data.accion == 'crear') {

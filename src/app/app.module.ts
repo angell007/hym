@@ -251,8 +251,9 @@ import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuenta
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
  
+// TODO  Funcion para dar formato a moneda
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-    align: "right",
+    align: "left",
     allowNegative: false,
     allowZero: false,
     decimal: ",",
