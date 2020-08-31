@@ -225,7 +225,6 @@
                         <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
                           Compra
                         </label>
-                        <!-- //TODO VALORES CORRECTOS -->
                         <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
                           class="form-control text-right input-font" name="Valor_Origen" id="Cambia"
                           [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')"
@@ -245,7 +244,7 @@
                           Cambio</label>
                         <input type="text" placeholder="Tasa" class="form-control input-font" autocomplete="false"
                           id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa"
-                          (blur)="conversionMoneda('o', 'e')"  currencyMask [options]="{ thousands: '.' }" [disabled]="HabilitarCampos" required>
+                          (blur)="conversionMoneda('o', 'e')" [disabled]="HabilitarCampos" required>
                         <!--<input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
                                                     id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">-->
                       </div>
@@ -268,26 +267,23 @@
                     </div>
                     <hr *ngIf="Venta">
                     <div class="row">
-                      <!-- TODO: FORMATEAR NUMEROS PAGA CON Y DEVUELTOS  -->
-
-                      <!-- currencyMask [options]="{ thousands: '.' }" -->
 
                       <div *ngIf="Venta" class="col-md-6">
                         <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                           Con</label>
                         <input id="pagocon" type="text" placeholder="Paga con" class="form-control input-font"
-                          name="Recibido" (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido" currencyMask
-                          [options]="{ thousands: '.' }"
+                          currencyMask [options]="{ thousands: '.' }" name="Recibido" (blur)="ObtenerVueltos()"
+                          [(ngModel)]="CambioModel.Recibido"
                           [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required>
                       </div>
 
 
                       <div *ngIf="Venta" class="col-md-6">
                         <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
-                        <input readonly type="text" placeholder="Vueltos" class="form-control input-font" name="Vueltos"
-                          currencyMask [options]="{ thousands: '.' }" [(ngModel)]="CambioModel.Vueltos" required>
-                      </div>
+                        <input readonly type="text" placeholder="Vueltos" class="form-control input-font" currencyMask
+                          [options]="{ thousands: '.' }" name="Vueltos" [(ngModel)]="CambioModel.Vueltos" required>
 
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -320,11 +316,10 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <!-- TODO Cambiar formato de presentacion de tasas  -->
                       <tr style="font-weight: bold;">
-
-                        <!-- TODO : CAMBIAR FORMATOS TASA DE CAMBIO -->
-                        <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Max_Venta_Efectivo | currency: ' ' }}</td>
-                        <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Min_Venta_Efectivo | currency: ' ' }}</td>
+                        <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Max_Venta_Efectivo | currency: ' '}}</td>
+                        <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Min_Venta_Efectivo | currency: ' '}}</td>
                         <td *ngIf="!Venta">$ {{MonedaParaCambio.Valores.Max_Compra_Efectivo | currency: ' '}}</td>
                         <td *ngIf="!Venta">$ {{MonedaParaCambio.Valores.Min_Compra_Efectivo | currency: ' '}}</td>
                       </tr>
@@ -360,7 +355,7 @@
                   </app-tablatransferenciascajero>
                 </div>
               </div>
-
+              <!-- TODO se modifica paga con, vueltos  -->
               <div class="row" id="transferencias2" *ngIf="Transferencia2" style="margin-top: 50px">
                 <div class="col-md-12">
                   <form #FormTransferencia="ngForm">
@@ -405,7 +400,6 @@
                       </div>
                     </div>
                     <div id="data-container">
-                        <!-- TODO  -->
                       <!-- Para Credito-->
                       <div class="row" *ngIf="ControlVisibilidadTransferencia.DatosCredito">
                         <div class="col-md-12">

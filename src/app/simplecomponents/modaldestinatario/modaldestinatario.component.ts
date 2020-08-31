@@ -26,6 +26,13 @@ export class ModaldestinatarioComponent implements OnInit {
   @ViewChild('ModalDestinatario') ModalDestinatario: any;
   @ViewChild('ModalCNE') ModalCNE: any;
 
+  public paisDefault: string;
+  public id_pais: string;
+
+  public rowDefault = {
+    posicion: 0,
+    fila: '0'
+  };
   public BancosPais: Array<any> = [];
   public Paises: any = [];
   public Monedas: any = [];
@@ -139,6 +146,7 @@ export class ModaldestinatarioComponent implements OnInit {
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
 
+      console.log('Iniciando modal ');
       if (data.id_destinatario != "0" && data.accion == 'editar') {
         this.Editar = true;
         this.accion = data.accion;
@@ -184,6 +192,9 @@ export class ModaldestinatarioComponent implements OnInit {
         this.DestinatarioModel.Id_Destinatario = data.id_destinatario;
         this.Editar = false;
         this.accion = data.accion;
+
+        
+        // Se setean los datos por defecto a venezuela cuando se reabre el modal
         this.GetPaises();
         this.ModalDestinatario.show();
         // console.log('Iniciando modal 3');
@@ -202,6 +213,25 @@ export class ModaldestinatarioComponent implements OnInit {
     }
 
     this.CerrarModal();
+  }
+  // Solo para iniciar cuando se abre por primera vez //TODO se carga por defecto venezuela en identificacion
+  /**-----------------------------------------------------------------------------------------------*/
+  async GetPaises() {
+    console.log('activated ');
+    this.Paises = await this.generalService.getPaises();
+    let fullPais = await this.Paises.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
+    this.paisDefault = fullPais.Id_Pais;
+    this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+    this.GetBancosPais(this.rowDefault.fila);
+    this.FiltrarDatosNacionalidad();
+    this.GetTiposCuenta();
+  }
+  /**-----------------------------------------------------------------------------------------------*/
+
+  GetTiposCuenta() {
+    setTimeout(() => {
+      this.TiposCuenta = this.generalService.getTiposCuenta();
+    }, 1000);
   }
 
   GetBancosCuentas() {
@@ -356,8 +386,28 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   FiltrarDatosNacionalidad(conservarTipoDocumento: boolean = false) {
+
     // Custon funcion para traer datos de Nacionalidad 
     this.GetDatosNacionalidad(conservarTipoDocumento);
+    if (this.DestinatarioModel.Id_Pais == '') {
+      this.DestinatarioModel.Id_Pais = this.paisDefault;
+      this.TiposDocumento = [];
+    }
+
+    let p = { id_pais: this.DestinatarioModel.Id_Pais };
+    this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.TiposDocumento = data.query_data;
+        if (!conservarTipoDocumento)
+          this.DestinatarioModel.Tipo_Documento = '';
+
+      } else {
+
+        this.TiposDocumento = [];
+        this.DestinatarioModel.Tipo_Documento = '';
+        this.swalService.ShowMessage(data);
+      }
+    });
   }
 
   ValidarCedula() {
@@ -428,7 +478,12 @@ export class ModaldestinatarioComponent implements OnInit {
         Bancos: [],
         EsVenezolana: false
       };
+
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
+      this.Lista_Cuentas_Destinatario[longitudCuentas].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+      this.GetBancosPais(longitudCuentas);
+      console.log(longitudCuentas);
+      console.log(this.paisDefault);
 
     } else if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
 
@@ -457,6 +512,29 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   codigoBanco(posicion: string | number, texto: any) {
+  GetBancosPais(cuentaIndex: string) {
+    //let index_bancos_cuenta = this.BancosCuentas.findIndex(x => x.cuenta_index == cuentaIndex);
+    let id_pais = this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Pais;
+
+    if (id_pais == '') {
+      this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = [];
+      this.Lista_Cuentas_Destinatario[cuentaIndex].Id_Banco = '';
+    } else {
+
+      let p = { id_pais: id_pais };
+      this.bancoService.getListaBancosByPais(p).subscribe((data: any) => {
+        if (data.codigo == 'success') {
+          this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = data.query_data;
+          this.CheckCuentasVenezolanas(cuentaIndex);
+        } else {
+          this.Lista_Cuentas_Destinatario[cuentaIndex].Bancos = [];
+          this.swalService.ShowMessage(data);
+        }
+      });
+    }
+  }
+
+  codigoBanco(posicion, texto) {
 
     let country = this.Lista_Cuentas_Destinatario[posicion].Id_Pais;
     let nroCuenta = this.Lista_Cuentas_Destinatario[posicion].Numero_Cuenta;
@@ -501,13 +579,18 @@ export class ModaldestinatarioComponent implements OnInit {
           if (countryObject.Nombre == 'Venezuela') {
 
             if (countryObject.Cantidad_Digitos_Cuenta != 0) {
+              // Se usa variable auxiliar para formatear la longitud del input 
+              let aux = nroCuenta.replace(/-/g, '')
+              let longitud = aux.length;
+              console.log(longitud);
+
 
               let aux = nroCuenta.replace(/-/g, '');
               nroCuenta = aux;
               // console.log(aux);
               let longitud = nroCuenta.length;
               console.log(longitud);
-
+              
               if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {
                 this.swalService.ShowMessage(['warning', 'Alerta', 'Digite la cantidad correcta de dígitos de la cuenta(' + countryObject.Cantidad_Digitos_Cuenta + ')']);
                 this.SePuedeAgregarMasCuentas = false;
@@ -555,14 +638,12 @@ export class ModaldestinatarioComponent implements OnInit {
         }
       } else {
 
-        this.Lista_Cuentas_Destinatario.forEach((cta: any, i: number) => {
-
+        this.Lista_Cuentas_Destinatario.forEach((cta, i) => {
           if (cta.Id_Pais == veObj.Id_Pais) {
             this.Lista_Cuentas_Destinatario[i].EsVenezolana = true;
           } else {
             this.Lista_Cuentas_Destinatario[i].EsVenezolana = false;
           }
-
         });
       }
     } else {
