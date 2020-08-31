@@ -502,7 +502,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
             if (countryObject.Cantidad_Digitos_Cuenta != 0) {
 
-              let aux = nroCuenta.replaceAll('-', '');
+              let aux = nroCuenta.replace(/-/g, '');
               nroCuenta = aux;
               // console.log(aux);
               let longitud = nroCuenta.length;
