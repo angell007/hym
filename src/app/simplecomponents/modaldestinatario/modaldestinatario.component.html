@@ -85,9 +85,11 @@
                                 </select>
                             </td>
                             <td width="20%">
+                                <!-- TODO se cambia mascara de cuenta -->
                                 <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Numero_Cuenta{{i}}" type="text"
                                     [(ngModel)]="item.Numero_Cuenta" (blur)="codigoBanco(i,'input')"
-                                    (change)="validarBanco(i,$event.target.value)" required>                                                    
+                                    (change)="validarBanco(i,$event.target.value)" required
+                                    mask="0000-0000-0000-0000-0000">                                                    
                             </td>
                             <td width="20%">
                                 <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}"
