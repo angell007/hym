@@ -474,9 +474,16 @@
                                     [inputFormatter]="formatter_destino"
                                     (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
                                     (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
-                                    (blur)="EditarDest2(destinatario.Numero_Documento_Destino, 'crear especial', i)"
+                                    (blur)="validateInputDocumentSmall[i] = true "
                                     [disabled]="MonedaParaTransferencia.id == ''" required>
+
+                                  <small *ngIf="validateInputDocumentSmall[i]" style="color: red;">Validar
+                                    Documento</small>
+
+                                  <button class="btn btn-primary btn-sm" style="height: 2rem; margin-top:2px;"
+                                    (click)="validateInputDocument(destinatario.Numero_Documento_Destino, 'crear especial', i) ;  ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">validate</button>
                                 </div>
+
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
@@ -486,15 +493,17 @@
                                     [disabled]="MonedaParaTransferencia.id == ''">
                                 </div>
                               </div>
+                              <!-- TODO cuenta por deafult primera -->
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="transferencia">Cuenta</label>
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
-                                    autocomplete="off" required [disabled]="MonedaParaTransferencia.id == ''"
+                                    autocomplete="off" [disabled]="MonedaParaTransferencia.id == ''"
                                     (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
-                                    <option value="">Seleccione una Cuenta</option>
-                                    <option *ngFor="let c of destinatario.Cuentas" [value]="c.Id_Destinatario_Cuenta">
+                                    <!-- <option value="">Seleccione una Cuenta</option> -->
+                                    <option *ngFor="let c of destinatario.Cuentas;  index as i;"
+                                      [value]="c.Id_Destinatario_Cuenta" [selected]="i==0">
                                       {{c.Nombre}}</option>
                                   </select>
                                 </div>
@@ -676,8 +685,8 @@
 
                       <div class="row mrg-top-20">
                         <div class="col-md-10">
-                          <button [disabled]="!FormTransferencia.valid" id="BotonTransferencia"
-                            class="btn btn-primary btn-sm btn-block mrg-top-10"
+                          <button [disabled]="!FormTransferencia.valid || validateInputDocumentSmall.includes(true)"
+                            id="BotonTransferencia" class="btn btn-primary btn-sm btn-block mrg-top-10"
                             [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                             (confirm)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia
                           </button>
@@ -687,9 +696,7 @@
                             (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                         </div>
                       </div>
-
                     </div>
-
                   </form>
                 </div>
               </div>
@@ -1242,11 +1249,12 @@
                                         (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Aprobado')">
                                         <i class="fa fa-check"></i>
                                       </button>
-                                      <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                      <!-- TODO se elimina boton de anular traslado recibido -->
+                                      <!-- <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                         [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
                                         (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Negado')">
                                         <i class="fa fa-times"></i>
-                                      </button>
+                                      </button> -->
                                     </td>
                                     <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
                                       <label>{{Traslado.Estado}}</label>

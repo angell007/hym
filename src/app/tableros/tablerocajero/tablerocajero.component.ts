@@ -358,6 +358,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   ];
 
+  // validateInputDocumentSmall: boolean = true;
+  validateInputDocumentSmall: any = [];
+
   public MotivoAnulacionTransferencia: string = '';
   public RemitenteTransferenciaModel: RemitenteModel = new RemitenteModel();
   public ActulizarTablaRecibos: Subject<any> = new Subject<any>();
@@ -1949,17 +1952,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   EditarDest2(id: string, accion: string, posicionDestinatario: string) {
+
     if (accion == 'crear especial') {
 
+      // let v = this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino;
       let v = this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino;
-
+      console.log(['Datas v ', v, this.ListaDestinatarios[posicionDestinatario]['Id_Destinatario']]);
       if (v == '') {
         return;
       }
 
       let p = { id_destinatario: v };
       this.destinatarioService.validarExistenciaDestinatario(p).subscribe((data) => {
-
         if (data == 0) {
           var longitud = this.LongitudCarateres(v);
           if (longitud > 6) {
@@ -1968,7 +1972,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.AbrirModalDestinatario.next(objModal);
 
           } else if (longitud < 6) {
-
           }
         }
       });
@@ -2159,10 +2162,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (listaDestinatarios[index].Id_Destinatario_Cuenta == '' || listaDestinatarios[index].Id_Destinatario_Cuenta === undefined) {
-        this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
-        return;
-      }
+      // TODO mejorar esta validacion
+      
+      // if (listaDestinatarios[index].Id_Destinatario_Cuenta == '' || listaDestinatarios[index].Id_Destinatario_Cuenta === undefined) {
+      //   this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
+      //   return;
+      // }
 
       // if(listaDestinatarios[index].Valor_Transferencia == '' || listaDestinatarios[index].Valor_Transferencia === undefined){
       //   this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
@@ -2555,12 +2560,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
 
-    //let validacion = this.BuscarCedulaRepetida(modelo, i, listaDestinatarios);
     if (typeof (modelo) == 'object') {
-      // if(validacion){
-      //   return;
-      // };
-
       if (modelo.Cuentas != undefined) {
         listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
         listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
@@ -4573,17 +4573,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     );
   formatter_destino = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
 
-  search_destino2 = (text$: Observable<string>) =>
-    text$
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        switchMap(term => term.length < 4 ? [] :
-          this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: term, moneda: this.MonedaParaTransferencia.id } })
-            .map(response => response)
-            .do(data => data)
-        )
-      );
+  search_destino2 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 4 ? [] : this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: term, moneda: this.MonedaParaTransferencia.id } }).map((response, params) => {
+    console.log('Parametros', params);
+    return response;
+  })
+    .do(data => {
+      console.log('data respuesta search detino 2 ', data);
+      return data
+    })
+  )
+  );
+
+
 
   search_remitente = (text$: Observable<string>) =>
     text$.pipe(
@@ -4988,6 +4989,32 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     }
   }
+
+  validateInputDocument(id: string, accion: string, posicionDestinatario: string): any {
+    let p = { id_destinatario: id };
+    if (p.id_destinatario == "") {
+      return false
+    }
+    this.destinatarioService.validarExistenciaDestinatario(p).subscribe((data) => {
+      if (data == 0) {
+        var longitud = this.LongitudCarateres(id);
+        if (longitud > 6) {
+          this.PosicionDestinatarioActivo = posicionDestinatario;
+          let objModal = { id_destinatario: id, accion: accion };
+          this.AbrirModalDestinatario.next(objModal);
+
+        } else if (longitud < 6) {
+          this.swalService.ShowMessage([data.codigo, data.titulo, 'El numero de caracteres debe ser mayor a 6 !']);
+        }
+      }
+      if (data == 1) {
+        this.validateInputDocumentSmall[posicionDestinatario] = false
+      }
+    });
+  };
+
+
+
 }
 
 
