@@ -217,6 +217,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     traslados: false,
     corresponsal: false,
     servicios: false,
+    egresos: false,
   }
 
   public RemitenteModalEnum = AccionModalRemitente.AccionModalRemitente;
@@ -3913,6 +3914,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
   }
 
+  //Danilo CargarEgresos
+  CargarEgresosDiarios() {
+    this.Servicios = [];
+    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params: { id_funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
+      this.Servicios = data.query_data;
+    });
+  }
+
   public AprobarCambioComision() {
     let comision = this.ServicioExternoModel.Comision;
     if (comision != '') {
@@ -3981,6 +3990,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case 'servicios':
+        this.CargarDatosServicios();
+        break;
+
+      case 'egresos':
         this.CargarDatosServicios();
         break;
 
@@ -4188,6 +4201,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     //this.ShowSwal("warning", "Alerta", "Desarrollar");
     this.CargarServiciosDiarios();
 
+    this.ListaServiciosExternos = [];
+    this.ListaServiciosExternos = this.globales.ServiciosExternos;
+  }
+
+  //Danilo CargarDatosEgresos
+  CargarDatosEgresos() {
+    //this.ShowSwal("warning", "Alerta", "Desarrollar");
+    this.CargarEgresosDiarios();
     this.ListaServiciosExternos = [];
     this.ListaServiciosExternos = this.globales.ServiciosExternos;
   }

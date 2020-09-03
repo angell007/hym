@@ -156,14 +156,14 @@ export class TablatercerosComponent implements OnInit {
     this.MensajeGuardar = 'Se dispone a guardar este tercero';
     this.ModalTercero.show();
   }
-// -----------------------------------------------------------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------
   EditarTercero(idTercero: string) {
     this.Edicion = true;
     this.MensajeGuardar = 'Se dispone a actualizar este tercero';
     this.terceroService.getTercero(idTercero).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TerceroModel = data.query_data;
-        console.log( this.TerceroModel.Id_Tercero);
+        console.log(this.TerceroModel.Id_Tercero);
         this.IdTerceroOld = this.TerceroModel.Id_Tercero
         this.GetMunicipiosList(this.TerceroModel.Id_Departamento);
         this.ModalTercero.show();
@@ -294,16 +294,15 @@ export class TablatercerosComponent implements OnInit {
     let datos: any = new FormData();
 
     datos.append("modulo", 'Tercero');
-    datos.append("datos", info);    
+    datos.append("datos", info);
     datos.append("oldid", this.IdTerceroOld);
 
     if (this.Edicion) {
-      this.terceroService.editTercero(datos).subscribe((data: any) => {
+      this.terceroService.customEditTercero(datos).subscribe((data: any) => {
         console.log(data);
         if (data.codigo == 'success') {
           let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
           this._toastService.ShowToast(toastObj);
-          //this._swalService.ShowMessage(data);
           this.LimpiarModeloTercero();
           this.ConsultaFiltrada();
           this.ModalTercero.hide();

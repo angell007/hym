@@ -51,6 +51,10 @@ export class TerceroService {
     return this.client.post(this._rutaBase+'editar_tercero.php', data);
   }
 
+  customEditTercero(data:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'custom_edit_terceros.php', data);
+  }
+
   cambiarEstadoTercero(data:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'cambiar_estado_tercero.php', data);
   }
