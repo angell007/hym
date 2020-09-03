@@ -5,22 +5,26 @@
         <h4>CIERRE DE CAJA - {{Nombre_Funcionario}}</h4>
       </div>
       <div class="col-md-12">
-        <div style="text-align: center; margin-top:10px; margin-bottom:10px;"  *ngIf="!Armado">
-            <h2>CARGANDO DATOS DEL CIERRE</h2>
-            <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
+        <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="!Armado">
+          <h2>CARGANDO DATOS DEL CIERRE</h2>
+          <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
         </div>
-        
-        <table class="table table-striped table-bordered cierre-caja-table"  *ngIf="Armado">
+
+        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <thead>
             <tr>
               <th style="width:15%;"></th>
-              <th *ngFor="let m of MonedasSistema" style="text-align:center;" colspan="2" [ngStyle]="{'background-color':m.Color}">
+              <th *ngFor="let m of MonedasSistema" style="text-align:center;" colspan="2"
+                [ngStyle]="{'background-color':m.Color}">
                 <h4>{{m.Nombre}}</h4>
               </th>
             </tr>
             <tr>
-              <th style="text-align:center;"><h4>Modulos</h4></th>
-              <th *ngFor="let c of CeldasIngresoEgresoEncabezado" style="text-align:center;" [ngStyle]="{'background-color':c.Color}">
+              <th style="text-align:center;">
+                <h4>Modulos</h4>
+              </th>
+              <th *ngFor="let c of CeldasIngresoEgresoEncabezado" style="text-align:center;"
+                [ngStyle]="{'background-color':c.Color}">
                 <h6>{{c.Nombre_Celda}}</h6>
               </th>
             </tr>
@@ -28,16 +32,19 @@
           <tbody>
             <tr *ngFor="let m of Modulos;">
               <td>{{m}}</td>
-              <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index" [ngStyle]="{'background-color':Totales[m][ind].Color}">
-                <label *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
-                <label *ngIf="ind % 2 != 0">{{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
-                  <!-- {{Totales[m][ind].Codigo}} {{ind % 2 == 0 ? Totales[m][ind].Ingreso_Total | customcurrency : Totales[m][ind].Egreso_Total | customcurrency}} -->
+              <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
+                [ngStyle]="{'background-color':Totales[m][ind].Color}">
+                <label
+                  *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
+                <label
+                  *ngIf="ind % 2 != 0">{{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
               </td>
             </tr>
             <tr>
               <td class="font-weight-bold" style="text-align:right;color:black;"><b>Totales:</b></td>
-              <td class="font-weight-bold" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal" [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td> 
-            </tr>          
+              <td class="font-weight-bold" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal"
+                [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -48,7 +55,7 @@
         <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <tbody>
             <tr>
-              <td ><b>Monedas</b></td>
+              <td><b>Monedas</b></td>
               <td style="text-align:center;" *ngFor="let m of MonedasSistema">{{m.Nombre}}</td>
             </tr>
             <tr>
@@ -56,16 +63,19 @@
               <td style="text-align:right;" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
             </tr>
             <tr>
-              <td style="background:rgb(61, 230, 89);color:black;">Ingreso</td> 
-              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;background:rgb(61, 230, 89);color:black;">+{{ti | customcurrency:''}}</td>
+              <td style="background:rgb(61, 230, 89);color:black;">Ingreso</td>
+              <td *ngFor="let ti of TotalesIngresosMonedas"
+                style="text-align:right;background:rgb(61, 230, 89);color:black;">+{{ti | customcurrency:''}}</td>
             </tr>
             <tr>
               <td style="background:rgb(251, 59, 59);color:white;">Egreso</td>
-              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;background:rgb(251, 59, 59);color:white;">-{{te | customcurrency:''}}</td>
+              <td *ngFor="let te of TotalesEgresosMonedas"
+                style="text-align:right;background:rgb(251, 59, 59);color:white;">-{{te | customcurrency:''}}</td>
             </tr>
             <tr>
               <td>Total a Entregar</td>
-              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">{{resta | customcurrency:''}}</td>
+              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">
+                {{resta | customcurrency:''}}</td>
             </tr>
             <tr>
               <td>Entregado</td>
@@ -73,8 +83,10 @@
                 <div class="input-group input-group-sm">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">{{t.Codigo}}</span>
-                  </div>                
-                  <input type="text" class="form-control sp-text" [(ngModel)]="t.Entregado" name="Entregado_{{i}}"  aria-describedby="basic-addon1" placeholder="0" (blur)="CalcularDiferencia($event.target.value, ind)" [disabled]="FieldsDisabled[ind]">
+                  </div>
+                  <input type="text" class="form-control sp-text" [(ngModel)]="t.Entregado" name="Entregado_{{i}}"
+                    aria-describedby="basic-addon1" placeholder="0"
+                    (blur)="CalcularDiferencia($event.target.value, ind)" [disabled]="FieldsDisabled[ind]">
                 </div>
               </td>
             </tr>
@@ -88,8 +100,9 @@
         </table>
       </div>
       <div class="col-md-12" *ngIf="Armado">
-        <label class="block-element">Observaciones</label>           
-        <textarea style="width: 100%;" name="Observaciones" id="" rows="4" [(ngModel)]="CierreCajaModel.Observacion"></textarea>
+        <label class="block-element">Observaciones</label>
+        <textarea style="width: 100%;" name="Observaciones" id="" rows="4"
+          [(ngModel)]="CierreCajaModel.Observacion"></textarea>
       </div>
       <div class="col-md-12" *ngIf="Armado">
         <div class="row">

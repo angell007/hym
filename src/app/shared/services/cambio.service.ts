@@ -8,11 +8,11 @@ export class CambioService {
   CambioMonedaXPeso(valorMoneda:number, valorTasaMoneda:number){
 
     let result = valorMoneda * valorTasaMoneda;
-    return result.toFixed(2);
+    return result.toFixed(4);
   }
 
   CambioPesoMonedaX(valorPeso:number, valorTasaMoneda:number){
     let result = valorPeso / valorTasaMoneda;
-    return result.toFixed(2);
+    return result.toFixed(4);
   }
 }

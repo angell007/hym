@@ -1574,7 +1574,7 @@ export class PosComponent implements OnInit {
             }
         
             let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-            valor = parseFloat(valor).toFixed(2);
+            valor = parseFloat(valor).toFixed(4);
             let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
         
             if (total_valor_destinatarios > transferir) {
@@ -1606,7 +1606,7 @@ export class PosComponent implements OnInit {
             if (total_valor_destinatarios > total_sumado) {
               
               let asignar = Math.round(valor - (total_valor_destinatarios - total_sumado));
-              this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+              this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(4);
 
             }else if (total_valor_destinatarios < total_sumado) {
 

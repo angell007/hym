@@ -905,7 +905,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   // TODO validacion de la tasa
   ValidacionTasa(tipo_cambio: string): boolean {
-    console.log("entro a validar tasa");
+
+    console.log(["entro a validar tasa", this.MonedaParaCambio]);
+
     if (this.CambioModel.Tasa == '' || this.CambioModel.Tasa == 0 || this.CambioModel.Tasa === undefined) {
 
       this.ShowSwal('warning', 'Tasa incorrecta', 'No se ha establecido una tasa de cambio!');
@@ -925,6 +927,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {
           this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
           this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2);
+
+          // console.log(["Nueva tasa ",  this.CambioModel.Tasa  ]);
+
+
           if (tipo_cambio == 'o') {
             this.CambioModel.Valor_Destino = '';
             this.CambioModel.Valor_Origen = '';
@@ -1574,7 +1580,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
 
           let transferir = parseFloat(this.TransferenciaModel.Cantidad_Transferida);
-          valor = parseFloat(valor).toFixed(2);
+          valor = parseFloat(valor).toFixed(4);
           let total_valor_destinatarios = this.GetTotalTransferenciaDestinatarios();
 
           if (total_valor_destinatarios > transferir) {
@@ -1606,7 +1612,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           if (total_valor_destinatarios > total_sumado) {
 
             let asignar = Math.round(valor - (total_valor_destinatarios - total_sumado));
-            this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(2);
+            this.ListaDestinatarios[index].Valor_Transferencia = asignar.toFixed(4);
 
           } else if (total_valor_destinatarios < total_sumado) {
 
@@ -2163,7 +2169,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
 
       // TODO mejorar esta validacion
-      
+
       // if (listaDestinatarios[index].Id_Destinatario_Cuenta == '' || listaDestinatarios[index].Id_Destinatario_Cuenta === undefined) {
       //   this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
       //   return;
@@ -2245,7 +2251,24 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).subscribe((data: any) => {
           this.MonedaParaTransferencia.Valores = data.query_data;
 
+          // Buscando Valores de moneda
           this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
+          // Comision_Efectivo_Transferencia: "30"
+          // Costo_Transferencia: "3000"
+          // Id_Moneda: "12"
+          // Id_Valor_Moneda: "6"
+          // Max_Compra_Efectivo: "3350"
+          // Max_Venta_Efectivo: "5000"
+          // Max_Venta_Transferencia: "405"
+          // Min_Compra_Efectivo: "2000"
+          // Min_No_Cobro_Transferencia: "1000"
+          // Min_Venta_Efectivo: "3450"
+          // Min_Venta_Transferencia: "205"
+          // Pagar_Comision_Desde: "0"
+          // Sugerido_Compra_Efectivo: "3300"
+          // Sugerido_Venta_Efectivo: "3500"
+          // Sugerido_Venta_Transferencia: "105"
+          // console.log(['Recogiendo valores de moneda ', data.query_data]);
 
           if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
             this.InputBolsaBolivares = true;

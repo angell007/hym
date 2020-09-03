@@ -119,7 +119,7 @@ export class ComprascrearComponent implements OnInit {
 
   CalcularValorCompra(valor:number){
     let suma = parseFloat(this.CompraModel.Valor_Compra) + valor;
-    this.CompraModel.Valor_Compra = suma.toFixed(2);
+    this.CompraModel.Valor_Compra = suma.toFixed(4);
   }
 
   CalcularCambio(){

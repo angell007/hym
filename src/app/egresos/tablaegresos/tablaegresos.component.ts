@@ -118,6 +118,7 @@ export class TablaegresosComponent implements OnInit {
 
     var p = this.SetFiltros(paginacion);    
 
+    console.log('consulta filtrada ', p );
     if(p === ''){
       this.ResetValues();
       return;
@@ -125,6 +126,9 @@ export class TablaegresosComponent implements OnInit {
     
     this.Cargando = true;
     this._egresoService.getListaEgresos(p).subscribe((data:any) => {
+      console.log('consulta filtrada ', data );
+
+
       if (data.codigo == 'success') {
         this.Egresos = data.query_data;
         this.TotalItems = data.numReg;
