@@ -1836,8 +1836,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     switch (tipo_transferencia) {
       case 'Transferencia':
-
         if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
+
           console.log(total_suma_transferir_destinatarios);
           console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
           console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
@@ -1850,39 +1850,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             } else if (total_suma_transferir_destinatarios >= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
               this.TransferenciaModel.Cantidad_Transferida_Con_Bolivares = parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir;
             }
-            console.log(this.TransferenciaModel);
-
             this.SaveTransferencia(restante_bolsa);
           } else {
             this.ShowSwal('warning', 'Alerta', 'No se han cargado valores para transferir, ya sea en los destinatarios o en los datos de la transferencia!');
           }
 
-          // if (this.TransferenciaModel.Forma_Pago == 'Credito') {
-          //   if (total_suma_transferir_destinatarios > 0) {
-          //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();  
-          //     this.SaveTransferencia(restante_bolsa);
-          //   }else{
-          //     this.ShowSwal('warning', 'Alerta', 'No se han cargado valores para transferir, ya sea en los destinatarios o en los datos de la transferencia!');
-          //   }
-          //   if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
-          //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
-
-          //     this.SaveTransferencia(restante_bolsa);
-          //   }else{
-          //     this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
-          //   }
-          // }else{
-          //   if (total_suma_transferir_destinatarios <= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
-          //     let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
-
-          //     this.SaveTransferencia(restante_bolsa);
-          //   }else{
-          //     this.ShowSwal('warning', 'Alerta', 'La suma total del monto a transferir de los destinatarios es mayor que el total asignado a la transferencia!');
-          //   }
-          // }
-
         } else {
 
+          console.log(['Siguiente if  de ...']);
           if (total_suma_transferir_destinatarios > 0 && total_a_transferir == total_suma_transferir_destinatarios) {
 
             this.SaveTransferencia();
@@ -1946,6 +1921,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.errorSwal.show();
         return this.handleError(error);
       }).subscribe((data: any) => {
+        console.log(['data ...', data]);
         this.LimpiarBancosDestinatarios(this.ListaDestinatarios);
         this.LimpiarModeloTransferencia();
         this.SetTransferenciaDefault();
@@ -1957,6 +1933,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this._getMonedasExtranjeras();
       });
   }
+
+  EditarDest2Retard(destinatario, accion, i) {
+    setTimeout(() => {
+      this.EditarDest2(destinatario, accion, i)
+    }, 2000);
+  }
+
 
   EditarDest2(id: string, accion: string, posicionDestinatario: string) {
 
@@ -2303,6 +2286,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
               let index_dest = this.ListaDestinatarios.findIndex(x => x.Numero_Documento_Destino == id_dest);
               this.ListaDestinatarios[index_dest].Cuentas = data.cuentas[i];
+              const Id_Destinatario_Cuenta_Default = data.cuentas[0];
               if (data.cuentas[i].length == 0) {
                 this.ListaDestinatarios[index_dest].Id_Destinatario_Cuenta = '';
               }
@@ -4612,12 +4596,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   search_destino = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
-      map(term => term.length < 4 ? []
+      map(term => term.length < 2 ? []
         : this.Destinatarios.filter(v => v.Id_Destinatario.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_destino = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
 
-  search_destino2 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 4 ? [] : this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: term, moneda: this.MonedaParaTransferencia.id } }).map((response, params) => {
+  search_destino2 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: term, moneda: this.MonedaParaTransferencia.id } }).map((response, params) => {
     console.log('Parametros', params);
     return response;
   })
@@ -4633,7 +4617,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   search_remitente = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
-      map(term => term.length < 4 ? []
+      map(term => term.length < 2 ? []
         : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
@@ -4643,7 +4627,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(200),
         distinctUntilChanged(),
-        switchMap(term => term.length < 4 ? [] :
+        switchMap(term => term.length < 2 ? [] :
           this.http.get(this.globales.ruta + 'php/remitentes/filtrar_remitente_por_id.php', { params: { id_remitente: term } })
             .map(response => response)
             .do(data => data)
@@ -4653,7 +4637,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   search_cuenta = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
-      map(term => term.length < 4 ? []
+      map(term => term.length < 2 ? []
         : this.Remitentes.filter(v => v.Numero_Cuenta.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;

@@ -17,6 +17,10 @@ SELECT * FROM `Bolsa_Bolivares_Tercero` ORDER BY `Bolsa_Bolivares_Tercero`.`Id_T
 UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercero`.`Id_Movimiento_Tercero` = 1;
 
 
+
+        this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
+
+
 Message alert 
    if (this.Venta) {
         if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {

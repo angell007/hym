@@ -279,7 +279,7 @@
                                 <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);" (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                                     <i class="fa fa-bars"></i>
                                 </a>
-                                <a *ngIf="OcultarCajero" href="javascript:void(0);" class="logo logo-dark"><img src="assets/images/logo/logo.png" /></a>
+                                <a *ngIf="OcultarCajero" href=""  [routerLink]="['/tablero']"  class="logo logo-dark"><img src="assets/images/logo/logo.png" /></a>
                             </li>
                         </ul>
                         <ul class="nav-left">

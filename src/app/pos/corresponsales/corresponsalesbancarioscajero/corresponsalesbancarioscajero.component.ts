@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CorresponsalDiarioModel } from '../../../Modelos/CorresponsalDiarioModel';
 import { CorresponsalDiarioShortModel } from '../../../Modelos/CorresponsalDiarioShortModel';
 import { GeneralService } from '../../../shared/services/general/general.service';
@@ -15,7 +15,7 @@ import { AccionTableroCajero } from '../../../shared/Enums/AccionTableroCajero';
   styleUrls: ['./corresponsalesbancarioscajero.component.scss', '../../../../style.scss']
 })
 export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy {
-
+  @ViewChild('alertSwal') alertSwal: any;
   @Input() ManageView:Observable<any> = new Observable();
   @Output() ActualizarRegistrosCorresponsal:EventEmitter<any> = new EventEmitter();
   @Output() RegresarTablaRegistros:EventEmitter<any> = new EventEmitter();
@@ -24,8 +24,18 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
   public CorresponsalesBancarios:Array<any> = [];
   private _viewManagementSubscription:any;
 
+  //MOSTRAR ALERTAS DESDE LA INSTANCIA DEL SWEET ALERT GLOBAL
+  ShowSwal({ tipo, titulo, msg }: { tipo: string; titulo: string; msg: string; }) {
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+
   constructor(private _generalService: GeneralService,
               private _swalService:SwalService,
+              private swalService:SwalService,
+
               private _validacionService:ValidacionService,
               private _toastService:ToastService,
               private _corresponsalService:CorresponsalbancarioService)
@@ -89,8 +99,10 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
         this.LimpiarModeloCorresponsal();
         this.ActualizarRegistrosCorresponsal.emit(null);
         this.RegresarTablaRegistros.emit();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
+        this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
+
       }else{
         this._swalService.ShowMessage(data);
       }

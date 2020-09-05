@@ -489,20 +489,15 @@
                                     <i class="ti-pencil" style="cursor:pointer;" *ngIf="destinatario.EditarVisible"
                                       (click)="EditarDest2(destinatario.Numero_Documento_Destino, 'editar cuentas', i)"></i>
                                   </label>
+
                                   <input type="text" class="form-control" name="Destino_{{i}}" id="Destino_{{i}}"
-                                    [(ngModel)]="destinatario.id_destinatario_transferencia"
-                                    [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
-                                    [inputFormatter]="formatter_destino"
-                                    (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
-                                    (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
-                                    (blur)="validateInputDocumentSmall[i] = true "
-                                    [disabled]="MonedaParaTransferencia.id == ''" required>
-
-                                  <small *ngIf="validateInputDocumentSmall[i]" style="color: red;">Validar
-                                    Documento</small>
-
-                                  <button class="btn btn-primary btn-sm" style="height: 2rem; margin-top:2px;"
-                                    (click)="validateInputDocument(destinatario.Numero_Documento_Destino, 'crear especial', i) ;  ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">validate</button>
+                                  [(ngModel)]="destinatario.id_destinatario_transferencia"
+                                  [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
+                                  [inputFormatter]="formatter_destino"
+                                  (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
+                                  (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios)"
+                                  (blur)="EditarDest2Retard(destinatario.Numero_Documento_Destino, 'crear especial', i)"
+                                  [disabled]="MonedaParaTransferencia.id == ''" required>                                 
                                 </div>
 
                               </div>
@@ -522,9 +517,8 @@
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
                                     autocomplete="off" [disabled]="MonedaParaTransferencia.id == ''"
                                     (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
-                                    <!-- <option value="">Seleccione una Cuenta</option> -->
-                                    <option *ngFor="let c of destinatario.Cuentas;  index as i;"
-                                      [value]="c.Id_Destinatario_Cuenta" [selected]="i==0">
+                                    <option id="opId_Destinatario_Cuenta_{{i}}" *ngFor="let c of destinatario.Cuentas;  index as i;"
+                                      [value]="c.Id_Destinatario_Cuenta" >
                                       {{c.Nombre}}</option>
                                   </select>
                                 </div>

@@ -15,55 +15,54 @@ import { OficinaService } from '../../shared/services/oficinas/oficina.service';
 })
 export class ModalcajaComponent implements OnInit {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  
-  @ViewChild('ModalCaja') ModalCaja:any;
+  @Input() AbrirModal: Observable<any> = new Observable();
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
-  public Oficinas:Array<any> = [];
-  public openSubscription:any;
-  public Editar:boolean = false;
-  public MensajeGuardar:string = 'Se dispone a guardar esta caja';
+  @ViewChild('ModalCaja') ModalCaja: any;
 
-  public CajaModel:CajaModel = new CajaModel();
+  public Oficinas: Array<any> = [];
+  public openSubscription: any;
+  public Editar: boolean = false;
+  public MensajeGuardar: string = 'Se dispone a guardar esta caja';
+
+  public CajaModel: CajaModel = new CajaModel();
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _validacionService:ValidacionService,
-              private _toastService:ToastService,
-              private _cajaService:CajaService,
-              private _oficinaService:OficinaService) 
-  {
+    private _swalService: SwalService,
+    private _validacionService: ValidacionService,
+    private _toastService: ToastService,
+    private _cajaService: CajaService,
+    private _oficinaService: OficinaService) {
     this.GetOficinas();
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:string) => {
-      
+    this.openSubscription = this.AbrirModal.subscribe((data: string) => {
+
       if (data != "0") {
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar esta caja';
-        let p = {id_caja:data};
-        
-        this._cajaService.getCaja(p).subscribe((d:any) => {
+        let p = { id_caja: data };
+
+        this._cajaService.getCaja(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.CajaModel = d.query_data;
-            this.ModalCaja.show();  
-          }else{
-            
+            this.ModalCaja.show();
+          } else {
+
             this._swalService.ShowMessage(d);
           }
-          
+
         });
-      }else{
+      } else {
         this.MensajeGuardar = 'Se dispone a guardar esta caja';
         this.Editar = false;
         this.ModalCaja.show();
       }
     });
   }
-  
-  ngOnDestroy(){    
+
+  ngOnDestroy() {
     if (this.openSubscription != undefined) {
       this.openSubscription.unsubscribe();
     }
@@ -71,78 +70,81 @@ export class ModalcajaComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetOficinas(){
-    this._oficinaService.getOficinas().subscribe((data:any) => {
+  GetOficinas() {
+    this._oficinaService.getOficinas().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Oficinas = data.query_data;
-      }else{
+      } else {
 
         this.Oficinas = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  GuardarCaja(){
+  GuardarCaja() {
 
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
 
     //console.log(this.CajaModel);
-    
+
     this.CajaModel = this._generalService.limpiarString(this.CajaModel);
-    
+    let aux = this.CajaModel.MAC;
+    this.CajaModel.MAC = aux.match(/.{1,2}/g).map(x => x + ':').join('').slice(0, 17)
+
     let info = this._generalService.normalize(JSON.stringify(this.CajaModel));
+
     let datos = new FormData();
-    datos.append("modelo",info);
+    datos.append("modelo", info);
 
     if (this.Editar) {
       this._cajaService.editCaja(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Editar = false;
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }else{
+        .catch(error => {
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            this.Editar = false;
+            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            this._toastService.ShowToast(toastObj);
+          } else {
+            this._swalService.ShowMessage(data);
+          }
+        });
+    } else {
       this._cajaService.saveCaja(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }    
+        .catch(error => {
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            this._toastService.ShowToast(toastObj);
+          } else {
+            this._swalService.ShowMessage(data);
+          }
+        });
+    }
   }
 
-  ValidateBeforeSubmit():boolean{
-    
+  ValidateBeforeSubmit(): boolean {
+
     if (!this._validacionService.validateString(this.CajaModel.Nombre, 'Nombre caja')) {
       return false;
-    }else if (!this._validacionService.validateString(this.CajaModel.Id_Oficina, 'Pais')) {
+    } else if (!this._validacionService.validateString(this.CajaModel.Id_Oficina, 'Pais')) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -151,12 +153,12 @@ export class ModalcajaComponent implements OnInit {
     return Observable.throw(error);
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalCaja.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.CajaModel = new CajaModel();
   }
 

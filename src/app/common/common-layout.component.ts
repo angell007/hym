@@ -1071,7 +1071,7 @@ this.ModalResumenCuenta.show();
                 this.swalService.ShowMessage(data);
             }else{
 
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, true, '']);
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
             }
         });
     }
