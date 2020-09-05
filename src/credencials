@@ -8,6 +8,7 @@ gerente 9999999
 9999999
 cajero ppal: 1234567891
 clave 1234567891
+<<<<<<< HEAD
 4144411
 
 TODO: no se si se debe actualizar Tabla Saldo_Moneda_Tercero
@@ -39,3 +40,8 @@ Message alert
           return true;
         }
       }
+=======
+
+Bancos: 0134
+01341258521456932145
+>>>>>>> 23ad908dc069161128a1edd36f43eb10541ae20d

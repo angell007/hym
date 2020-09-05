@@ -13,8 +13,14 @@
           <div class="form-group">
             <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais"
               required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
+<<<<<<< HEAD
               <option value="">Seleccione pais</option>
               <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+=======
+              <option value="null">Seleccione pais</option>
+              <!-- Se agrega select a  cuentas asociadas -->
+              <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+>>>>>>> 23ad908dc069161128a1edd36f43eb10541ae20d
             </select>
           </div>
         </div>
@@ -38,7 +44,7 @@
               name="Tipo_Documento" required (change)="BuscarCNE()"
               [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
               <option value="">Seleccione Tipo Documento</option>
-              <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">
+              <option *ngFor="let documento of TiposDocumento; let i=index" Value="documento.Codigo">
                 {{documento.Codigo}}</option>
             </select>
           </div>
@@ -81,18 +87,30 @@
             <tbody>
               <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
                 <td width="20%">
+
                   <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
                     (change)="GetBancosPais(i);" required>
                     <option value="">Seleccione País</option>
+<<<<<<< HEAD
+=======
+                    <!-- Se agrega select a  cuentas asociadas -->
+>>>>>>> 23ad908dc069161128a1edd36f43eb10541ae20d
                     <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                   </select>
+
                 </td>
                 <td width="20%">
                   <!-- TODO se cambia mascara de cuenta -->
                   <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
                     name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
                     (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required
+<<<<<<< HEAD
                     mask="0000-0000-0000-0000-0000">
+=======
+                    mask="0000-0000-0000-0000-0000"
+                    
+                    >
+>>>>>>> 23ad908dc069161128a1edd36f43eb10541ae20d
                 </td>
                 <td width="20%">
                   <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"
