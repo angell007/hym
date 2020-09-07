@@ -2566,6 +2566,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  validateInputDocumentRetard(Numero_Documento_Destino, accion, i) {
+    setTimeout(() => {
+      this.AutoCompletarDestinatario(Numero_Documento_Destino, accion, i)
+    }, 2000);
+  }
+
   AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
 
     if (typeof (modelo) == 'object') {

@@ -123,11 +123,20 @@ export class TablaegresosComponent implements OnInit {
       return;
     }
 
+    // Danilo Custom switch para egresos 
     this.Cargando = true;
     this._egresoService.getListaEgresos(p).subscribe((data: any) => {
-      console.log([data]);
+
       if (data.codigo == 'success') {
-        this.Egresos = data.query_data.filter((user) => user.Identificacion_Funcionario == JSON.parse(localStorage['User']).Identificacion_Funcionario)
+        let user = JSON.parse( localStorage['User']) ;
+        switch (user.Id_Perfil) {
+          case '6':
+            this.Egresos = data.query_data
+            break;
+          default:
+            this.Egresos = data.query_data.filter((egreso) => egreso.Identificacion_Funcionario == JSON.parse(localStorage['User']).Identificacion_Funcionario && new Date().toISOString().slice(0, 10) == new Date(egreso.Fecha).toISOString().slice(0, 10))
+            break;
+        }
         this.TotalItems = data.numReg;
       } else {
         this.Egresos = [];
