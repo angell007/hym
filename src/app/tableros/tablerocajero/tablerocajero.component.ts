@@ -4,7 +4,7 @@ import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, delay } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, delay, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -94,12 +94,33 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   entregar: any;
   Tipo: string;
 
+
+  //Paginación
+  public maxSize = 5;
+  public pageSize = 10;
+  public TotalItems: number;
+  public page = 1;
+  public InformacionPaginacion: any = {
+    desde: 0,
+    hasta: 0,
+    total: 0
+  }
+
+  public Filtros: any = {
+    codigo: '',
+    funcionario: '',
+    tipo: ''
+  };
+
+
   //CONTROL DE VISTAS
   Cambios1 = true;
   Cambios2 = false
   Transferencia = [];
   Transferencia1 = true;
   Transferencia2 = false;
+  Egreso1 = true;
+  Egreso2 = false;
   Traslado1 = true;
   Traslado2 = false;
   Corresponsal1 = true;
@@ -366,6 +387,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public RemitenteTransferenciaModel: RemitenteModel = new RemitenteModel();
   public ActulizarTablaRecibos: Subject<any> = new Subject<any>();
   public TransferenciaPesos: boolean = false;
+  public Cargando: boolean = true;
 
   //#endregion 
 
@@ -444,7 +466,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public CajerosTraslados: any = [];
   public MonedasTraslados: any = [];
   public MonedaSeleccionadaTraslado: string = '';
-
+  public counterTraslados = 0;
   public TrasladosEnviados: any = [];
   public TrasladoRecibidos: any = [];
 
@@ -511,6 +533,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     EsVenezolana: false
   }];
 
+
   public TipoDocumentoFiltrados: any = [];
   public SePuedeAgregarMasCuentas: boolean = false;
 
@@ -535,6 +558,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     private _aperturaCajaService: AperturacajaService) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.AsignarMonedas();
+    this.CargarTrasladosDiarios()
   }
 
   CierreCajaAyerBolivares = 0;
@@ -553,6 +577,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.IdOficina = JSON.parse(localStorage.getItem('Oficina'));
       this.IdCaja = JSON.parse(localStorage.getItem('Caja'));
       this.CheckApertura();
+
     });
 
     this.comisionServicioSubscription = this.searchComisionService$.pipe(
@@ -1160,12 +1185,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http.get(this.globales.ruta + 'php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;
-      } else {
-
-        this.Cambios = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
       }
+      this.Cargando = false;
+      this.SetInformacionPaginacion();
 
     });
   }
@@ -3663,7 +3685,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.Traslados = [];
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
+      console.log(['data en traslados ', data]);
+      let axu = data.filter(x => x.Estado == 'Pendiente')
+      this.counterTraslados = axu.length
     });
+
+    this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
+      console.log(' obteniendo traslados recibidos ', data);
+      data = data.filter(x => x.Estado == "Pendiente")
+      this.counterTraslados += data.length
+    });
+
   }
 
   GetCajerosTraslados() {
@@ -4283,7 +4315,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case "Corresponsal": {
         this.Corresponsal2 = true;
         this.Corresponsal1 = false;
-
         this.corresponsalView.next(AccionTableroCajero.Iniciar);
         //this.CargarDatosCorresponsal();
         break;
@@ -4291,6 +4322,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case "Servicio": {
         this.Servicio2 = true;
         this.Servicio1 = false;
+        break;
+      }
+      case "Egreso": {
+        this.Egreso2 = true;
+        this.Egreso1 = false;
         break;
       }
     }
@@ -5047,6 +5083,76 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     });
   };
+
+  public filtroCustom: string;
+
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
+    params.tam = this.pageSize;
+    params.funcionario = this.funcionario_data.Identificacion_Funcionario
+
+
+    if (paginacion === true) {
+      params.pag = this.page;
+    } else {
+      this.page = 1; // Volver a la página 1 al filtrar
+      params.pag = this.page;
+    }
+
+    if (this.Filtros.codigo.trim() != "") {
+      console.log(this.Filtros.codigo);
+      params.codigo = this.Filtros.codigo;
+    }
+
+    if (this.Filtros.tipo.trim() != "") {
+      params.tipo = this.Filtros.tipo;
+    }
+
+    return params;
+  }
+
+
+  ConsultaFiltrada(paginacion: boolean = false) {
+
+    var p = this.SetFiltros(paginacion);
+
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+    this.Cargando = true;
+
+    this.http.get(this.globales.ruta + 'php/cambio/get_filtre_cambios.php?', { params: p }).pipe(
+      tap(x => { console.log(x); })
+    ).subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.Cambios = data.query_data
+        this.Cargando = false;
+        this.SetInformacionPaginacion();
+      }
+      this.TotalItems = data.numReg;
+    });
+  }
+
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
+    var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
+
+    this.InformacionPaginacion['desde'] = desde;
+    this.InformacionPaginacion['hasta'] = hasta;
+    this.InformacionPaginacion['total'] = this.TotalItems;
+  }
+
+
+  ResetValues() {
+    this.Filtros = {
+      codigo: '',
+      funcionario: '',
+      tipo: '',
+    };
+  }
 
 
 

@@ -55,12 +55,14 @@ export class TablaegresosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.SetInformacionPaginacion();
   }
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Monedas = data.query_data;
+
       } else {
 
         this.Monedas = [];

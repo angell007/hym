@@ -1,66 +1,69 @@
 <app-modal-basic [dialogClass]="'modal-lg'" #ModalEgreso>
-    <div class="app-modal-header">
-      <h4 class="modal-title">Egreso</h4>
-      <button type="button" class="close basic-close" (click)="CerrarModal()">
-        <span aria-hidden="true">&times;</span>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Egreso</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormEgreso="ngForm">
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Grupo</label>
+            <select id="grupo" class="form-control" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo"
+              (change)="GetTercerosGrupo()" required>
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let g of Grupos" [value]="g.Id_Grupo_Tercero">{{g.Nombre_Grupo}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Tercero</label>
+            <!-- <input type="text" placeholder="Tercero" class="form-control" name="Id_Tercero" 
+                [(ngModel)]="EgresoModel.Id_Tercero" required> -->
+            <select id="grupo" class="form-control" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let t of Terceros" [value]="t.Id_Tercero">{{t.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Moneda</label>
+            <select id="moneda" class="form-control" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Valor</label>
+            <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" currencyMask
+              [options]="{ thousands: '.' }" [(ngModel)]="EgresoModel.Valor" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Observación</label>
+            <textarea class="form-control" placeholder="Observaciones del egreso" name="Detalle"
+              [(ngModel)]="EgresoModel.Detalle"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarEgreso()" [disabled]="!FormEgreso.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
       </button>
     </div>
-    <div class="app-modal-body">    
-      <form #FormEgreso="ngForm">
-        <div class="form-row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Grupo</label>
-              <select id="grupo" class="form-control" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo" (change)="GetTercerosGrupo()" required>
-                <option value="" selected>Seleccione</option>
-                <option *ngFor="let g of Grupos" [value]="g.Id_Grupo_Tercero">{{g.Nombre_Grupo}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Tercero</label>
-              <!-- <input type="text" placeholder="Tercero" class="form-control" name="Id_Tercero" 
-                [(ngModel)]="EgresoModel.Id_Tercero" required> -->
-                <select id="grupo" class="form-control" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
-                  <option value="" selected>Seleccione</option>
-                  <option *ngFor="let t of Terceros" [value]="t.Id_Tercero">{{t.Nombre}}</option>
-                </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Moneda</label>
-              <select id="moneda" class="form-control" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
-                <option value="" selected>Seleccione</option>
-                <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label>Valor</label>
-              <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" [(ngModel)]="EgresoModel.Valor" required>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label>Observación</label>
-              <textarea class="form-control" placeholder="Observaciones del egreso" name="Detalle" [(ngModel)]="EgresoModel.Detalle"></textarea>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="app-modal-footer">
-      <div class="text-right">
-        <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
-        <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-          [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
-          (confirm)="GuardarEgreso()" [disabled]="!FormEgreso.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
-        </button>
-      </div>
-    </div>  
-  </app-modal-basic>
+  </div>
+</app-modal-basic>
