@@ -2555,14 +2555,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
 
-  validateInputDocumentRetard(Numero_Documento_Destino, accion, i) {
-    setTimeout(() => {
-      this.AutoCompletarDestinatario(Numero_Documento_Destino, accion, i)
-    }, 2000);
-  }
-
-  AutoCompletarDestinatario(modelo, i, listaDestinatarios) {
-
+  AutoCompletarDestinatario(modelo, i, listaDestinatarios, dest) {
     if (typeof (modelo) == 'object') {
       if (modelo.Cuentas != undefined) {
         listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -2570,6 +2563,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         listaDestinatarios[i].Cuentas = modelo.Cuentas;
         listaDestinatarios[i].esconder = true;
         listaDestinatarios[i].EditarVisible = true;
+        dest.Id_Destinatario_Cuenta = modelo.Cuentas[0].Id_Destinatario_Cuenta
       } else {
         listaDestinatarios[i].esconder = false;
       }
@@ -2589,6 +2583,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     }
   }
+
 
   BuscarCedulaRepetida(object, index, dest: any) {
     let existe = false;
@@ -5010,6 +5005,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     }
   }
+
+  validateInputDocumentRetard(id: string, accion: string, posicionDestinatario: string): any {
+    setTimeout(() => {
+     this.validateInputDocument(id, accion, posicionDestinatario)
+    }, 1000);
+  }
+
+
 
   validateInputDocument(id: string, accion: string, posicionDestinatario: string): any {
     let p = { id_destinatario: id };
