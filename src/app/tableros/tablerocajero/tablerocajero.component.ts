@@ -23,15 +23,15 @@ import { of } from 'rxjs/observable/of';
 import { RemitenteModel } from '../../Modelos/RemitenteModel';
 import * as AccionModalRemitente from '../../shared/Enums/AccionModalRemitente';
 import { AccionTableroCajero } from '../../shared/Enums/AccionTableroCajero';
-
 import { QzTrayService } from '../../shared/qz-tray.service';
+import { FiltroService } from '../../customservices/filtro.service';
 
 
 @Component({
   selector: 'app-tablerocajero',
   templateUrl: './tablerocajero.component.html',
   styleUrls: ['./tablerocajero.component.scss', '../../../style.scss'],
-  providers: [QzTrayService]
+  providers: [QzTrayService, FiltroService]
 })
 
 export class TablerocajeroComponent implements OnInit, OnDestroy {
@@ -86,7 +86,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public Paises: any = [];
   public Clientes: any = [];
   public CorresponsalesBancarios: any = [];
-  public Cambios: any = [];
+  // public Cambios: any = [];
   public Monedas: any = [];
   vueltos: number;
   Venta = false;
@@ -522,6 +522,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   constructor(private http: HttpClient,
     public qz: QzTrayService,
+    public fc: FiltroService,
     public globales: Globales,
     public sanitizer: DomSanitizer,
     private generalService: GeneralService,
@@ -764,7 +765,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.confirmacionSwal.show();
           this.Cambios1 = true;
           this.Cambios2 = false;
-          this.CargarCambiosDiarios();
+          this.fc.CargarCambiosDiarios()
         });
       }
     }
@@ -1013,7 +1014,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.confirmacionSwal.type = "success"
       this.confirmacionSwal.show();
       setTimeout(() => {
-        this.CargarCambiosDiarios();
+        this.fc.CargarCambiosDiarios()
       }, 300);
     });
 
@@ -1155,20 +1156,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  CargarCambiosDiarios() {
-    this.Cambios = [];
-    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.Cambios = data.query_data;
-      } else {
 
-        this.Cambios = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
-      }
-
-    });
-  }
 
   //#endregion
 
@@ -4027,11 +4015,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarDatosCambios() {
-    //this.ShowSwal("warning", "Alerta", "Desarrollar");
-    this.CargarCambiosDiarios();
-
+    this.fc.CargarCambiosDiarios();
+    console.log('entra a cambios');
     this.MonedasCambio = [];
-    //this.AsignarMonedasSinMonedaLocal(this.MonedasCambio);
     this._monedaService.getMonedasExtranjeras().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.MonedasCambio = data.query_data;

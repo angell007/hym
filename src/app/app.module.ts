@@ -25,6 +25,7 @@ import { registerLocaleData, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
 import { QzTrayService } from './shared/qz-tray.service';
+import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 
 registerLocaleData(localeES);
 
@@ -295,8 +296,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgxCurrencyModule,
         MDBBootstrapModule.forRoot(),
         MyDateRangePickerModule,
-        SelectModule
+        SelectModule,
         //NgxSpinnerModule
+        NgxPaginationModule
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
