@@ -13,11 +13,10 @@
         <th>Acciones</th>
       </tr>
       <tr>
+        <th class="table-filters"></th>
         <th class="table-filters">
-        </th>
-        <th class="table-filters">
-          <input type="text" class="form-control" placeholder="Filtro recibo" [(ngModel)]="Filtros.recibo"
-            (change)="ConsultaFiltrada()">
+          <!-- <input type="text" class="form-control" placeholder="Filtro código" [(ngModel)]="Filtro."
+            (change)="ConsultaFiltrada()"> -->
         </th>
         <th class="table-filters">
           <input type="text" class="form-control" placeholder="Filtro remitente" [(ngModel)]="Filtros.remitente"
@@ -32,8 +31,7 @@
             (change)="ConsultaFiltrada()">
         </th>
         <th class="table-filters">
-          <!-- <input type="text" class="form-control" placeholder="Filtro tasa" [(ngModel)]="Filtros.tasa"
-            (change)="ConsultaFiltrada()"> -->
+         
         </th>
         <th class="table-filters">
           <select id="estado" class="form-control" [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
