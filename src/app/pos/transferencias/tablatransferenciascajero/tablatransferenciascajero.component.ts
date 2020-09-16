@@ -12,45 +12,43 @@ import { Observable, Subject } from 'rxjs';
 })
 export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
-  @Input() ActualizarTabla:Observable<any> = new Observable();
-  private _updateSubscription:any;
+  @Input() ActualizarTabla: Observable<any> = new Observable();
+  private _updateSubscription: any;
 
-  @ViewChild('ModalAnularTransferencia') ModalAnularTransferencia:any;
+  @ViewChild('ModalAnularTransferencia') ModalAnularTransferencia: any;
 
-  public AbrirModalDetalleRecibo:Subject<any> = new Subject();
-  public RecibosTransferencia:Array<any> = [];
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  public Id_Transferencia_Anular:string = '';
-  public MotivoAnulacion:string = '';
-  
-  public Filtros:any = {
-    remitente:'',
-    recibo:'',
-    recibido:'',
-    transferido:'',
-    tasa:'',
-    estado:''
+  public AbrirModalDetalleRecibo: Subject<any> = new Subject();
+  public RecibosTransferencia: Array<any> = [];
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+  public Id_Transferencia_Anular: string = '';
+  public MotivoAnulacion: string = '';
+
+  public Filtros: any = {
+    remitente: '',
+    recibo: '',
+    recibido: '',
+    transferido: '',
+    tasa: '',
+    estado: ''
   };
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
-  public page = 1; 
-  public InformacionPaginacion:any = {
+  public TotalItems: number;
+  public page = 1;
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _transferenciaService:TransferenciaService) 
-  {
-  this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
-  this.ConsultaFiltrada();
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _transferenciaService: TransferenciaService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
   }
 
   ngOnInit() {
@@ -58,32 +56,33 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
       this.ConsultaFiltrada();
     });
   }
-  
+
   ngOnDestroy(): void {
     if (this._updateSubscription != null) {
       this._updateSubscription.unsubscribe();
     }
   }
 
-  GetRecibosTransferencias(){
+  GetRecibosTransferencias() {
     this._transferenciaService.getRecibosTransferenciasFuncionario(this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario).subscribe(data => {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
-      }else{
+        this.TotalItems = data.numReg;
+      } else {
         this.RecibosTransferencia = [];
       }
     });
   }
 
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -115,44 +114,44 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
-    var p = this.SetFiltros(paginacion);    
+    var p = this.SetFiltros(paginacion);
 
-    if(p === ''){
+    if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this._transferenciaService.getRecibosTransferenciasFuncionario2(p).subscribe((data:any) => {
+    this._transferenciaService.getRecibosTransferenciasFuncionario2(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
-      }else{
+      } else {
         this.RecibosTransferencia = [];
         this._swalService.ShowMessage(data);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      remitente:'',
-      recibo:'',
-      recibido:'',
-      transferido:'',
-      tasa:'',
-      estado:''
+      remitente: '',
+      recibo: '',
+      recibido: '',
+      transferido: '',
+      tasa: '',
+      estado: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -160,12 +159,12 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  AbrirModalAnularTransferencia(idTransferenciaAnular:string){
+  AbrirModalAnularTransferencia(idTransferenciaAnular: string) {
     this.Id_Transferencia_Anular = idTransferenciaAnular;
     this.ModalAnularTransferencia.show();
   }
 
-  CerrarModalAnular(){
+  CerrarModalAnular() {
     this.Id_Transferencia_Anular = '';
     this.MotivoAnulacion = '';
     this.ModalAnularTransferencia.hide();
@@ -176,20 +175,20 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     datos.append("id_transferencia", this.Id_Transferencia_Anular);
     datos.append("motivo_anulacion", this.MotivoAnulacion);
     this._transferenciaService.anularReciboTransferencias(datos)
-    .subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.ModalAnularTransferencia.hide();
-        this.MotivoAnulacion = '';
-        this._swalService.ShowMessage(data);
-        this.ConsultaFiltrada();
-      }else{
+      .subscribe((data: any) => {
+        if (data.codigo == 'success') {
+          this.ModalAnularTransferencia.hide();
+          this.MotivoAnulacion = '';
+          this._swalService.ShowMessage(data);
+          this.ConsultaFiltrada();
+        } else {
 
-        this._swalService.ShowMessage(data);
-      }
-    });
+          this._swalService.ShowMessage(data);
+        }
+      });
   }
 
-  AbrirDetalleRecibo(transferencia:any){
+  AbrirDetalleRecibo(transferencia: any) {
     this.AbrirModalDetalleRecibo.next(transferencia);
   }
 

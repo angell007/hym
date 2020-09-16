@@ -1,250 +1,124 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header('Content-Type: application/json');
 
-error_reporting(E_ALL ^ E_NOTICE);
+include_once('../../class/class.querybasedatos.php');
+include_once('../../class/class.paginacion.php');
 
-require_once('../../config/start.inc.php');
-require_once('../../class/class.configuracion.php');
-include_once('../../class/class.consulta.php');
-include_once("../../class/class.log_sistema.php");
 
-$configuracion = new Configuracion();
-$queryObj = new QueryBaseDatos();
-$datos = (isset($_REQUEST['datos']) ? $_REQUEST['datos'] : '');
-$envios = (isset($_REQUEST['destinatarios']) ? $_REQUEST['destinatarios'] : '');
-$id_oficina = (isset($_REQUEST['id_oficina']) ? $_REQUEST['id_oficina'] : 0);
-$bolsa_restante = (isset($_REQUEST['bolsa_restante']) ? $_REQUEST['bolsa_restante'] : '');
+$page = (isset($_REQUEST['pag']) ? $_REQUEST['pag'] : 1);
+// Current pagination page number
+// $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
 
-$datos = (array) json_decode($datos, true);
-$envios = (array) json_decode($envios, true);
+$limit = (isset($_REQUEST['tam']) ? $_REQUEST['tam'] : 10);
+// Dynamic limit
+// $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
 
-$log_sistema = new LogSistema($datos['Identificacion_Funcionario']);
+$condicion = SetCondiciones($_REQUEST);
 
-$datos['Tasa_Cambio'] = str_replace(",", ".", $datos['Tasa_Cambio']);
-$datos['Cantidad_Transferida'] = str_replace(",", ".", $datos['Cantidad_Transferida']);
-$datos['Cantidad_Recibida'] = str_replace(",", ".", $datos['Cantidad_Recibida']);
-$total_transferencia_con_bolsa_bolivares = $datos['Cantidad_Transferida_Con_Bolivares'];
-$cod = $configuracion->Consecutivo('Transferencia');
-$datos["Codigo"] = $cod;
 
-$oItem = new complex("Transferencia", "Id_Transferencia");
+// Get total records
+$sql = 'SELECT 
+COUNT(Id_Egreso) AS Total
+FROM  Egreso E
+INNER JOIN Funcionario F ON E.Identificacion_Funcionario = F.Identificacion_Funcionario
+INNER JOIN Tercero T ON E.Id_Tercero = T.Id_Tercero
+INNER JOIN Moneda M ON E.Id_Moneda = M.Id_Moneda
+INNER JOIN Grupo_Tercero_Nuevo GTN ON E.Id_Grupo = GTN.Id_Grupo_Tercero' . $condicion;
+$queryObj = new QueryBaseDatos($query);
+$allRecrods = $queryObj->Consultar('Simple');
 
-foreach ($datos as $index => $value) {
-	$oItem->$index = $value;
-}
 
-$oItem->Id_Oficina = $id_oficina;
+// Calculate total pages
+$totoalPages = ceil($allRecrods / $limit);
 
-$oItem->Cantidad_Recibida_Bolsa_Bolivares = $datos['Cantidad_Transferida_Con_Bolivares'];
+// Offset
+$paginationStart = ($page - 1) * $limit;
 
-if ($datos['Forma_Pago'] == 'Credito') {
+// Limit query
 
-	if (intval($bolsa_restante) > 0) {
-		$oItem->Cantidad_Recibida_Bolsa_Bolivares = $datos['Cantidad_Transferida_Con_Bolivares'];
-		$oItem->Cantidad_Recibida = 0;
-		$oItem->Cantidad_Transferida = 0;
-	} elseif (intval($datos['Bolsa_Bolivares']) != 0 && intval($bolsa_restante) == 0) {
-		$oItem->Cantidad_Recibida_Bolsa_Bolivares = $datos['Bolsa_Bolivares'];
-		$oItem->Cantidad_Recibida = $datos['Cantidad_Recibida'] == '' ? '0' : $datos['Cantidad_Recibida'];
-		$oItem->Cantidad_Transferida = $datos['Cantidad_Transferida'] == '' ? '0' : $datos['Cantidad_Transferida'];
-	}
-}
+$query = '
+		SELECT 
+			E.*,
+            CONCAT_WS(" ", F.Nombres, F.Apellidos) AS Nombre_Funcionario,
+            M.Nombre AS Nombre_Moneda,
+            T.Nombre AS Nombre_Tercero,
+            GTN.Nombre_Grupo,
+            M.Codigo AS Codigo_Moneda
+			FROM Egreso E
+			INNER JOIN Funcionario F ON E.Identificacion_Funcionario = F.Identificacion_Funcionario
+			INNER JOIN Tercero T ON E.Id_Tercero = T.Id_Tercero
+			INNER JOIN Moneda M ON E.Id_Moneda = M.Id_Moneda
+			INNER JOIN Grupo_Tercero_Nuevo GTN ON E.Id_Grupo = GTN.Id_Grupo_Tercero'
+	. $condicion
+	. ' ORDER BY Fecha DESC LIMIT ' . $paginationStart;
 
-$oItem->Tipo_Origen = $datos["Forma_Pago"] == "Credito" ? 'Tercero' : 'Remitente';
-$oItem->Tipo_Destino = 'Destinatario';
+// $paginationObj = new PaginacionData($pageSize, $query_paginacion, $pagina);
 
-$oItem->save();
-$idTransferencia = $oItem->getId();
-unset($oItem);
+$queryObj = new QueryBaseDatos($query);
 
-GuardarLogSistema($datos['Forma_Pago'], $datos['Tipo_Transferencia'], $idTransferencia);
+//Ejecuta la consulta de la instancia queryobj y retorna el resultado de la misma segun los parametros
+$result = $queryObj->Consultar('Simple');
 
-//Recibo
-$cod =  $configuracion->Consecutivo('Recibo');
-$datos["Codigo"] = $cod;
+echo json_encode($result);
 
-$oItem = new complex("Recibo", "Id_Recibo");
-foreach ($datos as $index => $value) {
-	$oItem->Id_Transferencia = $idTransferencia;
-	$oItem->$index = $value;
-}
+echo json_encode($egresos);
 
-$oItem->save();
-$idRecibo = $oItem->getId();
-unset($oItem);
 
-//si tengo destinatarios
-$i = -1;
-foreach ($envios as $envio) {
-	$i++;
-	$envio['Id_Moneda'] = $datos['Moneda_Destino'];
-	$oItem = new complex("Transferencia_Destinatario", "Id_Transferencia_Destinatario");
-	foreach ($envio as $index => $value) {
-		$oItem->Id_Transferencia = $idTransferencia;
-		$oItem->Id_Recibo = $idRecibo;
-		$oItem->$index = $value;
-	}
-	$oItem->save();
-	unset($oItem);
-}
+function SetCondiciones($req)
+{
 
-if ($datos["Forma_Pago"] == "Credito" && $datos["Tipo_Transferencia"] == "Transferencia") {
-	//NUEVA VALIDACION
-	if ($datos['Bolsa_Bolivares'] != '0') {
-		if ($total_transferencia_con_bolsa_bolivares > $datos['Bolsa_Bolivares']) {
+	$condicion = '';
 
-			$oItem = new complex("Movimiento_Tercero", "Id_Movimiento_Tercero");
-			$oItem->Fecha = $hoy;
-			$oItem->Tipo = "Egreso";
-			$oItem->Valor = $datos["Bolsa_Bolivares"];
-			$oItem->Detalle = $datos["Observacion_Transferencia"];
-			$oItem->Id_Moneda_Valor = $datos["Moneda_Destino"];
-			$oItem->Id_Tipo_Movimiento = '1';
-			$oItem->Valor_Tipo_Movimiento = $idTransferencia;
-			$oItem->Id_Tercero = $datos["Documento_Origen"];
-			$oItem->Estado = 'Activo';
-			$oItem->save();
-			unset($oItem);
-			DescontarBolsa($datos["Documento_Origen"], $datos['Bolsa_Bolivares']);
-
-			$oItem = new complex("Movimiento_Tercero", "Id_Movimiento_Tercero");
-			$oItem->Fecha = $hoy;
-			$oItem->Tipo = "Egreso";
-			$oItem->Valor = $datos["Cantidad_Recibida"];
-			$oItem->Detalle = $datos["Observacion_Transferencia"];
-			$oItem->Id_Moneda_Valor = $datos["Moneda_Origen"];
-			$oItem->Id_Tipo_Movimiento = '1';
-			$oItem->Valor_Tipo_Movimiento = $idTransferencia;
-			$oItem->Id_Tercero = $datos["Documento_Origen"];
-			$oItem->Estado = 'Activo';
-			$oItem->save();
-			unset($oItem);
-
-			DescontarCupo($datos["Documento_Origen"], $datos['Cantidad_Recibida']);
-		} elseif ($total_transferencia_con_bolsa_bolivares < $datos['Bolsa_Bolivares']) {
-			$oItem = new complex("Movimiento_Tercero", "Id_Movimiento_Tercero");
-			$oItem->Fecha = $hoy;
-			$oItem->Tipo = "Egreso";
-			$oItem->Valor = $datos["Cantidad_Transferida_Con_Bolivares"];
-			$oItem->Detalle = $datos["Observacion_Transferencia"];
-			$oItem->Id_Moneda_Valor = $datos["Moneda_Destino"];
-			$oItem->Id_Tipo_Movimiento = '1';
-			$oItem->Valor_Tipo_Movimiento = $idTransferencia;
-			$oItem->Id_Tercero = $datos["Documento_Origen"];
-			$oItem->Estado = 'Activo';
-			$oItem->save();
-			unset($oItem);
-			DescontarBolsa($datos["Documento_Origen"], $datos['Cantidad_Transferida_Con_Bolivares']);
-		} elseif ($total_transferencia_con_bolsa_bolivares == $datos['Bolsa_Bolivares']) {
-			$oItem = new complex("Movimiento_Tercero", "Id_Movimiento_Tercero");
-			$oItem->Fecha = $hoy;
-			$oItem->Tipo = "Egreso";
-			$oItem->Valor = $datos["Bolsa_Bolivares"];
-			$oItem->Detalle = $datos["Observacion_Transferencia"];
-			$oItem->Id_Moneda_Valor = $datos["Moneda_Destino"];
-			$oItem->Id_Tipo_Movimiento = '1';
-			$oItem->Valor_Tipo_Movimiento = $idTransferencia;
-			$oItem->Id_Tercero = $datos["Documento_Origen"];
-			$oItem->Estado = 'Activo';
-			$oItem->save();
-			unset($oItem);
-			DescontarBolsa($datos["Documento_Origen"], $datos['Bolsa_Bolivares']);
+	if (isset($req['codigo']) && $req['codigo'] != "") {
+		if ($condicion != "") {
+			$condicion .= " AND E.Codigo LIKE '%" . $req['codigo'] . "%'";
+		} else {
+			$condicion .=  " WHERE E.Codigo LIKE '%" . $req['codigo'] . "%'";
 		}
-	} else {
-
-		$oItem = new complex("Movimiento_Tercero", "Id_Movimiento_Tercero");
-		$oItem->Fecha = $hoy;
-		$oItem->Tipo = "Egreso";
-		$oItem->Valor = $datos["Cantidad_Recibida"];
-		$oItem->Detalle = $datos["Observacion_Transferencia"];
-		$oItem->Id_Moneda_Valor = $datos["Moneda_Origen"];
-		$oItem->Id_Tercero = $datos["Documento_Origen"];
-		$oItem->Id_Tipo_Movimiento = '1';
-		$oItem->Valor_Tipo_Movimiento = $idTransferencia;
-		$oItem->Estado = 'Activo';
-		$oItem->save();
-		unset($oItem);
-
-		DescontarCupo($datos["Documento_Origen"], $datos['Cantidad_Recibida']);
-	}
-}
-
-if ($datos["Forma_Pago"] == "Consignacion" && $datos["Tipo_Transferencia"] == "Transferencia") {
-	//Movimiento_Cuenta_Bancaria    
-	$oItem = new complex("Movimiento_Cuenta_Bancaria", "Id_Movimiento_Cuenta_Bancaria");
-	foreach ($datos as $index => $value) {
-		//$oItem->Id_Transferencia=$idTransferencia;
-		$oItem->Fecha = $hoy;
-		$oItem->Tipo = "Ingreso";
-		$oItem->$index = $value;
-		$oItem->Valor = $datos["Cantidad_Recibida"];
-		$oItem->Detalle = $datos["Observacion_Transferencia"];
-		$oItem->Id_Tipo_Movimiento_Bancario = "1";
-		$oItem->Valor_Tipo_Movimiento_Bancario = $idTransferencia;
-		$oItem->Transferencia = "Si";
 	}
 
-	$oItem->save();
-	unset($oItem);
-}
+	if (isset($req['funcionario']) && $req['funcionario'] != "") {
+		if ($condicion != "") {
+			$condicion .= " AND CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['funcionario'] . "%'";
+		} else {
+			$condicion .=  " WHERE CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['funcionario'] . "%'";
+		}
+	}
 
+	if (isset($req['grupo']) && $req['grupo'] != "") {
+		if ($condicion != "") {
+			$condicion .= " AND E.Id_Grupo = " . $req['grupo'];
+		} else {
+			$condicion .=  " WHERE E.Id_Grupo = " . $req['grupo'];
+		}
+	}
 
+	if (isset($req['tercero']) && $req['tercero']) {
+		if ($condicion != "") {
+			$condicion .= " AND T.Nombre LIKE '%" . $req['tercero'] . "%'";
+		} else {
+			$condicion .= " WHERE T.Nombre LIKE '%" . $req['tercero'] . "%'";
+		}
+	}
 
-echo json_encode(['message' => 'Guardado con exito', 'Code' => 200]);
+	if (isset($req['moneda']) && $req['moneda']) {
+		if ($condicion != "") {
+			$condicion .= " AND E.Id_Moneda = " . $req['moneda'];
+		} else {
+			$condicion .= " WHERE E.Id_Moneda = " . $req['moneda'];
+		}
+	}
 
+	if (isset($req['valor']) && $req['valor']) {
+		if ($condicion != "") {
+			$condicion .= " AND E.Valor = " . $req['valor'];
+		} else {
+			$condicion .= " WHERE E.Valor = " . $req['valor'];
+		}
+	}
 
-
-function DescontarCupo($idTercero, $valorDescontar)
-{
-	$oItem = new complex("Tercero", "Id_Tercero", $idTercero);
-	$oItem->Cupo_Disponible = $oItem->Cupo_Disponible - $valorDescontar;
-	$oItem->save();
-	unset($oItem);
-}
-
-function ReponerCupo($idTercero, $valorReponer)
-{
-	$oItem = new complex("Tercero", "Id_Tercero", $idTercero);
-	$oItem->Cupo_Disponible = $oItem->Cupo_Disponible + $valorReponer;
-	$oItem->save();
-	unset($oItem);
-}
-
-function DescontarBolsa($idTercero, $bolivares)
-{
-	global $queryObj;
-
-	$query_update = "UPDATE Bolsa_Bolivares_Tercero SET Bolsa_Bolivares = Bolsa_Bolivares - $bolivares WHERE Id_Tercero = $idTercero";
-	$queryObj->SetQuery($query_update);
-	$nombre_moneda = $queryObj->QueryUpdate();
-}
-
-function GetCupoTercero($idTercero)
-{
-	global $queryObj;
-
-	$query = "SELECT Cupo, Cupo_Disponible FROM Tercero WHERE Id_Tercero = $idTercero";
-	$queryObj->SetQuery($query);
-	$cupo_tercero = $queryObj->ExecuteQuery('simple');
-	return $cupo_tercero;
-}
-
-function GetMontoPesosBolsaBolivares($idTercero, $bolivares, $bolsa_bolivares)
-{
-	global $queryObj;
-
-	$cupo_tercero = GetCupoTercero($idTercero);
-	$cupo_usado = intval($cupo_tercero['Cupo']) - intval($cupo_tercero['Cupo_Disponible']);
-	$equivalente_pesos_bolsa_bolivares = round(($cupo_usado * $bolivares) / $bolsa_bolivares);
-	return $equivalente_pesos_bolsa_bolivares;
-}
-
-function GuardarLogSistema($formaPago, $tipo, $idRegistro)
-{
-	global $log_sistema;
-
-	$detalle_log = 'Nuevo recibo transferencia de tipo: ' . $tipo . ', forma de pago: ' . $formaPago . '!';
-	$log_sistema->GuardarActividadLog('Recibo Transferencia', $detalle_log, $idRegistro);
+	return $condicion;
 }

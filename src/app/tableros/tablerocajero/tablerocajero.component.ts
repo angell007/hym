@@ -1727,8 +1727,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     if ((valor > total_transferir) || (total_valor_destinatarios > total_transferir)) {
       this.ListaDestinatarios[i].Valor_Transferencia = valor - (total_valor_destinatarios - total_transferir);
-      let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir!"], tipo: "warning", duracion: 4000 };
-      this._toastService.ShowToast(toastObj);
+      // let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir!"], tipo: "warning", duracion: 4000 };
+      // this._toastService.ShowToast(toastObj);
+      this.ShowSwal('warning', 'Alerta', 'El valor que coloco supera el total a transferir');
     } else if (total_valor_destinatarios <= total_transferir) {
       let asignar_siguiente = total_transferir - total_valor_destinatarios;
       console.log(asignar_siguiente);
@@ -1790,26 +1791,29 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   GuardarTransferencia(formulario: NgForm) {
     let forma_pago = this.TransferenciaModel.Forma_Pago;
+    this.GuardarTransferenciaEfectivo();
 
     //NUEVO CODIGO
-    switch (forma_pago) {
-      case 'Efectivo':
-        this.GuardarTransferenciaEfectivo();
-        break;
+    // switch (forma_pago) {
+    //   case 'Efectivo':
+    //     break;
 
-      case 'Consignacion':
-        this.GuardarTransferenciaEfectivo();
-        break;
+    //   case 'Consignacion':
+    //     this.GuardarTransferenciaEfectivo();
+    //     break;
 
-      case 'Credito':
-        this.GuardarTransferenciaEfectivo();
-        break;
+    //   case 'Credito':
+    //     this.GuardarTransferenciaEfectivo();
+    //     break;
 
-      default:
-        this.ShowSwal("warning", "Alerta", "Tipo de Transferencia erronea");
-        break;
-    }
+    //   default:
+    //     this.ShowSwal("warning", "Alerta", "Tipo de Transferencia erronea");
+    //     break;
+    // }
   }
+
+
+  // ************************************************** GuardarTransferenciaEfectivo **********************************************************************************
 
   GuardarTransferenciaEfectivo() {
 
@@ -1826,10 +1830,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case 'Transferencia':
         if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
 
-          console.log(total_suma_transferir_destinatarios);
-          console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
-          console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
-          console.log(total_a_transferir);
+          // console.log(total_suma_transferir_destinatarios);
+          // console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
+          // console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
+          // console.log(total_a_transferir);
 
           if (total_suma_transferir_destinatarios > 0) {
             let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
@@ -1887,6 +1891,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ************************************************** Termina aqui **********************************************************************************
   SaveTransferencia(bolsa = '') {
     this.TransferenciaModel.Id_Tercero_Destino = '0';
 
@@ -1905,7 +1910,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http.post(this.globales.ruta + 'php/pos/guardar_transferencia.php', datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
-        // this.TransferenciaModel.Cantidad_Transferida = '';
         this.errorSwal.show();
         return this.handleError(error);
       }).subscribe((data: any) => {
@@ -1998,7 +2002,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       Tipo_Origen: 'Remitente',
       Tipo_Destino: 'Destinatario'
     };
-
+// *****************
     this.ListaDestinatarios = [
       {
         id_destinatario_transferencia: '',
@@ -2012,7 +2016,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     ];
 
     this.MonedaParaTransferencia = {
-      id: '',
+      // id: 0,
       nombre: '',
       Valores: {
         Min_Venta_Efectivo: '',
@@ -2030,7 +2034,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         Min_No_Cobro_Transferencia: '',
       }
     };
-
+// ********************
     this.id_remitente = '';
     this.tercero_credito = '';
   }
@@ -2304,13 +2308,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _concatenarDocumentosDestinatarios() {
     let ids = '';
     this.ListaDestinatarios.forEach(d => {
-      console.log(d);
       if (d.Numero_Documento_Destino != '') {
-
         ids += d.Numero_Documento_Destino + ',';
       }
     });
-
     return ids;
   }
 
@@ -2726,8 +2727,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   private _getIdMoneda(nombreMoneda: string) {
     let moneda = this.Monedas.find(x => x.Nombre.toLowerCase() == nombreMoneda.toLowerCase());
-    console.log(moneda);
-
     if (!this.generalService.IsObjEmpty(moneda)) {
       return moneda.Id_Moneda;
     } else {
@@ -2759,12 +2758,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   EliminarDestinatarioTransferencia(index) {
     this.ListaDestinatarios.splice(index, 1);
     this.HabilitarCampoValor();
+    this.TransferenciaModel.Cantidad_Transferida = 0;
+
   }
 
   AutoCompletarRemitente(modelo: any) {
 
+
     if (typeof (modelo) == 'object') {
 
+      console.log('Autocompletando- object ', modelo);
+      this.TransferenciaModel.Documento_Origen = '';
       this.TransferenciaModel.Documento_Origen = modelo.Id_Transferencia_Remitente;
       this.TransferenciaModel.Telefono_Remitente = modelo.Telefono;
       this.TransferenciaModel.Nombre_Remitente = modelo.Nombre;
@@ -2776,15 +2780,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.TransferenciaModel.Telefono_Remitente = '';
       this.TransferenciaModel.Nombre_Remitente = '';
       this.EditRemitenteTransferencia = false;
-
-      // if(modelo == ''){
-      //   this.TransferenciaModel.Documento_Origen='';
-      //   this.TransferenciaModel.Telefono_Remitente='';
-      //   this.TransferenciaModel.Nombre_Remitente='';
-      // }else{
-
-      //   this.TransferenciaModel.Documento_Origen=modelo;
-      // }
     }
   }
 
@@ -4609,6 +4604,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
+  formatter_remitente_custom = (x: { Id_Transferencia_Remitente: string }) => x;
 
   search_remitente2 = (text$: Observable<string>) =>
     text$
@@ -5006,36 +5002,37 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  validateInputDocumentRetard(id: string, accion: string, posicionDestinatario: string): any {
+  validateInputDocumentRetard(id: string, accion: string, posicionDestinatario: string) {
     setTimeout(() => {
-     this.validateInputDocument(id, accion, posicionDestinatario)
-    }, 1000);
+      this.validateInputDocument(id, accion, posicionDestinatario)
+    }, 300);
   }
 
+  async validateInputDocument(id: string, accion: string, posicionDestinatario: string) {
 
+    console.log('Validando');
 
-  validateInputDocument(id: string, accion: string, posicionDestinatario: string): any {
-    let p = { id_destinatario: id };
-    if (p.id_destinatario == "") {
-      return false
-    }
-    this.destinatarioService.validarExistenciaDestinatario(p).subscribe((data) => {
-      if (data == 0) {
-        var longitud = this.LongitudCarateres(id);
-        if (longitud > 6) {
-          this.PosicionDestinatarioActivo = posicionDestinatario;
-          let objModal = { id_destinatario: id, accion: accion };
-          this.AbrirModalDestinatario.next(objModal);
+    let p = { id_destinatario: this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino };
 
-        } else if (longitud < 6) {
-          this.swalService.ShowMessage([data.codigo, data.titulo, 'El numero de caracteres debe ser mayor a 6 !']);
+    if (p.id_destinatario != "") {
+      await this.destinatarioService.validarExistenciaDestinatario(p).toPromise().then((data: any) => {
+        if (data == 0) {
+          var longitud = this.LongitudCarateres(this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino);
+          if (longitud > 6) {
+            this.PosicionDestinatarioActivo = posicionDestinatario;
+            let objModal = { id_destinatario: this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino, accion: accion };
+            this.AbrirModalDestinatario.next(objModal);
+
+          } else if (longitud <= 6) {
+            this.swalService.ShowMessage([data.codigo, data.titulo, 'El numero de caracteres debe ser mayor a 6 !']);
+          }
         }
-      }
-      if (data == 1) {
-        this.validateInputDocumentSmall[posicionDestinatario] = false
-      }
-    });
-  };
+        if (data == 1) {
+          this.validateInputDocumentSmall[posicionDestinatario] = false
+        }
+      });
+    };
+  }
 
 
 

@@ -12,6 +12,7 @@
       <th class="custom-thead">Estado</th>
       <th class="custom-thead">Acciones</th>
     </tr>
+
     <tr>
       <th class="table-filters">
       </th>
@@ -46,7 +47,7 @@
     </tr>
 
     <tr *ngIf="RecibosTransferencia.length == 0 ">
-      <td colspan="7" class="text-center">
+      <td colspan="8" class="text-center">
         <i class="ti-alert font-size-20 text-warning"></i>
         <h4>No hay RecibosTransferencia para mostrar!</h4>
       </td>
@@ -54,7 +55,9 @@
 
   </thead>
   <tbody *ngIf="!Cargando">
-    <tr *ngFor="let rt of RecibosTransferencia" [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
+    <tr
+      *ngFor="let rt of RecibosTransferencia  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
+      [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
       <td class="text-center">{{rt.Fecha | date:"HH:mm" }}</td>
       <td class="text-center">{{rt.CodigoRecibo}}</td>
       <td class="text-center">{{rt.Remitente}}</td>
