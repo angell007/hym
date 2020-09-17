@@ -19,12 +19,13 @@ import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofu
 import { QzTrayService } from '../shared/qz-tray.service';
 import { tap } from 'rxjs/operators';
 import { NotificacionsService } from '../customservices/notificacions.service';
+import { ConsolidadosService } from '../customservices/consolidados.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers: [QzTrayService, NotificacionsService]
+    providers: [QzTrayService, NotificacionsService,ConsolidadosService]
 
 })
 
@@ -177,7 +178,8 @@ export class CommonLayoutComponent implements OnInit {
         private _cajaService: CajaService,
         private _aperturaCajaService: AperturacajaService,
         private _generalService: GeneralService,
-        private _funcionarioService: NuevofuncionarioService) {
+        private _funcionarioService: NuevofuncionarioService,
+        private consolidados: ConsolidadosService) {
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 
