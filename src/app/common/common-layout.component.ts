@@ -17,13 +17,15 @@ import { GeneralService } from '../shared/services/general/general.service';
 import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
 
 import { QzTrayService } from '../shared/qz-tray.service';
+import { tap } from 'rxjs/operators';
+import { NotificacionsService } from '../customservices/notificacions.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers : [ QzTrayService ]
-    
+    providers: [QzTrayService, NotificacionsService]
+
 })
 
 export class CommonLayoutComponent implements OnInit {
@@ -37,7 +39,7 @@ export class CommonLayoutComponent implements OnInit {
     public sidenavSelected: any;
     public searchActived: any;
     public searchModel: any;
-    public user: any = JSON.parse(localStorage.User); 
+    public user: any = JSON.parse(localStorage.User);
     public changePasswordMessage: string;
     public alertas: any = [];
     public alertasCajas: any = [];
@@ -63,8 +65,8 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
     @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;
     @ViewChild('ModalAjuste') ModalAjuste: any;
-    @ViewChild('alertSwal') alertSwal:any;
-    
+    @ViewChild('alertSwal') alertSwal: any;
+
     @ViewChild('modalOficinaCaja') modalOficinaCaja: any;
     @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
 
@@ -100,15 +102,17 @@ export class CommonLayoutComponent implements OnInit {
     egresoGiro: any = 0;
     egresoTraslado: any = 0;
 
+    public counter = '0';
+
     //VARIABLES NUEVA
-    public Oficinas:any = [];
-    public Cajas:any = [];
-    public oficina_seleccionada:any = '';
-    public caja_seleccionada:any = '';
+    public Oficinas: any = [];
+    public Cajas: any = [];
+    public oficina_seleccionada: any = '';
+    public caja_seleccionada: any = '';
 
-    public Paises:any = [];
+    public Paises: any = [];
 
-    public AperturaCuentaModel:any = {
+    public AperturaCuentaModel: any = {
         Id_Cuenta_Bancaria: '',
         Id_Moneda: '',
         Valor: '',
@@ -137,46 +141,47 @@ export class CommonLayoutComponent implements OnInit {
 
     //NUEVO CODIGO
 
-    public MostrarToasty:boolean = false;
+    public MostrarToasty: boolean = false;
 
     //#region APERTURA CAJA
 
-        public MonedasSistema:any = [];
+    public MonedasSistema: any = [];
 
-        public DiarioModel:any = {
-            Id_Diario: '',
-            Id_Funcionario: this.user.Identificacion_Funcionario,
-            Caja_Apertura: this.caja_seleccionada,
-            Oficina_Apertura: this.oficina_seleccionada
-        };
+    public DiarioModel: any = {
+        Id_Diario: '',
+        Id_Funcionario: this.user.Identificacion_Funcionario,
+        Caja_Apertura: this.caja_seleccionada,
+        Oficina_Apertura: this.oficina_seleccionada
+    };
 
-        public ValoresMonedasApertura:any = [
-            { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
-        ];
+    public ValoresMonedasApertura: any = [
+        { Id_Moneda: '', Valor_Moneda_Apertura: '', NombreMoneda: '', Codigo: '' }
+    ];
 
-        public NombreCaja:string = '';
-        public NombreOficina:string = '';
-
-    //#endregion
-
+    public NombreCaja: string = '';
+    public NombreOficina: string = '';
 
     constructor(private router: Router,
-                private activeRoute:ActivatedRoute, 
-                public qz : QzTrayService,
-                private http: HttpClient, 
-                private globales: Globales, 
-                private toastyService: ToastyService,
-                private toastyConfig:ToastyConfig,
-                private cajaService:CajaService,
-                private swalService:SwalService,
-                private trasladoCajaService:TrasladocajaService,
-                private toastService:ToastService,
-                private _oficinaService:OficinaService,
-                private _cajaService:CajaService,
-                private _aperturaCajaService:AperturacajaService,
-                private _generalService:GeneralService,
-                private _funcionarioService:NuevofuncionarioService) {
-                    
+        private activeRoute: ActivatedRoute,
+        public qz: QzTrayService,
+        private http: HttpClient,
+        private globales: Globales,
+        private toastyService: ToastyService,
+        private toastyConfig: ToastyConfig,
+        private cajaService: CajaService,
+        private swalService: SwalService,
+        private _notificacionService: NotificacionsService,
+        private trasladoCajaService: TrasladocajaService,
+        private toastService: ToastService,
+        private _oficinaService: OficinaService,
+        private _cajaService: CajaService,
+        private _aperturaCajaService: AperturacajaService,
+        private _generalService: GeneralService,
+        private _funcionarioService: NuevofuncionarioService) {
+        this._notificacionService.counter();
+        this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
+
+
         this.app = {
             layout: {
                 sidePanelOpen: false,
@@ -210,13 +215,14 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedasApertura();
         this.ListarOficinas();
         console.log(localStorage);
-        
+
         this.SetOficina();
         this.SetCaja();
 
         if (!localStorage.getItem('Volver_Apertura')) {
-            localStorage.setItem("Volver_Apertura", "Si"); 
+            localStorage.setItem("Volver_Apertura", "Si");
         }
+
     }
 
     startTimer() {
@@ -229,12 +235,13 @@ export class CommonLayoutComponent implements OnInit {
     OcultarConsultor = false;
     ListaBancos = [];
     nombreBanco = "";
+
     ngOnInit() {
-        this.swalService.event.subscribe((data:any) => {
+        this.swalService.event.subscribe((data: any) => {
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
-        this.toastService.event.subscribe((data:any) => {
+        this.toastService.event.subscribe((data: any) => {
             this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 
@@ -272,97 +279,48 @@ export class CommonLayoutComponent implements OnInit {
                 break;
             }
         }
-        
-        setTimeout(() => {
-            localStorage.setItem('Perfil', this.user.Id_Perfil);
 
-            //if (this.user.Id_Perfil == 2) {
-                // if (this.oficina_seleccionada == '') {
-                //     this.modalOficinaCaja.show();                    
-                // }else{                    
-                //     this.ListarCajas(this.oficina_seleccionada);
-                //     this.SetNombreOficina(this.oficina_seleccionada);
-                // }
+        localStorage.setItem('Perfil', this.user.Id_Perfil);
 
-                // if (this.caja_seleccionada == '') {
-                //     this.modalOficinaCaja.show();
-                // }else{
-                //     this.SetNombreCaja(this.caja_seleccionada);
-                // }
-            //}
 
-            this.CheckCajaOficina();
+        this.CheckCajaOficina();
 
-            this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                this.alertas = data;
+        this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+            this.alertas = data;
+        });
+
+        this.startTimer();
+
+        if (localStorage['Banco']) {
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
             });
 
-            if (this.user.Password == this.user.Username) {
-                //this.ModalCambiarContrasena.show();
-            }
-
-            this.startTimer();
-
-            this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                this.alertasCajas = data;
-                if (this.alertasCajas.length > 0) {
-                    this.contadorTraslado = this.alertasCajas.length;
-                } else {
-                    this.contadorTraslado = 0;
-                }
-
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
             });
 
-            /*setInterval(() => {
-                this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                    this.alertasCajas = data;
-                    if (this.alertasCajas.length > 0) {
-                        this.contadorTraslado = this.alertasCajas.length;
-                    } else {
-                        this.contadorTraslado = 0;
-                    }
+            this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+                this.nombreBanco = data.Nombre_Titular;
+            });
+        }
 
-                });
-            }, 30000);*/
-
-            /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
-                this.ListaBancos = data;
-            });*/
-
-            /*setInterval(() => {
-                this.cerrarCaja()
-            }, 30000);*/
-
-            if (localStorage['Banco']) {
-                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                    params: { id: JSON.parse(localStorage['Banco']) }
-                }).subscribe((data: any) => {
-                    this.Movimientos = data.lista;
-                });
-        
-                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                    params: { id: JSON.parse(localStorage['Banco']) }
-                }).subscribe((data: any) => {
-                    this.Movimientos = data.lista;
-                });
-        
-                this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
-                    this.nombreBanco = data.Nombre_Titular;
-                });
-            }
-        }, 1200);
-        
-        
     }
 
+
+
     salir() {
-        
+
         // if (!this.ValidateConsultorBeforeLogout()) {
         //     return;
         // }
 
         this._registrarCierreSesion();
-        
+
         localStorage.removeItem("Token");
         localStorage.removeItem("User");
         localStorage.removeItem("Banco");
@@ -371,21 +329,21 @@ export class CommonLayoutComponent implements OnInit {
         localStorage.setItem('MonedaCuentaConsultor', '');
 
         setTimeout(() => {
-            this.router.navigate(["/login"]);    
-        }, 800);        
+            this.router.navigate(["/login"]);
+        }, 800);
     }
 
-    private _registrarCierreSesion(){
+    private _registrarCierreSesion() {
         let data = new FormData();
         data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
         this._funcionarioService.LogCierreSesion(data).subscribe();
     }
 
-    ValidateConsultorBeforeLogout(){
+    ValidateConsultorBeforeLogout() {
         let funcionario = JSON.parse(localStorage['User']);
 
         if (funcionario.Id_Perfil == '4') {
-            
+
             let cuenta = localStorage.getItem('CuentaConsultor');
 
             if (cuenta != '') {
@@ -396,10 +354,6 @@ export class CommonLayoutComponent implements OnInit {
 
         return true;
     }
-
-    ngAfterViewInit() {
-    }
-
 
 
     CambiarContrasena(formulario: NgForm, modal) {
@@ -422,16 +376,15 @@ export class CommonLayoutComponent implements OnInit {
         }
         document.getElementById(id).style.display = 'block';
 
-        let datos = new FormData();
-        datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-        this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php', datos).subscribe((data: any) => {
-            this.alertasCajas = [];
-            this.contadorTraslado = 0;
 
-        });
+        // let datos = new FormData();
+        // datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
+        // this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php', datos).pipe(tap(x => console.log(x))).subscribe((data: any) => {
+        //     this.alertasCajas = [];
+        //     this.contadorTraslado = 0;
+        // });
 
     }
-
 
     totalIngresosPesos = 0;
     totalIngresosBolivares = 0;
@@ -736,7 +689,7 @@ export class CommonLayoutComponent implements OnInit {
 
     }
 
-    GuardarMontoInicial2(modal) {      
+    GuardarMontoInicial2(modal) {
 
         let id_funcionario = this.user.Identificacion_Funcionario;
         let info = JSON.stringify(this.AperturaCuentaModel);
@@ -750,8 +703,8 @@ export class CommonLayoutComponent implements OnInit {
             this.mensajeSwal.type = data.codigo;
             this.mensajeSwal.show();
 
-            localStorage.setItem('Cuenta_Bancaria',this.AperturaCuentaModel.Id_Cuenta_Bancaria);
-            localStorage.setItem('Moneda_Cuenta_Bancaria',this.AperturaCuentaModel.Id_Moneda);
+            localStorage.setItem('Cuenta_Bancaria', this.AperturaCuentaModel.Id_Cuenta_Bancaria);
+            localStorage.setItem('Moneda_Cuenta_Bancaria', this.AperturaCuentaModel.Id_Moneda);
 
             modal.hide();
         });
@@ -767,8 +720,8 @@ export class CommonLayoutComponent implements OnInit {
     ValorInicial = 0;
     CierreCuentaBancaria() {
         //JSON.parse(localStorage['Banco']);
-this.ModalResumenCuenta.show();
-//return;
+        this.ModalResumenCuenta.show();
+        //return;
         this.MontoInicialCuenta = [];
         this.MontoInicial = 0;
         this.sumaEgresos = 0;
@@ -894,7 +847,7 @@ this.ModalResumenCuenta.show();
         }
     }
 
-    RealizarCierreDiaCuentaBancaria(modal:any = null) {
+    RealizarCierreDiaCuentaBancaria(modal: any = null) {
         let saldoActual = JSON.stringify(this.SaldoActual);
         JSON.parse(localStorage['Banco'])
         let datos = new FormData();
@@ -909,56 +862,56 @@ this.ModalResumenCuenta.show();
 
     //FUNCIONES NUEVAS
 
-    AsignarMonedas(){
-        this.MonedasSistema = this.globales.Monedas;        
+    AsignarMonedas() {
+        this.MonedasSistema = this.globales.Monedas;
     }
 
-    AsignarMonedasApertura(){
+    AsignarMonedasApertura() {
         if (this.MonedasSistema.length > 0) {
-            
+
             this.ValoresMonedasApertura = [];
             this.MonedasSistema.forEach(moneda => {
                 let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
                 this.ValoresMonedasApertura.push(monObj);
-            });            
+            });
         }
     }
 
-    ListarOficinas(){        
-        this._oficinaService.getOficinas().subscribe((data:any)=> {
-            
-            if (data.codigo == 'success') {        
+    ListarOficinas() {
+        this._oficinaService.getOficinas().subscribe((data: any) => {
+
+            if (data.codigo == 'success') {
                 this.Oficinas = data.query_data;
-            }else{
-                this.Oficinas = [];                
+            } else {
+                this.Oficinas = [];
                 this.ShowSwal(data.tipo, data.titulo, data.mensaje);
             }
         });
     }
 
-    ListarCajas(value:string){
+    ListarCajas(value: string) {
         if (value == '') {
             this.Cajas = [];
             return;
         }
-        
-        this.http.get(this.globales.ruta+'php/cajas/listar_cajas_por_oficina.php', {params: {id:value}}).subscribe((data:any)=> {
+
+        this.http.get(this.globales.ruta + 'php/cajas/listar_cajas_por_oficina.php', { params: { id: value } }).subscribe((data: any) => {
 
             if (data.tipo == 'error') {
                 this.Cajas = [];
                 this.ShowSwal(data.tipo, 'Error', data.mensaje);
-            }else{
+            } else {
                 this.Cajas = data.data;
                 //this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
             }
         });
     }
 
-    AsignarPaises(){
+    AsignarPaises() {
         this.Paises = this.globales.Paises;
     }
 
-    GuardarOficinaCaja(){
+    GuardarOficinaCaja() {
         if (this.oficina_seleccionada == '') {
             this.ShowSwal('warning', 'Alerta', 'Debe escoger la oficina!');
             return;
@@ -973,90 +926,90 @@ this.ModalResumenCuenta.show();
 
             if (data.codigo == 'success') {*/
 
-                this._generalService.SessionDataModel.idOficina = this.oficina_seleccionada;
-                this._generalService.SessionDataModel.idCaja = this.caja_seleccionada;
-                
-                // localStorage.setItem("Oficina", this.oficina_seleccionada);        
-                // localStorage.setItem("Caja", this.caja_seleccionada);
-                this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
-                this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
-                this.SetNombreOficina(this.oficina_seleccionada);
-                this.SetNombreCaja(this.caja_seleccionada);
-                this.modalOficinaCaja.hide();
-                this._aperturaCajaService.OpenModalApertura(null);
-            /*}else{
+        this._generalService.SessionDataModel.idOficina = this.oficina_seleccionada;
+        this._generalService.SessionDataModel.idCaja = this.caja_seleccionada;
 
-                this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-                localStorage.setItem("Oficina", '');        
-                localStorage.setItem("Caja", '');
-                this.DiarioModel.Caja_Apertura = '';
-                this.DiarioModel.Oficina_Apertura = '';
-            }
-        }); */       
+        // localStorage.setItem("Oficina", this.oficina_seleccionada);        
+        // localStorage.setItem("Caja", this.caja_seleccionada);
+        this.DiarioModel.Caja_Apertura = this.caja_seleccionada;
+        this.DiarioModel.Oficina_Apertura = this.oficina_seleccionada;
+        this.SetNombreOficina(this.oficina_seleccionada);
+        this.SetNombreCaja(this.caja_seleccionada);
+        this.modalOficinaCaja.hide();
+        this._aperturaCajaService.OpenModalApertura(null);
+        /*}else{
+
+            this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+            localStorage.setItem("Oficina", '');        
+            localStorage.setItem("Caja", '');
+            this.DiarioModel.Caja_Apertura = '';
+            this.DiarioModel.Oficina_Apertura = '';
+        }
+    }); */
     }
 
-    ShowSwal(tipo:string, titulo:string, msg:string){
+    ShowSwal(tipo: string, titulo: string, msg: string) {
         this.alertSwal.type = tipo;
         this.alertSwal.title = titulo;
         this.alertSwal.text = msg;
         this.alertSwal.show();
     }
 
-    ShowToasty(data:Array<string>, tipo:string = 'default', duracion:number = 3000){
+    ShowToasty(data: Array<string>, tipo: string = 'default', duracion: number = 3000) {
 
         let toastOptions = {
             title: data[0],
             msg: data[1],
             showClose: true,
             timeout: duracion,
-            onAdd: (toast:ToastData) => {
+            onAdd: (toast: ToastData) => {
                 this.MostrarToasty = true;
                 // console.log('Toast ' + toast.id + ' has been added!');
             },
-            onRemove: function(toast:ToastData) {
+            onRemove: function (toast: ToastData) {
                 this.MostrarToasty = false;
                 // console.log('Toast ' + toast.id + ' has been removed!');
             }
-        }        
+        }
 
         switch (tipo) {
             case 'default': this.toastyService.default(toastOptions); break;
             case 'info': this.toastyService.info(toastOptions); break;
             case 'success': this.toastyService.success(toastOptions); break;
             case 'wait': this.toastyService.wait(toastOptions); break;
-            case 'error': this.toastyService.error(toastOptions);  break;
+            case 'error': this.toastyService.error(toastOptions); break;
             case 'warning': this.toastyService.warning(toastOptions); break;
         }
     }
 
-    SetNombreCaja(idCaja:string){
-        this.cajaService.getNombreCaja(idCaja).subscribe((data:any) => {
-            this.NombreCaja = data.caja;            
+    SetNombreCaja(idCaja: string) {
+        this.cajaService.getNombreCaja(idCaja).subscribe((data: any) => {
+            this.NombreCaja = data.caja;
             this._aperturaCajaService.OpenModalApertura(null);
         });
     }
 
-    SetNombreOficina(idOficina:string){
-        
+    SetNombreOficina(idOficina: string) {
+
         if (this.Oficinas.length > 0) {
-            let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina); 
-            this.NombreOficina = oficinaObj.Nombre;    
-        }        
+            let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina);
+            this.NombreOficina = oficinaObj.Nombre;
+        }
     }
 
-    CargarBancosPais(id_pais){
+    CargarBancosPais(id_pais) {
         if (id_pais == '') {
             this.LimpiarModeloCuentaBancaria();
             this.ListaBancos = [];
             return;
         }
 
-        this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_por_pais.php', {params:{id_pais:id_pais}}).subscribe((data: any) => {
+        this.http.get(this.globales.ruta + 'php/bancos/lista_bancos_por_pais.php', { params: { id_pais: id_pais } }).subscribe((data: any) => {
             this.ListaBancos = data;
         });
     }
 
-    LimpiarModeloCuentaBancaria(){
+    LimpiarModeloCuentaBancaria() {
         this.AperturaCuentaModel = {
             Id_Cuenta_Bancaria: '',
             Id_Moneda: '',
@@ -1065,70 +1018,70 @@ this.ModalResumenCuenta.show();
         };
     }
 
-    VerificarAntesDeCierre(){
-        this.trasladoCajaService.getTrasladosPendientes(this.user.Identificacion_Funcionario).subscribe((data:any) => {
+    VerificarAntesDeCierre() {
+        this.trasladoCajaService.getTrasladosPendientes(this.user.Identificacion_Funcionario).subscribe((data: any) => {
             if (data.codigo != 'success') {
                 this.swalService.ShowMessage(data);
-            }else{
+            } else {
 
                 this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
             }
         });
     }
 
-    SetOficina(){
+    SetOficina() {
         if (localStorage.getItem("Oficina") && localStorage.getItem("Oficina") != '') {
             this.oficina_seleccionada = localStorage.getItem("Oficina");
             this._generalService.SessionDataModel.idOficina = this.oficina_seleccionada;
-        }else{
+        } else {
             this.oficina_seleccionada = '';
         }
     }
 
-    SetCaja(){
+    SetCaja() {
         if (localStorage.getItem("Caja") && localStorage.getItem("Caja") != '') {
             this.caja_seleccionada = localStorage.getItem("Caja");
             this._generalService.SessionDataModel.idCaja = this.caja_seleccionada;
-        }else{
-            this.caja_seleccionada = '';       
+        } else {
+            this.caja_seleccionada = '';
         }
     }
 
-    CheckCajaOficina(){
-        var macFormatted='';
+    CheckCajaOficina() {
+        var macFormatted = '';
         this.qz.getMac().subscribe(
-            data => {                
-                for(var i = 0; i < data.macAddress.length; i++) {
+            data => {
+                for (var i = 0; i < data.macAddress.length; i++) {
                     macFormatted += data.macAddress[i];
                     if (i % 2 == 1 && i < data.macAddress.length - 1) {
                         macFormatted += ":";
                     }
                 }
                 console.log(macFormatted);
-                if (this.oficina_seleccionada == ''||this.caja_seleccionada == '') {
-                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', {params:{mac:macFormatted}}).subscribe((data: any) => {
-                        if(data.mensaje=='Se han encontrado registros!'){
+                if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
+                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
+                        if (data.mensaje == 'Se han encontrado registros!') {
                             console.log(data.query_data.Id_Oficina)
                             this.oficina_seleccionada = data.query_data.Id_Oficina;
                             this.caja_seleccionada = data.query_data.Id_Caja;
-                            
+
                             localStorage.setItem('Oficina', this.oficina_seleccionada);
                             localStorage.setItem('Caja', this.caja_seleccionada);
 
                             this.SetNombreOficina(this.oficina_seleccionada);
                             this.SetNombreCaja(this.caja_seleccionada);
-                        }else{
+                        } else {
                             this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
                             setTimeout(() => {
                                 this.salir();
                             }, 10000);
-                            
+
                         }
 
-                        
+
                     });
                     //this.modalOficinaCaja.show();
-                }else{                    
+                } else {
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);
@@ -1142,7 +1095,7 @@ this.ModalResumenCuenta.show();
             this.qz.removePrinter();
         }, 10000);
 
-        
+
     }
 
 }
