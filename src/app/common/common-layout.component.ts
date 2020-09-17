@@ -25,7 +25,7 @@ import { ConsolidadosService } from '../customservices/consolidados.service';
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers: [QzTrayService, NotificacionsService,ConsolidadosService]
+    providers: [QzTrayService, NotificacionsService, ConsolidadosService]
 
 })
 
@@ -179,7 +179,7 @@ export class CommonLayoutComponent implements OnInit {
         private _aperturaCajaService: AperturacajaService,
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
-        private consolidados: ConsolidadosService) {
+        private consolidadosService: ConsolidadosService) {
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 
@@ -238,7 +238,7 @@ export class CommonLayoutComponent implements OnInit {
     ListaBancos = [];
     nombreBanco = "";
 
-    ngOnInit() {
+    async ngOnInit() {
         this.swalService.event.subscribe((data: any) => {
             this.ShowSwal(data.type, data.title, data.msg);
         });
@@ -262,6 +262,8 @@ export class CommonLayoutComponent implements OnInit {
             // cajero
             case "3": {
                 this.OcultarCajero = true;
+                // await this.consolidadosService.getValoresIniciales()
+                // await this.consolidadosService.getValoresApertura()
                 break;
             }
             // consultor

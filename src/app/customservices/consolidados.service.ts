@@ -14,12 +14,27 @@ export class ConsolidadosService {
   public TotalesEgresosMonedas: any = [];
   public Totales: any = [];
   public Saldos: any = [];
+  ValoresMonedasApertura: any;
+  TotalRestaIngresosEgresos: any;
 
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient) {
 
     this.getValoresIniciales();
+    this.getValoresApertura();
+    this.MonedasSistema.forEach((moneda, i) => {
+      let objMoneda = this.SumatoriaTotales[moneda.Nombre];
+      let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
+      // console.log('Imprimiendo  ', monto_inicial_moneda);
+      this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+      this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
+      let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
+      this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Nombre
+      this.TotalRestaIngresosEgresos.push([moneda.Nombre, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
+    });
+    console.log('Imprimiendo  ', this.TotalRestaIngresosEgresos);
 
   }
+
 
   async getValoresIniciales() {
 
@@ -47,12 +62,20 @@ export class ConsolidadosService {
               this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
               this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
 
-              console.log('Desde consolidado services ', this.SumatoriaTotales);
+              // console.log('Desde consolidado services ', this.SumatoriaTotales);
             }
           });
         });
       });
 
+  }
+
+  async getValoresApertura() {
+    await this.http.get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.user.Identificacion_Funcionario } }).toPromise().then(async (data: any) => {
+      data.valores_diario.forEach((valores, i) => {
+        this.ValoresMonedasApertura.push(valores);
+      });
+    });
   }
 
 }
