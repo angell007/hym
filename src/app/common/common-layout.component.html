@@ -221,6 +221,7 @@
 
         <div class="header navbar contenido {{OcultarCajero ? 'header2': '' }}">
           <div class="header-container">
+
             <ul class="nav-left">
               <li>
                 <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);"
@@ -231,6 +232,7 @@
                     src="assets/images/logo/logo.png" /></a>
               </li>
             </ul>
+
             <ul class="nav-left">
               <li class="user-profile dropdown">
                 <!-- PERFIL -->
@@ -247,6 +249,43 @@
                 </div>
               </li>
             </ul>
+
+            <ul class="nav-left">
+              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
+                <!-- NOTIFICACIONES SALDOS -->
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-money"></i> Saldos
+                </a>
+
+                <ul class="dropdown-menu ">
+                  <li class="notice-header">
+                    <i class="fa fa-money"></i> Mis saldos
+                  </li>
+
+                  <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable row">
+                    <li *ngFor="let alerta of  _notificacionService.alertasCajas"  >
+                      <!-- <a href="#traslados"> -->
+                        <div class="info row"  >
+                          <!-- <span class="title"> -->
+                            <span class="font-size-14 text-semibold col-6" style="display: inline-block;">{{alerta.NombreFuncionario}}</span>
+                            <!-- <span class="text-gray"> Le ha realizado un traslado por </span> -->
+                            <span class="font-size-14 text-semibold col-6" style="display: inline-block;">{{alerta.Valor }}</span>
+                            <!-- <span class="text-gray"> con código </span> -->
+                            <!-- <span class="font-size-14 text-semibold">{{alerta.Codigo}} -->
+                            <!-- </span> -->
+                          <!-- </span> -->
+                          <!-- <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span> -->
+                        </div>
+                      <!-- </a> -->
+                    </li>
+                  </ul>
+
+
+                </ul>
+              </li>
+            </ul>
+
+
             <ul class="nav-right">
               <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                 <!-- NOTIFICACIONES -->
@@ -257,7 +296,7 @@
                 <ul class="dropdown-menu ">
                   <li class="notice-header">
                     <i class="fa fa-refresh pdd-right-10"></i>
-                    <span>Traslados Recibidos</span>
+                    <!-- <span>Traslados Recibidos</span> -->
                   </li>
                   <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
                     <li *ngFor="let alerta of  _notificacionService.alertasCajas">
