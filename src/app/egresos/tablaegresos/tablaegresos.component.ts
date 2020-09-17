@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
@@ -42,6 +42,14 @@ export class TablaegresosComponent implements OnInit {
     total: 0
   }
 
+  ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+  @ViewChild('alertSwal') alertSwal: any;
+
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
     private _toastService: ToastService,
@@ -64,8 +72,10 @@ export class TablaegresosComponent implements OnInit {
       } else {
 
         this.Monedas = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
+        this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
+
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }
@@ -127,8 +137,10 @@ export class TablaegresosComponent implements OnInit {
     this.Cargando = true;
     this._egresoService.getListaEgresos(p).subscribe((data: any) => {
 
+      console.log('data egresos ', data);
+
       if (data.codigo == 'success') {
-        let user = JSON.parse( localStorage['User']) ;
+        let user = JSON.parse(localStorage['User']);
         switch (user.Id_Perfil) {
           case '6':
             this.Egresos = data.query_data
@@ -137,14 +149,14 @@ export class TablaegresosComponent implements OnInit {
             this.Egresos = data.query_data.filter((egreso) => egreso.Identificacion_Funcionario == JSON.parse(localStorage['User']).Identificacion_Funcionario && new Date().toISOString().slice(0, 10) == new Date(egreso.Fecha).toISOString().slice(0, 10))
             break;
         }
-        this.TotalItems = data.numReg;
+        // this.TotalItems = data.numReg;
       } else {
         this.Egresos = [];
         this._swalService.ShowMessage(data);
       }
 
       this.Cargando = false;
-      this.SetInformacionPaginacion();
+      this.SetInformacionPaginacion(this.Egresos);
     });
   }
 
@@ -159,15 +171,18 @@ export class TablaegresosComponent implements OnInit {
     };
   }
 
-  SetInformacionPaginacion() {
+  SetInformacionPaginacion(data: any) {
+    console.log(data);
+    this.TotalItems = data.length
+    console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
-
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
+
 
   AnularEgreso(idEgreso: string) {
     let datos = new FormData();
@@ -175,10 +190,14 @@ export class TablaegresosComponent implements OnInit {
     this._egresoService.anularEgreso(datos).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.ConsultaFiltrada();
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
+        this.ShowSwal('success', 'Success', 'Operacion realizada correctamente!');
+
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       } else {
-        this._swalService.ShowMessage(data);
+        // this._swalService.ShowMessage(data);
+        this.ShowSwal('warning', 'Warning',data);
+
       }
     });
   }
@@ -192,8 +211,10 @@ export class TablaegresosComponent implements OnInit {
       } else {
 
         this.GruposTerceros = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
+        this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
+
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }

@@ -16,8 +16,8 @@ export class FiltroService {
     tipo: ''
   };
   //Paginación
-  public maxSize = 5;
-  public pageSize = 5;
+  // public maxSize = 10;
+  public pageSize = 10;
   public TotalItems: number;
   public page = 1;
   public InformacionPaginacion: any = {

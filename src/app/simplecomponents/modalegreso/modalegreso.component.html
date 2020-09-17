@@ -40,7 +40,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <label>Valor</label>
-              <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" [(ngModel)]="EgresoModel.Valor" required>
+              <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" currencyMask [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required>
             </div>
           </div>
         </div>
@@ -64,3 +64,4 @@
       </div>
     </div>  
   </app-modal-basic>
+  <swal #alertSwal title="" html="" type="" text=""></swal>

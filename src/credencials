@@ -39,3 +39,8 @@ Message alert
           return true;
         }
       }
+
+      Modal egreso tiene alertas
+
+        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                    (confirm)="AnulaCambio(cambio.Id_Cambio)">

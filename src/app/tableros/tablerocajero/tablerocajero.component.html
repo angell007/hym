@@ -218,7 +218,7 @@
                             </thead>
                             <tbody *ngIf="!Cargando">
                               <tr
-                                *ngFor="let cambio of fc.Cambios | paginate: { itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }"
+                                *ngFor="let cambio of fc.Cambios | paginate: {  id: 'cambios', itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }"
                                 [ngClass]="{'bg-anulada':cambio.Estado == 'Anulado'}">
                                 <td class="text-center" style="font-size: 14px;">{{cambio.Fecha | date:"HH:mm" }}
                                 </td>
@@ -253,8 +253,9 @@
                             <div class="row">
                               <div class="col-md-12">
 
-                                <!-- <pagination-controls (pageChange)="fc.page = $event " previousLabel="Anterior"
-                                  nextLabel="Siguiente" responsive="true"></pagination-controls> -->
+                                <pagination-controls id="cambios" (pageChange)="fc.page = $event "
+                                  previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                                </pagination-controls>
 
                               </div>
 
@@ -439,7 +440,8 @@
                   <div class="card">
                     <div class="card-block">
                       <div class="tab-success">
-                        <app-tablatransferenciascajero [ActualizarTabla]="ActulizarTablaRecibos.asObservable()  "></app-tablatransferenciascajero>
+                        <app-tablatransferenciascajero [ActualizarTabla]="ActulizarTablaRecibos.asObservable()">
+                        </app-tablatransferenciascajero>
                       </div>
                     </div>
                   </div>
@@ -475,6 +477,7 @@
                         <select id="Moneda_Transferencia" class="form-control" name="Moneda_Transferencia"
                           [(ngModel)]="TransferenciaModel.Moneda_Destino" required
                           (change)="SetMonedaTransferencia($event.target.value)">
+                          <!-- <option selected value="">Seleccione moneda</option> -->
                           <option *ngFor="let m of MonedasTransferencia" [value]="m.Id_Moneda">{{m.Nombre}}</option>
                         </select>
                       </div>
@@ -715,14 +718,11 @@
                           <div class="row mrg-top-20">
                             <div class="col-md-4">
                               <div class="form-group">
-
-                                <label class="transferencia" style="display:block;">Número Documento</label>
-
-                                <input type="text" class="custom-input" placeholder="Documento"
+                                <label class="transferencia">Número Documento</label>
+                                <input type="text" class="custom-input" placeholder="Busqueda"
                                   name="Numero_Documento_Origen" autocomplete="off"
                                   [(ngModel)]="TransferenciaModel.Documento_Origen" [ngbTypeahead]="search_remitente2"
-                                
-                                  [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente_custom"
+                                  [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
                                   (ngModelChange)="AutoCompletarRemitente(TransferenciaModel.Documento_Origen, i)"
                                   value="TransferenciaModel.Documento_Origen">
 
@@ -758,15 +758,14 @@
 
                       <div class="row mrg-top-20">
                         <div class="col-md-12">
-                          <div class="form-group" >
-                            <label class="transferencia" style="display: inline-block;">Observaciones</label>
-                            <textarea  class="md-textarea form-control-md"  rows="5"  cols="12" style="width: 100%;" placeholder="Observaciones"   name="Observacion_Transferencia"
+                          <div class="form-group">
+                            <label class="transferencia">Observaciones</label>
+                            <textarea placeholder="Observaciones" class="form-control" name="Observacion_Transferencia"
                               [(ngModel)]="TransferenciaModel.Observacion_Transferencia"></textarea>
                           </div>
                         </div>
                       </div>
 
-                      <!-- _concatenarDocumentosDestinatarios -->
                       <div class="row mrg-top-20">
                         <div class="col-md-10">
                           <button [disabled]="!FormTransferencia.valid || validateInputDocumentSmall.includes(true)"
@@ -776,7 +775,7 @@
                           </button>
                         </div>
                         <div class="col-md-2">
-                          <button class="btn btn-secondary btn-sm btn-block mrg-top-10"
+                          <button class="btn btn-danger btn-sm btn-block mrg-top-10"
                             (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                         </div>
                       </div>
@@ -993,7 +992,6 @@
                 </div>
               </div>
             </div>
-
             <div class="row" id="Giros2" *ngIf="Giro2" style="margin-top: 10px">
               <!--FORMULARIO GIRO-->
               <div class="col-md-12">

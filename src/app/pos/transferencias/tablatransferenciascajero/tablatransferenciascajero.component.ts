@@ -33,8 +33,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     estado: ''
   };
 
-  //Paginación
-  public maxSize = 5;
+
   public pageSize = 10;
   public TotalItems: number;
   public page = 1;
@@ -49,6 +48,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     private _toastService: ToastService,
     private _transferenciaService: TransferenciaService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+    this.ConsultaFiltrada();
   }
 
   ngOnInit() {
@@ -67,7 +67,6 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     this._transferenciaService.getRecibosTransferenciasFuncionario(this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario).subscribe(data => {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
-        this.TotalItems = data.numReg;
       } else {
         this.RecibosTransferencia = [];
       }
@@ -77,15 +76,16 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   SetFiltros(paginacion: boolean) {
     let params: any = {};
 
-    params.tam = this.pageSize;
+    // params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if (paginacion === true) {
       params.pag = this.page;
     } else {
-      this.page = 1; // Volver a la página 1 al filtrar
+      this.page = 1;
       params.pag = this.page;
     }
+
 
     if (this.Filtros.remitente.trim() != "") {
       params.remitente = this.Filtros.remitente;
@@ -125,6 +125,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
     this.Cargando = true;
     this._transferenciaService.getRecibosTransferenciasFuncionario2(p).subscribe((data: any) => {
+      console.log(data);
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
@@ -134,7 +135,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
       }
 
       this.Cargando = false;
-      this.SetInformacionPaginacion();
+      this.SetInformacionPaginacion(data.query_data);
     });
   }
 
@@ -149,15 +150,18 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     };
   }
 
-  SetInformacionPaginacion() {
+  SetInformacionPaginacion(data: any) {
+    console.log(data);
+    this.TotalItems = data.length
+    console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
-
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
+
 
   AbrirModalAnularTransferencia(idTransferenciaAnular: string) {
     this.Id_Transferencia_Anular = idTransferenciaAnular;

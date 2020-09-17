@@ -55,8 +55,9 @@
 
   </thead>
   <tbody *ngIf="!Cargando">
+    <!-- *ngFor="let cambio of fc.Cambios | paginate: {  id: 'cambios', itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }" -->
     <tr
-      *ngFor="let rt of RecibosTransferencia  | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
+      *ngFor="let rt of RecibosTransferencia  | paginate: {  id: 'transferencias', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
       [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
       <td class="text-center">{{rt.Fecha | date:"HH:mm" }}</td>
       <td class="text-center">{{rt.CodigoRecibo}}</td>
@@ -83,8 +84,8 @@
   <div class="row">
     <div class="col-md-12">
 
-      <pagination-controls (pageChange)="page = $event " previousLabel="Anterior" nextLabel="Siguiente"
-        responsive="true"></pagination-controls>
+      <pagination-controls id="transferencias" (pageChange)="page = $event " previousLabel="Anterior"
+        nextLabel="Siguiente" responsive="true"></pagination-controls>
 
     </div>
   </div>
