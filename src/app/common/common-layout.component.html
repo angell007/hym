@@ -259,18 +259,13 @@
 
                 <ul class="dropdown-menu ">
                   <li class="notice-header">
-                    <i class="fa fa-money"></i> Mis saldos
-                    {{ consolidadosService.TotalRestaIngresosEgresos }}
-                  </li>
+                    <i class="fa fa-money"></i> Mis saldos </li>
 
-                  <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable row">
+                  <ul class="" style="list-style: none;">
                     <li *ngFor="let item of  consolidadosService.TotalRestaIngresosEgresos">
-                      <div class="info row">
-                        <span>{{  item[0]   }} $ {{  item[1] | currency:' ' }}</span>
-                        <!-- <span class="font-size-14 text-semibold col-6"
-                          style="display: inline-block;">{{alerta.NombreFuncionario}}</span>
-                        <span class="font-size-14 text-semibold col-6"
-                          style="display: inline-block;">{{alerta.Valor }}</span> -->
+                      <div class=" row">
+                        <span class="font-size-14 text-semibold col-6">{{ item[0] }}</span>
+                        <span class="font-size-14 text-semibold col-6">{{  item[1] | currency:' ' }}</span>
                       </div>
                     </li>
                   </ul>

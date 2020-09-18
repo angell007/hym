@@ -14,8 +14,9 @@ export class ConsolidadosService {
   public TotalesEgresosMonedas: any = [];
   public Totales: any = [];
   public Saldos: any = [];
-  ValoresMonedasApertura: any;
-  TotalRestaIngresosEgresos: any;
+  public ValoresMonedasApertura = []
+  public TotalRestaIngresosEgresos = [];
+
 
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient) {
 
@@ -25,19 +26,27 @@ export class ConsolidadosService {
         this.getValoresApertura().then(() => {
           this.MonedasSistema.forEach((moneda, i) => {
             let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-            let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
+
+            // this.ValoresMonedasApertura.push(valores);
+
+            console.log(this.ValoresMonedasApertura);
+
+            // let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
+            let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
             this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
             this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
             let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
-            console.log(['Monedas de apertura ', this.MonedasSistema, 'TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos[moneda.Nombre]]);
 
-            // this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Nombre
-            // this.TotalRestaIngresosEgresos.push([moneda.Nombre, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
+            // this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Codigo
+            this.TotalRestaIngresosEgresos.push([moneda.Codigo, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
 
           })
         })
       })
+
+      console.log(['TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos]);
+
     }).catch((err) => {
       console.log('Error  ', err);
     })
@@ -79,18 +88,19 @@ export class ConsolidadosService {
   async getValoresApertura() {
     await this.http.get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.user.Identificacion_Funcionario } }).toPromise().then(async (data: any) => {
       data.valores_diario.forEach((valores, i) => {
+        // console.log('Test.. valores', valores);
         this.ValoresMonedasApertura.push(valores);
       });
     });
   }
 
   async AsignarMonedasApertura() {
-    if (this.MonedasSistema.length > 0) {
-      this.ValoresMonedasApertura = [];
-      await this.MonedasSistema.forEach(moneda => {
-        let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
-        this.ValoresMonedasApertura.push(monObj);
-      });
+    // if (this.MonedasSistema.length > 0) {
+      // this.ValoresMonedasApertura = [];
+      // await this.MonedasSistema.forEach(moneda => {
+        // let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: , NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
+        // this.ValoresMonedasApertura.push(monObj);
+      // });
     }
-  }
+  // }
 }
