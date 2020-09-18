@@ -19,27 +19,35 @@ export class ConsolidadosService {
 
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient) {
 
-    this.getValoresIniciales();
-    this.getValoresApertura();
-    this.MonedasSistema.forEach((moneda, i) => {
-      let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-      let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
-      // console.log('Imprimiendo  ', monto_inicial_moneda);
-      this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
-      this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
-      let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
-      this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Nombre
-      this.TotalRestaIngresosEgresos.push([moneda.Nombre, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
-    });
-    console.log('Imprimiendo  ', this.TotalRestaIngresosEgresos);
 
+    this.getValoresIniciales().then(() => {
+      this.AsignarMonedasApertura().then(() => {
+        this.getValoresApertura().then(() => {
+          this.MonedasSistema.forEach((moneda, i) => {
+            let objMoneda = this.SumatoriaTotales[moneda.Nombre];
+            let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
+            this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+            this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
+            let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
+
+            console.log(['Monedas de apertura ', this.MonedasSistema, 'TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos[moneda.Nombre]]);
+
+            // this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Nombre
+            // this.TotalRestaIngresosEgresos.push([moneda.Nombre, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
+
+          })
+        })
+      })
+    }).catch((err) => {
+      console.log('Error  ', err);
+    })
   }
-
 
   async getValoresIniciales() {
 
-    await this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe(
-      tap(x => console.log('consultando', x)))
+    console.log('getValoresIniciales  ');
+
+    await this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {
         this.MonedasSistema = data.monedas;
         let t = data.totales_ingresos_egresos;
@@ -61,8 +69,6 @@ export class ConsolidadosService {
               this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
               this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
               this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-
-              // console.log('Desde consolidado services ', this.SumatoriaTotales);
             }
           });
         });
@@ -78,4 +84,13 @@ export class ConsolidadosService {
     });
   }
 
+  async AsignarMonedasApertura() {
+    if (this.MonedasSistema.length > 0) {
+      this.ValoresMonedasApertura = [];
+      await this.MonedasSistema.forEach(moneda => {
+        let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: '', NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
+        this.ValoresMonedasApertura.push(monObj);
+      });
+    }
+  }
 }
