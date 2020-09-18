@@ -588,7 +588,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     //this.GetRegistroDiario();
 
     this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
-      // console.log(d);
 
       if (d.verificado) {
         if (d.accion == 'transferencia_cajero') {
@@ -2224,7 +2223,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.MonedaParaTransferencia.Valores = data.query_data;
 
           // Buscando Valores de moneda
-          this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
+          this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
+          // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
           // Comision_Efectivo_Transferencia: "30"
           // Costo_Transferencia: "3000"
           // Id_Moneda: "12"
@@ -3457,24 +3457,27 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.DeshabilitarComisionGiro) {
-      if (this.permisoSubscription == undefined) {
+    // if (this.DeshabilitarComisionGiro) {
+    //   if (this.permisoSubscription == undefined) {
         this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
-          this.DeshabilitarComisionGiro = !d;
-
-          this.permisoSubscription.unsubscribe();
-          this.permisoSubscription = undefined;
+          // console.log(d);
+          if (d) {
+            this.DeshabilitarComisionGiro = false;
+            this.permisoSubscription.unsubscribe();
+            this.permisoSubscription = undefined;
+          }
         });
-      }
+      // }
 
       let p = { accion: "giro" };
       this.permisoService._openSubject.next(p);
       //this.DeshabilitarComisionGiro = false;
-    } else {
+    } 
+    // else {
 
-      this.DeshabilitarComisionGiro = true;
-    }
-  }
+    //   this.DeshabilitarComisionGiro = true;
+    // }
+  // }
 
   //#endregion
 
@@ -3777,6 +3780,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ValorComisionServicio = data.Comision;*/
       this.ServicioExternoModel = data;
       this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
+      console.log([parseInt('Cajero' ,this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision)]);
+
       this.ModalServicioEditar.show();
     });
   }
@@ -4966,7 +4971,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   validateInputDocumentRetard(id: string, accion: string, posicionDestinatario: string) {
     setTimeout(() => {
       this.validateInputDocument(id, accion, posicionDestinatario)
-    }, 300);
+    }, 100);
   }
 
   async validateInputDocument(id: string, accion: string, posicionDestinatario: string) {

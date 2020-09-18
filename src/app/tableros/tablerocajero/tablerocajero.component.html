@@ -176,7 +176,7 @@
                                 <th class="table-filters"></th>
 
                                 <th class="table-filters">
-                                  <input type="text" class="form-control" placeholder="Filtro codigo"
+                                  <input type="text" class="form-control" placeholder="Filtro código"
                                     (change)="fc.ConsultaFiltrada()" [(ngModel)]="fc.Filtros.codigo">
                                 </th>
 
@@ -714,13 +714,14 @@
                           <div class="row mrg-top-20">
                             <div class="col-md-4">
                               <div class="form-group">
-                                <label class="transferencia">Número Documento</label>
+
+                                <label class="transferencia" style="display:block;">Número Documento</label>
                                 <input type="text" class="custom-input" placeholder="Busqueda"
                                   name="Numero_Documento_Origen" autocomplete="off"
                                   [(ngModel)]="TransferenciaModel.Documento_Origen" [ngbTypeahead]="search_remitente2"
-                                  [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
+                                  [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente_custom"
                                   (ngModelChange)="AutoCompletarRemitente(TransferenciaModel.Documento_Origen, i)"
-                                  value="TransferenciaModel.Documento_Origen">
+                                  value="TransferenciaModel.Documento_Origen" required>
 
                                 <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;"
                                   *ngIf="EditRemitenteTransferencia"
@@ -756,7 +757,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label class="transferencia">Observaciones</label>
-                            <textarea placeholder="Observaciones" class="form-control" name="Observacion_Transferencia"
+                            <textarea placeholder="Observaciones" style="width: 100%;" name="Observacion_Transferencia"
                               [(ngModel)]="TransferenciaModel.Observacion_Transferencia"></textarea>
                           </div>
                         </div>
@@ -788,7 +789,7 @@
             <ul class="list-unstyled list-info">
               <li>
                 <span class="thumb-img pdd-top-10">
-                  <i class="ti-wallet text-primary font-size-30"></i>
+                  <i class="ti-wallet text-success font-size-30"></i>
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Giros</b>
@@ -880,7 +881,7 @@
                           </div>
 
 
-                          <div role="tabpanel" class="tab-pane fade" id="default-tab-2">
+                          <div role="tabpanel" class="tab-pane fade card-body" id="default-tab-2">
 
                             <h5>Últimos Giros Recibidos</h5>
                             <table class="table table-striped table-sm table-bordered">
@@ -1019,9 +1020,9 @@
                   <form #FormGiro="ngForm">
                     <div class="row">
                       <div class="col-md-6">
-                        <button class="btn btn-sm btn-success pull-right">
+                        <!-- <button class="btn btn-sm btn-success pull-right">
                           <i class="ti ti-hand-point-up"></i>
-                        </button>
+                        </button> -->
                         <h4>Remitente</h4>
                         <hr>
                         <div class="row">
@@ -1181,15 +1182,17 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label>Comisión
-                            <i class="text-info pl-2 font-size-15"
-                              [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}"
+                            <i class="text-info pl-2 font-size-15" [ngClass]="{'ti-unlock':DeshabilitarComisionGiro}"
                               style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
                           </label>
                           <input type="text" placeholder="Comision" class="form-control text-right" name="Comision"
                             [(ngModel)]="GiroModel.Comision" [disabled]="DeshabilitarComisionGiro" required currencyMask
                             [options]="{ thousands: '.', decimal: ',' }">
                         </div>
+                        <!-- [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}" -->
                       </div>
+
+                      {{ DeshabilitarComisionGiro | json }}
                       <div class="col-md-1">
                         <div class="form-group text-center">
                           <label>Libre</label>
@@ -1218,7 +1221,7 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Observaciones</label>
-                          <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                          <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
                             [(ngModel)]="GiroModel.Detalle"></textarea>
                         </div>
                       </div>
@@ -1488,8 +1491,8 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Observaciones</label>
-                          <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                            [(ngModel)]="TrasladoModel.Detalle" style="min-height:150px !important;"></textarea>
+                          <textarea placeholder="Observaciones"  name="Detalle"
+                            [(ngModel)]="TrasladoModel.Detalle" style="width: 100%;"></textarea>
                         </div>
                       </div>
                     </div>
@@ -1554,7 +1557,7 @@
             <ul class="list-unstyled list-info">
               <li>
                 <span class="thumb-img pdd-top-10">
-                  <i class="ti-control-shuffle text-danger font-size-30"></i>
+                  <i class="ti-truck text-danger font-size-30"></i>
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Servicios Externos</b>
@@ -1583,7 +1586,7 @@
                               <th class="custom-thead">Valor</th>
                               <th class="custom-thead">Comision</th>
                               <th class="custom-thead">Total</th>
-                              <th class="custom-thead"></th>
+                              <th class="custom-thead">Acciones</th>
                             </tr>
                             <tr>
                               <th class="table-filters"></th>
@@ -1698,7 +1701,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Observaciones</label>
-                            <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                            <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
                               [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
                           </div>
                         </div>
@@ -1892,8 +1895,8 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>Observaciones</label>
-                <textarea placeholder="Observaciones" class="form-control" name="Detalle"
-                  [(ngModel)]="TrasladoModel.Detalle" style="min-height:150px !important;"></textarea>
+                <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
+                  [(ngModel)]="TrasladoModel.Detalle"></textarea>
               </div>
             </div>
           </div>

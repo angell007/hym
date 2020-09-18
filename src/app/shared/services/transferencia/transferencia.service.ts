@@ -18,6 +18,11 @@ export class TransferenciaService {
     return this.client.get(this._rutaBase+'lista_transferencias_general.php', {params:p});
   } 
 
+  public GetInfoCompany():Observable<any>{
+
+    return this.client.get(this.globales.ruta+'php/configuracion/getInfoCompany.php');
+  } 
+
   getDetalleTransferencia(idTransferencia:string):Observable<any>{
     let p = {id_transferencia:idTransferencia};
     return this.client.get(this._rutaBase+'detalle_transferencia.php', {params:p});

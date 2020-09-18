@@ -1,3 +1,4 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { log } from 'util';
 import { HttpClient } from '@angular/common/http';
@@ -28,7 +29,7 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
   public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
@@ -63,7 +64,6 @@ export class CierrecajaComponent implements OnInit {
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
     console.log(this.solo_ver);
-
   }
 
   ConsultarNombreFuncionario() {
@@ -88,13 +88,17 @@ export class CierrecajaComponent implements OnInit {
 
 
     this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
-
+      //Total ingresos 
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
+
+
       for (const k in t) {
 
         let arr = t[k];
         this.Totales[k] = arr;
+
+
       }
 
       setTimeout(() => {
@@ -108,7 +112,7 @@ export class CierrecajaComponent implements OnInit {
 
     if (this.MonedasSistema.length > 0) {
       this.MonedasSistema.forEach((m, i) => {
-        let color = i % 2 == 0 ? '#d3d3d3' : '#ffffff';
+        let color = i % 2 == 0 ? '#f0ffff' : '#ffffff';
         let celda_i = { Nombre_Celda: 'Ingresos', Color: color };
         let celda_e = { Nombre_Celda: 'Egresos', Color: color };
         this.CeldasIngresoEgresoEncabezado.push(celda_i);
@@ -119,27 +123,21 @@ export class CierrecajaComponent implements OnInit {
 
     if (this.Modulos.length > 0) {
 
-      console.log('TEST ----- MODULO EGRESO ' + JSON.stringify(this.MonedasSistema));
 
       this.MonedasSistema.forEach((m) => {
-
         this.Modulos.forEach((mod) => {
-
           let obj = this.Totales[mod];
-          console.log('TEST ----- MODULO obj ' + JSON.stringify(obj));
-          
           let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
-          
-          console.log('TEST ----- MODULO monObj ' + JSON.stringify(obj));
 
-          if (!this.SumatoriaTotales[m.Nombre]) {
-            this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
+          if (this.SumatoriaTotales[m.Nombre]) {
             this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
             this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
           } else {
 
+            this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
             this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
             this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
+
           }
 
         });
@@ -148,7 +146,9 @@ export class CierrecajaComponent implements OnInit {
       this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
         let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        let color = i % 2 == 0 ? '#d3d3d3' : '#ffffff';
+        console.log('Imprimiendo Cierre  ', [ this.ValoresMonedasApertura, monto_inicial_moneda  ]);
+
+        let color = i % 2 == 0 ? '#f0ffff' : '#ffffff';
         let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };
         let obj_total_eg = { Total: objMoneda.Egreso_Total.toFixed(2), Color: color };
         this.MostrarTotal.push(obj_total_ing);
@@ -160,9 +160,10 @@ export class CierrecajaComponent implements OnInit {
         let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
         this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed());
+
+        // console.log('Imprimiendo totales ', this.TotalRestaIngresosEgresos);
       });
 
-      console.log(this.MostrarTotal);
 
       this.MonedasSistema.forEach((m, i) => {
         let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
@@ -182,7 +183,6 @@ export class CierrecajaComponent implements OnInit {
   }
 
   ArmarCeldasValoresTabla() {
-
     if (this.Totales.length > 0) {
       this.MonedasSistema.forEach(element => {
         let celdas = { Ingreso: 'Ingreso', Egreso: 'Egreso' };
@@ -196,8 +196,6 @@ export class CierrecajaComponent implements OnInit {
       return;
     } else if (!this.ValidarDiferencias()) {
       return;
-    } else if (this.CierreCajaModel.Observacion == '') {
-      this.ShowSwal('warning', 'Alerta', 'Debe colocar la observacion antes de realizar el cierre de caja!');
     } else {
       this.ArmarResumenMovimientos();
       console.log(this.ResumenMovimiento);
@@ -207,7 +205,9 @@ export class CierrecajaComponent implements OnInit {
       let resumen = JSON.stringify(this.ResumenMovimiento);
       let model = JSON.stringify(this.CierreCajaModel);
       let data = new FormData();
+
       console.log(resumen);
+
       data.append("entregado", entregado);
       data.append("diferencias", diferencias);
       data.append("modelo", model);
@@ -222,7 +222,6 @@ export class CierrecajaComponent implements OnInit {
         } else {
 
           this.LimpiarModelos();
-          //this.ShowSwal('success', 'Registro Exitoso!', 'Se guardó el cierre correctamente!');
           this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
           this.salir();
         }
@@ -269,7 +268,7 @@ export class CierrecajaComponent implements OnInit {
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
     //let diferencia = this.Diferencias[pos].Diferencia;
 
-    let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
+    let entregar = total_entregar;
     let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
@@ -312,7 +311,6 @@ export class CierrecajaComponent implements OnInit {
   AsignarFieldsDisabled() {
     this.TotalRestaIngresosEgresos.forEach(valor => {
       console.log(valor);
-
       if (valor == 0 || valor == '') {
         this.FieldsDisabled.push(true);
       } else {
@@ -339,8 +337,6 @@ export class CierrecajaComponent implements OnInit {
         data.valores_diario.forEach((valores, i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
         });
-        console.log(this.ValoresMonedasApertura);
-
       });
   }
 

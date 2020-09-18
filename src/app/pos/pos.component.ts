@@ -3806,10 +3806,10 @@ export class PosComponent implements OnInit {
 
     editarServicio(id) {
       this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo: "Servicio" } }).subscribe((data: any) => {
-        /*this.Servicio = data;
-        this.ValorComisionServicio = data.Comision;*/
         this.ServicioExternoModel = data;
         this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
+        console.log([parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision)]);
+        
         this.ModalServicioEditar.show();
       });
     }

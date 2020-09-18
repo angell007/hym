@@ -10,51 +10,65 @@ import { ReciboTransferenciaDetalleModel } from '../../Modelos/VerModels/ReciboT
 })
 export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestroy {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
+  @Input() AbrirModal: Observable<any> = new Observable();
 
-  @ViewChild('ModalVerRecibo') ModalVerRecibo:any;
+  @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
 
-  private _abrirSubscription:any;
+  private _abrirSubscription: any;
 
-  public Transferencia:ReciboTransferenciaDetalleModel = new ReciboTransferenciaDetalleModel();
-  public DestinatariosTransferencia:Array<any> = [];
+  public Transferencia: ReciboTransferenciaDetalleModel = new ReciboTransferenciaDetalleModel();
+  public DestinatariosTransferencia: Array<any> = [];
+  public infoCompany: Array<any> = [];
 
-  constructor(private _transferenciaService:TransferenciaService) { }
+  constructor(private _transferenciaService: TransferenciaService) { }
 
   ngOnInit() {
     this._abrirSubscription = this.AbrirModal.subscribe(data => {
       console.log(data);
-      
+
       this.Transferencia = data;
       this.GetDestinatariosTransferencia();
+      this.GetInfoCompany();
       this.ModalVerRecibo.show();
       console.log(this.Transferencia);
-      
+
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     if (this._abrirSubscription != null) {
       this._abrirSubscription.unsubscribe();
     }
   }
 
-  private GetDestinatariosTransferencia(){
+  private GetDestinatariosTransferencia() {
     this._transferenciaService.getDestinatariosTransferencia(this.Transferencia.Id_Transferencia).subscribe(data => {
       if (data.codigo == 'success') {
         this.DestinatariosTransferencia = data.query_data;
-      }else{
+      } else {
         this.DestinatariosTransferencia = [];
       }
     });
   }
 
-  CerrarModal(){
+  private GetInfoCompany() {
+    this._transferenciaService.GetInfoCompany().subscribe(data => {
+      console.log('GetInfoCompany');
+      if (data.codigo == 'success') {
+        this.infoCompany = data.query_data[0];
+        console.log('Data',  this.infoCompany );
+      } else {
+        this.infoCompany = [];
+      }
+    });
+  }
+
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalVerRecibo.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.Transferencia = new ReciboTransferenciaDetalleModel();
   }
 
