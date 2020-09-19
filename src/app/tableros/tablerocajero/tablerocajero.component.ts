@@ -537,7 +537,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     private _toastService: ToastService,
     private _transferenciaService: TransferenciaService,
     private _aperturaCajaService: AperturacajaService,
-    private _trasladosCustomService: TrasladosCustomService,
+    public _trasladosCustomService: TrasladosCustomService,
     private _notificacionService: NotificacionsService,
     private _sexternos: SexternosService,
 
@@ -1860,10 +1860,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         let datos = new FormData();
         datos.append("datos", info);
         datos.append('id_oficina', this.IdOficina);
-        // console.log(info);
 
         this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
-          //this.http.post(this.globales.ruta + 'php/transferencias/pruebas_envio_transferencia.php', datos)
           .catch(error => {
             console.error('An error occurred:', error.error);
             this.errorSwal.show();

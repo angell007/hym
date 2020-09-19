@@ -18,7 +18,8 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
 
   public Transferencia: ReciboTransferenciaDetalleModel = new ReciboTransferenciaDetalleModel();
   public DestinatariosTransferencia: Array<any> = [];
-  public infoCompany: Array<any> = [];
+  public infoCompany: any = [];
+
 
   constructor(private _transferenciaService: TransferenciaService) { }
 
@@ -58,7 +59,7 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
         this.infoCompany = data.query_data[0];
         console.log('Data',  this.infoCompany );
       } else {
-        this.infoCompany = [];
+        // this.infoCompany = [];
       }
     });
   }
