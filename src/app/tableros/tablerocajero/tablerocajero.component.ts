@@ -3457,24 +3457,24 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     // if (this.DeshabilitarComisionGiro) {
     //   if (this.permisoSubscription == undefined) {
-        this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
-          // console.log(d);
-          if (d) {
-            this.DeshabilitarComisionGiro = false;
-            this.permisoSubscription.unsubscribe();
-            this.permisoSubscription = undefined;
-          }
-        });
-      // }
-
-      let p = { accion: "giro" };
-      this.permisoService._openSubject.next(p);
-      //this.DeshabilitarComisionGiro = false;
-    } 
-    // else {
-
-    //   this.DeshabilitarComisionGiro = true;
+    this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
+      // console.log(d);
+      if (d) {
+        this.DeshabilitarComisionGiro = false;
+        this.permisoSubscription.unsubscribe();
+        this.permisoSubscription = undefined;
+      }
+    });
     // }
+
+    let p = { accion: "giro" };
+    this.permisoService._openSubject.next(p);
+    //this.DeshabilitarComisionGiro = false;
+  }
+  // else {
+
+  //   this.DeshabilitarComisionGiro = true;
+  // }
   // }
 
   //#endregion
@@ -3737,11 +3737,22 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   GuardarServicio(formulario: NgForm, modal, tipo: string = 'creacion') {
 
+    if (this.ServicioExternoModel.Servicio_Externo == '' || this.ServicioExternoModel.Valor == '' || this.ServicioExternoModel.Comision == '') {
+      this.ShowSwal('warning', 'Alerta', 'Ingrese valores !');
+      return
+    }
+
+
+
     let info = this.generalService.normalize(JSON.stringify(this.ServicioExternoModel));
     let datos = new FormData();
+
+
     datos.append("modulo", 'Servicio');
     datos.append('id_oficina', this.IdOficina);
     datos.append("datos", info);
+
+
     this.http.post(this.globales.ruta + 'php/serviciosexternos/guardar_servicio.php', datos).subscribe((data: any) => {
       this.LimpiarModeloServicios(tipo);
       this.ShowSwal('success', 'Registro Existoso', tipo == "creacion" ? 'Se ha registrado exitosamente el servicio!' : 'Se ha editado exitosamente el servicio!');
@@ -3774,12 +3785,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   editarServicio(id) {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo: "Servicio" } }).subscribe((data: any) => {
-      /*this.Servicio = data;
-      this.ValorComisionServicio = data.Comision;*/
       this.ServicioExternoModel = data;
+      this.ListaServiciosExternos = this.globales.ServiciosExternos
       this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
-      console.log([parseInt('Cajero' ,this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision)]);
-
       this.ModalServicioEditar.show();
     });
   }
@@ -3943,7 +3951,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case 'egresos':
-        // this.CargarDatosServicios();
         break;
 
       default:
@@ -4130,11 +4137,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.ActualizarTablaCorresponsal.next();
   }
 
+  // this.ListaServiciosExternos = this.globales.ServiciosExternos ;
 
 
   //Danilo CargarDatosEgresos
   CargarDatosEgresos() {
-    //this.ShowSwal("warning", "Alerta", "Desarrollar");
     this.CargarEgresosDiarios();
     this.ListaServiciosExternos = [];
     this.ListaServiciosExternos = this.globales.ServiciosExternos;
@@ -4178,7 +4185,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CambiarVista(tipo) {
 
     // this._notificacionService.counter();
-    console.log('Cambiando vista');
+    // console.log('Cambiando vista');
 
     switch (tipo) {
       case "Compra": {
@@ -4231,6 +4238,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case "Servicio": {
         this.Servicio2 = true;
         this.Servicio1 = false;
+        this.ListaServiciosExternos = this.globales.ServiciosExternos
+
         break;
       }
     }
@@ -4276,7 +4285,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case 'servicios':
-
+        // console.log('clg');
+        // this.CargarDatosEgresos()
+        // console.log(this.globales.ServiciosExternos);
+        // ServiciosExternos;
+        // this.ListaServiciosExternos = this.globales.ServiciosExternos;
         break;
 
       default:

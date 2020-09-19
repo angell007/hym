@@ -1340,7 +1340,7 @@
                                   <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                     (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
-                                    <i class="ti-close"></i>
+                                    <i class="ti-trash text-danger"></i>
                                   </button>
                                 </td>
                                 <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
@@ -1421,7 +1421,7 @@
                                     <button class="btn btn-default btn-xs" type="button" style="margin:0;"
                                       [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
                                       (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Negado')">
-                                      <i class="fa fa-times"></i>
+                                      <i class="ti-trash text-danger"></i>
                                     </button>
                                   </td>
                                   <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
@@ -1491,8 +1491,8 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label>Observaciones</label>
-                          <textarea placeholder="Observaciones"  name="Detalle"
-                            [(ngModel)]="TrasladoModel.Detalle" style="width: 100%;"></textarea>
+                          <textarea placeholder="Observaciones" name="Detalle" [(ngModel)]="TrasladoModel.Detalle"
+                            style="width: 100%;"></textarea>
                         </div>
                       </div>
                     </div>
@@ -1613,7 +1613,7 @@
                           </thead>
                           <tbody>
                             <tr
-                              *ngFor="let Servicio of _sexternos.Servicios | paginate: {  id: 'sexternos', itemsPerPage:_sexternos.pageSize, currentPage:_sexternos.page, totalItems: _sexternos.TotalItems }"
+                              *ngFor="let Servicio of _sexternos.Servicios | paginate: {  id: 'sexternos', itemsPerPage:_sexternos.pageSize, currentPage:_sexternos.page }"
                               class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
                               <td class="text-center">{{Servicio.Fecha | date:"HH:mm" }}</td>
                               <td class="text-center">{{Servicio.Codigo}}</td>
@@ -1632,6 +1632,8 @@
                             </tr>
                           </tbody>
                         </table>
+
+
                       </div>
                     </div>
                   </div>
@@ -1639,14 +1641,13 @@
                     <div class="row">
                       <div class="col-md-12">
 
-                        <pagination-controls id="sexternos" (pageChange)="_sexternos.pageRecibidos = $event "
+                        <pagination-controls id="sexternos" (pageChange)="_sexternos.page = $event "
                           previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
                         </pagination-controls>
                       </div>
 
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -1662,7 +1663,7 @@
                           <div class="form-group">
                             <label>Servicio</label>
                             <select name="Servicio_Externo" class="form-control"
-                              [(ngModel)]="ServicioExternoModel.Servicio_Externo">
+                              [(ngModel)]="ServicioExternoModel.Servicio_Externo" required>
                               <option value="">Seleccione un Servicio</option>
                               <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
                                 {{se.Nombre}}</option>
@@ -1675,7 +1676,7 @@
                             <input type="text" class="form-control text-right" name="Valor"
                               [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
                               (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
-                              [options]="{ thousands: '.' }">
+                              [options]="{ thousands: '.' }" required>
                           </div>
                         </div>
 
@@ -1685,7 +1686,7 @@
                             <input name="Comision" type="text" placeholder="Comisión" class="form-control"
                               [(ngModel)]="ServicioExternoModel.Comision" currencyMask
                               [options]="{ thousands: '.', decimal: ',' }" [disabled]="ServicioExternoModel.Valor == ''"
-                              (blur)="AprobarCambioComision()">
+                              (blur)="AprobarCambioComision()" required>
                           </div>
                         </div>
                         <div class="col-md-3">
@@ -1693,7 +1694,7 @@
                             <label class="block-element">Total</label>
                             <input name="Total" type="text" placeholder="Total" class="form-control"
                               [(ngModel)]="Total_Servicio" disabled currencyMask
-                              [options]="{ thousands: '.', decimal: ',' }">
+                              [options]="{ thousands: '.', decimal: ',' }" required>
                           </div>
                         </div>
                       </div>
@@ -1887,7 +1888,7 @@
               <div class="form-group">
                 <label>Valor</label>
                 <input name="Valor" type="text" placeholder="$ 100.000" class="form-control"
-                  [(ngModel)]="TrasladoModel.Valor" required>
+                  [(ngModel)]="TrasladoModel.Valor" required currencyMask [options]="{ thousands: '.', decimal: ',' }">
               </div>
             </div>
           </div>

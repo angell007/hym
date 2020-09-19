@@ -57,9 +57,9 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
       console.log('GetInfoCompany');
       if (data.codigo == 'success') {
         this.infoCompany = data.query_data[0];
-        console.log('Data',  this.infoCompany );
+        console.log('Data', this.infoCompany);
       } else {
-        // this.infoCompany = [];
+        this.infoCompany = [];
       }
     });
   }

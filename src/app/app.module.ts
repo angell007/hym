@@ -251,6 +251,7 @@ import { TableroagenteexternoComponent } from './tableros/tableroagenteexterno/t
 import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
+import { HourPipe } from './hour.pipe';
  
 // TODO  Funcion para dar formato a moneda
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -457,7 +458,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TableroagenteexternoComponent,
         DetallemovimientoscuentagerenteComponent,
         TrasladoscajaComponent,
-        TablatasladoscajaComponent
+        TablatasladoscajaComponent,
+        HourPipe
     ],
     exports:[
         ModalBasicComponent

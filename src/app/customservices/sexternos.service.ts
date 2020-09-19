@@ -33,7 +33,6 @@ export class SexternosService {
   ) {
 
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log('Iniciando servicio y user es : ', this.user);
     this.CargarDatosServicios()
   }
   public filtroCustom: string;
@@ -118,6 +117,7 @@ export class SexternosService {
     this.Servicios = [];
     this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params: { id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Servicios = data.query_data;
+      this.SetInformacionPaginacion(data.query_data);
     });
   }
 

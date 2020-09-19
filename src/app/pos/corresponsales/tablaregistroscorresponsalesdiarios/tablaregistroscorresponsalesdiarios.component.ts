@@ -4,47 +4,48 @@ import { GeneralService } from '../../../shared/services/general/general.service
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { CorresponsalbancarioService } from '../../../shared/services/corresponsalesbancarios/corresponsalbancario.service';
+import { HourPipe } from '../../../hour.pipe';
 
 @Component({
   selector: 'app-tablaregistroscorresponsalesdiarios',
   templateUrl: './tablaregistroscorresponsalesdiarios.component.html',
-  styleUrls: ['./tablaregistroscorresponsalesdiarios.component.scss', '../../../../style.scss']
+  styleUrls: ['./tablaregistroscorresponsalesdiarios.component.scss', '../../../../style.scss'],
+  providers: [HourPipe]
 })
 export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnDestroy {
 
-  @Input() ActualizarTabla:Observable<any> = new Observable();
-  private _updateTablaSubscription:any;
+  @Input() ActualizarTabla: Observable<any> = new Observable();
+  private _updateTablaSubscription: any;
 
-  public RegistrosCorresponsales:Array<any> = [];
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  
-  public Filtros:any = {
-    remitente:'',
-    recibo:'',
-    recibido:'',
-    transferido:'',
-    tasa:'',
-    estado:''
+  public RegistrosCorresponsales: Array<any> = [];
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+
+  public Filtros: any = {
+    remitente: '',
+    recibo: '',
+    recibido: '',
+    transferido: '',
+    tasa: '',
+    estado: ''
   };
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
-  public page = 1; 
-  public InformacionPaginacion:any = {
+  public TotalItems: number;
+  public page = 1;
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _corresponsalService:CorresponsalbancarioService) 
-  {
-    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _corresponsalService: CorresponsalbancarioService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
   }
 
@@ -53,22 +54,22 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
       this.ConsultaFiltrada();
     });
   }
-  
+
   ngOnDestroy(): void {
     if (this._updateTablaSubscription != null) {
       this._updateTablaSubscription.unsubscribe();
     }
   }
 
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -100,44 +101,44 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
-    var p = this.SetFiltros(paginacion);    
+    var p = this.SetFiltros(paginacion);
 
-    if(p === ''){
+    if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this._corresponsalService.GetRegistrosDiarios(p).subscribe((data:any) => {
+    this._corresponsalService.GetRegistrosDiarios(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.RegistrosCorresponsales = data.query_data;
         this.TotalItems = data.numReg;
-      }else{
+      } else {
         this.RegistrosCorresponsales = [];
         this._swalService.ShowMessage(data);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      remitente:'',
-      recibo:'',
-      recibido:'',
-      transferido:'',
-      tasa:'',
-      estado:''
+      remitente: '',
+      recibo: '',
+      recibido: '',
+      transferido: '',
+      tasa: '',
+      estado: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;

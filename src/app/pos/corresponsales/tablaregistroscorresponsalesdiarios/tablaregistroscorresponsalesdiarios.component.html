@@ -42,7 +42,7 @@
                 <tbody *ngIf="!Cargando">
                   <tr
                     *ngFor="let cd of RegistrosCorresponsales  | paginate: {  id: 'corresponsales', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems}">
-                    <td class=" text-center"> {{ cd.Hora  }}</td>
+                    <td class=" text-center"> {{ cd.Hora | hour }}</td>
                     <td class="text-center">{{cd.Nombre}}</td>
                     <td class=" text-right">{{cd.Consignacion | customcurrency}}</td>
                     <td class=" text-right">{{cd.Retiro | customcurrency}}</td>
