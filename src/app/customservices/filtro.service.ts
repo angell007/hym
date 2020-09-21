@@ -32,7 +32,7 @@ export class FiltroService {
   ) {
 
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log('Iniciando servicio y user es : ', this.user);
+    console.log('Iniciando servicio filtro y user es : ', this.user);
     this.CargarCambiosDiarios()
   }
   public filtroCustom: string;
@@ -84,9 +84,9 @@ export class FiltroService {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -97,7 +97,7 @@ export class FiltroService {
 
   CargarCambiosDiarios() {
     this.Cambios = [];
-    console.log('CargarCambiosDiarios cargado ');
+    // console.log('CargarCambiosDiarios cargado ');
     this.http.get(this.globales.ruta + 'php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;

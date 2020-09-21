@@ -28,13 +28,14 @@ import { FiltroService } from '../../customservices/filtro.service';
 import { TrasladosCustomService } from '../../customservices/traslados.custom.service';
 import { NotificacionsService } from '../../customservices/notificacions.service';
 import { SexternosService } from '../../customservices/sexternos.service';
+import { GirosService } from '../../customservices/giros.service';
 
 
 @Component({
   selector: 'app-tablerocajero',
   templateUrl: './tablerocajero.component.html',
   styleUrls: ['./tablerocajero.component.scss', '../../../style.scss'],
-  providers: [QzTrayService, FiltroService, TrasladosCustomService, NotificacionsService, SexternosService]
+  providers: [QzTrayService, FiltroService, TrasladosCustomService, NotificacionsService, SexternosService, GirosService]
 })
 
 export class TablerocajeroComponent implements OnInit, OnDestroy {
@@ -405,8 +406,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   };
 
   //VARIABLES GIRO VIEJAS
-  GirosBuscar = [];
-  public Aparecer = false;
+
   public EditarRemitenteGiro: boolean = false;
   public EditarDestinatarioGiro: boolean = false;
   public CrearRemitenteGiro: boolean = false;
@@ -528,6 +528,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public fc: FiltroService,
     public globales: Globales,
     public sanitizer: DomSanitizer,
+    public giroService: GirosService,
     private generalService: GeneralService,
     private cajeroService: CajeroService,
     private swalService: SwalService,
@@ -540,6 +541,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public _trasladosCustomService: TrasladosCustomService,
     private _notificacionService: NotificacionsService,
     private _sexternos: SexternosService,
+
 
   ) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
@@ -925,7 +927,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
           this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2);
 
-          console.log(["Nueva tasa ", this.CambioModel.Tasa]);
+          // console.log(["Nueva tasa ", this.CambioModel.Tasa]);
 
 
           if (tipo_cambio == 'o') {
@@ -1825,10 +1827,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case 'Transferencia':
         if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
 
-          console.log(total_suma_transferir_destinatarios);
-          console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
-          console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
-          console.log(total_a_transferir);
+          // console.log(total_suma_transferir_destinatarios);
+          // console.log((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir));
+          // console.log(parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
+          // console.log(total_a_transferir);
 
           if (total_suma_transferir_destinatarios > 0) {
             let restante_bolsa = Math.round(((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
@@ -2008,25 +2010,25 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.MonedaParaTransferencia = {
-      // id: 0,
-      nombre: '',
-      Valores: {
-        Min_Venta_Efectivo: '',
-        Max_Venta_Efectivo: '',
-        Sugerido_Venta_Efectivo: '',
-        Min_Compra_Efectivo: '',
-        Max_Compra_Efectivo: '',
-        Sugerido_Compra_Efectivo: '',
-        Min_Venta_Transferencia: '',
-        Max_Venta_Transferencia: '',
-        Sugerido_Venta_Transferencia: '',
-        Costo_Transferencia: '',
-        Comision_Efectivo_Transferencia: '',
-        Pagar_Comision_Desde: '',
-        Min_No_Cobro_Transferencia: '',
-      }
-    };
+    // this.MonedaParaTransferencia = {
+    //   id: 0,
+    //   nombre: '',
+    //   Valores: {
+    //     Min_Venta_Efectivo: '',
+    //     Max_Venta_Efectivo: '',
+    //     Sugerido_Venta_Efectivo: '',
+    //     Min_Compra_Efectivo: '',
+    //     Max_Compra_Efectivo: '',
+    //     Sugerido_Compra_Efectivo: '',
+    //     Min_Venta_Transferencia: '',
+    //     Max_Venta_Transferencia: '',
+    //     Sugerido_Venta_Transferencia: '',
+    //     Costo_Transferencia: '',
+    //     Comision_Efectivo_Transferencia: '',
+    //     Pagar_Comision_Desde: '',
+    //     Min_No_Cobro_Transferencia: '',
+    //   }
+    // };
     // ********************
     this.id_remitente = '';
     this.tercero_credito = '';
@@ -2177,7 +2179,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
-    // console.log(value);
+    console.log(value);
     // console.log(this.Monedas);
 
     this.MonedaParaTransferencia.id = value;
@@ -2238,7 +2240,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           // Sugerido_Compra_Efectivo: "3300"
           // Sugerido_Venta_Efectivo: "3500"
           // Sugerido_Venta_Transferencia: "105"
-          console.log(['Recogiendo valores de moneda ', data.query_data]);
+          // console.log(['Recogiendo valores de moneda ', data.query_data]);
 
           if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
             this.InputBolsaBolivares = true;
@@ -2955,8 +2957,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#region FUNCIONES GIROS  
 
   public ActualizarTablasGiros() {
-    this.CargarGirosDiarios();
-    this.CargarGirosAprobados();
+    this.giroService.CargarGirosDiarios();
+    this.giroService.CargarGirosAprobados();
   }
 
   ModalVerGiro(id) {
@@ -2967,25 +2969,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.ModalAprobarGiro.show();
   }
 
-  FiltrarGiroCedula(value) {
-
-    this.Aparecer = false;
-    this.CargandoGiros = true;
-
-    if (value == '') {
-      this.GirosBuscar = [];
-      this.Aparecer = true;
-      this.CargandoGiros = false;
-    } else {
-      this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value, funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
-        this.CargandoGiros = false;
-        this.GirosBuscar = data;
-        if (this.GirosBuscar.length > 0) {
-          this.Aparecer = true;
-        }
-      });
-    }
-  }
 
   PagarGiro(id, modal, value) {
     let datos = new FormData();
@@ -3005,7 +2988,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.confirmacionSwal.show();
         modal.hide();
 
-        this.FiltrarGiroCedula(value);
+        this.giroService.FiltrarGiroCedula(value);
         this.ActualizarTablasGiros();
       });
   }
@@ -3159,10 +3142,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  valorComision(value) {
+  valorComision(value: string) {
 
     let recibido = parseFloat(this.GiroModel.Valor_Recibido);
-
     if (typeof (value) == 'boolean') {
       if (recibido == 0 || recibido == undefined || isNaN(recibido)) {
         this.ShowSwal('warning', 'Alerta', 'Debe introducir el valor a enviar para hacer el cálculo!');
@@ -3174,7 +3156,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (value == '' || value == '0') {
         this.GiroModel.Comision = '';
         this.GiroModel.Valor_Recibido = '';
-        this.GiroModel.Comision = '';
         this.GiroModel.Valor_Total = '';
         this.GiroModel.Valor_Entrega = '';
         return;
@@ -3242,7 +3223,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.confirmacionSwal.text = "Se ha guardado correctamente el giro"
         this.confirmacionSwal.type = "success"
         this.confirmacionSwal.show();
-        this.CargarGirosDiarios();
+        this.giroService.CargarGirosDiarios();
       });
     }
   }
@@ -3374,19 +3355,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  CargarGirosDiarios() {
-    this.Giros = [];
-    this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario.php', { params: { modulo: 'Giro', funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
-      this.Giros = data;
-    });
-  }
-
-  CargarGirosAprobados() {
-    this.GirosAprobados = [];
-    this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
-      this.GirosAprobados = data;
-    });
-  }
 
   AnularGiro(id) {
     let datos = new FormData();
@@ -3398,7 +3366,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.confirmacionSwal.type = "success";
       this.confirmacionSwal.show();
 
-      this.FiltrarGiroCedula(this.CedulaBusquedaGiro);
+      this.giroService.FiltrarGiroCedula(this.CedulaBusquedaGiro);
       //this.actualizarVista();
     });
   }
@@ -3939,6 +3907,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       case 'traslados':
         this.CargarDatosTraslados();
+        this.SetMonedaTransferencia(1);
         break;
 
       case 'corresponsal':
@@ -3960,7 +3929,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   VaciarDatosModulo(modulo: string) {
-
+    /**
+     * Custom notificaciones
+     */
     this._notificacionService.notifcaciones$.subscribe(x => { console.log(x) })
 
     switch (modulo) {
@@ -4089,7 +4060,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CargarDatosGiros() {
     //this.ShowSwal("warning", "Alerta", "Desarrollar");
 
-    this.CargarGirosDiarios();
+    this.giroService.CargarGirosDiarios();
 
     this.GirosAprobados = [];
     this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {

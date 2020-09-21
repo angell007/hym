@@ -29,7 +29,7 @@ export class ConsolidadosService {
 
             // this.ValoresMonedasApertura.push(valores);
 
-            console.log(this.ValoresMonedasApertura);
+            // console.log(this.ValoresMonedasApertura);
 
             // let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
             let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
@@ -45,7 +45,7 @@ export class ConsolidadosService {
         })
       })
 
-      console.log(['TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos]);
+      // console.log(['TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos]);
 
     }).catch((err) => {
       console.log('Error  ', err);
@@ -54,7 +54,7 @@ export class ConsolidadosService {
 
   async getValoresIniciales() {
 
-    console.log('getValoresIniciales  ');
+    // console.log('getValoresIniciales  ');
 
     await this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {

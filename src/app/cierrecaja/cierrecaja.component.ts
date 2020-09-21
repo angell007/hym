@@ -89,6 +89,34 @@ export class CierrecajaComponent implements OnInit {
 
     this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
       //Total ingresos 
+
+      let array: any = [];
+      // let array =   Array.prototype.slice.apply(data.totales_ingresos_egresos)
+      // console.log(array);
+
+      for (const property in data.totales_ingresos_egresos) {
+        array[property] = data.totales_ingresos_egresos[property].filter((element)=>{
+
+          console.log(element.Moneda);
+
+        })
+      }
+
+      console.log(typeof(array), typeof(data.totales_ingresos_egresos)  );
+      console.log(array, data.totales_ingresos_egresos  );
+
+      //   data.totales_ingresos_egresos.filter((modulo, index) => {
+
+      //     data.totales_ingresos_egresos(modulo).filter((moneda, index) => {
+
+      //       console.log(data.totales_ingresos_egresos(moneda.Nombre));
+
+      //     })
+      //   console.log( data.totales_ingresos_egresos(modulo));
+
+      // })
+
+
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
 
@@ -146,7 +174,7 @@ export class CierrecajaComponent implements OnInit {
       this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
         let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        console.log('Imprimiendo Cierre  ', [ this.ValoresMonedasApertura, monto_inicial_moneda  ]);
+        console.log('Imprimiendo Cierre  ', [this.ValoresMonedasApertura, monto_inicial_moneda]);
 
         let color = i % 2 == 0 ? '#f0ffff' : '#ffffff';
         let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };

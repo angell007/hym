@@ -67,7 +67,7 @@ export class ModalegresoComponent implements OnInit {
             this.ModalEgreso.show();
           } else {
 
-            this.ShowSwal('warning', 'Warning', 'ingresando a egresos');
+            this.ShowSwal('warning', 'Alerta', 'ingresando a egresos');
             // this._swalService.ShowMessage(d);
           }
 
@@ -101,7 +101,7 @@ export class ModalegresoComponent implements OnInit {
 
           this.Terceros = [];
           this.EgresoModel.Id_Tercero = '';
-          this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
+          this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
           // this.ShowSwal('warning', 'Warning', 'Debe recalcular el monto a entregar!');
           // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
           // this._toastService.ShowToast(toastObj);
@@ -117,7 +117,7 @@ export class ModalegresoComponent implements OnInit {
       } else {
 
         this.Monedas = [];
-        this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
+        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
 
         // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         // this._toastService.ShowToast(toastObj);
@@ -132,7 +132,7 @@ export class ModalegresoComponent implements OnInit {
       } else {
 
         this.Grupos = [];
-        this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
+        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
 
         // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         // this._toastService.ShowToast(toastObj);
@@ -168,12 +168,12 @@ export class ModalegresoComponent implements OnInit {
             this.ActualizarTabla.emit();
             this.CerrarModal();
             this.Editar = false;
-            this.ShowSwal('success', 'Success', 'Operacion realizada correctamente!');
+            this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
 
             // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
             // this._toastService.ShowToast(toastObj);
           } else {
-            this.ShowSwal('warning', 'Warning',data);
+            this.ShowSwal('warning', 'Alerta',data);
             // this._swalService.ShowMessage(data);
           }
         });
@@ -183,7 +183,7 @@ export class ModalegresoComponent implements OnInit {
           //console.log('An error occurred:', error);
           // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-          this.ShowSwal('success', 'Success', 'Ha ocurrido un error!');
+          this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un error!');
 
 
           return this.handleError(error);
@@ -192,11 +192,11 @@ export class ModalegresoComponent implements OnInit {
           if (data.codigo == 'success') {
             this.ActualizarTabla.emit();
             this.CerrarModal();
-            this.ShowSwal('success', 'Success', 'Operacion realizada correctamente!');
+            this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
             // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
             // this._toastService.ShowToast(toastObj);
           } else {
-            this.ShowSwal('warning', 'Warning',data);
+            this.ShowSwal('warning', 'Alerta',data);
             // this._swalService.ShowMessage(data);
           }
         });

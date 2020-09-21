@@ -31,7 +31,7 @@ export class SexternosService {
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient
 
   ) {
-
+    console.log('Iniciando servicio Externos filtro y user es : ', this.user);
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.CargarDatosServicios()
   }
@@ -82,9 +82,9 @@ export class SexternosService {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;

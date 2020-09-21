@@ -1,124 +1,633 @@
 <?php
-
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header('Content-Type: application/json');
 
-include_once('../../class/class.querybasedatos.php');
-include_once('../../class/class.paginacion.php');
+require_once('../../config/start.inc.php');
+include_once('../../class/class.lista.php');
+include_once('../../class/class.complex.php');
+include_once('../../class/class.consulta.php');
 
+date_default_timezone_set('America/Los_Angeles');
 
-$page = (isset($_REQUEST['pag']) ? $_REQUEST['pag'] : 1);
-// Current pagination page number
-// $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
+$id = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
+$fecha_actual = isset($_REQUEST['fecha']) && $_REQUEST['fecha'] != ''  ? $_REQUEST['fecha'] : date('Y-m-d');
+$modulos = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
 
-$limit = (isset($_REQUEST['tam']) ? $_REQUEST['tam'] : 10);
-// Dynamic limit
-// $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
-
-$condicion = SetCondiciones($_REQUEST);
-
-
-// Get total records
-$sql = 'SELECT 
-COUNT(Id_Egreso) AS Total
-FROM  Egreso E
-INNER JOIN Funcionario F ON E.Identificacion_Funcionario = F.Identificacion_Funcionario
-INNER JOIN Tercero T ON E.Id_Tercero = T.Id_Tercero
-INNER JOIN Moneda M ON E.Id_Moneda = M.Id_Moneda
-INNER JOIN Grupo_Tercero_Nuevo GTN ON E.Id_Grupo = GTN.Id_Grupo_Tercero' . $condicion;
-$queryObj = new QueryBaseDatos($query);
-$allRecrods = $queryObj->Consultar('Simple');
-
-
-// Calculate total pages
-$totoalPages = ceil($allRecrods / $limit);
-
-// Offset
-$paginationStart = ($page - 1) * $limit;
-
-// Limit query
 
 $query = '
-		SELECT 
-			E.*,
-            CONCAT_WS(" ", F.Nombres, F.Apellidos) AS Nombre_Funcionario,
-            M.Nombre AS Nombre_Moneda,
-            T.Nombre AS Nombre_Tercero,
-            GTN.Nombre_Grupo,
-            M.Codigo AS Codigo_Moneda
-			FROM Egreso E
-			INNER JOIN Funcionario F ON E.Identificacion_Funcionario = F.Identificacion_Funcionario
-			INNER JOIN Tercero T ON E.Id_Tercero = T.Id_Tercero
-			INNER JOIN Moneda M ON E.Id_Moneda = M.Id_Moneda
-			INNER JOIN Grupo_Tercero_Nuevo GTN ON E.Id_Grupo = GTN.Id_Grupo_Tercero'
-	. $condicion
-	. ' ORDER BY Fecha DESC LIMIT ' . $paginationStart;
+		SELECT
+			Id_Moneda,
+			Nombre,
+			Codigo
+		FROM Moneda';
 
-// $paginationObj = new PaginacionData($pageSize, $query_paginacion, $pagina);
+$oCon = new consulta();
+$oCon->setQuery($query);
+$oCon->setTipo('Multiple');
+$resultado['monedas'] = $oCon->getData();
+unset($oCon);
 
-$queryObj = new QueryBaseDatos($query);
+AgregarColoresMoneda();
 
-//Ejecuta la consulta de la instancia queryobj y retorna el resultado de la misma segun los parametros
-$result = $queryObj->Consultar('Simple');
+function is_not_null($value)
+{
+	return $value['Nombre'] == 'Pesos' || $value['Nombre'] == 'Viejitos' || $value['Nombre'] == 'Bolivares Soberanos';
+}
 
-echo json_encode($result);
+function have_valor($value)
+{
+	// $flag = false;
+	// foreach ($value as $v) {
+	// 	if ($v[0] != 0) {
+	// 		$flag = true;
+	// 	}
+	// 	var_dump($v[0]);
+	// }
 
-echo json_encode($egresos);
+	// if ($flag) {
+	return $value;
+	// }
+}
+
+$in_condition = FormarCadenaIdMonedas($resultado['monedas']);
 
 
-function SetCondiciones($req)
+
+$valores = array();
+
+foreach ($modulos as $value) {
+
+	$valores[$value] = array();
+
+	switch ($value) {
+		case 'Cambios':
+			ConsultarIngresosEgresosCambios($value, $id, $fecha_actual);
+			break;
+
+		case 'Transferencias':
+
+			ConsultarIngresosEgresosTransferencias($value, $id, $fecha_actual);
+			break;
+
+		case 'Giros':
+
+			ConsultarIngresosEgresosGiros($value, $id, $fecha_actual);
+			break;
+
+		case 'Traslados':
+
+			ConsultarIngresosEgresosTraslados($value, $id, $fecha_actual);
+			break;
+
+		case 'Corresponsal':
+
+			ConsultarIngresosEgresosCorresponsal($value, $id, $fecha_actual);
+			break;
+
+		case 'Servicios':
+
+			ConsultarIngresosEgresosServicios($value, $id, $fecha_actual);
+			break;
+		case 'Egresos':
+
+			ConsultarEgresos($value, $id, $fecha_actual);
+			break;
+
+		default:
+
+			break;
+	}
+}
+
+
+function FormarCadenaIdMonedas($arrayMonedas)
+{
+	$cadena = '';
+	$i = 0;
+
+	foreach ($arrayMonedas as $value) {
+
+		if (($i + 1) == count($arrayMonedas)) {
+			$cadena .= $value['Id_Moneda'];
+			return $cadena;
+		}
+
+		$cadena .= $value['Id_Moneda'] . ", ";
+		$i++;
+	}
+
+	return $cadena;
+}
+
+function ArmarValores($resultado)
+{
+	$max_cel_colspan = 0;
+	$valores_tabla = array();
+
+	if (count($resultado['monedas']) > 0) {
+		foreach ($resultado['monedas'] as $value) {
+			$ing = 'Ingresos';
+			$eg = 'Egresos';
+			array_push($valores_tabla, $ing, $eg);
+			$max_cel_colspan += 2;
+		}
+	}
+
+	$valores = array();
+
+	if (count($modulos) > 0) {
+		foreach ($modulos as $value) {
+
+			array_filter($resultado['monedas']);
+		}
+	}
+}
+
+function ConsultarIngresosEgresosCambios($modulo, $id, $fecha_actual)
+{
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = '#ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		$query_ingreso = '
+				SELECT 
+					IF(sum(Valor_Origen) > 0, sum(Valor_Origen), 0) AS Ingreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Cambio` t1
+				inner join Moneda t2 on t1.Moneda_Origen = t2.Id_Moneda
+				where
+					t1.Moneda_Origen = ' . $val['Id_Moneda'] . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND Identificacion_Funcionario = ' . $id . '
+					AND t1.Estado <> "Anulado"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_ingreso);
+		$r1 = $oCon->getData();
+
+		unset($oCon);
+
+		if ($r1 === false) {
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo], $arr);
+		} else {
+			array_push($valores[$modulo], $r1);
+		}
+
+		$query_egreso = '
+				SELECT 
+					sum(Valor_Destino) AS Egreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Cambio` t1
+				inner join Moneda t2 on t1.Moneda_Destino = t2.Id_Moneda
+				where
+					t1.Moneda_Destino = ' . $val['Id_Moneda'] . '
+					AND Identificacion_Funcionario = ' . $id . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND t1.Estado <> "Anulado"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_egreso);
+		$r2 = $oCon->getData();
+		unset($oCon);
+
+		if ($r2 === false) {
+			$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr1);
+		} else {
+			array_push($valores[$modulo], $r2);
+		}
+
+		$i++;
+	}
+}
+
+function ConsultarIngresosEgresosTransferencias($modulo, $id, $fecha_actual)
 {
 
-	$condicion = '';
+	global $valores, $resultado;
 
-	if (isset($req['codigo']) && $req['codigo'] != "") {
-		if ($condicion != "") {
-			$condicion .= " AND E.Codigo LIKE '%" . $req['codigo'] . "%'";
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		$query_ingreso = '
+				SELECT 
+					sum(t1.Cantidad_Recibida) as Ingreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Transferencia` t1
+				inner join Moneda t2 on t1.Moneda_Origen = t2.Id_Moneda
+				where
+					t1.Moneda_Origen = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND Identificacion_Funcionario = ' . $id . ' 
+					AND (t1.Estado = "Activa" OR  t1.Estado = "Pagada")
+					AND t1.Forma_Pago = "Efectivo"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_ingreso);
+		$r1 = $oCon->getData();
+
+		unset($oCon);
+
+		if ($r1 === false) {
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr);
 		} else {
-			$condicion .=  " WHERE E.Codigo LIKE '%" . $req['codigo'] . "%'";
+			array_push($valores[$modulo], $r1);
 		}
-	}
 
-	if (isset($req['funcionario']) && $req['funcionario'] != "") {
-		if ($condicion != "") {
-			$condicion .= " AND CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['funcionario'] . "%'";
+		$query_egreso = '
+				SELECT 
+				    0 as Egreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Transferencia` t1
+				inner join Moneda t2 on t1.Moneda_Destino = t2.Id_Moneda
+				where
+					t1.Moneda_Destino = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND Identificacion_Funcionario = ' . $id . ' 
+					AND (t1.Estado = "Activa" OR  t1.Estado = "Pagada")
+					AND t1.Forma_Pago = "Efectivo"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_egreso);
+		$r2 = $oCon->getData();
+		unset($oCon);
+
+
+		if ($r2 === false) {
+			$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $i % 2 == 0 ? '#87cefa' : "#ffffff"];
+
+			array_push($valores[$modulo], $arr1);
 		} else {
-			$condicion .=  " WHERE CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['funcionario'] . "%'";
+			array_push($valores[$modulo], $r2);
 		}
+		$i++;
 	}
+}
 
-	if (isset($req['grupo']) && $req['grupo'] != "") {
-		if ($condicion != "") {
-			$condicion .= " AND E.Id_Grupo = " . $req['grupo'];
+function ConsultarIngresosEgresosGiros($modulo, $id, $fecha_actual)
+{
+
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		$query_ingreso = '
+				SELECT 
+					(IFNULL((SELECT SUM(Valor_Total)), 0)) AS Ingreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Giro` t1
+				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+				where
+					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND t1.Identificacion_Funcionario = ' . $id . '
+					AND t1.Estado != "Anulado"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_ingreso);
+		$r1 = $oCon->getData();
+
+		unset($oCon);
+
+		if ($r1 === false) {
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr);
 		} else {
-			$condicion .=  " WHERE E.Id_Grupo = " . $req['grupo'];
+			array_push($valores[$modulo], $r1);
 		}
-	}
 
-	if (isset($req['tercero']) && $req['tercero']) {
-		if ($condicion != "") {
-			$condicion .= " AND T.Nombre LIKE '%" . $req['tercero'] . "%'";
+		$query_egreso = '
+				SELECT 
+					(IFNULL((SELECT SUM(Valor_Entrega)), 0)) AS Egreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color,
+				    "Giros" as Modulo
+				FROM `Giro` t1
+				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+				where
+					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+					AND Funcionario_Pago = ' . $id . '
+					AND t1.Estado = "Pagado"
+				group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_egreso);
+		$r2 = $oCon->getData();
+		unset($oCon);
+
+		if ($r2 === false) {
+			$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr1);
 		} else {
-			$condicion .= " WHERE T.Nombre LIKE '%" . $req['tercero'] . "%'";
+			array_push($valores[$modulo], $r2);
 		}
+		$i++;
 	}
+}
 
-	if (isset($req['moneda']) && $req['moneda']) {
-		if ($condicion != "") {
-			$condicion .= " AND E.Id_Moneda = " . $req['moneda'];
+function ConsultarIngresosEgresosTraslados($modulo, $id, $fecha_actual)
+{
+
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		$query_ingreso = '
+				SELECT 
+					(IFNULL((select sum(Valor)), 0)) as Ingreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Traslado_Caja` t1
+				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+				where
+					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha_Traslado) = "' . $fecha_actual . '" 
+					AND t1.Estado = "Aprobado"
+					AND t1.Funcionario_Destino = ' . $id . ' 
+				group by t1.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_ingreso);
+		$r1 = $oCon->getData();
+
+		unset($oCon);
+
+		if ($r1 === false) {
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr);
 		} else {
-			$condicion .= " WHERE E.Id_Moneda = " . $req['moneda'];
+			array_push($valores[$modulo], $r1);
 		}
-	}
 
-	if (isset($req['valor']) && $req['valor']) {
-		if ($condicion != "") {
-			$condicion .= " AND E.Valor = " . $req['valor'];
+		$query_egreso = '
+				SELECT 
+		            (IFNULL((select sum(Valor)), 0)) as Egreso_Total,
+				    t2.Nombre as Moneda,
+				    t2.Codigo as Codigo,
+				    t2.Id_Moneda as Moneda_Id,
+				    "' . $color . '" AS Color
+				FROM `Traslado_Caja` t1
+				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+				where
+					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+					AND DATE(t1.Fecha_Traslado) = "' . $fecha_actual . '" 
+					AND t1.Estado = "Aprobado"
+					AND t1.Id_Cajero_Origen = ' . $id . ' 
+				group by t1.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_egreso);
+		$r2 = $oCon->getData();
+		unset($oCon);
+
+		if ($r2 === false) {
+			$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+			array_push($valores[$modulo], $arr1);
 		} else {
-			$condicion .= " WHERE E.Valor = " . $req['valor'];
+			array_push($valores[$modulo], $r2);
 		}
-	}
 
-	return $condicion;
+		$i++;
+	}
+}
+
+function ConsultarIngresosEgresosCorresponsal($modulo, $id, $fecha_actual)
+{
+
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		if (strtolower($val['Nombre']) == 'pesos') {
+			$query_ingreso = '
+					SELECT 
+						IFNULL(sum(t1.Consignacion), 0) as Ingreso_Total,
+					    "' . $val['Nombre'] . '" as Moneda,
+					    "' . $val['Codigo'] . '" as Codigo,
+					    "' . $val['Id_Moneda'] . '" as Moneda_Id,
+					    "Corresponsal Bancario" as Modulo,
+				    	"' . $color . '" AS Color
+					FROM `Corresponsal_Diario_Nuevo` t1
+					where
+						t1.Fecha = "' . $fecha_actual . '" 
+						AND t1.Identificacion_Funcionario = ' . $id . ' 
+					group by t1.Identificacion_Funcionario';
+
+			$oCon = new consulta();
+			$oCon->setQuery($query_ingreso);
+			$r1 = $oCon->getData();
+
+
+			unset($oCon);
+
+			if ($r1 === false) {
+				$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+				array_push($valores[$modulo], $arr);
+			} else {
+				array_push($valores[$modulo], $r1);
+			}
+
+			$query_egreso = '
+					SELECT 
+						IFNULL(sum(t1.Retiro), 0) as Egreso_Total,
+					    "' . $val['Nombre'] . '" as Moneda,
+					    "' . $val['Codigo'] . '" as Codigo,
+					    "' . $val['Id_Moneda'] . '" as Moneda_Id,
+					    "Corresponsal Bancario" as Modulo,
+				    	"' . $color . '" AS Color
+					FROM `Corresponsal_Diario_Nuevo` t1
+					where
+						t1.Fecha = "' . $fecha_actual . '" 
+						AND t1.Identificacion_Funcionario = ' . $id . ' 
+					group by t1.Identificacion_Funcionario';
+
+			$oCon = new consulta();
+			$oCon->setQuery($query_egreso);
+			$r2 = $oCon->getData();
+			unset($oCon);
+
+			if ($r2 === false) {
+				$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+				array_push($valores[$modulo], $arr1);
+			} else {
+				array_push($valores[$modulo], $r2);
+			}
+		} else {
+
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo], $arr);
+			array_push($valores[$modulo], $arr1);
+		}
+
+		$i++;
+	}
+}
+
+function ConsultarIngresosEgresosServicios($modulo, $id, $fecha_actual)
+{
+
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		if (strtolower($val['Nombre']) == 'pesos') {
+			$query_ingreso = '
+					SELECT 
+						sum(t1.Valor + t1.Comision) as Ingreso_Total,
+					    t2.Nombre as Moneda,
+					    t2.Codigo as Codigo,
+					    t2.Id_Moneda as Moneda_Id,
+				    	"' . $color . '" AS Color
+					FROM `Servicio` t1
+					inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					where
+						t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+						AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+						AND t1.Identificacion_Funcionario = ' . $id . ' 
+					group by t2.Id_Moneda';
+
+			$oCon = new consulta();
+			$oCon->setQuery($query_ingreso);
+			$r1 = $oCon->getData();
+
+			unset($oCon);
+
+			if ($r1 === false) {
+				$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+
+				array_push($valores[$modulo], $arr);
+			} else {
+				array_push($valores[$modulo], $r1);
+			}
+		} else {
+
+			$arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo], $arr);
+		}
+
+		$arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+		array_push($valores[$modulo], $arr1);
+
+		$i++;
+	}
+}
+function ConsultarEgresos($modulo, $id, $fecha_actual)
+{
+
+	global $valores, $resultado;
+
+	$i = 0;
+	$color = 'ffffff';
+	foreach ($resultado['monedas'] as $val) {
+		$color = $i % 2 == 0 ? '#87cefa' : "#ffffff";
+
+		$query_ingreso = '
+					SELECT 
+						sum(t1.Valor) as Egreso_Total,
+					    t2.Nombre as Moneda,
+					    t2.Codigo as Codigo,
+					    t2.Id_Moneda as Moneda_Id,
+				    	"' . $color . '" AS Color
+					FROM `Egreso` t1
+					inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					where
+						t1.Id_Moneda = ' . $val["Id_Moneda"] . '
+						AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
+						AND t1.Identificacion_Funcionario = ' . $id . ' 
+					group by t2.Id_Moneda';
+
+		$oCon = new consulta();
+		$oCon->setQuery($query_ingreso);
+		$r1 = $oCon->getData();
+
+		unset($oCon);
+
+
+		if (empty($r1)) {
+			$arr2 = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo],  $arr2);
+			$arr = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo],  $arr);
+		} else {
+			$arr2 = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
+			array_push($valores[$modulo],  $arr2);
+			array_push($valores[$modulo], $r1);
+		}
+
+		$i++;
+	}
+}
+
+$resultado['monedas'] =  array_values(array_filter($resultado['monedas'], 'is_not_null'));
+$resultado['totales_ingresos_egresos'] =  $valores;
+// $resultado['totales_ingresos_egresos'] =  array_values(array_filter($resultado['totales_ingresos_egresos'], 'have_valor'));
+$resultado['totales_ingresos_egresos'] =  array_filter($resultado['totales_ingresos_egresos'], 'have_valor');
+
+echo json_encode($resultado);
+
+function AgregarColoresMoneda()
+{
+	global $resultado;
+
+	$i = 0;
+	$color = '#ffffff';
+	foreach ($resultado['monedas'] as $key => $m) {
+		$color = $i % 2 == 0 ? '#f0f8ff' : "#ffffff";
+		$resultado['monedas'][$i]['Color'] = $color;
+		$i++;
+	}
 }

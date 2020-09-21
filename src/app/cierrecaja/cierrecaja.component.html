@@ -32,17 +32,17 @@
           <tbody>
             <tr *ngFor="let m of Modulos;">
               <td>{{m}}</td>
-              <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
+              <td class="text-right" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
                 [ngStyle]="{'background-color':Totales[m][ind].Color}">
-                <label
-                  *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
-                <label
-                  *ngIf="ind % 2 != 0">{{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
+                <p class="m-2" *ngIf="ind % 2 == 0">
+                 {{ (Totales[m][ind].Ingreso_Total == 0) == Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</p>
+                <p class="m-2" *ngIf="ind % 2 != 0">
+                  {{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</p>
               </td>
             </tr>
             <tr>
-              <td class="font-weight-bold" style="text-align:right;color:black;"><b>Totales:</b></td>
-              <td class="font-weight-bold" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal"
+              <td class="font-weight-bold px-2"><b>Totales:</b></td>
+              <td class="font-weight-bold p-2" *ngFor="let mt of MostrarTotal"
                 [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td>
             </tr>
           </tbody>
@@ -62,22 +62,27 @@
             </tr>
             <tr>
               <td><b>Montos Iniciales</b></td>
-              <td style="text-align:right;" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
+              <td class="text-right" *ngFor="let vm of ValoresMonedasApertura">
+                <p class="m-2">{{vm | customcurrency:''}}</p>
+              </td>
             </tr>
             <tr>
               <td style="color:black;">Ingreso</td>
-              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;color:black;">
-                +{{ti | customcurrency:''}}</td>
+              <td class="text-right" *ngFor="let ti of TotalesIngresosMonedas" style="color:black;">
+                <p class="m-2">+{{ti | customcurrency:''}}</p>
+              </td>
             </tr>
             <tr>
               <td style="color:black;">Egreso</td>
-              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;color:black;">
-                -{{te | customcurrency:''}}</td>
+              <td class="text-right" *ngFor="let te of TotalesEgresosMonedas" style="color:black;">
+                <p class="m-2"> -{{te | customcurrency:''}}</p>
+              </td>
             </tr>
             <tr>
               <td>Total a Entregar</td>
-              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">
-                {{resta | customcurrency:''}}</td>
+              <td class="text-right" *ngFor="let resta of TotalRestaIngresosEgresos">
+                <p class="m-2"> {{resta | customcurrency:''}}</p>
+              </td>
             </tr>
             <tr>
               <td>Entregado</td>
@@ -94,7 +99,7 @@
             </tr>
             <tr>
               <td>Diferencia</td>
-              <td style="text-align:right;" *ngFor="let d of Diferencias; let ind = index">
+              <td class="text-right m-2" *ngFor="let d of Diferencias; let ind = index">
                 {{d.Diferencia | customcurrency:''}}
               </td>
             </tr>

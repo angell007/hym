@@ -36,7 +36,7 @@ export class TrasladosCustomService {
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient, private cajeroService: CajeroService
 
   ) {
-
+    console.log('Iniciando servicio Traslados filtro y user es : ', this.user);
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.CargarDatosTraslados();
   }
@@ -89,9 +89,9 @@ export class TrasladosCustomService {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.pageRecibidos * this.pageSizeRecibidos);
     var desde = calculoHasta - this.pageSizeRecibidos + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -101,9 +101,9 @@ export class TrasladosCustomService {
   }
 
   SetInformacionPaginacionRecibidos(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItemsRecibidos = data.length
-    console.log('', this.TotalItemsRecibidos);
+    // console.log('', this.TotalItemsRecibidos);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItemsRecibidos ? this.TotalItemsRecibidos : calculoHasta;

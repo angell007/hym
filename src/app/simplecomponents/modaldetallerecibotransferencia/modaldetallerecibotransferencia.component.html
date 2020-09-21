@@ -12,12 +12,13 @@
       <img class="text-center mb-3 " style="display: block;" src="assets/images/logo/logo.png" alt="">
       <span class=" text-left"
         style="font-size: 0.7em; font-weight: 700; display: block;">{{infoCompany.Nombre_Empresa}}</span>
-      <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">NIT  {{infoCompany.NIT}}</span>
+      <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">NIT
+        {{infoCompany.NIT}}</span>
       <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">
         {{infoCompany.Direccion}}</span>
-      <span class=" text-left"
-        style="font-size: 0.7em; font-weight: 700; display: block;">Tel  {{infoCompany.Telefono}}</span>
-      <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">Cel 
+      <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">Tel
+        {{infoCompany.Telefono}}</span>
+      <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">Cel
         {{infoCompany.Celular}}</span>
     </div>
 
@@ -72,7 +73,7 @@
                 <td class="text-center"><span style="font-size: 0.8em;">{{d.Nombre_Destinatario}}</span></td>
                 <td class="text-center"><span style="font-size: 0.8em;">{{d.Numero_Cuenta_Destinatario}}</span></td>
                 <td class="text-right">
-                  <span>
+                  <span style="font-size: 0.8em;">
                     {{d.Valor_Transferencia | customcurrency:Transferencia.Codigo_Moneda_Destino}}
                   </span>
                 </td>
@@ -86,7 +87,8 @@
 
 
     <div class="invoicelist-footer">
-      <table>
+
+      <table style="width: 50%;">
         <tr class="taxrelated">
           <td>Recibido: </td>
           <td>{{Transferencia.Cantidad_Recibida | customcurrency:Transferencia.Codigo_Moneda_Origen}}
@@ -98,11 +100,12 @@
         </tr>
         <tr>
           <td><strong>Transferido:</strong></td>
-          <td id="total_price" style="font-weight: bolder; font-size: 1em;">
+        <td id="total_price" style="font-weight: bolder; font-size: 1em;">
             {{Transferencia.Monto_Transferido | customcurrency:Transferencia.Codigo_Moneda_Destino}}
           </td>
         </tr>
       </table>
+
     </div>
 
   </div>

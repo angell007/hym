@@ -565,7 +565,8 @@
                                     (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                     (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                     (blur)="validateInputDocumentRetard(destinatario.Numero_Documento_Destino, 'crear especial', i, destinatario)"
-                                    [disabled]="MonedaParaTransferencia.id == ''" required>
+                                    required>
+                                    <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                 </div>
                               </div>
 
@@ -580,9 +581,10 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="transferencia">Cuenta</label>
+                                  <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
-                                    autocomplete="off" [disabled]="MonedaParaTransferencia.id == ''"
+                                    autocomplete="off" 
                                     (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
                                     <option id="opId_Destinatario_Cuenta_{{i}}"
                                       *ngFor="let c of destinatario.Cuentas;  index as i;"
@@ -762,7 +764,7 @@
                           </div>
                         </div>
                       </div>
-
+                      
                       <div class="row mrg-top-20">
                         <div class="col-md-10">
                           <button [disabled]="!FormTransferencia.valid || validateInputDocumentSmall.includes(true)"
@@ -849,7 +851,7 @@
                                   <th class="table-filters"></th>
                                 </tr>
 
-                                <tr *ngIf="Giros.length == 0 && !Cargando">
+                                <tr *ngIf="giroService.Giros.length == 0 && !Cargando">
                                   <td colspan="7" class="text-center">
                                     <i class="ti-alert font-size-20 text-warning"></i>
                                     <h4>No hay Giros para mostrar!</h4>
@@ -858,24 +860,30 @@
 
                               </thead>
                               <tbody *ngIf="!Cargando">
-                                <tr *ngFor="let Giro of Giros; let i = index;"
+                                <tr
+                                  *ngFor="let Giro of giroService.Giros | paginate: {  id: 'girosRecibidos', itemsPerPage: giroService.InformacionPaginacionRecibidos.pageSize, currentPage: giroService.InformacionPaginacionRecibidos.page, totalItems: TotalItems }"
                                   [ngClass]="{'bg-anulada':Giro.Estado == 'Anulado'}">
                                   <td class="text-center">{{Giro.Fecha | date:"HH:mm" }}</td>
                                   <td class="text-center">{{Giro.Codigo}}</td>
-                                  <td class="text-center">{{Giro.Nombre_Remitente}}</td>
+                                  <td class="text-center">{{Giro.Nombre_Remitente | uppercase }}</td>
                                   <td class="text-center">{{Giro.Documento_Destinatario}}</td>
-                                  <td class="text-center">{{Giro.Nombre_Destinatario}} </td>
+                                  <td class="text-center">{{Giro.Nombre_Destinatario | uppercase }} </td>
                                   <td class="text-right">{{Giro.Valor_Total | customcurrency}}</td>
                                   <td class="text-right">{{Giro.Valor_Entrega | customcurrency}}</td>
                                 </tr>
                               </tbody>
                             </table>
-                            <div id="paginacion-container" *ngIf="Giros.length > 0">
+                            <div id="paginacion-container" *ngIf=" giroService.Giros.length > 0">
                               <div class="row">
-                                <!-- <div class="col-md-12">
-                              <pagination-controls (pageChange)="fc.page = $event " previousLabel="Anterior"
-                                nextLabel="Siguiente" responsive="true"></pagination-controls>
-                            </div> -->
+                                <div class="col-md-12">
+
+                                  <pagination-controls id="girosRecibidos"
+                                    (pageChange)="giroService.InformacionPaginacionRecibidos.page = $event "
+                                    previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                                  </pagination-controls>
+
+                                </div>
+
                               </div>
                             </div>
                           </div>
@@ -904,7 +912,7 @@
                                   <th class="table-filters"></th>
                                 </tr>
 
-                                <tr *ngIf="Giros.length == 0 && !Cargando">
+                                <tr *ngIf="giroService.GirosAprobados.length == 0 && !Cargando">
                                   <td colspan="7" class="text-center">
                                     <i class="ti-alert font-size-20 text-warning"></i>
                                     <h4>No hay Giros para mostrar!</h4>
@@ -913,7 +921,8 @@
 
                               </thead>
                               <tbody *ngIf="!Cargando">
-                                <tr *ngFor="let Giro of GirosAprobados">
+                                <tr
+                                  *ngFor="let Giro of giroService.GirosAprobados | paginate: {  id: 'girosAprobados', itemsPerPage: giroService.InformacionPaginacionAprobados.pageSize, currentPage: giroService.InformacionPaginacionAprobados.page, totalItems: TotalItems }">
                                   <td class="text-center">{{Giro.Fecha | date:"HH:mm" }}</td>
                                   <td class="text-center">{{Giro.Codigo}}</td>
                                   <td class="text-center">{{Giro.Nombre_Remitente}}</td>
@@ -923,12 +932,14 @@
                                 </tr>
                               </tbody>
                             </table>
-                            <div id="paginacion-container" *ngIf="GirosAprobados.length > 0">
+                            <div id="paginacion-container" *ngIf="giroService.GirosAprobados.length > 0">
                               <div class="row">
-                                <!-- <div class="col-md-12">
-                              <pagination-controls (pageChange)="fc.page = $event " previousLabel="Anterior"
-                                nextLabel="Siguiente" responsive="true"></pagination-controls>
-                            </div> -->
+                                <div class="col-md-12">
+                                  <pagination-controls id="girosAprobados"
+                                    (pageChange)="giroService.InformacionPaginacionAprobados.page = $event "
+                                    previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                                  </pagination-controls>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -942,7 +953,7 @@
                                       [(ngModel)]="CedulaBusquedaGiro">
                                   </div>
                                   <div class="col-md-1">
-                                    <button (click)="FiltrarGiroCedula(CedulaBusquedaGiro)"
+                                    <button (click)="giroService.FiltrarGiroCedula(CedulaBusquedaGiro)"
                                       class="btn btn-default btn-xs" type="button" style="margin:0;">
                                       <i class="ti-search"></i>
                                     </button>
@@ -953,30 +964,30 @@
                                       <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                                     </div>
                                   </div>
-                                  <div class="col-md-12" *ngIf="!CargandoGiros && GirosBuscar.length == 0">
+                                  <div class="col-md-12" *ngIf="!CargandoGiros && giroService.GirosBuscar.length == 0">
                                     <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                                       <i class="ti-alert font-size-20 text-warning"></i>
                                       <h4>No se han encontrado giros!</h4>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="row" *ngIf="Aparecer">
-                                  <div class="col-md-12" *ngIf="!CargandoGiros && GirosBuscar.length > 0">
+                                <div class="row" *ngIf="giroService.Aparecer">
+                                  <div class="col-md-12" *ngIf="!CargandoGiros && giroService.GirosBuscar.length > 0">
                                     <div class="table-responsive">
                                       <table class="table tabla-cajero">
                                         <thead>
                                           <tr>
-                                            <th style="width:150px;">Fecha</th>
+                                            <th>Fecha</th>
                                             <th>Código</th>
                                             <th>Enviado Por</th>
                                             <th>Cédula Destinatario</th>
                                             <th>Nombre Destinatario</th>
                                             <th>Valor a Entregar</th>
-                                            <th style="width:60px;"></th>
+                                            <th></th>
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <tr *ngFor="let Giro of GirosBuscar"
+                                          <tr *ngFor="let Giro of giroService.GirosBuscar"
                                             class="{{Giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
                                             <td class="cell-cajero">{{Giro.Fecha | date:"dd/MM/yyyy HH:mm:ss"}}</td>
                                             <td class="cell-cajero">{{Giro.Codigo}}</td>
@@ -1182,8 +1193,8 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label>Comisión
-                            <i class="text-info pl-2 font-size-15" [ngClass]="{'ti-unlock':DeshabilitarComisionGiro}"
-                              style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
+                            <!-- <i class="text-info pl-2 font-size-15" [ngClass]="{'ti-unlock':DeshabilitarComisionGiro}" -->
+                            <!-- style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i> -->
                           </label>
                           <input type="text" placeholder="Comision" class="form-control text-right" name="Comision"
                             [(ngModel)]="GiroModel.Comision" [disabled]="DeshabilitarComisionGiro" required currencyMask
@@ -1192,7 +1203,6 @@
                         <!-- [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}" -->
                       </div>
 
-                      {{ DeshabilitarComisionGiro | json }}
                       <div class="col-md-1">
                         <div class="form-group text-center">
                           <label>Libre</label>
@@ -1325,7 +1335,7 @@
                                 [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                 <td class="text-center">{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                 <td class="text-center">{{Traslado.Codigo}}</td>
-                                <td class="text-center">{{Traslado.Cajero_Destino}}</td>
+                                <td class="text-center">{{Traslado.Cajero_Destino | uppercase }}</td>
                                 <td class="text-right">{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}
                                 </td>
                                 <td class="text-center">{{Traslado.Moneda }}</td>
