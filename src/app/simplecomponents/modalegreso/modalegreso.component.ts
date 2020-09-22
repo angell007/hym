@@ -10,11 +10,14 @@ import { GrupoterceroService } from '../../shared/services/grupotercero.service'
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { TerceroService } from '../../shared/services/tercero/tercero.service';
 import { Funcionario } from '../../shared/funcionario/funcionario.model';
+import { NormailizerService } from '../../normailizer.service';
+import { providers } from 'ng2-toasty';
 
 @Component({
   selector: 'app-modalegreso',
   templateUrl: './modalegreso.component.html',
-  styleUrls: ['./modalegreso.component.scss', '../../../style.scss']
+  styleUrls: ['./modalegreso.component.scss', '../../../style.scss'],
+  providers:[NormailizerService]
 })
 export class ModalegresoComponent implements OnInit {
 
@@ -30,6 +33,7 @@ export class ModalegresoComponent implements OnInit {
   public Editar: boolean = false;
   public MensajeGuardar: string = 'Se dispone a guardar este egreso';
   public Funcionario: any = JSON.parse(localStorage.getItem('User'));
+  public coinDefault: string;
 
   public EgresoModel: EgresoModel = new EgresoModel();
 
@@ -48,9 +52,11 @@ export class ModalegresoComponent implements OnInit {
     private _EgresoService: EgresoService,
     private _grupoService: GrupoterceroService,
     private _monedaService: MonedaService,
-    private _terceroService: TerceroService) {
+    private _terceroService: TerceroService,
+    private _normalizeService: NormailizerService
+  ) {
     this.GetGrupos();
-    this.GetMonedas();
+
   }
 
   ngOnInit() {
@@ -68,14 +74,34 @@ export class ModalegresoComponent implements OnInit {
           } else {
 
             this.ShowSwal('warning', 'Alerta', 'ingresando a egresos');
-            // this._swalService.ShowMessage(d);
           }
 
         });
       } else {
         this.MensajeGuardar = 'Se dispone a guardar este egreso';
         this.Editar = false;
+        this.GetMonedas();
         this.ModalEgreso.show();
+      }
+    });
+
+  }
+
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.Monedas = data.query_data;
+        let monedaDefault: any[] = this.Monedas.filter((x: any) => {
+          return x.Nombre == 'Pesos'
+        })
+
+        this.EgresoModel.Id_Moneda = monedaDefault[0]['Id_Moneda'];
+
+      } else {
+
+        this.Monedas = [];
+        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
+
       }
     });
   }
@@ -110,20 +136,7 @@ export class ModalegresoComponent implements OnInit {
     }
   }
 
-  GetMonedas() {
-    this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
-      } else {
 
-        this.Monedas = [];
-        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
-
-        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        // this._toastService.ShowToast(toastObj);
-      }
-    });
-  }
 
   GetGrupos() {
     this._grupoService.getGrupos().subscribe((data: any) => {
@@ -151,7 +164,8 @@ export class ModalegresoComponent implements OnInit {
     this.EgresoModel = this._generalService.limpiarString(this.EgresoModel);
     // console.log(this.EgresoModel);
 
-    let info = this._generalService.normalize(JSON.stringify(this.EgresoModel));
+    let info = this._normalizeService.normalize(JSON.stringify(this.EgresoModel));
+
     let datos = new FormData();
     datos.append("modelo", info);
     console.log(datos.getAll("Id_Tercero"));
@@ -173,7 +187,7 @@ export class ModalegresoComponent implements OnInit {
             // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
             // this._toastService.ShowToast(toastObj);
           } else {
-            this.ShowSwal('warning', 'Alerta',data);
+            this.ShowSwal('warning', 'Alerta', data);
             // this._swalService.ShowMessage(data);
           }
         });
@@ -196,7 +210,7 @@ export class ModalegresoComponent implements OnInit {
             // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
             // this._toastService.ShowToast(toastObj);
           } else {
-            this.ShowSwal('warning', 'Alerta',data);
+            this.ShowSwal('warning', 'Alerta', data);
             // this._swalService.ShowMessage(data);
           }
         });

@@ -68,13 +68,13 @@
       <td class=" text-center"> {{rt.Estado }}</td>
       <td class="text-center">
         <div *ngIf="rt.Estado != 'Anulada'" class="text-center">
-          <button class="clean-btn-table" type="button" (click)="AbrirDetalleRecibo(rt)">
-            <i class="ti-search text-primary" style="font-size: 12px;"></i>
-          </button>
           <button class="clean-btn-table" type="button" (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
             <i class="ti-trash text-danger" style="font-size: 12px;"></i>
           </button>
         </div>
+        <button class="clean-btn-table" type="button" (click)="AbrirDetalleRecibo(rt)">
+          <i class="ti-search text-primary" style="font-size: 12px;"></i>
+        </button>
       </td>
     </tr>
 
@@ -104,7 +104,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label>Motivo Anulación</label>
-            <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion"
+            <textarea placeholder="Motivo Anulacion" style="width: 100% ;" name="Motivo_Anulacion"
               [(ngModel)]="MotivoAnulacion"></textarea>
           </div>
         </div>

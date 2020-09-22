@@ -71,6 +71,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('FormMoneda') FormMoneda: any;
   @ViewChild('FormTransferencia') FormTransferencia: any;
   @ViewChild('FormGiro') FormGiro: any;
+  @ViewChild('comision') comision: any;
   @ViewChild('FormTraslado') FormTraslado: any;
   @ViewChild('FormCorresponsal') FormCorresponsal: any;
   @ViewChild('FormServicio') FormServicio: any;
@@ -1245,32 +1246,25 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
   }
 
-  ValidarTasaCambio(tasa_cambio) {
+  ValidarTasaCambio(tasa_cambio){
     let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
     let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
     let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
-    // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
-          // Comision_Efectivo_Transferencia: "30"
-          // Costo_Transferencia: "3000"
-          // Id_Moneda: "12"
-          // Id_Valor_Moneda: "6"
-          // Max_Compra_Efectivo: "3350"
-          // Max_Venta_Efectivo: "5000"
-          // Max_Venta_Transferencia: "405"
-          // Min_Compra_Efectivo: "2000"
-          // Min_No_Cobro_Transferencia: "1000"
-          // Min_Venta_Efectivo: "3450"
-          // Min_Venta_Transferencia: "205"
-          // Pagar_Comision_Desde: "0"
-          // Sugerido_Compra_Efectivo: "3300"
-          // Sugerido_Venta_Efectivo: "3500"
-          // Sugerido_Venta_Transferencia: "105"
-          // console.log(['Recogiendo valores de moneda ', data.query_data]);
+    //tasa_cambio = parseFloat(tasa_cambio);
+
+    console.log(max);
+    console.log(min);
+    console.log(sug);
+    console.log(tasa_cambio);
+    console.log(tasa_cambio > max || tasa_cambio < min);
+    console.log(tasa_cambio > max && tasa_cambio < min);
+    console.log(tasa_cambio > max );
+    console.log(tasa_cambio < min);
 
     if (tasa_cambio > max || tasa_cambio < min) {
       this.TransferenciaModel.Tasa_Cambio = sug;
       this.confirmacionSwal.title = "Alerta";
-      this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo(" + min + ")/máximo(" + max + ") establecido para la moneda"
+      this.confirmacionSwal.text = "La tasa digitada es inferior/superior al mínimo("+min+")/máximo("+max+") establecido para la moneda"
       this.confirmacionSwal.type = "warning"
       this.confirmacionSwal.show();
       return false;
@@ -2233,7 +2227,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.MonedaParaTransferencia.Valores = data.query_data;
 
           // Buscando Valores de moneda
+          // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
           this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
+
           // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
           // Comision_Efectivo_Transferencia: "30"
           // Costo_Transferencia: "3000"
@@ -3160,7 +3156,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  valorComision(value: string) {
+  valorComision(value: any) {
 
     let recibido = parseFloat(this.GiroModel.Valor_Recibido);
     if (typeof (value) == 'boolean') {
@@ -3179,6 +3175,22 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         return;
       }
     }
+
+    // console.log([
+    //   recibido,
+    //   value,
+    //   parseInt(value),
+    //   Number(value),
+    //   Number(value.replace(".","")),     
+    //   parseInt(value.replace(".","")),     
+    //   parseFloat(value.replace(".","")),     
+    //   this.GiroModel.Valor_Total,
+    //   this.GiroModel.Valor_Entrega
+    // ]);
+
+
+
+
 
     let maxComision = this.GiroComision[(this.GiroComision.length - 1)].Comision;
 
@@ -3202,6 +3214,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     } else {
 
       this.GiroComision.forEach(element => {
+
         if ((parseFloat(element.Valor_Minimo) <= recibido) && (recibido <= parseFloat(element.Valor_Maximo))) {
           this.GiroModel.Comision = element.Comision;
 
@@ -3222,6 +3235,25 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         }
       });
     }
+
+    if (this.FormGiro.controls.Comision.dirty) {
+      var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+      switch (checkeado) {
+        case true: {
+          this.GiroModel.Valor_Total = recibido + parseFloat(value.replace(".", ""));
+          this.GiroModel.Valor_Entrega = recibido;
+          break;
+        }
+        case false: {
+          this.GiroModel.Valor_Total = recibido;
+          this.GiroModel.Valor_Entrega = recibido - parseFloat(value.replace(".", ""));
+          break;
+        }
+      }
+    }
+
+
+
   }
 
   RealizarGiro(formulario: NgForm) {
@@ -3441,27 +3473,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // if (this.DeshabilitarComisionGiro) {
-    //   if (this.permisoSubscription == undefined) {
     this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
-      // console.log(d);
-      if (d) {
-        this.DeshabilitarComisionGiro = false;
-        this.permisoSubscription.unsubscribe();
-        this.permisoSubscription = undefined;
-      }
+      this.DeshabilitarComisionGiro = !this.permisoService.permisoAceptado;
     });
-    // }
 
     let p = { accion: "giro" };
     this.permisoService._openSubject.next(p);
-    //this.DeshabilitarComisionGiro = false;
   }
-  // else {
-
-  //   this.DeshabilitarComisionGiro = true;
-  // }
-  // }
 
   //#endregion
 
@@ -4174,7 +4192,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CambiarVista(tipo) {
 
     // this._notificacionService.counter();
-    // console.log('Cambiando vista');
+    console.log('Cambiando vista');
 
     switch (tipo) {
       case "Compra": {
@@ -4211,6 +4229,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.GetDepartamentoCiudadOficina();
         this.Giro2 = true;
         this.Giro1 = false;
+        this.permisoService.permisoAceptado = false;
+        this.DeshabilitarComisionGiro = !this.permisoService.permisoAceptado;
+
         break;
       }
       case "Traslado": {

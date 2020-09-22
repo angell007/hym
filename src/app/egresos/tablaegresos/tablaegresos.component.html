@@ -94,21 +94,21 @@
                     <td class="text-right">{{e.Valor | customcurrency:e.Codigo_Moneda}}</td>
                     <td class="text-center" [ngClass]="{'bg-white':e.Estado != 'Anulado'}">
                       <div class="text-center" *ngIf="e.Estado != 'Anulado'">
-                        <div ngbDropdown class="dropdown-primary">
-                          <button ngbDropdownToggle
-                            class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light "
-                            type="button"><i class="ti-angle-down"></i></button>
-                          <div ngbDropdownMenu>
+                        <!-- <div ngbDropdown class="dropdown-primary"> -->
+                        <!-- <button ngbDropdownToggle
+                          class="btn btn-outline-primary btn- xs btn-rounded waves-effect waves-light " type="button"><i
+                            class="ti-angle-down"></i></button> -->
+                        <!-- <div ngbDropdownMenu> -->
 
-                            <a class="dropdown-item waves-light waves-effect caja-botones accionable"
-                              (confirm)="AnularEgreso(e.Id_Egreso)"
-                              [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este egreso' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
-                              <i
-                                [ngClass]="{'ti-na text-danger':e.Estado == 'Activo', 'ti-back-right text-success':e.Estado == 'Anulado'}"></i>
-                              {{e.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
-                          </div>
-                        </div>
+                        <a class="dropdown-item waves-light waves-effect caja-botones accionable"
+                          (confirm)="AnularEgreso(e.Id_Egreso)"
+                          [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este egreso' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
+                          <i
+                            [ngClass]="{'ti-trash text-danger':e.Estado == 'Activo', 'ti-back-right text-success':e.Estado == 'Anulado'}"></i>
+                          {{e.Estado == 'Activo' ? '' : ''}}</a>
                       </div>
+                      <!-- </div> -->
+                      <!-- </div> -->
                     </td>
                   </tr>
                 </tbody>

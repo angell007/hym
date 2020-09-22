@@ -1193,14 +1193,16 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label>Comisión
-                            <!-- <i class="text-info pl-2 font-size-15" [ngClass]="{'ti-unlock':DeshabilitarComisionGiro}" -->
-                            <!-- style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i> -->
+                            <i class="text-info pl-2 font-size-15"
+                              [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}"
+                              style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
                           </label>
-                          <input type="text" placeholder="Comision" class="form-control text-right" name="Comision"
+                          <input type="text" placeholder="Comision" #comision class="form-control text-right" name="Comision"
                             [(ngModel)]="GiroModel.Comision" [disabled]="DeshabilitarComisionGiro" required currencyMask
-                            [options]="{ thousands: '.', decimal: ',' }">
+                            [options]="{ thousands: '.', decimal: ',' }" 
+                            (ngModelChange)="valorComision(comision.value)">
                         </div>
-                        <!-- [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}" -->
+
                       </div>
 
                       <div class="col-md-1">
@@ -2014,7 +2016,7 @@
           <input type="text" name="id" hidden ngModel="{{idTransferencia}}">
           <div class="form-group">
             <label>Motivo Anulación</label>
-            <textarea placeholder="Motivo Anulacion" class="form-control" name="Motivo_Anulacion"
+            <textarea placeholder="Motivo Anulacion" style="width: 100%;" name="Motivo_Anulacion"
               [(ngModel)]="MotivoAnulacionTransferencia"></textarea>
           </div>
         </div>

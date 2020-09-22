@@ -196,7 +196,7 @@ export class TablaegresosComponent implements OnInit {
         // this._toastService.ShowToast(toastObj);
       } else {
         // this._swalService.ShowMessage(data);
-        this.ShowSwal('warning', 'Warning',data);
+        this.ShowSwal('warning', 'Warning', data);
 
       }
     });

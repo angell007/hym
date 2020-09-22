@@ -66,9 +66,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     {
       if (data.codigo == 'success') {
         this.CerrarModal();
-        //this.RespuestaCodigo.emit(!data.query_data);
         this.permisoService.permisoAceptado = data.query_data;
-
         if (this.accion == 'transferencia_cajero') {
           this.response.verificado = data.query_data;
           this.permisoService._subject.next(this.response);

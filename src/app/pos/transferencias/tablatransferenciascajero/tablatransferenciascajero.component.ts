@@ -4,11 +4,13 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { TransferenciaService } from '../../../shared/services/transferencia/transferencia.service';
 import { Observable, Subject } from 'rxjs';
+import { NormailizerService } from '../../../normailizer.service';
 
 @Component({
   selector: 'app-tablatransferenciascajero',
   templateUrl: './tablatransferenciascajero.component.html',
-  styleUrls: ['./tablatransferenciascajero.component.scss', '../../../../style.scss']
+  styleUrls: ['./tablatransferenciascajero.component.scss', '../../../../style.scss'],
+  providers: [NormailizerService]
 })
 export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
@@ -46,6 +48,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
     private _toastService: ToastService,
+    private _normalizeService: NormailizerService;
     private _transferenciaService: TransferenciaService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -176,8 +179,13 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
   AnularTransferencia() {
     let datos = new FormData();
+
+    let info = this._normalizeService.normalize(JSON.stringify(this.MotivoAnulacion));
+    console.log(info);
+
     datos.append("id_transferencia", this.Id_Transferencia_Anular);
-    datos.append("motivo_anulacion", this.MotivoAnulacion);
+    datos.append("motivo_anulacion", info);
+
     this._transferenciaService.anularReciboTransferencias(datos)
       .subscribe((data: any) => {
         if (data.codigo == 'success') {

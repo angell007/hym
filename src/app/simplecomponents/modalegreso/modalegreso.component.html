@@ -32,8 +32,9 @@
           <div class="form-group">
             <label>Moneda</label>
             <select id="moneda" class="form-control" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+              <!-- <option value="{{ coinDefault.Id_Moneda }}" selected>{{ coinDefault.Nombre }}</option> -->
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda" [selected]="EgresoModel.Id_Moneda">{{m.Nombre}}
+              </option>
             </select>
           </div>
         </div>
