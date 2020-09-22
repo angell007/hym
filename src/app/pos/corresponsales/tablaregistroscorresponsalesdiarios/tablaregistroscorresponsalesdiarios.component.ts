@@ -46,7 +46,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     private _toastService: ToastService,
     private _corresponsalService: CorresponsalbancarioService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    this.ConsultaFiltrada();
   }
 
   ngOnInit() {
@@ -64,7 +63,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   SetFiltros(paginacion: boolean) {
     let params: any = {};
 
-    params.tam = this.pageSize;
+    // params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if (paginacion === true) {
@@ -112,16 +111,19 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
     this.Cargando = true;
     this._corresponsalService.GetRegistrosDiarios(p).subscribe((data: any) => {
+
+      console.log(data);
+
       if (data.codigo == 'success') {
         this.RegistrosCorresponsales = data.query_data;
-        this.TotalItems = data.numReg;
+        // this.TotalItems = data.numReg;
       } else {
         this.RegistrosCorresponsales = [];
         this._swalService.ShowMessage(data);
       }
 
       this.Cargando = false;
-      this.SetInformacionPaginacion();
+      this.SetInformacionPaginacion(data.query_data);
     });
   }
 
@@ -136,13 +138,16 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     };
   }
 
-  SetInformacionPaginacion() {
+  SetInformacionPaginacion(data: any) {
+    // console.log(data);
+    this.TotalItems = data.length
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
-
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
+
 }

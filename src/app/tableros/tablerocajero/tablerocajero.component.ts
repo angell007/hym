@@ -1249,13 +1249,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let max = parseFloat(this.MonedaParaTransferencia.Valores.Max_Compra_Efectivo);
     let min = parseFloat(this.MonedaParaTransferencia.Valores.Min_Compra_Efectivo);
     let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
-    //tasa_cambio = parseFloat(tasa_cambio);
-
-    // console.log(max);
-    // console.log(min);
-    // console.log(sug);
-    // console.log(tasa_cambio);
-
+    // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
+          // Comision_Efectivo_Transferencia: "30"
+          // Costo_Transferencia: "3000"
+          // Id_Moneda: "12"
+          // Id_Valor_Moneda: "6"
+          // Max_Compra_Efectivo: "3350"
+          // Max_Venta_Efectivo: "5000"
+          // Max_Venta_Transferencia: "405"
+          // Min_Compra_Efectivo: "2000"
+          // Min_No_Cobro_Transferencia: "1000"
+          // Min_Venta_Efectivo: "3450"
+          // Min_Venta_Transferencia: "205"
+          // Pagar_Comision_Desde: "0"
+          // Sugerido_Compra_Efectivo: "3300"
+          // Sugerido_Venta_Efectivo: "3500"
+          // Sugerido_Venta_Transferencia: "105"
+          // console.log(['Recogiendo valores de moneda ', data.query_data]);
 
     if (tasa_cambio > max || tasa_cambio < min) {
       this.TransferenciaModel.Tasa_Cambio = sug;
@@ -2223,7 +2233,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.MonedaParaTransferencia.Valores = data.query_data;
 
           // Buscando Valores de moneda
-          this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
+          this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
           // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
           // Comision_Efectivo_Transferencia: "30"
           // Costo_Transferencia: "3000"
@@ -2779,10 +2789,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
+  removeAccents = (str: string) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   AnularTransferencia(id, formulario: NgForm) {
     let datos = new FormData();
     datos.append("id_transferencia", this.idTransferencia);
-    datos.append("motivo_anulacion", this.MotivoAnulacionTransferencia);
+
+
+    datos.append("motivo_anulacion", this.removeAccents(this.MotivoAnulacionTransferencia));
+
+
     this._transferenciaService.anularReciboTransferencias(datos)
       .catch(error => {
         console.error('An error occurred:', error.error);
@@ -3538,7 +3556,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.CargarDatosTraslados();
       }
 
-      this.swalService.ShowMessage(data);
+      this.swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
     });
   }
 
@@ -3907,7 +3926,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       case 'traslados':
         this.CargarDatosTraslados();
-        this.SetMonedaTransferencia(1);
         break;
 
       case 'corresponsal':
@@ -4179,6 +4197,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case "Transferencia": {
         this.Transferencia1 = false;
         this.Transferencia2 = true;
+        this.SetMonedaTransferencia(1);
+
+
         break;
       }
       case "Cambio": {
@@ -4195,7 +4216,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       case "Traslado": {
         this.Traslado2 = true;
         this.Traslado1 = false;
-
+        this.SetMonedaTransferencia(1)
         this.CargarDatosTraslados();
         break;
       }

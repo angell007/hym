@@ -39,7 +39,7 @@
                   </tr>
                   <tr>
                     <th class="table-filters">
-                      <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
+                      <input type="text" class="form-control" placeholder="Filtro código" (change)="ConsultaFiltrada()"
                         [(ngModel)]="Filtros.codigo">
                     </th>
                     <th class="table-filters">
@@ -133,5 +133,5 @@
   </div>
   <app-modalegreso [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
   </app-modalegreso>
-  
+
   <swal #alertSwal title="" html="" type="" text=""></swal>
