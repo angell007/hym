@@ -3,6 +3,7 @@ import { GeneralService } from '../shared/services/general/general.service';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class SexternosService {
@@ -127,5 +128,9 @@ export class SexternosService {
       funcionario: '',
       tipo: '',
     };
+  }
+
+  cambiarEstadoServicio(datos: FormData): Observable<any> {
+    return this.http.post(this.globales.ruta + 'php/serviciosexternos/cambiar_estado_servicio_custom.php', datos);
   }
 }

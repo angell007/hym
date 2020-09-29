@@ -48,7 +48,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
     private _toastService: ToastService,
-    private _normalizeService: NormailizerService;
+    private _normalizeService: NormailizerService,
     private _transferenciaService: TransferenciaService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();

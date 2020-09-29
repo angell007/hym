@@ -4,6 +4,7 @@ import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { CajeroService } from '../shared/services/cajeros/cajero.service';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 @Injectable()
 export class TrasladosCustomService {
@@ -31,14 +32,17 @@ export class TrasladosCustomService {
   public user = JSON.parse(localStorage['User']);
   public Cambios: any = [];
   public CajerosTraslados: any = [];
-  Traslados: any[];
+  Traslados: Array<string> = [];
   TrasladosRecibidos: any[];
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient, private cajeroService: CajeroService
 
   ) {
-    console.log('Iniciando servicio Traslados filtro y user es : ', this.user);
-    this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+
+    this.TrasladosRecibidos = [];
+    TimerObservable.create(0, 10000)
+    .subscribe(() => {
     this.CargarDatosTraslados();
+    });
   }
   public filtroCustom: string;
 

@@ -10,7 +10,8 @@
                                 TituloCard="Pendientes"
                                 IconoCard="ti-receipt"
                                 CardClass="bg-danger"
-                                AdditionalText="">
+                                AdditionalText=""
+                                (click)="customFilter('Pendiente');">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">
@@ -19,7 +20,8 @@
                                 TituloCard="Realizadas"
                                 IconoCard="ti-check"
                                 CardClass="bg-success"
-                                AdditionalText="">
+                                AdditionalText=""
+                                (click)="customFilter('Pagada');">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">
@@ -29,7 +31,8 @@
                                 IconoCard="ti-back-right"
                                 CardClass="bg-warning"
                                 AdditionalText=""
-                                TextColor="black">
+                                TextColor="black"
+                                (click)="customFilter('devuelta');">
                             </app-informativecard>
                         </div>
                         <div class="col-md-3">

@@ -252,6 +252,9 @@ import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuenta
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
 import { HourPipe } from './hour.pipe';
+import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
+// import { TransferenciasconsultorService } from './customservices/transferenciasconsultor.service';
+import { TesCustomServiceService } from './tes-custom-service.service';
  
 // TODO  Funcion para dar formato a moneda
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -459,7 +462,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         DetallemovimientoscuentagerenteComponent,
         TrasladoscajaComponent,
         TablatasladoscajaComponent,
-        HourPipe
+        HourPipe,
+        ConsolidadoComponent
     ],
     exports:[
         ModalBasicComponent
@@ -470,7 +474,6 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CompraService,
         ProveedorService,
         CajaService,
-        TransferenciaService,
         FuncionarioService,
         GiroService,
         GrupoterceroService,
@@ -521,7 +524,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         PerfilService,
         ConfiguracionService,
         SafePipe,
-        WebnavigationService
+        WebnavigationService,
+        // TransferenciasconsultorService,
+        TransferenciaService,
+        TesCustomServiceService
+
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]

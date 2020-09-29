@@ -66,6 +66,8 @@ import { DetallemovimientoscuentaComponent } from './tableros/tableroconsultor/d
 import { CuentasconsultorComponent } from './cuentasconsultor/cuentasconsultor.component';
 import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
+import { ConsolidadosService } from './customservices/consolidados.service';
+import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
 
 export const AppRoutes: Routes = [
     {        
@@ -285,8 +287,12 @@ export const AppRoutes: Routes = [
         children: [{ path: '', component: GrupostercerosComponent, canActivate: [AuthGuard] }]
     },
     {
-        path: 'cierrecaja/:id_funcionario/:solo_ver/:fechaSoloVer', component: CommonLayoutComponent,
+        path: 'cierrecaja/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
+    },    
+    {
+        path: 'consolidado/:id_funcionario', component: CommonLayoutComponent,
+        children: [{ path: '', component: ConsolidadoComponent, canActivate: [AuthGuard] }]
     },    
     {
         path: 'cierrecuentasconsultor/:id_funcionario', component: CommonLayoutComponent,

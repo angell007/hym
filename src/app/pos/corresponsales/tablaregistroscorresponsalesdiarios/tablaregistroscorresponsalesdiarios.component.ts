@@ -43,9 +43,10 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
-    private _toastService: ToastService,
+    // private _toastService: ToastService,
     private _corresponsalService: CorresponsalbancarioService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+    this.ConsultaFiltrada();
   }
 
   ngOnInit() {

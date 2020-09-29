@@ -3,6 +3,8 @@ import { GeneralService } from '../shared/services/general/general.service';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 @Injectable()
 export class ConsolidadosService {
@@ -12,14 +14,25 @@ export class ConsolidadosService {
   public SumatoriaTotales: any = [];
   public TotalesIngresosMonedas: any = [];
   public TotalesEgresosMonedas: any = [];
+  public TotalesCustom: any = [];
   public Totales: any = [];
   public Saldos: any = [];
   public ValoresMonedasApertura = []
   public TotalRestaIngresosEgresos = [];
-
+  public subject = new Subject;
+  public observer$ = this.subject.asObservable();
 
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient) {
 
+    TimerObservable.create(0, 10000)
+    .subscribe(() => {
+      this.GetData();
+    });
+  }
+
+  async GetData() {
+    this.TotalRestaIngresosEgresos = []
+    this.SumatoriaTotales = []
 
     this.getValoresIniciales().then(() => {
       this.AsignarMonedasApertura().then(() => {
@@ -27,25 +40,18 @@ export class ConsolidadosService {
           this.MonedasSistema.forEach((moneda, i) => {
             let objMoneda = this.SumatoriaTotales[moneda.Nombre];
 
-            // this.ValoresMonedasApertura.push(valores);
-
-            // console.log(this.ValoresMonedasApertura);
-
-            // let monto_inicial_moneda = this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
             let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
             this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
             this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
             let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
-
-            // this.TotalRestaIngresosEgresos[moneda.Nombre] = moneda.Codigo
             this.TotalRestaIngresosEgresos.push([moneda.Codigo, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed()]);
 
           })
         })
       })
 
-      // console.log(['TotalRestaIngresosEgresos', this.TotalRestaIngresosEgresos]);
+      return this.TotalRestaIngresosEgresos;
 
     }).catch((err) => {
       console.log('Error  ', err);
@@ -96,11 +102,11 @@ export class ConsolidadosService {
 
   async AsignarMonedasApertura() {
     // if (this.MonedasSistema.length > 0) {
-      // this.ValoresMonedasApertura = [];
-      // await this.MonedasSistema.forEach(moneda => {
-        // let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: , NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
-        // this.ValoresMonedasApertura.push(monObj);
-      // });
-    }
+    // this.ValoresMonedasApertura = [];
+    // await this.MonedasSistema.forEach(moneda => {
+    // let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: , NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
+    // this.ValoresMonedasApertura.push(monObj);
+    // });
+  }
   // }
 }

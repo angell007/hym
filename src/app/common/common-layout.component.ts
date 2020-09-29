@@ -20,12 +20,13 @@ import { QzTrayService } from '../shared/qz-tray.service';
 import { tap } from 'rxjs/operators';
 import { NotificacionsService } from '../customservices/notificacions.service';
 import { ConsolidadosService } from '../customservices/consolidados.service';
+import { TrasladosCustomService } from '../customservices/traslados.custom.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers: [QzTrayService, NotificacionsService, ConsolidadosService]
+    providers: [QzTrayService, NotificacionsService, ConsolidadosService, TrasladosCustomService]
 
 })
 
@@ -174,6 +175,7 @@ export class CommonLayoutComponent implements OnInit {
         private _notificacionService: NotificacionsService,
         private trasladoCajaService: TrasladocajaService,
         private toastService: ToastService,
+        private trasladosCustomService: TrasladosCustomService,
         private _oficinaService: OficinaService,
         private _cajaService: CajaService,
         private _aperturaCajaService: AperturacajaService,
@@ -373,20 +375,17 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     muestra_tabla(id) {
+
+        this.trasladosCustomService.CargarDatosTraslados();
+
         var tot = document.getElementsByClassName('modulos').length;
         for (let i = 0; i < tot; i++) {
             var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
             document.getElementById(id2).style.display = 'none';
         }
+
         document.getElementById(id).style.display = 'block';
 
-
-        // let datos = new FormData();
-        // datos.append("id", JSON.parse(localStorage['User']).Identificacion_Funcionario);
-        // this.http.post(this.globales.ruta + 'php/trasladocaja/limpiar_notificaciones.php', datos).pipe(tap(x => console.log(x))).subscribe((data: any) => {
-        //     this.alertasCajas = [];
-        //     this.contadorTraslado = 0;
-        // });
 
     }
 
@@ -1028,7 +1027,7 @@ export class CommonLayoutComponent implements OnInit {
                 this.swalService.ShowMessage(data);
             } else {
 
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario]);
             }
         });
     }

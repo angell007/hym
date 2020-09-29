@@ -1,19 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { Globales } from '../shared/globales/globales';
 
 @Injectable()
 export class NotificacionsService {
   public user = JSON.parse(localStorage['User']);
   public contadorTraslado = 0;
+  public contadorTrasladoCustom = 0;
   public alertasCajas: any = [];
 
   notifcaciones$ = new Subject<string>()
 
   constructor(private http: HttpClient, private globales: Globales) {
 
-    this.counter;
+    TimerObservable.create(0, 3000)
+      .subscribe(() => {
+        this.counter();
+      });
 
   }
 

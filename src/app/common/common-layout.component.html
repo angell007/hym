@@ -242,7 +242,8 @@
                   </div>
                 </a>
               </li>
-              <li>
+              <!-- //TODO: customizar este permiso  -->
+              <li *ngIf="user.Id_Perfil == 3 ">
                 <div class="pl-2 pt-2">
                   <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
                   <label for="" style="display:block;">Caja: {{NombreCaja}}</label>
@@ -250,17 +251,15 @@
               </li>
             </ul>
 
-            <ul class="nav-left">
+            <ul class="nav-left" >
               <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                 <!-- NOTIFICACIONES SALDOS -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-money"></i> Saldos
                 </a>
-
-                <ul class="dropdown-menu ">
+                <ul class="dropdown-menu " style="height: 150px; ">
                   <li class="notice-header">
                     <i class="fa fa-money"></i> Mis saldos </li>
-
                   <ul class=" py-3" style="list-style: none;">
                     <li *ngFor="let item of  consolidadosService.TotalRestaIngresosEgresos">
                       <div class=" row">
@@ -273,8 +272,16 @@
               </li>
             </ul>
 
+            <ul class="nav-left">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3">
+                <a [routerLink]="[ '/consolidado', user.Identificacion_Funcionario ]" routerLinkActive="active">
+                  <i class="ti-clipboard"></i> Consolidado
+                </a>
+              </li>
+            </ul>
 
-            <ul class="nav-right">
+
+            <ul class="nav-left">
               <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
                 <!-- NOTIFICACIONES -->
                 <span class="counter">{{  counter }}</span>
@@ -284,7 +291,6 @@
                 <ul class="dropdown-menu ">
                   <li class="notice-header">
                     <i class="fa fa-refresh pdd-right-10"></i>
-                    <!-- <span>Traslados Recibidos</span> -->
                   </li>
                   <ul [perfectScrollbar] class="list-info overflow-y-auto relative scrollable">
                     <li *ngFor="let alerta of  _notificacionService.alertasCajas">
@@ -308,26 +314,18 @@
                       </a>
                     </li>
                   </ul>
-                  <li class="notice-footer">
-                    <span>
-                      <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
-                        Ver Todos Los Traslados
-                        <i class="ei-right-chevron pdd-left-5 font-size-10"></i>
-                      </a>
-                    </span>
-                  </li>
                 </ul>
               </li>
+            </ul>
 
-              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
-                <!-- NOTIFICACIONES -->
+
+            <ul class="nav-right">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3">
                 <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
                   (click)="VerificarAntesDeCierre()">
                   <i class="fa fa-lock"> Cerrar Caja</i>
                 </button>
               </li>
-
-
               <li class="user-profile dropdown">
                 <!-- PERFIL -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -362,6 +360,11 @@
                 </ul>
               </li>
             </ul>
+
+
+            <ul class="nav-right">
+            </ul>
+
           </div>
         </div>
 
