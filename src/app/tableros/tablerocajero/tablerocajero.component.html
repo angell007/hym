@@ -818,7 +818,7 @@
                               Enviados</a>
                           </li>
                           <li class="nav-item" (click)="ActualizarTablasGiros()">
-                            <a href="#default-tab-2" class="nav-link" role="tab" data-toggle="tab">Giros Pagados</a>
+                            <a href="#default-tab-2" class="nav-link " role="tab" data-toggle="tab">Giros Pagados</a>
                           </li>
                           <li class="nav-item">
                             <a href="#default-tab-3" class="nav-link" role="tab" data-toggle="tab">Buscador</a>
@@ -842,15 +842,27 @@
                                 </tr>
 
                                 <tr>
+                                  <th class="table-filters"></th>
                                   <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                      (change)="giroService.ConsultaFiltrada()"
+                                      [(ngModel)]="giroService.FiltrosRecibidos.codigo">
                                   </th>
                                   <th class="table-filters">
-                                    <!-- <input type="text" class="form-control" placeholder="Filtro Código"
-                                      [(ngModel)]="Filtros.recibo" (change)="ConsultaFiltrada()"> -->
+                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                      (change)="giroService.ConsultaFiltrada()"
+                                      [(ngModel)]="giroService.FiltrosRecibidos.nombreRemitente">
                                   </th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Documento"
+                                      (change)="giroService.ConsultaFiltrada()"
+                                      [(ngModel)]="giroService.FiltrosRecibidos.documento">
+                                  </th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                      (change)="giroService.ConsultaFiltrada()"
+                                      [(ngModel)]="giroService.FiltrosRecibidos.nombreDestinatario">
+                                  </th>
                                   <th class="table-filters"></th>
                                   <th class="table-filters"></th>
                                 </tr>
@@ -906,13 +918,29 @@
                                   <th class="custom-thead">Nombre Destinatario</th>
                                   <th class="custom-thead">Valor Pagado</th>
                                 </tr>
-                                <tr>
 
+                                <tr>
                                   <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                      (change)="giroService.ConsultaFiltradaAprobados()"
+                                      [(ngModel)]="giroService.FiltrosAprobados.codigo">
+                                  </th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                      (change)="giroService.ConsultaFiltradaAprobados()"
+                                      [(ngModel)]="giroService.FiltrosAprobados.nombreRemitente">
+                                  </th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Documento"
+                                      (change)="giroService.ConsultaFiltradaAprobados()"
+                                      [(ngModel)]="giroService.FiltrosAprobados.documento">
+                                  </th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                      (change)="giroService.ConsultaFiltradaAprobados()"
+                                      [(ngModel)]="giroService.FiltrosAprobados.nombreDestinatario">
+                                  </th>
                                   <th class="table-filters"></th>
                                 </tr>
 
@@ -1311,12 +1339,38 @@
 
                             <tr>
                               <th class="table-filters"></th>
+                              <th class="table-filters">
+                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                  (change)="_trasladosCustomService.ConsultaFiltrada()"
+                                  [(ngModel)]="_trasladosCustomService.Filtros.codigo">
+                              </th>
+                              <th class="table-filters">
+                                <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                  (change)="_trasladosCustomService.ConsultaFiltrada()"
+                                  [(ngModel)]="_trasladosCustomService.Filtros.destinatario">
+                              </th>
+
                               <th class="table-filters"></th>
+
+                              <th class="table-filters">
+                                <input type="text" class="form-control" placeholder="Filtro Moneda"
+                                  (change)="_trasladosCustomService.ConsultaFiltrada()"
+                                  [(ngModel)]="_trasladosCustomService.Filtros.moneda">
+                              </th>
+
+                              <th class="table-filters">
+                                <select class="form-control form-control-sm"
+                                  (change)="_trasladosCustomService.ConsultaFiltrada()"
+                                  [(ngModel)]="_trasladosCustomService.Filtros.estado">
+                                  <option value=""></option>
+                                  <option value="Anulado">Anulado</option>
+                                  <option value="Aprobado">Aprobado</option>
+                                  <option value="Negado">Negado</option>
+                                  <option value="Pendiente">Pendiente</option>
+                                </select>
+                              </th>
                               <th class="table-filters"></th>
-                              <th class="table-filters"></th>
-                              <th class="table-filters"></th>
-                              <th class="table-filters"></th>
-                              <th class="table-filters"></th>
+                            </tr>
 
                             <tr *ngIf="Cargando">
                               <td colspan="8" class="text-center">
@@ -1385,20 +1439,49 @@
                                 <tr>
                                   <th class="custom-thead">Hora</th>
                                   <th class="custom-thead">Código</th>
-                                  <th class="custom-thead">Enviado a</th>
+                                  <th class="custom-thead">Enviado por</th>
                                   <th class="custom-thead">Valor</th>
                                   <th class="custom-thead">Moneda</th>
                                   <th class="custom-thead">Estado</th>
                                   <th class="custom-thead">Acciones</th>
                                 </tr>
                                 <tr>
+
+                                <tr>
                                   <th class="table-filters"></th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                      (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
+                                      [(ngModel)]="_trasladosCustomService.Filtros.codigo">
+                                  </th>
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                      (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
+                                      [(ngModel)]="_trasladosCustomService.Filtros.destinatario">
+                                  </th>
+
                                   <th class="table-filters"></th>
+
+                                  <th class="table-filters">
+                                    <input type="text" class="form-control" placeholder="Filtro Moneda"
+                                      (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
+                                      [(ngModel)]="_trasladosCustomService.Filtros.moneda">
+                                  </th>
+
+                                  <th class="table-filters">
+                                    <select class="form-control form-control-sm"
+                                      (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
+                                      [(ngModel)]="_trasladosCustomService.Filtros.estado">
+                                      <option value=""></option>
+                                      <option value="Anulado">Anulado</option>
+                                      <option value="Aprobado">Aprobado</option>
+                                      <option value="Negado">Negado</option>
+                                      <option value="Pendiente">Pendiente</option>
+                                    </select>
+                                  </th>
                                   <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
-                                  <th class="table-filters"></th>
+                                </tr>
+
                                 <tr *ngIf="Cargando">
                                   <td colspan="8" class="text-center">
                                     <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
@@ -1420,7 +1503,7 @@
                                   [ngClass]="{'bg-anulada':Traslado.Estado == 'Negado' || Traslado.Estado == 'Anulado', 'bg-selected':Traslado.Estado == 'Aprobado'}">
                                   <td class="text-center">{{Traslado.Fecha_Traslado | date:"HH:mm" }}</td>
                                   <td class="text-center">{{Traslado.Codigo}}</td>
-                                  <td class="text-center">{{Traslado.Cajero_Destino}}</td>
+                                  <td class="text-center">{{Traslado.Cajero_Origen}}</td>
                                   <td class="text-right">{{Traslado.Valor | customcurrency:Traslado.Codigo_Moneda}}
                                   </td>
                                   <td class="text-center">{{Traslado.Moneda }}</td>
@@ -1445,8 +1528,11 @@
                                   </td>
                                 </tr>
                               </tbody>
+
                             </table>
-                            <div id="paginacion-container" *ngIf="_trasladosCustomService.Traslados.length > 0">
+
+                            <div id="paginacion-container"
+                              *ngIf="_trasladosCustomService.TrasladosRecibidos.length > 0">
                               <div class="row">
                                 <div class="col-md-12">
                                   <pagination-controls id="trasladosRecibidos"
@@ -1606,8 +1692,14 @@
                             </tr>
                             <tr>
                               <th class="table-filters"></th>
-                              <th class="table-filters"></th>
-                              <th class="table-filters"></th>
+                              <th class="table-filters">
+                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                  [(ngModel)]="_sexternos.Filtros.codigo" (change)="_sexternos.ConsultaFiltrada()">
+                              </th>
+                              <th class="table-filters">
+                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                  [(ngModel)]="_sexternos.Filtros.servicio" (change)="_sexternos.ConsultaFiltrada()">
+                              </th>
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
@@ -1652,8 +1744,6 @@
                                     [ngClass]="{'ti-trash text-danger':Servicio.Estado == 'Activo', 'ti-back-right text-success':Servicio.Estado == 'Inactivo'}"></i>
                                   {{Servicio.Estado == 'Activo' ? '' : ''}}
                                 </button>
-
-                                <!-- <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label> -->
                               </td>
                             </tr>
                           </tbody>

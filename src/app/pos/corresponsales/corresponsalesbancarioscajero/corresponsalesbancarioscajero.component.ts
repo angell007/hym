@@ -77,11 +77,11 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     let consignaciones = this.CorresponsalModel.Consignacion != '' ? parseFloat(this.CorresponsalModel.Consignacion) : 0;
     let retiro = this.CorresponsalModel.Retiro != '' ? parseFloat(this.CorresponsalModel.Retiro) : 0;
 
-    if (consignaciones == 0 || retiro == 0) {
-      this.CorresponsalModel.Total_Corresponsal = '0';
-    } else {
-      this.CorresponsalModel.Total_Corresponsal = (consignaciones - retiro).toString();
-    }
+    // if (consignaciones == 0 || retiro == 0) {
+    //   this.CorresponsalModel.Total_Corresponsal = '0';
+    // } else {
+    this.CorresponsalModel.Total_Corresponsal = (consignaciones - retiro).toString();
+    // }
   }
 
   public GuardarCorresponsalDiario() {
@@ -90,14 +90,14 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     this.CorresponsalModel.Id_Oficina = this._generalService.SessionDataModel.idOficina;
     this.CorresponsalModel.Fecha = this._generalService.FechaActual;
     this.CorresponsalModel.Hora = this._generalService.HoraActual;
-    
+
     // Custom pesos  
     this.GetMonedas().then((monedas) => {
       this.monedaPeso = monedas.filter((moneda: any) => {
         return moneda.Nombre == 'Pesos'
       })
-      
-      this.CorresponsalModel.Id_Moneda = this.monedaPeso[0]['Id_Moneda'];      
+
+      this.CorresponsalModel.Id_Moneda = this.monedaPeso[0]['Id_Moneda'];
       let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
 
       let datos = new FormData();

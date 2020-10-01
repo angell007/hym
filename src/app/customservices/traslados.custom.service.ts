@@ -2,7 +2,6 @@ import { Injectable, ViewChild } from '@angular/core';
 import { GeneralService } from '../shared/services/general/general.service';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { CajeroService } from '../shared/services/cajeros/cajero.service';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
@@ -14,8 +13,9 @@ export class TrasladosCustomService {
   public Cargando: boolean = true;
   public Filtros: any = {
     codigo: '',
-    funcionario: '',
-    tipo: ''
+    destinatario: '',
+    moneda: '',
+    estado: '',
   };
   //Paginación
   public pageSizeRecibidos = 10;
@@ -39,26 +39,15 @@ export class TrasladosCustomService {
   ) {
 
     this.TrasladosRecibidos = [];
-    TimerObservable.create(0, 10000)
+    TimerObservable.create(0, 50000)
     .subscribe(() => {
     this.CargarDatosTraslados();
     });
   }
   public filtroCustom: string;
 
-  ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {
-    this.alertSwal.type = tipo;
-    this.alertSwal.title = titulo;
-    this.alertSwal.text = msg;
-    this.alertSwal.show();
-  }
-
-  @ViewChild('alertSwal') alertSwal: any;
-
   SetFiltros(paginacion: boolean) {
     let params: any = {};
-    // Limitar tamaño del filtro 
-    // params.tam = this.pageSize;
     params.funcionario = this.user.Identificacion_Funcionario
 
     if (paginacion === true) {
@@ -72,7 +61,18 @@ export class TrasladosCustomService {
       params.codigo = this.Filtros.codigo;
     }
 
-    params.tipo = this.Filtros.tipo;
+    if (this.Filtros.destinatario.trim() != "") {
+      params.destinatario = this.Filtros.destinatario;
+    }
+
+    if (this.Filtros.moneda.trim() != "") {
+      params.moneda = this.Filtros.moneda;
+    }
+
+    if (this.Filtros.estado.trim() != "") {
+      params.estado = this.Filtros.estado;
+    }
+
     return params;
   }
 
@@ -84,18 +84,34 @@ export class TrasladosCustomService {
       return;
     }
 
-    // this.http.get(this.globales.ruta + 'php/cambio/get_filtre_cambios.php?', { params: p }).subscribe((data: any) => {
-    //   if (data.codigo == 'success') {
-    //     this.Cambios = data.query_data;
-    //     this.SetInformacionPaginacion(data.query_data);
-    //   }
-    // });
+    this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario_filter.php?', { params: p }).subscribe((data: any) => {
+      console.log(data);
+      if (data.codigo == 'success') {
+        this.Traslados = data.query_data;
+        this.SetInformacionPaginacion(data)
+      }
+    });
+  }
+
+  ConsultaFiltradaRecibidos(paginacion: boolean = false) {
+    this.Cambios = [];
+    var p = this.SetFiltros(paginacion);
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+
+    this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario_filter_recibidos.php?', { params: p }).subscribe((data: any) => {
+      console.log(data);
+      if (data.codigo == 'success') {
+        this.TrasladosRecibidos = data.query_data;
+        this.SetInformacionPaginacionRecibidos(data)
+      }
+    });
   }
 
   SetInformacionPaginacion(data: any) {
-    // console.log(data);
     this.TotalItems = data.length
-    // console.log('', this.TotalItems);
     var calculoHasta = (this.pageRecibidos * this.pageSizeRecibidos);
     var desde = calculoHasta - this.pageSizeRecibidos + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -105,9 +121,7 @@ export class TrasladosCustomService {
   }
 
   SetInformacionPaginacionRecibidos(data: any) {
-    // console.log(data);
     this.TotalItemsRecibidos = data.length
-    // console.log('', this.TotalItemsRecibidos);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItemsRecibidos ? this.TotalItemsRecibidos : calculoHasta;
@@ -124,7 +138,6 @@ export class TrasladosCustomService {
       if (data.codigo == 'success') {
         this.CajerosTraslados = data.query_data;
       } else {
-        // this.ShowSwal('warning', 'Warning', 'No hay más cajeros abiertos en este momento!');
       }
     });
   }
@@ -142,17 +155,20 @@ export class TrasladosCustomService {
     this.TrasladosRecibidos = [];
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.TrasladosRecibidos = data;
+      console.log(data);
       this.SetInformacionPaginacionRecibidos(data)
     });
 
     this.GetCajerosTraslados();
+    this.ResetValues();
   }
 
   ResetValues() {
     this.Filtros = {
       codigo: '',
-      funcionario: '',
-      tipo: '',
+      destinatario: '',
+      moneda: '',
+      estado: '',
     };
   }
 }

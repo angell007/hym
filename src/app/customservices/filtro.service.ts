@@ -2,7 +2,6 @@ import { Injectable, ViewChild } from '@angular/core';
 import { GeneralService } from '../shared/services/general/general.service';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class FiltroService {
@@ -15,8 +14,7 @@ export class FiltroService {
     funcionario: '',
     tipo: ''
   };
-  //Paginación
-  // public maxSize = 10;
+
   public pageSize = 10;
   public TotalItems: number;
   public page = 1;
@@ -31,8 +29,6 @@ export class FiltroService {
 
   ) {
 
-    this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log('Iniciando servicio filtro y user es : ', this.user);
     this.CargarCambiosDiarios()
   }
   public filtroCustom: string;
@@ -48,8 +44,6 @@ export class FiltroService {
 
   SetFiltros(paginacion: boolean) {
     let params: any = {};
-    // Limitar tamaño del filtro 
-    // params.tam = this.pageSize;
     params.funcionario = this.user.Identificacion_Funcionario
 
     if (paginacion === true) {
@@ -84,9 +78,7 @@ export class FiltroService {
   }
 
   SetInformacionPaginacion(data: any) {
-    // console.log(data);
     this.TotalItems = data.length
-    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -97,7 +89,6 @@ export class FiltroService {
 
   CargarCambiosDiarios() {
     this.Cambios = [];
-    // console.log('CargarCambiosDiarios cargado ');
     this.http.get(this.globales.ruta + 'php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;

@@ -1020,11 +1020,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   tituloCambio = "Compras o Ventas";
   VerCambio(id, modal) {
-
     this.http.get(this.globales.ruta + '/php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
       this.verCambio = data;
-
-
       modal.show();
     });
 
@@ -2973,6 +2970,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public ActualizarTablasGiros() {
     this.giroService.CargarGirosDiarios();
     this.giroService.CargarGirosAprobados();
+    this.giroService.ResetValues();
+
   }
 
   ModalVerGiro(id) {
@@ -3579,17 +3578,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           if (data.codigo == 'success') {
             this.CargarDatosTraslados();
           }
-          this.swalService.ShowMessage (['success', 'Exito', 'Operacion realizada correctamente']);
+          this.swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
         });
-      }else{
+      } else {
         if (confirm('El traslado ha sido modificado, realmente desea aprobarlo?')) {
           this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
             if (data.codigo == 'success') {
               this.CargarDatosTraslados();
             }
-            this.swalService.ShowMessage (['success', 'Exito', 'Operacion realizada correctamente']);
+            this.swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
           });
-        } 
+        }
       }
     });
   }
@@ -3952,7 +3951,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarDatosModulo(modulo: string) {
-    this._notificacionService.counter();
+    // this._notificacionService.counter();
 
     /***
      * Cargango modulos.
@@ -4118,10 +4117,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarDatosGiros() {
-    //this.ShowSwal("warning", "Alerta", "Desarrollar");
-
-    this.giroService.CargarGirosDiarios();
-
+    this.ActualizarTablasGiros();
     this.GirosAprobados = [];
     this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.GirosAprobados = data;

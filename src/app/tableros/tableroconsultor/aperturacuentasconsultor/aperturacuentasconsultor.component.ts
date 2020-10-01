@@ -51,7 +51,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     //Inicializa observables para actualizar cuentas cada segundo
-    this.CuentasActualizadas = TimerObservable.create(0, 1000)
+    this.CuentasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
         this.GetCuentasBancariasAperturaObservable();
       });

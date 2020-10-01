@@ -1,8 +1,7 @@
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { GeneralService } from '../shared/services/general/general.service';
 import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
@@ -10,7 +9,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 export class ConsolidadosService {
   public MonedasSistema: any = [];
   public user = JSON.parse(localStorage['User']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
   public SumatoriaTotales: any = [];
   public TotalesIngresosMonedas: any = [];
   public TotalesEgresosMonedas: any = [];
@@ -22,7 +21,7 @@ export class ConsolidadosService {
   public subject = new Subject;
   public observer$ = this.subject.asObservable();
 
-  constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient) {
+  constructor(public globales: Globales, private http: HttpClient) {
 
     TimerObservable.create(0, 10000)
     .subscribe(() => {
@@ -35,7 +34,6 @@ export class ConsolidadosService {
     this.SumatoriaTotales = []
 
     this.getValoresIniciales().then(() => {
-      this.AsignarMonedasApertura().then(() => {
         this.getValoresApertura().then(() => {
           this.MonedasSistema.forEach((moneda, i) => {
             let objMoneda = this.SumatoriaTotales[moneda.Nombre];
@@ -49,7 +47,6 @@ export class ConsolidadosService {
 
           })
         })
-      })
 
       return this.TotalRestaIngresosEgresos;
 
@@ -59,8 +56,6 @@ export class ConsolidadosService {
   }
 
   async getValoresIniciales() {
-
-    // console.log('getValoresIniciales  ');
 
     await this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {
@@ -94,19 +89,9 @@ export class ConsolidadosService {
   async getValoresApertura() {
     await this.http.get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.user.Identificacion_Funcionario } }).toPromise().then(async (data: any) => {
       data.valores_diario.forEach((valores, i) => {
-        // console.log('Test.. valores', valores);
         this.ValoresMonedasApertura.push(valores);
       });
     });
   }
 
-  async AsignarMonedasApertura() {
-    // if (this.MonedasSistema.length > 0) {
-    // this.ValoresMonedasApertura = [];
-    // await this.MonedasSistema.forEach(moneda => {
-    // let monObj = { Id_Moneda: moneda.Id_Moneda, Valor_Moneda_Apertura: , NombreMoneda: moneda.Nombre, Codigo: moneda.Codigo };
-    // this.ValoresMonedasApertura.push(monObj);
-    // });
-  }
-  // }
 }

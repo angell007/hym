@@ -6,21 +6,28 @@ import { GeneralService } from '../shared/services/general/general.service';
 @Injectable()
 export class GirosService {
 
-  Giros = [];
-  GirosBuscar = [];
+  // Los Giros aprobados son los que aparecen pagados 
+  // Los Giros  son los que aparecen enviados  
   public GirosAprobados = [];
-  public RutaGifCargando: string;
+  public Giros = [];
+  public GirosBuscar = [];
   public CargandoGiros: boolean = false;
   public Cargando: boolean = true;
+  public user = JSON.parse(localStorage['User']);
+
   public FiltrosRecibidos: any = {
     codigo: '',
+    documento: '',
+    nombreDestinatario: '',
+    nombreRemitente: '',
     funcionario: '',
-    tipo: ''
   };
   public FiltrosAprobados: any = {
     codigo: '',
+    documento: '',
+    nombreDestinatario: '',
+    nombreRemitente: '',
     funcionario: '',
-    tipo: ''
   };
   public Aparecer = false;
   //Paginación
@@ -41,64 +48,109 @@ export class GirosService {
     TotalItems: 0,
     page: 1
   }
-  public user = JSON.parse(localStorage['User']);
-  public Cambios: any = [];
-  constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient
-
-  ) {
-
-    this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log('Iniciando servicio Giros y user es : ', this.user);
+  constructor(public globales: Globales, private http: HttpClient) {
     this.CargarGirosDiarios()
     this.CargarGirosAprobados()
+    this.ResetValues();
+
   }
   public filtroCustom: string;
 
-  // ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {
-  //   this.alertSwal.type = tipo;
-  //   this.alertSwal.title = titulo;
-  //   this.alertSwal.text = msg;
-  //   this.alertSwal.show();
-  // }
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+    params.funcionario = this.user.Identificacion_Funcionario
 
-  // @ViewChild('alertSwal') alertSwal: any;
+    if (paginacion === true) {
+      params.pag = this.InformacionPaginacionRecibidos.page;
+    } else {
+      this.InformacionPaginacionRecibidos.page = 1;
+      params.pag = this.InformacionPaginacionRecibidos.page;
+    }
 
-  // SetFiltros(paginacion: boolean) {
-  //   let params: any = {};
-  //   params.funcionario = this.user.Identificacion_Funcionario
+    if (this.FiltrosRecibidos.codigo.trim() != "") {
+      params.codigo = this.FiltrosRecibidos.codigo;
+    }
 
-  //   if (paginacion === true) {
-  //     params.pag = this.page;
-  //   } else {
-  //     this.page = 1;
-  //     params.pag = this.page;
-  //   }
+    if (this.FiltrosRecibidos.documento.trim() != "") {
+      params.documento = this.FiltrosRecibidos.documento;
+    }
 
-  //   if (this.Filtros.codigo.trim() != "") {
-  //     params.codigo = this.Filtros.codigo;
-  //   }
+    if (this.FiltrosRecibidos.nombreDestinatario.trim() != "") {
+      params.destinatario = this.FiltrosRecibidos.nombreDestinatario;
+    }
 
-  //   params.tipo = this.Filtros.tipo;
-  //   return params;
-  // }
+    if (this.FiltrosRecibidos.nombreRemitente.trim() != "") {
+      params.remitente = this.FiltrosRecibidos.nombreRemitente;
+    }
 
-  // ConsultaFiltrada(paginacion: boolean = false) {
-  //   this.Cambios = [];
-  //   var p = this.SetFiltros(paginacion);
-  //   if (p === '') {
-  //     this.ResetValues();
-  //     return;
-  //   }
+    return params;
+  }
 
-  //   this.http.get(this.globales.ruta + 'php/cambio/get_filtre_cambios.php?', { params: p }).subscribe((data: any) => {
-  //     if (data.codigo == 'success') {
-  //       this.Cambios = data.query_data;
-  //       this.SetInformacionPaginacion(data.query_data);
-  //     }
-  //   });
-  // }
+  SetFiltrosAprobados(paginacion: boolean) {
+    let params: any = {};
+    params.funcionario = this.user.Identificacion_Funcionario
 
-  FiltrarGiroCedula(value) {
+    if (paginacion === true) {
+      params.pag = this.InformacionPaginacionAprobados.page;
+    } else {
+      this.InformacionPaginacionAprobados.page = 1;
+      params.pag = this.InformacionPaginacionAprobados.page;
+    }
+
+    if (this.FiltrosAprobados.codigo.trim() != "") {
+      params.codigo = this.FiltrosAprobados.codigo;
+    }
+
+    if (this.FiltrosAprobados.documento.trim() != "") {
+      params.documento = this.FiltrosAprobados.documento;
+    }
+
+    if (this.FiltrosAprobados.nombreDestinatario.trim() != "") {
+      params.destinatario = this.FiltrosAprobados.nombreDestinatario;
+    }
+
+    if (this.FiltrosAprobados.nombreRemitente.trim() != "") {
+      params.remitente = this.FiltrosAprobados.nombreRemitente;
+    }
+
+    return params;
+  }
+
+  ConsultaFiltradaAprobados(paginacion: boolean = false) {
+    this.GirosAprobados = [];
+    var p = this.SetFiltrosAprobados(paginacion);
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+
+    this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario_filter_aprobados.php?', { params: p }).subscribe((data: any) => {
+      console.log(data);
+      if (data.codigo == 'success') {
+        this.GirosAprobados = data.query_data;
+        this.SetInformacionPaginacionAprobados(data.query_data);
+      }
+    });
+  }
+
+  ConsultaFiltrada(paginacion: boolean = false) {
+    this.Giros = [];
+    var p = this.SetFiltros(paginacion);
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+
+    this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario_filter.php?', { params: p }).subscribe((data: any) => {
+      console.log(data);
+      if (data.codigo == 'success') {
+        this.Giros = data.query_data;
+        this.SetInformacionPaginacionRecibidos(data.query_data);
+      }
+    });
+  }
+
+  FiltrarGiroCedula(value: any) {
 
     this.Aparecer = false;
     this.CargandoGiros = true;
@@ -111,7 +163,7 @@ export class GirosService {
       this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value, funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
         this.CargandoGiros = false;
         this.GirosBuscar = data;
-        console.log(' this.GirosBuscar',  this.GirosBuscar );
+        console.log(' this.GirosBuscar', this.GirosBuscar);
         if (this.GirosBuscar.length > 0) {
           this.Aparecer = true;
         }
@@ -119,28 +171,24 @@ export class GirosService {
     }
   }
 
-  SetInformacionPaginacionAprobados(data: any) {
-    // console.log(data);
+  SetInformacionPaginacionRecibidos(data: any) {
     this.InformacionPaginacionRecibidos.TotalItems = data.length
-    // console.log('', this.InformacionPaginacionRecibidos.TotalItems);
     var calculoHasta = (this.InformacionPaginacionRecibidos.page * this.InformacionPaginacionRecibidos.pageSize);
     var desde = calculoHasta - this.InformacionPaginacionRecibidos.pageSize + 1;
     var hasta = calculoHasta > this.InformacionPaginacionRecibidos.TotalItems ? this.InformacionPaginacionRecibidos.TotalItems : calculoHasta;
-    this.InformacionPaginacionRecibidos.InformacionPaginacion['desde'] = desde;
-    this.InformacionPaginacionRecibidos.InformacionPaginacion['hasta'] = hasta;
-    this.InformacionPaginacionRecibidos.InformacionPaginacion['total'] = this.InformacionPaginacionRecibidos.TotalItems;
+    this.InformacionPaginacionRecibidos['desde'] = desde;
+    this.InformacionPaginacionRecibidos['hasta'] = hasta;
+    this.InformacionPaginacionRecibidos['total'] = this.InformacionPaginacionRecibidos.TotalItems;
   }
 
-  SetInformacionPaginacionRecibidos(data: any) {
-    // console.log(data);
+  SetInformacionPaginacionAprobados(data: any) {
     this.InformacionPaginacionAprobados.TotalItems = data.length
-    // console.log('', this.InformacionPaginacionAprobados.TotalItems);
     var calculoHasta = (this.InformacionPaginacionAprobados.page * this.InformacionPaginacionAprobados.pageSize);
     var desde = calculoHasta - this.InformacionPaginacionAprobados.pageSize + 1;
     var hasta = calculoHasta > this.InformacionPaginacionAprobados.TotalItems ? this.InformacionPaginacionAprobados.TotalItems : calculoHasta;
-    this.InformacionPaginacionRecibidos['desde'] = desde;
-    this.InformacionPaginacionRecibidos['hasta'] = hasta;
-    this.InformacionPaginacionRecibidos['total'] = this.InformacionPaginacionAprobados.TotalItems;
+    this.InformacionPaginacionAprobados['desde'] = desde;
+    this.InformacionPaginacionAprobados['hasta'] = hasta;
+    this.InformacionPaginacionAprobados['total'] = this.InformacionPaginacionAprobados.TotalItems;
   }
 
 
@@ -155,7 +203,6 @@ export class GirosService {
     this.GirosAprobados = [];
     this.http.get(this.globales.ruta + '/php/giros/giros_aprobados.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.GirosAprobados = data;
-      // console.log('Giros aprobados', this.GirosAprobados);
     });
   }
 
@@ -163,13 +210,17 @@ export class GirosService {
   ResetValues() {
     this.FiltrosRecibidos = {
       codigo: '',
+      documento: '',
+      nombreDestinatario: '',
+      nombreRemitente: '',
       funcionario: '',
-      tipo: '',
     };
     this.FiltrosAprobados = {
       codigo: '',
+      documento: '',
+      nombreDestinatario: '',
+      nombreRemitente: '',
       funcionario: '',
-      tipo: '',
     };
   }
 }
