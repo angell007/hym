@@ -80,6 +80,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalVerCambio') ModalVerCambio: any;
   @ViewChild('ModalAprobarGiro') ModalAprobarGiro: any;
   @ViewChild('confirmacionGiro') confirmacionGiro: any;
+  @ViewChild('Customcomision') Customcomision: any;
+  @ViewChild('custom') custom: any;
 
   //SWEET ALERT FOR GENERAL ALERTS
   @ViewChild('alertSwal') alertSwal: any;
@@ -216,6 +218,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   ];
 
   public CardSelection: any = {
+    cajeros: false,
     cambios: true,
     trans: false,
     giros: false,
@@ -1866,11 +1869,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
         this.http.post(this.globales.ruta + 'php/pos/movimiento.php', datos)
           .catch(error => {
-            console.error('An error occurred:', error.error);
+            console.log('An error occurred:', error);
             this.errorSwal.show();
             return this.handleError(error);
           })
           .subscribe((data: any) => {
+            console.log(data);
             this.LimpiarModeloTransferencia();
             this.SetTransferenciaDefault();
             this.movimientoExitosoSwal.show();
@@ -3155,101 +3159,162 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  valorComision(value: any) {
-
+  valorComision(value: any, flag: boolean = false) {
     let recibido = parseFloat(this.GiroModel.Valor_Recibido);
-    if (typeof (value) == 'boolean') {
-      if (recibido == 0 || recibido == undefined || isNaN(recibido)) {
-        this.ShowSwal('warning', 'Alerta', 'Debe introducir el valor a enviar para hacer el cálculo!');
-        return;
-      }
-    }
 
-    if (typeof (value) == 'string') {
-      if (value == '' || value == '0') {
-        this.GiroModel.Comision = '';
-        this.GiroModel.Valor_Recibido = '';
-        this.GiroModel.Valor_Total = '';
-        this.GiroModel.Valor_Entrega = '';
-        return;
-      }
-    }
+    let minComision = parseFloat(this.GiroComision[0]['Comision']);
+    let maxComision = parseFloat(this.GiroComision[1]['Comision']);
 
-    // console.log([
-    //   recibido,
-    //   value,
-    //   parseInt(value),
-    //   Number(value),
-    //   Number(value.replace(".","")),     
-    //   parseInt(value.replace(".","")),     
-    //   parseFloat(value.replace(".","")),     
-    //   this.GiroModel.Valor_Total,
-    //   this.GiroModel.Valor_Entrega
-    // ]);
-
-
-
-
-
-    let maxComision = this.GiroComision[(this.GiroComision.length - 1)].Comision;
-
-    if (recibido > maxComision) {
-      this.GiroModel.Comision = maxComision;
-
-      var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-
-      switch (checkeado) {
-        case true: {
-          this.GiroModel.Valor_Total = recibido + parseFloat(maxComision);
-          this.GiroModel.Valor_Entrega = recibido;
-          break;
-        }
-        case false: {
-          this.GiroModel.Valor_Total = recibido;
-          this.GiroModel.Valor_Entrega = recibido - parseFloat(maxComision);
-          break;
-        }
-      }
+    if (recibido >= maxComision) {
+      this.GiroModel.Comision = maxComision
     } else {
-
-      this.GiroComision.forEach(element => {
-
-        if ((parseFloat(element.Valor_Minimo) <= recibido) && (recibido <= parseFloat(element.Valor_Maximo))) {
-          this.GiroModel.Comision = element.Comision;
-
-          var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-
-          switch (checkeado) {
-            case true: {
-              this.GiroModel.Valor_Total = recibido + parseFloat(element.Comision);
-              this.GiroModel.Valor_Entrega = recibido;
-              break;
-            }
-            case false: {
-              this.GiroModel.Valor_Total = recibido;
-              this.GiroModel.Valor_Entrega = recibido - parseFloat(element.Comision);
-              break;
-            }
-          }
-        }
-      });
+      this.GiroModel.Comision = minComision
     }
 
-    if (this.FormGiro.controls.Comision.dirty) {
-      var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
-      switch (checkeado) {
-        case true: {
-          this.GiroModel.Valor_Total = recibido + parseFloat(value.replace(".", ""));
-          this.GiroModel.Valor_Entrega = recibido;
-          break;
-        }
-        case false: {
-          this.GiroModel.Valor_Total = recibido;
-          this.GiroModel.Valor_Entrega = recibido - parseFloat(value.replace(".", ""));
-          break;
-        }
+    console.log(this.GiroModel.Comision);
+
+
+    if (flag) {
+      this.GiroModel.Comision = parseFloat(this.Customcomision.nativeElement.value.replace(".", ""))
+    }
+
+    let checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+
+    switch (checkeado) {
+      case true: {
+        this.GiroModel.Valor_Total = recibido + this.GiroModel.Comision;
+        this.GiroModel.Valor_Entrega = recibido;
+        break;
+      }
+      case false: {
+        this.GiroModel.Valor_Total = recibido;
+        this.GiroModel.Valor_Entrega = recibido - this.GiroModel.Comision;
+        break;
       }
     }
+
+
+
+    // this.GiroModel.Comision = this.Customcomision.nativeElement.value.replace(".", "");
+    // console.log([maxComision, recibido]);
+
+    // this.GiroModel.Valor_Total = recibido + parseFloat(value.replace(".", ""));
+    // this.GiroModel.Valor_Entrega = recibido;
+
+
+
+    // let recibido = parseFloat(this.GiroModel.Valor_Recibido);
+    // if (typeof (value) == 'boolean') {
+    //   if (recibido == 0 || recibido == undefined || isNaN(recibido)) {
+    //     this.ShowSwal('warning', 'Alerta', 'Debe introducir el valor a enviar para hacer el cálculo!');
+    //     return;
+    //   }
+    // }
+
+    // if (typeof (value) == 'string') {
+    //   if (value == '' || value == '0') {
+    //     this.GiroModel.Comision = '';
+    //     this.GiroModel.Valor_Recibido = '';
+    //     this.GiroModel.Valor_Total = '';
+    //     this.GiroModel.Valor_Entrega = '';
+    //     return;
+    //   }
+    // }
+
+    // // console.log([
+    // //   recibido,
+    // //   value,
+    // //   parseInt(value),
+    // //   Number(value),
+    // //   Number(value.replace(".","")),     
+    // //   parseInt(value.replace(".","")),     
+    // //   parseFloat(value.replace(".","")),     
+    // //   this.GiroModel.Valor_Total,
+    // //   this.GiroModel.Valor_Entrega
+    // // ]);
+
+
+
+
+
+    // let maxComision = this.GiroComision[(this.GiroComision.length - 1)].Comision;
+
+    // if (recibido > maxComision) {
+    //   this.GiroModel.Comision = maxComision;
+
+    //   var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+
+    //   switch (checkeado) {
+    //     case true: {
+    //       this.GiroModel.Valor_Total = recibido + parseFloat(maxComision);
+    //       this.GiroModel.Valor_Entrega = recibido;
+    //       break;
+    //     }
+    //     case false: {
+    //       this.GiroModel.Valor_Total = recibido;
+    //       this.GiroModel.Valor_Entrega = recibido - parseFloat(maxComision);
+    //       break;
+    //     }
+    //   }
+    // } else {
+
+    //   this.GiroComision.forEach(element => {
+
+    //     if ((parseFloat(element.Valor_Minimo) <= recibido) && (recibido <= parseFloat(element.Valor_Maximo))) {
+    //       this.GiroModel.Comision = element.Comision;
+
+    //       var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+
+    //       switch (checkeado) {
+    //         case true: {
+    //           this.GiroModel.Valor_Total = recibido + parseFloat(element.Comision);
+    //           this.GiroModel.Valor_Entrega = recibido;
+    //           break;
+    //         }
+    //         case false: {
+    //           this.GiroModel.Valor_Total = recibido;
+    //           this.GiroModel.Valor_Entrega = recibido - parseFloat(element.Comision);
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
+
+    // if (this.FormGiro.controls.Comision.dirty) {
+
+    //   console.log([value, this.Customcomision.nativeElement.value.replace(".", "") + recibido]);
+
+    //   if (typeof (value) == 'boolean') {
+    //     switch (checkeado) {
+    //       case true: {
+    //         this.GiroModel.Valor_Total = recibido + parseFloat(this.Customcomision.nativeElement.value.replace(".", ""));
+    //         this.GiroModel.Valor_Entrega = recibido;
+    //         break;
+    //       }
+    //       case false: {
+    //         this.GiroModel.Valor_Total = recibido;
+    //         this.GiroModel.Valor_Entrega = recibido - parseFloat(this.Customcomision.nativeElement.value.replace(".", ""));
+    //         break;
+    //       }
+
+    //     }
+    //   } else {
+    //     var checkeado = ((document.getElementById("libre") as HTMLInputElement).checked);
+    //     switch (checkeado) {
+    //       case true: {
+    //         this.GiroModel.Valor_Total = recibido + parseFloat(value.replace(".", ""));
+    //         this.GiroModel.Valor_Entrega = recibido;
+    //         break;
+    //       }
+    //       case false: {
+    //         this.GiroModel.Valor_Total = recibido;
+    //         this.GiroModel.Valor_Entrega = recibido - parseFloat(value.replace(".", ""));
+    //         break;
+    //       }
+    //     }
+    //   }
+    // }
 
 
 
@@ -3929,8 +3994,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   muestra_tabla(id) {
-    // console.log(id);
-
     var tot = document.getElementsByClassName('modulos').length;
     for (let i = 0; i < tot; i++) {
       var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
@@ -3947,6 +4010,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     document.getElementById(id).style.display = 'block';
+    console.log(document.getElementById(id));
     this.CargarDatosModulo(id);
   }
 
@@ -3966,6 +4030,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case 'giros':
+        this.CedulaBusquedaGiro = '';
         this.CargarDatosGiros();
         break;
 
@@ -3983,6 +4048,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case 'egresos':
+        break;
+
+      case 'cajeros':
         break;
 
       default:

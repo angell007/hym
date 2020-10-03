@@ -131,12 +131,19 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       this.filter = data
     })
 
-    console.log(this.Funcionario.Id_Perfil);
+    if (this.Funcionario.Id_Perfil == 4) {
+      this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
+        .subscribe(() => {
+          this.ConsultaFiltradaObservable(false, this.filter);
+        });
+    }
 
     this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
         this.ConsultaFiltradaObservable(false, this.filter);
       });
+    // console.log(this.Funcionario.Id_Perfil);
+
   }
 
   ngOnDestroy(): void {

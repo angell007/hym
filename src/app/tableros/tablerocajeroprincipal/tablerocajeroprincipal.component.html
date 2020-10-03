@@ -1,17 +1,7 @@
-<div class="container-fluid">
+<div class="container-fluid p-3">
   <div class="row">
     <div class="col-md-12">
       <div class="row">
-        <div class="col-md-3">
-          <!-- <app-flujoefectivo></app-flujoefectivo> -->
-          <div class="row">
-            <div class="col-md-12" id="funcionarios-container">
-              <app-funcionarioactivos
-                [Fecha_Consulta]="Fecha_Consulta">
-              </app-funcionarioactivos>
-            </div>
-          </div>
-        </div>
         <div class="col-md-9">
           <div class="row">
             <div class="col-md-12">
@@ -31,27 +21,11 @@
                           <div class="pull-right">
                             <div class="form-row align-items-center">
                               <div class="col-auto">
-                                <input 
-                                  type="date" 
-                                  placeholder="Escoja fecha" 
-                                  class="form-control form-control-sm"
-                                  [(ngModel)]="Fecha_Consulta"
-                                  (change)="onDataChange()"
-                                  [attr.max]="FechaActual">
-                                <!-- <my-date-range-picker 
-                                  name="mydaterange" 
-                                  (dateRangeChanged)="dateRangeChanged($event)" 
-                                  [options]="myDateRangePickerOptions"
-                                  placeholder="Fecha"
-                                  [(ngModel)]="model">
-                                </my-date-range-picker> -->
+                                <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
+                                  [(ngModel)]="Fecha_Consulta" (change)="onDataChange()" [attr.max]="FechaActual">
+
                               </div>
-                              <!-- <div class="col-auto">                                
-                                <select class="form-control form-control-sm" (change)="AsignarDepartamentoSeleccionado($event.target.value)">
-                                  <option value="">Seleccione departamento</option>
-                                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
-                                </select>
-                              </div> -->
+
                             </div>
                           </div>
                         </div>
@@ -66,46 +40,32 @@
                             <th style="width: 40%; padding: 0;border: none;">
                               <span class="font-size-17 font-weight-bold" style="color: black;">{{t.Nombre}}</span>
                             </th>
-                            <th *ngFor="let tm of t.Totales" class="text-right font-weight-bold font-size-17" style="width:80px !important;max-width:80px !important; padding: 0 12px 0 0;border: none;color: black;">
+                            <th *ngFor="let tm of t.Totales" class="text-right font-weight-bold font-size-17"
+                              style="width:80px !important;max-width:80px !important; padding: 0 12px 0 0;border: none;color: black;">
                               {{tm.Total | customcurrency:tm.Codigo}}
                             </th>
                           </tr>
                         </thead>
                       </table>
-                      <!-- <div class="row">
-                        <div class="col-md-4">
-                          <span class="font-size-17 font-weight-bold" style="color: black;">{{t.Nombre}}</span>
-                        </div>
-                        <div class="col-md-8">
-                          <table class="table-gerente">
-                            <tr>
-                              <td *ngFor="let tm of t.Totales" style="width:25% !important;">
-                                <span class="pull-right font-size-17 font-weight-bold" style="color: black; margin-right: 10px;">{{tm.Total | customcurrency:tm.Codigo}}</span>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div> -->
-                      <!-- <span class="font-size-19 font-weight-bold" style="color: black;">{{t.Nombre}}</span>
-                      <span class="pull-right font-size-19 font-weight-bold" style="color: black; margin-right: 10px;">{{t.Total | customcurrency:'$'}}</span> -->
+
                       <table class="table table-striped table-bordered" *ngFor="let o of t.Oficinas">
                         <thead>
                           <tr style="background-color: #e1e1e1;">
                             <th style="width: 40%;font-weight: normal;" class="custom-th">{{o.Nombre}}</th>
-                            <th *ngFor="let tmo of o.Totales" class="text-right" appColorsaldo [value]="tmo.Total" style="width:80px !important;max-width:80px !important;">
+                            <th *ngFor="let tmo of o.Totales" class="text-right" appColorsaldo [value]="tmo.Total"
+                              style="width:80px !important;max-width:80px !important;">
                               {{tmo.Total | customcurrency:tmo.Codigo}}
                             </th>
-                            <!-- <th class="text-right custom-th" appColorsaldo [value]="o.Total">{{o.Total | customcurrency:'$'}}</th> -->
                           </tr>
                         </thead>
                         <tbody *ngIf="o.Cajeros.length > 0">
                           <tr *ngFor="let c of o.Cajeros">
                             <td class="custom-td" style="padding-left: 30px;">{{c.Nombre}}</td>
-                            <td *ngFor="let tmc of c.Totales" appColorsaldo [value]="tmc.Total" class="text-right" style="max-width:80px !important;">
+                            <td *ngFor="let tmc of c.Totales" appColorsaldo [value]="tmc.Total" class="text-right"
+                              style="max-width:80px !important;">
                               {{tmc.Total | customcurrency:tmc.Codigo}}
                             </td>
                           </tr>
-                          <!-- <td class="text-right custom-td" appColorsaldo [value]="c.Total">{{c.Total | customcurrency:'$'}}</td> -->
                         </tbody>
                       </table>
                     </div>
@@ -116,47 +76,27 @@
                       <h4>No hay datos para mostrar!</h4>
                     </div>
                   </div>
-                  <!-- <div class="row">
-                    <div class="col-md-12" id="table-container">
-                      <div class="row">
-                        <div class="col-md-6" style="display:flex; align-items: center;">
-                          <i class="ti-map text-primary font-size-25" style="margin-right:8px;"></i><span class="font-size-25">{{DepartamentoSeleccionado}}</span>
-                        </div>
-                        <div class="col-md-6 pull-right">
-                          <app-tablatotalesmonedas *ngIf="MostrarTotales.length > 0"
-                            [MostrarTotales]="MostrarTotales">
-                          </app-tablatotalesmonedas>
-                        </div>
-                      </div>
-                      <div class="row" *ngIf="TotalesMunicipio.length == 0 && DepartamentoId == ''">
-                        <div class="col-md-12 text-center">
-                          <h3>Escoja un departamento para realizar una búsqueda!</h3>
-                        </div>
-                      </div>
-                      <div class="row" *ngIf="TotalesMunicipio.length == 0 && DepartamentoId != ''">
-                        <div class="col-md-12 text-center">
-                          <h3>No se han encontrado datos en este departamento!</h3>
-                        </div>
-                      </div>
-                      <div class="row" *ngIf="TotalesMunicipio.length > 0">
-                        <div class="col-md-12">
-                          <app-tablaresumentotalizado *ngFor="let tm of TotalesMunicipio; let i = index"
-                            [Municipio]="tm"
-                            [Id_Cajero]="Funcionario.Identificacion_Funcionario"
-                            [ParentIndex]="i">                        
-                          </app-tablaresumentotalizado>  
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-                </div>                
+
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <div class="col-md-12" id="funcionarios-container">
+              <app-funcionarioactivos [Fecha_Consulta]="Fecha_Consulta">
+              </app-funcionarioactivos>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
 <swal #alertSwal type="" title="" text=""></swal>
+
+<!-- <app-tablerocajeroprincipal></app-tablerocajeroprincipal> -->

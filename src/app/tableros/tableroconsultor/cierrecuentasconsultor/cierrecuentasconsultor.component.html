@@ -1,32 +1,31 @@
 <div class="container-fluid">
   <div class="card">
+
+    <div class="card-header alert alert-primary text-center">
+      CIERRE DE CUENTAS - {{Nombre_Funcionario | uppercase }}
+    </div>
+
     <div class="row card-body">
-      <div class="col-md-12">
-        <h4>CIERRE DE CUENTAS - {{Nombre_Funcionario}}</h4>
-      </div>
-      <div class="col-md-12">
-        <!-- <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="Cargando">
-            <h2>CARGANDO DATOS DEL CIERRE</h2>
-            <img src="{{generalService.RutaImagenes}}GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="cargando">
-        </div> -->
-        
+      <div class="col-md-12 table-responsive-sm ">
+
         <table class="table table-striped table-bordered custom-table">
           <thead>
             <tr>
-              <th class="custom-thead" style="width:15%;">Titular</th>
-              <th class="custom-thead" style="width:15%;">Banco</th>
-              <th class="custom-thead" style="width:10%;">Nro. Cuenta</th>
-              <th class="custom-thead" style="width:10%;">Moneda</th>
-              <th class="custom-thead" style="width:12%;">Monto Apertura</th>
-              <th class="custom-thead" style="width:12%;">Monto Diario</th>
-              <th class="custom-thead" style="width:12%;">Monto Cierre</th>
-              <th class="custom-thead" style="width:8%;">Ver Movimientos</th>
+              <th class="custom-thead" style="">Titular</th>
+              <th class="custom-thead" style="">Banco</th>
+              <th class="custom-thead" style="">Nro. Cuenta</th>
+              <th class="custom-thead" style="">Moneda</th>
+              <th class="custom-thead" style="">Monto Apertura</th>
+              <th class="custom-thead" style="">Monto Diario</th>
+              <th class="custom-thead" style="">Monto Cierre</th>
+              <th class="custom-thead" style="">Ver Movimientos</th>
             </tr>
             <tr *ngIf="Cargando">
               <td colspan="8" class="text-center">
                 <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                   <h2>CARGANDO CUENTAS BANCARIAS</h2>
-                  <img src="{{generalService.RutaImagenes}}GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="CARGANDO">
+                  <img src="{{generalService.RutaImagenes}}GIFS/reloj_arena_cargando.gif" style="width:250px;"
+                    alt="CARGANDO">
                 </div>
               </td>
             </tr>
@@ -37,31 +36,32 @@
               </td>
             </tr>
           </thead>
-          <tbody *ngIf="!Cargando">                                            
+          <tbody *ngIf="!Cargando">
             <tr *ngFor="let cb of CuentasBancarias; let i = index;">
-              <td class="custom-cell">{{cb.Nombre_Titular }}</td>
-              <td class="custom-cell">{{cb.Apodo}}</td>
-              <td class="custom-cell">{{cb.Numero_Cuenta}}</td>
-              <td class="custom-cell">{{cb.Nombre_Moneda}}</td>                   
-              <td class="custom-cell text-right">{{cb.Monto_Apertura | customcurrency:cb.Codigo_Moneda}}</td>
-              <td class="custom-cell text-right">{{cb.Usado_Diario | customcurrency:cb.Codigo_Moneda}}</td>
-              <td class="custom-cell text-right">{{cb.Monto_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
-              <td class="custom-cell text-center">
-                <button class="btn btn-default btn-xs" type="button" title="Ver Movimientos Cuenta"
-                  style="margin:0;" (click)="VerMovimientos(cb.Id_Cuenta_Bancaria)">
+              <td class="text-center">{{cb.Nombre_Titular }}</td>
+              <td class="text-center">{{cb.Apodo}}</td>
+              <td class="text-center">{{cb.Numero_Cuenta}}</td>
+              <td class="text-center">{{cb.Nombre_Moneda}}</td>
+              <td class=" text-right">{{cb.Monto_Apertura | customcurrency:cb.Codigo_Moneda}}</td>
+              <td class=" text-right">{{cb.Usado_Diario | customcurrency:cb.Codigo_Moneda}}</td>
+              <td class=" text-right">{{cb.Monto_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
+              <td class=" text-center">
+                <button class="btn btn-default btn-xs" type="button" title="Ver Movimientos Cuenta" style="margin:0;"
+                  (click)="VerMovimientos(cb.Id_Cuenta_Bancaria)">
                   <i class="ti-search text-primary"></i>
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
+
       </div>
       <div class="col-md-12 text-right" style="font-size: 1.7rem;">
-          <button class="btn btn-outline-danger btn-rounded btn-sm" type="button"
-            (click)="VolverATablero()">Volver al tablero</button>
-          <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
+        <button class="btn btn-outline-danger btn-rounded btn-sm" type="button" (click)="VolverATablero()">Volver al
+          tablero</button>
+        <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
           [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a guardar un cierre de cuentas!' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Cerrar cuentas', cancelButtonText : 'No, Comprobar!' }"
-            (confirm)="GuardarCierreConsultor()">Cerrar Cuentas</button>
+          (confirm)="GuardarCierreConsultor()">Cerrar Cuentas</button>
       </div>
     </div>
   </div>

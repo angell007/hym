@@ -3,6 +3,9 @@
     <div class="row">
       <div class="col-md-3 ">
         <sticky [sticky-offset-top]="105">
+
+
+
           <a href="#cambios" scrollTo class="card mrg-btm-15 m-t-15 scroll-to"
             (click)="muestra_tabla('cambios'); ActivarCard('cambios')"
             [ngClass]="{'card-selected': CardSelection.cambios, 'card-tremor': !CardSelection.cambios}">
@@ -20,6 +23,8 @@
               </ul>
             </div>
           </a>
+
+
           <a href="#transferencias" scrollTo class="card mrg-btm-15 scroll-to"
             (click)="muestra_tabla('transferencias'); ActivarCard('trans')"
             [ngClass]="{'card-selected': CardSelection.trans, 'card-tremor': !CardSelection.trans}">
@@ -119,6 +124,24 @@
                   <div class="info">
                     <b class="text-dark font-size-18">Servicios Externos</b>
                     <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </a>
+
+          <a href="#cajeros" scrollTo class="card mrg-btm-15 m-t-15 scroll-to"
+            (click)="muestra_tabla('cajeros'); ActivarCard('cajeros')"
+            [ngClass]="{'card-selected': CardSelection.cajeros, 'card-tremor': !CardSelection.cajeros}">
+            <div class="card-block padding-10">
+              <ul class="list-unstyled list-info">
+                <li>
+                  <span class="thumb-img pdd-top-10">
+                    <i class="ti-desktop text-success font-size-30"></i>
+                  </span>
+                  <div class="info">
+                    <b class="text-dark font-size-18">Cajeros Aperturados</b>
+                    <p class="no-mrg-btm ">Gestion de Cajeros</p>
                   </div>
                 </li>
               </ul>
@@ -578,7 +601,7 @@
                                     [disabled]="MonedaParaTransferencia.id == ''">
                                 </div>
                               </div>
-                              <div class="col-md-3">
+                              <div class="col-md-5">
                                 <div class="form-group">
                                   <label class="transferencia">Cuenta</label>
                                   <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
@@ -588,14 +611,15 @@
                                     (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
                                     <option id="opId_Destinatario_Cuenta_{{i}}"
                                       *ngFor="let c of destinatario.Cuentas;  index as i;"
-                                      [value]="c.Id_Destinatario_Cuenta">
-                                      {{c.Nombre}}</option>
+                                      [value]="c.Id_Destinatario_Cuenta" #custom>
+                                      {{c.Numero_Cuenta | mask: '0000-0000-0000-0000' }} {{ Apodo }} {{ c.Apodo }}  {{ c.Name }}   {{ Name }}
+                                    </option>
                                   </select>
                                 </div>
                               </div>
-                              <div class="col-md-4">
+                              <div class="col-md-2">
                                 <div class="form-group">
-                                  <label class="transferencia">Valor {{MonedaParaTransferencia.nombre}}</label>
+                                  <label class="transferencia"> {{MonedaParaTransferencia.nombre}}</label>
                                   <div class="row">
                                     <div class="col-md-10">
                                       <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
@@ -1229,10 +1253,12 @@
                               [ngClass]="{'ti-unlock':DeshabilitarComisionGiro, 'ti-lock':!DeshabilitarComisionGiro}"
                               style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
                           </label>
-                          <input type="text" placeholder="Comision" #comision class="form-control text-right"
-                            name="Comision" [(ngModel)]="GiroModel.Comision" [disabled]="DeshabilitarComisionGiro"
-                            required currencyMask [options]="{ thousands: '.', decimal: ',' }"
-                            (ngModelChange)="valorComision(comision.value)">
+
+                          <input type="text" placeholder="0" class="form-control text-right" name="Comision"
+                            [(ngModel)]="GiroModel.Comision" required [disabled]="DeshabilitarComisionGiro" currencyMask
+                            [options]="{ thousands: '.' }" (ngModelChange)="valorComision(GiroModel.Comision, true)"
+                            #Customcomision>
+
                         </div>
 
                       </div>
@@ -1362,7 +1388,7 @@
                                 <select class="form-control form-control-sm"
                                   (change)="_trasladosCustomService.ConsultaFiltrada()"
                                   [(ngModel)]="_trasladosCustomService.Filtros.estado">
-                                  <option value=""></option>
+                                  <option value="">Todos</option>
                                   <option value="Anulado">Anulado</option>
                                   <option value="Aprobado">Aprobado</option>
                                   <option value="Negado">Negado</option>
@@ -1472,7 +1498,7 @@
                                     <select class="form-control form-control-sm"
                                       (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
                                       [(ngModel)]="_trasladosCustomService.Filtros.estado">
-                                      <option value=""></option>
+                                      <option value="">Todos</option>
                                       <option value="Anulado">Anulado</option>
                                       <option value="Aprobado">Aprobado</option>
                                       <option value="Negado">Negado</option>
@@ -1831,7 +1857,7 @@
                       <button type="button"
                         [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                         (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)"
-                        class="btn btn-danger btn-sm btn-block">Crear Servicio</button>
+                        class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
                     </div>
                     <div class="col-md-2">
                       <button class="btn btn-secondary btn-sm btn-block"
@@ -1840,6 +1866,83 @@
                   </div>
                 </div>
               </div>
+
+
+              <!-- ******************************************************************************************************************************************************* -->
+
+              <!-- <div class="row" id="Servicios2" *ngIf="Servicio2" style="margin-top: 10px">
+                <div class="col-md-12">
+
+                  <div class="mrg-top-30">
+                    <form #FormServicio="ngForm">
+                      <h4>Datos del servicio</h4>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Servicio</label>
+                            <select name="Servicio_Externo" class="form-control"
+                              [(ngModel)]="ServicioExternoModel.Servicio_Externo" required>
+                              <option value="">Seleccione un Servicio</option>
+                              <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
+                                {{se.Nombre}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Valor</label>
+                            <input type="text" class="form-control text-right" name="Valor"
+                              [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
+                              (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
+                              [options]="{ thousands: '.' }" required>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Comisión</label>
+                            <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                              [(ngModel)]="ServicioExternoModel.Comision" currencyMask
+                              [options]="{ thousands: '.', decimal: ',' }" [disabled]="ServicioExternoModel.Valor == ''"
+                              (blur)="AprobarCambioComision()" required>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label class="block-element">Total</label>
+                            <input name="Total" type="text" placeholder="Total" class="form-control"
+                              [(ngModel)]="Total_Servicio" disabled currencyMask
+                              [options]="{ thousands: '.', decimal: ',' }" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mrg-top-20">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Observaciones</label>
+                            <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
+                              [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="row mrg-top-5">
+                    <div class="col-md-10">
+                      <button type="button"
+                        [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                        (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)"
+                        class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-secondary btn-sm btn-block"
+                        (click)="volverReciboServicio()">Volver</button>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <!-- ******************************************************************************************************************************************************* -->
             </div>
           </div>
 
@@ -1849,10 +1952,22 @@
           <app-tablaegresos></app-tablaegresos>
         </div>
 
+        <div class="card modulos" id="cajeros" style="display: none;">
+          <app-tablerocajeroprincipal></app-tablerocajeroprincipal>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
 
 <!--TEMPLATES PARA LOS NGB-TYPEAHEAD-->
 

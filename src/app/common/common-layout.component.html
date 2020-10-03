@@ -243,7 +243,7 @@
                 </a>
               </li>
               <!-- //TODO: customizar este permiso  -->
-              <li *ngIf="user.Id_Perfil == 3 ">
+              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  ">
                 <div class="pl-2 pt-2">
                   <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
                   <label for="" style="display:block;">Caja: {{NombreCaja}}</label>
@@ -252,7 +252,7 @@
             </ul>
 
             <ul class="nav-left" >
-              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
+              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
                 <!-- NOTIFICACIONES SALDOS -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-money"></i> Saldos
@@ -273,7 +273,7 @@
             </ul>
 
             <ul class="nav-left">
-              <li class="notifications" *ngIf="user.Id_Perfil == 3">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
                 <a [routerLink]="[ '/consolidado', user.Identificacion_Funcionario ]" routerLinkActive="active">
                   <i class="ti-clipboard"></i> Consolidado
                 </a>
@@ -282,7 +282,7 @@
 
 
             <ul class="nav-left">
-              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3">
+              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
                 <!-- NOTIFICACIONES -->
                 <span class="counter">{{  counter }}</span>
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -320,7 +320,7 @@
 
 
             <ul class="nav-right">
-              <li class="notifications" *ngIf="user.Id_Perfil == 3">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
                 <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
                   (click)="VerificarAntesDeCierre()">
                   <i class="fa fa-lock"> Cerrar Caja</i>

@@ -17,21 +17,24 @@
         </div>
         <div class="col-md-4">
           <label for="">Tipo</label>
-          <select name="TIpo" id="tipo" [(ngModel)]="AjusteCuentaModel.Id_Tipo_Ajuste_Cuenta" class="form-control" required>
+          <select name="TIpo" id="tipo" [(ngModel)]="AjusteCuentaModel.Id_Tipo_Ajuste_Cuenta" class="form-control"
+            required>
             <option value="" selected>Seleccione</option>
             <option *ngFor="let ta of TiposAjuste" [value]="ta.Id_Tipo_Ajuste_Cuenta">{{ta.Descripcion_Ajuste}}</option>
           </select>
         </div>
         <div class="col-md-4">
           <label>Valor (en {{CodigoMoneda}})</label>
-          <input class="form-control text-right" name="Valor" type="number" min="0" [(ngModel)]="AjusteCuentaModel.Valor" required>
+          <input class="form-control text-right" name="Valor" type="text" min="0" [(ngModel)]="AjusteCuentaModel.Valor"
+            currencyMask [options]="{ thousands: '.', decimal: ',' }" required>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
             <label>Observación</label>
-            <textarea style="width:100%;" rows="4" class="form-control" placeholder="Observaciones" name="Detalle" [(ngModel)]="AjusteCuentaModel.Detalle" required></textarea>
+            <textarea style="width:100%;" rows="4" class="form-control" placeholder="Observaciones" name="Detalle"
+              [(ngModel)]="AjusteCuentaModel.Detalle" required></textarea>
           </div>
         </div>
       </div>
@@ -39,13 +42,11 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-outline-success btn-rounded btn-sm" 
+      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-outline-success btn-rounded btn-sm"
         [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar un ajuste en la cuenta!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Ajustar',cancelButtonText: 'No, Dejame Comprobar!'}"
         (confirm)="GuardarAjusteCuenta()">Crear Ajuste
       </button>
-      <button 
-        id="cerrarmodalajuste" 
-        class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar
+      <button id="cerrarmodalajuste" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar
       </button>
     </div>
   </div>

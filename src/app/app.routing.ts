@@ -68,11 +68,16 @@ import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuenta
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 import { ConsolidadosService } from './customservices/consolidados.service';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
+import { TablerocajeroprincipalComponent } from './tableros/tablerocajeroprincipal/tablerocajeroprincipal.component';
 
 export const AppRoutes: Routes = [
-    {        
+    {
         path: 'tablero', component: CommonLayoutComponent,
         children: [{ path: '', component: TableroComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'cajeros', component: CommonLayoutComponent,
+        children: [{ path: '', component: TablerocajeroprincipalComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'configuraciongeneral', component: CommonLayoutComponent,
@@ -289,19 +294,19 @@ export const AppRoutes: Routes = [
     {
         path: 'cierrecaja/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
-    },    
+    },
     {
         path: 'consolidado/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: ConsolidadoComponent, canActivate: [AuthGuard] }]
-    },    
+    },
     {
         path: 'cierrecuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: CierrecuentasconsultorComponent, canActivate: [AuthGuard] }]
-    },    
+    },
     {
         path: 'cuadrecuentas', component: CommonLayoutComponent,
         children: [{ path: '', component: CuadrecuentasconsultorComponent, canActivate: [AuthGuard] }]
-    },    
+    },
     {
         path: 'detallemovimientoscuenta/:id_cuenta/:accion', component: CommonLayoutComponent,
         children: [{ path: '', component: DetallemovimientoscuentaComponent, canActivate: [AuthGuard] }]
@@ -309,7 +314,7 @@ export const AppRoutes: Routes = [
     {
         path: 'cuentasconsultor/:id_funcionario', component: CommonLayoutComponent,
         children: [{ path: '', component: CuentasconsultorComponent, canActivate: [AuthGuard] }]
-    },    
+    },
     {
         path: 'detallemovimientoscuentagerencial/:id_cuenta', component: CommonLayoutComponent,
         children: [{ path: '', component: DetallemovimientoscuentagerenteComponent, canActivate: [AuthGuard] }]

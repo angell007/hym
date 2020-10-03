@@ -1,27 +1,4 @@
-<div class="row">
-  <!-- <div class="col-md-12" id="filter-container">
-    <div class="card" style="margin-bottom:10px;">
-      <div class="card-body">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-10">              
-              <label for="">Búsqueda de funcionarios</label>
-            </div>
-          </div>
-          <input 
-            type="text" 
-            class="form-control" 
-            aria-describedby="searchFuncionarioHelp" 
-            [(ngModel)]="FuncionarioBusqueda" 
-            placeholder="Nombre/apellido del funcionario"
-            (keyup)="FiltrarFuncionario()">
-            <small id="searchFuncionarioHelp" class="form-text text-muted">
-              Busqueda activa solo para cajeros que han iniciado sesión
-            </small>
-        </div>
-      </div>
-    </div>
-  </div> -->
+<div class="row text-center">
   <div class="col-md-12">
     <label>Cajeros Aperturados</label>
   </div>
@@ -35,8 +12,7 @@
     </div>
   </div>
   <div class="col-md-12" *ngIf="FuncionariosFiltrados.length > 0" style="height:550px;overflow-y: auto;">
-    <app-funcionarioinformativecard *ngFor="let ff of FuncionariosFiltrados"
-      [Funcionario]="ff"
+    <app-funcionarioinformativecard *ngFor="let ff of FuncionariosFiltrados" [Funcionario]="ff"
       [Fecha]="Fecha_Consulta">
     </app-funcionarioinformativecard>
   </div>

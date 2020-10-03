@@ -1,73 +1,130 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json');
-require_once('../../config/start.inc.php');
-include_once('../../class/class.lista.php');
-include_once('../../class/class.complex.php');
-include_once('../../class/class.consulta.php');
-include_once('../../class/class.querybasedatos.php');
-include_once('../../class/class.paginacion.php');
-include_once('../../class/class.http_response.php');
+	header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+	header('Content-Type: application/json');
+
+	// require_once($_SERVER['DOCUMENT_ROOT'].'/config/start.inc.php');
+	// include_once($_SERVER['DOCUMENT_ROOT'].'/class/class.complex.php');
+	// include_once($_SERVER['DOCUMENT_ROOT'].'/class/class.consulta.php');
+	include_once('../../class/class.querybasedatos.php');
+	include_once('../../class/class.http_response.php');
+
+	$modelo = (isset($_REQUEST['modelo']) && $_REQUEST['modelo'] != '') ? $_REQUEST['modelo'] : '';
+	$contacto_emergencia = (isset($_REQUEST['contacto_emergencia']) && $_REQUEST['contacto_emergencia'] != '') ? $_REQUEST['contacto_emergencia'] : '';
+	$permisos = (isset($_REQUEST['permisos']) && $_REQUEST['permisos'] != '') ? $_REQUEST['permisos'] : '';
+	$cuentas_asociadas = (isset($_REQUEST['cuentas_asociadas']) && $_REQUEST['cuentas_asociadas'] != '') ? $_REQUEST['cuentas_asociadas'] : '';
+    $Oficinas_Asociadas = (isset($_REQUEST['Oficinas_Asociadas']) && $_REQUEST['Oficinas_Asociadas'] != '') ? $_REQUEST['Oficinas_Asociadas'] : '';
 
 
-$id_funcionario = (isset($_REQUEST['funcionario']) && $_REQUEST['funcionario'] != '') ? $_REQUEST['funcionario'] : '';
-$condicion = SetCondiciones($_REQUEST);
-$pagina = (isset($_REQUEST['pag']) ? $_REQUEST['pag'] :  '');
-$pageSize = (isset($_REQUEST['tam']) ? $_REQUEST['tam'] : 1000);
+	$modelo = json_decode($modelo, true);
+	$contacto_emergencia = json_decode($contacto_emergencia, true);
+	$permisos = (array)json_decode($permisos, true);
+	$cuentas_asociadas = (array)json_decode($cuentas_asociadas, true);
+    $Oficinas_Asociadas = (array)json_decode($Oficinas_Asociadas, true);
 
+	unset($contacto_emergencia['Identificacion_Funcionario_Contacto_Emergencia']);
 
-$httpResponse = new HttpResponse();
-$response = array();
+	$response = array();
+	$http_response = new HttpResponse();
 
-$query_paginacion = "SELECT COUNT(TC.Codigo) As Total FROM Traslado_Caja TC 
-INNER JOIN Moneda M 
-ON M.Id_Moneda = TC.Id_Moneda
-INNER JOIN Funcionario F 
-ON TC.Funcionario_Destino = F.Identificacion_Funcionario
-WHERE Cast(Current_Date As Date)
-$condicion
-AND  TC.Funcionario_Destino = $id_funcionario 
-ORDER BY TC.Fecha_Traslado DESC";
+	// var_dump($modelo);
+	// var_dump($contacto_emergencia);
+	// var_dump($permisos);
+	// var_dump($cuentas_asociadas);
+	// exit;
 
-$query = "SELECT TC.Id_Traslado_Caja, TC.Codigo, TC.Fecha_Traslado, TC.Valor , CONCAT_WS(' ',F.Nombres,F.Apellidos) AS Cajero_Destino, M.Nombre as Moneda, TC.Aprobado, TC.Estado, M.Codigo AS Codigo_Moneda,
-(SELECT CONCAT_WS(' ',Nombres,Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = TC.Id_Cajero_Origen) AS Cajero_Origen
-FROM Traslado_Caja TC   INNER JOIN Moneda M 
-ON M.Id_Moneda = TC.Id_Moneda
-INNER JOIN Funcionario F 
-ON TC.Id_Cajero_Origen = F.Identificacion_Funcionario
-WHERE Cast(Current_Date As Date)
-$condicion
-ORDER BY TC.Fecha_Traslado DESC";
-
-$paginationObj = new PaginacionData($pageSize, $query_paginacion, $pagina);
-$queryObj = new QueryBaseDatos($query);
-$response = $queryObj->Consultar('Multiple', true, $paginationObj);
-
-function SetCondiciones($req)
-{
-
-    $condicion = '';
-
-    if (isset($req['codigo']) && $req['codigo'] != "") {
-        $condicion =  "AND TC.Codigo LIKE '%" . $req['codigo'] . "%'";
+	//ASIGNAR DATOS Y GUARDAR FUNCIONARIO
+	$oItem = new complex("Funcionario","Identificacion_Funcionario");
+	foreach($modelo as $index=>$value) {
+		if ($value=='') {
+			$value='0';
+		}
+        $oItem->$index=$value;
     }
 
-    if (isset($req['destinatario'])) {
-        $destinatario =  $req["destinatario"];
-        $condicion .=  "AND (F.Nombres LIKE '%$destinatario%' OR F.Apellidos LIKE  '%$destinatario%')";
+    $oItem->save();
+    unset($oItem);
+
+    //ASIGNAR DATOS Y GUARDAR CONTACTO EMERGENCIA
+    $oItem = new complex("Funcionario_Contacto_Emergencia","Identificacion_Funcionario_Contacto_Emergencia");
+	foreach($contacto_emergencia as $index=>$value) {
+        $oItem->$index=$value;
     }
 
-    if (isset($req['moneda'])) {
-        $moneda =  $req["moneda"];
-        $condicion .=  "AND M.Nombre LIKE '%$moneda%'";
-    }
-    if (isset($req['estado'])) {
-        $estado =  $req["estado"];
-        $condicion .=  "AND TC.Estado LIKE '%$estado%'";
+    $oItem->save();
+    unset($oItem);
+
+    //ASIGNAR DATOS Y GUARDAR PERMISOS FUNCIONARIO
+    foreach ($permisos as $permiso) {
+
+		//unset($permiso['Id_Perfil_Funcionario']);		
+
+    	$oItem = new complex("Perfil_Funcionario","Id_Perfil_Funcionario");
+
+	    $oItem->Id_Perfil=$modelo["Id_Perfil"];
+	    $oItem->Identificacion_Funcionario=$modelo['Identificacion_Funcionario'];
+	    $oItem->Titulo_Modulo=$permiso["Titulo_Modulo"];
+	    $oItem->Modulo = $permiso["Modulo"];
+	    if($permiso["Ver"] != ""){
+	         $oItem->Ver = $permiso["Ver"]; 
+	    }else{
+	        $oItem->Ver = "0";
+	    }
+	    if($permiso["Crear"] != ""){
+	     $oItem->Crear = $permiso["Crear"];   
+	    }else{
+	        $oItem->Crear = "0";
+	    }
+	     if($permiso["Editar"] != ""){
+	     $oItem->Editar = $permiso["Editar"];   
+	    }else{
+	        $oItem->Editar = "0";
+	    }
+	     if($permiso["Eliminar"] != ""){
+	     $oItem->Eliminar = $permiso["Eliminar"];   
+	    }else{
+	        $oItem->Eliminar = "0";
+	    }
+	    $oItem->save();
+	    unset($oItem);
     }
 
-    return $condicion;
-}
 
-echo json_encode($response);
+    //ASIGNAR DATOS Y GUARDAR CUENTAS ASOCIADAS
+    if (count($cuentas_asociadas) > 0) {
+	
+		foreach ($cuentas_asociadas as $cta) {
+
+			//unset($cta['Id_Funcionario_Cuenta_Bancaria']);
+			
+		 	$oItem = new complex("Funcionario_Cuenta_Bancaria","Id_Funcionario_Cuenta_Bancaria");
+		    $oItem->Id_Funcionario=$modelo['Identificacion_Funcionario'];
+		    $oItem->Id_Cuenta_Bancaria=$cta;
+		    $oItem->EnUso='Si';
+		    $oItem->save();
+		    unset($oItem);
+
+		    $oItem = new complex("Cuenta_Bancaria","Id_Cuenta_Bancaria", $cta);
+		    $oItem->Asignada='Si';
+		    $oItem->save();
+		    unset($oItem);
+		}
+    }
+    
+    if (count($Oficinas_Asociadas) > 0) {
+        foreach ($Oficinas_Asociadas as $oficina) {
+            $oItem = new complex("Cajero_Principal_Oficina", "Id");
+            $oItem->Cajero_Principal_Id = $modelo['Identificacion_Funcionario'];
+            $oItem->Oficina_Id = $oficina;
+            $oItem->save();
+            unset($oItem);
+        }
+    }
+
+	$http_response->SetRespuesta(0, 'Registro Exitoso', 'Se ha guardado el funcionario exitosamente!');
+	$response = $http_response->GetRespuesta();
+
+	unset($queryObj);
+	unset($http_response);
+
+	echo json_encode($response);

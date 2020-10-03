@@ -40,7 +40,8 @@ export class TableroComponent implements OnInit {
           break;
         //cajeroprincipal
         case '2':
-          vari = TablerocajeroprincipalComponent;
+          vari = TablerocajeroComponent;
+          // vari = TablerocajeroprincipalComponent;
           break;
         //cajero
         case '3':

@@ -40,9 +40,9 @@ export class TrasladosCustomService {
 
     this.TrasladosRecibidos = [];
     TimerObservable.create(0, 50000)
-    .subscribe(() => {
-    this.CargarDatosTraslados();
-    });
+      .subscribe(() => {
+        this.CargarDatosTraslados();
+      });
   }
   public filtroCustom: string;
 
@@ -135,6 +135,7 @@ export class TrasladosCustomService {
   GetCajerosTraslados() {
     this.CajerosTraslados = [];
     this.cajeroService.getCajerosTraslados(this.user.Identificacion_Funcionario).subscribe((data: any) => {
+      console.log(data);
       if (data.codigo == 'success') {
         this.CajerosTraslados = data.query_data;
       } else {
