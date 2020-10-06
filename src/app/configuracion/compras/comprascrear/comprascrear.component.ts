@@ -130,13 +130,12 @@ export class ComprascrearComponent implements OnInit {
     if (tasa == '' || tasa === undefined || tasa === null) {
       this.ShowSwal('warning', 'Alerta', 'Debe colocar una tasa de cambio para la conversión!');
       this.CompraModel.Valor_Peso = 0;
-
     }else{
-
       if (this.CompraModel.Valor_Compra != 0) {
-
         let cambio = this.cambioService.CambioMonedaXPeso(this.CompraModel.Valor_Compra, parseFloat(tasa));
-        this.CompraModel.Valor_Peso = cambio;
+        this.CompraModel.Valor_Peso  = parseFloat(cambio).toFixed(2);
+
+        console.log(cambio);
       }else{
 
         this.ShowSwal('warning', 'Alerta', 'Debe escoger compras para poder realizar el cálculo!');
@@ -189,6 +188,8 @@ export class ComprascrearComponent implements OnInit {
       data.append("compras", compras);
       this.compraService.guardarCompra(data).subscribe((data:any) => {
 
+        console.log(data);
+        
         this.ShowSwal('success', 'Regisro Exitoso', 'Compra generada de manera exitosa!');
         this.LimpiarCompraModel();
 

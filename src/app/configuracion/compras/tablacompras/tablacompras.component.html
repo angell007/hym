@@ -23,7 +23,7 @@
           style="cursor:pointer;">
           <td class="custom-cell">{{cp.Nombre_Titular}}</td>
           <td class="custom-cell">{{cp.Banco}}</td>
-          <td class="custom-cell text-right">{{cp.Numero_Cuenta}}</td>
+          <td class="custom-cell text-right">{{cp.Numero_Cuenta | mask: '0000.0000.0000.0000'}}</td>
           <td class="custom-cell">{{cp.Tipo_Cuenta}}</td>
           <td class="custom-cell text-right">{{cp.Valor | customcurrency:CodigoMoneda}}</td>
         </tr>

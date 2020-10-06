@@ -19,6 +19,19 @@ UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercer
 
 
         this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
+
+         <ul class="list-unstyled list-info my-5">
+    <li>
+      <span class="thumb-img pdd-top-10 ">
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Transferencias</b>
+        <p class="no-mrg-btm ">Gestion de Transferencias</p>
+      </div>
+    </li>
+  </ul>
 
 
 Message alert 

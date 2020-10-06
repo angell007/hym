@@ -1,14 +1,12 @@
-<div class="card-header">
+<div class="card-header bg-light">
 
-  <!-- <div class="card-block"> -->
   <ul class="list-unstyled list-info">
     <li>
       <span class="thumb-img pdd-top-10">
-        <i class="ti-control-shuffle text-primary font-size-30"></i>
       </span>
       <div class="info">
         <b class="text-dark font-size-22">Agentes externos registrados</b>
-        <p class="no-mrg-btm ">A cuentas extranjeras</p>
+        <p class="no-mrg-btm ">Gestion  agentes Externos</p>
       </div>
     </li>
   </ul>
@@ -16,23 +14,10 @@
   <div class="my-3">
     <div class="row d-flex justify-content-center">
       <div class="col-md-4">
-        <button (click)="AbrirModal('0')" class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo agente
+        <button (click)="AbrirModal('0')" class="btn btn-info btn-block mrg-top-10 btn-grande">Nuevo agente
           externo</button>
       </div>
 
-      <!-- <div class="row">
-    <div class="col-md-6" style="display:flex; align-items:flex-end;">
-      <h5>Agentes externos registrados</h5>
-    </div>
-    <div class="col-md-6">
-      <div class="pull-right">
-        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
-          (click)="AbrirModal('0')">
-          <i class="ti-plus font-size-15 mr-2"></i> Nuevo agente externo
-        </button>
-      </div>
-    </div>
-  </div> -->
     </div>
   </div>
   <div class="card-body">
@@ -80,8 +65,8 @@
           </td>
         </tr>
       </thead>
-      <tbody *ngIf="!Cargando">
-        <tr *ngFor="let ae of AgentesExternos; let i = index;">
+      <tbody *ngIf="!Cargando" style="font-size: 0.8em;">
+        <tr class="p-0 m-0" *ngFor="let ae of AgentesExternos; let i = index;">
           <td class="text-right">
             <div class="list-info text-center">
               <img class="thumb-img" src="assets/images/user.jpg" alt="">
@@ -94,30 +79,31 @@
             <div class="info">
               <span class="text-muted">Cupo: {{ae.Cupo | customcurrency }}</span>
             </div>
+
           </td>
           <td class="custom-cell text-center">
-            <div class="relative mrg-top-10">
+            <div class="relative mrg-top-10"> 
               <span class="status" [ngClass]="{'online':ae.Estado == 'Activo'}"> </span>
               <span>{{ae.Estado}}</span>
             </div>
           </td>
           <td class="text-right">
             <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light "
-                  type="button"><i class="ti-angle-down"></i></button>
-                <div ngbDropdownMenu>
-                  <a class="dropdown-item waves-light waves-effect caja-botones accionable"
-                    (click)="AbrirModal(ae.Id_Agente_Externo)">
-                    <i class="ti-pencil text-warning"></i> Editar</a>
-                  <a class="dropdown-item waves-light waves-effect caja-botones accionable"
-                    (confirm)="CambiarEstadoAgenteExterno(ae.Id_Agente_Externo)"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este agente externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                    <i
-                      [ngClass]="{'ti-na text-danger':ae.Estado == 'Activo', 'ti-back-right text-success':ae.Estado == 'Inactivo'}"></i>
-                    {{ae.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}</a>
-                </div>
-              </div>
+              <!-- <div ngbDropdown class="dropdown-primary"> -->
+                <!-- <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light "
+                  type="button"><i class="ti-angle-down"></i></button> -->
+                <!-- <div ngbDropdownMenu> -->
+                <a class=" waves-effect  accionable"
+                  (click)="AbrirModal(ae.Id_Agente_Externo)">
+                  <i class="ti-pencil text-warning"></i> </a>
+                <a class=" waves-effect  accionable"
+                  (confirm)="CambiarEstadoAgenteExterno(ae.Id_Agente_Externo)"
+                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este agente externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                  <i
+                    [ngClass]="{'ti-trash text-danger':ae.Estado == 'Activo', 'ti-back-right text-success':ae.Estado == 'Inactivo'}"></i>
+                  {{ae.Estado == 'Activo' ? '' : 'Activar'}}</a>
+                <!-- </div> -->
+              <!-- </div> -->
             </div>
           </td>
         </tr>
@@ -138,6 +124,7 @@
       </div>
     </div>
   </div>
+</div>
 
-  <app-modalagenteexterno [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
-  </app-modalagenteexterno>
+<app-modalagenteexterno [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
+</app-modalagenteexterno>

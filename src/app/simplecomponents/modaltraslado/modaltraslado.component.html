@@ -67,7 +67,7 @@
           <div class="form-group">
             <label>Valor</label>
             <input type="text" name="Valor" class="form-control" [(ngModel)]="TrasladoModel.Valor" placeholder="Valor"
-              required >
+              required currencyMask  [options]="{ thousands: '.', decimal: ',' }">
           </div>
         </div>
       </div>

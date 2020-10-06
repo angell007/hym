@@ -26,7 +26,8 @@
             <div class="form-group">
               <label>Cupo</label>
               <input type="text" placeholder="Cupo" class="form-control text-right" name="Cupo" 
-                [(ngModel)]="AgenteExternoModel.Cupo" (onkeypress)="SoloNumerosYDecimal($event)" required>
+                [(ngModel)]="AgenteExternoModel.Cupo" (onkeypress)="SoloNumerosYDecimal($event)" required 
+                currencyMask [options]="{ thousands: '.', decimal: ',' }" >
             </div>
           </div>
         </div>
