@@ -2,14 +2,17 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header  alert-primary py-3">
           <div class="row">
-            <div class="col-md-6">CUADRE DE CUENTAS - Cuenta: {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})</div>
+            <div class="col-md-6 ">CUADRE DE CUENTAS :
+              {{CuentaBancariaModel.Apodo | uppercase }}
+              {{CuentaBancariaModel.Numero_Cuenta | mask:'0000-0000-0000-0000'}}</div>
             <div class="col-md-6 text-right">
               <button class="btn btn-outline-success btn-sm btn-rounded" (click)="AbrirCompraCuenta()">
                 Abono
               </button>
-              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="Ajustar()">Ajuste</button>
+              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
+                (click)="Ajustar()">Ajuste</button>
             </div>
           </div>
         </div>
@@ -17,10 +20,10 @@
           <div class="row mb-2">
             <div class="col-md-8"></div>
             <div class="col-md-4">
-              <table class="table table-striped custom-table">
+              <table class="table bg-white custom-table" style="border: none;">
                 <tr>
-                  <td class="custom-cell text-center font-size-13">Monto Apertura:</td>
-                  <td class="custom-cell text-right font-size-13">{{Apertura | customcurrency:Codigo_Moneda}}</td>
+                  <td class=" text-center font-size-15">Monto Apertura:</td>
+                  <td class=" text-right font-size-15">{{Apertura | customcurrency:Codigo_Moneda}}</td>
                 </tr>
               </table>
             </div>
@@ -40,7 +43,7 @@
                 <td colspan="6" class="text-center">
                   <i class="ti-alert font-size-20 text-warning"></i>
                   <h4>No se encontraron movimientos en esta cuenta!</h4>
-              </td>
+                </td>
               </tr>
             </thead>
             <tbody *ngIf="Movimientos.length > 0">
@@ -51,23 +54,30 @@
                 <td class="text-right custom-cell" appColorsaldo [value]="MovimientosCuentaBancaria.totales.balance">{{MovimientosCuentaBancaria.totales.balance | customcurrency:MovimientosCuentaBancaria.totales.codigo_moneda}}</td>
                 <td class="custom-cell"></td>
               </tr> -->
-              <tr *ngFor="let m of Movimientos ; let i = index" 
-                [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
+              <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
                 <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy" }}</td>
                 <td class="custom-cell text-center">{{m.Recibo}}</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="m.Total" [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
+                <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
+                <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
+                <td class="text-right custom-cell" appColorsaldo [value]="m.Total"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
                 <td>
                   <div class="text-center" *ngIf="m.Tipo_Movimiento == 'Transferencia' && m.Estado != 'Devuelta'">
                     <div ngbDropdown class="dropdown-primary">
-                      <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
+                      <button ngbDropdownToggle
+                        class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i
+                          class="ti-angle-down"></i></button>
                       <div ngbDropdownMenu>
-                        <a *ngIf="m.Estado != 'Anulada'" class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="DevolverTransferencia(m)">
+                        <a *ngIf="m.Estado != 'Anulada'"
+                          class="dropdown-item waves-light waves-effect caja-botones accionable"
+                          (click)="DevolverTransferencia(m)">
                           <i class="ti-back-right text-danger"></i> Devolución</a>
-                        <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="MoverTransferencia(m)">
-                            <i class="fa fa-exchange text-primary"></i> 
-                            Transferir Movimimiento</a>
+                        <a class="dropdown-item waves-light waves-effect caja-botones accionable"
+                          (click)="MoverTransferencia(m)">
+                          <i class="fa fa-exchange text-primary"></i>
+                          Transferir Movimimiento</a>
                       </div>
                     </div>
                   </div>
@@ -85,7 +95,8 @@
                 </tr>
                 <tr>
                   <td class="custom-cell text-center font-size-13">Monto Apertura Actual:</td>
-                  <td class="custom-cell text-right font-size-13">{{MontoAperturaConsultor | customcurrency:Codigo_Moneda}}</td>
+                  <td class="custom-cell text-right font-size-13">
+                    {{MontoAperturaConsultor | customcurrency:Codigo_Moneda}}</td>
                 </tr>
                 <tr>
                   <td class="custom-cell text-center font-size-13">Diferencia:</td>
@@ -96,8 +107,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-            (click)="Siguiente()">Cuadrar Cuenta
+          <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" (click)="Siguiente()">Cuadrar Cuenta
           </button>
         </div>
       </div>
@@ -105,22 +115,18 @@
   </div>
 </div>
 
-<app-modalajustecuenta
-  [AbrirModal]="AbrirModalAjuste.asObservable()"
+<app-modalajustecuenta [AbrirModal]="AbrirModalAjuste.asObservable()"
   (ActualizarTabla)="GetMovimientosCuentaDescuadre()">
 </app-modalajustecuenta>
 
-<app-modaldevoluciontransferencia
-  [AbrirModal]="AbrirModalDevolucion.asObservable()"
+<app-modaldevoluciontransferencia [AbrirModal]="AbrirModalDevolucion.asObservable()"
   (RecargarPagos)="GetMovimientosCuentaDescuadre()">
 </app-modaldevoluciontransferencia>
 
-<app-modalabonocompracuenta
-  [AbrirModal]="AbrirModalCompra.asObservable()"
+<app-modalabonocompracuenta [AbrirModal]="AbrirModalCompra.asObservable()"
   (ActualizarDatos)="GetMovimientosCuentaDescuadre()">
 </app-modalabonocompracuenta>
 
-<app-modalamovertransferencia
-  [AbrirModal]="AbrirModalMoverTransferencia.asObservable()"
+<app-modalamovertransferencia [AbrirModal]="AbrirModalMoverTransferencia.asObservable()"
   (ActualizarDatos)="GetMovimientosCuentaDescuadre()">
-</app-modalamovertransferencia> 
+</app-modalamovertransferencia>

@@ -206,6 +206,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public DeshabilitarValor: boolean = true;
   public DeshabilitarTasa: boolean = true;
 
+  public Perfil = JSON.parse(localStorage['User'])
+
   public DiarioModel: any = {
     Id_Diario: '',
     Id_Funcionario: this.funcionario_data.Identificacion_Funcionario,
@@ -223,6 +225,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     trans: false,
     giros: false,
     traslados: false,
+    otrotraslados: false,
+    
     corresponsal: false,
     servicios: false,
     egresos: false,
@@ -550,6 +554,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   ) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.AsignarMonedas();
+    console.log('Perfil', this.Perfil);
   }
 
   CierreCajaAyerBolivares = 0;
@@ -4038,6 +4043,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.CargarDatosTraslados();
         break;
 
+      case 'otrotraslados':
+        // this.CargarDatosTraslados();
+        break;
+
       case 'corresponsal':
         this.Corresponsal = true;
         this.CargarDatosCorresponsal();
@@ -4072,6 +4081,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       case 'giros':
         this.CargarDatosGiros();
+        break;
+
+      case 'otrotraslados':
+        this.CargarDatosTraslados();
         break;
 
       case 'traslados':

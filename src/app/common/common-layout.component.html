@@ -238,7 +238,10 @@
                 <!-- PERFIL -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                   <div class="user-info">
-                    <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                    <!-- <span class="name pdd-right-5 text-center"> -->
+                      <p class="pt-2 m-0">{{ myDate | date:'dd/MM/yyyy' }}</p>
+                      <p>{{ myDate | date:'HH:mm:ss' }}</p>
+                    <!-- </span> -->
                   </div>
                 </a>
               </li>
@@ -251,7 +254,7 @@
               </li>
             </ul>
 
-            <ul class="nav-left" >
+            <ul class="nav-left">
               <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
                 <!-- NOTIFICACIONES SALDOS -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -321,9 +324,9 @@
 
             <ul class="nav-right">
               <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
-                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" style="margin-top: 10px"
+                <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" title=" Cerrar Caja" style="margin-top: 10px"
                   (click)="VerificarAntesDeCierre()">
-                  <i class="fa fa-lock"> Cerrar Caja</i>
+                  <i class="fa fa-lock"></i>
                 </button>
               </li>
               <li class="user-profile dropdown">

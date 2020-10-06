@@ -70,6 +70,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
         });
       }else{
         this.MensajeGuardar = 'Se dispone a guardar este traslado';
+        console.log('Se dispone');
         this.Editar = false;
         this.ModalTraslado.show();
       }
@@ -155,7 +156,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       this.TrasladoModel.Fecha = this._generalService.FechaActual;
       this.TrasladoModel.Id_Caja = this._generalService.SessionDataModel.idCaja;
       this.TrasladoModel = this._generalService.limpiarString(this.TrasladoModel);
-      
+      console.log(this.TrasladoModel);
       let info = this._generalService.normalize(JSON.stringify(this.TrasladoModel));
       let datos = new FormData();
       datos.append("modelo",info);
@@ -168,6 +169,9 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           return this.handleError(error);
         })
         .subscribe((data:any)=>{
+
+          console.log(data);
+
           if (data.codigo == 'success') { 
             this.ActualizarTabla.emit();       
             this.CerrarModal();
@@ -200,24 +204,26 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   }
 
   ValidateBeforeSubmit():boolean{
-    
+    console.log('validando');
+    console.log(this.TrasladoModel);
     if (!this._validacionService.validateString(this.TrasladoModel.Origen, 'Tipo Origen')) {
       return false;
     }else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
       return false;
-    }else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origen')) {
+    }else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origenx')) {
       return false;
     }else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Destino, 'Destino')) {
       return false;
     }else if (!this._validacionService.validateNumber(this.TrasladoModel.Moneda, 'Moneda')) {
       return false;
-    }else if (!this._validacionService.validateNumber(this.TrasladoModel.Valor, 'Valor')) {
+    }else if (!this._validacionService.validateNumber(this.TrasladoModel.Valor, 'Valorx')) {
       return false;
     }else if (!this._validacionService.validateString(this.TrasladoModel.Detalle, 'Detalle')) {
       console.log(this.TrasladoModel);
       
       return false;
     }else{
+      console.log('validado');
       return true;
     }
   }

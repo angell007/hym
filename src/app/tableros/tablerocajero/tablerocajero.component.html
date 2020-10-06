@@ -6,7 +6,7 @@
 
 
 
-          <a href="#cambios" scrollTo class="card mrg-btm-15 m-t-15 scroll-to"
+          <a href="#cambios" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('cambios'); ActivarCard('cambios')"
             [ngClass]="{'card-selected': CardSelection.cambios, 'card-tremor': !CardSelection.cambios}">
             <div class="card-block padding-10">
@@ -25,7 +25,7 @@
           </a>
 
 
-          <a href="#transferencias" scrollTo class="card mrg-btm-15 scroll-to"
+          <a href="#transferencias" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('transferencias'); ActivarCard('trans')"
             [ngClass]="{'card-selected': CardSelection.trans, 'card-tremor': !CardSelection.trans}">
             <div class="card-block padding-10">
@@ -42,7 +42,7 @@
               </ul>
             </div>
           </a>
-          <a href="#giros" scrollTo class="card mrg-btm-15 scroll-to"
+          <a href="#giros" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('giros'); ActivarCard('giros')"
             [ngClass]="{'card-selected': CardSelection.giros, 'card-tremor': !CardSelection.giros}">
             <div class="card-block padding-10">
@@ -60,7 +60,7 @@
             </div>
           </a>
 
-          <a href="#egresos" scrollTo class="card mrg-btm-15 scroll-to"
+          <a href="#egresos" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('egresos'); ActivarCard('egresos')"
             [ngClass]="{'card-selected': CardSelection.egresos, 'card-tremor': !CardSelection.egresos}">
             <div class="card-block padding-10">
@@ -79,23 +79,9 @@
           </a>
 
 
-          <a href="#traslados" scrollTo (click)="muestra_tabla('traslados'); ActivarCard('traslados')"
-            [ngClass]="{'card-selected': CardSelection.traslados, 'card-tremor': !CardSelection.traslados , 'card mrg-btm-15 scroll-to':true}">
-            <div class="card-block padding-10">
-              <ul class="list-unstyled list-info">
-                <li>
-                  <span class="thumb-img pdd-top-10">
-                    <i class="ti-reload text-info font-size-30"></i>
-                  </span>
-                  <div class="info">
-                    <b class=" text-dark font-size-18 ">Traslados</b>
-                    <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </a>
-          <a href="#corresponsal" scrollTo class="card mrg-btm-15 scroll-to"
+
+
+          <a href="#corresponsal" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('corresponsal'); ActivarCard('corresponsal')"
             [ngClass]="{'card-selected': CardSelection.corresponsal, 'card-tremor': !CardSelection.corresponsal}">
             <div class="card-block padding-10">
@@ -112,7 +98,8 @@
               </ul>
             </div>
           </a>
-          <a href="#servicios" scrollTo class="card mrg-btm-15 scroll-to"
+
+          <a href="#servicios" scrollTo class="card my-0 py-0 scroll-to"
             (click)="muestra_tabla('servicios'); ActivarCard('servicios')"
             [ngClass]="{'card-selected': CardSelection.servicios, 'card-tremor': !CardSelection.servicios}">
             <div class="card-block padding-10">
@@ -123,14 +110,14 @@
                   </span>
                   <div class="info">
                     <b class="text-dark font-size-18">Servicios Externos</b>
-                    <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+                    <p class="no-mrg-btm">Consignaciones, Pagos, Trámites </p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
 
-          <a href="#cajeros" scrollTo class="card mrg-btm-15 m-t-15 scroll-to"
+          <a href="#cajeros" scrollTo class="card my-0 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
             (click)="muestra_tabla('cajeros'); ActivarCard('cajeros')"
             [ngClass]="{'card-selected': CardSelection.cajeros, 'card-tremor': !CardSelection.cajeros}">
             <div class="card-block padding-10">
@@ -142,6 +129,43 @@
                   <div class="info">
                     <b class="text-dark font-size-18">Cajeros Aperturados</b>
                     <p class="no-mrg-btm ">Gestion de Cajeros</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </a>
+
+
+          <a href="#traslados" scrollTo class="card my-0 py-0 scroll-to"
+            (click)="muestra_tabla('traslados'); ActivarCard('traslados')"
+            [ngClass]="{'card-selected': CardSelection.traslados, 'card-tremor': !CardSelection.traslados }">
+            <div class="card-block padding-10">
+              <ul class="list-unstyled list-info">
+                <li>
+                  <span class="thumb-img pdd-top-10">
+                    <i class="ti-ticket text-info font-size-30"></i>
+                  </span>
+                  <div class="info">
+                    <b class="text-dark font-size-18">Traslados </b>
+                    <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </a>
+
+          <a href="#otrotraslados" scrollTo class="card my-0 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
+            (click)="muestra_tabla('otrotraslados'); ActivarCard('otrotraslados')"
+            [ngClass]="{'card-selected': CardSelection.otrotraslados, 'card-tremor': !CardSelection.otrotraslados }">
+            <div class="card-block padding-10">
+              <ul class="list-unstyled list-info">
+                <li>
+                  <span class="thumb-img pdd-top-10">
+                    <i class="ti-share-alt text-dark font-size-30"></i>
+                  </span>
+                  <div class="info">
+                    <b class="text-dark font-size-18">Otros Traslados </b>
+                    <p class="no-mrg-btm">Gestión de Traslados </p>
                   </div>
                 </li>
               </ul>
@@ -612,7 +636,8 @@
                                     <option id="opId_Destinatario_Cuenta_{{i}}"
                                       *ngFor="let c of destinatario.Cuentas;  index as i;"
                                       [value]="c.Id_Destinatario_Cuenta" #custom>
-                                      {{c.Numero_Cuenta | mask: '0000-0000-0000-0000' }} {{ Apodo }} {{ c.Apodo }}  {{ c.Name }}   {{ Name }}
+                                      {{c.Numero_Cuenta | mask: '0000-0000-0000-0000' }} {{ Apodo }} {{ c.Apodo }}
+                                      {{ c.Name }} {{ Name }}
                                     </option>
                                   </select>
                                 </div>
@@ -1641,6 +1666,10 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="card modulos" id="otrotraslados" style="display: none;">
+          <app-tablatraslados></app-tablatraslados>
         </div>
 
         <div class="card modulos" id="corresponsal" style="display: none;">

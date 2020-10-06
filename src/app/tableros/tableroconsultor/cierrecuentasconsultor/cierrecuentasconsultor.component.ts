@@ -12,40 +12,40 @@ import { NuevofuncionarioService } from '../../../shared/services/funcionarios/n
 })
 export class CierrecuentasconsultorComponent implements OnInit {
 
-  public CuentasBancarias:Array<any> = [];
-  public Nombre_Funcionario:string = "Nombre Consultor";
-  public Cargando:boolean = false;
-  public Id_Funcionario:string =  this._activeRoute.snapshot.params["id_funcionario"];
-  public Id_Apertura:any =  localStorage.getItem('Apertura_Consultor');
+  public CuentasBancarias: Array<any> = [];
+  public Nombre_Funcionario: string = "Nombre Consultor";
+  public Cargando: boolean = false;
+  public Id_Funcionario: string = this._activeRoute.snapshot.params["id_funcionario"];
+  public Id_Apertura: any = localStorage.getItem('Apertura_Consultor');
 
-  constructor(private _cuentaBancariaService:CuentabancariaService,
-              public generalService:GeneralService,
-              private _activeRoute:ActivatedRoute,
-              private _route:Router,
-              private _swalService:SwalService,
-              private _generalService:GeneralService,
-              private _funcionarioService:NuevofuncionarioService) { }
+  constructor(private _cuentaBancariaService: CuentabancariaService,
+    public generalService: GeneralService,
+    private _activeRoute: ActivatedRoute,
+    private _route: Router,
+    private _swalService: SwalService,
+    private _generalService: GeneralService,
+    private _funcionarioService: NuevofuncionarioService) { }
 
   ngOnInit() {
     this.GetCuentasBancariasApertura();
   }
 
-  public GetCuentasBancariasApertura(){
+  public GetCuentasBancariasApertura() {
     this.Cargando = true;
-    let p = {id_funcionario:this.Id_Funcionario, id_apertura:this.Id_Apertura};
-    this._cuentaBancariaService.GetCuentasBancariasCierre(p).subscribe((data:any) => {
+    let p = { id_funcionario: this.Id_Funcionario, id_apertura: this.Id_Apertura };
+    this._cuentaBancariaService.GetCuentasBancariasCierre(p).subscribe((data: any) => {
       console.log(data);
       if (data.codigo == 'success') {
         this.Cargando = false;
         this.CuentasBancarias = data.query_data;
         this.Nombre_Funcionario = data.consultor;
-      }else{
+      } else {
         this.CuentasBancarias = [];
       }
     });
   }
 
-  public GuardarCierreConsultor(){
+  public GuardarCierreConsultor() {
     let data = new FormData();
     data.append('cuentas', JSON.stringify(this.CuentasBancarias));
     data.append('id_funcionario', this.Id_Funcionario);
@@ -53,23 +53,37 @@ export class CierrecuentasconsultorComponent implements OnInit {
     data.append('id_oficina', this.generalService.SessionDataModel.idOficina);
     data.append('id_caja', this.generalService.SessionDataModel.idCaja);
 
-    this._cuentaBancariaService.GuardaCierreCuentasBancarias(data).subscribe((response:any) => {
-      console.log(response);
-      if (response.codigo == 'success') {
-        this.CuentasBancarias = [];
-        localStorage.setItem('Apertura_Consultor', '');
-        localStorage.setItem('Volver_Apertura', 'Si');
-        this._swalService.ShowMessage(response);
-        setTimeout(() => {
-          this.CerrarSesion();
-        }, 500);
-      }else{
-        this._swalService.ShowMessage(response);
+    let flag = [];
+    this.CuentasBancarias.forEach(element => {
+      if (element.Monto_Cierre < 0) {
+        flag.push(element)
       }
     });
+
+    if (flag.length == 0) {
+      this._cuentaBancariaService.GuardaCierreCuentasBancarias(data).subscribe((response: any) => {
+        console.log(response);
+        if (response.codigo == 'success') {
+          this.CuentasBancarias = [];
+          localStorage.setItem('Apertura_Consultor', '');
+          localStorage.setItem('Volver_Apertura', 'Si');
+          this._swalService.ShowMessage(response);
+          setTimeout(() => {
+            this.CerrarSesion();
+          }, 500);
+        } else {
+          this._swalService.ShowMessage(response);
+        }
+      });
+
+    } else {
+      this._swalService.ShowMessage(['warning', 'Adertencia', 'No puede cerrar en Negativo ']);
+      return false;
+
+    }
   }
 
-  public VerMovimientos(idCuentaBancaria:string){
+  public VerMovimientos(idCuentaBancaria: string) {
     console.log(idCuentaBancaria);
     this._route.navigate(['/detallemovimientoscuenta', idCuentaBancaria, 'Ver']);
   }
@@ -88,14 +102,14 @@ export class CierrecuentasconsultorComponent implements OnInit {
     this._route.navigate(["/login"]);
   }
 
-  public VolverATablero(){    
+  public VolverATablero() {
     this._route.navigate(["/tablero"]);
   }
 
-  private _registrarCierreSesion(){
+  private _registrarCierreSesion() {
     let data = new FormData();
     data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
     this._funcionarioService.LogCierreSesion(data).subscribe();
-}
+  }
 
 }

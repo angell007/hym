@@ -1,7 +1,7 @@
 <!-- <div class="container-fluid "> -->
-<div class="row">
+<div class="row h-100">
   <div class="col-md-6">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header alert alert-primary">
         <label class="text font-weight-bold">Cuentas Disponibles</label>
       </div>
@@ -32,7 +32,7 @@
                   <h4>No hay cuentas cerradas para aperturar!</h4>
                 </td>
               </tr>
-              <tbody *ngIf="!Cargando">
+              <tbody *ngIf="!Cargando" style="font-size: 0.9em;">
                 <tr *ngFor="let cb of CuentasBancarias; let i = index;"
                   [ngClass]="{'bg-selected': cb.Seleccionada == 1}" style="cursor: pointer;">
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
@@ -43,7 +43,7 @@
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
                     {{cb.Nombre_Moneda }}</td>
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-right">
-                    {{cb.Numero_Cuenta}}</td>
+                    {{cb.Numero_Cuenta | mask:'0000-0000-0000-0000' }}</td>
 
                 </tr>
               </tbody>
@@ -73,26 +73,28 @@
                   <th class="custom-thead">Diferencia</th>
                 </tr>
                 <tr *ngIf="CuentasBancariasSeleccionadas.length == 0">
-                  <td colspan="4" class="text-center">
+                  <td colspan="6" class="text-center">
                     <i class="ti-alert font-size-20 text-warning"></i>
                     <h4>No ha seleccionado cuentas!</h4>
                   </td>
                 </tr>
               </thead>
-              <tbody *ngIf="CuentasBancariasSeleccionadas.length > 0">
+              <tbody *ngIf="CuentasBancariasSeleccionadas.length > 0" style="font-size: 0.9em;">
                 <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;"
                   [ngClass]="{'bg-anulada':cb.Correccion_Cuenta == '1'}">
                   <td class="text-right">{{cb.Nombre_Titular | uppercase}}</td>
-                  <td class="text-right">{{cb.Numero_Cuenta  }}</td>
+                  <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000'}}</td>
                   <td class="text-center">{{cb.Apodo}}</td>
                   <td class="text-center">
                     <input class="text-right form-control-sm" type="text" [(ngModel)]="cb.Monto_Apertura"
                       (blur)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)" currencyMask
-                      [options]="{ thousands: '.' }">
+                      [options]="{ thousands: '.' }" min="1" minlength="1">
                   </td>
                   <td class="text-right">{{cb.Monto_Ultimo_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
-                  <td class="text-right">{{cb.Diferencia | customcurrency:cb.Codigo_Moneda}}</td>
+                  <td class="text-right">{{cb.Diferencia | customcurrency:cb.Codigo_Moneda}} </td>
                 </tr>
+
+                
               </tbody>
             </table>
           </div>
@@ -103,7 +105,7 @@
           <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" *ngIf="MostrarBotonAjusteCuentas"
             (click)="CargarMovimientosAperturaAnterior()">Ajustar Cuentas</button>
           <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" (click)="SiguientePaso()"
-            [disabled]="CuentasBancariasSeleccionadasId.length == 0">Siguiente
+            [disabled]="CuentasBancariasSeleccionadasId.length == 0 ">Siguiente
           </button>
         </div>
       </div>

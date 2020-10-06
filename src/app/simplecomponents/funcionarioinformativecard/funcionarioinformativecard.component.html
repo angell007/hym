@@ -1,15 +1,10 @@
-<div class="card m-3" style="
-
-cursor: pointer;
+<div class="card m-3" style="cursor: pointer;
 padding: 2px;
 margin: 0;
-border-radius: 25em;
-
-" (click)="AbrirCierreFuncionario(Funcionario.Id_Funcionario)">
+border-radius: 25em;"  (click)="AbrirCierreFuncionario()">
   <div class="card-body" style="padding: 0px;">
     <div class="row">
       <div class="col-md-2">
-
         <ng-container *ngIf="Funcionario.Imagen == '' || Funcionario.Imagen == 0">
           <img style="padding: 2px;" class="img-circle img-responsive" src="../../../assets/images/cliente.jpg"
             alt="funcionario-img">
@@ -28,9 +23,12 @@ border-radius: 25em;
                 <small>{{Funcionario.Nombre_Funcionario}}</small>
                 <small>{{Funcionario.Nombre_Oficina}}</small>
                 <div class="w-100"></div>
-                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-info"></i> <small>{{Funcionario.Hora_Apertura}}</small>
-                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i> <small>{{Funcionario.Hora_Cierre}}</small>
-                <i style="margin-right: 0.1em;" [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"></i>
+                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-info"></i>
+                <small>{{Funcionario.Hora_Apertura}}</small>
+                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
+                <small>{{Funcionario.Hora_Cierre}}</small>
+                <i style="margin-right: 0.1em;"
+                  [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"></i>
               </div>
             </div>
           </div>

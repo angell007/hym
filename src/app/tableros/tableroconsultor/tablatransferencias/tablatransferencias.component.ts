@@ -57,6 +57,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public ValorRealCuenta: number = 0;
   public CodigoMonedaValorReal: string = '';
 
+  public custom = 0;
   public MovimientoBancoModel: any = {
     Valor: '0',
     Id_Cuenta_Bancaria: '',
@@ -197,8 +198,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
               if (data == '1') {
                 this.BloquearSeleccion = false;
                 this.TransferenciasSeleccionadas.push(modelo);
-                let data = new FormData();
 
+                let data = new FormData();
                 data.append("id_funcionario", this.Funcionario.Identificacion_Funcionario);
                 data.append("id_transferencia", modelo.Id_Transferencia_Destinatario);
                 this._transferenciaService.BloquearTransferencia(data).subscribe(response => {
@@ -213,9 +214,6 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
         }
       }
     }
-
-
-
   }
 
   public DeseleccionarTransferencia(idTransferenciaDestinatario: any) {
@@ -281,6 +279,9 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this.TransferenciaModel = modelo;
 
     this.MovimientoBancoModel.Valor = modelo.Valor_Real;
+
+    this.custom = modelo.Valor_Real;
+
     this.MovimientoBancoModel.Id_Transferencia_Destino = modelo.Id_Transferencia_Destinatario;
     //this.MovimientoBancoModel.Id_Cuenta_Bancaria = this.CuentaConsultor;
   };

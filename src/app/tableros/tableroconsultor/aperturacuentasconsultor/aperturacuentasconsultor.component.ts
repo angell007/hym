@@ -27,6 +27,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   public DiferencialMonedas: Array<any> = [];
   public CuentasDescuadradas: Array<any> = [];
   public Cargando: boolean = false;
+  public sgt: boolean = true;
   public MostrarBotonAjusteCuentas: boolean = false;
   private _mostrarBotonRevision: Subject<any> = new Subject();
   private _updatedListSubscription: any;
@@ -151,6 +152,15 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+
+
+
+
+
+
+
   public SeleccionarCuenta(seleccionada: string, cuenta: any) {
 
     if (seleccionada == '0') {
@@ -163,6 +173,10 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
             this.CuentasBancariasSeleccionadasId.push(cuenta.Id_Cuenta_Bancaria);
             this.CuentasBancarias[ind].Seleccionada = '1';
             this.CuentasBancarias[ind].Habilitar_Monto = '1';
+
+            // if (parseFloat(this.CuentasBancarias[ind].Monto_Apertura) == parseFloat(this.CuentasBancarias[ind].Monto_Ultimo_Cierre)) {
+            //   this.sgt = false;
+            // }
           }
 
           this.SeleccionarCuentaBaseDeDatos(cuenta.Id_Cuenta_Bancaria);
@@ -186,7 +200,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       if (ind > -1) {
         this.CuentasBancarias[ind].Seleccionada = '0';
         this.CuentasBancarias[ind].Habilitar_Monto = '0';
-        this.CuentasBancarias[ind].Monto_Apertura = '0';
+        this.CuentasBancarias[ind].Monto_Apertura = '0'
       }
 
       setTimeout(() => {
@@ -196,6 +210,35 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
     this._setCuentasSeleccionadasStorage(800);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   public GuardarAperturaCuentas() {
     if (this.MostrarBotonAjusteCuentas) {
@@ -241,11 +284,12 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public Validardiferencia(posCuenta: number, valor: string, idMoneda: string) {
     valor = valor.replace(/\./g, '');
-    console.log(valor);
+    console.log([posCuenta, valor, idMoneda]);
 
     let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
     let p = { id_cuenta: id_cuenta };
     this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response: any) => {
+      console.log(response);
       if (response == '0') {
         this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
       } else {
@@ -303,6 +347,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public SiguientePaso() {
     localStorage.setItem("Volver_Apertura", "No");
+    console.log(this.CuentasDescuadradas);
     if (this.CuentasDescuadradas.length > 0) {
       this.router.navigate(['/cuadrecuentas']);
       this.CuentasActualizadas.unsubscribe();
