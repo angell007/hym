@@ -3,191 +3,284 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header('Content-Type: application/json');
 
-require_once('../../config/start.inc.php');
-include_once('../../class/class.lista.php');
-include_once('../../class/class.complex.php');
-require_once('../../class/class.configuracion.php');
+include_once('../../class/class.querybasedatos.php');
+include_once('../../class/class.paginacion.php');
 
-$configuracion = new Configuracion();
-    $id_oficina = ( isset( $_REQUEST['id_oficina'] ) ? $_REQUEST['id_oficina'] : 0 );
-$datos = ( isset( $_REQUEST['datos'] ) ? $_REQUEST['datos'] : '' );
+$pagina = (isset($_REQUEST['pag']) ? $_REQUEST['pag'] : '');
+$pageSize = (isset($_REQUEST['tam']) ? $_REQUEST['tam'] : '');
+$id_funcionario = (isset($_REQUEST['id_funcionario']) ? $_REQUEST['id_funcionario'] : '');
+$condicion = 'WHERE (T.Estado = "Activa" OR T.Estado = "Pagada") AND TD.Estado_Consultor = "Cerrada" ';
+$condicion = SetCondiciones($condicion);
+$having = SetHaving($_REQUEST);
 
-$datos = (array) json_decode($datos);
+$query_pendiente = 'SELECT 
+	      T.Id_Transferencia,
+        T.Fecha,
+        T.Cantidad_Transferida,
+        T.Tasa_Cambio,
+	      TD.Id_Transferencia_Destinatario,
+        TD.Estado,
+        TD.Valor_Transferencia,
+        TD.Numero_Documento_Destino,
+	      SUBSTRING(R.Codigo, 3) as Codigo,
+	      CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
+	      DC.Numero_Cuenta AS Cuenta_Destino,
+	      D.Nombre AS Destinatario,
+        (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
+	      IFNULL((SELECT 
+	                SUM(Valor)
+	              FROM Pago_Transfenecia
+	              WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
+	      (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
+	                SUM(Valor)
+	              FROM Pago_Transfenecia
+	              WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
+        IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
+        (CASE
+          WHEN TD.Estado = "Pagada" THEN 1
+          WHEN TD.Estado = "Pendiente" THEN 2
+         END) AS Orden_Consulta,
+        IFNULL((SELECT 
+                  Id_Pago_Transfenecia 
+                FROM Pago_Transfenecia 
+                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
+	    FROM Transferencia T  
+	    INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
+	    INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
+	    INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
+        INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
+	    INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
+	    INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
+	    ' . $condicion . '
+        AND TD.Estado = "Pendiente"
+        ';
 
-$datos['Tasa_Cambio'] = str_replace(",", ".", $datos['Tasa_Cambio']);
-$datos['Cantidad_Transferida'] = str_replace(",", ".", $datos['Cantidad_Transferida']);
-$datos['Cantidad_Recibida'] = str_replace(",", ".", $datos['Cantidad_Recibida']);
+$query_pagadas = '
+        SELECT
+        T.Id_Transferencia,
+        T.Fecha,
+        T.Cantidad_Transferida,
+        T.Tasa_Cambio,
+        TD.Id_Transferencia_Destinatario,
+        TD.Estado,
+        TD.Valor_Transferencia,
+        TD.Numero_Documento_Destino,
+        SUBSTRING(R.Codigo, 3) as Codigo,
+        CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
+        DC.Numero_Cuenta AS Cuenta_Destino,
+        D.Nombre AS Destinatario,
+        (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
+        IFNULL((SELECT 
+                  SUM(Valor)
+                FROM Pago_Transfenecia
+                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
+        (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
+                  SUM(Valor)
+                FROM Pago_Transfenecia
+                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
+        IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
+        (CASE
+          WHEN TD.Estado = "Pagada" THEN 1
+          WHEN TD.Estado = "Pendiente" THEN 2
+         END) AS Orden_Consulta,
+        IFNULL((SELECT 
+                  Id_Pago_Transfenecia 
+                FROM Pago_Transfenecia 
+                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
+        FROM Transferencia T  
+        INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
+        INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
+        INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
+        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
+        INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
+        INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
+        ' . $condicion . '
+        AND PT.Cajero = ' . $id_funcionario . ' AND TD.Estado = "Pagada"';
+
+$query_devueltas = "SELECT
+    T.Id_Transferencia,
+    T.Fecha,
+    T.Cantidad_Transferida,
+    T.Tasa_Cambio,
+    TD.Id_Transferencia_Destinatario,
+    TD.Estado,
+    TD.Valor_Transferencia,
+    TD.Numero_Documento_Destino,
+    SUBSTRING(R.Codigo, 3) as Codigo,
+    CONCAT(F.Nombres, \" \" , F.Apellidos) as NombreCajero,
+    DC.Numero_Cuenta AS Cuenta_Destino,
+    D.Nombre AS Destinatario,
+  (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
+    IFNULL((SELECT 
+              SUM(Valor)
+            FROM Pago_Transfenecia
+            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), \"0\") AS Pago_Parcial,
+    (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
+              SUM(Valor)
+            FROM Pago_Transfenecia
+            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), 0)) AS Valor_Real,
+  IFNULL((SELECT CONCAT_WS(\" \", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), \"Disponible\") AS Funcionario_Bloqueo,
+  (CASE
+    WHEN TD.Estado = \"Pagada\" THEN 1
+    WHEN TD.Estado = \"Pendiente\" THEN 2
+   END) AS Orden_Consulta,
+  IFNULL((SELECT 
+            Id_Pago_Transfenecia 
+          FROM Pago_Transfenecia 
+          WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"Si\" LIMIT 1), \"0\") AS Devolucion
+  FROM Transferencia T  
+  INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
+  INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
+  INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
+INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
+  INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
+  INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
 
 
+$query_pagadas_parciales = '
+        SELECT 
+          T.Id_Transferencia,
+          TD.Id_Transferencia_Destinatario,
+          T.Fecha,
+          SUBSTRING(R.Codigo, 3) as Codigo,
+          CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
+          T.Cantidad_Transferida,
+          TD.Valor_Transferencia,
+          TD.Numero_Documento_Destino,
+          DC.Numero_Cuenta AS Cuenta_Destino,
+          D.Nombre AS Destinatario,
+          "Pagada" AS Estado,
+          (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
+          IFNULL((SELECT 
+                    SUM(Valor)
+                  FROM Pago_Transfenecia
+                  WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
+          T.Tasa_Cambio,
+          (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
+                    SUM(Valor)
+                  FROM Pago_Transfenecia
+                  WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
+          IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
+          1 AS Orden_Consulta,
+           IFNULL((SELECT Id_Pago_Transfenecia FROM Pago_Transfenecia WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
+        FROM Transferencia T  
+        INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
+        INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
+        INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
+        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
+        INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
+        INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
+        ' . $condicion . '
+        AND PT.Cajero = ' . $id_funcionario . ' AND TD.Estado = "Pendiente"';
 
-if($datos["Forma_Pago"] == "Efectivo"){
+// $query_union = $query_pendiente . ' UNION (' . $query_pagadas . ')  ORDER BY Fecha DESC';
+$query_union = $query_pendiente . ' UNION (' . $query_pagadas . ')  UNION (' . $query_devueltas . ') ORDER BY Fecha DESC';
 
-    $cod = $configuracion->Consecutivo('Transferencia');
-    $oItem = new complex("Transferencia","Id_Transferencia" );
-    $oItem->Observacion_Transferencia = $datos["Observacion_Transferencia"];
-    $oItem->Moneda_Origen = $datos["Moneda_Origen"];
-    $oItem->Moneda_Destino =  $datos["Moneda_Destino"]; 
-    $oItem->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    $oItem->Cantidad_Transferida = $datos["Cantidad_Transferida"];
-    $oItem->Cantidad_Recibida_Bolsa_Bolivares = $datos['Cantidad_Transferida_Con_Bolivares'];
-    $oItem->Forma_Pago = "Efectivo";
-    $oItem->Tipo_Transferencia = "Cliente";
-    $oItem->Codigo = $cod;
-    $oItem->Identificacion_Funcionario = $datos["Identificacion_Funcionario"];
-    $oItem->Id_Oficina = $id_oficina;
-    //$oItem->Id_Tercero_Destino = $datos['Id_Tercero_Destino'];
-    $oItem->Documento_Origen = $datos['Documento_Origen'];
-    $oItem->Tasa_Cambio = $datos['Tasa_Cambio'];
-    $oItem->Id_Caja = $datos['Id_Caja'];
-    $oItem->Tipo_Origen = 'Remitente';
-    $oItem->Tipo_Destino = 'Tercero';
-    $oItem->save();
-    $idtransferencia = $oItem->getId();
-    unset($oItem);
-   
-    $oItem = new complex("Movimiento_Tercero","Id_Movimiento_Tercero" );
-    $oItem->Id_Tercero=$datos["Id_Tercero_Destino"];
-    $oItem->Tipo="Ingreso";
-    $oItem->Fecha = date("Y-m-d");
-    $oItem->Detalle = $datos["Observacion_Transferencia"];
-    $oItem->Valor = $datos["Cantidad_Transferida"];    
-    $oItem->Id_Moneda_Valor = $datos["Moneda_Destino"]; 
-    $oItem->Id_Funcionario = $datos["Identificacion_Funcionario"];
-    // $oItem->Moneda_Origen = $datos["Moneda_Origen"];
-    // $oItem->Moneda_Destino = $datos["Moneda_Destino"]; 
-    // $oItem->Cantidad_Transferida= $datos["Cantidad_Transferida"];
-    // $oItem->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    // $oItem->Id_Tipo_Movimiento = '1';
-    $oItem->Id_Tipo_Movimiento = '7';
-    $oItem->Valor_Tipo_Movimiento = $idtransferencia;
-	$oItem->Transferencia="Si";
-	
-	var_dump(json_decode($oItem));
-	
-    $oItem->save();
-    unset($oItem);
-    
-    $cod = $configuracion->Consecutivo('Recibo');
-    $oItem = new complex("Recibo","Id_Recibo" );
-    $oItem->Codigo = $cod;
-    $oItem->Identificacion_Funcionario = $datos["Identificacion_Funcionario"];
-    $oItem->Id_Transferencia = $idtransferencia;
-    $oItem->Tasa_Cambio = $datos['Tasa_Cambio'];
-    $oItem->save();
-    unset($oItem);
+$query_union = "
+        SELECT 
+            r.*
+          FROM ($query_union) r
+          ORDER BY r.Orden_Consulta DESC";
+
+$query_paginacion = "
+        SELECT 
+            COUNT(*) AS Total
+          FROM ($query_union) r";
+
+$paginationObj = new PaginacionData($pageSize, $query_paginacion, $pagina);
+
+//Se crea la instancia que contiene la consulta a realizar
+$queryObj = new QueryBaseDatos($query_union);
+
+//Ejecuta la consulta de la instancia queryobj y retorna el resultado de la misma segun los parametros
+$result = $queryObj->Consultar('Multiple', true, $paginationObj);
+
+echo json_encode($result);
+
+function SetCondiciones($condicion)
+{
+    $req = $_REQUEST;
+
+    // $condicion = ' WHERE PT.Cajero ='.$req['id_funcionario'];
+
+    if (isset($req['fecha']) && $req['fecha'] != "") {
+        if ($condicion != "") {
+            $condicion .= " AND DATE(T.Fecha) = '" . $req['fecha'] . "'";
+        } else {
+            $condicion .=  " WHERE DATE(T.Fecha) = '" . $req['fecha'] . "'";
+        }
+    }
+
+    if (isset($req['codigo']) && $req['codigo'] != '') {
+        if ($condicion != "") {
+            $condicion .= " AND R.Codigo LIKE '%" . $req['codigo'] . "%'";
+        } else {
+            $condicion .= " WHERE R.Codigo LIKE '%" . $req['codigo'] . "%'";
+        }
+    }
+
+    if (isset($req['cajero']) && $req['cajero']) {
+        if ($condicion != "") {
+            $condicion .= " AND CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['cajero'] . "%'";
+        } else {
+            $condicion .= " WHERE CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['cajero'] . "%'";
+        }
+    }
+
+    if (isset($req['valor']) && $req['valor']) {
+        if ($condicion != "") {
+            $condicion .= " AND TD.Valor_Transferencia = " . $req['valor'];
+        } else {
+            $condicion .= " WHERE TD.Valor_Transferencia = " . $req['valor'];
+        }
+    }
+
+    if (isset($req['cedula']) && $req['cedula']) {
+        if ($condicion != "") {
+            $condicion .= " AND TD.Numero_Documento_Destino = " . $req['cedula'];
+        } else {
+            $condicion .= " WHERE TD.Numero_Documento_Destino = " . $req['cedula'];
+        }
+    }
+
+    if (isset($req['cta_destino']) && $req['cta_destino']) {
+        if ($condicion != "") {
+            $condicion .= " AND DC.Numero_Cuenta LIKE '%" . $req['cta_destino'] . "%'";
+        } else {
+            $condicion .= " WHERE DC.Numero_Cuenta LIKE '%" . $req['cta_destino'] . "%'";
+        }
+    }
+
+    if (isset($req['nombre_destinatario']) && $req['nombre_destinatario']) {
+        if ($condicion != "") {
+            $condicion .= " AND D.Nombre LIKE '%" . $req['nombre_destinatario'] . "%'";
+        } else {
+            $condicion .= " WHERE D.Nombre LIKE '%" . $req['nombre_destinatario'] . "%'";
+        }
+    }
+
+    if (isset($req['estado']) && $req['estado']) {
+
+        if ($condicion != "") {
+            if (strtolower($req['estado']) == 'devuelta') {
+                $condicion .= " AND  PT.Devuelta = 'Si'";
+            } else {
+                $condicion .= " AND TD.Estado = '" . $req['estado'] . "'";
+            }
+        } 
+    }
+
+    return $condicion;
 }
 
-if($datos["Forma_Pago"] == "Credito"){
-    $oItem = new complex("Movimiento_Tercero","Id_Movimiento_Tercero" );
-    $oItem->Id_Tercero=$datos["Id_Tercero"];
-    $oItem->Tipo="Egreso";
-    $oItem->Fecha = date("Y-m-d");
-    $oItem->Detalle = $datos["Observacion_Transferencia"];
-    $oItem->Valor = $datos["Cantidad_Transferida"];
-    $oItem->Id_Moneda_Valor = $datos["Moneda_Destino"];         
-    $oItem->Id_Oficina = $id_oficina;
-    $oItem->Id_Funcionario = $datos["Identificacion_Funcionario"];
-    //$oItem->Transferencia="Si";
-    // $oItem->Moneda_Origen = $datos["Moneda_Origen"];
-    // $oItem->Moneda_Destino = $datos["Moneda_Destino"]; 
-    // $oItem->Cantidad_Transferida= $datos["Cantidad_Transferida"];
-    // $oItem->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    $oItem->Id_Tipo_Movimiento = '7';
-    $oItem->Valor_Tipo_Movimiento = $idtransferencia;
-    $oItem->save();
-    unset($oItem);
-    
-    $oItem1 = new complex("Movimiento_Tercero","Id_Movimiento_Tercero" );
-    $oItem1->Id_Tercero=$datos["Id_Tercero_Destino"];
-    $oItem1->Tipo="Ingreso";
-    $oItem1->Fecha = date("Y-m-d");
-    $oItem1->Detalle = $datos["Observacion_Transferencia"];
-    $oItem1->Valor = $datos["Cantidad_Transferida"];
-    $oItem1->Id_Funcionario = $datos["Identificacion_Funcionario"];
-    //$oItem1->Transferencia="Si";
-    //$oItem1->Moneda_Origen = $datos["Moneda_Origen"];
-    //$oItem1->Moneda_Destino = $datos["Moneda_Destino"]; 
-    $oItem1->Id_Moneda_Valor = $datos["Moneda_Destino"]; 
-    $oItem1->Id_Tipo_Movimiento = '7';
-    $oItem1->Valor_Tipo_Movimiento = $idtransferencia;
-    //$oItem1->Cantidad_Transferida= $datos["Cantidad_Transferida"];
-    //$oItem1->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    $oItem1->save();
-    unset($oItem1);
+function SetHaving()
+{
+    $req = $_REQUEST;
+    $having = '';
+
+    if (isset($req['pendiente']) && $req['pendiente']) {
+        $having .= " HAVING Valor_Real = " . $req['pendiente'];
+    }
+
+    return $having;
 }
-
-
-if($datos["Forma_Pago"] == "Consignacion"){
-    $cod = $configuracion->Consecutivo('Transferencia');
-    $oItem = new complex("Transferencia","Id_Transferencia" );
-    $oItem->Observacion_Transferencia = $datos["Observacion_Transferencia"];
-    $oItem->Moneda_Origen = $datos["Moneda_Origen"];
-    $oItem->Moneda_Destino =  $datos["Moneda_Destino"]; 
-    $oItem->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    $oItem->Cantidad_Transferida = $datos["Cantidad_Transferida"];
-    $oItem->Forma_Pago = "Consignacion";
-    $oItem->Tipo_Transferencia = "Cliente";
-    $oItem->Id_Oficina = $id_oficina;
-    $oItem->Codigo = $cod;
-    $oItem->Identificacion_Funcionario = $datos["Identificacion_Funcionario"];
-    $oItem->Cantidad_Recibida_Bolsa_Bolivares = $datos['Cantidad_Transferida_Con_Bolivares'];
-    $oItem->Id_Caja = $datos['Id_Caja'];
-    $oItem->Documento_Origen = $datos['Documento_Origen'];
-    $oItem->Id_Tercero_Destino = $datos['Id_Tercero_Destino'];
-    $oItem->Id_Cuenta_Bancaria=$datos['Id_Cuenta_Bancaria'];
-    $oItem->Tasa_Cambio = $datos["Tasa_Cambio"];
-    $oItem->Tipo_Origen = 'Remitente';
-    $oItem->Tipo_Destino = 'Tercero';
-    $oItem->save();
-    $idtransferencia = $oItem->getId();
-    unset($oItem);
-    
-    //var_dump("paso 1");
-    $oItem2 = new complex("Movimiento_Tercero","Id_Movimiento_Tercero");
-    $oItem2->Id_Tercero=$datos["Id_Tercero_Destino"];
-    $oItem2->Tipo="Ingreso";
-    $oItem2->Fecha = date("Y-m-d");
-    $oItem2->Detalle = $datos["Observacion_Transferencia"];
-    $oItem2->Id_Funcionario = $datos["Identificacion_Funcionario"];
-    $oItem2->Valor = $datos["Cantidad_Transferida"];
-    // $oItem2->Moneda_Origen = $datos["Moneda_Origen"];
-    $oItem2->Id_Moneda_Valor = $datos["Moneda_Destino"]; 
-    // $oItem2->Moneda_Destino = $datos["Moneda_Destino"]; 
-    // $oItem2->Cantidad_Transferida= $datos["Cantidad_Transferida"];
-    // $oItem2->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    //$oItem2->Transferencia="Si";
-    $oItem2->Id_Tipo_Movimiento = '1';
-    $oItem2->Valor_Tipo_Movimiento = $idtransferencia;
-    $oItem2->save();
-    unset($oItem2);
-    
-    
-    
-    //var_dump("paso 3");
-    $cod = $configuracion->Consecutivo('Recibo');
-    $oItem = new complex("Recibo","Id_Recibo" );
-    $oItem->Codigo = $cod;
-    $oItem->Identificacion_Funcionario = $datos["Identificacion_Funcionario"];
-    $oItem->Id_Transferencia = $idtransferencia;
-    $oItem->Tasa_Cambio = $datos["Tasa_Cambio"];
-    $oItem->save();
-    unset($oItem);
-    
-    //var_dump("paso 4");
-    $oItem3 = new complex("Movimiento_Cuenta_Bancaria","Id_Movimiento_Cuenta_Bancaria");
-    $oItem3->Id_Cuenta_Bancaria=$datos['Id_Cuenta_Bancaria'];
-    $oItem3->Tipo="Ingreso";
-    $oItem3->Fecha = date("Y-m-d");
-    $oItem3->Detalle = $datos["Observacion_Transferencia"];
-    $oItem3->Valor = $datos["Cantidad_Recibida"];
-    $oItem3->Moneda_Origen = $datos["Moneda_Origen"];
-    $oItem3->Moneda_Destino = $datos["Moneda_Destino"]; 
-    $oItem3->Cantidad_Transferida= $datos["Cantidad_Transferida"];
-    $oItem3->Cantidad_Recibida = $datos["Cantidad_Recibida"];
-    $oItem3->Id_Tipo_Movimiento_Bancario = "1";
-    $oItem3->Valor_Tipo_Movimiento_Bancario =$idtransferencia;
-    $oItem3->save();
-    unset($oItem3);
-}
-
-	echo json_encode('Exito');

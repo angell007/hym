@@ -90,6 +90,8 @@ import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
 import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
 import { WebnavigationService } from './shared/services/navegacionweb/webnavigation.service';
+// import { Actualizar } 
+// from './shared/services/navegacionweb/webnavigation.service';
 
 
 //MODALES
@@ -253,8 +255,8 @@ import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component'
 import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
 import { HourPipe } from './hour.pipe';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
-// import { TransferenciasconsultorService } from './customservices/transferenciasconsultor.service';
 import { TesCustomServiceService } from './tes-custom-service.service';
+import { ActualizarService } from './customservices/actualizar.service';
  
 // TODO  Funcion para dar formato a moneda
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -469,6 +471,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         ModalBasicComponent
     ],
     providers: [
+        ActualizarService,
         QzTrayService,
         CambioService,
         CompraService,

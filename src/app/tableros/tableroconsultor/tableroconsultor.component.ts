@@ -14,7 +14,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
 import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cuentabancaria.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { TesCustomServiceService } from '../../tes-custom-service.service';
-// import { TesCustomServiceService } from ;
+import { ActualizarService } from '../../customservices/actualizar.service';
 
 
 
@@ -149,6 +149,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     private _cuentaBancariaService: CuentabancariaService,
     private _swalService: SwalService,
     private _TesCustomServiceService: TesCustomServiceService,
+    private _actualizar: ActualizarService
   ) { }
 
 
@@ -156,7 +157,9 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     this.AsignarPaises();
     this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
     this._getCuentasFuncionarioApertura();
-
+    this._actualizar.cardListing.subscribe(() => {
+    this.CargarIndicadores();
+    })
     // this.sub = this._TesCustomServiceService.subjec.subscribe((data) => {
     //   this.TransferenciasListar = data['query_data'];
     //   this.SetInformacionPaginacion();
@@ -366,8 +369,11 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     });
   }
 
+
   CargarIndicadores() {
     this.http.get(this.globales.ruta + 'php/transferencias/indicadores_transferencias.php', { params: { id_funcionario: this.Id_Funcionario } }).subscribe((data: any) => {
+
+      console.log(data);
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;

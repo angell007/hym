@@ -7,7 +7,7 @@
             <div class="col-md-6 text-center mt-3">
 
               MOVIMIENTOS DE CUENTA : <span class="text font-weight-bold">
-                {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta}})
+                {{CuentaBancariaModel.Apodo}}({{CuentaBancariaModel.Numero_Cuenta | mask:'0000-0000-0000-0000'}})
               </span>
 
             </div>

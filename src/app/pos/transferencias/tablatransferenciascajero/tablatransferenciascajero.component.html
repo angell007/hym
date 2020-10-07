@@ -67,7 +67,7 @@
       <td class=" text-right"> {{rt.Tasa_Cambio }}</td>
       <td class=" text-center"> {{rt.Estado }}</td>
       <td class="text-center">
-        <div *ngIf="rt.Estado != 'Anulada'" class="text-center">
+        <div *ngIf="rt.Estado != 'Anulada' && rt.Estado != 'Pagada' " class="text-center">
           <button class="clean-btn-table" type="button" (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
             <i class="ti-trash text-danger" style="font-size: 12px;"></i>
           </button>

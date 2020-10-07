@@ -83,7 +83,7 @@
                 <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;"
                   [ngClass]="{'bg-anulada':cb.Correccion_Cuenta == '1'}">
                   <td class="text-right">{{cb.Nombre_Titular | uppercase}}</td>
-                  <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000'}}</td>
+                  <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000-0000'}}</td>
                   <td class="text-center">{{cb.Apodo}}</td>
                   <td class="text-center">
                     <input class="text-right form-control-sm" type="text" [(ngModel)]="cb.Monto_Apertura"

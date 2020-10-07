@@ -1,83 +1,38 @@
-<?php
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-    header('Content-Type: application/json');
-
-    require_once('../../config/start.inc.php');
-    include_once('../../class/class.lista.php');
-    include_once('../../class/class.complex.php');
-    include_once('../../class/class.consulta.php');
-    require_once('../../class/class.configuracion.php');
-
-    $datos = ( isset( $_REQUEST['modelo'] ) ? $_REQUEST['modelo'] : '' );
-    $compras = ( isset( $_REQUEST['compras'] ) ? $_REQUEST['compras'] : '' );
-
-    $datos = json_decode($datos,true);
-    $compras = json_decode($compras,true);
-
-    $fecha = date('Y-m-d');
-    $hora = date('H:i:s');
-
-    $datos['Fecha'] = $fecha;
-    $datos['Hora'] = $hora;
-
-  
-        //creo la compra...
-    $configuracion = new Configuracion();
-    $cod = $configuracion->Consecutivo('Compra');
-    $datos['Codigo']=$cod;
-        
-    $oItem = new complex("Compra","Id_Compra");
-    $oItem->Codigo = $datos['Codigo'];
-    $oItem->Id_Funcionario = $datos['Id_Funcionario'];
-    $oItem->Id_Tercero = $datos['Id_Tercero'];
-    $oItem->Valor_Compra = $datos['Valor_Compra'];
-    $oItem->Tasa = $datos['Tasa'];
-    $oItem->Valor_Peso = $datos['Valor_Peso'];
-    $oItem->Fecha = $datos['Fecha'];
-    $oItem->Hora = $datos['Hora'];
-    $oItem->Detalle = $datos['Detalle'];
-    $oItem->Id_Moneda_Compra = $datos['Id_Moneda_Compra'];
-        
-    $oItem->save();
-    $idCompra = $oItem->getId();
-    unset($oItem);
-        
-    //actualizo para relacionar la compra    
-    foreach($compras as $compra){
-        $oItem = new complex("Compra_Cuenta","Id_Compra_Cuenta",$compra['Id_Compra_Cuenta']);
-        $oItem->Id_Compra = $idCompra;
-        $oItem->save();
-        unset($oItem);
-    }
-
-    //movimiento tercero    
-    $oItem = new complex("Movimiento_Tercero","Id_Movimiento_Tercero");
-    $oItem->Tipo = "Ingreso";
-    $oItem->Valor = $datos["Valor_Compra"];
-    $oItem->Id_Tercero = $datos["Id_Tercero"];
-    $oItem->Detalle = 'Compra de '.GetCodigoMoneda($datos['Id_Moneda_Compra']).' '.$datos["Valor_Compra"].' por $'.$datos["Valor_Peso"].' a la tasa de '.$datos["Tasa"].' al Tercero '.GetNombreTercero($datos['Id_Tercero']);
-    $oItem->Fecha = $fecha;
-    $oItem->Id_Moneda_Valor = $datos['Id_Moneda_Compra'];
-    $oItem->Id_Tipo_Movimiento = '2';
-    $oItem->Valor_Tipo_Movimiento = $idCompra;
-    $oItem->Estado = 'Activo';
-    $oItem->save();
-    unset($oItem);
-
-        
-    //}
-
-    function GetCodigoMoneda($id_moneda){
-        $bdObj = new complex('Moneda','Id_Moneda', $id_moneda);
-        $codigo = $bdObj->Codigo;
-        unset($bdObj);
-        return $codigo;
-    }
-
-    function GetNombreTercero($id_tercero){
-        $bdObj = new complex('Tercero','Id_Tercero', $id_tercero);
-        $nombre = $bdObj->Nombre;
-        unset($bdObj);
-        return $nombre ;
-    }
+$query_devueltas = "SELECT
+    T.Id_Transferencia,
+    T.Fecha,
+    T.Cantidad_Transferida,
+    T.Tasa_Cambio,
+    TD.Id_Transferencia_Destinatario,
+    TD.Estado,
+    TD.Valor_Transferencia,
+    TD.Numero_Documento_Destino,
+    SUBSTRING(R.Codigo, 3) as Codigo,
+    CONCAT(F.Nombres, \" \" , F.Apellidos) as NombreCajero,
+    DC.Numero_Cuenta AS Cuenta_Destino,
+    D.Nombre AS Destinatario,
+  (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
+    IFNULL((SELECT 
+              SUM(Valor)
+            FROM Pago_Transfenecia
+            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), \"0\") AS Pago_Parcial,
+    (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
+              SUM(Valor)
+            FROM Pago_Transfenecia
+            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), 0)) AS Valor_Real,
+  IFNULL((SELECT CONCAT_WS(\" \", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), \"Disponible\") AS Funcionario_Bloqueo,
+  (CASE
+    WHEN TD.Estado = \"Pagada\" THEN 1
+    WHEN TD.Estado = \"Pendiente\" THEN 2
+   END) AS Orden_Consulta,
+  IFNULL((SELECT 
+            Id_Pago_Transfenecia 
+          FROM Pago_Transfenecia 
+          WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"Si\" LIMIT 1), \"0\") AS Devolucion
+  FROM Transferencia T  
+  INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
+  INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
+  INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
+INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
+  INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
+  INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
