@@ -10,11 +10,14 @@ import { GrupoterceroService } from '../../shared/services/grupotercero.service'
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { TerceroService } from '../../shared/services/tercero/tercero.service';
 import { Funcionario } from '../../shared/funcionario/funcionario.model';
+import { NormailizerService } from '../../normailizer.service';
+import { providers } from 'ng2-toasty';
 
 @Component({
   selector: 'app-modalegreso',
   templateUrl: './modalegreso.component.html',
-  styleUrls: ['./modalegreso.component.scss', '../../../style.scss']
+  styleUrls: ['./modalegreso.component.scss', '../../../style.scss'],
+  providers:[NormailizerService]
 })
 export class ModalegresoComponent implements OnInit {
 
@@ -30,8 +33,17 @@ export class ModalegresoComponent implements OnInit {
   public Editar: boolean = false;
   public MensajeGuardar: string = 'Se dispone a guardar este egreso';
   public Funcionario: any = JSON.parse(localStorage.getItem('User'));
+  public coinDefault: string;
 
   public EgresoModel: EgresoModel = new EgresoModel();
+
+  ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {
+    this.alertSwal.type = tipo;
+    this.alertSwal.title = titulo;
+    this.alertSwal.text = msg;
+    this.alertSwal.show();
+  }
+  @ViewChild('alertSwal') alertSwal: any;
 
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
@@ -40,9 +52,11 @@ export class ModalegresoComponent implements OnInit {
     private _EgresoService: EgresoService,
     private _grupoService: GrupoterceroService,
     private _monedaService: MonedaService,
-    private _terceroService: TerceroService) {
+    private _terceroService: TerceroService,
+    private _normalizeService: NormailizerService
+  ) {
     this.GetGrupos();
-    this.GetMonedas();
+
   }
 
   ngOnInit() {
@@ -59,14 +73,35 @@ export class ModalegresoComponent implements OnInit {
             this.ModalEgreso.show();
           } else {
 
-            this._swalService.ShowMessage(d);
+            this.ShowSwal('warning', 'Alerta', 'ingresando a egresos');
           }
 
         });
       } else {
         this.MensajeGuardar = 'Se dispone a guardar este egreso';
         this.Editar = false;
+        this.GetMonedas();
         this.ModalEgreso.show();
+      }
+    });
+
+  }
+
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.Monedas = data.query_data;
+        let monedaDefault: any[] = this.Monedas.filter((x: any) => {
+          return x.Nombre == 'Pesos'
+        })
+
+        this.EgresoModel.Id_Moneda = monedaDefault[0]['Id_Moneda'];
+
+      } else {
+
+        this.Monedas = [];
+        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
+
       }
     });
   }
@@ -92,25 +127,16 @@ export class ModalegresoComponent implements OnInit {
 
           this.Terceros = [];
           this.EgresoModel.Id_Tercero = '';
-          let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-          this._toastService.ShowToast(toastObj);
+          this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
+          // this.ShowSwal('warning', 'Warning', 'Debe recalcular el monto a entregar!');
+          // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+          // this._toastService.ShowToast(toastObj);
         }
       });
     }
   }
 
-  GetMonedas() {
-    this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
-      } else {
 
-        this.Monedas = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
-      }
-    });
-  }
 
   GetGrupos() {
     this._grupoService.getGrupos().subscribe((data: any) => {
@@ -119,8 +145,10 @@ export class ModalegresoComponent implements OnInit {
       } else {
 
         this.Grupos = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
+        this.ShowSwal('warning', 'Alerta', 'No se encontraron registros!');
+
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }
@@ -136,7 +164,8 @@ export class ModalegresoComponent implements OnInit {
     this.EgresoModel = this._generalService.limpiarString(this.EgresoModel);
     // console.log(this.EgresoModel);
 
-    let info = this._generalService.normalize(JSON.stringify(this.EgresoModel));
+    let info = this._normalizeService.normalize(JSON.stringify(this.EgresoModel));
+
     let datos = new FormData();
     datos.append("modelo", info);
     console.log(datos.getAll("Id_Tercero"));
@@ -153,27 +182,36 @@ export class ModalegresoComponent implements OnInit {
             this.ActualizarTabla.emit();
             this.CerrarModal();
             this.Editar = false;
-            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            this._toastService.ShowToast(toastObj);
+            this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
+
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
           } else {
-            this._swalService.ShowMessage(data);
+            this.ShowSwal('warning', 'Alerta', data);
+            // this._swalService.ShowMessage(data);
           }
         });
     } else {
       this._EgresoService.saveEgreso(datos)
         .catch(error => {
           //console.log('An error occurred:', error);
-          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un error!');
+
+
           return this.handleError(error);
         })
         .subscribe((data: any) => {
           if (data.codigo == 'success') {
             this.ActualizarTabla.emit();
             this.CerrarModal();
-            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            this._toastService.ShowToast(toastObj);
+            this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
           } else {
-            this._swalService.ShowMessage(data);
+            this.ShowSwal('warning', 'Alerta', data);
+            // this._swalService.ShowMessage(data);
           }
         });
     }

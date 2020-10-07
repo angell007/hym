@@ -1,154 +1,151 @@
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-md-4">
-            <h5>Todos los terceros de nuestro sistema
-              <span>
-                <i class="ti-reload text-info" title="Actualizar tabla" (click)="ConsultaFiltrada()"
-                  style="cursor:pointer;"></i>
-              </span>
-            </h5>
-          </div>
-          <div class="col-md-8">
-            <div class="pull-right">
-              <button class="btn btn-rounded btn-outline-info btn-sm" style="display:flex; align-items:center;"
-                (click)="NuevoTercero()">
-                <i class="ti-plus font-size-15 mr-1"></i> Nuevo Tercero
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <table class="table table-bordered table-sm table-hover custom-table">
-          <thead>
-            <tr>
-              <th class="custom-thead text-center" style="width:15%">Identificación</th>
-              <th class="custom-thead text-center">Nombres y Apellidos</th>
-              <th class="custom-thead text-center" style="width:15%">Departamento</th>
-              <th class="custom-thead text-center" style="width:25%">Ciudad</th>
-              <th class="custom-thead text-center" style="width:10%">Tipo Tercero</th>
-              <th class="custom-thead text-center" style="width:10%;">Acciones</th>
-            </tr>
-            <tr>
-              <th class="table-filters">
-                <input type="text" class="form-control" [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()"
-                  placeholder="Cedula">
-              </th>
-              <th class="table-filters">
-                <input type="text" class="form-control" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
-                  placeholder="Nombre y/o apellidos">
-              </th>
-              <th class="table-filters">
-                <select class="custom-select form-control" [(ngModel)]="Filtros.departamento"
-                  (change)="ConsultaFiltrada()">
-                  <option value="" selected>Seleccione</option>
-                  <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
-                </select>
-              </th>
-              <th class="table-filters">
-                <select class="custom-select form-control" (change)="GetMunicipiosDepartamento($event.target.value)">
-                  <option value="" selected>Seleccione</option>
-                  <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
-                </select>
+<div class=" card card-block">
 
-                <select class="custom-select form-control" [(ngModel)]="Filtros.municipio"
-                  (change)="ConsultaFiltrada()">
-                  <option value="" selected>Seleccione</option>
-                  <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
-                </select>
-              </th>
-              <th class="table-filters">
-                <select class="custom-select form-control" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
-                  <option value="" selected>Seleccione</option>
-                  <option value="Cliente">Cliente</option>
-                  <option value="Proveedor">Proveedor</option>
-                </select>
-              </th>
-              <th class="table-filters">
-                <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
-                  <option value="" selected>Seleccione</option>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                </select>
-              </th>
-              <th class="table-filters"></th>
-            </tr>
-            <tr *ngIf="Terceros.length == 0 && !Cargando">
-              <th colspan="6" class="text-center">
-                <div><i class="text-warning font-size-25 ti-alert"></i></div>
-                <div>
-                  <h4>No hay datos para mostrar</h4>
-                </div>
-              </th>
-            </tr>
-            <tr *ngIf="Cargando">
-              <th colspan="6" class="text-center">
-                <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
-                <h1>CARGANDO</h1>
-              </th>
-            </tr>
-          </thead>
-          <tbody *ngIf="Terceros.length > 0 && !Cargando">
-            <tr *ngFor="let t of Terceros">
-              <td class="custom-cell">{{t.Id_Tercero}}</td>
-              <td class="custom-cell">{{t.Nombre}}</td>
-              <td class="custom-cell">{{t.Departamento}}</td>
-              <td class="custom-cell">{{t.Municipio}}</td>
-              <td class="custom-cell">{{t.Tipo_Tercero}}</td>
-              <td class="custom-cell">{{t.Estado}}</td>
-              <td class="custom-cell">
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button ngbDropdownToggle
-                      class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" type="button"> <i
-                        class="ti-angle-down"></i></button>
-                    <div ngbDropdownMenu>
-                      <a class="dropdown-item waves-light waves-effect" style="cursor:pointer;"
-                        [routerLink]="['/tercerover',t.Id_Tercero]">
-                        <i class="ti-zoom-in text-info"></i>
-                        Detalle
-                      </a>
-                      <a class="dropdown-item waves-light waves-effect" style="cursor:pointer;"
-                        (click)="EditarTercero(t.Id_Tercero)">
-                        <i class="ti-pencil text-warning"></i>
-                        Editar
-                      </a>
-                      <a class="dropdown-item waves-light waves-effect caja-botones accionable"
-                        (confirm)="CambiarEstadoTercero(t.Id_Tercero)"
-                        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este tercero' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                        <i
-                          [ngClass]="{'ti-na text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Inactivo'}"></i>
-                        {{t.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div id="paginacion-container" *ngIf="Terceros.length > 0 && !Cargando">
-          <div class="row">
-            <div class="col-md-3">
-              <p>
-                <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
-                  {{ InformacionPaginacion.total }}</b>
-              </p>
+  <ul class="list-unstyled list-info">
+    <li>
+      <span class="thumb-img pdd-top-10">
+        <!-- <i class=" text-danger font-size-30"></i> -->
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Terceros </b>
+        <p class="no-mrg-btm ">Todos los terceros de nuestro sistema</p>
+        <!-- <i class="ti-reload text-info" title="Actualizar tabla" (click)="ConsultaFiltrada()"
+          style="cursor:pointer;"></i> -->
+      </div>
+    </li>
+  </ul>
+
+  <div class="my-3 ">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-4">
+        <button class="btn btn-info btn-block mrg-top-10 btn-grande text-center" (click)="NuevoTercero()">
+          Nuevo Tercero
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="card-body">
+    <table class="table table-bordered table-sm table-hover custom-table">
+      <thead>
+        <tr>
+          <th class="text-center" style="width:15%">Identificación</th>
+          <th class="text-center">Nombres y Apellidos</th>
+          <th class="text-center" style="width:15%">Departamento</th>
+          <th class="text-center" style="width:25%">Ciudad</th>
+          <th class="text-center" style="width:10%">Tipo Tercero</th>
+          <th class="text-center" style="width:10%;">Acciones</th>
+        </tr>
+        <tr>
+          <th class="text-center">
+            <input type="text" class="form-control" [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()"
+              placeholder="Cedula">
+          </th>
+          <th class="text-center">
+            <input type="text" class="form-control" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()"
+              placeholder="Nombre y/o apellidos">
+          </th>
+          <th class="text-center">
+            <select class="custom-select form-control" [(ngModel)]="Filtros.departamento" (change)="ConsultaFiltrada()">
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
+            </select>
+          </th>
+          <th class="text-center">
+            <select class="custom-select form-control" (change)="GetMunicipiosDepartamento($event.target.value)">
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+            </select>
+
+            <select class="custom-select form-control" [(ngModel)]="Filtros.municipio" (change)="ConsultaFiltrada()">
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
+            </select>
+          </th>
+          <th class="text-center">
+            <select class="custom-select form-control" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
+              <option value="" selected>Seleccione</option>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+            </select>
+          </th>
+          <th class="text-center">
+            <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
+              <option value="" selected>Seleccione</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </th>
+          <th class="text-center"></th>
+        </tr>
+        <tr *ngIf="Terceros.length == 0 && !Cargando">
+          <th colspan="6" class="text-center">
+            <div><i class="text-warning font-size-25 ti-alert"></i></div>
+            <div>
+              <h4>No hay datos para mostrar</h4>
             </div>
-            <div class="col-md-9">
-              <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
-                [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
-              </ngb-pagination>
+          </th>
+        </tr>
+        <tr *ngIf="Cargando">
+          <th colspan="6" class="text-center">
+            <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+            <h1>CARGANDO</h1>
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="Terceros.length > 0 && !Cargando">
+        <tr *ngFor="let t of Terceros" [ngClass]="{'bg-inactive':t .Estado == 'Inactivo'}">
+          <td class="text-center">{{t.Id_Tercero}}</td>
+          <td class="text-center">{{t.Nombre}}</td>
+          <td class="text-center">{{t.Departamento}}</td>
+          <td class="text-center">{{t.Municipio}}</td>
+          <td class="text-center">{{t.Tipo_Tercero}}</td>
+          <td class="text-center">{{t.Estado}}</td>
+          <td class="text-center">
+            <div class="text-center">
+              <!-- <div ngbDropdown class="dropdown-primary"> -->
+              <!-- <button ngbDropdownToggle class="btn btn-xs btn-rounded btn-outline-primary waves-effect waves-light" -->
+              <!-- type="button"> <i class="ti-angle-down"></i></button> -->
+              <!-- <div ngbDropdownMenu> -->
+              <a style="cursor:pointer;" [routerLink]="['/tercerover',t.Id_Tercero]">
+                <i class="ti-search text-info"></i>
+              </a>
+              <a style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
+                <i class="ti-pencil text-warning"></i>
+              </a>
+              <a (confirm)="CambiarEstadoTercero(t.Id_Tercero)"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este tercero' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                <i
+                  [ngClass]="{'ti-trash text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Inactivo'}"></i>
+                {{t.Estado == 'Activo' ? '' : ''}}
+              </a>
+              <!-- </div> -->
+              <!-- </div> -->
             </div>
-          </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="paginacion-container" *ngIf="Terceros.length > 0 && !Cargando">
+      <div class="row">
+        <div class="col-md-3">
+          <p>
+            <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+              {{ InformacionPaginacion.total }}</b>
+          </p>
+        </div>
+        <div class="col-md-9">
+          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+            [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+          </ngb-pagination>
         </div>
       </div>
     </div>
   </div>
+
 </div>
+
 
 <swal #alertSwal title="" text="" type=""></swal>
 

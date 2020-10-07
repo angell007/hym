@@ -28,8 +28,7 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
-  public MonedasSistema: any = [];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -85,7 +84,6 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
-
     this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
       //Total ingresos 
       this.MonedasSistema = data.monedas;
@@ -111,7 +109,7 @@ export class CierrecajaComponent implements OnInit {
 
     if (this.MonedasSistema.length > 0) {
       this.MonedasSistema.forEach((m, i) => {
-        let color = i % 2 == 0 ? '#f0ffff' : '#ffffff';
+        let color = '#ffffff';
         let celda_i = { Nombre_Celda: 'Ingresos', Color: color };
         let celda_e = { Nombre_Celda: 'Egresos', Color: color };
         this.CeldasIngresoEgresoEncabezado.push(celda_i);
@@ -122,14 +120,15 @@ export class CierrecajaComponent implements OnInit {
 
     if (this.Modulos.length > 0) {
 
-
       this.MonedasSistema.forEach((m) => {
 
         this.Modulos.forEach((mod) => {
           let obj = this.Totales[mod];
           let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
 
-          if (this.SumatoriaTotales[m.Nombre]) {
+          if (!this.SumatoriaTotales[m.Nombre]) {
+
+            this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
             this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
             this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
             console.log(this.SumatoriaTotales[m.Nombre], ['ingreso', monObj[0].Ingreso_Total, 'egreso', monObj[1].Egreso_Total]);
@@ -147,20 +146,18 @@ export class CierrecajaComponent implements OnInit {
       this.MonedasSistema.forEach((moneda, i) => {
         let objMoneda = this.SumatoriaTotales[moneda.Nombre];
         let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        let color = i % 2 == 0 ? '#f0ffff' : '#ffffff';
+        let color = '#ffffff';
         let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };
         let obj_total_eg = { Total: objMoneda.Egreso_Total.toFixed(2), Color: color };
         this.MostrarTotal.push(obj_total_ing);
         this.MostrarTotal.push(obj_total_eg);
 
-        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(4));
-        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(4));
+        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
 
         let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
-        this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed());
-
-        console.log('Imprimiendo totales ', this.TotalRestaIngresosEgresos);
+        this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
       });
 
 
@@ -266,7 +263,6 @@ export class CierrecajaComponent implements OnInit {
     }
 
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
-    //let diferencia = this.Diferencias[pos].Diferencia;
 
     let entregar = total_entregar;
     let resta = value - entregar;
@@ -282,9 +278,6 @@ export class CierrecajaComponent implements OnInit {
 
         let obj = this.Totales[modulo];
         let monObj = obj.filter(x => x.Moneda_Id == moneda.Id_Moneda);
-
-        /*let ing = this.SumatoriaTotales[ind];
-        let eg = this.SumatoriaTotales[(ind + 1)];*/
 
         let objResumen = { "Valor": monObj[0].Ingreso_Total, "Moneda": moneda.Id_Moneda, "Tipo": "Ingreso", "Modulo": modulo };
         let objResumen2 = { "Valor": monObj[1].Egreso_Total, "Moneda": moneda.Id_Moneda, "Tipo": "Egreso", "Modulo": modulo };
@@ -359,4 +352,9 @@ export class CierrecajaComponent implements OnInit {
     data.append('id_funcionario', this._generalService.Funcionario.Identificacion_Funcionario);
     this._funcionarioService.LogCierreSesion(data).subscribe();
   }
+
+  isEqual(str1: string, str2: string) {
+    return str1.toUpperCase() === str2.toUpperCase()
+  }
+
 }

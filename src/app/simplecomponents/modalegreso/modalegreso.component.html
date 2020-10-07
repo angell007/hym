@@ -21,8 +21,6 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Tercero</label>
-            <!-- <input type="text" placeholder="Tercero" class="form-control" name="Id_Tercero" 
-                [(ngModel)]="EgresoModel.Id_Tercero" required> -->
             <select id="grupo" class="form-control" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
               <option value="" selected>Seleccione</option>
               <option *ngFor="let t of Terceros" [value]="t.Id_Tercero">{{t.Nombre}}</option>
@@ -33,8 +31,9 @@
           <div class="form-group">
             <label>Moneda</label>
             <select id="moneda" class="form-control" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+              <!-- <option value="{{ coinDefault.Id_Moneda }}" selected>{{ coinDefault.Nombre }}</option> -->
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda" [selected]="EgresoModel.Id_Moneda">{{m.Nombre}}
+              </option>
             </select>
           </div>
         </div>
@@ -42,7 +41,7 @@
           <div class="form-group">
             <label>Valor</label>
             <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" currencyMask
-              [options]="{ thousands: '.' }" [(ngModel)]="EgresoModel.Valor" required>
+              [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required>
           </div>
         </div>
       </div>
@@ -50,7 +49,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label>Observación</label>
-            <textarea class="form-control" placeholder="Observaciones del egreso" name="Detalle"
+            <textarea style="width: 100%;" placeholder="Observaciones del egreso" name="Detalle"
               [(ngModel)]="EgresoModel.Detalle"></textarea>
           </div>
         </div>
@@ -67,3 +66,4 @@
     </div>
   </div>
 </app-modal-basic>
+<swal #alertSwal title="" html="" type="" text=""></swal>

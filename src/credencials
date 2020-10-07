@@ -2563,12 +2563,42 @@ this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el ter
       total: 0
     }
 
-    SetInformacionPaginacion() {
-      var calculoHasta = (this.page * this.pageSize);
-      var desde = calculoHasta - this.pageSize + 1;
-      var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
-  
-      this.InformacionPaginacion['desde'] = desde;
-      this.InformacionPaginacion['hasta'] = hasta;
-      this.InformacionPaginacion['total'] = this.TotalItems;
-    }
+        this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
+
+         <ul class="list-unstyled list-info my-5">
+    <li>
+      <span class="thumb-img pdd-top-10 ">
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Transferencias</b>
+        <p class="no-mrg-btm ">Gestion de Transferencias</p>
+      </div>
+    </li>
+  </ul>
+
+
+Message alert 
+   if (this.Venta) {
+        if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {
+          this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
+          this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2);
+          if (tipo_cambio == 'o') {
+            this.CambioModel.Valor_Destino = '';
+            this.CambioModel.Valor_Origen = '';
+          } else {
+            this.CambioModel.Valor_Origen = '';
+            this.CambioModel.Valor_Destino = '';
+          }
+          return false;
+        } else {
+          console.log("limite venta true");
+          return true;
+        }
+      }
+
+      Modal egreso tiene alertas
+
+        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                    (confirm)="AnulaCambio(cambio.Id_Cambio)">

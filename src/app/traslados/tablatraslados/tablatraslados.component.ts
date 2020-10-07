@@ -257,8 +257,9 @@ export class TablatrasladosComponent implements OnInit {
     this._trasladoService.anularTraslado(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }else{
         this._swalService.ShowMessage(data); 
       }

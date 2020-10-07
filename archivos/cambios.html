@@ -1,0 +1,290 @@
+<div class="card-block">
+  <ul class="list-unstyled list-info">
+    <li>
+      <span class="thumb-img pdd-top-10">
+        <i class="ti-calendar text-primary font-size-30"></i>
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Cambios Efectivo</b>
+        <p class="no-mrg-btm ">{{tituloCambio}}</p>
+      </div>
+    </li>
+  </ul>
+  <div class="mrg-top-10" style="min-height: 470px;">
+    <div class="row justify-content-center h-100" id="cambios1" *ngIf="Cambios1">
+
+      <div class="col-md-4">
+        <button (click)="CambiarVista('Cambio');CambiarVista('Compra');"
+          class="btn btn-info btn-block mrg-top-10 btn-grande">Compra</button>
+      </div>
+      <div class="col-md-4">
+        <button (click)="CambiarVista('Cambio');CambiarVista('Venta')"
+          class="btn btn-success btn-block mrg-top-10 btn-grande">Venta</button>
+      </div>
+
+      <div class="col-md-12">
+
+        <div class="card">
+          <div class="card-block">
+            <div class="tab-success">
+
+              <div class="card-body">
+                <h5>Últimos Cambios Registrados</h5>
+                <table class="table table-striped table-sm table-bordered">
+                  <thead class="rounded">
+                    <tr>
+                      <th class="custom-thead">Hora</th>
+                      <th class="custom-thead">Código</th>
+                      <th class="custom-thead">Tipo</th>
+                      <th class="custom-thead">Recibido</th>
+                      <th class="custom-thead">Entregado</th>
+                      <th class="custom-thead">Tasa</th>
+                      <th class="custom-thead">Acciones</th>
+                    </tr>
+                    <tr>
+                      <th class="table-filters"></th>
+
+                      <th class="table-filters">
+                        <input type="text" class="form-control" placeholder="Filtro codigo"
+                          (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.codigo">
+                      </th>
+
+                      <th class="table-filters">
+                        <select id="grupo" class="form-control" (change)="ConsultaFiltrada()"
+                          [(ngModel)]="Filtros.tipo">
+                          <option value="">Todos</option>
+                          <option value="Compra">Compra</option>
+                          <option value="Venta">Venta</option>
+                        </select>
+                      </th>
+
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+
+
+
+
+                    <tr *ngIf="Cargando">
+                      <td colspan="7" class="text-center">
+                        <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                          <h2>CARGANDO CAMBIOS</h2>
+                          <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr *ngIf="Cambios.length == 0 && !Cargando">
+                      <td colspan="7" class="text-center">
+                        <i class="ti-alert font-size-20 text-warning"></i>
+                        <h4>No hay Cambios para mostrar!</h4>
+                      </td>
+                    </tr>
+
+                  </thead>
+                  <tbody *ngIf="!Cargando">
+                    <tr *ngFor="let cambio of Cambios; let i = index;"
+                      [ngClass]="{'bg-anulada':cambio.Estado == 'Anulado'}">
+                      <td class="text-center" style="font-size: 14px;">{{cambio.Fecha | date:"HH:mm" }}
+                      </td>
+                      <td class="text-center" style="font-size: 14px;">{{cambio.Codigo}}</td>
+                      <td class="text-center" style="font-size: 14px;">{{cambio.Tipo}}</td>
+                      <td class="text-right" style="font-size: 14px;">
+                        {{cambio.Valor_Origen | customcurrency:cambio.Codigo_Moneda_Origen}}
+                      </td>
+                      <td class="text-right" style="font-size: 14px;">
+                        {{cambio.Valor_Destino | customcurrency:cambio.Codigo_Moneda_Destino}}
+                      </td>
+                      <td class="text-right " style="font-size: 14px;">{{cambio.Tasa}}</td>
+
+                      <td class="text-center">
+
+                        <button class="clean-btn-table" type="button" style="margin:0;"
+                          (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
+                          <i class="ti-search text-primary" style="font-size: 14px;"></i>
+                        </button>
+                        <button class="clean-btn-table" type="button" style="margin:0;"
+                          [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                          (confirm)="AnulaCambio(cambio.Id_Cambio)">
+                          <i class="ti-trash text-danger" style="font-size: 14px;"></i>
+                        </button>
+
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="paginacion-container" *ngIf="Cambios.length > 0">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al
+                          {{InformacionPaginacion.hasta}} <b *ngIf="InformacionPaginacion.total">de
+                            {{ InformacionPaginacion.total }}</b></b></p>
+                    </div>
+                    <div class="col-md-8">
+                      <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page"
+                        [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)"
+                        [boundaryLinks]="true"></ngb-pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+        <!-- </div> -->
+
+      </div>
+    </div>
+    <div class="row" id="cambios2" *ngIf="Cambios2" style="margin-top: 50px">
+      <div class="col-md-12">
+        <form #FormMoneda="ngForm">
+          <div class="row">
+
+            <!--ESCOGER MONEDA PARA COMPRA-->
+            <div class="col-md-6">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                {{ !Venta ? 'Moneda que compra' : 'Moneda que recibe'}}
+              </label>
+              <select *ngIf="!Venta" class="form-control" placeholder="Origen" ngModel="" id="Origen" name="Origen"
+                (change)="SetMonedaCambio($event.target.value);" required>
+                <option value=""> Seleccione Moneda</option>
+                <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
+                  ({{ m.Codigo }}) </option>
+              </select>
+              <input *ngIf="Venta" disabled name="Origen" readonly type="text" class="form-control input-font"
+                ngModel="Pesos">
+              <!--<input hidden readonly name="Moneda_Origen" type="text" class="form-control"
+                                            ngModel="{{MonedaOrigen}}">-->
+            </div>
+
+            <!--ESCOGER MONEDA PARA VENTA-->
+            <div class="col-md-6">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
+              </label>
+              <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino" name="Destino"
+                ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);" required>
+                <option value=""> Seleccione Moneda</option>
+                <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
+                  ({{ m.Codigo }}) </option>
+              </select>
+              <input *ngIf="!Venta" disabled name="Moneda_Destino" readonly type="text" class="form-control input-font"
+                ngModel="{{MonedaDestino}}">
+              <!--<input hidden name="Tipo" readonly type="text" class="form-control"
+                                            ngModel="{{Tipo}}">-->
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="col-md-4" *ngIf="!Venta">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                Compra
+              </label>
+              <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
+                class="form-control text-right input-font" name="Valor_Origen" id="Cambia"
+                [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" currencyMask
+                [options]="{ thousands: '.', decimal: ',' }" [disabled]="HabilitarCampos" required>
+            </div>
+
+            <div class="col-md-4" *ngIf="Venta">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
+              <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control input-font"
+                autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" currencyMask
+                [options]="{ thousands: '.' }" (ngModelChange)="conversionMoneda('d', 'l')" [disabled]="HabilitarCampos"
+                required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
+                Cambio</label>
+              <input type="text" placeholder="Tasa" class="form-control input-font" autocomplete="false"
+                id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa" (blur)="conversionMoneda('o', 'e')"
+                [disabled]="HabilitarCampos" required>
+              <!--<input *ngIf="!Venta" type="text" placeholder="Cambio" class="form-control" autocomplete="false"
+                                            id="Precio_Sugerido" name="Tasa" [(ngModel)]="tasaCambiaria" (blur)="conversionMoneda()" [disabled]="HabilitarCampos">-->
+            </div>
+
+            <div class="col-md-4" *ngIf="!Venta">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
+              <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control input-font"
+                autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" [disabled]="HabilitarCampos"
+                currencyMask [options]="{ thousands: '.', decimal: ',' }" (ngModelChange)="conversionMoneda('d', 'l')"
+                required>
+            </div>
+
+            <div class="col-md-4" *ngIf="Venta">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
+              <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
+                class="form-control text-right input-font" name="Valor_Origen" id="Cambia"
+                [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" currencyMask
+                [options]="{ thousands: '.', decimal: ',' }" [disabled]="HabilitarCampos" required>
+            </div>
+          </div>
+          <hr *ngIf="Venta">
+          <div class="row">
+
+            <div *ngIf="Venta" class="col-md-6">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
+                Con</label>
+              <input id="pagocon" type="text" placeholder="Paga con" class="form-control input-font" currencyMask
+                [options]="{ thousands: '.', decimal: ',' }" name="Recibido" (blur)="ObtenerVueltos()"
+                [(ngModel)]="CambioModel.Recibido"
+                [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required>
+            </div>
+
+
+            <div *ngIf="Venta" class="col-md-6">
+              <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
+              <input readonly type="text" placeholder="Vueltos" class="form-control input-font" currencyMask
+                [options]="{ thousands: '.' }" name="Vueltos" [(ngModel)]="CambioModel.Vueltos" required>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-10" style="margin-top: 50px">
+        <button id="BotonEnviar" [disabled]="!FormMoneda.valid"
+          [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este cambio ', type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+          class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+          (confirm)="guardarCambio(FormMoneda,'compra')">Realizar Cambio</button>
+
+        <!--<button *ngIf="Venta === true" id="BotonEnviar" disabled [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta venta' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                                class="{{ Venta === false ? 'btn btn-info btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+                                (confirm)="guardarCambio(FormMoneda,'venta')">{{TextoBoton}}</button>-->
+      </div>
+      <div class="col-md-2" style="margin-top: 50px">
+        <button (click)="volverCambioEfectivo()"
+          class="{{ Venta === false ? 'btn btn-danger btn-block mrg-top-10' : 'btn btn-danger btn-block mrg-top-10' }}">
+          Volver
+        </button>
+      </div>
+
+      <div class="col-md-12">
+        <hr>
+        <h4>Información Tasas de cambio<span *ngIf="NombreMonedaTasaCambio != ''">({{NombreMonedaTasaCambio}})</span>
+        </h4>
+        <table class="table table-hover table-sm table-striped text-center">
+          <thead>
+            <tr>
+              <th>Máximo </th>
+              <th>Mínimo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- TODO Cambiar formato de presentacion de tasas  -->
+            <tr style="font-weight: bold;">
+              <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Max_Venta_Efectivo | currency: ' '}}</td>
+              <td *ngIf="Venta">$ {{MonedaParaCambio.Valores.Min_Venta_Efectivo | currency: ' '}}</td>
+              <td *ngIf="!Venta">$ {{MonedaParaCambio.Valores.Max_Compra_Efectivo | currency: ' '}}</td>
+              <td *ngIf="!Venta">$ {{MonedaParaCambio.Valores.Min_Compra_Efectivo | currency: ' '}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

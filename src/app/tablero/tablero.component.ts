@@ -35,12 +35,13 @@ export class TableroComponent implements OnInit {
       var vari: any;
       switch (data.Id_Perfil) {
         //administrador
-        case '1':           
+        case '1':
           vari = TablerocajeroprincipalComponent;
           break;
         //cajeroprincipal
         case '2':
-          vari = TablerocajeroprincipalComponent;
+          vari = TablerocajeroComponent;
+          // vari = TablerocajeroprincipalComponent;
           break;
         //cajero
         case '3':
@@ -60,7 +61,7 @@ export class TableroComponent implements OnInit {
           vari = TablerocajeroprincipalComponent;
           break;
       }
-      
+
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(vari);
       let viewContainerRef = this.tableroDinamico.viewContainerRef;
       viewContainerRef.clear();

@@ -17,16 +17,15 @@ import { GeneralService } from '../shared/services/general/general.service';
 import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
 import { QzTrayService } from '../shared/qz-tray.service';
 import { tap } from 'rxjs/operators';
-import { async } from '@angular/core/testing';
-import { TablerocajeroComponent } from '../tableros/tablerocajero/tablerocajero.component';
-import { ComponentFactoryResolver, Input } from '@angular/core';
-
+import { NotificacionsService } from '../customservices/notificacions.service';
+import { ConsolidadosService } from '../customservices/consolidados.service';
+import { TrasladosCustomService } from '../customservices/traslados.custom.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers: [QzTrayService]
+    providers: [QzTrayService, NotificacionsService, ConsolidadosService, TrasladosCustomService]
 
 })
 
@@ -104,6 +103,8 @@ export class CommonLayoutComponent implements OnInit {
     egresoGiro: any = 0;
     egresoTraslado: any = 0;
 
+    public counter = '0';
+
     //VARIABLES NUEVA
     public Oficinas: any = [];
     public Cajas: any = [];
@@ -160,17 +161,6 @@ export class CommonLayoutComponent implements OnInit {
 
     public NombreCaja: string = '';
     public NombreOficina: string = '';
-    public SumatoriaTotales: any = [];
-    public Totales: any = [];
-    public TotalRestaIngresosEgresos = [];
-    public TotalesIngresosMonedas: any = [];
-    public TotalesEgresosMonedas: any = [];
-    public TrasladosRecibidos: any = [];
-    public TotalTraslados: number;
-    TablerocajeroComponent: any;
-
-    //#endregion
-
 
     constructor(private router: Router,
         private activeRoute: ActivatedRoute,
@@ -181,16 +171,19 @@ export class CommonLayoutComponent implements OnInit {
         private toastyConfig: ToastyConfig,
         private cajaService: CajaService,
         private swalService: SwalService,
+        private _notificacionService: NotificacionsService,
         private trasladoCajaService: TrasladocajaService,
         private toastService: ToastService,
+        private trasladosCustomService: TrasladosCustomService,
         private _oficinaService: OficinaService,
         private _cajaService: CajaService,
         private _aperturaCajaService: AperturacajaService,
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
-        private componentFactoryResolver: ComponentFactoryResolver
+        private consolidadosService: ConsolidadosService) {
+        this._notificacionService.counter();
+        this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 
-    ) {
 
         this.app = {
             layout: {
@@ -232,6 +225,7 @@ export class CommonLayoutComponent implements OnInit {
         if (!localStorage.getItem('Volver_Apertura')) {
             localStorage.setItem("Volver_Apertura", "Si");
         }
+
     }
 
     startTimer() {
@@ -244,7 +238,8 @@ export class CommonLayoutComponent implements OnInit {
     OcultarConsultor = false;
     ListaBancos = [];
     nombreBanco = "";
-    ngOnInit() {
+
+    async ngOnInit() {
         this.swalService.event.subscribe((data: any) => {
             this.ShowSwal(data.type, data.title, data.msg);
         });
@@ -275,64 +270,8 @@ export class CommonLayoutComponent implements OnInit {
 
 
                 this.OcultarCajero = true;
-
-                this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe(
-                    tap(x => x))
-                    .subscribe(async (data: any) => {
-                        this.MonedasSistema = await data.monedas;
-                        let t = await data.totales_ingresos_egresos;
-                        for (const k in t) {
-                            let arr = await t[k];
-                            this.Totales[k] = await arr;
-                        }
-
-                        setTimeout(() => {
-                            this.MonedasSistema.forEach((m) => {
-                                this.Modulos.forEach((mod) => {
-                                    // console.log('Revisando llegada', mod)
-                                    let obj = this.Totales[mod];
-                                    let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
-
-                                    if (this.SumatoriaTotales[m.Nombre]) {
-                                        // console.log('Revisando if', parseFloat(monObj[0].Ingreso_Total))
-
-                                        this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-                                        this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-                                    } else {
-                                        this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
-                                        this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-                                        this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-                                        // console.log('Revisando el', parseFloat(monObj[0].Ingreso_Total))
-                                    }
-
-                                });
-                            });
-
-                            this.MonedasSistema.forEach((moneda, i) => {
-                                let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-                                let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-
-                                console.log('Quien es i ', i)
-                                console.log('Revisando el monto inicial ', this.ValoresMonedasApertura.Valor_Moneda_Apertura)
-                                console.log('Revisando el ingreso ', this.TotalesIngresosMonedas)
-                                console.log('Revisando el egreso ', this.TotalesEgresosMonedas)
-
-                                this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(4));
-                                this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(4));
-
-                                let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
-                                console.log('Revisando suma ', suma_inicial_ingreso)
-
-                                this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed());
-                                console.log('Revisando el Total ', suma_inicial_ingreso - objMoneda.Egreso_Total)
-
-                                console.log('Imprimiendo totales ', this.TotalRestaIngresosEgresos);
-                            });
-                        }, 3000);
-
-                    })
-
-
+                // await this.consolidadosService.getValoresIniciales()
+                // await this.consolidadosService.getValoresApertura()
                 break;
             }
             // consultor
@@ -353,87 +292,38 @@ export class CommonLayoutComponent implements OnInit {
             }
         }
 
-        setTimeout(() => {
-            localStorage.setItem('Perfil', this.user.Id_Perfil);
+        localStorage.setItem('Perfil', this.user.Id_Perfil);
 
-            //if (this.user.Id_Perfil == 2) {
-            // if (this.oficina_seleccionada == '') {
-            //     this.modalOficinaCaja.show();                    
-            // }else{                    
-            //     this.ListarCajas(this.oficina_seleccionada);
-            //     this.SetNombreOficina(this.oficina_seleccionada);
-            // }
 
-            // if (this.caja_seleccionada == '') {
-            //     this.modalOficinaCaja.show();
-            // }else{
-            //     this.SetNombreCaja(this.caja_seleccionada);
-            // }
-            //}
+        this.CheckCajaOficina();
 
-            this.CheckCajaOficina();
+        this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+            this.alertas = data;
+        });
 
-            this.http.get(this.globales.ruta + 'php/sesion/alerta.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                this.alertas = data;
+        this.startTimer();
+
+        if (localStorage['Banco']) {
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
             });
 
-            if (this.user.Password == this.user.Username) {
-                //this.ModalCambiarContrasena.show();
-            }
-
-            this.startTimer();
-
-            this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                this.alertasCajas = data;
-                if (this.alertasCajas.length > 0) {
-                    this.contadorTraslado = this.alertasCajas.length;
-                } else {
-                    this.contadorTraslado = 0;
-                }
-
+            this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
+                params: { id: JSON.parse(localStorage['Banco']) }
+            }).subscribe((data: any) => {
+                this.Movimientos = data.lista;
             });
 
-            /*setInterval(() => {
-                this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                    this.alertasCajas = data;
-                    if (this.alertasCajas.length > 0) {
-                        this.contadorTraslado = this.alertasCajas.length;
-                    } else {
-                        this.contadorTraslado = 0;
-                    }
-        
-                });
-            }, 30000);*/
-
-            /*this.http.get(this.globales.ruta + 'php/consultor/lista_bancos.php').subscribe((data: any) => {
-                this.ListaBancos = data;
-            });*/
-
-            /*setInterval(() => {
-                this.cerrarCaja()
-            }, 30000);*/
-
-            if (localStorage['Banco']) {
-                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                    params: { id: JSON.parse(localStorage['Banco']) }
-                }).subscribe((data: any) => {
-                    this.Movimientos = data.lista;
-                });
-
-                this.http.get(this.globales.ruta + 'php/movimientos/movimiento_cuenta_bancaria.php', {
-                    params: { id: JSON.parse(localStorage['Banco']) }
-                }).subscribe((data: any) => {
-                    this.Movimientos = data.lista;
-                });
-
-                this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
-                    this.nombreBanco = data.Nombre_Titular;
-                });
-            }
-        }, 1200);
-
+            this.http.get(this.globales.ruta + '/php/genericos/detalle.php', { params: { id: JSON.parse(localStorage['Banco']), modulo: "Cuenta_Bancaria" } }).subscribe((data: any) => {
+                this.nombreBanco = data.Nombre_Titular;
+            });
+        }
 
     }
+
+
 
     salir() {
 
@@ -477,10 +367,6 @@ export class CommonLayoutComponent implements OnInit {
         return true;
     }
 
-    ngAfterViewInit() {
-    }
-
-
 
     CambiarContrasena(formulario: NgForm, modal) {
         let datos = new FormData();
@@ -496,15 +382,19 @@ export class CommonLayoutComponent implements OnInit {
 
 
     muestra_tabla(id) {
-        console.log('mostrando', id);
+
+        this.trasladosCustomService.CargarDatosTraslados();
+
         var tot = document.getElementsByClassName('modulos').length;
         for (let i = 0; i < tot; i++) {
             var id2 = document.getElementsByClassName('modulos').item(i).getAttribute("id");
             document.getElementById(id2).style.display = 'none';
         }
-        document.getElementById(id).style.display = 'block';
-    }
 
+        document.getElementById(id).style.display = 'block';
+
+
+    }
 
     totalIngresosPesos = 0;
     totalIngresosBolivares = 0;
@@ -1059,7 +949,6 @@ export class CommonLayoutComponent implements OnInit {
         this.modalOficinaCaja.hide();
         this._aperturaCajaService.OpenModalApertura(null);
         /*}else{
-    
             this.ShowSwal(data.codigo, data.titulo, data.mensaje);
             localStorage.setItem("Oficina", '');        
             localStorage.setItem("Caja", '');
@@ -1145,18 +1034,7 @@ export class CommonLayoutComponent implements OnInit {
                 this.swalService.ShowMessage(data);
             } else {
 
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
-            }
-        });
-    }
-
-    Verconsolidado() {
-        this.trasladoCajaService.getTrasladosPendientes(this.user.Identificacion_Funcionario).subscribe((data: any) => {
-            if (data.codigo != 'success') {
-                this.swalService.ShowMessage(data);
-            } else {
-
-                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario, false, '']);
+                this.router.navigate(['/cierrecaja', this.user.Identificacion_Funcionario]);
             }
         });
     }

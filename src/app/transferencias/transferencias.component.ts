@@ -82,36 +82,26 @@ export class TransferenciasComponent implements OnInit {
 
   GetDetalleTransferencia(id){
     this.tService.getDetalleTransferencia(id).subscribe((data:any)=> {
-      console.log(data);
-      
       if (data.transferencia != '') {
         this.DetalleTransferencia = data.transferencia;
-       
         this.Destinatarios = data.transferencia.Destinatarios;
-
         if (data.transferencia.Pagos != '') {
-          this.DatosPago = data.transferencia.Pagos; 
-          //this.CuentasPagadas =  data.transferencia.Pagos.Cuentas_Pagadas;
-          
+          this.DatosPago = data.transferencia.Pagos;           
           this.ShowDatosPago = true;
         }else{
-
           this.DatosPago = {};
           this.CuentasPagadas = [];
           this.ShowDatosPago = false;
         }
-
         if (data.transferencia.Datos_Devolucion != '') {
           this.DatosDevolucion = data.transferencia.Datos_Devolucion;  
           this.ShowDatosDevolucion = true;
         }else{
-
           this.DatosDevolucion = {Fecha:'',Motivo_Devolucion:''};
           this.ShowDatosDevolucion = false;
         }        
         console.log(this.ShowDatosPago);
         console.log(this.ShowDatosDevolucion);
-        
         this.ModalVerTransferencia.show();
       }else{
 

@@ -1,0 +1,211 @@
+<div class="card-block">
+    <ul class="list-unstyled list-info">
+      <li>
+        <span class="thumb-img pdd-top-10">
+          <i class="ti-control-shuffle text-primary font-size-30"></i>
+        </span>
+        <div class="info">
+          <b class="text-dark font-size-22">Servicios Externos</b>
+          <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+        </div>
+      </li>
+    </ul>
+    <div class="mrg-top-10" style="min-height: 470px;">
+      <div class="row d-flex justify-content-center" id="Servicios1" *ngIf="Servicio1">
+        <div class="col-md-4">
+          <button (click)="CambiarVista('Servicio')"
+            class="btn btn-danger btn-block mrg-top-10 btn-grande">Nuevo
+            Servicio</button>
+        </div>
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-block">
+              <div class="tab-success">
+                <h5>Últimos Traslados Recibidos</h5>
+                <table class="table table-striped table-sm table-bordered">
+                  <thead class="rounded">
+                    <tr>
+                      <th class="custom-thead">Hora</th>
+                      <th class="custom-thead">Código</th>
+                      <th class="custom-thead">Servicio</th>
+                      <th class="custom-thead">Valor</th>
+                      <th class="custom-thead">Comision</th>
+                      <th class="custom-thead">Total</th>
+                      <th class="custom-thead"></th>
+                    </tr>
+                    <tr>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+                      <th class="table-filters"></th>
+
+                    <tr *ngIf="Cargando">
+                      <td colspan="8" class="text-center">
+                        <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                          <h2>CARGANDO SERVICIOS EXTERNOS</h2>
+                          <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="Servicios.length == 0 ">
+                      <td colspan="7" class="text-center">
+                        <i class="ti-alert font-size-20 text-warning"></i>
+                        <h4>No hay Traslados para mostrar!</h4>
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let Servicio of Servicios; let i = index;"
+                      class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                      <td class="text-center">{{Servicio.Fecha | date:"HH:mm" }}</td>
+                      <td class="text-center">{{Servicio.Codigo}}</td>
+                      <td class="text-center">{{Servicio.Nombre_Servicio_Externo }}</td>
+                      <td class="text-center">{{Servicio.Valor | customcurrency}}</td>
+                      <td class="text-center">{{Servicio.Comision | customcurrency }}</td>
+                      <td class="text-center">{{Servicio.Total | customcurrency }}</td>
+
+                      <td class="text-center">
+                        <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                          type="button" style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                          <i class="ti-pencil"></i>
+                        </button>
+                        <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="paginacion-container" *ngIf="Traslados.length > 0">
+            <div class="row">
+              <div class="col-md-4">
+                <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al
+                    {{InformacionPaginacion.hasta}} <b *ngIf="InformacionPaginacion.total">de
+                      {{ InformacionPaginacion.total }}</b></b></p>
+              </div>
+              <div class="col-md-8">
+                <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page"
+                  [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)"
+                  [boundaryLinks]="true"></ngb-pagination>
+              </div>
+            </div>
+          </div>
+
+          <!-- <h5>Últimos Servicios Registrados</h5> -->
+          <!-- <div class="table-responsive">
+            <table class="table tabla-cajero">
+              <thead>
+                <tr>
+                  <th style="width:60px;">Hora</th>
+                  <th>Código</th>
+                  <th>Servicio</th>
+                  <th>Valor</th>
+                  <th>Comision</th>
+                  <th>Total</th>
+                  <th style="width:160px;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Servicio of Servicios"
+                  class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                  <td>{{Servicio.Fecha | date:"HH:mm" }}</td>
+                  <td>{{Servicio.Codigo}}</td>
+                  <td>{{Servicio.Nombre_Servicio_Externo }}</td>
+                  <td>{{Servicio.Valor | customcurrency}}</td>
+                  <td>{{Servicio.Comision | customcurrency }}</td>
+                  <td>{{Servicio.Total | customcurrency }}</td>
+
+                  <td class="text-center">
+
+                    <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs" type="button"
+                      style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                      <i class="ti-pencil"></i>
+                    </button>
+                    <label *ngIf="!esconderAnular(Servicio.Estado)">Anulado</label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="row" id="Servicios2" *ngIf="Servicio2" style="margin-top: 10px">
+        <div class="col-md-12">
+
+          <!--<div class="mrg-top-30" style="min-height: 470px;">-->
+          <div class="mrg-top-30">
+            <form #FormServicio="ngForm">
+              <h4>Datos del servicio</h4>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Servicio</label>
+                    <select name="Servicio_Externo" class="form-control"
+                      [(ngModel)]="ServicioExternoModel.Servicio_Externo">
+                      <option value="">Seleccione un Servicio</option>
+                      <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
+                        {{se.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Valor</label>
+                    <input type="text" class="form-control text-right" name="Valor"
+                      [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
+                      (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
+                      [options]="{ thousands: '.' }">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label>Comisión</label>
+                    <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                      [(ngModel)]="ServicioExternoModel.Comision" currencyMask
+                      [options]="{ thousands: '.', decimal: ',' }" [disabled]="ServicioExternoModel.Valor == ''"
+                      (blur)="AprobarCambioComision()">
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="block-element">Total</label>
+                    <input name="Total" type="text" placeholder="Total" class="form-control"
+                      [(ngModel)]="Total_Servicio" disabled currencyMask
+                      [options]="{ thousands: '.', decimal: ',' }">
+                    <!-- <label>{{Total_Servicio | customcurrency}}</label> -->
+                  </div>
+                </div>
+              </div>
+              <div class="row mrg-top-20">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea placeholder="Observaciones" class="form-control" name="Detalle"
+                      [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+
+          <div class="row mrg-top-5">
+            <div class="col-md-10">
+              <button type="button"
+                [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)"
+                class="btn btn-primary btn-sm btn-block">Crear Servicio</button>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-danger btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

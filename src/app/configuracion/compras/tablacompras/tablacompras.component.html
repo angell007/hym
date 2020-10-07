@@ -9,21 +9,22 @@
           <th class="text-center custom-thead">Tipo Cuenta</th>
           <th class="text-center custom-thead">Valor</th>
         </tr>
-        <tr *ngIf="Id_Moneda == ''">
+        <tr *ngIf="ComprasPendientes.length == 0 || Id_Moneda == '' ">
           <th colspan="5" class="text-center">
             <div><i class="text-warning font-size-20 ti-alert"></i></div>
-            <div><h4>No hay datos para mostrar</h4></div>
+            <div>
+              <h4>No hay datos para mostrar</h4>
+            </div>
           </th>
         </tr>
       </thead>
-      <tbody *ngIf="Id_Moneda != ''">
-        <tr *ngFor="let cp of ComprasPendientes; let i = index" 
-          (click)="SeleccionarCompra(cp.Seleccionado, cp.Id_Compra_Cuenta, i)" 
-          [ngClass]="{'bg-selected': cp.Seleccionado == 1}"
-          style="cursor:pointer;">
+      <tbody *ngIf="Id_Moneda != '' ||  ComprasPendientes.length != 0 ">
+        <tr *ngFor="let cp of ComprasPendientes; let i = index"
+          (click)="SeleccionarCompra(cp.Seleccionado, cp.Id_Compra_Cuenta, i)"
+          [ngClass]="{'bg-selected': cp.Seleccionado == 1}" style="cursor:pointer;">
           <td class="custom-cell">{{cp.Nombre_Titular}}</td>
           <td class="custom-cell">{{cp.Banco}}</td>
-          <td class="custom-cell text-right">{{cp.Numero_Cuenta}}</td>
+          <td class="custom-cell text-right">{{cp.Numero_Cuenta | mask: '0000.0000.0000.0000'}}</td>
           <td class="custom-cell">{{cp.Tipo_Cuenta}}</td>
           <td class="custom-cell text-right">{{cp.Valor | customcurrency:CodigoMoneda}}</td>
         </tr>

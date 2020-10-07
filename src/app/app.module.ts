@@ -25,6 +25,7 @@ import { registerLocaleData, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
 import { QzTrayService } from './shared/qz-tray.service';
+import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
 
 registerLocaleData(localeES);
 
@@ -89,6 +90,8 @@ import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
 import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
 import { WebnavigationService } from './shared/services/navegacionweb/webnavigation.service';
+// import { Actualizar } 
+// from './shared/services/navegacionweb/webnavigation.service';
 
 
 //MODALES
@@ -250,6 +253,10 @@ import { TableroagenteexternoComponent } from './tableros/tableroagenteexterno/t
 import { DetallemovimientoscuentagerenteComponent } from './configuracion/cuentasbancarias/detallemovimientoscuentagerente/detallemovimientoscuentagerente.component';
 import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component';
 import { TablatasladoscajaComponent } from './trasladoscaja/tablatasladoscaja/tablatasladoscaja.component';
+import { HourPipe } from './hour.pipe';
+import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
+import { TesCustomServiceService } from './tes-custom-service.service';
+import { ActualizarService } from './customservices/actualizar.service';
  
 // TODO  Funcion para dar formato a moneda
 export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -295,8 +302,9 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         NgxCurrencyModule,
         MDBBootstrapModule.forRoot(),
         MyDateRangePickerModule,
-        SelectModule
+        SelectModule,
         //NgxSpinnerModule
+        NgxPaginationModule
     ],
     schemas: [ NO_ERRORS_SCHEMA ],
     declarations: [
@@ -455,18 +463,20 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         TableroagenteexternoComponent,
         DetallemovimientoscuentagerenteComponent,
         TrasladoscajaComponent,
-        TablatasladoscajaComponent
+        TablatasladoscajaComponent,
+        HourPipe,
+        ConsolidadoComponent
     ],
     exports:[
         ModalBasicComponent
     ],
     providers: [
+        ActualizarService,
         QzTrayService,
         CambioService,
         CompraService,
         ProveedorService,
         CajaService,
-        TransferenciaService,
         FuncionarioService,
         GiroService,
         GrupoterceroService,
@@ -517,7 +527,11 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         PerfilService,
         ConfiguracionService,
         SafePipe,
-        WebnavigationService
+        WebnavigationService,
+        // TransferenciasconsultorService,
+        TransferenciaService,
+        TesCustomServiceService
+
     ],
     bootstrap: [AppComponent],
     entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]

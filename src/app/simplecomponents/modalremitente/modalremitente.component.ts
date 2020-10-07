@@ -14,94 +14,93 @@ import { AccionModalRemitente } from '../../shared/Enums/AccionModalRemitente';
 })
 export class ModalremitenteComponent implements OnInit, OnDestroy {
 
-  @Input() AbrirModalEvent:Observable<any>;
+  @Input() AbrirModalEvent: Observable<any>;
 
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  @Output() IncluirRemitenteEnGiro:EventEmitter<any> = new EventEmitter();
-  @Output() CargarDatosRemitente:EventEmitter<object> = new EventEmitter();
-  @Output() CargarDatosRemitenteTransferencia:EventEmitter<object> = new EventEmitter();
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
+  @Output() IncluirRemitenteEnGiro: EventEmitter<any> = new EventEmitter();
+  @Output() CargarDatosRemitente: EventEmitter<object> = new EventEmitter();
+  @Output() CargarDatosRemitenteTransferencia: EventEmitter<object> = new EventEmitter();
 
-  @ViewChild('ModalRemitente') ModalRemitente:any;
+  @ViewChild('ModalRemitente') ModalRemitente: any;
 
   private suscripcion: any;
-  private tipo_persona:string = '';
-  public Editar:boolean = false;
-  public accion:string = 'crear';
-  public MensajeGuardar:string = 'Se dispone a guardar esta caja recaudo';
+  private tipo_persona: string = '';
+  public Editar: boolean = false;
+  public accion: string = 'crear';
+  public MensajeGuardar: string = 'Se dispone a guardar esta caja recaudo';
 
-  public RemitenteModel:RemitenteModel = new RemitenteModel();
+  public RemitenteModel: RemitenteModel = new RemitenteModel();
 
-  constructor(private _swalService:SwalService, 
-              private _remitenteService:RemitenteService,
-              private _toastService:ToastService,
-              private _generalService:GeneralService) 
-  { }
+  constructor(private _swalService: SwalService,
+    private _remitenteService: RemitenteService,
+    private _toastService: ToastService,
+    private _generalService: GeneralService) { }
 
   ngOnInit() {
-    this.suscripcion = this.AbrirModalEvent.subscribe((data:any) => {
+    this.suscripcion = this.AbrirModalEvent.subscribe((data: any) => {
       this.accion = data.accion;
       console.log(data);
-      
+
 
       if (data.id_remitente != "0" && data.accion == 'editar') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
-        let p = {id_remitente:data.id_remitente};
-        this._remitenteService.getRemitente(p).subscribe((d:any) => {
+        let p = { id_remitente: data.id_remitente };
+        this._remitenteService.getRemitente(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
-            this.ModalRemitente.show();  
-          }else{
+            this.ModalRemitente.show();
+          } else {
 
             this._swalService.ShowMessage(data);
           }
-          
+
         });
-      }else if (data.id_remitente != "0" && data.accion == 'editar desde giro') {
+      } else if (data.id_remitente != "0" && data.accion == 'editar desde giro') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
         this.tipo_persona = data.tipo;
-        let p = {id_remitente:data.id_remitente};
-        this._remitenteService.getRemitente(p).subscribe((d:any) => {
+        let p = { id_remitente: data.id_remitente };
+        this._remitenteService.getRemitente(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
-            this.ModalRemitente.show();  
-          }else{
+            this.ModalRemitente.show();
+          } else {
 
             this._swalService.ShowMessage(data);
           }
-          
+
         });
-      }else if (data.id_remitente != "0" && data.accion == 'editar desde transferencia') {
+      } else if (data.id_remitente != "0" && data.accion == 'editar desde transferencia') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
         //this.tipo_persona = data.tipo;
-        let p = {id_remitente:data.id_remitente};
-        this._remitenteService.getRemitente(p).subscribe((d:any) => {
+        let p = { id_remitente: data.id_remitente };
+        this._remitenteService.getRemitente(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
-            this.ModalRemitente.show();  
-          }else{
+            this.ModalRemitente.show();
+          } else {
 
             this._swalService.ShowMessage(data);
           }
-          
+
         });
-      }else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
+      } else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
         this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
         this.ModalRemitente.show();
 
-      }else if (data.id_remitente != "0" && data.accion == 'crear desde transferencia') {
+      } else if (data.id_remitente != "0" && data.accion == 'crear desde transferencia') {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
         //this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
         this.ModalRemitente.show();
 
-      }else{
+      } else {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
         this.ModalRemitente.show();
@@ -127,8 +126,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   //   });
   // }
 
-  GuardarRemitente(){
-    if(!this.ValidateModelBeforeSubmit()){
+  GuardarRemitente() {
+    if (!this.ValidateModelBeforeSubmit()) {
       return;
     }
 
@@ -138,77 +137,82 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
     if (this.Editar) {
       this._remitenteService.editRemitente(datos)
-      .catch(error => { 
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          switch (this.accion) {
-            case 'editar':
-              this.ActualizarTabla.emit();
-              break;
-  
-            case 'editar desde giro':
-              let rem = {tipo:this.tipo_persona, model:this.RemitenteModel};
-              this.CargarDatosRemitente.emit(rem);
-              break;
+        .catch(error => {
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            switch (this.accion) {
+              case 'editar':
+                this.ActualizarTabla.emit();
+                break;
 
-            case AccionModalRemitente.Editar_Transferencia:
-            console.log("entro editar switch");
-            
-              let remitente = {model:this.RemitenteModel};              
-              this.CargarDatosRemitenteTransferencia.emit(remitente);
-              break;
-          
-            default:
-              break;
+              case 'editar desde giro':
+                let rem = { tipo: this.tipo_persona, model: this.RemitenteModel };
+                this.CargarDatosRemitente.emit(rem);
+                break;
+
+              case AccionModalRemitente.Editar_Transferencia:
+                console.log("entro editar switch");
+
+                let remitente = { model: this.RemitenteModel };
+                this.CargarDatosRemitenteTransferencia.emit(remitente);
+                break;
+
+              default:
+                break;
+            }
+
+
+            this._swalService.ShowMessage(['success', data.titulo, data.mensaje]);
+
+
+            // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+            // this._toastService.ShowToast(toastObj);
+            this.CerrarModal();
+          } else {
+            this._swalService.ShowMessage(data);
           }
-          
-          
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-          this.CerrarModal();
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }else{
+        });
+    } else {
       this._remitenteService.saveRemitente(datos)
-      .catch(error => { 
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any) => {
-        if (data.codigo == 'success') {
-          switch (this.accion) {
-            case 'crear':
-              this.ActualizarTabla.emit();
-              break;
-  
-            case 'crear desde giro':
-              let objRespuesta = {tipo:this.tipo_persona, model:this.RemitenteModel};
-              this.IncluirRemitenteEnGiro.emit(objRespuesta);
-              break;
+        .catch(error => {
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            switch (this.accion) {
+              case 'crear':
+                this.ActualizarTabla.emit();
+                break;
 
-            case AccionModalRemitente.Crear_Transferencia:
-            console.log("entro crear switch");
-              let remitente = {model:this.RemitenteModel};
-              this.CargarDatosRemitenteTransferencia.emit(remitente);
-              break;
-          
-            default:
-              break;
-          }          
-          
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-          this.CerrarModal();
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    } 
+              case 'crear desde giro':
+                let objRespuesta = { tipo: this.tipo_persona, model: this.RemitenteModel };
+                this.IncluirRemitenteEnGiro.emit(objRespuesta);
+                break;
+
+              case AccionModalRemitente.Crear_Transferencia:
+                console.log("entro crear switch");
+                let remitente = { model: this.RemitenteModel };
+                this.CargarDatosRemitenteTransferencia.emit(remitente);
+                break;
+
+              default:
+                break;
+            }
+
+            this._swalService.ShowMessage(['success', data.titulo, data.mensaje]);
+
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
+            this.CerrarModal();
+          } else {
+            this._swalService.ShowMessage(data);
+          }
+        });
+    }
 
     // this._remitenteService.editRemitente(datos).subscribe((data: any) => {
     //   if (data.codigo == 'success') {
@@ -221,7 +225,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
     // });
   }
 
-  ValidateModelBeforeSubmit(){
+  ValidateModelBeforeSubmit() {
     if (this.RemitenteModel.Id_Transferencia_Remitente == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'El número de documento no puede estar vacio']);
       return false;
@@ -240,7 +244,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.RemitenteModel = new RemitenteModel();
     this.ModalRemitente.hide();
   };

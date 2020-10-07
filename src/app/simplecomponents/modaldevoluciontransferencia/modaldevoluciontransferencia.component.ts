@@ -6,6 +6,7 @@ import { DevolucionTransferenciaModel } from '../../Modelos/DevolucionTransferen
 import { TransferenciaService } from '../../shared/services/transferencia/transferencia.service';
 import { SwalService } from '../../shared/services/swal/swal.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
+import { ActualizarService } from '../../customservices/actualizar.service';
 
 @Component({
   selector: 'app-modaldevoluciontransferencia',
@@ -30,7 +31,8 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
   constructor(private _generalService:GeneralService,
               private _transferenciaService:TransferenciaService,
               private _swalService:SwalService,
-              private _toastService:ToastService) 
+              private _toastService:ToastService,
+              private _actualizar: ActualizarService) 
   { 
   }
 
@@ -80,6 +82,7 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
         let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
         this._toastService.ShowToast(toastObj);
         this.CerrarModal();
+        this._actualizar.cardListing.next()
         this.RecargarPagos.emit();
       }else{
         let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};

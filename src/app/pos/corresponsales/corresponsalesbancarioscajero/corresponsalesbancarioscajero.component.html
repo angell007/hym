@@ -1,14 +1,3 @@
-<ul class="list-unstyled list-info">
-    <li>
-        <span class="thumb-img pdd-top-10">
-            <i class="ti-money text-warning font-size-30"></i>
-        </span>
-        <div class="info">
-            <b class="text-dark font-size-22">Corresponsal Bancario</b>
-            <p class="no-mrg-btm">Saldo del día</p>
-        </div>
-    </li>
-</ul>
 <div class="mrg-top-30" style="min-height: 470px;">
   <form #FormCorresponsal="ngForm">
     <h4>Datos del corresponsal</h4>
@@ -16,10 +5,11 @@
       <div class="col-md-4">
         <div class="form-group">
           <label class="font-weight-bold">Corresponsal</label>
-          <select required name="Id_Corresponsal_Bancario" class="form-control" 
+          <select required name="Id_Corresponsal_Bancario" class="form-control"
             [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario">
             <option value="">Seleccione un Corresponsal</option>
-            <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}</option>
+            <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}
+            </option>
           </select>
         </div>
       </div>
@@ -28,15 +18,17 @@
       <div class="col-md-4">
         <div class="form-group">
           <label class="font-weight-bold">Consignaciones</label>
-          <input required name="Consignacion" type="text" placeholder="Consignaciones" class="form-control" 
-            [(ngModel)]="CorresponsalModel.Consignacion" (blur)="CalcularTotalCorresponsal()" currencyMask [options]="{ thousands: '.' }">
+          <input required name="Consignacion" type="text" placeholder="Consignaciones" class="form-control"
+            [(ngModel)]="CorresponsalModel.Consignacion" (blur)="CalcularTotalCorresponsal()" currencyMask
+            [options]="{ thousands: '.' }">
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label class="font-weight-bold">Retiros</label>
-          <input required name="Retiro" type="text" placeholder="Retiros" class="form-control" 
-          [(ngModel)]="CorresponsalModel.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask [options]="{ thousands: '.' }">
+          <input required name="Retiro" type="text" placeholder="Retiros" class="form-control"
+            [(ngModel)]="CorresponsalModel.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask
+            [options]="{ thousands: '.' }">
         </div>
       </div>
       <div class="col-md-4">
@@ -48,23 +40,24 @@
     </div>
     <div class="row mrg-top-20">
       <div class="col-md-12">
-          <div class="form-group">
-              <label class="font-weight-bold">Observaciones</label>
-              <textarea placeholder="Observaciones" class="form-control" name="Detalle" [(ngModel)]="CorresponsalModel.Detalle">
+        <div class="form-group">
+          <label class="font-weight-bold">Observaciones</label>
+          <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
+            [(ngModel)]="CorresponsalModel.Detalle">
               </textarea>
-          </div>
+        </div>
       </div>
     </div>
   </form>
   <div class="row">
     <div class="col-md-10">
-      <!-- <label>&nbsp;</label> -->
       <button type="submit" class="btn btn-sm btn-info btn-block" [disabled]="!FormCorresponsal.valid"
         [swal]="{title : '¿Está Seguro?', text: '¿Está Seguro?, Se van guardar los datos del corresponsal para el dia de hoy!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
         (confirm)="GuardarCorresponsalDiario()">Guardar</button>
     </div>
     <div class="col-md-2">
-        <button class="btn btn-danger btn-sm btn-block" (click)="VolverTablaRegistros()">Volver</button>
+      <button class="btn btn-secondary btn-sm btn-block" (click)="VolverTablaRegistros()">Volver</button>
     </div>
   </div>
+  {{ CorresponsalModel.Retiro | json }}
 </div>

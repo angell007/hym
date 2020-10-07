@@ -32,7 +32,7 @@
           <tbody>
             <tr *ngFor="let m of Modulos;">
               <td>{{m}}</td>
-              <td style="text-align:right;" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
+              <td class="mx-1" style="" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
                 [ngStyle]="{'background-color':Totales[m][ind].Color}">
                 <label
                   *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
@@ -41,8 +41,8 @@
               </td>
             </tr>
             <tr>
-              <td class="font-weight-bold" style="text-align:right;color:black;"><b>Totales:</b></td>
-              <td class="font-weight-bold" style="text-align:right;color:black;" *ngFor="let mt of MostrarTotal"
+              <td class="font-weight-bold" class="mx-1" style="color: #333;"><b>Totales:</b></td>
+              <td class="font-weight-bold" class="mx-1" style="color: #333;" *ngFor="let mt of MostrarTotal"
                 [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td>
             </tr>
           </tbody>
@@ -50,9 +50,7 @@
       </div>
     </div>
 
-    <!-- {{ MostrarTotal | json }} -->
-
-    <div class="row card-body" *ngIf="solo_ver">
+    <div class="row card-body" *ngIf="!solo_ver">
       <div class="col-md-12">
         <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <tbody>
@@ -62,21 +60,19 @@
             </tr>
             <tr>
               <td><b>Montos Iniciales</b></td>
-              <td style="text-align:right;" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
+              <td class="mx-1" style="" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
             </tr>
             <tr>
-              <td style="color:black;">Ingreso</td>
-              <td *ngFor="let ti of TotalesIngresosMonedas" style="text-align:right;color:black;">
-                +{{ti | customcurrency:''}}</td>
+              <td>Ingreso</td>
+              <td *ngFor="let ti of TotalesIngresosMonedas">+{{ti | customcurrency:''}}</td>
             </tr>
             <tr>
-              <td style="color:black;">Egreso</td>
-              <td *ngFor="let te of TotalesEgresosMonedas" style="text-align:right;color:black;">
-                -{{te | customcurrency:''}}</td>
+              <td>Egreso</td>
+              <td *ngFor="let te of TotalesEgresosMonedas">-{{te | customcurrency:''}}</td>
             </tr>
             <tr>
               <td>Total a Entregar</td>
-              <td style="text-align:right;" *ngFor="let resta of TotalRestaIngresosEgresos">
+              <td class="mx-1" style="" *ngFor="let resta of TotalRestaIngresosEgresos">
                 {{resta | customcurrency:''}}</td>
             </tr>
             <tr>
@@ -94,7 +90,7 @@
             </tr>
             <tr>
               <td>Diferencia</td>
-              <td style="text-align:right;" *ngFor="let d of Diferencias; let ind = index">
+              <td class="mx-1" style="" *ngFor="let d of Diferencias; let ind = index">
                 {{d.Diferencia | customcurrency:''}}
               </td>
             </tr>
@@ -109,7 +105,7 @@
       <div class="col-md-12" *ngIf="Armado">
         <div class="row">
           <div class="col-md-12">
-            <button class="btn btn-block" style="background-color: #00bfff;"
+            <button class="btn btn-info btn-block"
               [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar el cierre de caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
               (confirm)="GuardarCierre()">Guardar Cierre
             </button>

@@ -1,154 +1,169 @@
-<div class="card-header">
-  <div class="row">
-    <div class="col-md-6" style="display:flex; align-items:flex-end;"> 
-      <h5>Traslados realizados</h5>       
-    </div>
-    <div class="col-md-6">
-      <div class="pull-right">
-        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
-          (click)="AbrirModal('0')">
-          <i class="ti-plus font-size-15 mr-2"></i> Nuevo traslado
-        </button>
+<div class="card-block">
+  <ul class="list-unstyled list-info">
+    <li>
+      <span class="thumb-img pdd-top-10">
+        <i class="ti-share-alt text-dark font-size-30"></i>
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Traslados entre terceros </b>
+        <p class="no-mrg-btm">Gestión de traslados</p>
       </div>
-    </div>
-  </div>                  
-</div>
-<div class="card-body">
-  <table class="table table-bordered table-striped custom-table">
-    <thead>
-      <tr>
-        <th class="custom-thead" style="width:70px;">Fecha</th>
-        <th class="custom-thead" style="width:6%;">Código</th>
-        <th class="custom-thead" >Funcionario</th>
-        <th class="custom-thead" >Origen</th>
-        <th class="custom-thead" >Destino</th>
-        <th class="custom-thead" style="width:10%;">Moneda</th>
-        <th class="custom-thead" style="width:10%;">Valor</th>
-        <th class="custom-thead" style="width:7%;">Estado</th>
-        <th class="custom-thead" style="width:6%;">Acciones</th>
-      </tr>
-      <tr>
-        <th class="table-filters">
-          <input type="date" class="form-control" placeholder="Filtro fecha"
-          (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha">
-        </th>
-        <th class="table-filters">
-          <input type="text" class="form-control" placeholder="Filtro codigo"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.codigo">
-        </th>
-        <th class="table-filters">
-          <input type="text" class="form-control" placeholder="Filtro funcionario"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.funcionario">
-        </th>
-        <th class="table-filters">
-          <select id="tipo_origen" class="form-control" (change)="ConsultaSelectOrigen()" [(ngModel)]="Filtros.tipo_origen">
-            <option value="" selected>Seleccione</option>
-            <option value="Cliente">Cliente</option>
-            <option value="Proveedor">Proveedor</option>
-            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-          </select>
-          <input type="text" class="form-control" placeholder="Filtro origen" [disabled]="Filtros.tipo_origen == ''"              
-            [(ngModel)]="Origen"
-            [ngbTypeahead]="search_origen"
-            [resultTemplate]="rt_origen" 
-            [inputFormatter]="formatter_origen" 
-            (ngModelChange)="CompletarOrigen(Origen)">
-        </th>
-        <th class="table-filters">
-          <select id="tipo_destino" class="form-control" (change)="ConsultaSelectDestino()" [(ngModel)]="Filtros.tipo_destino">
-            <option value="" selected>Seleccione</option>
-            <option value="Cliente">Cliente</option>
-            <option value="Proveedor">Proveedor</option>
-            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-          </select>
-          <input type="text" class="form-control" placeholder="Filtro destino" [disabled]="Filtros.tipo_destino == ''"              
-            [(ngModel)]="Destino"
-            [ngbTypeahead]="search_destino"
-            [resultTemplate]="rt_destino" 
-            [inputFormatter]="formatter_destino" 
-            (ngModelChange)="CompletarDestino(Destino)">
-        </th>
-        <th class="table-filters">
-          <select id="moneda" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.moneda">
-            <option value="" selected>Seleccione</option>
-            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
-          </select>
-        </th>
-        <th class="table-filters"></th>
-        <th class="table-filters">
-          <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
-            <option value="" selected>Seleccione</option>
-            <option value="Activo">Activo</option>
-            <option value="Anulado">Anulado</option>
-          </select>
-        </th>
-        <th class="table-filters"></th>
-      </tr>
-      <tr *ngIf="Cargando">
-        <td colspan="9" class="text-center">
-          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
-            <h2>CARGANDO TRASLADOS</h2>
-            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
-          </div>
-        </td>
-      </tr>
-      <tr *ngIf="Traslados.length == 0 && !Cargando">
-        <td colspan="9" class="text-center">
-            <i class="ti-alert font-size-20 text-warning"></i>
-            <h4>No hay traslados para mostrar!</h4>
-        </td>
-      </tr>
-    </thead>
-    <tbody *ngIf="!Cargando">                                            
-      <tr *ngFor="let t of Traslados; let i = index;" [ngClass]="{'bg-anulada':t.Estado == 'Anulado'}">
-        <td class="custom-cell">{{t.Fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-        <td class="custom-cell">{{t.Codigo}}</td>
-        <td class="custom-cell">{{t.Nombre_Funcionario}}</td>
-        <td class="custom-cell">{{t.Nombre_Origen}}</td>
-        <td class="custom-cell">{{t.Nombre_Destino}}</td>
-        <td class="custom-cell">{{t.Nombre_Moneda}}</td>
-        <td class="custom-cell text-right">{{t.Valor | customcurrency:t.Codigo_Moneda}}</td>
-        <td class="custom-cell text-center">{{t.Estado}}</td>
-        <td class="custom-cell">
-          <div class="text-center" *ngIf="t.Estado != 'Anulado'">
-            <div ngbDropdown class="dropdown-primary">
-              <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
-              <div ngbDropdownMenu>
-                <!-- <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(t.Id_Traslado)">
-                  <i class="ti-pencil text-warning"></i> Editar</a> -->
-                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularTraslado(t)"
-                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
-                    <i [ngClass]="{'ti-na text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Anulado'}"></i> 
-                    {{t.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
-              </div>
+    </li>
+  </ul>
+  <div class="mrg-top-10" style="min-height: 470px;">
+    <div class="row d-flex justify-content-center" id="otrotraslados">
+      <div class="col-md-4">
+        <button (click)="AbrirModal('0')" class="btn btn-dark  btn-block mrg-top-10 btn-grande text-white">Nuevo
+          Traslado</button>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-block">
+            <div class="tab-success">
+              <h5>Últimos Traslados </h5>
+              <table class="table table-striped table-sm table-bordered">
+                <thead class="rounded">
+                  <tr>
+                    <th class="custom-thead">Fecha</th>
+                    <th class="custom-thead">Código</th>
+                    <th class="custom-thead">Funcionario</th>
+                    <th class="custom-thead">Origen</th>
+                    <th class="custom-thead">Destino</th>
+                    <th class="custom-thead">Moneda</th>
+                    <th class="custom-thead">Valor</th>
+                    <th class="custom-thead">Estado</th>
+                    <th class="custom-thead">Acciones</th>
+                  </tr>
+                  <tr>
+                    <th class="table-filters">
+                      <input type="date" class="form-control" placeholder="Filtro fecha" (change)="ConsultaFiltrada()"
+                        [(ngModel)]="Filtros.fecha">
+                    </th>
+                    <th class="table-filters">
+                      <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
+                        [(ngModel)]="Filtros.codigo">
+                    </th>
+                    <th class="table-filters">
+                      <input type="text" class="form-control" placeholder="Filtro funcionario"
+                        (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.funcionario">
+                    </th>
+                    <th class="table-filters">
+                      <select id="tipo_origen" class="form-control" (change)="ConsultaSelectOrigen()"
+                        [(ngModel)]="Filtros.tipo_origen">
+                        <option value="" selected>Seleccione</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Proveedor">Proveedor</option>
+                        <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+                      </select>
+                      <input type="text" class="form-control" placeholder="Filtro origen"
+                        [disabled]="Filtros.tipo_origen == ''" [(ngModel)]="Origen" [ngbTypeahead]="search_origen"
+                        [resultTemplate]="rt_origen" [inputFormatter]="formatter_origen"
+                        (ngModelChange)="CompletarOrigen(Origen)">
+                    </th>
+                    <th class="table-filters">
+                      <select id="tipo_destino" class="form-control" (change)="ConsultaSelectDestino()"
+                        [(ngModel)]="Filtros.tipo_destino">
+                        <option value="" selected>Seleccione</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Proveedor">Proveedor</option>
+                        <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+                      </select>
+                      <input type="text" class="form-control" placeholder="Filtro destino"
+                        [disabled]="Filtros.tipo_destino == ''" [(ngModel)]="Destino" [ngbTypeahead]="search_destino"
+                        [resultTemplate]="rt_destino" [inputFormatter]="formatter_destino"
+                        (ngModelChange)="CompletarDestino(Destino)">
+                    </th>
+                    <th class="table-filters">
+                      <select id="moneda" class="form-control" (change)="ConsultaFiltrada()"
+                        [(ngModel)]="Filtros.moneda">
+                        <option value="" selected>Seleccione</option>
+                        <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+                      </select>
+                    </th>
+                    <th class="table-filters"></th>
+                    <th class="table-filters">
+                      <select id="estado" class="form-control" (change)="ConsultaFiltrada()"
+                        [(ngModel)]="Filtros.estado">
+                        <option value="" selected>Seleccione</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Anulado">Anulado</option>
+                      </select>
+                    </th>
+                    <th class="table-filters"></th>
+                  </tr>
+                  <tr *ngIf="Cargando">
+                    <td colspan="9" class="text-center">
+                      <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                        <h2>CARGANDO TRASLADOS</h2>
+                        <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="Traslados.length == 0 && !Cargando">
+                    <td colspan="9" class="text-center">
+                      <i class="ti-alert font-size-20 text-warning"></i>
+                      <h4>No hay traslados para mostrar!</h4>
+                    </td>
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let t of Traslados | paginate: {  id: 'otrotrasladoss', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
+                    [ngClass]="{'bg-anulada':t.Estado == 'Anulado'}">
+                    <td class="text-center">{{t.Fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td class="text-center">{{t.Codigo}}</td>
+                    <td class="text-center">{{t.Nombre_Funcionario}}</td>
+                    <td class="text-center">{{t.Nombre_Origen}}</td>
+                    <td class="text-center">{{t.Nombre_Destino}}</td>
+                    <td class="text-center">{{t.Nombre_Moneda}}</td>
+                    <td class="text-right">{{t.Valor | customcurrency:t.Codigo_Moneda}}</td>
+                    <td class="text-center">{{t.Estado}}</td>
+                    <td class="text-center">
+                      <div class="text-center" *ngIf="t.Estado != 'Anulado'">
+                        <a class="dropdown-item waves-light waves-effect caja-botones accionable"
+                          (confirm)="AnularTraslado(t)"
+                          [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
+                          <i
+                            [ngClass]="{'ti-trash text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Anulado'}"></i>
+                          {{t.Estado == 'Activo' ? '' : 'Activar'}}</a>
+
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+
             </div>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="paginacion-container" *ngIf="Traslados.length > 0">
-    <div class="row">
-      <div class="col-md-4">
-        <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-      </div>
-      <div class="col-md-8">
-        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
-          size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+        </div>
+
+
+        <div id="paginacion-container" *ngIf="Traslados.length > 0">
+          <div class="row">
+            <div class="col-md-12">
+              <pagination-controls id="otrotrasladoss" (pageChange)="ConsultaFiltrada(true)" previousLabel="Anterior"
+                nextLabel="Siguiente" responsive="true">
+              </pagination-controls>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 
+
 <ng-template #rt_origen let-r="result" let-t="term">
-        <strong>{{r.Nombre}}</strong>
+  <strong>{{r.Nombre}}</strong>
 </ng-template>
 
 <ng-template #rt_destino let-r="result" let-t="term">
-        <strong>{{r.Nombre}}</strong>
+  <strong>{{r.Nombre}}</strong>
 </ng-template>
 
-<app-modaltraslado
-  [AbrirModal]="AbrirModalAgregar.asObservable()"
-  (ActualizarTabla)="ConsultaFiltrada()">
+<app-modaltraslado [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
 </app-modaltraslado>

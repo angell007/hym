@@ -1,0 +1,35 @@
+<div class="card-block">
+    <ul class="list-unstyled list-info">
+      <li>
+        <span class="thumb-img pdd-top-10">
+          <i class="ti-money text-warning font-size-30"></i>
+        </span>
+        <div class="info">
+          <b class="text-dark font-size-22">Corresponsales</b>
+          <p class="no-mrg-btm">Valor de corresponsales bancarios diario</p>
+        </div>
+      </li>
+    </ul>
+    <div class="row d-flex justify-content-center" id="corresponsal1" *ngIf="Corresponsal1">
+      <div class="col-md-4">
+        <button (click)="CambiarVista('Corresponsal')" class="btn  btn-block mrg-top-10 btn-grande"
+          style="color:white; background-color: #EFA92E;">Nuevo Registro Corresponsal</button>
+      </div>
+
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-block">
+            <div class="tab-success">
+              <app-tablaregistroscorresponsalesdiarios
+                [ActualizarTabla]="ActualizarTablaCorresponsal.asObservable()">
+              </app-tablaregistroscorresponsalesdiarios>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-corresponsalesbancarioscajero *ngIf="Corresponsal2" [ManageView]="corresponsalView.asObservable()"
+      (ActualizarRegistrosCorresponsal)="UpdateTablaCorresponsal($event)"
+      (RegresarTablaRegistros)="volverCorresponsal()">
+    </app-corresponsalesbancarioscajero>
+  </div>
