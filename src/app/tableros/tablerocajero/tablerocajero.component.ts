@@ -592,11 +592,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.AsignarTiposCuenta();
 
 
-    setTimeout(() => {
-      this.SetDatosIniciales();
-      //this.CheckApertura();
-    }, 1500);
-    //this.GetRegistroDiario();
+    // setTimeout(() => {
+    //   this.SetDatosIniciales();
+    //   //this.CheckApertura();
+    // }, 1500);
+    // //this.GetRegistroDiario();
 
     this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
 

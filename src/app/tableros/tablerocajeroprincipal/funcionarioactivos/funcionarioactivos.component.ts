@@ -46,6 +46,7 @@ export class FuncionarioactivosComponent implements OnInit, OnChanges {
         const aux = data.funcionarios_activos;
         aux.forEach((element: any) => {
           if (element.Identificacion_Funcionario != JSON.parse(localStorage['User']).Identificacion_Funcionario) {
+            console.log(element);
             this.FuncionariosFiltrados.push(element)
           }
         })

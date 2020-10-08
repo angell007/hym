@@ -17,6 +17,39 @@ SELECT * FROM `Bolsa_Bolivares_Tercero` ORDER BY `Bolsa_Bolivares_Tercero`.`Id_T
 UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercero`.`Id_Movimiento_Tercero` = 1;
 
 
+ <div class="row card">
+  <div class="card-body">
+    <div class="col-md-4 " style="display:flex; align-items:flex-end;">
+      <ul class="list-unstyled list-info mt-3">
+        <li>
+          <span class="thumb-img pdd-top-10 ">
+          </span>
+          <div class="info">
+            <b class="text-dark font-size-22">Cajas</b>
+            <p class="no-mrg-btm ">Gestion de Cajas</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="w-100"></div>
+    <div class="col-md-12">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-4">
+          <button (click)="AbrirModal('0')" class="btn btn-info btn-block mrg-top-10 btn-grande">
+            Nueva caja
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+
+    <!-- Table  -->
+    <!-- Paginator -->
+  </div>
+</div>
+
 
         this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
         this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
@@ -32,6 +65,27 @@ UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercer
       </div>
     </li>
   </ul>
+
+
+ <ul class="list-unstyled list-info">
+              <li>
+                <span class="thumb-img pdd-top-10">
+                  <i class="ti-wallet text-success font-size-30"></i>
+                </span>
+                <div class="info">
+                  <b class="text-dark font-size-22">Giros</b>
+                  <p class="no-mrg-btm ">Envío/Recepción Dinero</p>
+                </div>
+              </li>
+            </ul>
+
+            <div class="my-3 ">
+              <div class="row d-flex justify-content-center" id="Giros1" *ngIf="Giro1">
+                <div class="col-md-4">
+                  <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">
+                    Nuevo Giro
+                  </button>
+                </div>
 
 
 Message alert 

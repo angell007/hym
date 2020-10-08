@@ -56,7 +56,7 @@ export class DetallemovimientoscuentaComponent implements OnInit {
       
       if (data.codigo == 'success') {
         this.MovimientosCuentaBancaria = data.query_data;
-        this.Movimientos = data.query_data.movimientos;
+        this.Movimientos = data.query_data.movimientos.reverse();
         this.Balance = parseInt(data.query_data.balance);
         this.Codigo_Moneda = data.codigo_moneda;
         this.Apertura = parseInt(data.query_data.monto_apertura);

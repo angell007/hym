@@ -139,9 +139,12 @@ export class CargosComponent implements OnInit {
   EditarDependencia(id, modal){
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Dependencia', id:id}
-    }).subscribe((data:any)=>{      
+    }).subscribe((data:any)=>{    
+      
+      console.log(data);
+
       this.Identificacion = id;
-      this.Nombre = data;
+      this.Nombre = data.Nombre;
       this.IdGrupo = data.Id_Grupo;
       modal.show();
     });

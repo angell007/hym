@@ -61,7 +61,6 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
-    console.log(this.solo_ver);
 
   }
 

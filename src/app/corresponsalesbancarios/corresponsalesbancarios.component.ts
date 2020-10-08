@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { CorresponsalModel } from '../Modelos/CorresponsalModel';
 import { CorresponsalbancarioService } from '../shared/services/corresponsalesbancarios/corresponsalbancario.service';
 import { SwalService } from '../shared/services/swal/swal.service';
+import { Globales } from '../shared/globales/globales';
 
 @Component({
   selector: 'app-corresponsalesbancarios',
@@ -16,7 +17,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
   public Departamentos: any = [];
   public Municipios: any = [];
 
-  public CorresponsalModel:CorresponsalModel = new CorresponsalModel();
+  public CorresponsalModel: CorresponsalModel = new CorresponsalModel();
   //variables que hacen referencia a los campos del formulario editar   
 
   public Identificacion: any = [];
@@ -42,14 +43,14 @@ export class CorresponsalesbancariosComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('saveSwal') saveSwal: any;
 
-  readonly ruta = 'https://hym.corvuslab.co/';
+  // readonly ruta = 'https://hym.corvuslab.co/';
 
-  constructor(private http: HttpClient, private _corresponsalService:CorresponsalbancarioService,
-              private _swalService:SwalService) { }
+  constructor(private http: HttpClient, private _corresponsalService: CorresponsalbancarioService,
+    private _swalService: SwalService, public globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
-    this.http.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Departamento' } }).subscribe((data: any) => {
       this.Departamentos = data;
     });
   }
@@ -76,13 +77,13 @@ export class CorresponsalesbancariosComponent implements OnInit {
   }
 
   ActualizarVista() {
-    this.http.get(this.ruta + 'php/corresponsalesbancarios/lista_corresponsales.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/corresponsalesbancarios/lista_corresponsales.php').subscribe((data: any) => {
       this.corresponsales = data;
     });
   }
 
   Municipios_Departamento(Departamento) {
-    this.http.get(this.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
       this.Municipios = data;
     });
   }
@@ -90,14 +91,14 @@ export class CorresponsalesbancariosComponent implements OnInit {
   // GuardarCorresponsal(formulario: NgForm, modal: any) {
   //   let info = JSON.stringify(formulario.value);
   //   console.log(formulario);
-    
+
   //   // let datos = new FormData();
 
   //   // datos.append("modulo", 'Corresponsal_Bancario');
   //   // datos.append("datos", info);
 
   //   // this.OcultarFormulario(modal);
-  //   // this.http.post(this.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
+  //   // this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
   //   //   this.saveSwal.show();
   //   //   this.ActualizarVista();
   //   //   formulario.reset();
@@ -106,11 +107,11 @@ export class CorresponsalesbancariosComponent implements OnInit {
   //   //   this.departamentoDefault = "";
   //   // });
   // }
-  
+
   GuardarCorresponsal() {
     let info = JSON.stringify(this.CorresponsalModel);
     console.log(CorresponsalModel);
-    
+
     let datos = new FormData();
 
     datos.append("modulo", 'Corresponsal_Bancario');
@@ -124,7 +125,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
   }
 
   VerCorresponsal(id, modal) {
-    this.http.get(this.ruta + 'php/corresponsalesbancarios/detalle_corresponsales.php', {
+    this.http.get(this.globales.ruta + 'php/corresponsalesbancarios/detalle_corresponsales.php', {
       params: { modulo: 'Corresponsal', id: id }
     }).subscribe((data: any) => {
       this.CorresponsalModel.Cupo = parseInt(data.Cupo);
@@ -142,7 +143,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
   }
 
   EditarCorresponsal(id, modal) {
-    this.http.get(this.ruta + 'php/genericos/detalle.php', {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Corresponsal_Bancario', id: id }
     }).subscribe((data: any) => {
 
@@ -165,14 +166,14 @@ export class CorresponsalesbancariosComponent implements OnInit {
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Bancario');
     datos.append("id", id);
-    this.http.post(this.ruta + 'php/genericos/eliminar_generico.php', datos).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php', datos).subscribe((data: any) => {
       this.ActualizarVista();
       this.deleteSwal.show();
     })
   }
 
   AutoSleccionarMunicipio(Departamento, Municipio) {
-    this.http.get(this.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
       this.Municipios = data;
       this.Municipio = Municipio;
     });
@@ -187,22 +188,23 @@ export class CorresponsalesbancariosComponent implements OnInit {
     modal.hide();
   }
 
-  public CerrarModalGuardar(){
+  public CerrarModalGuardar() {
     this._limpiarModelo();
     this.ModalCorresponsal.hide();
-  }
-  
-  public CerrarModalEditar(){
-    this._limpiarModelo();
     this.ModalEditarCorresponsal.hide();
   }
-  
-  public CerrarModalVer(){
+
+  public CerrarModalEditar() {
     this._limpiarModelo();
     this.ModalEditarCorresponsal.hide();
   }
 
-  private _limpiarModelo(){
+  public CerrarModalVer() {
+    this._limpiarModelo();
+    this.ModalEditarCorresponsal.hide();
+  }
+
+  private _limpiarModelo() {
     this.CorresponsalModel = new CorresponsalModel();
   }
 }

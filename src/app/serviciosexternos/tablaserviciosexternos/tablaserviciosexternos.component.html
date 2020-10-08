@@ -1,97 +1,110 @@
-<div class="card-header">
-  <div class="row">
-    <div class="col-md-4" style="display:flex; align-items:flex-end;">
-      <h5>Todos los servicios externos registrados</h5>          
-    </div>
-    <div class="col-md-8">
-      <div class="pull-right">
-        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
-          (click)="AbrirModal('0')">
-          <i class="ti-plus font-size-15 mr-2"></i> Nuevo Servicio
+<div class="row card">
+  <div class="col-md-4 " style="display:flex; align-items:flex-end;">
+    <ul class="list-unstyled list-info mt-3">
+      <li>
+        <span class="thumb-img pdd-top-10 ">
+        </span>
+        <div class="info">
+          <b class="text-dark font-size-22">Servicios Externos</b>
+          <p class="no-mrg-btm ">Todos los servicios externos registrados</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="w-100"></div>
+  <div class="col-md-12">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-4">
+        <button (click)="AbrirModal('0')" class="btn btn-info btn-block mrg-top-10 btn-grande">
+          Nuevo servicio
         </button>
       </div>
     </div>
-  </div>                  
-</div>
-<div class="card-body">
-  <table class="table table-striped table-bordered custom-table">
-    <thead>
-      <tr>
-        <th class="custom-thead">Nombre</th>
-        <th class="custom-thead" >Comisión</th>
-        <th class="custom-thead" style="width:10%;">Estado</th>
-        <th class="custom-thead" style="width:8%;">Acciones</th>
-      </tr>
-      <tr>
-        <th class="table-filters">
-          <input type="text" class="form-control form-control-sm" placeholder="Filtro nombre"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.nombre">
-        </th>
-        <th class="table-filters">
-          <input type="text" class="form-control form-control-sm" placeholder="Filtro comision"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.comision">
-        </th>
-        <th class="table-filters">
-          <select id="pais" class="form-control form-control-sm" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
-            <option value="" selected>Seleccione</option>
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
-          </select>
-        </th>
-        <th class="table-filters"></th>
-      </tr>
-      <tr *ngIf="Cargando">
-        <td colspan="4" class="text-center">
-          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
-            <h2>CARGANDO SERVICIOS</h2>
-            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
-          </div>
-        </td>
-      </tr>
-      <tr *ngIf="Servicios.length == 0 && !Cargando">
-        <td colspan="4" class="text-center">
+  </div>
+
+  <div class="card-body">
+    <table class="table table-striped table-bordered custom-table">
+      <thead>
+        <tr>
+          <th class="custom-thead">Nombre</th>
+          <th class="custom-thead">Comisión</th>
+          <th class="custom-thead" style="width:10%;">Estado</th>
+          <th class="custom-thead" style="width:8%;">Acciones</th>
+        </tr>
+        <tr>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro nombre"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.nombre">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control form-control-sm" placeholder="Filtro comision"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.comision">
+          </th>
+          <th class="table-filters">
+            <select id="pais" class="form-control form-control-sm" (change)="ConsultaFiltrada()"
+              [(ngModel)]="Filtros.estado">
+              <option value="" selected>Seleccione</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </th>
+          <th class="table-filters"></th>
+        </tr>
+        <tr *ngIf="Cargando">
+          <td colspan="4" class="text-center">
+            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+              <h2>CARGANDO SERVICIOS ...</h2>
+              <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="Servicios.length == 0 && !Cargando">
+          <td colspan="4" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
             <h4>No hay servicios para mostrar!</h4>
-        </td>
-      </tr>
-    </thead>
-    <tbody *ngIf="!Cargando">                                            
-      <tr *ngFor="let s of Servicios; let i = index;" [ngClass]="{'bg-inactive':s.Estado == 'Inactivo'}">
-        <td class="custom-cell">{{s.Nombre}}</td>
-        <td class="custom-cell">{{s.Comision}}</td>
-        <td class="custom-cell text-center">{{s.Estado}}</td>
-        <td class="custom-cell">
-          <div class="text-center">
-            <div ngbDropdown class="dropdown-primary">
-              <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
-              <div ngbDropdownMenu>
-                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(s.Id_Servicio_Externo)">
-                  <i class="ti-pencil text-warning"></i> Editar</a>
-                <a class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="CambiarEstadoServicio(s.Id_Servicio_Externo)"
-                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                    <i [ngClass]="{'ti-na text-danger':s.Estado == 'Activo', 'ti-back-right text-success':s.Estado == 'Inactivo'}"></i> 
-                    {{s.Estado == 'Activo' ? 'Inactivar' : 'Activar'}}</a>
-              </div>
+          </td>
+        </tr>
+      </thead>
+      <tbody *ngIf="!Cargando">
+        <tr *ngFor="let s of Servicios; let i = index;" [ngClass]="{'bg-inactive':s.Estado == 'Inactivo'}">
+          <td class="text-center">{{s.Nombre}}</td>
+          <td class="text-center">{{s.Comision | currency:' ' }}</td>
+          <td class="text-center text-center">{{s.Estado}}</td>
+          <td class="text-center">
+            <div class="text-center">
+              <!-- <div ngbDropdown class="dropdown-primary"> -->
+              <!-- <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " -->
+              <!-- type="button"><i class="ti-angle-down"></i></button> -->
+              <!-- <div ngbDropdownMenu> -->
+              <a style="cursor: pointer;" class="" (click)="AbrirModal(s.Id_Servicio_Externo)">
+                <i class="ti-pencil text-warning"></i> </a>
+              <a style="cursor: pointer;" class="" (confirm)="CambiarEstadoServicio(s.Id_Servicio_Externo)"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                <i
+                  [ngClass]="{'ti-trash text-danger':s.Estado == 'Activo', 'ti-back-right text-success':s.Estado == 'Inactivo'}"></i>
+                {{s.Estado == 'Activo' ? '' : ''}}</a>
+              <!-- </div> -->
+              <!-- </div> -->
             </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="paginacion-container" *ngIf="Servicios.length > 0">
-    <div class="row">
-      <div class="col-md-3">
-        <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-      </div>
-      <div class="col-md-9">
-        <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
-          size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="paginacion-container" *ngIf="Servicios.length > 0">
+      <div class="row">
+        <div class="col-md-3">
+          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+              {{ InformacionPaginacion.total }}</b></p>
+        </div>
+        <div class="col-md-9">
+          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+            [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+          </ngb-pagination>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<app-modalservicioexterno
-  [AbrirModal]="AbrirModalCrear.asObservable()"
-  (ActualizarTabla)="ConsultaFiltrada()">
+<app-modalservicioexterno [AbrirModal]="AbrirModalCrear.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
 </app-modalservicioexterno>

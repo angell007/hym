@@ -45,7 +45,7 @@
               </tr>
             </thead>
             <tbody *ngIf="Movimientos.length > 0">
-              <tr *ngFor="let m of Movimientos.reverse() ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
+              <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
                 <td class="text-center ">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
                 <td class=" text-center">{{m.Recibo}}</td>
                 <td class="text-right " appColorsaldo [value]="m.Ingreso"
