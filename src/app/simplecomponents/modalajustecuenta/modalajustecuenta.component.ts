@@ -57,8 +57,11 @@ export class ModalajustecuentaComponent implements OnInit {
         this.TiposAjuste = response.query_data;
       }else{
         this.TiposAjuste = [];
-        let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+
+        this._swalService.ShowMessage(['info', response.titulo, response.mensaje]);
+
+        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }
       
     });
@@ -86,8 +89,9 @@ export class ModalajustecuentaComponent implements OnInit {
         if (data.codigo == 'success') { 
           this.ActualizarTabla.emit();       
           this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
+          this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+          // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          // this._toastService.ShowToast(toastObj);
         }else{
           this._swalService.ShowMessage(data);
         }

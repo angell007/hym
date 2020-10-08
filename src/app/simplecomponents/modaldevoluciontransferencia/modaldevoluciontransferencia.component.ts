@@ -79,14 +79,18 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
     this._transferenciaService.DevolverTransferencia(datos).subscribe((response:any) => {
       console.log(response);
       if (response.codigo == 'success') {
-        let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+        
+        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
         this.CerrarModal();
         this._actualizar.cardListing.next()
         this.RecargarPagos.emit();
       }else{
-        let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['warning', response.titulo, response.mensaje]);
+        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }

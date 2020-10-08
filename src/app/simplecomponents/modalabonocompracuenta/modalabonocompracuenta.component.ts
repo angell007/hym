@@ -70,8 +70,11 @@ export class ModalabonocompracuentaComponent implements OnInit {
       if (data.codigo == 'success') { 
         this.ActualizarDatos.emit();       
         this.CerrarModal();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+
+        this._swalService.ShowMessage(['success', data.titulo,  data.mensaje]);
+
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }else{
         this._swalService.ShowMessage(data);
       }

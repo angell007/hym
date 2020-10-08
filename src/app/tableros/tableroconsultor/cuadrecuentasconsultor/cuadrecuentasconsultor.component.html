@@ -6,7 +6,7 @@
           <div class="row">
             <div class="col-md-6 ">CUADRE DE CUENTAS :
               {{CuentaBancariaModel.Apodo | uppercase }}
-              {{CuentaBancariaModel.Numero_Cuenta | mask:'0000-0000-0000-0000'}}</div>
+              {{CuentaBancariaModel.Numero_Cuenta | mask:'0000-0000-0000-0000-0000'}}</div>
             <div class="col-md-6 text-right">
               <button class="btn btn-outline-success btn-sm btn-rounded" (click)="AbrirCompraCuenta()">
                 Abono
@@ -37,7 +37,7 @@
                 <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
                 <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
                 <th class="custom-thead" class="text-center" style="width:10%">Saldo</th>
-                <th class="custom-thead" class="text-center" style="width:6%;"></th>
+                <th class="custom-thead" class="text-center" style="width:6%;">Acciones</th>
               </tr>
               <tr *ngIf="Movimientos.length == 0">
                 <td colspan="6" class="text-center">
@@ -62,26 +62,26 @@
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
                   [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Total"
-                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{ m.Estado  }}</td>
+                  <!-- [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td> -->
                 <td>
                   <div class="text-center" *ngIf="m.Tipo_Movimiento == 'Transferencia' && m.Estado != 'Devuelta'">
                     <!-- <div ngbDropdown class="dropdown-primary"> -->
-                      <!-- <button ngbDropdownToggle -->
-                        <!-- class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i -->
-                          <!-- class="ti-angle-down"></i></button> -->
-                      <!-- <div ngbDropdownMenu> -->
-                        <a *ngIf="m.Estado != 'Anulada'" title="Devolución"
-                          class="" style="cursor: pointer;"
-                          (click)="DevolverTransferencia(m)">
-                          <i class="ti-back-right text-danger"></i>
-                           <!-- Devolución -->
-                          </a>
-                        <a class="" style="cursor: pointer;" title="Transferir Movimimiento"
-                          (click)="MoverTransferencia(m)">
-                          <i class="fa fa-exchange text-primary"></i>
-                          <!-- Transferir Movimimiento -->
-                        </a>
-                      <!-- </div> -->
+                    <!-- <button ngbDropdownToggle -->
+                    <!-- class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i -->
+                    <!-- class="ti-angle-down"></i></button> -->
+                    <!-- <div ngbDropdownMenu> -->
+                    <a *ngIf="m.Estado != 'Anulada'" title="Devolución" class="" style="cursor: pointer;"
+                      (click)="DevolverTransferencia(m)">
+                      <i class="ti-back-right text-danger"></i>
+                      <!-- Devolución -->
+                    </a>
+                    <a class="" style="cursor: pointer;" title="Transferir Movimimiento"
+                      (click)="MoverTransferencia(m)">
+                      <i class="fa fa-exchange text-primary"></i>
+                      <!-- Transferir Movimimiento -->
+                    </a>
+                    <!-- </div> -->
                     <!-- </div> -->
                   </div>
                 </td>
