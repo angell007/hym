@@ -182,7 +182,7 @@ export class CommonLayoutComponent implements OnInit {
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
         private consolidadosService: ConsolidadosService) {
-        // this._notificacionService.counter();
+        this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 
 

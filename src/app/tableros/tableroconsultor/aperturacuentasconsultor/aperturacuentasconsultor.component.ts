@@ -304,7 +304,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
           console.log(topes);
 
           if (diferencia < -topes.maximo || diferencia > topes.maximo) {
-            this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!']);
+            this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los límites permitidos, no podra aperturar cuentas hasta que no se corrijan los valores de la misma!']);
             this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
             this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
             this._setCuentaDescuadre(id_cuenta);

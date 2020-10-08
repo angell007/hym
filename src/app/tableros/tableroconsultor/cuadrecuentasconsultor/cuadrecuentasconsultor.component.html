@@ -65,21 +65,24 @@
                   [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
                 <td>
                   <div class="text-center" *ngIf="m.Tipo_Movimiento == 'Transferencia' && m.Estado != 'Devuelta'">
-                    <div ngbDropdown class="dropdown-primary">
-                      <button ngbDropdownToggle
-                        class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i
-                          class="ti-angle-down"></i></button>
-                      <div ngbDropdownMenu>
-                        <a *ngIf="m.Estado != 'Anulada'"
-                          class="dropdown-item waves-light waves-effect caja-botones accionable"
+                    <!-- <div ngbDropdown class="dropdown-primary"> -->
+                      <!-- <button ngbDropdownToggle -->
+                        <!-- class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i -->
+                          <!-- class="ti-angle-down"></i></button> -->
+                      <!-- <div ngbDropdownMenu> -->
+                        <a *ngIf="m.Estado != 'Anulada'" title="Devolución"
+                          class="" style="cursor: pointer;"
                           (click)="DevolverTransferencia(m)">
-                          <i class="ti-back-right text-danger"></i> Devolución</a>
-                        <a class="dropdown-item waves-light waves-effect caja-botones accionable"
+                          <i class="ti-back-right text-danger"></i>
+                           <!-- Devolución -->
+                          </a>
+                        <a class="" style="cursor: pointer;" title="Transferir Movimimiento"
                           (click)="MoverTransferencia(m)">
                           <i class="fa fa-exchange text-primary"></i>
-                          Transferir Movimimiento</a>
-                      </div>
-                    </div>
+                          <!-- Transferir Movimimiento -->
+                        </a>
+                      <!-- </div> -->
+                    <!-- </div> -->
                   </div>
                 </td>
               </tr>

@@ -73,11 +73,11 @@
       </thead>
       <tbody *ngIf="!Cargando">
         <tr *ngFor="let td of TipoDocumentos; let i = index;" [ngClass]="{'bg-inactive':td.Estado == 'Inactivo'}">
-          <td class="custom-cell">{{td.Nombre}}</td>
-          <td class="custom-cell">{{td.Codigo}}</td>
-          <td class="custom-cell">{{td.Nombre_Pais}}</td>
-          <td class="custom-cell text-center">{{td.Estado}}</td>
-          <td class="custom-cell">
+          <td class="text-center">{{td.Nombre}}</td>
+          <td class="text-center">{{td.Codigo}}</td>
+          <td class="text-center">{{td.Nombre_Pais}}</td>
+          <td class="text-center">{{td.Estado}}</td>
+          <td class="text-center">
             <div class="text-center">
               <!-- <div ngbDropdown class="dropdown-primary"> -->
               <!-- <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " -->

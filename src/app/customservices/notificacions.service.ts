@@ -15,21 +15,21 @@ export class NotificacionsService {
 
   constructor(private http: HttpClient, private globales: Globales) {
 
-    // TimerObservable.create(0, 15000)
-    //   .subscribe(() => {
-    //     // this.counter();
-    //   });
+    TimerObservable.create(0, 15000)
+      .subscribe(() => {
+        this.counter();
+      });
 
   }
 
-  // counter() {
-  //   this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-  //     this.alertasCajas = data;
-  //     if (this.alertasCajas.length > 0) {
-  //       this.notifcaciones$.next(this.alertasCajas.length)
-  //     } else {
-  //       this.notifcaciones$.next('0');
-  //     }
-  //   });
-  // }
+  counter() {
+    this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+      this.alertasCajas = data;
+      if (this.alertasCajas.length > 0) {
+        this.notifcaciones$.next(this.alertasCajas.length)
+      } else {
+        this.notifcaciones$.next('0');
+      }
+    });
+  }
 }

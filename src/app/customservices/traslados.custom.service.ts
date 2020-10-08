@@ -38,11 +38,11 @@ export class TrasladosCustomService {
 
   ) {
 
-    // this.TrasladosRecibidos = [];
-    // TimerObservable.create(0, 50000)
-    //   .subscribe(() => {
-    //     // this.CargarDatosTraslados();
-    //   });
+    this.TrasladosRecibidos = [];
+    TimerObservable.create(0, 50000)
+      .subscribe(() => {
+        this.CargarDatosTraslados();
+      });
   }
   public filtroCustom: string;
 
