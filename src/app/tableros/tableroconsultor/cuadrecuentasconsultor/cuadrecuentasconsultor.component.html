@@ -62,9 +62,10 @@
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
                   [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Total"
-                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{ m.Estado  }}</td>
-                  <!-- [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td> -->
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
+                <!-- </td> -->
                 <td>
+                  <!-- [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{ m.Estado  }} -->
                   <div class="text-center" *ngIf="m.Tipo_Movimiento == 'Transferencia' && m.Estado != 'Devuelta'">
                     <!-- <div ngbDropdown class="dropdown-primary"> -->
                     <!-- <button ngbDropdownToggle -->

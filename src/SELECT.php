@@ -48,15 +48,14 @@ $query_pendiente = 'SELECT
 	    INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
 	    INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
 	    INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-        INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
+        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
 	    INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
 	    INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
 	    ' . $condicion . '
-        AND TD.Estado = "Pendiente"
+        AND TD.Estado = "Pendiente" Having Devolucion <> 0 
         ';
 
-$query_pagadas = '
-        SELECT
+$query_pagadas = 'SELECT
         T.Id_Transferencia,
         T.Fecha,
         T.Cantidad_Transferida,
@@ -132,7 +131,7 @@ $query_devueltas = "SELECT
   INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
   INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
   INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
+  LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
   INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
   INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
 
@@ -267,7 +266,7 @@ function SetCondiciones($condicion)
             } else {
                 $condicion .= " AND TD.Estado = '" . $req['estado'] . "'";
             }
-        } 
+        }
     }
 
     return $condicion;

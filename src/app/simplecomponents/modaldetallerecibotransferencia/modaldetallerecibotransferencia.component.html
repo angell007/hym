@@ -71,7 +71,7 @@
               <tr *ngFor="let d of DestinatariosTransferencia">
                 <td class="text-center"><span style="font-size: 0.8em;">{{d.Id_Destinatario}}</span></td>
                 <td class="text-center"><span style="font-size: 0.8em;">{{d.Nombre_Destinatario}}</span></td>
-                <td class="text-center"><span style="font-size: 0.8em;">{{d.Numero_Cuenta_Destinatario | mask:'0000-0000-0000-0000'}}</span></td>
+                <td class="text-center"><span style="font-size: 0.8em;">{{d.Numero_Cuenta_Destinatario | mask:'0000-0000-0000-0000-0000'}}</span></td>
                 <td class="text-right">
                   <span style="font-size: 0.8em;">
                     {{d.Valor_Transferencia | customcurrency:Transferencia.Codigo_Moneda_Destino}}

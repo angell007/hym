@@ -636,7 +636,7 @@
                                     <option id="opId_Destinatario_Cuenta_{{i}}"
                                       *ngFor="let c of destinatario.Cuentas;  index as i;"
                                       [value]="c.Id_Destinatario_Cuenta" #custom>
-                                      {{c.Numero_Cuenta | mask: '0000-0000-0000-0000' }} {{ Apodo }} {{ c.Apodo }}
+                                      {{c.Numero_Cuenta | mask: '0000-0000-0000-0000-0000' }} {{ Apodo }} {{ c.Apodo }}
                                       {{ c.Name }} {{ Name }}
                                     </option>
                                   </select>

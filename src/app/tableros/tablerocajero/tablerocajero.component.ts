@@ -1918,7 +1918,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.errorSwal.show();
         return this.handleError(error);
       }).subscribe((data: any) => {
-        // console.log(['data ...', data]);
         this.LimpiarBancosDestinatarios(this.ListaDestinatarios);
         this.LimpiarModeloTransferencia();
         this.SetTransferenciaDefault();

@@ -158,7 +158,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
     this._getCuentasFuncionarioApertura();
     this._actualizar.cardListing.subscribe(() => {
-    this.CargarIndicadores();
+      this.CargarIndicadores();
     })
     // this.sub = this._TesCustomServiceService.subjec.subscribe((data) => {
     //   this.TransferenciasListar = data['query_data'];
@@ -373,16 +373,19 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   CargarIndicadores() {
     this.http.get(this.globales.ruta + 'php/transferencias/indicadores_transferencias.php', { params: { id_funcionario: this.Id_Funcionario } }).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
         this.ChartData = [];
+        this.ChartData.push(this.Indicadores.Pendientes);
         this.ChartData.push(this.Indicadores.Realizadas);
         this.ChartData.push(this.Indicadores.Devueltas);
       } else {
         this.LimpiarIndicadores();
         this.ChartData = [];
+        this.Indicadores = { Pendientes: 0, Realizadas: 0, Devueltas: 0, Productividad: 0 };
+
       }
     });
   }
