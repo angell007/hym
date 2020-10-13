@@ -10,8 +10,8 @@
       <div class="form-row">
         <div class="col-md-3">
           <div class="form-group">
-            <label>Grupo</label>
-            <select id="grupo" class="form-control" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo"
+            <label class=" font-size-18">Grupo</label>
+            <select id="grupo" class="form-control  font-size-18" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo"
               (change)="GetTercerosGrupo()" required>
               <option value="" selected>Seleccione</option>
               <option *ngFor="let g of Grupos" [value]="g.Id_Grupo_Tercero">{{g.Nombre_Grupo}}</option>
@@ -20,9 +20,9 @@
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Tercero</label>
+            <label class=" font-size-18">Tercero</label>
 
-            <select id="grupo" class="form-control" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
+            <select id="grupo" class="form-control  font-size-18" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
               <option value="" selected>Seleccione</option>
               <option *ngFor="let t of Terceros" [value]="t.Id_Tercero">{{t.Nombre}}</option>
             </select>
@@ -30,8 +30,8 @@
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Moneda</label>
-            <select id="moneda" class="form-control" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
+            <label class=" font-size-18">Moneda</label>
+            <select id="moneda" class="form-control  font-size-18" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
               <!-- <option value="{{ coinDefault.Id_Moneda }}" selected>{{ coinDefault.Nombre }}</option> -->
               <option *ngFor="let m of Monedas" [value]="m.Id_Moneda" [selected]="EgresoModel.Id_Moneda">{{m.Nombre}}
               </option>
@@ -40,8 +40,8 @@
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <label>Valor</label>
-            <input type="text" placeholder="Valor egreso" class="form-control" name="Valor" currencyMask
+            <label class=" font-size-18">Valor</label>
+            <input type="text" placeholder="Valor egreso" class="form-control  font-size-18" name="Valor" currencyMask
               [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required>
           </div>
         </div>
@@ -49,7 +49,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <label>Observación</label>
+            <label class=" font-size-18">Observación</label>
             <textarea style="width: 100%;" placeholder="Observaciones del egreso" name="Detalle"
               [(ngModel)]="EgresoModel.Detalle"></textarea>
           </div>

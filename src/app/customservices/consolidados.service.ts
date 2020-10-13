@@ -57,7 +57,7 @@ export class ConsolidadosService {
 
   async getValoresIniciales() {
 
-    await this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe()
+    await this.http.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {
         this.MonedasSistema = data.monedas;
         let t = data.totales_ingresos_egresos;

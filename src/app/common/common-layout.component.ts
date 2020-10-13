@@ -1078,10 +1078,7 @@ export class CommonLayoutComponent implements OnInit {
                             setTimeout(() => {
                                 this.salir();
                             }, 10000);
-
                         }
-
-
                     });
                     //this.modalOficinaCaja.show();
                 } else {

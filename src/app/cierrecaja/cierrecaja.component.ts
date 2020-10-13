@@ -85,7 +85,7 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
-    this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
+    this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
 
       this.MonedasSistema = data.monedas;
       let t = data.totales_ingresos_egresos;
@@ -155,7 +155,7 @@ export class CierrecajaComponent implements OnInit {
         this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
       });
 
-      console.log(this.MostrarTotal);
+      // console.log(this.MostrarTotal);
 
       this.MonedasSistema.forEach((m, i) => {
         let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
@@ -299,7 +299,7 @@ export class CierrecajaComponent implements OnInit {
 
   AsignarFieldsDisabled() {
     this.TotalRestaIngresosEgresos.forEach(valor => {
-      console.log(valor);
+      // console.log(valor);
 
       if (valor == 0 || valor == '') {
         this.FieldsDisabled.push(true);
@@ -308,7 +308,7 @@ export class CierrecajaComponent implements OnInit {
       }
     });
 
-    console.log(this.FieldsDisabled);
+    // console.log(this.FieldsDisabled);
   }
 
   InhabilitarBoton() {
@@ -327,7 +327,7 @@ export class CierrecajaComponent implements OnInit {
         data.valores_diario.forEach((valores, i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
         });
-        console.log(this.ValoresMonedasApertura);
+        // console.log(this.ValoresMonedasApertura);
 
       });
   }

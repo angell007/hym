@@ -4,8 +4,8 @@
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label class="font-weight-bold">Corresponsal</label>
-          <select required name="Id_Corresponsal_Bancario" class="form-control"
+          <label class="font-weight-bold font-size-18">Corresponsal</label>
+          <select required name="Id_Corresponsal_Bancario" class="form-control font-size-18"
             [(ngModel)]="CorresponsalModel.Id_Corresponsal_Bancario">
             <option value="">Seleccione un Corresponsal</option>
             <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}
@@ -17,23 +17,23 @@
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label class="font-weight-bold">Consignaciones</label>
-          <input required name="Consignacion" type="text" placeholder="Consignaciones" class="form-control"
+          <label class="font-weight-bold font-size-18">Consignaciones</label>
+          <input required name="Consignacion" type="text" placeholder="Consignaciones" class="form-control font-size-18"
             [(ngModel)]="CorresponsalModel.Consignacion" (blur)="CalcularTotalCorresponsal()" currencyMask
             [options]="{ thousands: '.' }">
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label class="font-weight-bold">Retiros</label>
-          <input required name="Retiro" type="text" placeholder="Retiros" class="form-control"
+          <label class="font-weight-bold font-size-18">Retiros</label>
+          <input required name="Retiro" type="text" placeholder="Retiros" class="form-control font-size-18"
             [(ngModel)]="CorresponsalModel.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask
             [options]="{ thousands: '.' }">
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label class="font-weight-bold">Total Corresponsal</label>
+          <label class="font-weight-bold font-size-18">Total Corresponsal</label>
           <label class="block-element">{{CorresponsalModel.Total_Corresponsal | customcurrency}}</label>
         </div>
       </div>
@@ -41,7 +41,7 @@
     <div class="row mrg-top-20">
       <div class="col-md-12">
         <div class="form-group">
-          <label class="font-weight-bold">Observaciones</label>
+          <label class="font-weight-bold font-size-18">Observaciones</label>
           <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
             [(ngModel)]="CorresponsalModel.Detalle">
               </textarea>
@@ -51,12 +51,12 @@
   </form>
   <div class="row">
     <div class="col-md-10">
-      <button type="submit" class="btn btn-sm btn-info btn-block" [disabled]="!FormCorresponsal.valid"
+      <button type="submit" class="btn btn-sm btn-info btn-block font-size-20" [disabled]="!FormCorresponsal.valid"
         [swal]="{title : '¿Está Seguro?', text: '¿Está Seguro?, Se van guardar los datos del corresponsal para el dia de hoy!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
         (confirm)="GuardarCorresponsalDiario()">Guardar</button>
     </div>
     <div class="col-md-2">
-      <button class="btn btn-secondary btn-sm btn-block" (click)="VolverTablaRegistros()">Volver</button>
+      <button class="btn btn-secondary btn-sm btn-block font-size-20" (click)="VolverTablaRegistros()">Volver</button>
     </div>
   </div>
   {{ CorresponsalModel.Retiro | json }}

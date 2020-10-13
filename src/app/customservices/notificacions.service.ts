@@ -23,7 +23,7 @@ export class NotificacionsService {
   }
 
   counter() {
-    this.http.get(this.globales.ruta + 'php/trasladocaja/notificaciones_traslado.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+    this.http.get(`${this.globales.ruta}/php/trasladocaja/notificaciones_traslado.php`, { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.alertasCajas = data;
       if (this.alertasCajas.length > 0) {
         this.notifcaciones$.next(this.alertasCajas.length)

@@ -844,12 +844,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (tipo_moneda_origen == 'l') {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Destino = cambio;
-          // console.log('if', cambio);
+          console.log('if', cambio);
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
 
           this.CambioModel.Valor_Destino = cambio;
-          // console.log('else', cambio);
+          console.log('else', cambio);
         }
       }
     } else if (tipo_cambio == 'd') {
@@ -862,7 +862,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Origen = cambio;
-          // console.log('else2', cambio);
+          console.log('else2', cambio);
         }
       }
     }
@@ -1261,14 +1261,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
     //tasa_cambio = parseFloat(tasa_cambio);
 
-    // console.log(max);
-    // console.log(min);
-    // console.log(sug);
-    // console.log(tasa_cambio);
-    // console.log(tasa_cambio > max || tasa_cambio < min);
-    // console.log(tasa_cambio > max && tasa_cambio < min);
-    // console.log(tasa_cambio > max);
-    // console.log(tasa_cambio < min);
+    console.log(max);
+    console.log(min);
+    console.log(sug);
+    console.log(tasa_cambio);
+    console.log(tasa_cambio > max || tasa_cambio < min);
+    console.log(tasa_cambio > max && tasa_cambio < min);
+    console.log(tasa_cambio > max);
+    console.log(tasa_cambio < min);
 
     if (tasa_cambio > max || tasa_cambio < min) {
       this.TransferenciaModel.Tasa_Cambio = sug;
@@ -1883,7 +1883,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             return this.handleError(error);
           })
           .subscribe((data: any) => {
-            // console.log(data);
+            console.log(data);
             this.LimpiarModeloTransferencia();
             this.SetTransferenciaDefault();
             this.movimientoExitosoSwal.show();
@@ -2192,7 +2192,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
-    // console.log(value);
+    console.log(value);
     // console.log(this.Monedas);
 
     this.MonedaParaTransferencia.id = value;
@@ -3179,7 +3179,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.GiroModel.Comision = minComision
     }
 
-    // console.log(this.GiroModel.Comision);
+    console.log(this.GiroModel.Comision);
 
 
     if (flag) {
@@ -3644,7 +3644,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     this.http.post(this.globales.ruta + 'php/trasladocaja/verify_traslado.php', datos).subscribe((data: any) => {
 
-      // console.log(data);
+      console.log(data);
 
       if (data.titulo != 'Advertencia') {
         this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
@@ -4296,7 +4296,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CambiarVista(tipo) {
 
     // this._notificacionService.counter();
-    // console.log('Cambiando vista');
+    console.log('Cambiando vista');
 
     switch (tipo) {
       case "Compra": {
@@ -4546,13 +4546,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
         if (data.DiarioNeto <= 0) {
-
+          console.log(data);
           if (data.valores_anteriores.length == 0) {
             this.ValoresMonedasApertura = [];
             let toastObj = { textos: ['Alerta', 'No se encontraron registros de apertura'], tipo: 'warning', duracion: 4000 };
             this._toastService.ShowToast(toastObj);
           } else {
-            // console.log(this.ValoresMonedasApertura);
 
             data.valores_anteriores.forEach((valores, i) => {
               this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
@@ -4560,10 +4559,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
             this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
             this.ModalAperturaCaja.show();
+            
+            // data.valores_anteriores.forEach((valores: any, i: number) => {
+            // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            // (this.ValoresMonedasApertura[i]) ? this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre : ''
+            // });
           }
 
         } else {
-
           data.valores_anteriores.forEach((valores, i) => {
             this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
           });

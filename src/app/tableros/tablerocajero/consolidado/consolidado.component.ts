@@ -35,10 +35,10 @@ export class ConsolidadoComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/consolidados/getConsolidados.php', { params: { id_funcionario: this.id_funcionario, pag: '1000' } }).subscribe(async (data: any) => {
       this.datos = data;
       await this.datos.forEach(async (element: any, index: number) => {
-        element.query_data.forEach(async (elements: any) => {
+        element.query_data.forEach((elements: any) => {
           this.ValoresMonedasApertura[index] += elements.Ingreso - elements.Egreso
           elements.saldo = this.ValoresMonedasApertura[index]
-          elements.codigo = this.ValoresMonedasApertura2[index].Codigo
+          elements.codigo = this.ValoresMonedasApertura2[index]['Codigo']
         });
       });
     });
