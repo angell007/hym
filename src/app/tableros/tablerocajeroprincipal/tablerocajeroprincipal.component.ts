@@ -62,7 +62,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('iniciando tablero principal ');
+    // console.log('iniciando tablero principal ');
     this.ConsultarTotalesDepartamento();
   }
 
@@ -121,7 +121,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
       p = { fecha: this.Fecha_Consulta };
       this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
-        console.log(data);
+        // console.log(data);
 
         if (data.success) {
           this.CajerosAbiertos = data.conteo.Activos;
@@ -138,7 +138,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
       p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_Consulta };
       this._cajaService.getCajasAbiertasFuncionario(p).subscribe((data: any) => {
 
-        console.log(data);
+        // console.log(data);
 
 
         if (data.success) {
@@ -171,7 +171,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
 
             if (this.Funcionario.Id_Perfil == 2) {
-              let nue = []; 
+              let nue = [];
               data.query_data.map((elemnt: any, i: number) => {
                 return elemnt['Oficinas'].map((oficina) => {
                   if (oficina.Nombre == 'Oficina 1') {
@@ -179,8 +179,10 @@ export class TablerocajeroprincipalComponent implements OnInit {
                   }
                 })
               })
+              // console.log(nue);
               this.Totales = nue;
             } else {
+              // console.log(data.query_data);
               this.Totales = data.query_data
             }
 
@@ -256,7 +258,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   Test() {
-    console.log(this.Fecha_Consulta);
+    // console.log(this.Fecha_Consulta);
   }
 
   ShowSwal(tipo: string, titulo: string, msg: string) {

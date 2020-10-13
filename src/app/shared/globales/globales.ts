@@ -78,7 +78,7 @@ export class Globales {
 
   BuscarServiciosExternos() {
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
-      console.log(' obtenniendo servicios externos', data );
+      // console.log(' obtenniendo servicios externos', data );
       this.ServiciosExternos = data;
     });
   }

@@ -74,7 +74,7 @@ export class SexternosService {
     }
 
     this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios_filter.php?', { params: p }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.Servicios = data.query_data;
         this.SetInformacionPaginacion(data.query_data);

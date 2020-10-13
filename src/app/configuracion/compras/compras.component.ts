@@ -85,7 +85,7 @@ export class ComprasComponent implements OnInit {
   ComprasPendientes =[];
   ActualizarVista() {
     this.http.get(this.globales.ruta + 'php/compras/lista_compras.php', { params: { modulo: 'Compra' } }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       
       this.compras = data;
     });

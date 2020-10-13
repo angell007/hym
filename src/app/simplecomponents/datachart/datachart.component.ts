@@ -18,9 +18,9 @@ export class DatachartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.ChartData);
-    console.log(this.ChartLabels);
-    console.log(this.ChartType);
+    // console.log(this.ChartData);
+    // console.log(this.ChartLabels);
+    // console.log(this.ChartType);
     
   }
 

@@ -211,7 +211,7 @@ export class CofiguracionComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       
       this.Identificacion = '1';
       this.configuracionGeneral = data;

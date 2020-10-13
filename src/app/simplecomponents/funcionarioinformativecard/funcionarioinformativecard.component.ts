@@ -27,7 +27,7 @@ export class FuncionarioinformativecardComponent implements OnInit {
   AbrirCierreFuncionario(funcionario: any) {
 
     let user = funcionario;
-    console.log(user);
+    // console.log(user);
     
     if (this.Fecha == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'La fecha para la consulta del cierre esta vacia, contacte con el administrador del sistema!']);

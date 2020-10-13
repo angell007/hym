@@ -31,7 +31,7 @@ export class ModalabonocompracuentaComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       
       this.CompraCuentaModel.Id_Cuenta_Bancaria = data.id_cuenta;
       this.CompraCuentaModel.Id_Funcionario = data.id_funcionario;
@@ -54,7 +54,7 @@ export class ModalabonocompracuentaComponent implements OnInit {
 
     }
     
-    console.log(this.CompraCuentaModel);
+    // console.log(this.CompraCuentaModel);
     
     let info = this._generalService.normalize(JSON.stringify(this.CompraCuentaModel));
     let datos = new FormData();

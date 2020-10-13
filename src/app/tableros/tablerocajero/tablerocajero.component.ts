@@ -226,7 +226,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     giros: false,
     traslados: false,
     otrotraslados: false,
-    
+
     corresponsal: false,
     servicios: false,
     egresos: false,
@@ -554,7 +554,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   ) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.AsignarMonedas();
-    console.log('Perfil', this.Perfil);
+    // console.log('Perfil', this.Perfil);
   }
 
   CierreCajaAyerBolivares = 0;
@@ -818,9 +818,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.CambioModel.Recibido = '';
           return;
         } else {
-          let vuelto = pagoCon - recibido;
-          this.CambioModel.TotalPago = pagoCon;
-          this.CambioModel.Vueltos = vuelto;
+          this.CambioModel.Vueltos = parseFloat(this.CambioModel.Recibido) - (parseFloat(this.CambioModel.Tasa) * parseFloat(this.CambioModel.Valor_Origen))
+          // let vuelto = pagoCon - recibido;
+          // this.CambioModel.TotalPago = pagoCon;
+          // this.CambioModel.Vueltos = vuelto;
         }
       }
     }
@@ -840,25 +841,28 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     if (tipo_cambio == 'o') {
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
-        // console.log("entro");
         if (tipo_moneda_origen == 'l') {
-          var cambio = (parseFloat(this.CambioModel.Valor_Origen) / parseFloat(this.CambioModel.Tasa));
+          var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Destino = cambio;
+          // console.log('if', cambio);
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
-          // console.log(cambio);
 
           this.CambioModel.Valor_Destino = cambio;
+          // console.log('else', cambio);
         }
       }
     } else if (tipo_cambio == 'd') {
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
         if (tipo_moneda_origen == 'l') {
-          var cambio = (parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
+
+          var cambio = Math.floor(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Origen = cambio;
+
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Origen = cambio;
+          // console.log('else2', cambio);
         }
       }
     }
@@ -1257,14 +1261,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
     //tasa_cambio = parseFloat(tasa_cambio);
 
-    console.log(max);
-    console.log(min);
-    console.log(sug);
-    console.log(tasa_cambio);
-    console.log(tasa_cambio > max || tasa_cambio < min);
-    console.log(tasa_cambio > max && tasa_cambio < min);
-    console.log(tasa_cambio > max);
-    console.log(tasa_cambio < min);
+    // console.log(max);
+    // console.log(min);
+    // console.log(sug);
+    // console.log(tasa_cambio);
+    // console.log(tasa_cambio > max || tasa_cambio < min);
+    // console.log(tasa_cambio > max && tasa_cambio < min);
+    // console.log(tasa_cambio > max);
+    // console.log(tasa_cambio < min);
 
     if (tasa_cambio > max || tasa_cambio < min) {
       this.TransferenciaModel.Tasa_Cambio = sug;
@@ -1879,7 +1883,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             return this.handleError(error);
           })
           .subscribe((data: any) => {
-            console.log(data);
+            // console.log(data);
             this.LimpiarModeloTransferencia();
             this.SetTransferenciaDefault();
             this.movimientoExitosoSwal.show();
@@ -2188,7 +2192,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
-    console.log(value);
+    // console.log(value);
     // console.log(this.Monedas);
 
     this.MonedaParaTransferencia.id = value;
@@ -3175,7 +3179,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.GiroModel.Comision = minComision
     }
 
-    console.log(this.GiroModel.Comision);
+    // console.log(this.GiroModel.Comision);
 
 
     if (flag) {
@@ -3640,7 +3644,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     this.http.post(this.globales.ruta + 'php/trasladocaja/verify_traslado.php', datos).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       if (data.titulo != 'Advertencia') {
         this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
@@ -4014,7 +4018,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
 
     document.getElementById(id).style.display = 'block';
-    console.log(document.getElementById(id));
+    // console.log(document.getElementById(id));
     this.CargarDatosModulo(id);
   }
 
@@ -4292,7 +4296,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CambiarVista(tipo) {
 
     // this._notificacionService.counter();
-    console.log('Cambiando vista');
+    // console.log('Cambiando vista');
 
     switch (tipo) {
       case "Compra": {

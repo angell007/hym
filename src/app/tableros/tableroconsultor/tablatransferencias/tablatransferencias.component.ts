@@ -148,7 +148,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
         this.ConsultaFiltradaObservable(false, this.filter);
         this.ActualizarIndicadores.emit()
       });
-    console.log(this.Funcionario.Id_Perfil);
+    // console.log(this.Funcionario.Id_Perfil);
 
   }
 
@@ -233,7 +233,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     let data = new FormData();
     data.append("id_transferencia", idTransferenciaDestinatario);
     this._transferenciaService.DesbloquearTransferencia(data).subscribe((response: any) => {
-      console.log(response);
+      // console.log(response);
     });
   }
 
@@ -468,7 +468,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   public ActualizarValorCuentaBancaria() {
-    console.log("actualizando el valor real de la cuenta bancaria!");
+    // console.log("actualizando el valor real de la cuenta bancaria!");
 
   }
 
@@ -479,7 +479,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     } else {
       let p = { id_cuenta: idCuentaBancaria, id_apertura: this.Id_Apertura };
       this.cuentaService.GetValorActualizadoCuenta(p).subscribe((response: any) => {
-        console.log(response);
+        // console.log(response);
         this.ValorRealCuenta = parseInt(response.query_data);
         this.CodigoMonedaValorReal = response.codigo_moneda;
       });

@@ -99,8 +99,8 @@ export class TrasladosComponent implements OnInit {
 
   AsignarMonedas(){
     this.Monedas = this.globales.Monedas;
-    console.log(this.Monedas);
-    console.log(this.globales.Monedas);    
+    // console.log(this.Monedas);
+    // console.log(this.globales.Monedas);    
   }
 
   ActualizarVista() {
@@ -437,7 +437,7 @@ export class TrasladosComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Traslado', id: id }
     }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.Identificacion = id;
       this.edicionTraslado = data;
       this.Origen(data.Origen);
@@ -447,8 +447,8 @@ export class TrasladosComponent implements OnInit {
   }
 
   ObtenerOrigen(value, tipo:string = ''){
-    console.log(value);
-    console.log(tipo);
+    // console.log(value);
+    // console.log(tipo);
     
   }
 

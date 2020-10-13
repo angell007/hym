@@ -501,7 +501,7 @@ export class ModaldestinatarioComponent implements OnInit {
               // Se usa variable auxiliar para formatear la longitud del input 
               let aux = nroCuenta.replace(/-/g, '')
               let longitud = aux.length;
-              console.log(longitud);
+              // console.log(longitud);
 
 
               if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {

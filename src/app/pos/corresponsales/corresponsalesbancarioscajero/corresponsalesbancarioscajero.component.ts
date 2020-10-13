@@ -47,7 +47,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
   ngOnInit() {
     this._viewManagementSubscription = this.ManageView.subscribe((data: AccionTableroCajero) => {
       if (data == AccionTableroCajero.Cerrar) {
-        console.log(data);
+        // console.log(data);
 
         this.LimpiarModeloCorresponsal();
       }
@@ -117,7 +117,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
       });
 
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 
 

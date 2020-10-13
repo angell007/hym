@@ -519,7 +519,7 @@ export class PosComponent implements OnInit {
     datos.append("datos", info);
     datos.append("destinatario", cuentas);
 
-    console.log(cuentas);
+    // console.log(cuentas);
 
     //console.log(destinatario);
   

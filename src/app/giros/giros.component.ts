@@ -137,7 +137,7 @@ export class GirosComponent implements OnInit {
 
     var params = this.SetFiltros(paginacion);
 
-    console.log([params, this.Filtros.Estado]);
+    // console.log([params, this.Filtros.Estado]);
 
     if (params === '') {
       this.ResetValues();
@@ -148,7 +148,7 @@ export class GirosComponent implements OnInit {
     this.Cargando = true;
     this.giroService.getGiros(params).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
       
       this.Giros = data.query_data;
       this.TotalItems = data.numReg;

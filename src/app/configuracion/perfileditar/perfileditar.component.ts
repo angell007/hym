@@ -32,7 +32,7 @@ export class PerfileditarComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil.php', {
       params: { id: this.id}
     }).subscribe((data: any) => {
-      console.log(data)
+      // console.log(data)
       this.Permisos=data;    
     });
 

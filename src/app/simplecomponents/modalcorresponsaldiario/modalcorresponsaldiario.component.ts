@@ -174,11 +174,11 @@ export class ModalcorresponsaldiarioComponent implements OnInit, OnDestroy {
   }
 
   TestValue(value:string){
-    console.log(value);    
+    // console.log(value);    
   }
 
   TestV(){
-    console.log(this.CorresponsalModel);
+    // console.log(this.CorresponsalModel);
   }
 
 }

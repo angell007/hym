@@ -33,7 +33,7 @@ export class ModalamovertransferenciaComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       this.MoverTransferenciaModel.Id_Cuenta_Origen = data.id_cuenta_origen;
       this.MoverTransferenciaModel.Id_Pago_Transferencia = data.id_pago_transferencia;
@@ -65,7 +65,7 @@ export class ModalamovertransferenciaComponent implements OnInit {
 
     }
 
-    console.log(this.MoverTransferenciaModel);
+    // console.log(this.MoverTransferenciaModel);
 
     let info = this._generalService.normalize(JSON.stringify(this.MoverTransferenciaModel));
     let datos = new FormData();

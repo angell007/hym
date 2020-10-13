@@ -177,7 +177,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   public ConsultarAperturaFuncionario() {
     this._cuentaBancariaService.GetAperturaFuncionario(this.Id_Funcionario).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (!data.apertura_activa) {
         this.AbrirCuentas.emit();
@@ -190,7 +190,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   private _getCuentasFuncionarioApertura() {
     this._cuentaBancariaService.GetCuentasFuncionarioApertura(this.Id_Apertura).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.CuentasSeleccionadas = data.query_data;
@@ -202,7 +202,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public AbrirModalAPerturaCuentas() {
-    console.log("abriendo modal apertura cuenta desde tablero");
+    // console.log("abriendo modal apertura cuenta desde tablero");
     this.AbrirModalAperturaCuenta.next();
   }
 
@@ -628,7 +628,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public RecibirCuentasSeleccionadas(datos: any) {
-    console.log(datos);
+    // console.log(datos);
 
     this.CuentasSeleccionadas = datos.cuentas;
     this.Id_Apertura = datos.id_apertura;

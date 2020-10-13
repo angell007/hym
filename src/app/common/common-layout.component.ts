@@ -218,7 +218,7 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas();
-        console.log(localStorage);
+        // console.log(localStorage);
 
         this.SetOficina();
         this.SetCaja();
@@ -1060,11 +1060,11 @@ export class CommonLayoutComponent implements OnInit {
                         macFormatted += ":";
                     }
                 }
-                console.log(macFormatted);
+                // console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
                         if (data.mensaje == 'Se han encontrado registros!') {
-                            console.log(data.query_data.Id_Oficina)
+                            // console.log(data.query_data.Id_Oficina)
                             this.oficina_seleccionada = data.query_data.Id_Oficina;
                             this.caja_seleccionada = data.query_data.Id_Caja;
 

@@ -57,7 +57,7 @@ export class ConsolidadoComponent implements OnInit {
 
 
   calculateSaldo(ingreso) {
-    console.log(ingreso);
+    // console.log(ingreso);
     return ingreso
   }
 

@@ -40,8 +40,8 @@ export class ModalaperturacuentaComponent implements OnInit {
   ngOnInit() {
     this._getDiferencialMonedas();
     this._updatedListSubscription = this._mostrarBotonRevision.subscribe(list => {
-      console.log("suscripcion cuando cambia la lista");
-      console.log(list);
+      // console.log("suscripcion cuando cambia la lista");
+      // console.log(list);
       for (let index = 0; index < list.length; index++) {
         let cuenta = list[index];
         if (cuenta.Seleccionada == '1') {
@@ -65,7 +65,7 @@ export class ModalaperturacuentaComponent implements OnInit {
 
   public GetCuentasBancariasApertura(){
     this._cuentaBancariaService.GetCuentasBancariasApertura().subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
@@ -77,7 +77,7 @@ export class ModalaperturacuentaComponent implements OnInit {
 
   private _getDiferencialMonedas(){
     this._monedaService.GetMaximaDiferenciaMonedas().subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       
       if (data.codigo == 'success') {
         this.DiferencialMonedas = data.query_data;
@@ -128,7 +128,7 @@ export class ModalaperturacuentaComponent implements OnInit {
       data.append('modulo', 'Tablero Consultor');
 
       this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d:any) => {
-        console.log(d);
+        // console.log(d);
         if (d.codigo == 'success') {
           this._swalService.ShowMessage(d);
           let p = {cuentas:this.CuentasBancariasSeleccionadas, id_apertura:d.id_apertura};
@@ -150,7 +150,7 @@ export class ModalaperturacuentaComponent implements OnInit {
   }
 
   public CerrarModal(){
-    console.log("cerrando modal");
+    // console.log("cerrando modal");
     
   }
 
@@ -193,7 +193,7 @@ export class ModalaperturacuentaComponent implements OnInit {
   }
 
   public CargarMovimientosAperturaAnterior(){
-    console.log("abriendo movimientos anteriores!");
+    // console.log("abriendo movimientos anteriores!");
     
   }
 

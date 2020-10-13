@@ -25,13 +25,13 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
 
   ngOnInit() {
     this._abrirSubscription = this.AbrirModal.subscribe(data => {
-      console.log(data);
+      // console.log(data);
 
       this.Transferencia = data;
       this.GetDestinatariosTransferencia();
       this.GetInfoCompany();
       this.ModalVerRecibo.show();
-      console.log(this.Transferencia);
+      // console.log(this.Transferencia);
 
     });
   }
@@ -54,10 +54,10 @@ export class ModaldetallerecibotransferenciaComponent implements OnInit, OnDestr
 
   private GetInfoCompany() {
     this._transferenciaService.GetInfoCompany().subscribe(data => {
-      console.log('GetInfoCompany');
+      // console.log('GetInfoCompany');
       if (data.codigo == 'success') {
         this.infoCompany = data.query_data[0];
-        console.log('Data', this.infoCompany);
+        // console.log('Data', this.infoCompany);
       } else {
         this.infoCompany = [];
       }

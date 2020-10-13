@@ -50,7 +50,7 @@ export class TablacomprasComponent implements OnInit, OnChanges {
   ConsultarComprasPendientes(){
     this.compraService.getComprasPendientes(this.Id_Moneda).subscribe((data:any) => {
 
-      console.log(data);
+      // console.log(data);
       
       if (data.codigo == 'success') {
         

@@ -6,18 +6,18 @@
 
 
 
-          <a href="#cambios" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#cambios" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('cambios'); ActivarCard('cambios')"
             [ngClass]="{'card-selected': CardSelection.cambios, 'card-tremor': !CardSelection.cambios}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-calendar text-primary font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Cambios Efectivo</b>
-                    <p class="no-mrg-btm ">Compras o Ventas</p>
+                    <b class="text-dark font-size-20">Cambios Efectivo</b>
+                    <p class="no-mrg-btm font-size-16 ">Compras o Ventas</p>
                   </div>
                 </li>
               </ul>
@@ -25,53 +25,53 @@
           </a>
 
 
-          <a href="#transferencias" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#transferencias" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('transferencias'); ActivarCard('trans')"
             [ngClass]="{'card-selected': CardSelection.trans, 'card-tremor': !CardSelection.trans}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-control-shuffle text-primary font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Recibos Transferencia</b>
-                    <p class="no-mrg-btm ">A cuentas Extranjeras</p>
+                    <b class="text-dark font-size-20">Recibos Transferencia</b>
+                    <p class="no-mrg-btm font-size-16 ">A cuentas Extranjeras</p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
-          <a href="#giros" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#giros" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('giros'); ActivarCard('giros')"
             [ngClass]="{'card-selected': CardSelection.giros, 'card-tremor': !CardSelection.giros}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-wallet text-success font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Giros</b>
-                    <p class="no-mrg-btm">Envío/Recepción Dinero</p>
+                    <b class="text-dark font-size-20">Giros</b>
+                    <p class="no-mrg-btm font-size-16">Envío/Recepción Dinero</p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
 
-          <a href="#egresos" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#egresos" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('egresos'); ActivarCard('egresos')"
             [ngClass]="{'card-selected': CardSelection.egresos, 'card-tremor': !CardSelection.egresos}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-ticket text-danger font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Egresos</b>
-                    <p class="no-mrg-btm">Gestion de Egresos</p>
+                    <b class="text-dark font-size-20">Egresos</b>
+                    <p class="no-mrg-btm font-size-16">Gestion de Egresos</p>
                   </div>
                 </li>
               </ul>
@@ -81,54 +81,54 @@
 
 
 
-          <a href="#corresponsal" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#corresponsal" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('corresponsal'); ActivarCard('corresponsal')"
             [ngClass]="{'card-selected': CardSelection.corresponsal, 'card-tremor': !CardSelection.corresponsal}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-money text-warning font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Corresponsal Bancario</b>
-                    <p class="no-mrg-btm">Saldo del día</p>
+                    <b class="text-dark font-size-20">Corresponsal Bancario</b>
+                    <p class="no-mrg-btm font-size-16">Saldo del día</p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
 
-          <a href="#servicios" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#servicios" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('servicios'); ActivarCard('servicios')"
             [ngClass]="{'card-selected': CardSelection.servicios, 'card-tremor': !CardSelection.servicios}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-truck text-danger font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Servicios Externos</b>
-                    <p class="no-mrg-btm">Consignaciones, Pagos, Trámites </p>
+                    <b class="text-dark font-size-20">Servicios Externos</b>
+                    <p class="no-mrg-btm font-size-16">Consignaciones, Pagos, Trámites </p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
 
-          <a href="#cajeros" scrollTo class="card my-0 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
+          <a href="#cajeros" scrollTo class="card my-2 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
             (click)="muestra_tabla('cajeros'); ActivarCard('cajeros')"
             [ngClass]="{'card-selected': CardSelection.cajeros, 'card-tremor': !CardSelection.cajeros}">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-desktop text-success font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Cajeros Aperturados</b>
-                    <p class="no-mrg-btm ">Gestion de Cajeros</p>
+                    <b class="text-dark font-size-20">Cajeros Aperturados</b>
+                    <p class="no-mrg-btm font-size-16 ">Gestion de Cajeros</p>
                   </div>
                 </li>
               </ul>
@@ -136,36 +136,36 @@
           </a>
 
 
-          <a href="#traslados" scrollTo class="card my-0 py-0 scroll-to"
+          <a href="#traslados" scrollTo class="card my-2 py-0 scroll-to"
             (click)="muestra_tabla('traslados'); ActivarCard('traslados')"
             [ngClass]="{'card-selected': CardSelection.traslados, 'card-tremor': !CardSelection.traslados }">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-ticket text-info font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Traslados </b>
-                    <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
+                    <b class="text-dark font-size-20">Traslados </b>
+                    <p class="no-mrg-btm font-size-16">Entre Cajas de la Empresa</p>
                   </div>
                 </li>
               </ul>
             </div>
           </a>
 
-          <a href="#otrotraslados" scrollTo class="card my-0 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
+          <a href="#otrotraslados" scrollTo class="card my-2 py-0 scroll-to" *ngIf="this.Perfil.Id_Perfil  == '2'"
             (click)="muestra_tabla('otrotraslados'); ActivarCard('otrotraslados')"
             [ngClass]="{'card-selected': CardSelection.otrotraslados, 'card-tremor': !CardSelection.otrotraslados }">
-            <div class="card-block padding-10">
+            <div class="card-block padding-5">
               <ul class="list-unstyled list-info">
                 <li>
                   <span class="thumb-img pdd-top-10">
                     <i class="ti-share-alt text-dark font-size-30"></i>
                   </span>
                   <div class="info">
-                    <b class="text-dark font-size-18">Otros Traslados </b>
-                    <p class="no-mrg-btm">Gestión de Traslados </p>
+                    <b class="text-dark font-size-20">Otros Traslados </b>
+                    <p class="no-mrg-btm font-size-16">Gestión de Traslados </p>
                   </div>
                 </li>
               </ul>
@@ -184,7 +184,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Cambios Efectivo</b>
-                  <p class="no-mrg-btm ">{{tituloCambio}}</p>
+                  <p class="no-mrg-btm font-size-16 ">{{tituloCambio}}</p>
                 </div>
               </li>
             </ul>
@@ -193,11 +193,11 @@
 
                 <div class="col-md-4">
                   <button (click)="CambiarVista('Cambio');CambiarVista('Compra');"
-                    class="btn btn-info btn-block mrg-top-10 btn-grande">Compra</button>
+                    class= " font-size-18 btn btn-info btn-block mrg-top-10 btn-grande font-size-20">Compra</button>
                 </div>
                 <div class="col-md-4">
                   <button (click)="CambiarVista('Cambio');CambiarVista('Venta')"
-                    class="btn btn-success btn-block mrg-top-10 btn-grande">Venta</button>
+                    class= " font-size-18 btn btn-success btn-block mrg-top-10 btn-grande font-size-20">Venta</button>
                 </div>
 
                 <div class="col-md-12">
@@ -223,12 +223,12 @@
                                 <th class="table-filters"></th>
 
                                 <th class="table-filters">
-                                  <input type="text" class="form-control" placeholder="Filtro código"
+                                  <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro código"
                                     (change)="fc.ConsultaFiltrada()" [(ngModel)]="fc.Filtros.codigo">
                                 </th>
 
                                 <th class="table-filters">
-                                  <select id="grupo" class="form-control" (change)="fc.ConsultaFiltrada()"
+                                  <select id="grupo" class="form-control font-size-20 pa-1 font-size-20 p-auto" (change)="fc.ConsultaFiltrada()"
                                     [(ngModel)]="fc.Filtros.tipo">
                                     <option value="">Todos</option>
                                     <option value="Compra">Compra</option>
@@ -321,99 +321,119 @@
 
                       <!--ESCOGER MONEDA PARA COMPRA-->
                       <div class="col-md-6">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                           {{ !Venta ? 'Moneda que compra' : 'Moneda que recibe'}}
                         </label>
-                        <select *ngIf="!Venta" class="form-control" placeholder="Origen" ngModel="" id="Origen"
-                          name="Origen" (change)="SetMonedaCambio($event.target.value);" required>
+                        <select *ngIf="!Venta" class="inputfield  form-control form-control-lg" placeholder="Origen"
+                          ngModel="" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
+                          required>
                           <option value=""> Seleccione Moneda</option>
                           <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
                             ({{ m.Codigo }}) </option>
                         </select>
-                        <input *ngIf="Venta" disabled name="Origen" readonly type="text" class="form-control input-font"
-                          ngModel="Pesos">
+
+
+                        <input *ngIf="Venta" disabled name="Origen" readonly type="text"
+                          class="inputfield  form-control form-control-lg" ngModel="Pesos">
+
+
                       </div>
 
                       <!--ESCOGER MONEDA PARA VENTA-->
                       <div class="col-md-6">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                           {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
                         </label>
-                        <select *ngIf="Venta" class="form-control" placeholder="Destino" id="Destino" name="Destino"
-                          ngModel="{{ Venta === false ? '2' : '' }}" (change)="SetMonedaCambio($event.target.value);"
-                          required>
+                        <select *ngIf="Venta" class="inputfield  form-control form-control-lg" placeholder="Destino"
+                          id="Destino" name="Destino" ngModel="{{ Venta === false ? '2' : '' }}"
+                          (change)="SetMonedaCambio($event.target.value);" required>
                           <option value=""> Seleccione Moneda</option>
                           <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
                             ({{ m.Codigo }}) </option>
                         </select>
                         <input *ngIf="!Venta" disabled name="Moneda_Destino" readonly type="text"
-                          class="form-control input-font" ngModel="{{MonedaDestino}}">
+                          class="form-control font-size-20 pa-1 input-font" ngModel="{{MonedaDestino}}">
 
                       </div>
                     </div>
                     <div class="row">
 
                       <div class="col-md-4" *ngIf="!Venta">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                           Compra
                         </label>
                         <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
-                          class="form-control text-right input-font" name="Valor_Origen" id="Cambia"
+                          class="inputfield  form-control form-control-lg" name="Valor_Origen" id="Cambia"
                           [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')"
                           currencyMask [options]="{ thousands: '.', decimal: ',' }" [disabled]="HabilitarCampos"
                           required>
                       </div>
 
+                      <div class="col-md-4 mt-1" *ngIf="Venta">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Valor en pesos a cambiar
+                        </label>
+                        <input type="text" placeholder="Entrega" name="Valor_Destino"
+                          class="inputfield  form-control form-control-lg" autocomplete="false" id="Entrega"
+                          [(ngModel)]="CambioModel.Valor_Destino" currencyMask [options]="{ thousands: '.' }"
+                          (ngModelChange)="conversionMoneda('d', 'l')" [disabled]="HabilitarCampos" required>
+                      </div>
+
+                      <div class="col-md-4 mt-1">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
+                          Cambio</label>
+                        <input type="text" placeholder="Tasa" class="inputfield  form-control form-control-lg"
+                          autocomplete="false" id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa"
+                          (blur)="conversionMoneda('o', 'e')" [disabled]="HabilitarCampos" required currencyMask
+                          [options]="{ thousands: '.', decimal: ',' }">
+                      </div>
+
+                      <div class="col-md-4 mt-1" *ngIf="!Venta">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
+                        <input type="text" placeholder="Entrega" name="Valor_Destino"
+                          class="inputfield  form-control form-control-lg" autocomplete="false" id="Entrega"
+                          [(ngModel)]="CambioModel.Valor_Destino" [disabled]="HabilitarCampos" currencyMask
+                          [options]="{ thousands: '.', decimal: ',' }" (ngModelChange)="conversionMoneda('d', 'l')"
+                          required>
+                      </div>
+
                       <div class="col-md-4" *ngIf="Venta">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Recibe</label>
-                        <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control input-font"
-                          autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" currencyMask
-                          [options]="{ thousands: '.' }" (ngModelChange)="conversionMoneda('d', 'l')"
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion de peso a {{ MonedaParaCambio.nombre}}</label>
+                        <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
+                          class="inputfield  form-control form-control-lg" name="Valor_Origen" id="Cambia"
+                          [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')"
+                          currencyMask [options]="{ thousands: '.', decimal: ',' , precision: '4'}"
                           [disabled]="HabilitarCampos" required>
                       </div>
 
-                      <div class="col-md-4">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
-                          Cambio</label>
-                        <input type="text" placeholder="Tasa" class="form-control input-font" autocomplete="false"
-                          id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa"
-                          (blur)="conversionMoneda('o', 'e')" [disabled]="HabilitarCampos" required>
-                      </div>
-
-                      <div class="col-md-4" *ngIf="!Venta">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Entrega</label>
-                        <input type="text" placeholder="Entrega" name="Valor_Destino" class="form-control input-font"
-                          autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino"
-                          [disabled]="HabilitarCampos" currencyMask [options]="{ thousands: '.', decimal: ',' }"
-                          (ngModelChange)="conversionMoneda('d', 'l')" required>
-                      </div>
-
-                      <div class="col-md-4" *ngIf="Venta">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
+                      <!-- <div class="col-md-4" *ngIf="Venta">
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vende</label>
                         <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
-                          class="form-control text-right input-font" name="Valor_Origen" id="Cambia"
+                          class="inputfield  form-control form-control-lg" name="Valor_Origen" id="Cambia"
                           [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')"
                           currencyMask [options]="{ thousands: '.', decimal: ',' }" [disabled]="HabilitarCampos"
                           required>
-                      </div>
+                      </div> -->
+
                     </div>
                     <hr *ngIf="Venta">
                     <div class="row">
 
                       <div *ngIf="Venta" class="col-md-6">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Paga
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                           Con</label>
-                        <input id="pagocon" type="text" placeholder="Paga con" class="form-control input-font"
-                          currencyMask [options]="{ thousands: '.', decimal: ',' }" name="Recibido"
-                          (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido"
+                        <input id="pagocon" type="text" placeholder="Paga con"
+                          class="inputfield  form-control form-control-lg" currencyMask
+                          [options]="{ thousands: '.', decimal: ',' }" name="Recibido" (blur)="ObtenerVueltos()"
+                          [(ngModel)]="CambioModel.Recibido"
                           [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required>
                       </div>
 
 
                       <div *ngIf="Venta" class="col-md-6">
-                        <label class="{{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
-                        <input readonly type="text" placeholder="Vueltos" class="form-control input-font" currencyMask
-                          [options]="{ thousands: '.' }" name="Vueltos" [(ngModel)]="CambioModel.Vueltos" required>
+                        <label  class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
+                        <input readonly type="text" placeholder="Vueltos"
+                          class="inputfield  form-control form-control-lg" currencyMask [options]="{ thousands: '.' }"
+                          name="Vueltos" [(ngModel)]="CambioModel.Vueltos" required>
 
                       </div>
                     </div>
@@ -422,12 +442,12 @@
                 <div class="col-md-10" style="margin-top: 50px">
                   <button id="BotonEnviar" [disabled]="!FormMoneda.valid"
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este cambio ', type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                    class="{{ Venta === false ? 'btn btn-primary btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
+                    class="font-size-20 {{ Venta === false ? 'btn btn-primary btn-block mrg-top-10' : 'btn btn-success btn-block mrg-top-10' }}"
                     (confirm)="guardarCambio(FormMoneda,'compra')">Realizar Cambio</button>
                 </div>
                 <div class="col-md-2" style="margin-top: 50px">
                   <button (click)="volverCambioEfectivo()"
-                    class="{{ Venta === false ? 'btn btn-secondary btn-block mrg-top-10' : 'btn btn-secondary btn-block mrg-top-10' }}">
+                    class="font-size-20 {{ Venta === false ? 'btn btn-secondary btn-block mrg-top-10' : 'btn btn-secondary btn-block mrg-top-10' }}">
                     Volver
                   </button>
                 </div>
@@ -468,7 +488,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Recibos Transferencias</b>
-                  <p class="no-mrg-btm ">A cuentas extranjeras</p>
+                  <p class="no-mrg-btm font-size-16 ">A cuentas extranjeras</p>
                 </div>
               </li>
             </ul>
@@ -477,7 +497,7 @@
               <div class="row d-flex justify-content-center" id="transferencias1" *ngIf="Transferencia1">
                 <div class="col-md-4">
                   <button (click)="CambiarVista('Transferencia')"
-                    class="btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo Recibo De Transferencia</button>
+                    class= " font-size-18 btn btn-primary btn-block mrg-top-10 btn-grande">Nuevo Recibo De Transferencia</button>
                 </div>
                 <div class="col-md-12">
                   <div class="card">
@@ -496,8 +516,8 @@
                   <form #FormTransferencia="ngForm">
                     <div class="row">
                       <div class="col-md-3">
-                        <label class="transferencia">Forma de Pago</label>
-                        <select id="Forma_Pago" class="form-control"
+                        <label  class="font-size-18 transferencia">Forma de Pago</label>
+                        <select id="Forma_Pago" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                           (change)="ControlarValoresSelect($event.target.value)" name="Forma_Pago"
                           [(ngModel)]="TransferenciaModel.Forma_Pago" required>
                           <option value="Efectivo" [selected]>Efectivo</option>
@@ -506,9 +526,9 @@
                         </select>
                       </div>
                       <div class="col-md-3">
-                        <label class="transferencia">Recibe Para</label>
+                        <label  class="font-size-18 transferencia">Recibe Para</label>
                         <select id="Tipo_Transferencia" (change)="ControlarValoresSelect($event.target.value)"
-                          class="form-control" name="Tipo_Transferencia"
+                          class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Tipo_Transferencia"
                           [(ngModel)]="TransferenciaModel.Tipo_Transferencia" required>
                           <option value="Transferencia">Transferencia</option>
                           <option value="Cliente" *ngIf="TransferenciaModel.Forma_Pago != 'Credito'">Cliente</option>
@@ -516,8 +536,8 @@
                       </div>
 
                       <div class="col-md-3">
-                        <label class="transferencia">Moneda para el cambio</label>
-                        <select id="Moneda_Transferencia" class="form-control" name="Moneda_Transferencia"
+                        <label  class="font-size-18 transferencia">Moneda para el cambio</label>
+                        <select id="Moneda_Transferencia" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Moneda_Transferencia"
                           [(ngModel)]="TransferenciaModel.Moneda_Destino" required
                           (change)="SetMonedaTransferencia($event.target.value)">
                           <!-- <option selected value="">Seleccione moneda</option> -->
@@ -526,8 +546,8 @@
                       </div>
 
                       <div class="col-md-3" *ngIf="ControlVisibilidadTransferencia.SelectCliente">
-                        <label class="transferencia">Seleccione Cliente</label>
-                        <select class="form-control" name="Id_Tercero_Destino"
+                        <label  class="font-size-18 transferencia">Seleccione Cliente</label>
+                        <select class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Id_Tercero_Destino"
                           [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" required>
                           <option value="">Seleccione un cliente</option>
                           <option *ngFor="let c of Clientes" [value]="c.Id_Tercero">{{c.Nombre}}</option>
@@ -544,7 +564,7 @@
                           <div class="row">
                             <div class="col-md-4">
                               <label>Tercero</label>
-                              <input class="form-control" name="Id_Tercero" type="text" [(ngModel)]="tercero_credito"
+                              <input class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Id_Tercero" type="text" [(ngModel)]="tercero_credito"
                                 placeholder="Nombre Tercero" [ngbTypeahead]="search_tercero_credito"
                                 [resultTemplate]="rt_tercero_credito" [inputFormatter]="formatter_tercero_credito"
                                 (ngModelChange)="AutoCompletarTerceroCredito(tercero_credito)">
@@ -552,13 +572,13 @@
                             <div class="col-md-4">
                               <label>Cupo Tercero</label>
                               <input name="Cupo_T" [(ngModel)]="TransferenciaModel.Cupo_Tercero" type="text" disabled
-                                class="form-control" placeholder="Cupo disponible" currencyMask
+                                class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Cupo disponible" currencyMask
                                 [options]="{ thousands: '.' }">
                             </div>
                             <div *ngIf="InputBolsaBolivares" class="col-md-4">
                               <label>Bolsa de Bolivares</label>
                               <input name="SaldoBolivar" [(ngModel)]="TransferenciaModel.Bolsa_Bolivares" type="text"
-                                disabled class="form-control" placeholder="Bolsa disponible" currencyMask
+                                disabled class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Bolsa disponible" currencyMask
                                 [options]="{ thousands: '.' }">
                             </div>
 
@@ -571,7 +591,7 @@
                         <div class="col-md-12">
                           <hr>
                           <h5>Consignación</h5>
-                          <select class="form-control" name="Id_Cuenta_Bancaria"
+                          <select class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Id_Cuenta_Bancaria"
                             [(ngModel)]="TransferenciaModel.Id_Cuenta_Bancaria">
                             <option value="" selected>Seleccione Cuenta Bancaria</option>
                             <option *ngFor="let c of CuentasPersonales" [value]="c.Id_Cuenta_Bancaria">
@@ -590,7 +610,7 @@
                               <h5>Destinatarios</h5>
                             </div>
                             <div class="col-md-6" style="text-align:right;">
-                              <button class="btn btn-light" (click)="AgregarDestinatarioTransferencia()">
+                              <button class= " font-size-18 btn btn-light" (click)="AgregarDestinatarioTransferencia()">
                                 Agregar Destinatario <i class="ti-plus"></i>
                               </button>
                             </div>
@@ -601,11 +621,11 @@
 
                               <div class="col-md-2">
                                 <div class="form-group">
-                                  <label class="transferencia">N. Documento
+                                  <label  class="font-size-18 transferencia">N. Documento
                                     <i class="ti-pencil" style="cursor:pointer;" *ngIf="destinatario.EditarVisible"
                                       (click)="EditarDest2(destinatario.Numero_Documento_Destino, 'editar cuentas', i)"></i>
                                   </label>
-                                  <input type="text" class="form-control" name="Destino_{{i}}" id="Destino_{{i}}"
+                                  <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Destino_{{i}}" id="Destino_{{i}}"
                                     [(ngModel)]="destinatario.id_destinatario_transferencia"
                                     [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
                                     [inputFormatter]="formatter_destino"
@@ -619,18 +639,18 @@
 
                               <div class="col-md-3">
                                 <div class="form-group">
-                                  <label class="transferencia">Nombre</label>
+                                  <label  class="font-size-18 transferencia">Nombre</label>
                                   <input name="Nombre_Destino_{{i}}" [(ngModel)]="destinatario.Nombre_Destinatario"
-                                    type="text" placeholder="Nombre" class="form-control" readonly
+                                    type="text" placeholder="Nombre" class="form-control font-size-20 pa-1 font-size-20 p-auto" readonly
                                     [disabled]="MonedaParaTransferencia.id == ''">
                                 </div>
                               </div>
                               <div class="col-md-5">
                                 <div class="form-group">
-                                  <label class="transferencia">Cuenta</label>
+                                  <label  class="font-size-18 transferencia">Cuenta</label>
                                   <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
-                                    [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control"
+                                    [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                                     autocomplete="off"
                                     (ngModelChange)="ValidarCuentaBancariaDuplicada(i, destinatario.Id_Destinatario_Cuenta)">
                                     <option id="opId_Destinatario_Cuenta_{{i}}"
@@ -644,11 +664,11 @@
                               </div>
                               <div class="col-md-2">
                                 <div class="form-group">
-                                  <label class="transferencia"> {{MonedaParaTransferencia.nombre}}</label>
+                                  <label  class="font-size-18 transferencia"> {{MonedaParaTransferencia.nombre}}</label>
                                   <div class="row">
                                     <div class="col-md-10">
                                       <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
-                                        [disabled]="DeshabilitarValor" class="form-control alinear-derecha"
+                                        [disabled]="DeshabilitarValor" class="form-control font-size-20 pa-1 alinear-derecha"
                                         name="Valor_Transferencia_{{i}}" [(ngModel)]="destinatario.Valor_Transferencia"
                                         required (blur)="ValidarValorTransferirDestinatario2($event.target.value, i)"
                                         currencyMask [options]="{ thousands: '.', decimal: ',' }">
@@ -674,20 +694,20 @@
                           <div class="row mrg-top-20">
                             <div class="col-md-4">
                               <div class="form-group text-center">
-                                <label class="transferencia">Moneda Recibida</label>
-                                <label class="block-element font-weight-bold">Pesos</label>
+                                <label  class="font-size-18 transferencia">Moneda Recibida</label>
+                                <label  class="font-size-18 block-element font-weight-bold">Pesos</label>
 
                               </div>
                               <div class="form-group">
                                 <input *ngIf="TransferenciaModel.Bolsa_Bolivares == '0'"
-                                  class="form-control alinear-derecha" id="Cantidad_Recibida" type="text"
+                                  class="form-control font-size-20 pa-1 alinear-derecha" id="Cantidad_Recibida" type="text"
                                   (blur)="CalcularCambioMoneda($event.target.value, 'por origen')" autocomplete="off"
                                   placeholder="Valor Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
                                   name="Cantidad_Recibida" required currencyMask
                                   [options]="{ thousands: '.', decimal: ',' }">
 
                                 <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'"
-                                  class="form-control alinear-derecha" id="Cantidad_Recibida" type="text"
+                                  class="form-control font-size-20 pa-1 alinear-derecha" id="Cantidad_Recibida" type="text"
                                   (blur)="CalcularCambioMoneda($event.target.value, 'por origen')" autocomplete="off"
                                   placeholder="Valor Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
                                   name="Cantidad_Recibida" currencyMask [options]="{ thousands: '.', decimal: ',' }">
@@ -695,10 +715,10 @@
                             </div>
                             <div class="col-md-4">
                               <div class="form-group text-center">
-                                <label class="transferencia">Tasa de Cambio
+                                <label  class="font-size-18 transferencia">Tasa de Cambio
 
                                 </label>
-                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control alinear-derecha"
+                                <input id="Tasa_Cambio_Transferencia" type="text" class="form-control font-size-20 pa-1 alinear-derecha"
                                   [disabled]="TransferenciaModel.Cantidad_Transferida == ''" name="Tasa_Cambio"
                                   [(ngModel)]="TransferenciaModel.Tasa_Cambio"
                                   (blur)="CalcularCambioMoneda($event.target.value, 'por tasa')"
@@ -708,7 +728,7 @@
 
                             <div class="col-md-4">
                               <div class="form-group text-center">
-                                <label class="transferencia">Moneda de Transferencia
+                                <label  class="font-size-18 transferencia">Moneda de Transferencia
                                 </label>
                                 <label
                                   class="block-element font-weight-bold">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label>
@@ -716,13 +736,13 @@
 
                               <div class="form-group">
                                 <input *ngIf="TransferenciaModel.Bolsa_Bolivares == '0'" id="Cantidad_Transferida"
-                                  type="text" placeholder="Valor Transferencia" class="form-control alinear-derecha"
+                                  type="text" placeholder="Valor Transferencia" class="form-control font-size-20 pa-1 alinear-derecha"
                                   [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
                                   required (blur)="CalcularCambioMoneda($event.target.value, 'por destino')"
                                   currencyMask [options]="{ thousands: '.', decimal: ',' }">
 
                                 <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'" id="Cantidad_Transferida"
-                                  type="text" placeholder="Valor Transferencia" class="form-control alinear-derecha"
+                                  type="text" placeholder="Valor Transferencia" class="form-control font-size-20 pa-1 alinear-derecha"
                                   [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
                                   (blur)="CalcularCambioMoneda($event.target.value, 'por destino')" currencyMask
                                   [options]="{ thousands: '.' }">
@@ -738,8 +758,8 @@
                           <div class="row mrg-top-20">
                             <div class="col-md-4">
                               <div class="form-group text-center">
-                                <label class="transferencia">Monto Recibido</label>
-                                <input class="form-control alinear-derecha" id="Cantidad_Recibida" type="text"
+                                <label  class="font-size-18 transferencia">Monto Recibido</label>
+                                <input class="form-control font-size-20 pa-1 alinear-derecha" id="Cantidad_Recibida" type="text"
                                   (blur)="ColocarMontoSoloPesos($event.target.value)" autocomplete="off"
                                   placeholder="Monto Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
                                   name="Cantidad_Recibida" required currencyMask
@@ -766,7 +786,7 @@
                             <div class="col-md-4">
                               <div class="form-group">
 
-                                <label class="transferencia" style="display:block;">Número Documento</label>
+                                <label  class="font-size-18 transferencia" style="display:block;">Número Documento</label>
                                 <input type="text" class="custom-input" placeholder="Busqueda"
                                   name="Numero_Documento_Origen" autocomplete="off"
                                   [(ngModel)]="TransferenciaModel.Documento_Origen" [ngbTypeahead]="search_remitente2"
@@ -788,14 +808,14 @@
                             </div>
                             <div class="col-md-5">
                               <div class="form-group">
-                                <label class="transferencia">Nombre</label>
+                                <label  class="font-size-18 transferencia">Nombre</label>
                                 <label
                                   style="display:block;">{{TransferenciaModel.Nombre_Remitente == "" ? "Nombre Remitente" : TransferenciaModel.Nombre_Remitente}}</label>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                                <label class="transferencia">Teléfono</label>
+                                <label  class="font-size-18 transferencia">Teléfono</label>
                                 <label
                                   style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono Remitente" : TransferenciaModel.Telefono_Remitente}}</label>
                               </div>
@@ -807,7 +827,7 @@
                       <div class="row mrg-top-20">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label class="transferencia">Observaciones</label>
+                            <label  class="font-size-18 transferencia">Observaciones</label>
                             <textarea placeholder="Observaciones" style="width: 100%;" name="Observacion_Transferencia"
                               [(ngModel)]="TransferenciaModel.Observacion_Transferencia"></textarea>
                           </div>
@@ -817,13 +837,13 @@
                       <div class="row mrg-top-20">
                         <div class="col-md-10">
                           <button [disabled]="!FormTransferencia.valid || validateInputDocumentSmall.includes(true)"
-                            id="BotonTransferencia" class="btn btn-primary btn-sm btn-block mrg-top-10"
+                            id="BotonTransferencia" class= " font-size-18 btn btn-primary btn-sm btn-block mrg-top-10"
                             [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                             (confirm)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia
                           </button>
                         </div>
                         <div class="col-md-2">
-                          <button class="btn btn-secondary btn-sm btn-block mrg-top-10"
+                          <button class= " font-size-18 btn btn-secondary btn-sm btn-block mrg-top-10"
                             (click)="volverReciboTransferencia(FormTransferencia)">Volver</button>
                         </div>
                       </div>
@@ -844,7 +864,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Giros</b>
-                  <p class="no-mrg-btm ">Envío/Recepción Dinero</p>
+                  <p class="no-mrg-btm font-size-16 ">Envío/Recepción Dinero</p>
                 </div>
               </li>
             </ul>
@@ -852,7 +872,7 @@
             <div class="my-3 ">
               <div class="row d-flex justify-content-center" id="Giros1" *ngIf="Giro1">
                 <div class="col-md-4">
-                  <button (click)="CambiarVista('Giro')" class="btn btn-success btn-block mrg-top-10 btn-grande">
+                  <button (click)="CambiarVista('Giro')" class= " font-size-18 btn btn-success btn-block mrg-top-10 btn-grande">
                     Nuevo Giro
                   </button>
                 </div>
@@ -893,22 +913,22 @@
                                 <tr>
                                   <th class="table-filters"></th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                       (change)="giroService.ConsultaFiltrada()"
                                       [(ngModel)]="giroService.FiltrosRecibidos.codigo">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                       (change)="giroService.ConsultaFiltrada()"
                                       [(ngModel)]="giroService.FiltrosRecibidos.nombreRemitente">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Documento"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Documento"
                                       (change)="giroService.ConsultaFiltrada()"
                                       [(ngModel)]="giroService.FiltrosRecibidos.documento">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                       (change)="giroService.ConsultaFiltrada()"
                                       [(ngModel)]="giroService.FiltrosRecibidos.nombreDestinatario">
                                   </th>
@@ -971,22 +991,22 @@
                                 <tr>
                                   <th class="table-filters"></th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                       (change)="giroService.ConsultaFiltradaAprobados()"
                                       [(ngModel)]="giroService.FiltrosAprobados.codigo">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                       (change)="giroService.ConsultaFiltradaAprobados()"
                                       [(ngModel)]="giroService.FiltrosAprobados.nombreRemitente">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Documento"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Documento"
                                       (change)="giroService.ConsultaFiltradaAprobados()"
                                       [(ngModel)]="giroService.FiltrosAprobados.documento">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                       (change)="giroService.ConsultaFiltradaAprobados()"
                                       [(ngModel)]="giroService.FiltrosAprobados.nombreDestinatario">
                                   </th>
@@ -1030,12 +1050,12 @@
                               <div class="col-md-12">
                                 <div class="row">
                                   <div class="col-md-11">
-                                    <input type="text" class="form-control" placeholder="Buscador de cedula"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Buscador de cedula"
                                       [(ngModel)]="CedulaBusquedaGiro">
                                   </div>
                                   <div class="col-md-1">
                                     <button (click)="giroService.FiltrarGiroCedula(CedulaBusquedaGiro)"
-                                      class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                      class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;">
                                       <i class="ti-search"></i>
                                     </button>
                                   </div>
@@ -1112,7 +1132,7 @@
                   <form #FormGiro="ngForm">
                     <div class="row">
                       <div class="col-md-6">
-                        <!-- <button class="btn btn-sm btn-success pull-right">
+                        <!-- <button class= " font-size-18 btn btn-sm btn-success pull-right">
                           <i class="ti ti-hand-point-up"></i>
                         </button> -->
                         <h4>Remitente</h4>
@@ -1122,20 +1142,20 @@
                             <div class="form-group">
                               <label>Departamento Remitente</label>
                               <select name="Departamento_Remitente" [(ngModel)]="GiroModel.Departamento_Remitente"
-                                class="form-control"
+                                class="form-control font-size-20 pa-1 font-size-20 p-auto"
                                 (change)="Municipios_Departamento($event.target.value, 'Remitente')" required>
                                 <option value="">Seleccione Departamento</option>
                                 <option *ngFor="let departamento of DepartamentosGiros"
                                   [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
                               </select>
                             </div>
-                            <input type="text" class="form-control" name="Departamento_Remitente"
+                            <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Departamento_Remitente"
                               [(ngModel)]="Departamento_Remitente" hidden readonly>
                           </div>
                           <div class="col-md-12">
                             <div class="form-group">
                               <label>Ciudad Origen</label>
-                              <select class="form-control" name="Municipio" name="Municipio_Remitente"
+                              <select class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Municipio" name="Municipio_Remitente"
                                 [(ngModel)]="GiroModel.Municipio_Remitente" required>
                                 <option value="">Seleccione Ciudad</option>
                                 <option *ngFor="let municipio of Municipios_Remitente" [value]="municipio.Id_Municipio">
@@ -1156,7 +1176,7 @@
                                   *ngIf="CrearRemitenteGiro"
                                   (click)="EditarPersonaGiro(Remitente_Giro, 'remitente', 'crear desde giro')"></i>
                               </label>
-                              <input id="DocumentoGiroRemitente" type="text" class="form-control"
+                              <input id="DocumentoGiroRemitente" type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                                 placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
                                 [(ngModel)]="Remitente_Giro" [ngbTypeahead]="search_remitente"
                                 [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
@@ -1194,20 +1214,20 @@
                             <div class="form-group">
                               <label>Departamento Destinatario</label>
                               <select [(ngModel)]="GiroModel.Departamento_Destinatario" name="Departamento_Destinatario"
-                                class="form-control"
+                                class="form-control font-size-20 pa-1 font-size-20 p-auto"
                                 (change)="Municipios_Departamento($event.target.value, 'Destinatario')" required>
                                 <option value="">Seleccione Departamento</option>
                                 <option *ngFor="let departamento of DepartamentosGiros"
                                   [value]="departamento.Id_Departamento">{{departamento.Nombre}}</option>
                               </select>
                             </div>
-                            <input type="text" class="form-control" name="Departamento_Destinatario"
+                            <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Departamento_Destinatario"
                               [(ngModel)]="Departamento_Destinatario" hidden readonly>
                           </div>
                           <div class="col-md-12">
                             <div class="form-group">
                               <label>Ciudad Destino</label>
-                              <select class="form-control" [(ngModel)]="GiroModel.Municipio_Destinatario"
+                              <select class="form-control font-size-20 pa-1 font-size-20 p-auto" [(ngModel)]="GiroModel.Municipio_Destinatario"
                                 name="Municipio_Destinatario" required>
                                 <option value="">Seleccione Ciudad</option>
                                 <option *ngFor="let municipio of Municipios_Destinatario"
@@ -1228,7 +1248,7 @@
                                   *ngIf="CrearDestinatarioGiro"
                                   (click)="EditarPersonaGiro(Destinatario_Giro, 'destinatario', 'crear desde giro')"></i>
                               </label>
-                              <input id="DocumentoGiroDestinatario" type="text" class="form-control"
+                              <input id="DocumentoGiroDestinatario" type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                                 placeholder="Número Documento" autocomplete="off" name="Documento_Destinatario"
                                 [(ngModel)]="Destinatario_Giro" [ngbTypeahead]="search_remitente"
                                 [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente"
@@ -1266,7 +1286,7 @@
                       <div class="col-md-3">
                         <div class="form-group">
                           <label>Valor a Enviar</label>
-                          <input type="text" placeholder="Precio" class="form-control text-right" name="Valor_Recibido"
+                          <input type="text" placeholder="Precio" class="form-control font-size-20 pa-1 text-right" name="Valor_Recibido"
                             [(ngModel)]="GiroModel.Valor_Recibido" (blur)="valorComision($event.target.value)" required
                             currencyMask [options]="{ thousands: '.' }">
                         </div>
@@ -1279,7 +1299,7 @@
                               style="cursor:pointer;" (click)="HabilitarEdicionComisionGiro()"></i>
                           </label>
 
-                          <input type="text" placeholder="0" class="form-control text-right" name="Comision"
+                          <input type="text" placeholder="0" class="form-control font-size-20 pa-1 text-right" name="Comision"
                             [(ngModel)]="GiroModel.Comision" required [disabled]="DeshabilitarComisionGiro" currencyMask
                             [options]="{ thousands: '.' }" (ngModelChange)="valorComision(GiroModel.Comision, true)"
                             #Customcomision>
@@ -1291,7 +1311,7 @@
                       <div class="col-md-1">
                         <div class="form-group text-center">
                           <label>Libre</label>
-                          <input id="libre" type="checkbox" placeholder="Precio" class="form-control" name="Giro_Libre"
+                          <input id="libre" type="checkbox" placeholder="Precio" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Giro_Libre"
                             [(ngModel)]="GiroModel.Giro_Libre" (click)="valorComision($event.target.checked)">
                         </div>
                       </div>
@@ -1328,11 +1348,11 @@
                     <button type="button"
                       [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este giro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                       (confirm)="RealizarGiro(FormGiro)" [disabled]="!FormGiro.valid"
-                      class="btn btn-primary btn-sm btn-block">Hacer
+                      class= " font-size-18 btn btn-primary btn-sm btn-block">Hacer
                       Giro</button>
                   </div>
                   <div class="col-md-2">
-                    <button class="btn btn-secondary btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
+                    <button class= " font-size-18 btn btn-secondary btn-sm btn-block" (click)="volverReciboGiro()">Volver</button>
                   </div>
                 </div>
               </div>
@@ -1349,13 +1369,13 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Traslados</b>
-                  <p class="no-mrg-btm">Entre Cajas de la Empresa</p>
+                  <p class="no-mrg-btm font-size-16">Entre Cajas de la Empresa</p>
                 </div>
               </li>
             </ul>
             <div class="row d-flex justify-content-center" id="Traslados1" *ngIf="Traslado1">
               <div class="col-md-4">
-                <button (click)="CambiarVista('Traslado')" class="btn btn-info btn-block mrg-top-10 btn-grande">
+                <button (click)="CambiarVista('Traslado')" class= " font-size-18 btn btn-info btn-block mrg-top-10 btn-grande">
                   Nuevo Traslado
                 </button>
               </div>
@@ -1391,12 +1411,12 @@
                             <tr>
                               <th class="table-filters"></th>
                               <th class="table-filters">
-                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                   (change)="_trasladosCustomService.ConsultaFiltrada()"
                                   [(ngModel)]="_trasladosCustomService.Filtros.codigo">
                               </th>
                               <th class="table-filters">
-                                <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                   (change)="_trasladosCustomService.ConsultaFiltrada()"
                                   [(ngModel)]="_trasladosCustomService.Filtros.destinatario">
                               </th>
@@ -1404,13 +1424,13 @@
                               <th class="table-filters"></th>
 
                               <th class="table-filters">
-                                <input type="text" class="form-control" placeholder="Filtro Moneda"
+                                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Moneda"
                                   (change)="_trasladosCustomService.ConsultaFiltrada()"
                                   [(ngModel)]="_trasladosCustomService.Filtros.moneda">
                               </th>
 
                               <th class="table-filters">
-                                <select class="form-control form-control-sm"
+                                <select class="form-control font-size-20 pa-1 form-control-sm"
                                   (change)="_trasladosCustomService.ConsultaFiltrada()"
                                   [(ngModel)]="_trasladosCustomService.Filtros.estado">
                                   <option value="">Todos</option>
@@ -1454,11 +1474,11 @@
                                   <label>{{Traslado.Estado}}</label>
                                 </td>
                                 <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
-                                  <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                  <button class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;"
                                     (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
                                     <i class="ti-pencil"></i>
                                   </button>
-                                  <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                  <button class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;"
                                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                     (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
                                     <i class="ti-trash text-danger"></i>
@@ -1501,12 +1521,12 @@
                                 <tr>
                                   <th class="table-filters"></th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Código"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                       (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
                                       [(ngModel)]="_trasladosCustomService.Filtros.codigo">
                                   </th>
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Nombre"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Nombre"
                                       (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
                                       [(ngModel)]="_trasladosCustomService.Filtros.destinatario">
                                   </th>
@@ -1514,13 +1534,13 @@
                                   <th class="table-filters"></th>
 
                                   <th class="table-filters">
-                                    <input type="text" class="form-control" placeholder="Filtro Moneda"
+                                    <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Moneda"
                                       (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
                                       [(ngModel)]="_trasladosCustomService.Filtros.moneda">
                                   </th>
 
                                   <th class="table-filters">
-                                    <select class="form-control form-control-sm"
+                                    <select class="form-control font-size-20 pa-1 form-control-sm"
                                       (change)="_trasladosCustomService.ConsultaFiltradaRecibidos()"
                                       [(ngModel)]="_trasladosCustomService.Filtros.estado">
                                       <option value="">Todos</option>
@@ -1562,13 +1582,13 @@
                                     <label>{{Traslado.Estado}}</label>
                                   </td>
                                   <td class="text-center" *ngIf="Traslado.Estado == 'Pendiente'">
-                                    <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                    <button class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;"
                                       [swal]="{title:'¿Está Seguro?',text : 'Se dispone a aprobar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aprobar', cancelButtonText:'No, Dejame Comprobar!'}"
                                       (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Aprobado')">
                                       <i class="fa fa-check"></i>
                                     </button>
 
-                                    <!-- <button class="btn btn-default btn-xs" type="button" style="margin:0;"
+                                    <!-- <button class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;"
                                       [swal]="{title:'¿Está Seguro?',text : 'Se dispone a negar este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Negar', cancelButtonText:'No, Dejame Comprobar!'}"
                                       (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Negado')">
                                       <i class="ti-trash text-danger"></i>
@@ -1611,7 +1631,7 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>Cajero Destino</label>
-                          <select name="Funcionario_Destino" class="form-control"
+                          <select name="Funcionario_Destino" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                             [(ngModel)]="TrasladoModel.Funcionario_Destino" required>
                             <option value="">seleccione una opción</option>
                             <option *ngFor="let ct of _trasladosCustomService.CajerosTraslados"
@@ -1624,7 +1644,7 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>Moneda</label>
-                          <select name="Id_Moneda" class="form-control" [(ngModel)]="TrasladoModel.Id_Moneda"
+                          <select name="Id_Moneda" class="form-control font-size-20 pa-1 font-size-20 p-auto" [(ngModel)]="TrasladoModel.Id_Moneda"
                             (change)="SetMonedaTraslados($event.target.value)" required>
                             <option value="">Seleccione una Opción</option>
                             <option *ngFor="let m of MonedasTraslados" value="{{m.Id_Moneda}}">{{m.Nombre}}</option>
@@ -1634,7 +1654,7 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <label>Valor {{MonedaSeleccionadaTraslado}}</label>
-                          <input name="Valor" type="text" placeholder="$ 100.000" class="form-control text-right"
+                          <input name="Valor" type="text" placeholder="$ 100.000" class="form-control font-size-20 pa-1 text-right"
                             [(ngModel)]="TrasladoModel.Valor" required currencyMask
                             [options]="{ thousands: '.', decimal: ',' }">
                         </div>
@@ -1656,11 +1676,11 @@
                     <button type="button"
                       [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                       (confirm)="RealizarTraslado(FormTraslado,ModalTrasladoEditar)"
-                      class="btn btn-primary btn-sm btn-block" [disabled]="!FormTraslado.valid">Hacer
+                      class= " font-size-18 btn btn-primary btn-sm btn-block" [disabled]="!FormTraslado.valid">Hacer
                       Traslado</button>
                   </div>
                   <div class="col-md-2">
-                    <button class="btn btn-secondary btn-sm btn-block" (click)="volverTraslado()">Volver</button>
+                    <button class= " font-size-18 btn btn-secondary btn-sm btn-block" (click)="volverTraslado()">Volver</button>
                   </div>
                 </div>
               </div>
@@ -1681,7 +1701,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Corresponsales</b>
-                  <p class="no-mrg-btm">Valor de corresponsales bancarios diario</p>
+                  <p class="no-mrg-btm font-size-16">Valor de corresponsales bancarios diario</p>
                 </div>
               </li>
             </ul>
@@ -1718,7 +1738,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Servicios Externos</b>
-                  <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+                  <p class="no-mrg-btm font-size-16">Consignaciones, Pagos, Trámites</p>
                 </div>
               </li>
             </ul>
@@ -1726,7 +1746,7 @@
               <div class="row d-flex justify-content-center" id="Servicios1" *ngIf="Servicio1">
                 <div class="col-md-4">
                   <button (click)="CambiarVista('Servicio')"
-                    class="btn btn-danger btn-block mrg-top-10 btn-grande">Nuevo
+                    class= " font-size-18 btn btn-danger btn-block mrg-top-10 btn-grande">Nuevo
                     Servicio</button>
                 </div>
                 <div class="col-md-12">
@@ -1748,11 +1768,11 @@
                             <tr>
                               <th class="table-filters"></th>
                               <th class="table-filters">
-                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                   [(ngModel)]="_sexternos.Filtros.codigo" (change)="_sexternos.ConsultaFiltrada()">
                               </th>
                               <th class="table-filters">
-                                <input type="text" class="form-control" placeholder="Filtro Código"
+                                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Filtro Código"
                                   [(ngModel)]="_sexternos.Filtros.servicio" (change)="_sexternos.ConsultaFiltrada()">
                               </th>
                               <th class="table-filters"></th>
@@ -1786,12 +1806,12 @@
                               <td class="text-center">{{Servicio.Total | customcurrency }}</td>
 
                               <td class="text-center">
-                                <button *ngIf="esconderAnular(Servicio.Estado)" class="btn btn-default btn-xs"
+                                <button *ngIf="esconderAnular(Servicio.Estado)" class= " font-size-18 btn btn-default btn-xs"
                                   type="button" style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
                                   <i class="ti-pencil"></i>
                                 </button>
 
-                                <button class="btn btn-default btn-xs"
+                                <button class= " font-size-18 btn btn-default btn-xs"
                                   (confirm)="CambiarEstadoServicio(Servicio.Id_Servicio)" type="button"
                                   style="margin:0;"
                                   [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
@@ -1833,7 +1853,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Servicio</label>
-                            <select name="Servicio_Externo" class="form-control"
+                            <select name="Servicio_Externo" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="ServicioExternoModel.Servicio_Externo" required>
                               <option value="">Seleccione un Servicio</option>
                               <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
@@ -1844,7 +1864,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Valor</label>
-                            <input type="text" class="form-control text-right" name="Valor"
+                            <input type="text" class="form-control font-size-20 pa-1 text-right" name="Valor"
                               [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
                               (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
                               [options]="{ thousands: '.' }" required>
@@ -1854,7 +1874,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Comisión</label>
-                            <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                            <input name="Comision" type="text" placeholder="Comisión" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="ServicioExternoModel.Comision" currencyMask
                               [options]="{ thousands: '.', decimal: ',' }" [disabled]="ServicioExternoModel.Valor == ''"
                               (blur)="AprobarCambioComision()" required>
@@ -1862,8 +1882,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <label class="block-element">Total</label>
-                            <input name="Total" type="text" placeholder="Total" class="form-control"
+                            <label  class="font-size-18 block-element">Total</label>
+                            <input name="Total" type="text" placeholder="Total" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="Total_Servicio" disabled currencyMask
                               [options]="{ thousands: '.', decimal: ',' }" required>
                           </div>
@@ -1886,10 +1906,10 @@
                       <button type="button"
                         [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                         (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)"
-                        class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
+                        class= " font-size-18 btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn-secondary btn-sm btn-block"
+                      <button class= " font-size-18 btn btn-secondary btn-sm btn-block"
                         (click)="volverReciboServicio()">Volver</button>
                     </div>
                   </div>
@@ -1909,7 +1929,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Servicio</label>
-                            <select name="Servicio_Externo" class="form-control"
+                            <select name="Servicio_Externo" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="ServicioExternoModel.Servicio_Externo" required>
                               <option value="">Seleccione un Servicio</option>
                               <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
@@ -1920,7 +1940,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Valor</label>
-                            <input type="text" class="form-control text-right" name="Valor"
+                            <input type="text" class="form-control font-size-20 pa-1 text-right" name="Valor"
                               [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
                               (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
                               [options]="{ thousands: '.' }" required>
@@ -1930,7 +1950,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label>Comisión</label>
-                            <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                            <input name="Comision" type="text" placeholder="Comisión" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="ServicioExternoModel.Comision" currencyMask
                               [options]="{ thousands: '.', decimal: ',' }" [disabled]="ServicioExternoModel.Valor == ''"
                               (blur)="AprobarCambioComision()" required>
@@ -1938,8 +1958,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <label class="block-element">Total</label>
-                            <input name="Total" type="text" placeholder="Total" class="form-control"
+                            <label  class="font-size-18 block-element">Total</label>
+                            <input name="Total" type="text" placeholder="Total" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                               [(ngModel)]="Total_Servicio" disabled currencyMask
                               [options]="{ thousands: '.', decimal: ',' }" required>
                           </div>
@@ -1962,10 +1982,10 @@
                       <button type="button"
                         [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
                         (confirm)="GuardarServicio(FormServicio,ModalServicioEditar)"
-                        class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
+                        class= " font-size-18 btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
                     </div>
                     <div class="col-md-2">
-                      <button class="btn btn-secondary btn-sm btn-block"
+                      <button class= " font-size-18 btn btn-secondary btn-sm btn-block"
                         (click)="volverReciboServicio()">Volver</button>
                     </div>
                   </div>
@@ -2044,7 +2064,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre Cliente" class="form-control" name="Nombre" ngModel=""
+            <input type="text" placeholder="Nombre Cliente" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Nombre" ngModel=""
               (focusout)="boolNombreR = true" required #nombreR="ngModel">
           </div>
         </div>
@@ -2053,7 +2073,7 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Teléfono</label>
-            <input type="text" class="form-control" placeholder="Detalles del Destinatario" name="Telefono" ngModel=""
+            <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" placeholder="Detalles del Destinatario" name="Telefono" ngModel=""
               (focusout)="boolTelefonoR = true" required #telefonoR="ngModel">
           </div>
         </div>
@@ -2063,7 +2083,7 @@
   </div>
   <div class="app-modal-footer" id="guardar">
     <div class="text-right">
-      <button class="btn btn-primary btn-sm"
+      <button class= " font-size-18 btn btn-primary btn-sm"
         [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar un remitente' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}">Guardar</button>
     </div>
   </div>
@@ -2127,7 +2147,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label>Cajero Destino</label>
-                <select name="Funcionario_Destino" class="form-control" [(ngModel)]="TrasladoModel.Funcionario_Destino">
+                <select name="Funcionario_Destino" class="form-control font-size-20 pa-1 font-size-20 p-auto" [(ngModel)]="TrasladoModel.Funcionario_Destino">
                   <option value="">seleccione una opción</option>
                   <option *ngFor="let ct of _trasladosCustomService.CajerosTraslados"
                     value="{{ct.Identificacion_Funcionario}}">{{ct.Nombre}}
@@ -2138,7 +2158,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label>Moneda</label>
-                <select name="Id_Moneda" class="form-control" [(ngModel)]="TrasladoModel.Id_Moneda">
+                <select name="Id_Moneda" class="form-control font-size-20 pa-1 font-size-20 p-auto" [(ngModel)]="TrasladoModel.Id_Moneda">
                   <option value="">Seleccione una Opción</option>
                   <option *ngFor="let m of MonedasTraslados" value="{{m.Id_Moneda}}">{{m.Nombre}}</option>
                 </select>
@@ -2147,7 +2167,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label>Valor</label>
-                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control"
+                <input name="Valor" type="text" placeholder="$ 100.000" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                   [(ngModel)]="TrasladoModel.Valor" required currencyMask [options]="{ thousands: '.', decimal: ',' }">
               </div>
             </div>
@@ -2167,12 +2187,12 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right" style="display:inline-flex;">
-      <button type="button" class="btn btn-default btn-sm"
+      <button type="button" class= " font-size-18 btn btn-default btn-sm"
         (click)="CerrarModal(ModalTrasladoEditar, 'traslados')">Cancelar</button>
       <button type="button"
         [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
         (confirm)="RealizarTraslado(FormTrasladoEditar,ModalTrasladoEditar)"
-        class="btn btn-primary btn-sm btn-block">Editar
+        class= " font-size-18 btn btn-primary btn-sm btn-block">Editar
         Traslado</button>
     </div>
 
@@ -2195,7 +2215,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Servicio</label>
-                <select name="Servicio_Externo" class="form-control"
+                <select name="Servicio_Externo" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                   [(ngModel)]="ServicioExternoModel.Servicio_Externo">
                   <option value="">Seleccione un Servicio</option>
                   <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">{{se.Nombre}}
@@ -2206,7 +2226,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Valor</label>
-                <input type="text" class="form-control" name="Valor" [(ngModel)]="ServicioExternoModel.Valor"
+                <input type="text" class="form-control font-size-20 pa-1 font-size-20 p-auto" name="Valor" [(ngModel)]="ServicioExternoModel.Valor"
                   (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
                   [options]="{ thousands: '.', decimal: ',' }">
               </div>
@@ -2214,15 +2234,15 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>Comisión</label>
-                <input name="Comision" type="text" placeholder="Comisión" class="form-control"
+                <input name="Comision" type="text" placeholder="Comisión" class="form-control font-size-20 pa-1 font-size-20 p-auto"
                   [(ngModel)]="ServicioExternoModel.Comision" currencyMask [options]="{ thousands: '.', decimal: ',' }"
                   [disabled]="ServicioExternoModel.Valor == ''" (blur)="AprobarCambioComision()">
               </div>
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <label class="block-element">Total</label>
-                <input name="Total" type="text" placeholder="Total" class="form-control" [(ngModel)]="Total_Servicio"
+                <label  class="font-size-18 block-element">Total</label>
+                <input name="Total" type="text" placeholder="Total" class="form-control font-size-20 pa-1 font-size-20 p-auto" [(ngModel)]="Total_Servicio"
                   disabled currencyMask [options]="{ thousands: '.', decimal: ',' }">
 
               </div>
@@ -2245,7 +2265,7 @@
     <button type="button"
       [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
       (confirm)="GuardarServicio(FormServicio,ModalServicioEditar, 'edicion')"
-      class="btn btn-primary btn-sm btn-block">Modificar
+      class= " font-size-18 btn btn-primary btn-sm btn-block">Modificar
       Servicio</button>
   </div>
 </app-modal-basic>
@@ -2274,7 +2294,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button class="btn btn-primary btn-sm"
+      <button class= " font-size-18 btn btn-primary btn-sm"
         (click)="AnularTransferencia(idTransferencia , FormAnularTransferencia)">Anular
       </button>
     </div>
@@ -2355,7 +2375,7 @@
         <h4>Recibo de {{verCambio.Tipo}} Cliente </h4>
       </div>
       <div class="col-md-2 pull-right">
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+        <button class= " font-size-18 btn btn-default btn-xs" type="button" style="margin:0;">
           <i class="ti-printer"></i>
         </button>
       </div>
@@ -2395,7 +2415,7 @@
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
-      <button class="btn btn-default" (click)="ModalVerCambio.hide()">Cerrar</button>
+      <button class= " font-size-18 btn btn-default" (click)="ModalVerCambio.hide()">Cerrar</button>
     </div>
   </div>
 </app-modal-basic>
@@ -2411,7 +2431,7 @@
         <div class="col-md-12">
           <div class="form-group">
             <label><b>{{vma.NombreMoneda}}</b></label>
-            <label class="block-element">{{vma.Valor_Moneda_Apertura | customcurrency:vma.Codigo}}</label>
+            <label  class="font-size-18 block-element">{{vma.Valor_Moneda_Apertura | customcurrency:vma.Codigo}}</label>
 
           </div>
         </div>
@@ -2420,7 +2440,7 @@
   </div>
   <div class="app-modal-footer" style="margin: 0 auto;">
     <div class="text-center">
-      <button id="btnGuardarValoresApertura" class="btn btn-outline-primary btn-sm"
+      <button id="btnGuardarValoresApertura" class= " font-size-18 btn btn-outline-primary btn-sm"
         [swal]="{title : '¿Está Seguro?', text: 'Se va a realizar la apertura esta caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aperturar',cancelButtonText: 'No, Dejame Comprobar!'}"
         (confirm)="GuardarApertura()">Aperturar Caja
       </button>
@@ -2454,7 +2474,7 @@
   </div>
   <div class="app-modal-footer" style="margin: 0 auto;">
     <div class="text-center">
-      <button class="btn btn-primary btn-sm"
+      <button class= " font-size-18 btn btn-primary btn-sm"
         (click)="PagarGiro(informacionGiro.Id_Giro,ModalAprobarGiro,informacionGiro.Documento_Destinatario)">Pagar
         Giro
       </button>

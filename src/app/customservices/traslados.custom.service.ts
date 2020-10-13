@@ -85,7 +85,7 @@ export class TrasladosCustomService {
     }
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario_filter.php?', { params: p }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.Traslados = data.query_data;
         this.SetInformacionPaginacion(data)
@@ -102,7 +102,7 @@ export class TrasladosCustomService {
     }
 
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario_filter_recibidos.php?', { params: p }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.TrasladosRecibidos = data.query_data;
         this.SetInformacionPaginacionRecibidos(data)
@@ -135,7 +135,7 @@ export class TrasladosCustomService {
   GetCajerosTraslados() {
     this.CajerosTraslados = [];
     this.cajeroService.getCajerosTraslados(this.user.Identificacion_Funcionario).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.CajerosTraslados = data.query_data;
       } else {
@@ -156,7 +156,7 @@ export class TrasladosCustomService {
     this.TrasladosRecibidos = [];
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.TrasladosRecibidos = data;
-      console.log(data);
+      // console.log(data);
       this.SetInformacionPaginacionRecibidos(data)
     });
 

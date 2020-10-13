@@ -141,7 +141,7 @@ export class CargosComponent implements OnInit {
       params:{modulo:'Dependencia', id:id}
     }).subscribe((data:any)=>{    
       
-      console.log(data);
+      // console.log(data);
 
       this.Identificacion = id;
       this.Nombre = data.Nombre;

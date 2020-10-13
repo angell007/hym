@@ -6,7 +6,7 @@ import { Directive, ElementRef } from '@angular/core';
 export class ThousandSeparatorDirective {
 
   constructor(el:ElementRef) {
-    console.log(el.nativeElement);
+    // console.log(el.nativeElement);
     el.nativeElement = "HOla";
    }
 

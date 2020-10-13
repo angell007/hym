@@ -59,7 +59,7 @@ export class DetallemovimientoscuentagerenteComponent implements OnInit {
   public GetMovimientosCuenta(){
     let p = {id_cuenta:this.Id_Cuenta, mes:this.Mes_Consulta};
     this._cuentaBancariaService.GetMovimientosCuentaBancariaGerente(p).subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       
       
       if (data.codigo == 'success') {

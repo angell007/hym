@@ -137,7 +137,7 @@ export class TablaegresosComponent implements OnInit {
     this.Cargando = true;
     this._egresoService.getListaEgresos(p).subscribe((data: any) => {
 
-      console.log('data egresos ', data);
+      // console.log('data egresos ', data);
 
       if (data.codigo == 'success') {
         let user = JSON.parse(localStorage['User']);
@@ -172,9 +172,9 @@ export class TablaegresosComponent implements OnInit {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;

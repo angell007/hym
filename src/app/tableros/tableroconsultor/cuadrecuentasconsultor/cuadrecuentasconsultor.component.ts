@@ -49,7 +49,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     private _swalService: SwalService,
     private _monedaService: MonedaService,
     private _toastService: ToastService) {
-    console.log(this.CuentasDescuadre);
+    // console.log(this.CuentasDescuadre);
   }
 
   ngOnInit() {
@@ -67,7 +67,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
       this.Router.navigate(['/tablero']);
     } else {
       this._idCuentaActual = this.CuentasDescuadre[0];
-      console.log(this._idCuentaActual);
+      // console.log(this._idCuentaActual);
 
       this.GetMovimientosCuentaDescuadre();
       this._getInformacionCuentaBancariaActual();
@@ -77,7 +77,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   public GetMovimientosCuentaDescuadre() {
     let p = { id_cuenta: this._idCuentaActual, id_funcionario: this._generalService.Funcionario.Identificacion_Funcionario };
     this._cuentaBancariaService.GetMovimientoCuentaBancariaUltimaSesion(p).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.MovimientosCuentaBancaria = data.query_data;
@@ -126,9 +126,9 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   }
 
   private _getTopesMoneda(idMoneda: string) {
-    console.log(idMoneda);
+    // console.log(idMoneda);
     let moneda = this.DiferencialMonedas.find(x => x.Id_Moneda == idMoneda);
-    console.log(moneda);
+    // console.log(moneda);
 
     let topes = { minimo: parseFloat(moneda.Monto_Minimo_Diferencia_Transferencia), maximo: parseFloat(moneda.Monto_Maximo_Diferencia_Transferencia) };
 
@@ -171,7 +171,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   }
 
   public Siguiente() {
-    console.log("Tiene pendiente " + (this.CuentasDescuadre.length - 1) + " por cuadrar!");
+    // console.log("Tiene pendiente " + (this.CuentasDescuadre.length - 1) + " por cuadrar!");
     if (!this.ComprobarCuadre()) {
       this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra proseguir sin antes cuadrar la cuenta!!']);
 
@@ -222,7 +222,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
     data.append('modulo', 'Tablero Consultor');
 
     this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d: any) => {
-      console.log(d);
+      // console.log(d);
       if (d.codigo == 'success') {
         this._swalService.ShowMessage(d);
         localStorage.setItem("Apertura_Consultor", d.id_apertura);
@@ -243,10 +243,10 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   public ComprobarCuadre(): boolean {
     let monto_apertura_cuenta_actual = this.CuentasBancariasSeleccionadas.find(x => x.Id_Cuenta_Bancaria == this._idCuentaActual).Monto_Apertura;
     let moneda_cuenta = this.CuentasBancariasSeleccionadas.find(x => x.Id_Cuenta_Bancaria == this._idCuentaActual).Id_Moneda;
-    console.log("monto apertura de al cuenta actual:", monto_apertura_cuenta_actual);
-    console.log("moneda de la cuenta:", moneda_cuenta);
-    console.log(this._montoCierreCuentaActual);
-    console.log(monto_apertura_cuenta_actual);
+    // console.log("monto apertura de al cuenta actual:", monto_apertura_cuenta_actual);
+    // console.log("moneda de la cuenta:", moneda_cuenta);
+    // console.log(this._montoCierreCuentaActual);
+    // console.log(monto_apertura_cuenta_actual);
 
     return this._validarDiferencia(monto_apertura_cuenta_actual, this._montoCierreCuentaActual, moneda_cuenta);
   }
@@ -265,7 +265,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
 
   private _getMontoCierre() {
     this._cuentaBancariaService.GetMontoCierreCuenta(this._idCuentaActual).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this._montoCierreCuentaActual = typeof (data) == 'string' ? parseFloat(data) : data;
     });
   }
@@ -286,7 +286,7 @@ export class CuadrecuentasconsultorComponent implements OnInit {
   }
 
   public MoverTransferencia(transferenciaModel: any) {
-    console.log(transferenciaModel);
+    // console.log(transferenciaModel);
 
     let p = { id_cuenta_origen: this._idCuentaActual, id_pago_transferencia: transferenciaModel.Id_Pago_Transfenecia, id_transferencia_destinatario: transferenciaModel.Id_Transferencia_Destino, numero_transferencia: transferenciaModel.Numero_Transferencia, recibo: transferenciaModel.Recibo, valor: transferenciaModel.Egreso, codigo_moneda: this.Codigo_Moneda, cuentas_ultima_apertura: this.CuentasBancariasUltimaApertura };
 

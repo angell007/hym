@@ -97,7 +97,7 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
   }
 
   GuardarBanco(){
-    console.log(this.BancoModel);
+    // console.log(this.BancoModel);
     this.FillEmptyValues(this.BancoModel);
     
     let info = this.generalService.normalize(JSON.stringify(this.BancoModel));

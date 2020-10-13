@@ -125,7 +125,7 @@ export class GirosService {
     }
 
     this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario_filter_aprobados.php?', { params: p }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.GirosAprobados = data.query_data;
         this.SetInformacionPaginacionAprobados(data.query_data);
@@ -142,7 +142,7 @@ export class GirosService {
     }
 
     this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario_filter.php?', { params: p }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.Giros = data.query_data;
         this.SetInformacionPaginacionRecibidos(data.query_data);
@@ -163,7 +163,7 @@ export class GirosService {
       this.http.get(this.globales.ruta + 'php/giros/giros_cedula.php', { params: { id: value, funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
         this.CargandoGiros = false;
         this.GirosBuscar = data;
-        console.log(' this.GirosBuscar', this.GirosBuscar);
+        // console.log(' this.GirosBuscar', this.GirosBuscar);
         if (this.GirosBuscar.length > 0) {
           this.Aparecer = true;
         }

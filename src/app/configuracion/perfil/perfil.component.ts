@@ -27,21 +27,21 @@ export class PerfilComponent implements OnInit {
     /*this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Perfil', id:this.id}
     }).subscribe((data:any)=>{
-      console.log(data);
+      // console.log(data);
      this.Datos=data;     
     });*/
 
     this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil.php', {
       params: { id: this.id}
     }).subscribe((data: any) => {
-      console.log(data)
+      // console.log(data)
       this.Permisos=data;    
     });
 
     this.http.get(this.globales.ruta + 'php/perfiles/detalle_perfil_cabecera.php', {
       params: { id: this.id}
     }).subscribe((data: any) => {
-      console.log(data);      
+      // console.log(data);      
       this.Cabecera=data;
     });
   }

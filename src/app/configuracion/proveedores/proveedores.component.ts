@@ -199,7 +199,7 @@ export class ProveedoresComponent implements OnInit {
     this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
       params:{modulo:'Proveedor', id:id}
     }).subscribe((data:any)=>{
-      console.log(data);      
+      // console.log(data);      
       this.Identificacion = data.Id_Proveedor;
       this.Nombre = data.Nombre;
       this.Direccion = data.Direccion;

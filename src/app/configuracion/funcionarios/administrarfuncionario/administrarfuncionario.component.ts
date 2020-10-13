@@ -98,7 +98,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   getOficinas() {
     this.http.get(this.global.ruta + 'php/oficinas/get_oficinas.php').subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.oficinas = data.query_data.map((oficina) => {
         return {
           value: oficina.Id_Oficina,
@@ -106,7 +106,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
         }
       });
 
-      console.log( this.oficinas);
+      // console.log( this.oficinas);
       
     });
 
@@ -206,7 +206,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     this._cuentaService.getCuentasBancariasSelect().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
-        console.log(this.CuentasBancarias);
+        // console.log(this.CuentasBancarias);
       } else {
 
         this.CuentasBancarias = [];
@@ -230,7 +230,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let permisos = this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
     let cuentas = this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
     let oficinas = this._generalService.normalize(JSON.stringify(this.oficinas_dependientes));
-    console.log([cuentas, oficinas]);
+    // console.log([cuentas, oficinas]);
 
     let datos = new FormData();
     datos.append("modelo", funcionario);
@@ -245,7 +245,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {
 
-        console.log(['editar', response]);
+        // console.log(['editar', response]);
 
         // if (response.codigo == 'success') {
         //   this._swalService.ShowMessage(response);
@@ -261,7 +261,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     } else {
       this._funcionarioService.saveFuncionario(datos).subscribe((response: any) => {
 
-        console.log(['Crear', response]);
+        // console.log(['Crear', response]);
 
         if (response.codigo == 'success') {
           // this._swalService.ShowMessage(response);
@@ -432,7 +432,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   }
 
   TestSelect() {
-    console.log(this.CuentasConsultor);
+    // console.log(this.CuentasConsultor);
 
   }
 

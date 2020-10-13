@@ -31,7 +31,7 @@ export class TableroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/perfiles/dashboard.php', {
       params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
     }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       var vari: any;
       switch (data.Id_Perfil) {
         //administrador

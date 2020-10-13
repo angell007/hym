@@ -46,7 +46,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
               private _cuentaBancariaService:CuentabancariaService) 
   {
     this.GetMonedas();
-    console.log(this.TrasladoModel);
+    // console.log(this.TrasladoModel);
     
   }
 
@@ -70,7 +70,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
         });
       }else{
         this.MensajeGuardar = 'Se dispone a guardar este traslado';
-        console.log('Se dispone');
+        // console.log('Se dispone');
         this.Editar = false;
         this.ModalTraslado.show();
       }
@@ -129,7 +129,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       this.ConsultaOrigen(term)
       .map(response => response)
       .do(data => {
-        console.log(data);
+        // console.log(data);
         return data;
       })
     )
@@ -159,7 +159,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       this.TrasladoModel.Fecha = this._generalService.FechaActual;
       this.TrasladoModel.Id_Caja = this._generalService.SessionDataModel.idCaja;
       this.TrasladoModel = this._generalService.limpiarString(this.TrasladoModel);
-      console.log(this.TrasladoModel);
+      // console.log(this.TrasladoModel);
       let info = this._generalService.normalize(JSON.stringify(this.TrasladoModel));
       let datos = new FormData();
       datos.append("modelo",info);
@@ -173,7 +173,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
         })
         .subscribe((data:any)=>{
 
-          console.log(data);
+          // console.log(data);
 
           if (data.codigo == 'success') { 
             this.ActualizarTabla.emit();       
@@ -210,8 +210,8 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   }
 
   ValidateBeforeSubmit():boolean{
-    console.log('validando');
-    console.log(this.TrasladoModel);
+    // console.log('validando');
+    // console.log(this.TrasladoModel);
     if (!this._validacionService.validateString(this.TrasladoModel.Origen, 'Tipo Origen')) {
       return false;
     }else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
@@ -225,11 +225,11 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     }else if (!this._validacionService.validateNumber(this.TrasladoModel.Valor, 'Valorx')) {
       return false;
     }else if (!this._validacionService.validateString(this.TrasladoModel.Detalle, 'Detalle')) {
-      console.log(this.TrasladoModel);
+      // console.log(this.TrasladoModel);
       
       return false;
     }else{
-      console.log('validado');
+      // console.log('validado');
       return true;
     }
   }

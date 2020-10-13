@@ -179,7 +179,7 @@ export class FuncionariocrearComponent implements OnInit {
 }
 
 onStepping(event){
-  console.log(event);
+  // console.log(event);
   
 }
 

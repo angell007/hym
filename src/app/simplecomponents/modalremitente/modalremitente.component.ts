@@ -39,7 +39,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.suscripcion = this.AbrirModalEvent.subscribe((data: any) => {
       this.accion = data.accion;
-      console.log(data);
+      // console.log(data);
 
 
       if (data.id_remitente != "0" && data.accion == 'editar') {
@@ -154,8 +154,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
                 break;
 
               case AccionModalRemitente.Editar_Transferencia:
-                console.log("entro editar switch");
-
+                // console.log("entro editar switch");
                 let remitente = { model: this.RemitenteModel };
                 this.CargarDatosRemitenteTransferencia.emit(remitente);
                 break;
@@ -194,7 +193,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
                 break;
 
               case AccionModalRemitente.Crear_Transferencia:
-                console.log("entro crear switch");
+                // console.log("entro crear switch");
                 let remitente = { model: this.RemitenteModel };
                 this.CargarDatosRemitenteTransferencia.emit(remitente);
                 break;

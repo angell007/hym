@@ -34,12 +34,12 @@ export class ModalajustecuentaComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       
       this.AjusteCuentaModel.Id_Cuenta_Bancaria = data.id_cuenta;
       this.CodigoMoneda=data.codigo_moneda;
       this.Id_Apertura_Cuadre = data.id_apertura == '' ? localStorage.getItem('Apertura_Consultor') : data.id_apertura;
-      console.log(this.Id_Apertura_Cuadre);
+      // console.log(this.Id_Apertura_Cuadre);
       this.ModalAjusteCuenta.show();
     });
   }
@@ -52,7 +52,7 @@ export class ModalajustecuentaComponent implements OnInit {
 
   private _getTiposAjuste(){
     this._generalService.GetTiposAjuste().subscribe((response:any) => {
-      console.log(response);
+      // console.log(response);
       if (response.codigo == 'success') { 
         this.TiposAjuste = response.query_data;
       }else{
@@ -73,7 +73,7 @@ export class ModalajustecuentaComponent implements OnInit {
       return;
     }else{
       this.AjusteCuentaModel.Id_Apertura = this.Id_Apertura_Cuadre == '' ? localStorage.getItem('Apertura_Consultor') : this.Id_Apertura_Cuadre;
-      console.log(this.AjusteCuentaModel);
+      // console.log(this.AjusteCuentaModel);
       
       let info = this._generalService.normalize(JSON.stringify(this.AjusteCuentaModel));
       let datos = new FormData();

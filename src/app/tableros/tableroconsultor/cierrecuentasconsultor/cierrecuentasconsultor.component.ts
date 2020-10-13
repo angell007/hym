@@ -34,7 +34,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
     this.Cargando = true;
     let p = { id_funcionario: this.Id_Funcionario, id_apertura: this.Id_Apertura };
     this._cuentaBancariaService.GetCuentasBancariasCierre(p).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.Cargando = false;
         this.CuentasBancarias = data.query_data;
@@ -62,7 +62,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
 
     if (flag.length == 0) {
       this._cuentaBancariaService.GuardaCierreCuentasBancarias(data).subscribe((response: any) => {
-        console.log(response);
+        // console.log(response);
         if (response.codigo == 'success') {
           this.CuentasBancarias = [];
           localStorage.setItem('Apertura_Consultor', '');
@@ -84,7 +84,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
   }
 
   public VerMovimientos(idCuentaBancaria: string) {
-    console.log(idCuentaBancaria);
+    // console.log(idCuentaBancaria);
     this._route.navigate(['/detallemovimientoscuenta', idCuentaBancaria, 'Ver']);
   }
 

@@ -81,7 +81,7 @@ export class ModalcuentabancariaComponent implements OnInit, OnDestroy {
 
   GetMonedas(){
     this.generalService.BuscarMonedas().subscribe((response:any) => {
-      console.log(response);
+      // console.log(response);
       this.Monedas = response.query_data; 
     });
   }
@@ -125,7 +125,7 @@ export class ModalcuentabancariaComponent implements OnInit, OnDestroy {
     }else{
       this.cuentaService.saveCuentaBancaria(datos)
       .catch(error => { 
-        console.log('An error occurred:', error);
+        // console.log('An error occurred:', error);
         this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })

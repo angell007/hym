@@ -35,7 +35,7 @@ export class VistaprincipalconsultorComponent implements OnInit {
    */
   public ConsultarAperturaFuncionario(){
     this._cuentaBancariaService.GetAperturaFuncionario(this._generalService.Funcionario.Identificacion_Funcionario).subscribe((data:any) =>{
-      console.log(data);
+      // console.log(data);
       
       if (!data.apertura_activa) {
         this.MostrarApertura = true;
