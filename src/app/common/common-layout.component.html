@@ -234,7 +234,7 @@
             </ul>
 
             <ul class="nav-left ">
-              <li class=" d-flex justify-content-center h-100 hm-100 text-center " style="box-sizing: border-box;">
+              <li class=" d-flex justify-content-center h-100 hm-100  text-center " style="box-sizing: border-box;">
                 <!-- PERFIL -->
                 <!-- <a href="" class="dropdown-toggle" data-toggle="dropdown"> -->
                   <div class="text-center pr-2 pt-2 vl" >
@@ -246,7 +246,7 @@
                 <!-- </a> -->
               </li>
               <!-- //TODO: customizar este permiso  -->
-              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  ">
+              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  " class="mt-2 pt-1">
                 <div class="pl-2">
                   <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
                   <label for="" style="display:block;">Caja: {{NombreCaja}}</label>

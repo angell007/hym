@@ -14,7 +14,7 @@ class item {
 
 	public function connect() {
 		global $MY_CONFIG;
-		include("/home/softwarehym/public_html/back/config/config.db.php");
+		include("/home/softwarehym/public_html/customback/config/config.db.php");
 		$oConn = new dao('mysql');
 		$oConn->connect($db_host,$db_user,$db_password,$db_name);
 		$oConn->setFetchMode("FETCH_ASSOC");

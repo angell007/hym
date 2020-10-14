@@ -627,9 +627,9 @@ export class PosComponent implements OnInit {
     }
   }
 
-  AbrirModalApertura(){
-    this.ModalAperturaCaja.show();
-  }
+  // AbrirModalApertura(){
+  //   this.ModalAperturaCaja.show();
+  // }
 
   AbrirModalPermiso(){
     this.permisoService._openSubject.next();

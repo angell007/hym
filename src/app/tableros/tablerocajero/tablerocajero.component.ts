@@ -647,9 +647,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  AbrirModalApertura() {
-    this.ModalAperturaCaja.show();
-  }
+  // AbrirModalApertura() {
+  //   this.ModalAperturaCaja.show();
+  // }
 
   AbrirModalPermiso() {
     this.permisoService._openSubject.next();
@@ -2192,7 +2192,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
-    console.log(value);
+    // console.log(value);
     // console.log(this.Monedas);
 
     this.MonedaParaTransferencia.id = value;
@@ -4296,7 +4296,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CambiarVista(tipo) {
 
     // this._notificacionService.counter();
-    console.log('Cambiando vista');
+    // console.log('Cambiando vista');
 
     switch (tipo) {
       case "Compra": {
@@ -4540,13 +4540,49 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
+  // GetRegistroDiario() {
+
+  //   this.http
+  //     .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
+  //     .subscribe((data: any) => {
+  //       if (data.DiarioNeto <= 0) {
+  //         console.log(data);
+  //         if (data.valores_anteriores.length == 0) {
+  //           this.ValoresMonedasApertura = [];
+  //           let toastObj = { textos: ['Alerta', 'No se encontraron registros de apertura'], tipo: 'warning', duracion: 4000 };
+  //           this._toastService.ShowToast(toastObj);
+  //         } else {
+
+  //           data.valores_anteriores.forEach((valores, i) => {
+  //             this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+  //           });
+
+  //           this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
+  //           this.ModalAperturaCaja.show();
+
+  //           // data.valores_anteriores.forEach((valores: any, i: number) => {
+  //           // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+  //           // (this.ValoresMonedasApertura[i]) ? this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre : ''
+  //           // });
+  //         }
+
+  //       } else {
+  //         data.valores_anteriores.forEach((valores, i) => {
+  //           this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+  //         });
+  //       }
+  //     });
+  // }
+
+
+
   GetRegistroDiario() {
 
     this.http
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
         if (data.DiarioNeto <= 0) {
-          console.log(data);
+
           if (data.valores_anteriores.length == 0) {
             this.ValoresMonedasApertura = [];
             let toastObj = { textos: ['Alerta', 'No se encontraron registros de apertura'], tipo: 'warning', duracion: 4000 };
@@ -4559,20 +4595,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
             this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
             this.ModalAperturaCaja.show();
-            
-            // data.valores_anteriores.forEach((valores: any, i: number) => {
-            // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
-            // (this.ValoresMonedasApertura[i]) ? this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre : ''
-            // });
           }
 
         } else {
+
           data.valores_anteriores.forEach((valores, i) => {
             this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
           });
         }
       });
   }
+
 
   CheckApertura() {
     this.http
