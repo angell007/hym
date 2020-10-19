@@ -53,6 +53,8 @@ export class CierrecajaComponent implements OnInit {
   public MostrarTotal: any = [];
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura: any = [];
+  public sizeColunm: any = 0 + '%';
+  public flagLimites: boolean = false;
 
   constructor(public globales: Globales, private cliente: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService, private _funcionarioService: NuevofuncionarioService) {
   }
@@ -61,7 +63,7 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
-    console.log(this.solo_ver);
+    // console.log(this.solo_ver);
 
   }
 
@@ -88,9 +90,11 @@ export class CierrecajaComponent implements OnInit {
     this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
 
       this.MonedasSistema = data.monedas;
+      const divi = (90 / this.MonedasSistema.length)
+      this.sizeColunm = divi + '%'
+
       let t = data.totales_ingresos_egresos;
       for (const k in t) {
-
         let arr = t[k];
         this.Totales[k] = arr;
       }
@@ -189,8 +193,6 @@ export class CierrecajaComponent implements OnInit {
       return;
     } else if (!this.ValidarDiferencias()) {
       return;
-    } else if (this.CierreCajaModel.Observacion == '') {
-      this.ShowSwal('warning', 'Alerta', 'Debe colocar la observacion antes de realizar el cierre de caja!');
     } else {
       this.ArmarResumenMovimientos();
       console.log(this.ResumenMovimiento);
@@ -250,6 +252,22 @@ export class CierrecajaComponent implements OnInit {
   }
 
   CalcularDiferencia(value, pos) {
+    let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
+    montos[0].forEach((element, index) => {
+      if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
+        console.log(element['Monto'] < value);
+        if (parseFloat(element['Monto']) < parseFloat(value))  {
+          this.flagLimites = true
+        }
+      }
+    });
+
+    if (this.flagLimites) {
+      this.flagLimites = false;
+      this.ShowSwal('warning', 'Alerta', 'La cantidad digitada supera los limites para esta oficina');
+      this.Diferencias[pos].Diferencia = -1;
+      return false;
+    }
 
     if (value == '') {
       this.Diferencias[pos].Diferencia = 0;
@@ -259,8 +277,9 @@ export class CierrecajaComponent implements OnInit {
     }
 
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
+    let entregar = total_entregar;
 
-    let entregar = total_entregar < 0 ? (total_entregar * -1) : total_entregar;
+
     let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }

@@ -8,6 +8,8 @@ import { OficinaService } from '../../shared/services/oficinas/oficina.service';
 import { OficinaModel } from '../../Modelos/OficinaModel';
 import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
 import { MunicipioService } from '../../shared/services/municipio/municipio.service';
+import { HttpClient } from '@angular/common/http';
+import { Globales } from '../../shared/globales/globales';
 
 @Component({
   selector: 'app-modaloficina',
@@ -23,6 +25,7 @@ export class ModaloficinaComponent implements OnInit {
 
   public Departamentos: Array<any> = [];
   public Municipios: Array<any> = [];
+  public MonedasSistema: Array<any> = [];
   public openSubscription: any;
   public Editar: boolean = false;
   public MensajeGuardar: string = 'Se dispone a guardar esta oficina';
@@ -35,8 +38,11 @@ export class ModaloficinaComponent implements OnInit {
     private _toastService: ToastService,
     private _oficinaService: OficinaService,
     private _departamentoService: DepartamentoService,
-    private _municipioService: MunicipioService) {
+    private _municipioService: MunicipioService,
+    private http: HttpClient,
+    private globales: Globales) {
     this.GetDepartamentos();
+    this.ConsultarMonedas();
   }
 
   ngOnInit() {
@@ -48,8 +54,20 @@ export class ModaloficinaComponent implements OnInit {
         let p = { id_oficina: data };
 
         this._oficinaService.getOficina(p).subscribe((d: any) => {
+
           if (d.codigo == 'success') {
+            
             this.OficinaModel = d.query_data;
+            if (d.limites.query_data.length > 0) {
+              this.MonedasSistema.forEach((element: any, index: number) => {
+                d.limites.query_data.forEach((element2: any) => {
+                  if (element.Id_Moneda == element2.Id_Moneda) {
+                    this.OficinaModel[element.Nombre] = element2.Monto
+                  }
+                })
+              });
+            }
+
             this.GetMunicipiosDepartamento(this.OficinaModel.Id_Departamento, true);
             this.ModalOficina.show();
           } else {
@@ -72,6 +90,13 @@ export class ModaloficinaComponent implements OnInit {
     }
 
     this.CerrarModal();
+  }
+
+
+  ConsultarMonedas() {
+    this.http.get(`${this.globales.ruta}php/monedas/lista_monedas.php`).subscribe((data: any) => {
+      this.MonedasSistema = data;
+    });
   }
 
   GetDepartamentos() {
@@ -112,8 +137,11 @@ export class ModaloficinaComponent implements OnInit {
       return;
     }
 
-    this.OficinaModel = this._generalService.limpiarString(this.OficinaModel);
+    this.MonedasSistema.forEach((element, index) => {
+      this.OficinaModel[index] = { 'Id_Moneda': element.Id_Moneda, 'Monto': this.OficinaModel[element.Nombre] }
+    });
 
+    this.OficinaModel = this._generalService.limpiarString(this.OficinaModel);
     let info = this._generalService.normalize(JSON.stringify(this.OficinaModel));
     let datos = new FormData();
     datos.append("modelo", info);
@@ -121,7 +149,7 @@ export class ModaloficinaComponent implements OnInit {
     if (this.Editar) {
       this._oficinaService.editOficina(datos)
         .catch(error => {
-          //console.log('An error occurred:', error);
+          console.log('An error occurred:', error);
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
@@ -131,9 +159,6 @@ export class ModaloficinaComponent implements OnInit {
             this.CerrarModal();
             this.Editar = false;
             this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
-
-            // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-            // this._toastService.ShowToast(toastObj);
           } else {
             this._swalService.ShowMessage(data);
           }
@@ -150,9 +175,6 @@ export class ModaloficinaComponent implements OnInit {
             this.ActualizarTabla.emit();
             this.CerrarModal();
             this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
-  
-            // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-            // this._toastService.ShowToast(toastObj);
           } else {
             this._swalService.ShowMessage(data);
           }
@@ -170,6 +192,8 @@ export class ModaloficinaComponent implements OnInit {
       return false;
     } else if (!this._validacionService.validateString(this.OficinaModel.Nombre_Establecimiento, 'Nombre Establecimiento')) {
       return false;
+      // } else if (!this._validacionService.validateString(this.OficinaModel.Monto_limite, 'Monto Limite')) {
+      //   return false;
     } else {
       return true;
     }
@@ -187,6 +211,5 @@ export class ModaloficinaComponent implements OnInit {
   LimpiarModelo() {
     this.OficinaModel = new OficinaModel();
   }
-
 
 }

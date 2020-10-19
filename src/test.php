@@ -1,38 +1,89 @@
-$query_devueltas = "SELECT
-    T.Id_Transferencia,
-    T.Fecha,
-    T.Cantidad_Transferida,
-    T.Tasa_Cambio,
-    TD.Id_Transferencia_Destinatario,
-    TD.Estado,
-    TD.Valor_Transferencia,
-    TD.Numero_Documento_Destino,
-    SUBSTRING(R.Codigo, 3) as Codigo,
-    CONCAT(F.Nombres, \" \" , F.Apellidos) as NombreCajero,
-    DC.Numero_Cuenta AS Cuenta_Destino,
-    D.Nombre AS Destinatario,
-  (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
-    IFNULL((SELECT 
-              SUM(Valor)
-            FROM Pago_Transfenecia
-            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), \"0\") AS Pago_Parcial,
-    (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
-              SUM(Valor)
-            FROM Pago_Transfenecia
-            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), 0)) AS Valor_Real,
-  IFNULL((SELECT CONCAT_WS(\" \", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), \"Disponible\") AS Funcionario_Bloqueo,
-  (CASE
-    WHEN TD.Estado = \"Pagada\" THEN 1
-    WHEN TD.Estado = \"Pendiente\" THEN 2
-   END) AS Orden_Consulta,
-  IFNULL((SELECT 
-            Id_Pago_Transfenecia 
-          FROM Pago_Transfenecia 
-          WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"Si\" LIMIT 1), \"0\") AS Devolucion
-  FROM Transferencia T  
-  INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
-  INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
-  INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
-  INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
-  INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+header('Content-Type: application/json');
+
+include_once('../../class/class.querybasedatos.php');
+include_once('../../class/class.http_response.php');
+
+$modelo = (isset($_REQUEST['modelo']) ? $_REQUEST['modelo'] : '');
+$modelo = (array) json_decode($modelo, true);
+$valores_moneda = $modelo['ValoresMoneda'];
+
+$httpResponse = new HttpResponse();
+$response = array();
+
+unset($modelo['ValoresMoneda']);
+
+if (ExisteNombreMoneda($modelo['Nombre'], $modelo['Id_Moneda'])) {
+
+    $httpResponse->setRespuesta(2, 'Alerta', 'Ya existe una moneda registrada con este nombre ' . $modelo['Nombre'] . '!');
+    $response = $httpResponse->getRespuesta();
+} else {
+
+    ActualizarMoneda($modelo);
+    ActualizarValoresMoneda($valores_moneda, $modelo['Id_Moneda']);
+
+    $httpResponse->setRespuesta(0, 'Actualizacion Exitosa', 'Se actualizo la moneda de manera exitosa!');
+    $response = $httpResponse->getRespuesta();
+}
+
+echo json_encode($response);
+
+function ExisteNombreMoneda($nombre, $idMoneda)
+{
+    $queryObj = new QueryBaseDatos();
+
+    $query = '
+			SELECT
+				Nombre
+			FROM Moneda
+			WHERE
+				Nombre = "' . $nombre . '" AND Id_Moneda <> ' . $idMoneda;
+
+    $queryObj->SetQuery($query);
+    $result = $queryObj->ExecuteQuery('simple');
+    unset($queryObj);
+
+    return $result != false;
+}
+
+function ActualizarValoresMoneda($valores, $idMoneda)
+{
+    $oItem = new complex('Valor_Moneda', "Id_Valor_Moneda", $valores['Id_Valor_Moneda']);
+
+    foreach ($valores as $index => $value) {
+        if ($value == '') {
+            $value = '0';
+        }
+
+        if (gettype($value) == "double") {
+            $oItem->$index = number_format($value, 2, ".", "");
+        } else {
+            $oItem->$index = $value;
+        }
+    }
+
+    $oItem->save();
+    unset($oItem);
+}
+
+function ActualizarMoneda($moneda)
+{
+    $oItem = new complex('Moneda', "Id_Moneda", $moneda['Id_Moneda']);
+
+    // foreach( $moneda as $index=>$value) {
+    //     $oItem->$index=$value;
+    // }
+    // $oItem->save();
+    // unset($oItem);
+
+    $oItem->Codigo = $moneda['Codigo'];
+    $oItem->Nombre = $moneda['Nombre'];
+    $oItem->Id_Pais = $moneda['Id_Pais'];
+    $oItem->MDefault = $moneda['Default'];
+    $oItem->Monto_Maximo_Diferencia_Transferencia = number_format($moneda['Monto_Maximo_Diferencia_Transferencia'], 2, ".", "");
+
+    $oItem->save();
+    unset($oItem);
+}

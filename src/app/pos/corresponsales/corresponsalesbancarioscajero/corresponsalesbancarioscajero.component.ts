@@ -41,14 +41,15 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     private _validacionService: ValidacionService,
     private _toastService: ToastService,
     private _corresponsalService: CorresponsalbancarioService) {
+    this.settearMoneda()
     this.GetCorresponsalesBancarios();
   }
 
   ngOnInit() {
+    this.settearMoneda()
     this._viewManagementSubscription = this.ManageView.subscribe((data: AccionTableroCajero) => {
       if (data == AccionTableroCajero.Cerrar) {
         // console.log(data);
-
         this.LimpiarModeloCorresponsal();
       }
     });
@@ -84,12 +85,23 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     // }
   }
 
+  async settearMoneda() {
+    await this.GetMonedas().then((monedas) => {
+      this.monedaPeso = monedas.filter((moneda: any) => {
+        return moneda.Nombre == 'Pesos'
+      })
+    })
+    this.monedaPeso = await Object.assign({}, this.monedaPeso[0])
+  }
+
   public GuardarCorresponsalDiario() {
     this.CorresponsalModel.Identificacion_Funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
     this.CorresponsalModel.Id_Caja = this._generalService.SessionDataModel.idCaja;
     this.CorresponsalModel.Id_Oficina = this._generalService.SessionDataModel.idOficina;
     this.CorresponsalModel.Fecha = this._generalService.FechaActual;
     this.CorresponsalModel.Hora = this._generalService.HoraActual;
+
+
 
     // Custom pesos  
     this.GetMonedas().then((monedas) => {
@@ -109,7 +121,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
           this.LimpiarModeloCorresponsal();
           this.ActualizarRegistrosCorresponsal.emit(null);
           this.RegresarTablaRegistros.emit();
-          this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
+          this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Operacion sealizada exitosamente!']);
 
         } else {
           this._swalService.ShowMessage(data);

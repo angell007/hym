@@ -8,7 +8,7 @@ import { FormWizardModule } from 'angular2-wizard';
 import { ArchwizardModule } from 'ng2-archwizard';
 import { FuncionarioService } from './shared/funcionario/funcionario.service'
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
-import {NgxDatatableModule} from '@swimlane/ngx-datatable';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ThemeConstants } from './shared/config/theme-constant';
 import { ChartsModule } from 'ng2-charts';
 import { StickyModule } from 'ng2-sticky-kit';
@@ -25,7 +25,7 @@ import { registerLocaleData, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
 import { QzTrayService } from './shared/qz-tray.service';
-import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
+import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
 
 registerLocaleData(localeES);
 
@@ -34,7 +34,7 @@ import { CommonLayoutComponent } from './common/common-layout.component';
 import { AuthenticationLayoutComponent } from './common/authentication-layout.component';
 
 //Directives
-import { NgbModule, NgbDropdown} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Sidebar_Directives } from './shared/directives/side-nav.directive';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
@@ -133,8 +133,9 @@ import { GruposComponent } from './configuracion/grupos/grupos.component';
 import { TipodocumentoComponent } from './configuracion/tipodocumento/tipodocumento.component';
 import { MonedasComponent } from './configuracion/monedas/monedas.component';
 import { NgxMaskModule } from 'ngx-mask'
-import { NgxCurrencyModule } from "ngx-currency";
-import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
+// import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
+// import { NgxCurrencyModule } from "ngx-currency";
+// import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from "ngx-currency/src/currency-mask.config";
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { CajarecaudosComponent } from './configuracion/cajarecaudos/cajarecaudos.component';
 import { ComprasComponent } from './configuracion/compras/compras.component';
@@ -257,19 +258,25 @@ import { HourPipe } from './hour.pipe';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
 import { TesCustomServiceService } from './tes-custom-service.service';
 import { ActualizarService } from './customservices/actualizar.service';
- 
-// TODO  Funcion para dar formato a moneda
-export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
+
+
+
+export const customCurrencyMaskConfig = {
     align: "left",
-    allowNegative: false,
-    allowZero: false,
+    allowNegative: true,
+    allowZero: true,
     decimal: ",",
-    precision: 0,
+    precision: 2,
     prefix: "",
     suffix: "",
     thousands: ".",
-    nullable: false
+    nullable: true,
+    min: null,
+    max: null,
+    inputMode: CurrencyMaskInputMode.NATURAL
 };
+
 
 @NgModule({
     imports: [
@@ -296,17 +303,16 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
             buttonsStyling: false,
             customClass: 'modal-content',
             confirmButtonClass: 'btn btn-outline-primary btn-rounded',
-            cancelButtonClass: 'btn btn-outline-danger btn-rounded'  
-          }),
+            cancelButtonClass: 'btn btn-outline-danger btn-rounded'
+        }),
         NgxMaskModule.forRoot(),
-        NgxCurrencyModule,
+        NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
         MDBBootstrapModule.forRoot(),
         MyDateRangePickerModule,
         SelectModule,
-        //NgxSpinnerModule
         NgxPaginationModule
     ],
-    schemas: [ NO_ERRORS_SCHEMA ],
+    schemas: [NO_ERRORS_SCHEMA],
     declarations: [
         PuntosPipe,
         CustomcurrencyPipe,
@@ -467,7 +473,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         HourPipe,
         ConsolidadoComponent
     ],
-    exports:[
+    exports: [
         ModalBasicComponent
     ],
     providers: [
@@ -491,8 +497,8 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         PuntosPipe,
         CustomcurrencyPipe,
         NgbDropdown,
-        { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-        { provide: LOCALE_ID,  useValue: 'es-CO' },
+        // { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+        { provide: LOCALE_ID, useValue: 'es-CO' },
         CuentabancariaService,
         SwalService,
         RemitenteService,
@@ -534,7 +540,7 @@ export var CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 
     ],
     bootstrap: [AppComponent],
-    entryComponents: [TableroauditoriaComponent,TablerocajeroComponent,TablerocajeroprincipalComponent,TableroconsultorComponent,TablerogerenciaComponent, VistaprincipalconsultorComponent]
+    entryComponents: [TableroauditoriaComponent, TablerocajeroComponent, TablerocajeroprincipalComponent, TableroconsultorComponent, TablerogerenciaComponent, VistaprincipalconsultorComponent]
 })
 
 

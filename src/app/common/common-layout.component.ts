@@ -994,9 +994,21 @@ export class CommonLayoutComponent implements OnInit {
 
     SetNombreOficina(idOficina: string) {
 
+        localStorage.removeItem('monedaDefault');
+
         if (this.Oficinas.length > 0) {
             let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina);
             this.NombreOficina = oficinaObj.Nombre;
+
+            this.http.get(this.globales.ruta + 'php/oficinas/get_montos.php', { params: { id_oficina: oficinaObj.Id_Oficina } }).subscribe((data: any) => {
+                localStorage.setItem('Montos', JSON.stringify(data.query_data));
+            });
+
+            this.globales.Monedas.forEach(element => {
+                if (element.MDefault == '1') {
+                    localStorage.setItem('monedaDefault', JSON.stringify(element));
+                }
+            });
         }
     }
 
@@ -1063,6 +1075,19 @@ export class CommonLayoutComponent implements OnInit {
                 console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
+
+                        // console.log(data);
+
+                        // if (d.limites.query_data.length > 0) {
+                        //     this.MonedasSistema.forEach((element: any, index: number) => {
+                        //       d.limites.query_data.forEach((element2: any) => {
+                        //         if (element.Id_Moneda == element2.Id_Moneda) {
+                        //           this.OficinaModel[element.Nombre] = element2.Monto
+                        //         }
+                        //       })
+                        //     });
+                        //   }
+
                         if (data.mensaje == 'Se han encontrado registros!') {
                             // console.log(data.query_data.Id_Oficina)
                             this.oficina_seleccionada = data.query_data.Id_Oficina;

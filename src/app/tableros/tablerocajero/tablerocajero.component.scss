@@ -33,6 +33,13 @@ table.modified-table>tbody>tr>td:first-child {
 }
 
 
+[contenteditable]:hover,
+[contenteditable]:focus,
+input:hover,
+input:focus {
+  background: rgba(241, 76, 76, 0.1);
+  outline: 1px solid #009688
+}
 
 .custom-input {
   box-shadow: none;

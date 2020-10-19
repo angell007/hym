@@ -12,7 +12,7 @@
           <div class="form-group">
             <label class=" font-size-18">Grupo</label>
             <select id="grupo" class="form-control  font-size-18" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo"
-              (change)="GetTercerosGrupo()" required>
+              (change)="GetTercerosGrupo()" required tabindex="1">
               <option value="" selected>Seleccione</option>
               <option *ngFor="let g of Grupos" [value]="g.Id_Grupo_Tercero">{{g.Nombre_Grupo}}</option>
             </select>

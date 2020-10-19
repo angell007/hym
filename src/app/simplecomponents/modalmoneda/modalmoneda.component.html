@@ -5,19 +5,21 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="app-modal-body">    
+  <div class="app-modal-body">
     <form #FormMoneda="ngForm">
       <div class="form-row">
         <div class="col-md-4">
           <div class="form-group">
             <label>Nombre</label>
-            <input type="text" placeholder="Nombre moneda" class="form-control" name="Nombre" [(ngModel)]="MonedaModel.Nombre" required>
+            <input type="text" placeholder="Nombre moneda" class="form-control" name="Nombre"
+              [(ngModel)]="MonedaModel.Nombre" required>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Código</label>
-            <input type="text" placeholder="Código moneda" class="form-control" name="Codigo" [(ngModel)]="MonedaModel.Codigo" required>
+            <input type="text" placeholder="Código moneda" class="form-control" name="Codigo"
+              [(ngModel)]="MonedaModel.Codigo" required>
           </div>
         </div>
         <div class="col-md-4">
@@ -35,21 +37,24 @@
           <div class="form-group">
             <label>Mínimo venta efectivo</label>
             <input id="Min_Venta_Efectivo" type="number" class="form-control text-right" name="Min_Venta_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Venta_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Venta_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Máximo venta efectivo</label>
             <input type="number" class="form-control text-right" name="Max_Venta_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Max_Venta_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Max_Venta_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Sugerido venta efectivo</label>
             <input type="number" class="form-control text-right" name="Sugerido_Venta_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Sugerido_Venta_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Sugerido_Venta_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
       </div>
@@ -58,21 +63,24 @@
           <div class="form-group">
             <label>Mínimo compra efectivo</label>
             <input type="number" class="form-control text-right" name="Min_Compra_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Compra_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Compra_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Máximo compra efectivo</label>
             <input type="number" class="form-control text-right" name="	Max_Compra_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.	Max_Compra_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.	Max_Compra_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Sugerido compra efectivo</label>
             <input type="number" class="form-control text-right" name="	Sugerido_Compra_Efectivo"
-              [(ngModel)]="MonedaModel.ValoresMoneda.	Sugerido_Compra_Efectivo" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.	Sugerido_Compra_Efectivo"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
       </div>
@@ -81,21 +89,24 @@
           <div class="form-group">
             <label>Mínimo venta transferencia</label>
             <input type="number" class="form-control text-right" name="Min_Venta_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Venta_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Min_Venta_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Máximo venta transferencia</label>
             <input type="number" class="form-control text-right" name="Max_Venta_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Max_Venta_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Max_Venta_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label>Sugerido venta transferencia</label>
             <input type="number" class="form-control text-right" name="Sugerido_Venta_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Sugerido_Venta_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Sugerido_Venta_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
       </div>
@@ -104,40 +115,62 @@
           <div class="form-group">
             <label>Costo Transferencia</label>
             <input type="number" class="form-control text-right" name="Costo_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Costo_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Costo_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Comision Efectivo Transf.</label>
             <input type="number" class="form-control text-right" name="Comision_Efectivo_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Comision_Efectivo_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Comision_Efectivo_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Pagar Comision Desde</label>
             <input type="number" class="form-control text-right" name="Pagar_Comision_Desde"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Pagar_Comision_Desde" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Pagar_Comision_Desde"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
             <label>Min No Cobro Transferencia</label>
             <input type="number" class="form-control text-right" name="Min_No_Cobro_Transferencia"
-              [(ngModel)]="MonedaModel.ValoresMoneda.Min_No_Cobro_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
-          </div>
-        </div>
-      </div>      
-      <div class="form-row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label title="Limite diferencial permitido para la apertura de cuentas con esta moneda!">Tope Diferencial</label>
-            <input type="number" class="form-control text-right" name="Monto_Maximo_Diferencia_Transferencia"
-              [(ngModel)]="MonedaModel.Monto_Maximo_Diferencia_Transferencia" (onkeypress)="InputSoloNumerosYDecimal($event)">
+              [(ngModel)]="MonedaModel.ValoresMoneda.Min_No_Cobro_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
           </div>
         </div>
       </div>
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label title="Limite diferencial permitido para la apertura de cuentas con esta moneda!">Tope
+              Diferencial</label>
+            <input type="number" class="form-control text-right" name="Monto_Maximo_Diferencia_Transferencia"
+              [(ngModel)]="MonedaModel.Monto_Maximo_Diferencia_Transferencia"
+              (onkeypress)="InputSoloNumerosYDecimal($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+
+            <div class="form-check" #checkDefault>
+              <input type="checkbox" name="Default" class="form-check-input" id="defaultCheck"
+                [(ngModel)]="MonedaModel.MDefault">
+              <label class="form-check-label" for="defaultCheck">Asignar por defecto</label>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
     </form>
   </div>
   <div class="app-modal-footer">
@@ -148,5 +181,5 @@
         (confirm)="GuardarMoneda()" [disabled]="!FormMoneda.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
       </button>
     </div>
-  </div>  
+  </div>
 </app-modal-basic>

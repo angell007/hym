@@ -6,6 +6,8 @@ import { SwalService } from '../../shared/services/swal/swal.service';
 import { ValidacionService } from '../../shared/services/validaciones/validacion.service';
 import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
+import { HttpClient } from '@angular/common/http';
+import { Globales } from '../../shared/globales/globales';
 
 @Component({
   selector: 'app-modalmoneda',
@@ -18,28 +20,37 @@ export class ModalmonedaComponent implements OnInit {
   @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('ModalMoneda') ModalMoneda: any;
+  @ViewChild('checkDefault') checkDefault: any;
 
   public BancosPais: Array<any> = [];
   public Paises: any = [];
   public Monedas: any = [];
   public TiposCuenta: any = [];
+  public flagMoneda: boolean = false;
 
   public openSubscription: any;
   public Editar: boolean = false;
   public MensajeGuardar: string = 'Se dispone a guardar esta moneda';
 
   public MonedaModel: MonedaModel = new MonedaModel();
-
+  public MonedasSistema: any =  [];
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
     private _validacionService: ValidacionService,
     private _monedaService: MonedaService,
-    private _toastService: ToastService) {
+    private _toastService: ToastService,
+    private http: HttpClient,
+    private globales: Globales) {
     this.GetPaises();
   }
 
   ngOnInit() {
+
     this.openSubscription = this.AbrirModal.subscribe((data: string) => {
+
+      this.http.get(`${this.globales.ruta}php/monedas/lista_monedas.php`).subscribe((data: any) => {
+        this.MonedasSistema = data;
+      });
 
       if (data != "0") {
         this.Editar = true;
@@ -48,8 +59,32 @@ export class ModalmonedaComponent implements OnInit {
 
         this._monedaService.getMoneda(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
+
+            this.MonedasSistema.forEach((moneda) => {
+              if (moneda['Id_Moneda'] == d.query_data.Id_Moneda) {
+                if (moneda['MDefault'] == '1') {
+                  this.checkDefault.nativeElement.style.display = 'block';
+                } else {
+                  this.checkDefault.nativeElement.style.display = 'none';
+                }
+              }
+            })
+
+            let count = 0;
+            this.MonedasSistema.forEach((moneda) => {
+              if (moneda['MDefault'] != '1') {
+                count++
+              }
+            })
+
+            if (this.MonedasSistema.length == count) {
+              this.checkDefault.nativeElement.style.display = 'block';
+            }
+
+            count = 0;
             this.MonedaModel = d.query_data;
             this.ModalMoneda.show();
+
           } else {
 
             this._swalService.ShowMessage(d);
@@ -59,6 +94,27 @@ export class ModalmonedaComponent implements OnInit {
       } else {
         this.MensajeGuardar = 'Se dispone a guardar esta moneda';
         this.Editar = false;
+
+        let count = 0;
+        this.http.get(`${this.globales.ruta}php/monedas/lista_monedas.php`).subscribe((data: any) => {
+          this.MonedasSistema = data;
+          data.forEach((moneda) => {
+            if (moneda['MDefault'] != '1') {
+              count++
+            }
+          })
+          
+          if (this.MonedasSistema.length == count) {
+            this.checkDefault.nativeElement.style.display = 'block';
+          } else {
+            this.checkDefault.nativeElement.style.display = 'none';
+          }
+
+        });
+
+
+
+        count = 0;
         this.ModalMoneda.show();
       }
     });
@@ -88,7 +144,6 @@ export class ModalmonedaComponent implements OnInit {
     //console.log(this.MonedaModel);
 
     this.MonedaModel = this._generalService.limpiarString(this.MonedaModel);
-
     let info = this._generalService.normalize(JSON.stringify(this.MonedaModel));
     let datos = new FormData();
     datos.append("modelo", info);

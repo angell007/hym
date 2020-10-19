@@ -96,6 +96,19 @@
           </div>
         </div>
       </div>
+
+      <hr>
+      <h3>Configuracion</h3>
+      <div class="form-row">
+        <div class="col-md-6" *ngFor="let item of MonedasSistema">
+          <div class="form-group">
+            <label>Lim. monto {{item.Nombre}}</label>
+            <input type="text" placeholder="Monto limites de cierre de caja" class="form-control"
+              name="Monto_limite_{{item.Nombre}}" [(ngModel)]="OficinaModel[item.Nombre]" required>
+          </div>
+        </div>
+      </div>
+
     </form>
   </div>
   <div class="app-modal-footer">
@@ -108,3 +121,4 @@
     </div>
   </div>
 </app-modal-basic>
+

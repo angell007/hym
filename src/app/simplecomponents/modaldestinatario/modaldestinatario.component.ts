@@ -196,6 +196,7 @@ export class ModaldestinatarioComponent implements OnInit {
     data.append('modelo', modelo);
 
     if (this.Editar) {
+   
       this.destinatarioService.editDestinatario(data)
         .catch(error => {
           this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -223,12 +224,14 @@ export class ModaldestinatarioComponent implements OnInit {
           this.swalService.ShowMessage(data);
         });
     } else {
+
       this.destinatarioService.saveDestinatario(data)
         .catch(error => {
           this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
         .subscribe((data: any) => {
+
           if (data.codigo == 'success') {
             switch (this.accion) {
               case 'crear':
