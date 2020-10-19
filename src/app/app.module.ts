@@ -258,7 +258,7 @@ import { HourPipe } from './hour.pipe';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
 import { TesCustomServiceService } from './tes-custom-service.service';
 import { ActualizarService } from './customservices/actualizar.service';
-import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
+import { NgxCurrencyModule } from "ngx-currency";
 
 
 
@@ -274,7 +274,7 @@ export const customCurrencyMaskConfig = {
     nullable: true,
     min: null,
     max: null,
-    inputMode: CurrencyMaskInputMode.NATURAL
+    // inputMode: CurrencyMaskInputMode.NATURAL
 };
 
 
