@@ -62,7 +62,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('iniciando tablero principal ');
     this.ConsultarTotalesDepartamento();
   }
 
@@ -70,7 +69,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let d = new Date();
     this.FechaActual = d.toISOString().split("T")[0];
     this.Fecha_Consulta = d.toISOString().split("T")[0];
-    // this.Fecha_Consulta = this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos+' - '+this._generalService.AnioActual+'-'+this._generalService.MesActualDosDigitos+'-'+this._generalService.DiaActualDosDigitos;
   }
 
   AsignarPaises() {

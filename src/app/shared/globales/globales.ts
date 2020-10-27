@@ -5,6 +5,7 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 @Injectable()
 export class Globales {
   ruta: string = 'https://softwarehym.com/customback/';
+  rutaNueva: string = 'http://softhym.test/';
   public urlRiff = '';
   public Monedas: any = [];
   public Paises: any = [];
@@ -32,26 +33,27 @@ export class Globales {
   }
 
   BuscarMonedas(): void {
-    this.client.get(this.ruta + 'php/monedas/lista_monedas.php').subscribe((data) => {
+    this.client.get(this.rutaNueva + 'monedas ').subscribe((data) => {
       this.Monedas = data;
     });
   }
 
+
   BuscarPaises(): void {
-    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Pais' } }).subscribe((data: any) => {
+    this.client.get(this.rutaNueva + 'genericos/paises').subscribe((data: any) => {
       this.Paises = data;
     });
   }
 
   BuscarTiposDocumentos(): void {
-    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento_Extranjero' } }).subscribe((data: any) => {
+    this.client.get(this.rutaNueva + 'genericos/tipo-documento-extrangeros').subscribe((data: any) => {
       this.TipoDocumentoExtranjero = data;
 
     });
   }
 
   BuscarTiposDocumentosNacionales(): void {
-    this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Tipo_Documento' } }).subscribe((data: any) => {
+    this.client.get(this.rutaNueva + 'genericos/tipo-documento-nacionales').subscribe((data: any) => {
       this.TipoDocumentoNacionales = data;
 
     });
@@ -77,7 +79,6 @@ export class Globales {
 
   BuscarServiciosExternos() {
     this.client.get(this.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Servicio_Externo' } }).subscribe((data: any) => {
-      // console.log(' obtenniendo servicios externos', data );
       this.ServiciosExternos = data;
     });
   }

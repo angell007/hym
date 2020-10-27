@@ -320,7 +320,31 @@
                   <form #FormMoneda="ngForm">
                     <div class="row">
 
-                      <!--ESCOGER MONEDA PARA COMPRA-->
+
+                      <div class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
+                          Tipo de Tercero
+                        </label>
+
+                        <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
+                          (change)="limpiarImputCliente()">
+                          <option value=""> Seleccione</option>
+                          <option value="Cliente">Clientes</option>
+                          <option value="Proveedor">Proveedores</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
+                          Tercero
+                        </label>
+
+                        <input type="text" class="form-control font-size-18" name="Id_Tercero" id="Id_Tercero"
+                          [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
+                          [inputFormatter]="formatterClienteCambioCompra" required [(ngModel)]="CambioModel.Id_Tercero">
+                      </div>
+
+
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                           {{ !Venta ? 'Moneda que compra' : 'Moneda que recibe'}}
@@ -335,6 +359,17 @@
 
                         <input *ngIf="Venta" disabled name="Origen" readonly type="text"
                           class="inputfield font-size-18  form-control form-control-lg" ngModel="Pesos">
+                      </div>
+
+                      <div class="col-md-6">
+                        <label class="font-size-18">
+                          Forma de pago
+                        </label>
+                        <select class="inputfield font-size-18  form-control form-control-lg" placeholder="id_fomapago"
+                          id="id_fomapago" name="id_fomapago" required [(ngModel)]="CambioModel.fomapago">
+                          <option value=""> Seleccione Moneda</option>
+                          <option *ngFor="let fp of formasPago" [value]="fp.id"> {{ fp.nombre }} </option>
+                        </select>
                       </div>
 
                       <!--ESCOGER MONEDA PARA VENTA-->
@@ -660,7 +695,7 @@
                                   <input type="text" class="form-control font-size-18" name="Destino_{{i}}"
                                     id="Destino_{{i}}" [(ngModel)]="destinatario.id_destinatario_transferencia"
                                     [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
-                                    [inputFormatter]="formatter_destino"
+                                    [inputFormatter]="formatterClienteCambioCompra"
                                     (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                     (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                     (blur)="validateInputDocumentRetard(destinatario.Numero_Documento_Destino, 'crear especial', i, destinatario)"
@@ -679,7 +714,8 @@
                               </div>
                               <div class="col-md-5">
                                 <div class="form-group">
-                                  <label class="transferencia font-size-18">Cuenta {{destinatario.Id_Destinatario_Cuenta}}</label>
+                                  <label class="transferencia font-size-18">Cuenta
+                                    {{destinatario.Id_Destinatario_Cuenta}}</label>
                                   <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control font-size-18"
@@ -1271,7 +1307,8 @@
                                 name="Municipio_Destinatario" required>
                                 <option value="">Seleccione Ciudad</option>
                                 <option *ngFor="let municipio of Municipios_Destinatario"
-                                  [value]="municipio.Id_Municipio">{{municipio.Nombre}}</option>
+                                  [value]="municipio.Id_Municipio">
+                                  {{municipio.Nombre}}</option>
                               </select>
                             </div>
                           </div>
@@ -2067,6 +2104,12 @@
 
 <ng-template #rt_destino let-r="result" let-t="term">
   <span class="f-9">{{ r.Id_Destinatario }}
+    <strong>{{r.Nombre}}</strong>
+  </span>
+</ng-template>
+
+<ng-template #clienteCambioCompra let-r="result" let-t="term">
+  <span class="f-9">{{ r.Id_Tercero }}
     <strong>{{r.Nombre}}</strong>
   </span>
 </ng-template>

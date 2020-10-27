@@ -30,6 +30,7 @@ import { NotificacionsService } from '../../customservices/notificacions.service
 import { SexternosService } from '../../customservices/sexternos.service';
 import { GirosService } from '../../customservices/giros.service';
 import { ConsolidadosService } from '../../customservices/consolidados.service';
+import { param } from 'jquery';
 
 
 @Component({
@@ -88,6 +89,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('alertSwal') alertSwal: any;
   @ViewChild("valorCambio") inputValorCambio: ElementRef;
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
+  @ViewChild('selectCustomClient') selectCustomClient: any;
 
   public Destinatarios: any = [];
   public Remitentes: any = [];
@@ -255,6 +257,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     TotalPago: '',
     Vueltos: '0',
     Recibido: '',
+    Id_Tercero: '',
+    fomapago: '',
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
   };
 
@@ -475,7 +479,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Valor: '',
     Fecha: '',
     Hora: '',
-    Id_Moneda:  JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
+    Id_Moneda: JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
   };
 
@@ -493,7 +497,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Comision: '',
     Valor: '',
     Detalle: '',
-    Id_Moneda:  JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
+    Id_Moneda: JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
     Estado: 'Activo',
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
     Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
@@ -534,6 +538,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   public RutaGifCargando: string;
   public CargandoGiros: boolean = false;
+  public customClientes: Array<any> = [];
+  public formasPago: {
+    nombre: ''
+    descripcion: ""
+    id: 0
+  }
 
   constructor(private http: HttpClient,
     public qz: QzTrayService,
@@ -561,7 +571,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.AsignarMonedas();
     this.settearMoneda();
     // console.log('Perfil',  JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda']);
-    console.log('Moneda por defecto',  JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
+    console.log('Moneda por defecto', JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
   }
 
   CierreCajaAyerBolivares = 0;
@@ -840,18 +850,20 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         datos.append("datos", info);
         datos.append("PagoTotal", this.TotalPagoCambio);
 
-        this.http.post(this.globales.ruta + '/php/pos/guardar_cambio.php', datos).subscribe((data: any) => {
+        this.http.post(this.globales.rutaNueva + 'cambios', datos).subscribe((data: any) => {
           //formulario.reset();
-          let msg = this.Venta ? "Se ha guardado correctamente la venta!" : "Se ha guardado correctamente la compra!";
 
-          this.LimpiarModeloCambio();
-          this.confirmacionSwal.title = "Guardado con exito";
-          this.confirmacionSwal.text = msg;
-          this.confirmacionSwal.type = "success";
-          this.confirmacionSwal.show();
-          this.Cambios1 = true;
-          this.Cambios2 = false;
-          this.fc.CargarCambiosDiarios()
+          console.log(data);
+          // let msg = this.Venta ? "Se ha guardado correctamente la venta!" : "Se ha guardado correctamente la compra!";
+
+          // this.LimpiarModeloCambio();
+          // this.confirmacionSwal.title = "Guardado con exito";
+          // this.confirmacionSwal.text = msg;
+          // this.confirmacionSwal.type = "success";
+          // this.confirmacionSwal.show();
+          // this.Cambios1 = true;
+          // this.Cambios2 = false;
+          // this.fc.CargarCambiosDiarios()
         });
       }
     }
@@ -2671,6 +2683,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios, dest) {
+    console.log(modelo, i, listaDestinatarios, dest);
+    return false;
     if (typeof (modelo) == 'object') {
       if (modelo.Cuentas != undefined) {
         listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -4432,7 +4446,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.TextoBoton = "Comprar"
         this.Tipo = "Compra";
         this.tituloCambio = "Compras"
-        this.CambioModel.Moneda_Destino = '2';
+        this.CambioModel.Moneda_Destino = localStorage.getItem('monedaDefault')['d_Moneda'];
+        this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
+          this.formasPago = data;
+        });
+
 
         break;
       }
@@ -4441,7 +4459,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
         this.tituloCambio = "Ventas"
-        this.CambioModel.Moneda_Origen = '2';
+        this.CambioModel.Moneda_Origen = localStorage.getItem('monedaDefault')['d_Moneda'];
+        this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
+          this.formasPago = data;
+        });
         break;
       }
       case "Transferencia": {
@@ -4842,15 +4863,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   formatter_destino = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
 
   search_destino2 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: term, moneda: this.MonedaParaTransferencia.id } }).map((response, params) => {
-    // console.log('Parametros', params);
     return response;
-  })
-    .do(data => {
-      // console.log('data respuesta search detino 2 ', data);
-      return data
-    })
-  )
-  );
+  }).do(data => { return data })));
+
+
+  search_destino3 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
+    return response;
+  }).do(data => { return data })));
+  formatterClienteCambioCompra = (x: { Id_Tercero: string }) => x.Id_Tercero;
 
 
 
@@ -5319,6 +5339,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
   }
 
+  limpiarImputCliente() {
+    this.CambioModel.Id_Tercero = '';
+  }
 }
 
 
