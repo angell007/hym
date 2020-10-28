@@ -2683,8 +2683,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios, dest) {
-    console.log(modelo, i, listaDestinatarios, dest);
-    return false;
     if (typeof (modelo) == 'object') {
       if (modelo.Cuentas != undefined) {
         listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
@@ -4738,8 +4736,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this._toastService.ShowToast(toastObj);
           } else {
 
-            data.valores_anteriores.forEach((valores, i) => {
-              this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            data.valores_anteriores.forEach((valores:any, i:number) => {
+              console.log(valores);
+              this.ValoresMonedasApertura[i]['Valor_Moneda_Apertura'] = valores.Valor_Moneda_Cierre;
+              // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
             });
 
             this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
@@ -4749,7 +4749,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         } else {
 
           data.valores_anteriores.forEach((valores, i) => {
-            this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
           });
         }
       });
@@ -4867,7 +4867,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }).do(data => { return data })));
 
 
-  search_destino3 = (text$: Observable<string>) => text$.pipe(debounceTime(200), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
+  search_destino3 = (text$: Observable<string>) => text$.pipe(debounceTime(50), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
     return response;
   }).do(data => { return data })));
   formatterClienteCambioCompra = (x: { Id_Tercero: string }) => x.Id_Tercero;
