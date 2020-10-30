@@ -38,10 +38,9 @@ export class Globales {
     });
   }
 
-
-  BuscarPaises(): void {
-    this.client.get(this.rutaNueva + 'genericos/paises').subscribe((data: any) => {
-      this.Paises = data;
+  BuscarPaises() {
+    this.Paises = this.client.get(this.rutaNueva + 'genericos/paises').toPromise().then((data: any) => {
+      return data;
     });
   }
 

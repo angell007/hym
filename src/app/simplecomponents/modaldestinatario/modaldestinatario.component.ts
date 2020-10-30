@@ -73,6 +73,8 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
 
       if (data.id_destinatario != "0" && data.accion == 'editar') {
@@ -140,18 +142,18 @@ export class ModaldestinatarioComponent implements OnInit {
   }
   // Solo para iniciar cuando se abre por primera vez //TODO se carga por defecto venezuela en identificacion
   /**-----------------------------------------------------------------------------------------------*/
+
   async GetPaises() {
-
-    this.Paises = await this.generalService.getPaises();
-    let fullPais = await this.Paises.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
-    this.paisDefault = fullPais.Id_Pais;
-    this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+    await this.generalService.getPaises().then((result) => {
+      let fullPais = result.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
+      this.paisDefault = fullPais.Id_Pais;
+      this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+    }).catch((err) => {
+      console.log(err);
+    });
     this.GetBancosPais(this.rowDefault.fila);
-
-
     this.FiltrarDatosNacionalidad();
     this.GetTiposCuenta();
-
   }
   /**-----------------------------------------------------------------------------------------------*/
 
@@ -196,7 +198,7 @@ export class ModaldestinatarioComponent implements OnInit {
     data.append('modelo', modelo);
 
     if (this.Editar) {
-   
+
       this.destinatarioService.editDestinatario(data)
         .catch(error => {
           this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);

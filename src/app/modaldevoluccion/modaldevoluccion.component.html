@@ -1,0 +1,33 @@
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalDevolucion" #ModalDevolucion>
+  <div class="app-modal-header" style="margin: 0 auto;">
+    <h4>Información Giro</h4>
+    <!-- <button type="button" class="close basic-close" (click)="ModalAprobarGiro.hide()"> -->
+      <!-- <span aria-hidden="true">&times;</span> -->
+    <!-- </button> -->
+  </div>
+  <div class="app-modal-body">
+    <h2>¿ Está seguro que desea realizar el giro ?</h2>
+    <table class="table table-hover table-sm table-striped">
+      <tr>
+        <td>Remitente</td>
+        <!-- <td>{{informacionGiro.Nombre_Remitente}}</td> -->
+      </tr>
+      <tr>
+        <td>Destinatario</td>
+        <!-- <td>{{informacionGiro.Nombre_Destinatario}}</td> -->
+      </tr>
+      <tr>
+        <td>Valor A Entregar</td>
+        <!-- <td>{{informacionGiro.Valor_Entrega | customcurrency}}</td> -->
+      </tr>
+    </table>
+  </div>
+  <div class="app-modal-footer" style="margin: 0 auto;">
+    <div class="text-center">
+      <!-- <button class="btn btn-primary btn-sm"
+        (click)="PagarGiro(informacionGiro.Id_Giro,ModalAprobarGiro,informacionGiro.Documento_Destinatario)">Pagar
+        Giro
+      </button> -->
+    </div>
+  </div>
+</app-modal-basic>

@@ -168,7 +168,7 @@ export class CommonLayoutComponent implements OnInit {
         public qz: QzTrayService,
         private http: HttpClient,
         private globales: Globales,
-        private toastyService: ToastyService,
+        public toastyService: ToastyService,
         private toastyConfig: ToastyConfig,
         private cajaService: CajaService,
         private swalService: SwalService,
@@ -910,8 +910,8 @@ export class CommonLayoutComponent implements OnInit {
         });
     }
 
-    AsignarPaises() {
-        this.Paises = this.globales.Paises;
+    async AsignarPaises() {
+        this.Paises = await this.globales.Paises;
     }
 
     GuardarOficinaCaja() {
@@ -982,7 +982,7 @@ export class CommonLayoutComponent implements OnInit {
             // case 'wait': this.toastyService.wait(toastOptions); break;
             // case 'error': this.toastyService.error(toastOptions); break;
             // case 'warning': this.toastyService.warning(toastOptions); break;
-            default : console.log(tipo); break;
+            // default : console.log(tipo); break;
         }
     }
 

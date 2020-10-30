@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -31,6 +31,10 @@ import { SexternosService } from '../../customservices/sexternos.service';
 import { GirosService } from '../../customservices/giros.service';
 import { ConsolidadosService } from '../../customservices/consolidados.service';
 import { param } from 'jquery';
+import { element } from 'protractor';
+import { saveAs } from 'file-saver';
+import { parse } from 'querystring';
+
 
 
 @Component({
@@ -80,6 +84,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalVerRecibo') ModalVerRecibo: any;
   @ViewChild('ModalSaldoInicio') ModalSaldoInicio: any;
   @ViewChild('ModalVerCambio') ModalVerCambio: any;
+  @ViewChild('AbrirModalDevolucion') AbrirModalDevolucion: any;
   @ViewChild('ModalAprobarGiro') ModalAprobarGiro: any;
   @ViewChild('confirmacionGiro') confirmacionGiro: any;
   @ViewChild('Customcomision') Customcomision: any;
@@ -198,6 +203,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public IdOficina: any = this.generalService.SessionDataModel.idOficina;
   public IdCaja: any = this.generalService.SessionDataModel.idCaja;
 
+  public savebtn: boolean = true;
   public TerceroCliente: any = [];
   public TransferenciasAnuladas: any = [];
   public RemitentesTransferencias: any = [];
@@ -323,6 +329,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public OpcionesTipo: any = ['Transferencia', 'Cliente'];
   public InputBolsaBolivares: boolean = false;
   public MonedasTransferencia: any = [];
+
+  // public AbrirModalDevolucion: Subject<any> = new Subject<any>();
 
   public ControlVisibilidadTransferencia: any = {
     DatosCambio: true,
@@ -539,11 +547,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public RutaGifCargando: string;
   public CargandoGiros: boolean = false;
   public customClientes: Array<any> = [];
-  public formasPago: {
-    nombre: ''
-    descripcion: ""
-    id: 0
-  }
+  public formasPago: Array<any> = [];
+  public formasPagoAux: Array<any> = [];
+  public devCambio: Array<any> = [];
+  public Motivos: Array<any> = [];
 
   constructor(private http: HttpClient,
     public qz: QzTrayService,
@@ -570,7 +577,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.AsignarMonedas();
     this.settearMoneda();
-    // console.log('Perfil',  JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda']);
     console.log('Moneda por defecto', JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
   }
 
@@ -613,7 +619,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.SetDatosIniciales();
       this.CheckApertura();
     }, 1500);
-    this.GetRegistroDiario();
+    // this.GetRegistroDiario();
 
     this.permisoSubscription = this.permisoService.permisoJefe.subscribe(d => {
 
@@ -768,38 +774,29 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   guardarCambio(formulario: NgForm, item) {
 
+    if (this.selectCustomClient.nativeElement.value != '' && this.CambioModel.Id_Tercero == '') {
+      this.ShowSwal('warning', 'Alerta', 'Debe Ingresar la identificacion de un tercero');
+      return false
+    }
+
     if (this.ValidateCambioBeforeSubmit()) {
-
       if (this.ValidacionTasaCambio()) {
-
 
         this.CambioModel.TotalPago == '' ? "0" : this.CambioModel.TotalPago;
 
-        // if (this.Venta) {
-        //   this.CambioModel.Tipo = 'Venta';
-        //   this.CambioModel.Estado = 'Realizado';
-
-        //   console.log(this.CambioModel.Valor_Destino);
-        //   CambioModel.Valor_Origen
-
-        // } else {
-        //   this.CambioModel.Tipo = 'Compra';
-        //   this.CambioModel.Recibido = '0';
-        //   this.CambioModel.Estado = 'Realizado';
-
-        //   console.log(this.CambioModel.Valor_Destino);
-        //   return false
-        //   this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-        //     console.log([element, this.MonedaDestino, this.MonedaOrigen]);
-        //     if (this.MonedaParaCambio.nombre == element[2]) { }
-        //   });
-
-        // }
-
-
-
         if (this.Venta) {
+          this.CambioModel.Tipo = 'Venta';
+          this.CambioModel.Estado = 'Realizado';
+        } else {
+          this.CambioModel.Tipo = 'Compra';
+          this.CambioModel.Recibido = '0';
+          this.CambioModel.Estado = 'Realizado';
+          this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+            if (this.MonedaParaCambio.nombre == element[2]) { }
+          });
 
+        }
+        if (this.Venta) {
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
             if (this.MonedaParaCambio.nombre == element[2]) {
               if (parseFloat(element[1]) < parseFloat(this.CambioModel.Valor_Destino)) {
@@ -808,16 +805,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             }
           });
 
-
           if (this.flagVenta) {
             this.flagVenta = false;
             this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
             return false
           }
-
           this.CambioModel.Tipo = 'Venta';
           this.CambioModel.Estado = 'Realizado';
-
 
         } else {
 
@@ -839,8 +833,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.CambioModel.Recibido = '0';
           this.CambioModel.Estado = 'Realizado';
         }
-
-        // console.log(this.CambioModel);
         this.CambioModel.Id_Caja = this.generalService.SessionDataModel.idCaja;
         this.CambioModel.Id_Oficina = this.generalService.SessionDataModel.idOficina;
 
@@ -848,25 +840,22 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         let datos = new FormData();
         datos.append("modulo", 'Cambio');
         datos.append("datos", info);
-        datos.append("PagoTotal", this.TotalPagoCambio);
+        datos.append("TotalPago", this.TotalPagoCambio);
 
         this.http.post(this.globales.rutaNueva + 'cambios', datos).subscribe((data: any) => {
-          //formulario.reset();
-
-          console.log(data);
-          // let msg = this.Venta ? "Se ha guardado correctamente la venta!" : "Se ha guardado correctamente la compra!";
-
-          // this.LimpiarModeloCambio();
-          // this.confirmacionSwal.title = "Guardado con exito";
-          // this.confirmacionSwal.text = msg;
-          // this.confirmacionSwal.type = "success";
-          // this.confirmacionSwal.show();
-          // this.Cambios1 = true;
-          // this.Cambios2 = false;
-          // this.fc.CargarCambiosDiarios()
+          let msg = this.Venta ? "Se ha guardado correctamente la venta!" : "Se ha guardado correctamente la compra!";
+          this.LimpiarModeloCambio();
+          this.confirmacionSwal.title = "Guardado con exito";
+          this.confirmacionSwal.text = msg;
+          this.confirmacionSwal.type = "success";
+          this.confirmacionSwal.show();
+          this.Cambios1 = true;
+          this.Cambios2 = false;
+          this.fc.CargarCambiosDiarios()
         });
       }
     }
+
   }
 
   ObtenerVueltos() {
@@ -1146,7 +1135,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   tituloCambio = "Compras o Ventas";
   VerCambio(id, modal) {
-    this.http.get(this.globales.ruta + '/php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
+      console.log(data);
       this.verCambio = data;
       modal.show();
     });
@@ -4432,11 +4422,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.Municipios_Remitente = data;
     });
   }
-  // TODO funcio cambiar vista 
-  CambiarVista(tipo) {
 
-    // this._notificacionService.counter();
-    // console.log('Cambiando vista');
+  CambiarVista(tipo) {
 
     switch (tipo) {
       case "Compra": {
@@ -4445,10 +4432,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Tipo = "Compra";
         this.tituloCambio = "Compras"
         this.CambioModel.Moneda_Destino = localStorage.getItem('monedaDefault')['d_Moneda'];
-        this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
-          this.formasPago = data;
-        });
-
+        this.setFormaPago();
 
         break;
       }
@@ -4458,9 +4442,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Tipo = "Venta";
         this.tituloCambio = "Ventas"
         this.CambioModel.Moneda_Origen = localStorage.getItem('monedaDefault')['d_Moneda'];
-        this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
-          this.formasPago = data;
-        });
+        this.setFormaPago();
         break;
       }
       case "Transferencia": {
@@ -4722,44 +4704,78 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   // }
 
 
-
   GetRegistroDiario() {
 
     this.http
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
         if (data.DiarioNeto <= 0) {
-
           if (data.valores_anteriores.length == 0) {
             this.ValoresMonedasApertura = [];
             let toastObj = { textos: ['Alerta', 'No se encontraron registros de apertura'], tipo: 'warning', duracion: 4000 };
             this._toastService.ShowToast(toastObj);
           } else {
 
-            data.valores_anteriores.forEach((valores:any, i:number) => {
-              console.log(valores);
-              this.ValoresMonedasApertura[i]['Valor_Moneda_Apertura'] = valores.Valor_Moneda_Cierre;
-              // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+            data.valores_anteriores.forEach((valores: any, i: number) => {
+              this.ValoresMonedasApertura[i] = Object.assign({}, valores)
+              // this.ValoresMonedasApertura.push({
+              // 'Valor_Moneda_Apertura': valores.Valor_Moneda_Cierre
+              // })
             });
 
             this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
             this.ModalAperturaCaja.show();
           }
-
-        } else {
-
-          data.valores_anteriores.forEach((valores, i) => {
-            // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+        }
+        else {
+          data.valores_anteriores.forEach((valores: any, i: number) => {
+            this.ValoresMonedasApertura[i] = Object.assign({}, valores)
+            // this.ValoresMonedasApertura.push({
+            //   'Valor_Moneda_Apertura': valores.Valor_Moneda_Cierre
+            // })
           });
         }
       });
   }
+
+  // GetRegistroDiario() {
+
+  //   this.http
+  //     .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
+  //     .subscribe((data: any) => {
+  //       if (data.DiarioNeto <= 0) {
+
+  //         if (data.valores_anteriores.length == 0) {
+  //           this.ValoresMonedasApertura = [];
+  //           let toastObj = { textos: ['Alerta', 'No se encontraron registros de apertura'], tipo: 'warning', duracion: 4000 };
+  //           this._toastService.ShowToast(toastObj);
+  //         } else {
+
+  //           data.valores_anteriores.forEach((valores:any, i:number) => {
+  //             console.log(valores);
+  //             this.ValoresMonedasApertura[i]['Valor_Moneda_Apertura'] = valores.Valor_Moneda_Cierre;
+  //             // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+  //           });
+
+  //           this.DiarioModel.Id_Diario = data.valores_diario[0].Id_Diario;
+  //           this.ModalAperturaCaja.show();
+  //         }
+
+  //       } else {
+
+  //         data.valores_anteriores.forEach((valores, i) => {
+  //           // this.ValoresMonedasApertura[i].Valor_Moneda_Apertura = valores.Valor_Moneda_Cierre;
+  //         });
+  //       }
+  //     });
+  // }
 
 
   CheckApertura() {
     this.http
       .get(this.globales.ruta + 'php/diario/verificar_apertura_diario.php', { params: { id_funcionario: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
+        console.log(data);
         if (data == '0') {
           this.GetRegistroDiario();
         }
@@ -4867,7 +4883,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }).do(data => { return data })));
 
 
-  search_destino3 = (text$: Observable<string>) => text$.pipe(debounceTime(50), distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
+  search_destino3 = (text$: Observable<string>) => text$.pipe(distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
     return response;
   }).do(data => { return data })));
   formatterClienteCambioCompra = (x: { Id_Tercero: string }) => x.Id_Tercero;
@@ -5341,7 +5357,77 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   limpiarImputCliente() {
     this.CambioModel.Id_Tercero = '';
+    if (this.selectCustomClient.nativeElement.value == '') {
+      this.setFormaPago();
+    } else {
+      this.formasPago = this.formasPagoAux;
+    }
   }
+
+  setFormaPago() {
+    this.formasPago = [];
+    this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
+      this.formasPagoAux = data;
+      for (const forma of this.formasPagoAux) {
+        if (forma['nombre'] == "Efectivo") {
+          this.formasPago.push(forma);
+        }
+      }
+    });
+  }
+
+  devolverCambio(id, modal) {
+
+    this.http.get(this.globales.ruta + 'php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
+      this.devCambio = data['cambio'];
+      this.Motivos = Array.of(Object.assign({}, Object.values(data['motivos'])));
+      this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
+      this.devCambio['Valor_Origen'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
+      this.devCambio['Valor_Devuelto'] = 0;
+      modal.show();
+    });
+
+
+    modal.show();
+  }
+
+  printCambio(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id }, responseType: 'blob' }).subscribe((data: any) => {
+      console.log(data);
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  calcularDevolucion() {
+
+    if (this.devCambio['Valor_Destino'] < this.devCambio['Valor_Devolver']) {
+      this.swalService.ShowMessage(['warning', 'Alerta', 'No puedes devolver mas de lo que vendiste !']);
+      this.savebtn = true
+      return false;
+    }
+    // this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
+    // this.devCambio['Valor_Origen'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
+    // this.devCambio['Valor_Devuelto'] = 0;
+
+    // console.log(parseFloat(this.devCambio['Tasa']), parseFloat(this.devCambio['Valor_Devolver']));
+    this.devCambio['Valor_Devuelto'] = parseFloat(this.devCambio['Tasa']) * parseFloat(this.devCambio['Valor_Devolver'])
+    this.savebtn = false;
+  }
+
+  saveDevolucion() {
+    // this.http.post(this.globales.rutaNueva + 'cambios', datos).subscribe((data: any) => {
+    let datos = new FormData();
+    datos.append("data", JSON.stringify(this.devCambio));
+    this.http.post(this.globales.rutaNueva + 'custom/cambios/update', datos).subscribe((data: any) => {
+      console.log(data);
+    })
+  };
 }
 
 

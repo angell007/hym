@@ -283,12 +283,24 @@
                                     (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
                                     <i class="ti-search text-primary" style="font-size: 14px;"></i>
                                   </button>
+
                                   <button class="clean-btn-table" type="button" style="margin:0;"
+                                    *ngIf="cambio.Tipo != 'Compra'"
+                                    (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
+                                    <i class="ti-shift-left text-info" style="font-size: 14px;"></i>
+                                  </button>
+
+                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                    (click)="printCambio(cambio.Id_Cambio)">
+                                    <i class="ti-desktop text-warnin" style="font-size: 14px;"></i>
+                                  </button>
+
+                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                    *ngIf="cambio.Estado != 'Anulado'"
                                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                                     (confirm)="AnulaCambio(cambio.Id_Cambio)">
                                     <i class="ti-trash text-danger" style="font-size: 14px;"></i>
                                   </button>
-
                                 </td>
 
                               </tr>
@@ -328,11 +340,12 @@
 
                         <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
                           (change)="limpiarImputCliente()">
-                          <option value=""> Seleccione</option>
+                          <option value=""> Publico</option>
                           <option value="Cliente">Clientes</option>
                           <option value="Proveedor">Proveedores</option>
                         </select>
                       </div>
+
 
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
@@ -341,9 +354,8 @@
 
                         <input type="text" class="form-control font-size-18" name="Id_Tercero" id="Id_Tercero"
                           [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
-                          [inputFormatter]="formatterClienteCambioCompra" required [(ngModel)]="CambioModel.Id_Tercero">
+                          [inputFormatter]="formatterClienteCambioCompra" [(ngModel)]="CambioModel.Id_Tercero">
                       </div>
-
 
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
@@ -371,6 +383,16 @@
                           <option *ngFor="let fp of formasPago" [value]="fp.id"> {{ fp.nombre }} </option>
                         </select>
                       </div>
+
+
+                      <div class="col-md-12" *ngIf="CambioModel.fomapago == '3'">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
+                          Cupo de Tercero
+                        </label>
+
+                        {{ CambioModel.Id_Tercero.cupo | json }}
+                      </div>
+
 
                       <!--ESCOGER MONEDA PARA VENTA-->
                       <div class="col-md-6">
@@ -419,12 +441,13 @@
 
                       <div class="col-md-4 mt-1">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
-                          Cambio</label>
+                          Cambio </label>
                         <input type="text" placeholder="Tasa"
                           class="inputfield font-size-18  form-control form-control-lg" autocomplete="false"
-                          id="Precio_Sugerido" name="Tasa" [(ngModel)]="CambioModel.Tasa"
-                          (blur)="conversionMoneda('o', 'e')" [disabled]="HabilitarCampos" required currencyMask
-                          [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" tabindex="5">
+                          id="Precio_Sugerido" name="Tasa" (blur)="conversionMoneda('o', 'e')"
+                          [disabled]="HabilitarCampos" required currencyMask
+                          [options]="{ thousands: '.' , decimal: ',' , precision:    (MonedaParaCambio.nombre =='Dolares') ? '0' :   '2'}"
+                          tabindex="5" [(ngModel)]="CambioModel.Tasa">
                       </div>
 
                       <div class="col-md-4 mt-1" *ngIf="!Venta">
@@ -2463,7 +2486,7 @@
     <div class="row">
       <div class="col-md-10">
 
-        <h4>Recibo de {{verCambio.Tipo}} Cliente </h4>
+        <h4>Recibo de {{verCambio.Tipo}} Cliente {{ (verCambio.Tipo == null) ? '' : verCambio.Nombre }}</h4>
       </div>
       <div class="col-md-2 pull-right">
         <button class="btn btn-default btn-xs" type="button" style="margin:0;">
@@ -2582,6 +2605,97 @@
   (ActualizarCuentasDestinatario)="AsignarDatosDestinatario($event)"
   (IncluirDestinatarioEnTransferencia)="AsignarDatosDestinatario($event)">
 </app-modaldestinatario>
+
+<!-- <app-modaldevoluccion [AbrirModalDevolucion]="AbrirModalDevolucion.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
+</app-modaldevoluccion> -->
+
+
+<app-modal-basic id="AbrirModalDevolucion" #AbrirModalDevolucion>
+  <div class="app-modal-header" style="width:100%;">
+
+    <div class="row">
+      <div class="col-md-10">
+
+        <h4>Devolucion Cliente {{  devCambio.Nombre }} Recibo {{devCambio.Codigo}}</h4>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="app-modal-body">
+    <div class="table-overflow">
+      <table class="table table-hover table-sm  modified-table">
+        <thead>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>Tasa</td>
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" [(ngModel)]="devCambio.Tasa"
+              currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" readonly>
+
+          </tr>
+
+          <tr>
+            <!-- <td>Valor Destino {{devCambio.Codigo_Moneda_Destino }}</td>
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
+              [(ngModel)]="devCambio.Valor_Destino" currencyMask
+              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
+          </tr> -->
+
+            <td>Cantidad a devolver {{devCambio.Codigo_Moneda_Destino}}</td>
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
+              [(ngModel)]="devCambio.Valor_Devolver" currencyMask
+              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
+          <tr>
+
+
+            <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
+              [(ngModel)]="devCambio.Valor_Devuelto" currencyMask
+              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
+
+            <!-- <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
+              [(ngModel)]="devCambio.Valor_Origen" currencyMask
+              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}"> -->
+
+          </tr>
+
+          <tr>
+
+            <td>Motivo devolución</td>
+            <select id="grupo" class="form-control" [(ngModel)]="devCambio['Motivo']">
+              <option value="">Seleccione</option>
+              <option *ngFor="let motivo of Motivos" value="{{motivo[0]}}">{{motivo[1] }}</option>
+            </select>
+
+          </tr>
+
+          <tr>
+            <td>Observación</td>
+            <textarea name="observacion" type="text" placeholder="observacion" style="width: 100%;"
+              [(ngModel)]="devCambio['Observacion']"
+              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}"></textarea>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-default" (click)="AbrirModalDevolucion.hide()">Cerrar</button>
+      <button class="btn btn-primary" (click)="saveDevolucion()" [disabled] = 'savebtn'>Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+
+<!-- <app-modaldevoluccion [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
+</app-modaldevoluccion> -->
+
 
 <!--FIN MODALES-->
 

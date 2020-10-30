@@ -259,6 +259,7 @@ import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/conso
 import { TesCustomServiceService } from './tes-custom-service.service';
 import { ActualizarService } from './customservices/actualizar.service';
 import { NgxCurrencyModule } from "ngx-currency";
+import { ModaldevoluccionComponent } from './modaldevoluccion/modaldevoluccion.component';
 
 
 
@@ -471,7 +472,8 @@ export const customCurrencyMaskConfig = {
         TrasladoscajaComponent,
         TablatasladoscajaComponent,
         HourPipe,
-        ConsolidadoComponent
+        ConsolidadoComponent,
+        ModaldevoluccionComponent
     ],
     exports: [
         ModalBasicComponent

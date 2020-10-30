@@ -67,7 +67,8 @@ export class TablaegresosComponent implements OnInit {
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
+
+      if (data.length > 0) {
         this.Monedas = data.query_data;
       } else {
 
