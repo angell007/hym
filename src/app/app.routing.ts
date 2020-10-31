@@ -69,6 +69,7 @@ import { TrasladoscajaComponent } from './trasladoscaja/trasladoscaja.component'
 import { ConsolidadosService } from './customservices/consolidados.service';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
 import { TablerocajeroprincipalComponent } from './tableros/tablerocajeroprincipal/tablerocajeroprincipal.component';
+import { MotivoscambioComponent } from './motivoscambio/motivoscambio.component';
 
 export const AppRoutes: Routes = [
     {
@@ -258,6 +259,10 @@ export const AppRoutes: Routes = [
     {
         path: 'cargo', component: CommonLayoutComponent,
         children: [{ path: '', component: CargosComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'motivos-cambios', component: CommonLayoutComponent,
+        children: [{ path: '', component: MotivoscambioComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'oficinacrear', component: CommonLayoutComponent,

@@ -278,6 +278,11 @@
                                 <td class="text-right " style="font-size: 14px;">{{cambio.Tasa}}</td>
 
                                 <td class="text-center">
+                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                    *ngIf="cambio.Tipo != 'Compra'"
+                                    (click)="verDevoluciones(cambio.Id_Cambio,AbrirModalverDevoluciones) ">
+                                    <i class="ti-eye text-warning" style="font-size: 14px;"></i>
+                                  </button>
 
                                   <button class="clean-btn-table" type="button" style="margin:0;"
                                     (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
@@ -289,6 +294,8 @@
                                     (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
                                     <i class="ti-shift-left text-info" style="font-size: 14px;"></i>
                                   </button>
+
+
 
                                   <button class="clean-btn-table" type="button" style="margin:0;"
                                     (click)="printCambio(cambio.Id_Cambio)">
@@ -2534,6 +2541,57 @@
   </div>
 </app-modal-basic>
 
+<app-modal-basic id="AbrirModalverDevoluciones" #AbrirModalverDevoluciones>
+  <div class="app-modal-header" style="width:100%;">
+    <div class="row">
+      <div class="col-md-10">
+        <h4>Devoluciones en Cambio </h4>
+      </div>
+      <div class="col-md-2 pull-right">
+      </div>
+    </div>
+  </div>
+
+  <div class="app-modal-body">
+    <div class="table-overflow">
+      <table class="table table-hover table-sm table-striped modified-table">
+        <thead>
+          <tr>
+            <td>
+              <label class="block-element">Valor entregado</label>
+            </td>
+            <td>
+              <label class="block-element">Valor recibido</label>
+            </td>
+            <td>
+              <label class="block-element">Observación</label>
+            </td>
+          </tr>
+        </thead>
+        <tbody *ngFor="let item of DevolucionesCambio">
+          <tr>
+            <td>
+              <label class="block-element">{{item.valor_entregado }}</label>
+            </td>
+            <td>
+              <label class="block-element">{{item.valor_recibido  }}</label>
+            </td>
+            <td>
+              <label class="block-element">{{item.observacion  }}</label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-default" (click)="AbrirModalverDevoluciones.hide()">Cerrar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
 <app-modal-basic [dialogClass]="'modal-md'" id="ModalAperturaCaja" #ModalAperturaCaja>
   <div class="app-modal-header" style="margin: 0 auto;">
     <h4>Apertura Caja - {{funcionario_data.Nombres}} {{funcionario_data.Apellidos}}</h4>
@@ -2650,7 +2708,7 @@
           <tr>
 
 
-            <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>
+            <td>Valor en {{devCambio.Codigo_Moneda_Origen}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
               [(ngModel)]="devCambio.Valor_Devuelto" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
@@ -2667,7 +2725,7 @@
             <td>Motivo devolución</td>
             <select id="grupo" class="form-control" [(ngModel)]="devCambio['Motivo']">
               <option value="">Seleccione</option>
-              <option *ngFor="let motivo of Motivos" value="{{motivo[0]}}">{{motivo[1] }}</option>
+              <option *ngFor="let motivo of Motivos" value="{{motivo.id}}">{{motivo.nombre }}</option>
             </select>
 
           </tr>
@@ -2687,7 +2745,7 @@
   <div class="app-modal-footer">
     <div class="text-right">
       <button class="btn btn-default" (click)="AbrirModalDevolucion.hide()">Cerrar</button>
-      <button class="btn btn-primary" (click)="saveDevolucion()" [disabled] = 'savebtn'>Guardar</button>
+      <button class="btn btn-primary" (click)="saveDevolucion()" [disabled]='savebtn'>Guardar</button>
     </div>
   </div>
 </app-modal-basic>

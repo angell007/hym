@@ -89,6 +89,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('confirmacionGiro') confirmacionGiro: any;
   @ViewChild('Customcomision') Customcomision: any;
   @ViewChild('custom') custom: any;
+  @ViewChild('AbrirModalverDevoluciones') AbrirModalverDevoluciones: any;
 
   //SWEET ALERT FOR GENERAL ALERTS
   @ViewChild('alertSwal') alertSwal: any;
@@ -96,6 +97,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
   @ViewChild('selectCustomClient') selectCustomClient: any;
 
+  public DevolucionesCambio: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
   public Paises: any = [];
@@ -5379,11 +5381,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   devolverCambio(id, modal) {
 
     this.http.get(this.globales.ruta + 'php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
+      console.log(data);
       this.devCambio = data['cambio'];
-      this.Motivos = Array.of(Object.assign({}, Object.values(data['motivos'])));
+      this.Motivos = data['motivos'];
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
-      this.devCambio['Valor_Origen'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
-      this.devCambio['Valor_Devuelto'] = 0;
+      this.devCambio['Valor_Devuelto'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
+      // this.devCambio['Valor_Devuelto'] = 0;
       modal.show();
     });
 
@@ -5421,11 +5424,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   saveDevolucion() {
-    // this.http.post(this.globales.rutaNueva + 'cambios', datos).subscribe((data: any) => {
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
-    this.http.post(this.globales.rutaNueva + 'custom/cambios/update', datos).subscribe((data: any) => {
+    this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {
       console.log(data);
+    })
+  };
+
+
+  verDevoluciones(Id_Cambio: number, ModalverDevoluciones: string) {
+    this.http.get(this.globales.rutaNueva + 'devoluciones/show/' + Id_Cambio).subscribe((data: any) => {
+      this.DevolucionesCambio = data;
+      this.AbrirModalverDevoluciones.show();
     })
   };
 }
