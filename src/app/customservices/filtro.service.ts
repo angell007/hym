@@ -90,6 +90,7 @@ export class FiltroService {
   CargarCambiosDiarios() {
     this.Cambios = [];
     this.http.get(this.globales.rutaNueva + 'cambios', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+      console.log(data);
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;
         this.SetInformacionPaginacion(data.query_data)

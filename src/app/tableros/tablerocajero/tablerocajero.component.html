@@ -215,7 +215,9 @@
                                 <th class="custom-thead">Código</th>
                                 <th class="custom-thead">Tipo</th>
                                 <th class="custom-thead">Recibido</th>
+                                <th class="custom-thead">Devuelto</th>
                                 <th class="custom-thead">Entregado</th>
+                                <th class="custom-thead">Total</th>
                                 <th class="custom-thead">Tasa</th>
                                 <th class="custom-thead">Acciones</th>
                               </tr>
@@ -273,13 +275,21 @@
                                   {{cambio.Valor_Origen | customcurrency:cambio.Codigo_Moneda_Origen}}
                                 </td>
                                 <td class="text-right" style="font-size: 14px;">
+                                  {{cambio.valor_recibido | customcurrency: ' '}}
+                                </td>
+                                <td class="text-right" style="font-size: 14px;">
                                   {{cambio.Valor_Destino | customcurrency:cambio.Codigo_Moneda_Destino}}
                                 </td>
+
+                                <td class="text-right" style="font-size: 14px;">
+                                  {{cambio.venta_final | customcurrency: ' '}}
+                                </td>
+
                                 <td class="text-right " style="font-size: 14px;">{{cambio.Tasa}}</td>
 
                                 <td class="text-center">
                                   <button class="clean-btn-table" type="button" style="margin:0;"
-                                    *ngIf="cambio.Tipo != 'Compra'"
+                                    *ngIf="cambio.Tipo != 'Compra' || cambio.Estado != 'Anulado'"
                                     (click)="verDevoluciones(cambio.Id_Cambio,AbrirModalverDevoluciones) ">
                                     <i class="ti-eye text-warning" style="font-size: 14px;"></i>
                                   </button>
@@ -294,8 +304,6 @@
                                     (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
                                     <i class="ti-shift-left text-info" style="font-size: 14px;"></i>
                                   </button>
-
-
 
                                   <button class="clean-btn-table" type="button" style="margin:0;"
                                     (click)="printCambio(cambio.Id_Cambio)">
@@ -2496,9 +2504,9 @@
         <h4>Recibo de {{verCambio.Tipo}} Cliente {{ (verCambio.Tipo == null) ? '' : verCambio.Nombre }}</h4>
       </div>
       <div class="col-md-2 pull-right">
-        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+        <!-- <button class="btn btn-default btn-xs" type="button" style="margin:0;">
           <i class="ti-printer"></i>
-        </button>
+        </button> -->
       </div>
     </div>
   </div>

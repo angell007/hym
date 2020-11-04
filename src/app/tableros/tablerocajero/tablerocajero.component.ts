@@ -5378,15 +5378,15 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
   }
 
-  devolverCambio(id, modal) {
+  devolverCambio(id: any, modal: any) {
 
-    this.http.get(this.globales.ruta + 'php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
+    this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
       console.log(data);
+      
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
       this.devCambio['Valor_Devuelto'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
-      // this.devCambio['Valor_Devuelto'] = 0;
       modal.show();
     });
 
