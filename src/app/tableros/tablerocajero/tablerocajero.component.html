@@ -367,9 +367,26 @@
                           Tercero
                         </label>
 
-                        <input type="text" class="form-control font-size-18" name="Id_Tercero" id="Id_Tercero"
-                          [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
-                          [inputFormatter]="formatterClienteCambioCompra" [(ngModel)]="CambioModel.Id_Tercero">
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="font-size-18">Número de documento
+                                <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;"
+                                  *ngIf="EditarRemitenteGiro"
+                                  (click)="EditarPersonaGiro(GiroModel.Documento_Remitente, 'remitente', 'editar desde giro')"></i>
+                                <i class="ti-plus text-success pl-2 font-size-17" style="cursor:pointer;"
+                                  *ngIf="CrearRemitenteGiro"
+                                  (click)="EditarPersonaGiro(Remitente_Giro, 'remitente', 'crear desde giro')"></i>
+                              </label>
+                              <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
+                                placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
+                                [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
+                                [(ngModel)]="CambioModel.Id_Tercero" [inputFormatter]="formatterClienteCambioCompra"
+                                (ngModelChange)="CambioModel.Id_Tercero" required>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       <div class="col-md-6">
@@ -2682,7 +2699,7 @@
     <div class="row">
       <div class="col-md-10">
 
-        <h4>Devolucion Cliente {{  devCambio.Nombre }} Recibo {{devCambio.Codigo}}</h4>
+        <h4>Devolucion Cliente {{  devCambio['Nombre'] }} Recibo {{devCambio['Codigo']}}</h4>
 
       </div>
     </div>
@@ -2697,7 +2714,7 @@
           <tr>
 
             <td>Tasa</td>
-            <input name="tasa" type="text" placeholder="tasa" class="form-control" [(ngModel)]="devCambio.Tasa"
+            <input name="tasa" type="text" placeholder="tasa" class="form-control" [(ngModel)]="devCambio['Tasa']"
               currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" readonly>
 
           </tr>
@@ -2709,16 +2726,16 @@
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
           </tr> -->
 
-            <td>Cantidad a devolver {{devCambio.Codigo_Moneda_Destino}}</td>
+            <td>Cantidad a devolver {{devCambio['Codigo_Moneda_Destino']}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio.Valor_Devolver" currencyMask
+              [(ngModel)]="devCambio['Valor_Devolver']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
           <tr>
 
 
-            <td>Valor en {{devCambio.Codigo_Moneda_Origen}}</td>
+            <td>Valor en {{devCambio['Codigo_Moneda_Origen']}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio.Valor_Devuelto" currencyMask
+              [(ngModel)]="devCambio['Valor_Devuelto']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
 
             <!-- <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>

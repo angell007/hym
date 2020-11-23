@@ -14,7 +14,7 @@
 
   <div class="row d-flex justify-content-center">
     <div class="col-md-4">
-      <button (click)="AbrirModal('0')" class="btn btn-info btn-block mrg-top-10 btn-grande  font-size-20">
+      <button (click)="AbrirModal()" class="btn btn-info btn-block mrg-top-10 btn-grande  font-size-20">
         Nuevo Motivo
       </button>
     </div>
@@ -40,14 +40,14 @@
                     <th class="table-filters"></th>
                   </tr>
 
-                  <tr *ngIf="Cargando">
+                  <!-- <tr>
                     <td colspan="3" class="text-center">
                       <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                         <h2>CARGANDO RECIBOS DE TRANSFERENCIA</h2>
                         <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                       </div>
                     </td>
-                  </tr>
+                  </tr> -->
 
                   <tr *ngIf="motivos.length == 0 ">
                     <td colspan="3" class="text-center">

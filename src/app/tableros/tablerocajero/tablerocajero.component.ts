@@ -776,6 +776,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   guardarCambio(formulario: NgForm, item) {
 
+    console.log(this.CambioModel);
     if (this.selectCustomClient.nativeElement.value != '' && this.CambioModel.Id_Tercero == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe Ingresar la identificacion de un tercero');
       return false
@@ -1040,9 +1041,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     } else {
       // console.log("validando limites de tasa");
       let tasa = parseFloat(this.CambioModel.Tasa);
-
       if (this.Venta) {
-        if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {
+        if (tasa > parseFloat(this.MonedaParaCambio.Valores.CambioModel) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {
           this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
           this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2);
 
@@ -1061,6 +1061,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           return true;
         }
       } else {
+        // console.log('qwe', tasa, parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo), parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo));
+        console.log(tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo));
+
         if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo)) {
           this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
           this.CambioModel.Tasa = Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo)) / 2);
@@ -1099,6 +1102,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         let tasa = parseFloat(this.CambioModel.Tasa);
 
         if (this.Venta) {
+
+          // console.log('qw2e', this.MonedaParaCambio.Valores.Max_Venta_Efectivo, this.MonedaParaCambio.Valores.Min_Venta_Efectivo);
+
           if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) {
             this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
             this.CambioModel.Tasa = (parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2;
@@ -1106,6 +1112,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             return false;
           }
         } else {
+
+          // console.log('qw3e', this.MonedaParaCambio.Valores.Max_Compra_Efectivo, this.MonedaParaCambio.Valores.Min_Compra_Efectivo);
+
           if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) || tasa < parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo)) {
             this.ShowSwal('warning', 'Tasa Incorrecta', 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.');
             this.CambioModel.Tasa = (parseFloat(this.MonedaParaCambio.Valores.Max_Compra_Efectivo) + parseFloat(this.MonedaParaCambio.Valores.Min_Compra_Efectivo)) / 2;
@@ -1123,7 +1132,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   AnulaCambio(id) {
     let datos = new FormData();
     datos.append("id", id);
-    this.http.post(this.globales.ruta + '/php/cambio/anular_cambio.php', datos).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/cambio/anular_cambio.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Cambio Anulado";
       this.confirmacionSwal.text = "Se ha anulado el cambio seleccionado"
       this.confirmacionSwal.type = "success"
@@ -4887,8 +4896,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   search_destino3 = (text$: Observable<string>) => text$.pipe(distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
     return response;
-  }).do(data => { return data })));
-  formatterClienteCambioCompra = (x: { Id_Tercero: string }) => x.Id_Tercero;
+  }).do((data) => {
+    return data
+  })));
+  formatterClienteCambioCompra = (x: { Nombre: string }) => x.Nombre;
 
 
 
@@ -5366,6 +5377,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
+  getInfo(Tercero: any, otro: any, another: any) {
+    console.log(Tercero, otro, another);
+    this.CambioModel.Id_Tercero = Tercero.Id_Tercero
+    console.log(this.CambioModel.Id_Tercero);
+  }
+
   setFormaPago() {
     this.formasPago = [];
     this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
@@ -5382,7 +5399,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
       console.log(data);
-      
+
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
