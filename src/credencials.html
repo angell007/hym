@@ -10,17 +10,6 @@ cajero ppal: 1234567891
 clave 1234567891
 4144411
 
-//Select customisable 
-<input type="text" class="form-control font-size-18" name="cliente_id" id="cliente_id" [ngbTypeahead]="search_destino3"
-  [resultTemplate]="clienteCambioCompra" [inputFormatter]="formatterClienteCambioCompra" required
-  [(ngModel)]="CambioModel.cliente_id">
-
-TODO: no se si se debe actualizar Tabla Saldo_Moneda_Tercero
-
-Tablas que dependen del id tercero
-SELECT * FROM `Bolsa_Bolivares_Tercero` ORDER BY `Bolsa_Bolivares_Tercero`.`Id_Tercero` DESC
-UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercero`.`Id_Movimiento_Tercero` = 1;
-
 
 <div class="row card">
   <div class="card-body">
@@ -56,9 +45,6 @@ UPDATE `Movimiento_Tercero` SET `Id_Tercero` = '123502' WHERE `Movimiento_Tercer
 </div>
 
 
-this.swalService.ShowMessage(['success', 'Registro Exitoso', 'Se registro el tercero exitosamente!']);
-this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
-
 
 <ul class="list-unstyled list-info my-5">
   <li>
@@ -91,31 +77,3 @@ this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correcta
         Nuevo Giro
       </button>
     </div>
-
-
-    Message alert
-    if (this.Venta) {
-    if (tasa > parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) || tasa <
-      parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) { this.ShowSwal('warning', 'Tasa Incorrecta'
-      , 'La tasa de cambio indicada es inferior/superior a los límites establecidos.\nRevise nuevamente.' );
-      this.CambioModel.Tasa=Math.round((parseFloat(this.MonedaParaCambio.Valores.Max_Venta_Efectivo) +
-      parseFloat(this.MonedaParaCambio.Valores.Min_Venta_Efectivo)) / 2); if (tipo_cambio=='o' ) {
-      this.CambioModel.Valor_Destino='' ; this.CambioModel.Valor_Origen='' ; } else { this.CambioModel.Valor_Origen='' ;
-      this.CambioModel.Valor_Destino='' ; } return false; } else { console.log("limite venta true"); return true; } }
-      Modal egreso tiene alertas
-      [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-      (confirm)="AnulaCambio(cambio.Id_Cambio)">
-
-
-      /**********************************************************************************************************************************/
-      classes aplicadas
-
-      font-size-20 pa-1
-
-      <label class="font-size-18
-
-font-size-20 p-auto
-
-no-mrg-btm font-size-16
-
-class= " font-size-18

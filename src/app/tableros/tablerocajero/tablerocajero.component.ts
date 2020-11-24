@@ -577,6 +577,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   ) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+    this._getMonedas();
+    this._getTodasMonedas();
     this.AsignarMonedas();
     this.settearMoneda();
     console.log('Moneda por defecto', JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
@@ -2308,9 +2310,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
-    // console.log(value);
+    this._getMonedas();
+    console.log(this.Monedas);
     // console.log(this.Monedas);
-
     this.MonedaParaTransferencia.id = value;
     this.TransferenciaModel.Moneda_Destino = value;
     this.SetMonedaDestinatarios(value);
@@ -4307,8 +4309,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getTodasMonedas() {
     this.MonedasTransferencia = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
+      console.log(data);
+      this.Monedas = data;
       if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
       } else {
         this.Monedas = [];
       }
@@ -4318,6 +4321,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getMonedas() {
     this.MonedasTransferencia = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
+      console.log(data);
       if (data.codigo == 'success') {
         this.MonedasTransferencia = data.query_data;
       } else {

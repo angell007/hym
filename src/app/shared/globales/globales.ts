@@ -5,7 +5,7 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 @Injectable()
 export class Globales {
   ruta: string = 'https://softwarehym.com/customback/';
-  rutaNueva: string = 'http://backnew.softwarehym.com/';
+  rutaNueva: string = 'https://backnew.softwarehym.com/';
   public urlRiff = '';
   public Monedas: any = [];
   public Paises: any = [];
