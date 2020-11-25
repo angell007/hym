@@ -2,8 +2,8 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import {NgForm} from '@angular/forms';
-import  {Globales } from '../shared/globales/globales';
+import { NgForm } from '@angular/forms';
+import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,25 +13,25 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CreardestinatarioComponent implements OnInit {
 
-  @ViewChild('alertSwal') alertSwal:any;
-  @ViewChild('ModalDestinatario') ModalDestinatario:any;
+  @ViewChild('alertSwal') alertSwal: any;
+  @ViewChild('ModalDestinatario') ModalDestinatario: any;
 
-  @Input() id_destinatario:number = 0;
+  @Input() id_destinatario: number = 0;
 
   @Output() ReturnDestinatario = new EventEmitter();
-  @Output() ControlVisibility:EventEmitter<boolean> = new EventEmitter();
+  @Output() ControlVisibility: EventEmitter<boolean> = new EventEmitter();
 
   ShowHideModal(): void {
     this.ControlVisibility.emit(false);
   }
 
   //MODELO DESTINATARIO
-  public DestinatarioModel:any = {
-    Id_Destinario:'',
-    Nombre:'',
+  public DestinatarioModel: any = {
+    Id_Destinario: '',
+    Nombre: '',
     Estado: 'Activo',
     Tipo_Documento: '',
-    Id_Pais: '' 
+    Id_Pais: ''
   };
 
   public Lista_Cuentas_Destinatario = [{
@@ -42,14 +42,14 @@ export class CreardestinatarioComponent implements OnInit {
     Numero_Cuenta: ''
   }];
 
-  public Paises:any = [];
-  public TiposDocumentoExtranjero:any = [];
-  public TiposDocumentoNacionales:any = [];
-  public TiposDocumentoFiltrados:any = [];
-  public TiposCuenta:any = [];
+  public Paises: any = [];
+  public TiposDocumentoExtranjero: any = [];
+  public TiposDocumentoNacionales: any = [];
+  public TiposDocumentoFiltrados: any = [];
+  public TiposCuenta: any = [];
   public SePuedeAgregarMasCuentas = false;
 
-  constructor(public globales:Globales, private cliente:HttpClient) { }
+  constructor(public globales: Globales, private cliente: HttpClient) { }
 
   ngOnInit() {
     this.AsignarPaises();
@@ -58,49 +58,49 @@ export class CreardestinatarioComponent implements OnInit {
     this.AsignarTiposCuenta();
 
     // console.log(this.id_destinatario);
-    
+
   }
 
-  AsignarPaises(){
+  async AsignarPaises() {
     this.Paises = [];
-    this.Paises = this.globales.Paises;
+    this.Paises = await this.globales.Paises;
   }
 
-  AsignarDocumentosExtranjeros(){
+  AsignarDocumentosExtranjeros() {
     this.TiposDocumentoExtranjero = [];
     this.TiposDocumentoExtranjero = this.globales.TipoDocumentoExtranjero;
   }
 
-  AsignarDocumentosNacionales(){
+  AsignarDocumentosNacionales() {
     this.TiposDocumentoNacionales = [];
     this.TiposDocumentoNacionales = this.globales.TipoDocumentoNacionales;
   }
 
-  AsignarTiposCuenta(){
+  AsignarTiposCuenta() {
     this.TiposCuenta = [];
     this.TiposCuenta = this.globales.TiposCuenta;
   }
 
-  ValidarCedula(identificacion){
-    this.cliente.get(this.globales.ruta+'/php/destinatarios/validar_identificacion.php', {params:{id:identificacion}}).subscribe((data:any)=>{
-      if(data == 1){
+  ValidarCedula(identificacion) {
+    this.cliente.get(this.globales.ruta + '/php/destinatarios/validar_identificacion.php', { params: { id: identificacion } }).subscribe((data: any) => {
+      if (data == 1) {
         this.ShowSwal('warning', 'Alerta', 'El número de identificación que intenta registrar ya se encuentra registrada en la base de datos!');
-        this.DestinatarioModel.Id_Destinatario = ''; 
+        this.DestinatarioModel.Id_Destinatario = '';
       }
     });
   }
 
-  FiltrarDatosNacionalidad(idPais){
+  FiltrarDatosNacionalidad(idPais) {
 
     this.DestinatarioModel.Id_Destinatario = '';
     this.TiposDocumentoFiltrados = [];
     this.DestinatarioModel.Nombre = '';
-    
+
     if (this.TiposDocumentoExtranjero.length > 0) {
-      this.TiposDocumentoExtranjero.forEach(documentObj  => {
+      this.TiposDocumentoExtranjero.forEach(documentObj => {
         if (documentObj.Id_Pais == idPais) {
-          this.TiposDocumentoFiltrados.push(documentObj);  
-        }        
+          this.TiposDocumentoFiltrados.push(documentObj);
+        }
       });
     }
   }
@@ -120,11 +120,11 @@ export class CreardestinatarioComponent implements OnInit {
     }
   }
 
-  AgregarOtraCuenta(){
-    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;    
+  AgregarOtraCuenta() {
+    let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
 
     if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {
-      
+
       let nuevaCuenta = {
         Id_Pais: '',
         Id_Banco: '',
@@ -134,24 +134,24 @@ export class CreardestinatarioComponent implements OnInit {
       };
       this.Lista_Cuentas_Destinatario.push(nuevaCuenta);
       this.SePuedeAgregarMasCuentas = false;
-    }else{
-      this.ShowSwal('warning','Faltan Datos','Faltan datos en la(s) cuenta(s) actuales, revise por favor!');
+    } else {
+      this.ShowSwal('warning', 'Faltan Datos', 'Faltan datos en la(s) cuenta(s) actuales, revise por favor!');
     }
   }
 
   Bancos_Pais(Pais, i) {
     this.cliente.get(this.globales.ruta + 'php/genericos/bancos_pais.php', { params: { id: Pais } }).subscribe((data: any) => {
-      
+
       this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
       this.Lista_Cuentas_Destinatario[i].Id_Banco = '';
       this.Lista_Cuentas_Destinatario[i].Id_Tipo_Cuenta = '';
 
-      if(data != ''){
+      if (data != '') {
         this.Lista_Cuentas_Destinatario[i].Bancos = data;
-      }else{
+      } else {
         this.Lista_Cuentas_Destinatario[i].Bancos = [];
       }
-      
+
     });
   }
 
@@ -170,7 +170,7 @@ export class CreardestinatarioComponent implements OnInit {
         case "input": {
 
           var cadena = seleccion.substring(0, 4);
-          
+
           var buscarBanco = this.Lista_Cuentas_Destinatario[posicion].Bancos.findIndex(x => x.Identificador === cadena);
           if (buscarBanco > -1) {
             this.Lista_Cuentas_Destinatario[posicion].Id_Banco = this.Lista_Cuentas_Destinatario[posicion].Bancos[buscarBanco].Id_Banco;
@@ -183,7 +183,7 @@ export class CreardestinatarioComponent implements OnInit {
     }
   }
 
-  ShowSwal(tipo:string, titulo:string, msg:string, confirmCallback = null, cancelCallback = null){
+  ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {
     this.alertSwal.type = tipo;
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
@@ -194,33 +194,33 @@ export class CreardestinatarioComponent implements OnInit {
     return parseInt(i.length);
   }
 
-  SetIdentificadorCuenta(idBanco, i){
+  SetIdentificadorCuenta(idBanco, i) {
     //comprobar de que pais es el banco
     //buscar el identificador del banco si posee
 
-    let cuentaDestinatario = this.Lista_Cuentas_Destinatario[i].Numero_Cuenta;    
+    let cuentaDestinatario = this.Lista_Cuentas_Destinatario[i].Numero_Cuenta;
 
     if (cuentaDestinatario == '') {
 
-      this.cliente.get(this.globales.ruta+'/php/bancos/buscar_identificador.php', {params:{id_banco:idBanco}}).subscribe((data:any)=>{
+      this.cliente.get(this.globales.ruta + '/php/bancos/buscar_identificador.php', { params: { id_banco: idBanco } }).subscribe((data: any) => {
         this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = data;
-      });     
-    }    
+      });
+    }
   }
 
   GuardarDestinatario(formulario: NgForm, modal: any) {
-    
-    this.Lista_Cuentas_Destinatario.forEach((element,index) => {
+
+    this.Lista_Cuentas_Destinatario.forEach((element, index) => {
       element.Bancos = [];
-      if(element.Numero_Cuenta == ""){
-        this.Lista_Cuentas_Destinatario.splice(index,1);
+      if (element.Numero_Cuenta == "") {
+        this.Lista_Cuentas_Destinatario.splice(index, 1);
       }
     });
-    
+
     let info = JSON.stringify(formulario.value);
     let destinatario = JSON.stringify(this.Lista_Cuentas_Destinatario);
     let datos = new FormData();
-    
+
     //datos.append("modulo",'Destinatario');
     datos.append("datos", info);
     datos.append("destinatario", destinatario);
@@ -241,7 +241,7 @@ export class CreardestinatarioComponent implements OnInit {
     return Observable.throw(error);
   }
 
-  LimpiarModelos(){
+  LimpiarModelos() {
     this.DestinatarioModel = {
       Id_Destinatario: '',
       Nombre: '',
@@ -258,7 +258,7 @@ export class CreardestinatarioComponent implements OnInit {
       Id_Tipo_Cuenta: '',
       Numero_Cuenta: '',
     }];
-    
+
     this.TiposDocumentoFiltrados = [];
     this.SePuedeAgregarMasCuentas = false;
   }
@@ -267,41 +267,41 @@ export class CreardestinatarioComponent implements OnInit {
 
   validarBanco(i, valor) {
     setTimeout(() => {
-      
+
       let ctaObject = this.Lista_Cuentas_Destinatario[i];
       let countryObject = this.Paises.find(x => x.Id_Pais == ctaObject.Id_Pais);
-      
-      if (!this.globales.IsObjEmpty(ctaObject) && !this.globales.IsObjEmpty(countryObject)) {        
+
+      if (!this.globales.IsObjEmpty(ctaObject) && !this.globales.IsObjEmpty(countryObject)) {
 
         if (countryObject.Nombre == 'Venezuela') {
-          
+
           if (countryObject.Cantidad_Digitos_Cuenta != 0) {
-            
+
             let longitud = this.LongitudCarateres(valor);
             if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {
               this.ShowSwal("warning", "Alerta", "Digite la cantidad correcta de dígitos de la cuenta");
               this.SePuedeAgregarMasCuentas = false;
               return;
-            }              
+            }
           }
 
-          this.cliente.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data:any)=>{
-            if(data == 1){
+          this.cliente.get(this.globales.ruta + 'php/bancos/validar_cuenta_bancaria.php', { params: { cta_bancaria: valor } }).subscribe((data: any) => {
+            if (data == 1) {
               this.ShowSwal("warning", "Alerta", "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!");
               this.SePuedeAgregarMasCuentas = false;
               this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
-            }else{
+            } else {
               this.SePuedeAgregarMasCuentas = true;
             }
           });
-        }else{
+        } else {
 
-          this.cliente.get(this.globales.ruta+'php/bancos/validar_cuenta_bancaria.php', {params: {cta_bancaria:valor} } ).subscribe((data:any)=>{
-            if(data == 1){
+          this.cliente.get(this.globales.ruta + 'php/bancos/validar_cuenta_bancaria.php', { params: { cta_bancaria: valor } }).subscribe((data: any) => {
+            if (data == 1) {
               this.ShowSwal("warning", "Alerta", "La cuenta que intenta registrar ya se encuentra registrada en la base de datos!");
               this.SePuedeAgregarMasCuentas = false;
               this.Lista_Cuentas_Destinatario[i].Numero_Cuenta = '';
-            }else{
+            } else {
               this.SePuedeAgregarMasCuentas = true;
             }
           });
@@ -310,9 +310,9 @@ export class CreardestinatarioComponent implements OnInit {
     }, 700);
   }
 
-  RevalidarValores(nroCuenta, index){
-    if(nroCuenta == ''){
-      if(!this.globales.IsObjEmpty(this.Lista_Cuentas_Destinatario[index])){
+  RevalidarValores(nroCuenta, index) {
+    if (nroCuenta == '') {
+      if (!this.globales.IsObjEmpty(this.Lista_Cuentas_Destinatario[index])) {
         this.Lista_Cuentas_Destinatario[index].Id_Banco = '';
         this.Lista_Cuentas_Destinatario[index].Id_Tipo_Cuenta = '';
       }

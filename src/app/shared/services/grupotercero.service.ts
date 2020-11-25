@@ -6,39 +6,44 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class GrupoterceroService {
 
-  constructor(private client:HttpClient, private globales:Globales) { }
+  constructor(private client: HttpClient, private globales: Globales) { }
 
-  getGruposTercero(p:string):Observable<any>{
-    return this.client.get(this.globales.ruta+'php/gruposterceros/get_grupos.php?'+p);
+  getGruposTercero(p: string): Observable<any> {
+    return this.client.get(this.globales.ruta + 'php/gruposterceros/get_grupos.php?' + p);
   }
 
-  getGrupos():Observable<any>{
-    return this.client.get(this.globales.ruta+'php/gruposterceros/get_lista_grupos.php');
+  getGrupos(): Observable<any> {
+    return this.client.get(this.globales.ruta + 'php/gruposterceros/get_lista_grupos.php');
   }
 
-  getGrupoTercero(idGrupo:string):Observable<any>{
-    let p = {id_grupo:idGrupo};
-    return this.client.get(this.globales.ruta+'php/gruposterceros/get_grupo.php', {params:p});
+  getTipos(tipos: String): Observable<any> {
+    console.log(tipos);
+    return this.client.get(this.globales.rutaNueva + `terceros/filter/${tipos}`);
   }
 
-  getGruposPadre():Observable<any>{
-    return this.client.get(this.globales.ruta+'php/gruposterceros/get_grupos_padre.php');
+  getGrupoTercero(idGrupo: string): Observable<any> {
+    let p = { id_grupo: idGrupo };
+    return this.client.get(this.globales.ruta + 'php/gruposterceros/get_grupo.php', { params: p });
   }
 
-  getGruposPadreEditar(idGrupo:string):Observable<any>{
-    let p = {id_grupo:idGrupo};
-    return this.client.get(this.globales.ruta+'php/gruposterceros/get_grupos_padre_edicion.php', {params:p});
+  getGruposPadre(): Observable<any> {
+    return this.client.get(this.globales.ruta + 'php/gruposterceros/get_grupos_padre.php');
   }
 
-  saveGrupoTercero(data:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/gruposterceros/guardar_grupo.php', data);
+  getGruposPadreEditar(idGrupo: string): Observable<any> {
+    let p = { id_grupo: idGrupo };
+    return this.client.get(this.globales.ruta + 'php/gruposterceros/get_grupos_padre_edicion.php', { params: p });
   }
 
-  editGrupoTercero(data:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/gruposterceros/editar_grupo.php', data);
+  saveGrupoTercero(data: FormData): Observable<any> {
+    return this.client.post(this.globales.ruta + 'php/gruposterceros/guardar_grupo.php', data);
   }
 
-  cambiarEstadoGrupoTercero(data:FormData):Observable<any>{
-    return this.client.post(this.globales.ruta+'php/gruposterceros/cambiar_estado_grupo.php', data);
+  editGrupoTercero(data: FormData): Observable<any> {
+    return this.client.post(this.globales.ruta + 'php/gruposterceros/editar_grupo.php', data);
+  }
+
+  cambiarEstadoGrupoTercero(data: FormData): Observable<any> {
+    return this.client.post(this.globales.ruta + 'php/gruposterceros/cambiar_estado_grupo.php', data);
   }
 }

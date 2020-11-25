@@ -124,8 +124,8 @@ export class CierrecajaComponent implements OnInit {
       this.MonedasSistema.forEach((m) => {
 
         this.Modulos.forEach((mod) => {
-
           let obj = this.Totales[mod];
+          console.log([obj, m]);
           let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
 
           if (!this.SumatoriaTotales[m.Nombre]) {
@@ -256,7 +256,7 @@ export class CierrecajaComponent implements OnInit {
     montos[0].forEach((element, index) => {
       if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
         console.log(element['Monto'] < value);
-        if (parseFloat(element['Monto']) < parseFloat(value))  {
+        if (parseFloat(element['Monto']) < parseFloat(value)) {
           this.flagLimites = true
         }
       }

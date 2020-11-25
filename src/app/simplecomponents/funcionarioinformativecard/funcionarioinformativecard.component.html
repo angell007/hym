@@ -1,7 +1,7 @@
 <div class="card m-3" style="cursor: pointer;
 padding: 2px;
 margin: 0;
-border-radius: 25em;" (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)">
+border-radius: 25em;">
   <div class="card-body" style="padding: 0px;">
     <div class="row">
       <div class="col-md-2">
@@ -20,7 +20,8 @@ border-radius: 25em;" (click)="AbrirCierreFuncionario(Funcionario.Identificacion
           <div class="col-md-12">
             <div class="row">
               <div class="mx-auto col-md-10">
-                <small>{{Funcionario.Nombre_Funcionario}}</small>
+                <small
+                  (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)">{{Funcionario.Nombre_Funcionario}}</small>
                 <small>{{Funcionario.Nombre_Oficina}}</small>
                 <div class="w-100"></div>
                 <i style="margin-right: 0.1em;" class="ti-alarm-clock text-info"></i>
@@ -28,7 +29,8 @@ border-radius: 25em;" (click)="AbrirCierreFuncionario(Funcionario.Identificacion
                 <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
                 <small>{{Funcionario.Hora_Cierre}}</small>
                 <i style="margin-right: 0.1em;"
-                  [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"></i>
+                  [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
+                  (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
               </div>
             </div>
           </div>

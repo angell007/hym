@@ -136,6 +136,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
     datos.append("modelo", modelo);
 
     if (this.Editar) {
+
       this._remitenteService.editRemitente(datos)
         .catch(error => {
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -175,6 +176,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
           }
         });
     } else {
+
       this._remitenteService.saveRemitente(datos)
         .catch(error => {
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -193,7 +195,6 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
                 break;
 
               case AccionModalRemitente.Crear_Transferencia:
-                // console.log("entro crear switch");
                 let remitente = { model: this.RemitenteModel };
                 this.CargarDatosRemitenteTransferencia.emit(remitente);
                 break;

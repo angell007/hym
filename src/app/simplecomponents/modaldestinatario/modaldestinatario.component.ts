@@ -145,6 +145,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
   async GetPaises() {
     await this.generalService.getPaises().then((result) => {
+      this.Paises = result;
       let fullPais = result.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
       this.paisDefault = fullPais.Id_Pais;
       this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
