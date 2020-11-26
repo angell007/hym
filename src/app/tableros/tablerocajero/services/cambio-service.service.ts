@@ -446,6 +446,7 @@ export class CambioService {
   }
 
   tituloCambio = "Compras o Ventas";
+
   VerCambio(id, modal) {
     this.http.get(this.globales.ruta + 'php/cambio/get_detalle_cambio.php', { params: { id_cambio: id } }).subscribe((data: any) => {
       this.verCambio = data;

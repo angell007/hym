@@ -172,7 +172,7 @@ export class CommonLayoutComponent implements OnInit {
         private toastyConfig: ToastyConfig,
         private cajaService: CajaService,
         private swalService: SwalService,
-        private _notificacionService: NotificacionsService,
+        public _notificacionService: NotificacionsService,
         private trasladoCajaService: TrasladocajaService,
         private toastService: ToastService,
         private trasladosCustomService: TrasladosCustomService,
@@ -181,7 +181,7 @@ export class CommonLayoutComponent implements OnInit {
         private _aperturaCajaService: AperturacajaService,
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
-        private consolidadosService: ConsolidadosService) {
+        public consolidadosService: ConsolidadosService) {
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 

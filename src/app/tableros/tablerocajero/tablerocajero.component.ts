@@ -507,7 +507,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     public _trasladosCustomService: TrasladosCustomService,
     private _notificacionService: NotificacionsService,
     private _sexternos: SexternosService,
-    private CambioService: CambioService,
+    public CambioService: CambioService,
     private _consolidadoService: ConsolidadosService
 
 

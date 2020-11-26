@@ -184,7 +184,7 @@
                 </span>
                 <div class="info">
                   <b class="text-dark font-size-22">Cambios Efectivo</b>
-                  <p class="no-mrg-btm ">{{tituloCambio}}</p>
+                  <p class="no-mrg-btm ">{{CambioService.tituloCambio}}</p>
                 </div>
               </li>
             </ul>
@@ -2740,15 +2740,15 @@
           </tr> -->
 
             <td>Cantidad a devolver {{devCambio['Codigo_Moneda_Destino']}}</td>
-            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio['Valor_Devolver']" currencyMask
+            <input name="tasa" type="text" placeholder="tasa" class="form-control"
+              (keyup)="CambioService.calcularDevolucion()" [(ngModel)]="devCambio['Valor_Devolver']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
           <tr>
 
 
             <td>Valor en {{devCambio['Codigo_Moneda_Origen']}}</td>
-            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio['Valor_Devuelto']" currencyMask
+            <input name="tasa" type="text" placeholder="tasa" class="form-control"
+              (keyup)="CambioService.calcularDevolucion()" [(ngModel)]="devCambio['Valor_Devuelto']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
 
             <!-- <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>
@@ -2783,7 +2783,7 @@
   <div class="app-modal-footer">
     <div class="text-right">
       <button class="btn btn-default" (click)="AbrirModalDevolucion.hide()">Cerrar</button>
-      <button class="btn btn-primary" (click)="saveDevolucion()" [disabled]='savebtn'>Guardar</button>
+      <button class="btn btn-primary" (click)="CambioService.saveDevolucion()" [disabled]='savebtn'>Guardar</button>
     </div>
   </div>
 </app-modal-basic>

@@ -99,17 +99,17 @@ export class CierrecajaComponent implements OnInit {
       //   this.MonedasSistema.forEach((m) => {
       data.forEach((mod) => {
         console.log(mod);
-        //   });
-        // });
+      });
+      // });
 
-        // const divi = (90 / this.MonedasSistema.length)
-        // this.sizeColunm = divi + '%'
+      // const divi = (90 / this.MonedasSistema.length)
+      // this.sizeColunm = divi + '%'
 
-        // let t = data.totales_ingresos_egresos;
-        // for (const k in t) {
-        //   let arr = t[k];
-        //   this.Totales[k] = arr;
-      }
+      // let t = data.totales_ingresos_egresos;
+      // for (const k in t) {
+      //   let arr = t[k];
+      //   this.Totales[k] = arr;
+      // }
 
       // setTimeout(() => {
       //   this.ArmarCeldasTabla();
