@@ -9,7 +9,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 export class ConsolidadosService {
   public MonedasSistema: any = [];
   public user = JSON.parse(localStorage['User']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
   public SumatoriaTotales: any = [];
   public TotalesIngresosMonedas: any = [];
   public TotalesEgresosMonedas: any = [];
@@ -57,8 +57,10 @@ export class ConsolidadosService {
 
   async getValoresIniciales() {
 
-    await this.http.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: { id: this.user.Identificacion_Funcionario } }).pipe()
+    await this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {
+
+
         this.MonedasSistema = data.monedas;
         let t = data.totales_ingresos_egresos;
 
@@ -69,7 +71,12 @@ export class ConsolidadosService {
 
         this.MonedasSistema.forEach((m) => {
           this.Modulos.forEach((mod) => {
+
+
             let obj = this.Totales[mod];
+
+            console.log(obj);
+
             let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
             if (this.SumatoriaTotales[m.Nombre]) {
               this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);

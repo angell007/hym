@@ -87,95 +87,105 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
-    this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
+    this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
 
-      this.MonedasSistema = data.monedas;
-      const divi = (90 / this.MonedasSistema.length)
-      this.sizeColunm = divi + '%'
+      this.MonedasSistema = data[0]['Monedas'];
 
-      let t = data.totales_ingresos_egresos;
-      for (const k in t) {
-        let arr = t[k];
-        this.Totales[k] = arr;
+      // console.log(this.MonedasSistema);
+      // console.log(this.Modulos);
+
+
+      // if (this.Modulos.length > 0) {
+      //   this.MonedasSistema.forEach((m) => {
+      data.forEach((mod) => {
+        console.log(mod);
+        //   });
+        // });
+
+        // const divi = (90 / this.MonedasSistema.length)
+        // this.sizeColunm = divi + '%'
+
+        // let t = data.totales_ingresos_egresos;
+        // for (const k in t) {
+        //   let arr = t[k];
+        //   this.Totales[k] = arr;
       }
 
-      setTimeout(() => {
-        this.ArmarCeldasTabla();
-      }, 1000);
+      // setTimeout(() => {
+      //   this.ArmarCeldasTabla();
+      // }, 1000);
 
     });
   }
 
   ArmarCeldasTabla() {
 
-    if (this.MonedasSistema.length > 0) {
-      this.MonedasSistema.forEach((m, i) => {
-        let color = '#ffffff';
-        let celda_i = { Nombre_Celda: 'Ingresos', Color: color };
-        let celda_e = { Nombre_Celda: 'Egresos', Color: color };
-        this.CeldasIngresoEgresoEncabezado.push(celda_i);
-        this.CeldasIngresoEgresoEncabezado.push(celda_e);
-        this.max_cel_colspan += 2;
-      });
-    }
+    // if (this.MonedasSistema.length > 0) {
+    //   this.MonedasSistema.forEach((m, i) => {
+    //     let color = '#ffffff';
+    //     let celda_i = { Nombre_Celda: 'Ingresos', Color: color };
+    //     let celda_e = { Nombre_Celda: 'Egresos', Color: color };
+    //     this.CeldasIngresoEgresoEncabezado.push(celda_i);
+    //     this.CeldasIngresoEgresoEncabezado.push(celda_e);
+    //     this.max_cel_colspan += 2;
+    //   });
+    // }
 
-    if (this.Modulos.length > 0) {
+    // if (this.Modulos.length > 0) {
 
-      this.MonedasSistema.forEach((m) => {
+    //   this.MonedasSistema.forEach((m)  => {
+    //     data[0].forEach((mod) => {
+    //       //     let obj = this.Totales[mod];
 
-        this.Modulos.forEach((mod) => {
-          let obj = this.Totales[mod];
-          console.log([obj, m]);
-          let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
+    //       //     let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
+    //       //     if (!this.SumatoriaTotales[m.Nombre]) {
 
-          if (!this.SumatoriaTotales[m.Nombre]) {
+    //       //       this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
+    //       //       this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
+    //       //       this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
+    //       //     } else {
 
-            this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
-            this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-            this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-          } else {
+    //       //       this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
+    //       //       this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
+    //       //     }
 
-            this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-            this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-          }
+    //     });
+    //   });
 
-        });
-      });
+    //     this.MonedasSistema.forEach((moneda, i) => {
+    //       let objMoneda = this.SumatoriaTotales[moneda.Nombre];
+    //       let monto_inicial_moneda = this.ValoresMonedasApertura[i];
+    //       let color = '#ffffff';
+    //       let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };
+    //       let obj_total_eg = { Total: objMoneda.Egreso_Total.toFixed(2), Color: color };
+    //       this.MostrarTotal.push(obj_total_ing);
+    //       this.MostrarTotal.push(obj_total_eg);
 
-      this.MonedasSistema.forEach((moneda, i) => {
-        let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-        let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-        let color = '#ffffff';
-        let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };
-        let obj_total_eg = { Total: objMoneda.Egreso_Total.toFixed(2), Color: color };
-        this.MostrarTotal.push(obj_total_ing);
-        this.MostrarTotal.push(obj_total_eg);
+    //       this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+    //       this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
 
-        this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
-        this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
+    //       let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
 
-        let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
+    //       this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
+    //     });
 
-        this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
-      });
+    //     // console.log(this.MostrarTotal);
 
-      // console.log(this.MostrarTotal);
+    //     this.MonedasSistema.forEach((m, i) => {
+    //       let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
+    //       this.TotalEntregado.push(obj);
 
-      this.MonedasSistema.forEach((m, i) => {
-        let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
-        this.TotalEntregado.push(obj);
+    //       let obj1 = { Moneda: m.Id_Moneda, Diferencia: 0, Codigo: m.Codigo, Nombre: m.Nombre };
+    //       this.Diferencias.push(obj1);
+    //     });
 
-        let obj1 = { Moneda: m.Id_Moneda, Diferencia: 0, Codigo: m.Codigo, Nombre: m.Nombre };
-        this.Diferencias.push(obj1);
-      });
+    //     this.AsignarFieldsDisabled();
 
-      this.AsignarFieldsDisabled();
+    //     this.Armado = true;
 
-      this.Armado = true;
-
-    } else {
-      this.Armado = true;
-    }
+    //   } else {
+    //     this.Armado = true;
+    // }
   }
 
   ArmarCeldasValoresTabla() {
