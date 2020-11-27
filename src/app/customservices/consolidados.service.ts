@@ -72,10 +72,7 @@ export class ConsolidadosService {
         this.MonedasSistema.forEach((m) => {
           this.Modulos.forEach((mod) => {
 
-
             let obj = this.Totales[mod];
-
-            console.log(obj);
 
             let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
             if (this.SumatoriaTotales[m.Nombre]) {

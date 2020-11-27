@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GeneralService } from '../shared/services/general/general.service';
 import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
+import { type } from 'jquery';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -55,6 +56,7 @@ export class CierrecajaComponent implements OnInit {
   public ValoresMonedasApertura: any = [];
   public sizeColunm: any = 0 + '%';
   public flagLimites: boolean = false;
+  public customModulos = [];
 
   constructor(public globales: Globales, private cliente: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService, private _funcionarioService: NuevofuncionarioService) {
   }
@@ -88,35 +90,44 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
+      this.MonedasSistema = data['Monedas'];
+      delete data['Monedas'];
 
-      this.MonedasSistema = data[0]['Monedas'];
+      console.log(data);
+      this.customModulos = [];
+      this.customModulos = data['Modulos'];
+      let canges = [];
+      for (let mod = 0; mod < this.customModulos.length; mod++) {
+        canges.push(this.customModulos[mod])
+      }
 
-      // console.log(this.MonedasSistema);
-      // console.log(this.Modulos);
+      console.log(canges);
 
-
-      // if (this.Modulos.length > 0) {
-      //   this.MonedasSistema.forEach((m) => {
-      data.forEach((mod) => {
-        console.log(mod);
-      });
-      // });
-
-      // const divi = (90 / this.MonedasSistema.length)
-      // this.sizeColunm = divi + '%'
-
-      // let t = data.totales_ingresos_egresos;
-      // for (const k in t) {
-      //   let arr = t[k];
-      //   this.Totales[k] = arr;
-      // }
-
-      // setTimeout(() => {
-      //   this.ArmarCeldasTabla();
-      // }, 1000);
-
+      /*     this.customModulos.forEach(e => {
+            console.log(e);
+          }) */
+      //data.data
+      // console.log(Object.keys(data));
+      // console.log(Object.values(data));
+      // this.customModulos = this.transformData(data)
+      // console.log(this.customModulos);
     });
   }
+
+  // transformData(data: object) {
+  //   let pair = [];
+  //   Object.keys(data).map(function (key) {
+  //     let k = 'key';
+  //     let v = 'data'
+
+  //     pair[k] = key;
+  //     pair[v] = data[key];
+
+
+  //   })
+  //   return pair;
+  // }
+
 
   ArmarCeldasTabla() {
 

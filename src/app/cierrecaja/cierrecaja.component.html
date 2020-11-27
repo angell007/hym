@@ -5,47 +5,60 @@
         <h4>CIERRE DE CAJA - {{Nombre_Funcionario}}</h4>
       </div>
       <div class="col-md-12">
-        <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="!Armado">
+        <!-- <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="!Armado">
           <h2>CARGANDO DATOS DEL CIERRE</h2>
           <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
-        </div>
+        </div> -->
 
-        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
+        <table class="table table-striped table-bordered cierre-caja-table">
           <thead>
             <tr>
-              <th style="width:10% !important;min-width:10% !important;max-width:10% !important;"></th>
+              <!-- <th style="width:10% !important;min-width:10% !important;max-width:10% !important;"></th> -->
+
               <th *ngFor="let m of MonedasSistema"
                 [ngStyle]="{'text-align':center, 'width':sizeColunm,'min-width':sizeColunm,'max-width':sizeColunm}"
                 colspan="2" [ngStyle]="{'background-color':m.Color}">
                 <h4>{{m.Nombre}}</h4>
               </th>
+
             </tr>
-            <tr>
-              <th style="text-align:center;">
-                <h4>Modulos</h4>
-              </th>
-              <th *ngFor="let c of CeldasIngresoEgresoEncabezado"
+            <tr *ngFor="let m of customModulos ">
+
+              <!-- <th style="text-align:center;" *ngFor="let m of customModulos "> -->
+              <h4>{{m.tipo}}</h4>
+              <!-- </th> -->
+
+              <!-- <th *ngFor="let c of CeldasIngresoEgresoEncabezado"
                 style="text-align:center;width:15% !important;min-width:15% !important;max-width:15% !important;"
                 [ngStyle]="{'background-color':c.Color}">
                 <h6>{{c.Nombre_Celda}}</h6>
-              </th>
+              </th> -->
             </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let m of Modulos;">
-              <td>{{m}}</td>
-              <td class="mx-1" style="" *ngFor="let ie of CeldasIngresoEgresoEncabezado; let ind = index"
-                [ngStyle]="{'background-color':Totales[m][ind].Color}">
-                <label
-                  *ngIf="ind % 2 == 0">{{Totales[m][ind].Ingreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
-                <label
-                  *ngIf="ind % 2 != 0">{{Totales[m][ind].Egreso_Total | customcurrency:Totales[m][ind].Codigo}}</label>
+          <tbody *ngFor="let m of customModulos ">
+            <tr *ngFor="let  items of m">
+              <td *ngFor="let  items of m"><span *ngIf="items != 'undefined' && items != '' ">{{ items | json}}</span>
               </td>
-            </tr>
-            <tr>
-              <td class="font-weight-bold" class="mx-1" style="color: #333;"><b>Totales:</b></td>
+              <!-- <td *ngIf="items[0] != 'undefined'">{{items[0]['Egreso_Total'] }} </td> -->
+
+              <!-- <td *ngIf="items[0] != 'undefined'">{{items[0]['Ingreso_Total'] }} </td>
+              <td *ngIf="items[0] != 'undefined'">{{items[0]['Ingreso_Total'] }} </td>
+              <td *ngIf="items[0] != 'undefined'">{{items[0]['Ingreso_Total'] }} </td> -->
+
+              <!-- {
+                "Ingreso_Total": "145002",
+                "Id_Moneda": 2,
+                "Egreso_Total": 0,
+                "moneda": {
+                    "Codigo": "$",
+                    "Id_Moneda": 2,
+                    "Moneda": "Pesos"
+                }
+            } -->
+              <!-- <td class="font-weight-bold" class="mx-1" style="color: #333;"><b>Totales:</b></td>
               <td class="font-weight-bold" class="mx-1" style="color: #333;" *ngFor="let mt of MostrarTotal"
-                [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td>
+                [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td> -->
+
             </tr>
           </tbody>
         </table>
@@ -54,7 +67,7 @@
 
       <!-- this.sizeColunm -->
       <!-- <div class="row card-body" *ngIf="!solo_ver"> -->
-      <div class="col-md-12">
+      <!-- <div class="col-md-12">
         <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <tbody>
             <tr>
@@ -117,7 +130,8 @@
           </div>
         </div>
       </div>
-      <!-- </div> -->
+    </div>
+  </div> -->
     </div>
   </div>
 </div>
