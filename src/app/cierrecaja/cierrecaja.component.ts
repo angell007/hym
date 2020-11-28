@@ -87,21 +87,26 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
-    this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
+    this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
 
-      this.MonedasSistema = data.monedas;
-      const divi = (90 / this.MonedasSistema.length)
-      this.sizeColunm = divi + '%'
+      this.Modulos = data;
+      console.log(data);
 
-      let t = data.totales_ingresos_egresos;
-      for (const k in t) {
-        let arr = t[k];
-        this.Totales[k] = arr;
-      }
+      // this.MonedasSistema = data['Monedas'];
+      // this.Modulos = data['Modulos'];
 
-      setTimeout(() => {
-        this.ArmarCeldasTabla();
-      }, 1000);
+      //   const divi = (90 / this.MonedasSistema.length)
+      //   this.sizeColunm = divi + '%'
+
+      //   let t = data.totales_ingresos_egresos;
+      //   for (const k in t) {
+      //     let arr = t[k];
+      //     this.Totales[k] = arr;
+      //   }
+
+      //   setTimeout(() => {
+      //     this.ArmarCeldasTabla();
+      //   }, 1000);
 
     });
   }
@@ -256,7 +261,7 @@ export class CierrecajaComponent implements OnInit {
     montos[0].forEach((element, index) => {
       if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
         console.log(element['Monto'] < value);
-        if (parseFloat(element['Monto']) < parseFloat(value))  {
+        if (parseFloat(element['Monto']) < parseFloat(value)) {
           this.flagLimites = true
         }
       }
