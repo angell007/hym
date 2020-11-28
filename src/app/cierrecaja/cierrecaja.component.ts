@@ -90,6 +90,7 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
+<<<<<<< HEAD
       this.MonedasSistema = data['Monedas'];
       delete data['Monedas'];
 
@@ -102,6 +103,27 @@ export class CierrecajaComponent implements OnInit {
       }
 
       console.log(canges);
+=======
+
+      this.Modulos = data;
+      console.log(data);
+
+      // this.MonedasSistema = data['Monedas'];
+      // this.Modulos = data['Modulos'];
+
+      //   const divi = (90 / this.MonedasSistema.length)
+      //   this.sizeColunm = divi + '%'
+
+      //   let t = data.totales_ingresos_egresos;
+      //   for (const k in t) {
+      //     let arr = t[k];
+      //     this.Totales[k] = arr;
+      //   }
+
+      //   setTimeout(() => {
+      //     this.ArmarCeldasTabla();
+      //   }, 1000);
+>>>>>>> ec3f20e
 
       /*     this.customModulos.forEach(e => {
             console.log(e);
