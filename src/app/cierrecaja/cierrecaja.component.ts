@@ -29,7 +29,8 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
+  public Modulos: Array<string> = []; public MonedasSistema: any = [];
+  // public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -57,6 +58,13 @@ export class CierrecajaComponent implements OnInit {
   public sizeColunm: any = 0 + '%';
   public flagLimites: boolean = false;
   public customModulos = [];
+  public valores = [
+    '$50.000',
+    '$20.000',
+    '$10.000',
+    '$5.000',
+    '$2.000',
+    '$1.000']
 
   constructor(public globales: Globales, private cliente: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService, private _funcionarioService: NuevofuncionarioService) {
   }
@@ -65,7 +73,6 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
-    // console.log(this.solo_ver);
 
   }
 
@@ -90,146 +97,10 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
-<<<<<<< HEAD
-      this.MonedasSistema = data['Monedas'];
-      delete data['Monedas'];
-
-      console.log(data);
-      this.customModulos = [];
-      this.customModulos = data['Modulos'];
-      let canges = [];
-      for (let mod = 0; mod < this.customModulos.length; mod++) {
-        canges.push(this.customModulos[mod])
-      }
-
-      console.log(canges);
-=======
-
       this.Modulos = data;
-      console.log(data);
-
-      // this.MonedasSistema = data['Monedas'];
-      // this.Modulos = data['Modulos'];
-
-      //   const divi = (90 / this.MonedasSistema.length)
-      //   this.sizeColunm = divi + '%'
-
-      //   let t = data.totales_ingresos_egresos;
-      //   for (const k in t) {
-      //     let arr = t[k];
-      //     this.Totales[k] = arr;
-      //   }
-
-      //   setTimeout(() => {
-      //     this.ArmarCeldasTabla();
-      //   }, 1000);
->>>>>>> ec3f20e
-
-      /*     this.customModulos.forEach(e => {
-            console.log(e);
-          }) */
-      //data.data
-      // console.log(Object.keys(data));
-      // console.log(Object.values(data));
-      // this.customModulos = this.transformData(data)
-      // console.log(this.customModulos);
     });
   }
 
-  // transformData(data: object) {
-  //   let pair = [];
-  //   Object.keys(data).map(function (key) {
-  //     let k = 'key';
-  //     let v = 'data'
-
-  //     pair[k] = key;
-  //     pair[v] = data[key];
-
-
-  //   })
-  //   return pair;
-  // }
-
-
-  ArmarCeldasTabla() {
-
-    // if (this.MonedasSistema.length > 0) {
-    //   this.MonedasSistema.forEach((m, i) => {
-    //     let color = '#ffffff';
-    //     let celda_i = { Nombre_Celda: 'Ingresos', Color: color };
-    //     let celda_e = { Nombre_Celda: 'Egresos', Color: color };
-    //     this.CeldasIngresoEgresoEncabezado.push(celda_i);
-    //     this.CeldasIngresoEgresoEncabezado.push(celda_e);
-    //     this.max_cel_colspan += 2;
-    //   });
-    // }
-
-    // if (this.Modulos.length > 0) {
-
-    //   this.MonedasSistema.forEach((m)  => {
-    //     data[0].forEach((mod) => {
-    //       //     let obj = this.Totales[mod];
-
-    //       //     let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
-    //       //     if (!this.SumatoriaTotales[m.Nombre]) {
-
-    //       //       this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
-    //       //       this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-    //       //       this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-    //       //     } else {
-
-    //       //       this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
-    //       //       this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-    //       //     }
-
-    //     });
-    //   });
-
-    //     this.MonedasSistema.forEach((moneda, i) => {
-    //       let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-    //       let monto_inicial_moneda = this.ValoresMonedasApertura[i];
-    //       let color = '#ffffff';
-    //       let obj_total_ing = { Total: objMoneda.Ingreso_Total.toFixed(2), Color: color };
-    //       let obj_total_eg = { Total: objMoneda.Egreso_Total.toFixed(2), Color: color };
-    //       this.MostrarTotal.push(obj_total_ing);
-    //       this.MostrarTotal.push(obj_total_eg);
-
-    //       this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
-    //       this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
-
-    //       let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
-
-    //       this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
-    //     });
-
-    //     // console.log(this.MostrarTotal);
-
-    //     this.MonedasSistema.forEach((m, i) => {
-    //       let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
-    //       this.TotalEntregado.push(obj);
-
-    //       let obj1 = { Moneda: m.Id_Moneda, Diferencia: 0, Codigo: m.Codigo, Nombre: m.Nombre };
-    //       this.Diferencias.push(obj1);
-    //     });
-
-    //     this.AsignarFieldsDisabled();
-
-    //     this.Armado = true;
-
-    //   } else {
-    //     this.Armado = true;
-    // }
-  }
-
-  ArmarCeldasValoresTabla() {
-
-    if (this.Totales.length > 0) {
-      this.MonedasSistema.forEach(element => {
-        let celdas = { Ingreso: 'Ingreso', Egreso: 'Egreso' };
-        this.CeldasIngresoEgresoEncabezado.push(celdas);
-      });
-    }
-  }
 
   GuardarCierre() {
     if (!this.ValidarMontos()) {
@@ -294,37 +165,47 @@ export class CierrecajaComponent implements OnInit {
     return true;
   }
 
-  CalcularDiferencia(value, pos) {
-    let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
-    montos[0].forEach((element, index) => {
-      if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
-        console.log(element['Monto'] < value);
-        if (parseFloat(element['Monto']) < parseFloat(value)) {
-          this.flagLimites = true
-        }
-      }
-    });
+  CalcularDiferencia(ingresado, calculado, pos) {
 
-    if (this.flagLimites) {
-      this.flagLimites = false;
-      this.ShowSwal('warning', 'Alerta', 'La cantidad digitada supera los limites para esta oficina');
-      this.Diferencias[pos].Diferencia = -1;
+    if (ingresado == '' || calculado == '') {
       return false;
     }
 
-    if (value == '') {
-      this.Diferencias[pos].Diferencia = 0;
-      return;
-    } else {
-      value = parseFloat(value);
-    }
+    console.log([ingresado, calculado, pos]);
 
-    let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
-    let entregar = total_entregar;
+    let resta = ingresado - calculado;
+    this.Diferencias[pos] = resta;
+
+    // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
+    // montos[0].forEach((element, index) => {
+    //   if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
+    //     console.log(element['Monto'] < value);
+    //     if (parseFloat(element['Monto']) < parseFloat(value)) {
+    //       this.flagLimites = true
+    //     }
+    //   }
+    // });
+
+    // if (this.flagLimites) {
+    //   this.flagLimites = false;
+    //   this.ShowSwal('warning', 'Alerta', 'La cantidad digitada supera los limites para esta oficina');
+    //   this.Diferencias[pos].Diferencia = -1;
+    //   return false;
+    // }
+
+    // if (value == '') {
+    //   this.Diferencias[pos].Diferencia = 0;
+    //   return;
+    // } else {
+    //   value = parseFloat(value);
+    // }
+
+    // let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
+    // let entregar = total_entregar;
 
 
-    let resta = value - entregar;
-    this.Diferencias[pos].Diferencia = resta;
+    // let resta = value - entregar;
+    // this.Diferencias[pos].Diferencia = resta;
   }
 
   ArmarResumenMovimientos() {
@@ -386,11 +267,10 @@ export class CierrecajaComponent implements OnInit {
     this.cliente
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.id_funcionario } })
       .subscribe((data: any) => {
+        console.log(data);
         data.valores_diario.forEach((valores, i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
         });
-        // console.log(this.ValoresMonedasApertura);
-
       });
   }
 
@@ -415,4 +295,35 @@ export class CierrecajaComponent implements OnInit {
     return str1.toUpperCase() === str2.toUpperCase()
   }
 
+  reduce(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += element.Ingreso_Total - element.Egreso_Total
+    })
+    return suma;
+  }
+  Ingresos(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Ingreso_Total)
+    })
+    return suma;
+  }
+  Egresos(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Egreso_Total)
+    })
+    return suma;
+  }
+
+  validate(a) {
+    let validate = false;
+    a.forEach((element) => {
+      if (element.Ingreso_Total != 0 || element.Egreso_Total != 0) {
+        validate = true;
+      }
+    })
+    return validate;
+  }
 }

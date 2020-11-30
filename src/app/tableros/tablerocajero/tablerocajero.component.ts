@@ -92,6 +92,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
   @ViewChild('selectCustomClient') selectCustomClient: any;
 
+  @ViewChild('destinatarioID') destinatarioID: any;
+
   public DevolucionesCambio: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
@@ -516,6 +518,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.AsignarMonedas();
     this.settearMoneda();
+    this._getTodasMonedas();
     console.log('Moneda por defecto', JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
   }
 
@@ -1301,6 +1304,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
+    // console.log(this.Monedas);
     this.MonedaParaTransferencia.id = value;
     this.TransferenciaModel.Moneda_Destino = value;
     this.SetMonedaDestinatarios(value);
@@ -1632,9 +1636,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
 
   AutoCompletarDestinatario(modelo, i, listaDestinatarios, dest) {
+
+    console.log(modelo.Id_Destinatario);
+
     if (typeof (modelo) == 'object') {
       if (modelo.Cuentas != undefined) {
-        listaDestinatarios[i].Numero_Documento_Destino = modelo.Id_Destinatario;
+        listaDestinatarios[i].Numero_Documento_Destino = (modelo.Id_Destinatario == '') ? 123 : modelo.Id_Destinatario;
         listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
         listaDestinatarios[i].Cuentas = modelo.Cuentas;
         listaDestinatarios[i].esconder = true;
@@ -3066,6 +3073,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._getMonedasExtranjeras();
 
     this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
+
+
     setTimeout(() => {
       this.SetMonedaTransferencia(this.TransferenciaModel.Moneda_Destino);
     }, 300);
@@ -3075,11 +3084,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getTodasMonedas() {
     this.MonedasTransferencia = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
-      } else {
-        this.Monedas = [];
-      }
+
+      this.Monedas = data;
+
     });
   }
 
@@ -3927,6 +3934,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         } else {
 
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
+          // this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data;
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data.Id_Destinatario;
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data.DestinatarioModel.Nombre;
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = '';
@@ -3952,6 +3960,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   AsignarDatosDestinatario(respuestaModal: any): void {
 
+    console.log(respuestaModal);
+
     if (respuestaModal.willdo == 'limpiar campo id dest') {
     }
 
@@ -3959,17 +3969,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: respuestaModal.id_destinatario, moneda: this.MonedaParaTransferencia.id, solo_extranjeras: '1' } }).subscribe((data: any) => {
 
+
         if (data != '') {
 
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0].Id_Destinatario;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data[0].Nombre;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = data[0]['Cuentas'][0].Id_Destinatario_Cuenta;
 
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data[0]['Cuentas'];
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Moneda = this.MonedaParaTransferencia.id;
+          data[0]['id_destinatario_transferencia'] = { Nombre: data[0].Nombre, Id_Destinatario: data[0].Id_Destinatario }
+
+          this.AutoCompletarDestinatario(data[0], this.PosicionDestinatarioActivo, this.ListaDestinatarios, this.ListaDestinatarios[this.PosicionDestinatarioActivo]);
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].EditarVisible = true;
           this.PosicionDestinatarioActivo = '';
+
         } else {
 
           this.ShowSwal('error', 'Consulta Fallida', 'No se encontraron datos del destinatario que se insertó!');

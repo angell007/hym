@@ -763,7 +763,6 @@
                                     (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                     (blur)="validateInputDocumentRetard(destinatario.Numero_Documento_Destino, 'crear especial', i, destinatario)"
                                     required tag="5">
-                                  <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                 </div>
                               </div>
 
@@ -777,8 +776,7 @@
                               </div>
                               <div class="col-md-5">
                                 <div class="form-group">
-                                  <label class="transferencia font-size-18">Cuenta
-                                    {{destinatario.Id_Destinatario_Cuenta}}</label>
+                                  <label class="transferencia font-size-18">Cuenta</label>
                                   <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control font-size-18"
@@ -865,7 +863,8 @@
                                 <label class="transferencia font-size-18">Moneda de Transferencia
                                 </label>
                                 <label
-                                  class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label>
+                                  class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre
+                                  == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label>
                               </div>
 
                               <div class="form-group">
@@ -947,15 +946,16 @@
                             <div class="col-md-5">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">Nombre</label>
-                                <label class="font-size-18"
-                                  style="display:block;">{{TransferenciaModel.Nombre_Remitente == "" ? "Nombre Remitente" : TransferenciaModel.Nombre_Remitente}}</label>
+                                <label class="font-size-18" style="display:block;">{{TransferenciaModel.Nombre_Remitente
+                                  == "" ? "Nombre Remitente" : TransferenciaModel.Nombre_Remitente}}</label>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">Teléfono</label>
                                 <label class="font-size-18"
-                                  style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono Remitente" : TransferenciaModel.Telefono_Remitente}}</label>
+                                  style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono
+                                  Remitente" : TransferenciaModel.Telefono_Remitente}}</label>
                               </div>
                             </div>
                           </div>
@@ -1328,8 +1328,8 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="font-size-18">Nombre Completo</label>
-                              <label
-                                class="block-element font-size-18">{{GiroModel.Nombre_Remitente == '' ? "Nombre" : GiroModel.Nombre_Remitente}}</label>
+                              <label class="block-element font-size-18">{{GiroModel.Nombre_Remitente == '' ? "Nombre" :
+                                GiroModel.Nombre_Remitente}}</label>
 
                             </div>
                           </div>
@@ -1338,8 +1338,8 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="font-size-18">Teléfono</label>
-                              <label
-                                class="block-element font-size-18">{{GiroModel.Telefono_Remitente == '' ? "Telefono" : GiroModel.Telefono_Remitente}}</label>
+                              <label class="block-element font-size-18">{{GiroModel.Telefono_Remitente == '' ?
+                                "Telefono" : GiroModel.Telefono_Remitente}}</label>
 
                             </div>
                           </div>
@@ -1401,8 +1401,8 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="font-size-18">Nombre Completo</label>
-                              <label
-                                class="block-element font-size-18">{{GiroModel.Nombre_Destinatario == '' ? "Nombre" : GiroModel.Nombre_Destinatario}}</label>
+                              <label class="block-element font-size-18">{{GiroModel.Nombre_Destinatario == '' ? "Nombre"
+                                : GiroModel.Nombre_Destinatario}}</label>
 
                             </div>
                           </div>
@@ -1411,8 +1411,8 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="font-size-18">Teléfono</label>
-                              <label
-                                class="block-element font-size-18">{{GiroModel.Telefono_Destinatario == '' ? "Telefono" : GiroModel.Telefono_Destinatario}}</label>
+                              <label class="block-element font-size-18">{{GiroModel.Telefono_Destinatario == '' ?
+                                "Telefono" : GiroModel.Telefono_Destinatario}}</label>
 
                             </div>
                           </div>
@@ -1460,16 +1460,16 @@
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="font-size-18">Valor a Entregar</label>
-                          <label
-                            class="block-element font-size-18">{{GiroModel.Valor_Entrega == '' ? "0" : GiroModel.Valor_Entrega | customcurrency}}</label>
+                          <label class="block-element font-size-18">{{GiroModel.Valor_Entrega == '' ? "0" :
+                            GiroModel.Valor_Entrega | customcurrency}}</label>
 
                         </div>
                       </div>
                       <div class="col-md-2">
                         <div class="form-group">
                           <label class="font-size-18">Total Recibido</label>
-                          <label
-                            class="block-element font-size-18">{{GiroModel.Valor_Total == '' ? "0" : GiroModel.Valor_Total | customcurrency}}</label>
+                          <label class="block-element font-size-18">{{GiroModel.Valor_Total == '' ? "0" :
+                            GiroModel.Valor_Total | customcurrency}}</label>
 
                         </div>
                       </div>
@@ -2474,7 +2474,7 @@
             <td>{{ item.Fecha }}</td>
             <td>Tipo </td>
             <td colspan="3" style="text-align: center;">{{ item.Forma_Pago }} - {{ item.Tipo_Transferencia
-                            }} </td>
+              }} </td>
           </tr>
           <tr *ngFor="let item of EncabezadoRecibo">
             <td>Total Pesos</td>
@@ -2612,10 +2612,10 @@
               <label class="block-element">{{item.valor_entregado }}</label>
             </td>
             <td>
-              <label class="block-element">{{item.valor_recibido  }}</label>
+              <label class="block-element">{{item.valor_recibido }}</label>
             </td>
             <td>
-              <label class="block-element">{{item.observacion  }}</label>
+              <label class="block-element">{{item.observacion }}</label>
             </td>
           </tr>
         </tbody>
@@ -2712,7 +2712,7 @@
     <div class="row">
       <div class="col-md-10">
 
-        <h4>Devolucion Cliente {{  devCambio['Nombre'] }} Recibo {{devCambio['Codigo']}}</h4>
+        <h4>Devolucion Cliente {{ devCambio['Nombre'] }} Recibo {{devCambio['Codigo']}}</h4>
 
       </div>
     </div>

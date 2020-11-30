@@ -3,6 +3,7 @@ import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { SwalService } from '../../shared/services/swal/swal.service';
+import { param } from 'jquery';
 
 @Component({
   selector: 'app-funcionarioinformativecard',
@@ -37,7 +38,12 @@ export class FuncionarioinformativecardComponent implements OnInit {
   }
 
   Abrir(id) {
-    console.log('Abriendo');
+
+    const params = new FormData();
+    params.append('id', id)
+    this.client.post(this.globales.rutaNueva + 'cierre-caja/funcionario', params).subscribe((data: any) => {
+      console.log(data);
+    });
   }
 
   Cerrar(id) {

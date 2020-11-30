@@ -161,6 +161,7 @@ export class ModaldestinatarioComponent implements OnInit {
   GetTiposCuenta() {
     setTimeout(() => {
       this.TiposCuenta = this.generalService.getTiposCuenta();
+      console.log(this.TiposCuenta);
     }, 1000);
   }
 
@@ -326,6 +327,7 @@ export class ModaldestinatarioComponent implements OnInit {
 
     let p = { id_pais: this.DestinatarioModel.Id_Pais };
     this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
+      console.log(data);
       if (data.codigo == 'success') {
         this.TiposDocumento = data.query_data;
         if (!conservarTipoDocumento)
