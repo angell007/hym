@@ -9,7 +9,7 @@ import { TimerObservable } from 'rxjs/observable/TimerObservable';
 export class ConsolidadosService {
   public MonedasSistema: any = [];
   public user = JSON.parse(localStorage['User']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
   public SumatoriaTotales: any = [];
   public TotalesIngresosMonedas: any = [];
   public TotalesEgresosMonedas: any = [];

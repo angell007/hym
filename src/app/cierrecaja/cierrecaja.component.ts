@@ -28,7 +28,7 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios']; public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -256,7 +256,7 @@ export class CierrecajaComponent implements OnInit {
     montos[0].forEach((element, index) => {
       if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
         console.log(element['Monto'] < value);
-        if (parseFloat(element['Monto']) < parseFloat(value))  {
+        if (parseFloat(element['Monto']) < parseFloat(value)) {
           this.flagLimites = true
         }
       }

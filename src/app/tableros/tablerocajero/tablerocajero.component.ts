@@ -2311,19 +2311,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   SetMonedaTransferencia(value) {
     this._getMonedas();
-    console.log(this.Monedas);
-    // console.log(this.Monedas);
     this.MonedaParaTransferencia.id = value;
     this.TransferenciaModel.Moneda_Destino = value;
     this.SetMonedaDestinatarios(value);
-    // if (value != '') {         
-    //   this._actualizarCuentasDestinatarios();
-    // }else{
-    //   this._limpiarCuentasBancarias();
-    // }
+
 
     if (value != '') {
       this._actualizarCuentasDestinatarios();
+
+      console.log(this.Monedas);
+
       let c = this.Monedas.find(x => x.Id_Moneda == value);
       this.MonedaParaTransferencia.nombre = c.Nombre;
 
@@ -4298,6 +4295,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // });
 
     this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
+
     setTimeout(() => {
       this.SetMonedaTransferencia(this.TransferenciaModel.Moneda_Destino);
     }, 300);
@@ -4311,19 +4309,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._monedaService.getMonedas().subscribe((data: any) => {
       console.log(data);
       this.Monedas = data;
-      if (data.codigo == 'success') {
-      } else {
-        this.Monedas = [];
-      }
+      // if (data.codigo == 'success') {
+      // } else {
+      //   this.Monedas = [];
+      // }
     });
   }
 
   private _getMonedas() {
     this.MonedasTransferencia = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
-      console.log(data);
-      if (data.codigo == 'success') {
-        this.MonedasTransferencia = data.query_data;
+      if (data != null) {
+        this.MonedasTransferencia = data;
+        this.Monedas = data;
       } else {
         this.MonedasTransferencia = [];
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
