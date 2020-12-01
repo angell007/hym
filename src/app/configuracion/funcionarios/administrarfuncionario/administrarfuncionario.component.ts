@@ -106,8 +106,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
         }
       });
 
+      this.oficinas.push({ value: '', label: 'Todos' });
       // console.log( this.oficinas);
-      
+
     });
 
   }
@@ -229,8 +230,17 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let contacto_emergencia = this._generalService.normalize(JSON.stringify(this.ContactoEmergenciaModel));
     let permisos = this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
     let cuentas = this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
+
+    if (this.oficinas_dependientes.length > 0) {
+      this.oficinas_dependientes.forEach((element) => {
+        if (element == "") {
+          this.oficinas_dependientes = this.oficinas;
+        }
+      })
+    }
+
+
     let oficinas = this._generalService.normalize(JSON.stringify(this.oficinas_dependientes));
-    // console.log([cuentas, oficinas]);
 
     let datos = new FormData();
     datos.append("modelo", funcionario);
@@ -245,18 +255,19 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {
 
-        // console.log(['editar', response]);
+        console.log(['editar', response]);
 
-        // if (response.codigo == 'success') {
-        //   this._swalService.ShowMessage(response);
-        //   this.LimpiarModelo();
-        //   setTimeout(() => {
-        //     this.router.navigate(['/funcionarios']);
-        //   }, 500);
-        // } else {
-          
-        //   this._swalService.ShowMessage(response);
-        // }
+        if (response.codigo == 'success') {
+          this._swalService.ShowMessage(response);
+          this.LimpiarModelo();
+          setTimeout(() => {
+            this.router.navigate(['/funcionarios']);
+          }, 500);
+        } else {
+
+          this._swalService.ShowMessage(response);
+        }
+
       });
     } else {
       this._funcionarioService.saveFuncionario(datos).subscribe((response: any) => {
@@ -442,4 +453,14 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   Cargo_Dependencia() { }
 
+
+  public onSelectAll() {
+    if (this.oficinas_dependientes.length > 0) {
+      this.oficinas_dependientes.forEach((element) => {
+        if (element == "") {
+          this.oficinas_dependientes = [''];
+        }
+      })
+    }
+  }
 }

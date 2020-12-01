@@ -131,6 +131,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log(this.RemitenteModel);
+
     let modelo = this._generalService.normalize(JSON.stringify(this.RemitenteModel));
     let datos = new FormData();
     datos.append("modelo", modelo);

@@ -17,7 +17,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-md-4">
           <button (click)="AbrirModal('0')" class="btn btn-info btn-block mrg-top-10 btn-grande">
-            Nuevo dest. giro
+            Nuevo destinatario
           </button>
         </div>
       </div>
@@ -79,19 +79,17 @@
           <td class="custom-cell">
             <div class="text-center">
               <!-- <div ngbDropdown class="dropdown-primary"> -->
-                <!-- <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " -->
-                  <!-- type="button"><i class="ti-angle-down"></i></button> -->
-                <!-- <div ngbDropdownMenu> -->
-                  <a style="cursor: pointer;" class=""
-                    (click)="AbrirModal(dg.Documento_Destinatario)">
-                    <i class="ti-pencil text-warning"></i> </a>
-                  <a style="cursor: pointer;" class=""
-                    (confirm)="CambiarEstadoDestinatarioGiro(dg.Documento_Destinatario)"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                    <i
-                      [ngClass]="{'ti-trash text-danger':dg.Estado == 'Activo', 'ti-back-right text-success':dg.Estado == 'Inactivo'}"></i>
-                    {{dg.Estado == 'Activo' ? '' : ''}}</a>
-                <!-- </div> -->
+              <!-- <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " -->
+              <!-- type="button"><i class="ti-angle-down"></i></button> -->
+              <!-- <div ngbDropdownMenu> -->
+              <a style="cursor: pointer;" class="" (click)="AbrirModal(dg.Documento_Destinatario)">
+                <i class="ti-pencil text-warning"></i> </a>
+              <a style="cursor: pointer;" class="" (confirm)="CambiarEstadoDestinatarioGiro(dg.Documento_Destinatario)"
+                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                <i
+                  [ngClass]="{'ti-trash text-danger':dg.Estado == 'Activo', 'ti-back-right text-success':dg.Estado == 'Inactivo'}"></i>
+                {{dg.Estado == 'Activo' ? '' : ''}}</a>
+              <!-- </div> -->
               <!-- </div> -->
             </div>
           </td>

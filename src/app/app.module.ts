@@ -305,7 +305,8 @@ export const customCurrencyMaskConfig = {
             buttonsStyling: false,
             customClass: 'modal-content',
             confirmButtonClass: 'btn btn-outline-primary btn-rounded',
-            cancelButtonClass: 'btn btn-outline-danger btn-rounded'
+            cancelButtonClass: 'btn btn-outline-danger btn-rounded',
+            timer: 1500
         }),
         NgxMaskModule.forRoot(),
         NgxCurrencyModule.forRoot(customCurrencyMaskConfig),

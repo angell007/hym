@@ -12,39 +12,38 @@ import { TipodocumentoService } from '../../../shared/services/tiposdocumento/ti
 })
 export class TablatipodocumentoComponent implements OnInit {
 
-  public TipoDocumentos:Array<any> = [];
-  public TipoDocumentosPais:Array<any> = [];
-  public Paises:Array<any> = [];
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  
-  public AbrirModalTipoDocumento:Subject<any> = new Subject<any>();
-  
-  public Filtros:any = {
-    nombre:'',
-    pais_documento:'',
-    codigo:'',
-    pais:'',
-    estado:''
+  public TipoDocumentos: Array<any> = [];
+  public TipoDocumentosPais: Array<any> = [];
+  public Paises: Array<any> = [];
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+
+  public AbrirModalTipoDocumento: Subject<any> = new Subject<any>();
+
+  public Filtros: any = {
+    nombre: '',
+    pais_documento: '',
+    codigo: '',
+    pais: '',
+    estado: ''
   };
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _tipoDocumentoService:TipodocumentoService) 
-  {
-    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _tipoDocumentoService: TipodocumentoService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
     this.GetPaises();
   }
@@ -52,51 +51,51 @@ export class TablatipodocumentoComponent implements OnInit {
   ngOnInit() {
   }
 
-  GetPaises(){
+  GetPaises() {
     setTimeout(() => {
-      this.Paises = this._generalService.getPaises();  
+      this.Paises = this._generalService.getPaises();
     }, 1000);
   }
 
-  FiltrarDocumentosPais(idPais:string){
+  FiltrarDocumentosPais(idPais: string) {
     if (this.Filtros.pais_documento == '') {
       this.Filtros.codigo = '';
       this.TipoDocumentosPais = [];
       this.ConsultaFiltrada();
-    }else{
-      let p = {id_pais:this.Filtros.pais_documento};
-      this._tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data:any) => {
+    } else {
+      let p = { id_pais: this.Filtros.pais_documento };
+      this._tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
         if (data.codigo == 'success') {
-          this.TipoDocumentosPais = data.query_data;          
-        }else{
+          this.TipoDocumentosPais = data.query_data;
+        } else {
 
-          let toastObj = {textos:[data.titulo, 'No se encontraron tipos de documentos para '+this.GetNombrePais(idPais)], tipo:data.codigo, duracion:4000};
+          let toastObj = { textos: [data.titulo, 'No se encontraron tipos de documentos para ' + this.GetNombrePais(idPais)], tipo: data.codigo, duracion: 4000 };
           this._toastService.ShowToast(toastObj);
         }
       });
     }
   }
 
-  GetNombrePais(idPais):string{
+  GetNombrePais(idPais): string {
     if (this.Paises.length > 0) {
       return this.Paises.find(x => x.Id_Pais == idPais).Nombre;
-    }else{
+    } else {
       return '';
     }
   }
 
-  AbrirModal(idTipoDocumento:string){
+  AbrirModal(idTipoDocumento: string) {
     this.AbrirModalTipoDocumento.next(idTipoDocumento);
   }
 
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -120,43 +119,43 @@ export class TablatipodocumentoComponent implements OnInit {
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
-    var p = this.SetFiltros(paginacion);    
+    var p = this.SetFiltros(paginacion);
 
-    if(p === ''){
+    if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this._tipoDocumentoService.getListaTiposDocumento(p).subscribe((data:any) => {
+    this._tipoDocumentoService.getListaTiposDocumento(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TipoDocumentos = data.query_data;
         this.TotalItems = data.numReg;
-      }else{
+      } else {
         this.TipoDocumentos = [];
         this._swalService.ShowMessage(data);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      nombre:'',
-      pais_documento:'',
-      codigo:'',
-      pais:'',
-      estado:''
+      nombre: '',
+      pais_documento: '',
+      codigo: '',
+      pais: '',
+      estado: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -164,16 +163,16 @@ export class TablatipodocumentoComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoTipoDocumento(idTipoDocumento:string){
+  CambiarEstadoTipoDocumento(idTipoDocumento: string) {
     let datos = new FormData();
     datos.append("id_tipo_documento", idTipoDocumento);
-    this._tipoDocumentoService.cambiarEstadoTipoDocumento(datos).subscribe((data:any) => {
-      if (data.codigo == 'success') { 
+    this._tipoDocumentoService.cambiarEstadoTipoDocumento(datos).subscribe((data: any) => {
+      if (data.codigo == 'success') {
         this.ConsultaFiltrada();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
-      }else{
-        this._swalService.ShowMessage(data); 
+      } else {
+        this._swalService.ShowMessage(data);
       }
     });
   }

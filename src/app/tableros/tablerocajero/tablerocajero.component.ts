@@ -2319,9 +2319,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     if (value != '') {
       this._actualizarCuentasDestinatarios();
 
-      console.log(this.Monedas);
-
       let c = this.Monedas.find(x => x.Id_Moneda == value);
+
       this.MonedaParaTransferencia.nombre = c.Nombre;
 
       if (c.Nombre == 'Pesos') {
@@ -5246,7 +5245,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   AsignarDatosDestinatarioNuevo(id): boolean {
     this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatarios.php', { params: { id_destinatario: id, moneda: this.MonedaParaTransferencia.id } }).subscribe((data: any) => {
 
-
       if (data != '') {
 
         if (this.DestinatarioEditar) {
@@ -5282,18 +5280,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   AsignarDatosDestinatario(respuestaModal: any): void {
 
     if (respuestaModal.willdo == 'limpiar campo id dest') {
-      // this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = '';
+      this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = '';
     }
 
     else if (respuestaModal.willdo == 'actualizar') {
 
       this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: respuestaModal.id_destinatario, moneda: this.MonedaParaTransferencia.id, solo_extranjeras: '1' } }).subscribe((data: any) => {
 
+        console.log(this.ListaDestinatarios[this.PosicionDestinatarioActivo]);
+
+
         if (data != '') {
 
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0].Id_Destinatario;
-          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
+          // this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0].Id_Destinatario;
+          // this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data[0].Nombre;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
+          this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0];
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Id_Destinatario_Cuenta = data[0]['Cuentas'][0].Id_Destinatario_Cuenta;
 
           this.ListaDestinatarios[this.PosicionDestinatarioActivo].Cuentas = data[0]['Cuentas'];

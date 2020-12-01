@@ -476,8 +476,8 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     };
   }
 
-  AsignarPaises() {
-    this.Paises = this.globales.Paises;
+  async AsignarPaises() {
+    this.Paises = await this.globales.Paises;
     this.cargar = true;
     this.CargarVista();
   }

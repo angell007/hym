@@ -211,7 +211,7 @@
                                 <i class="ti-control-shuffle text-primary font-size-30"></i>
                             </span>
                             <div class="info">
-                                <b class="text-dark font-size-22">Recibos Transferencias</b>
+                                <b class="text-dark font-size-22">Recibos</b>
                                 <p class="no-mrg-btm ">A cuentas extranjeras</p>
                             </div>
                         </li>
@@ -427,7 +427,7 @@
                             <div class="row mrg-top-20" *ngIf="Recibe==='Transferencia'">
                                 <div class="col-md-12">
                                     <button class="btn btn-info btn-sm btn-block" [disabled]="formaPago.value==''" [swal]="{title : '¿Está seguro?', text: 'Se dispone a registrar la transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                                        (confirm)="GuardarTransferencia(FormTransferencia)">Guardar Transferencia</button>
+                                        (confirm)="GuardarTransferencia(FormTransferencia)">Guardar recibo</button>
                                 </div>
                             </div>
                             <div class="row mrg-top-20" *ngIf="Recibe==='Cliente'">

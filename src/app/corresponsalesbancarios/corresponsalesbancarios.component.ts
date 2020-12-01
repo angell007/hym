@@ -201,7 +201,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
 
   public CerrarModalVer() {
     this._limpiarModelo();
-    this.ModalEditarCorresponsal.hide();
+    this.ModalVerCorresponsal.hide();
   }
 
   private _limpiarModelo() {
