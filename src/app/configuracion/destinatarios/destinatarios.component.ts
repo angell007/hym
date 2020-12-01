@@ -551,9 +551,9 @@ export class DestinatariosComponent implements OnInit {
 
   AgregarOtraCuenta(){
     let longitudCuentas = this.Lista_Cuentas_Destinatario.length;
-    console.log(longitudCuentas);
-    console.log(this.SePuedeAgregarMasCuentas);
-    console.log(this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)]);
+    // console.log(longitudCuentas);
+    // console.log(this.SePuedeAgregarMasCuentas);
+    // console.log(this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)]);
     
 
     if (this.SePuedeAgregarMasCuentas && this.Lista_Cuentas_Destinatario[(longitudCuentas - 1)].Id_Tipo_Cuenta != '') {

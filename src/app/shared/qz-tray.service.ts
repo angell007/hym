@@ -42,6 +42,7 @@ export class QzTrayService {
   // Print data to chosen printer 
   printData(printer: string, data: any, copias: any): Observable<any> {
     // Create a default config for the found printer
+    qz.websocket.disconnect();
     const config = qz.configs.create(printer,{ copies: copias, margins: { top: 0, right: 0, bottom: 0.25, left: 0 }});
     return Observable.fromPromise(qz.websocket.connect().then(() => qz.print(config, data)))
       .map((anything: any) => anything)

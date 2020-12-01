@@ -39,7 +39,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
     private _monedaService: MonedaService,
     private _toastService: ToastService,
     public router: Router) {
-    console.log(this.volver);
+    // console.log(this.volver);
 
     // this.GetCuentasBancariasApertura();
     if (this.volver == 'No') {
@@ -93,7 +93,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public GetCuentasBancariasApertura() {
     this._cuentaBancariaService.GetCuentasBancariasApertura().subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
@@ -107,7 +107,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
     this._cuentaBancariaService.GetCuentasBancariasAperturaObservable(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
-        console.log(data.query_data);
+        // console.log(data.query_data);
       } else {
         this.CuentasBancarias = [];
       }
@@ -116,7 +116,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public ConsultarAperturaFuncionario() {
     this._cuentaBancariaService.GetAperturaFuncionario(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.apertura_activa) {
         //OBTENER LAS CUENTAS DE LA APERTURA ACTUAL
@@ -130,7 +130,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   private _getDiferencialMonedas() {
     this._monedaService.GetMaximaDiferenciaMonedas().subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.DiferencialMonedas = data.query_data;
@@ -141,7 +141,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   private _setCuentasSeleccionadasInicial() {
-    console.log(this.CuentasBancarias);
+    // console.log(this.CuentasBancarias);
 
     if (this.CuentasBancarias.length > 0) {
       this.CuentasBancarias.forEach(cta => {
@@ -253,7 +253,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       data.append('modulo', 'Tablero Consultor');
 
       this._cuentaBancariaService.AperturaCuentaBancaria(data).subscribe((d: any) => {
-        console.log(d);
+        // console.log(d);
         if (d.codigo == 'success') {
           this._swalService.ShowMessage(d);
           localStorage.setItem("Apertura_Consultor", d.id_apertura);
@@ -278,33 +278,33 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   public CerrarModal() {
-    console.log("cerrando modal");
+    // console.log("cerrando modal");
 
   }
 
   public Validardiferencia(posCuenta: number, valor: string, idMoneda: string) {
     valor = valor.replace(/\./g, '');
-    console.log([posCuenta, valor, idMoneda]);
+    // console.log([posCuenta, valor, idMoneda]);
 
     let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
     let p = { id_cuenta: id_cuenta };
     this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response: any) => {
-      console.log(response);
+      // console.log(response);
       if (response == '0') {
         this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
       } else {
         if (valor != '') {
           let valor_apertura = parseFloat(valor);
-          console.log(valor_apertura);
+          // console.log(valor_apertura);
           let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
           let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
 
           let topes = this._getTopesMoneda(idMoneda);
 
-          console.log(topes);
+          // console.log(topes);
 
           if (diferencia < -topes.maximo || diferencia > topes.maximo) {
-            this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los limites permitidos, no podra aperturas cuentas hasta que no se corrijan los valores de la misma!']);
+            this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los límites permitidos, no podra aperturar cuentas hasta que no se corrijan los valores de la misma!']);
             this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
             this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
             this._setCuentaDescuadre(id_cuenta);
@@ -332,7 +332,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   public CargarMovimientosAperturaAnterior() {
-    console.log("abriendo movimientos anteriores!");
+    // console.log("abriendo movimientos anteriores!");
 
   }
 
@@ -347,7 +347,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   public SiguientePaso() {
     localStorage.setItem("Volver_Apertura", "No");
-    console.log(this.CuentasDescuadradas);
+    // console.log(this.CuentasDescuadradas);
     if (this.CuentasDescuadradas.length > 0) {
       this.router.navigate(['/cuadrecuentas']);
       this.CuentasActualizadas.unsubscribe();
@@ -389,7 +389,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   private _setCuentasSeleccionadasStorage(time: number) {
-    console.log(this.CuentasBancariasSeleccionadas);
+    // console.log(this.CuentasBancariasSeleccionadas);
 
     setTimeout(() => {
       localStorage.setItem("Cuentas_Seleccionadas", JSON.stringify(this.CuentasBancariasSeleccionadas));

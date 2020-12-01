@@ -11,7 +11,7 @@
       <div class="side-nav" sideBar *ngIf="!OcultarCajero">
         <div class="side-nav-inner">
           <div class="side-nav-logo">
-            <a href="" [routerLink]="['/dashboard']">
+            <a href="" [routerLink]="['/tablero']">
               <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
             </a>
             <div class="mobile-toggle side-nav-toggle">
@@ -165,6 +165,9 @@
 =======
 
 >>>>>>> miercoles07
+                <li>
+                  <a href="" [routerLink]="['/motivos-cambios']" routerLinkActive="menu-link-active">Motivos de devolución</a>
+                </li>
                 <li>
                   <a href="" [routerLink]="['/cargo']" routerLinkActive="menu-link-active">Cargo</a>
                 </li>
@@ -323,7 +326,7 @@
 =======
 
             <ul class="nav-left ">
-              <li class=" d-flex justify-content-center h-100 hm-100 text-center " style="box-sizing: border-box;">
+              <li class=" d-flex justify-content-center h-100 hm-100  text-center " style="box-sizing: border-box;">
                 <!-- PERFIL -->
                 <!-- <a href="" class="dropdown-toggle" data-toggle="dropdown"> -->
                   <div class="text-center pr-2 pt-2 vl" >
@@ -335,7 +338,7 @@
                 <!-- </a> -->
               </li>
               <!-- //TODO: customizar este permiso  -->
-              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  ">
+              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  " class="mt-2 pt-1">
                 <div class="pl-2">
 >>>>>>> miercoles07
                   <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>

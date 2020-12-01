@@ -64,7 +64,7 @@ export class ModalservicioexternoComponent implements OnInit, OnDestroy {
   }
 
   GuardarServicioExterno(){
-    console.log(this.ServicioExternoModel);
+    // console.log(this.ServicioExternoModel);
 
     if (!this.ValidateBeforeSubmit()) {
       return;

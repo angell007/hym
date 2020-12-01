@@ -107,6 +107,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public MonedaCuentaConsultor: any = '';
   public sub = new Subscription();
   public filter: string = '';
+  public SubscriptionTimer1: Subscription;
+  public SubscriptionTimer2: Subscription;
 
 
   constructor(private http: HttpClient, public globales: Globales,
@@ -133,15 +135,18 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     })
 
     if (this.Funcionario.Id_Perfil == 4) {
-      this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
+      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
         .subscribe(() => {
           this.ConsultaFiltradaObservable(false, this.filter);
+          this.ActualizarIndicadores.emit()
+          // this.ConsultaFiltradaObservable(false, this.filter);
         });
-    }
-
-    this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+      }
+      
+      this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
         this.ConsultaFiltradaObservable(false, this.filter);
+        this.ActualizarIndicadores.emit()
       });
     // console.log(this.Funcionario.Id_Perfil);
 
@@ -152,6 +157,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.TransferenciasActualizadas != null) {
       this.TransferenciasActualizadas.unsubscribe();
     }
+    this.SubscriptionTimer1.unsubscribe();
+    this.SubscriptionTimer2.unsubscribe();
   }
 
   GetCuentasBancarias(idFuncionario: string) {
@@ -226,7 +233,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     let data = new FormData();
     data.append("id_transferencia", idTransferenciaDestinatario);
     this._transferenciaService.DesbloquearTransferencia(data).subscribe((response: any) => {
-      console.log(response);
+      // console.log(response);
     });
   }
 
@@ -386,14 +393,17 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     }
 
     // this.Cargando = true;
+    // this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', { params: p }).subscribe((data: any) => {
+
     this._transferenciaService.GetTransferenciasConsultorObservable(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 5000 };
-        this._toastService.ShowToast(toastObj);
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 5000 };
+        this.ShowSwal('info', data.titulo, data.mensaje);
+        // this._toastService.ShowToast(toastObj);
       }
 
       this.Cargando = false;
@@ -458,7 +468,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   public ActualizarValorCuentaBancaria() {
-    console.log("actualizando el valor real de la cuenta bancaria!");
+    // console.log("actualizando el valor real de la cuenta bancaria!");
 
   }
 
@@ -469,7 +479,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     } else {
       let p = { id_cuenta: idCuentaBancaria, id_apertura: this.Id_Apertura };
       this.cuentaService.GetValorActualizadoCuenta(p).subscribe((response: any) => {
-        console.log(response);
+        // console.log(response);
         this.ValorRealCuenta = parseInt(response.query_data);
         this.CodigoMonedaValorReal = response.codigo_moneda;
       });

@@ -59,8 +59,8 @@ export class TablabancosComponent implements OnInit {
 
   AsignarPaises(){      
     this.Paises = this.globales.Paises;
-    console.log(this.Paises);
-    console.log(this.globales.Paises);
+    // console.log(this.Paises);
+    // console.log(this.globales.Paises);
   }
 
   AbrirModal(idBanco:string){

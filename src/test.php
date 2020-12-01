@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $query_devueltas = "SELECT
     T.Id_Transferencia,
     T.Fecha,
@@ -36,3 +37,26 @@ $query_devueltas = "SELECT
 INNER JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
   INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
   INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
+=======
+<?php
+include_once('class.lista.php');
+include_once('class.complex.php');
+
+class Configuracion {
+    
+function Consecutivo($index){
+    $oItem = new complex('Configuracion','Id_Configuracion',1);
+    $nc = $oItem->getData();
+    
+    $oItem->$index=$oItem->$index+1;
+    $oItem->save();
+    $num_cotizacion=$nc[$index];
+    unset($oItem);
+    
+    $cod = $nc["Prefijo_".$index].sprintf("%05d", $num_cotizacion);
+    
+    return $cod;
+}    
+
+} 
+>>>>>>> development

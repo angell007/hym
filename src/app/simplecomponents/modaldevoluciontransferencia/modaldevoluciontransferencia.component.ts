@@ -38,7 +38,7 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       this.CodigoMoneda = data.codigo_moneda;
       this._setDatosModelo(data.transferencia);
       this.Id_Apertura_Consultor = data.id_apertura;
@@ -52,7 +52,7 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
 
   public GetMotivosDevolucion(){
     this._generalService.GetMotivosDevolucion().subscribe((response:any) => {
-      console.log(response);
+      // console.log(response);
       if (response.codigo == 'success') {
         this.MotivosDevolucion = response.query_data;
       }else{
@@ -65,28 +65,32 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
     this.DevolucionModel.Id_Pago_Transferencia = transferenciaModel.Id_Pago_Transfenecia;
     this.DevolucionModel.Id_Transferencia_Destinatario = transferenciaModel.Id_Transferencia_Destino;
     this.DevolucionModel.Valor = transferenciaModel.Valor_Pagado;
-    console.log(this.DevolucionModel);    
+    // console.log(this.DevolucionModel);    
   }
 
   RealizarDevolucion() {    
     this.DevolucionModel.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
-    console.log(this.DevolucionModel);
+    // console.log(this.DevolucionModel);
 
     let info = this._generalService.normalize(JSON.stringify(this.DevolucionModel));
     let datos = new FormData();
     datos.append("modelo", info);
     datos.append("id_apertura", this.Id_Apertura_Consultor);
     this._transferenciaService.DevolverTransferencia(datos).subscribe((response:any) => {
-      console.log(response);
+      // console.log(response);
       if (response.codigo == 'success') {
-        let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+        
+        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
         this.CerrarModal();
         this._actualizar.cardListing.next()
         this.RecargarPagos.emit();
       }else{
-        let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['warning', response.titulo, response.mensaje]);
+        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }

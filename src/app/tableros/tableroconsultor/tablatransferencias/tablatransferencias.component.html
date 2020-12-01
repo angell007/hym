@@ -106,7 +106,7 @@
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="text-align:right;cursor:pointer;">{{ts.Numero_Documento_Destino}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="cursor:pointer;">{{ts.Cuenta_Destino  | mask: '0000-0000-0000-0000'}}</td>
+                style="cursor:pointer;">{{ts.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000'}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="cursor:pointer;">{{ts.Destinatario}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
@@ -134,7 +134,7 @@
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">
                 {{t.Numero_Documento_Destino}}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell">
-                {{t.Cuenta_Destino  | mask: '0000-0000-0000-0000' }}</td>
+                {{t.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000' }}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Funcionario_Bloqueo}}</td>
               <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Estado}}</td>
@@ -262,7 +262,7 @@
           <div class="form-group">
             <label for="">Cuenta Destino</label>
             <label for=""
-              style="display:block;"><b>{{TransferenciaModel.Cuenta_Destino | mask: '0000-0000-0000-0000' }}</b></label>
+              style="display:block;"><b>{{TransferenciaModel.Cuenta_Destino | mask: '0000-0000-0000-0000-0000' }}</b></label>
           </div>
         </div>
         <div class="col-md-6">
@@ -271,7 +271,7 @@
             <input type="text" class="form-control form-control-sm" name="valor"
               [(ngModel)]="MovimientoBancoModel.Valor" style="text-align:right;" required currencyMask
               [options]="{ thousands: '.', decimal: ',' }">
-            <label for="" style="display:block;"><small>valor real {{  custom }}</small></label>
+            <label for="" style="display:block;"><small>valor real {{custom | currency:' '}}</small></label>
           </div>
         </div>
       </div>

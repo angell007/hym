@@ -158,7 +158,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     this.Id_Apertura = localStorage.getItem("Apertura_Consultor");
     this._getCuentasFuncionarioApertura();
     this._actualizar.cardListing.subscribe(() => {
-    this.CargarIndicadores();
+      this.CargarIndicadores();
     })
     // this.sub = this._TesCustomServiceService.subjec.subscribe((data) => {
     //   this.TransferenciasListar = data['query_data'];
@@ -177,7 +177,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   public ConsultarAperturaFuncionario() {
     this._cuentaBancariaService.GetAperturaFuncionario(this.Id_Funcionario).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (!data.apertura_activa) {
         this.AbrirCuentas.emit();
@@ -190,7 +190,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   private _getCuentasFuncionarioApertura() {
     this._cuentaBancariaService.GetCuentasFuncionarioApertura(this.Id_Apertura).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.CuentasSeleccionadas = data.query_data;
@@ -202,7 +202,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public AbrirModalAPerturaCuentas() {
-    console.log("abriendo modal apertura cuenta desde tablero");
+    // console.log("abriendo modal apertura cuenta desde tablero");
     this.AbrirModalAperturaCuenta.next();
   }
 
@@ -373,16 +373,19 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   CargarIndicadores() {
     this.http.get(this.globales.ruta + 'php/transferencias/indicadores_transferencias.php', { params: { id_funcionario: this.Id_Funcionario } }).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
         this.ChartData = [];
+        this.ChartData.push(this.Indicadores.Pendientes);
         this.ChartData.push(this.Indicadores.Realizadas);
         this.ChartData.push(this.Indicadores.Devueltas);
       } else {
         this.LimpiarIndicadores();
         this.ChartData = [];
+        this.Indicadores = { Pendientes: 0, Realizadas: 0, Devueltas: 0, Productividad: 0 };
+
       }
     });
   }
@@ -473,8 +476,8 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     };
   }
 
-  AsignarPaises() {
-    this.Paises = this.globales.Paises;
+  async AsignarPaises() {
+    this.Paises = await this.globales.Paises;
     this.cargar = true;
     this.CargarVista();
   }
@@ -625,7 +628,7 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public RecibirCuentasSeleccionadas(datos: any) {
-    console.log(datos);
+    // console.log(datos);
 
     this.CuentasSeleccionadas = datos.cuentas;
     this.Id_Apertura = datos.id_apertura;

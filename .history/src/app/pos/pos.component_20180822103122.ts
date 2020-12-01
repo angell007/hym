@@ -200,7 +200,7 @@ export class PosComponent implements OnInit {
     });
     this.http.get(this.globales.ruta + 'php/pos/lista_destinatarios.php').subscribe((data: any) => {
       this.Destinatarios = data;
-      console.log(this.Destinatarios);
+      // console.log(this.Destinatarios);
     });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
@@ -379,8 +379,8 @@ export class PosComponent implements OnInit {
   }
 
   NuevoDestinatario() {
-    console.log("INSIDE");
-    console.log(this.Envios);
+    // console.log("INSIDE");
+    // console.log(this.Envios);
 
     let agregar: boolean = true;
     let totalTransferencia = 0;
@@ -520,7 +520,7 @@ export class PosComponent implements OnInit {
     datos.append("datos", info);
     datos.append("destinatario", cuentas);
 
-    console.log(cuentas);
+    // console.log(cuentas);
 
     //console.log(destinatario);
   

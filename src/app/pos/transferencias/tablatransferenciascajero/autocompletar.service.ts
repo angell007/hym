@@ -69,7 +69,7 @@ export class AutocompletarService {
   ) {
 
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log('Iniciando servicio y user es : ', this.user);
+    // console.log('Iniciando servicio y user es : ', this.user);
     this.CargarTransferencias()
   }
   public filtroCustom: string;
@@ -124,8 +124,6 @@ export class AutocompletarService {
   CargarTransferencias() {
     this.RecibosTransferencia = [];
     console.log('Cargando transferencias ');
-
-    // https://softwarehym.com/back/php/transferencias/get_recibos_transferencias_funcionario.php?id_funcionario=1524854&pag=3&tam=10
 
     this.http.get(this.globales.ruta + 'php/transferencias/get_recibos_transferencias_funcionario.php', { params: { id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       console.log('tranferencias cargadas', data);

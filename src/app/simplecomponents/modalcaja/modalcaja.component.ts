@@ -112,8 +112,10 @@ export class ModalcajaComponent implements OnInit {
             this.ActualizarTabla.emit();
             this.CerrarModal();
             this.Editar = false;
-            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            this._toastService.ShowToast(toastObj);
+            this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
           } else {
             this._swalService.ShowMessage(data);
           }
@@ -129,8 +131,10 @@ export class ModalcajaComponent implements OnInit {
           if (data.codigo == 'success') {
             this.ActualizarTabla.emit();
             this.CerrarModal();
-            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            this._toastService.ShowToast(toastObj);
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
+            this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
           } else {
             this._swalService.ShowMessage(data);
           }

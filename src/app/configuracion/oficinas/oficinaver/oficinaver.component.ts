@@ -24,7 +24,7 @@ export class OficinaverComponent implements OnInit {
   ngOnInit() {
 
     this.http.get(this.globales.ruta + '/php/oficinas/ver_oficina.php', { params: { id: this.id } }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.oficina = data;
     });
   }

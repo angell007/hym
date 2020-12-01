@@ -57,7 +57,7 @@ export class CreardestinatarioComponent implements OnInit {
     this.AsignarDocumentosNacionales();
     this.AsignarTiposCuenta();
 
-    console.log(this.id_destinatario);
+    // console.log(this.id_destinatario);
     
   }
 

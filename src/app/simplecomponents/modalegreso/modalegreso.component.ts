@@ -12,12 +12,13 @@ import { TerceroService } from '../../shared/services/tercero/tercero.service';
 import { Funcionario } from '../../shared/funcionario/funcionario.model';
 import { NormailizerService } from '../../normailizer.service';
 import { providers } from 'ng2-toasty';
+import { ConsolidadosService } from '../../customservices/consolidados.service';
 
 @Component({
   selector: 'app-modalegreso',
   templateUrl: './modalegreso.component.html',
   styleUrls: ['./modalegreso.component.scss', '../../../style.scss'],
-  providers:[NormailizerService]
+  providers: [NormailizerService]
 })
 export class ModalegresoComponent implements OnInit {
 
@@ -34,6 +35,7 @@ export class ModalegresoComponent implements OnInit {
   public MensajeGuardar: string = 'Se dispone a guardar este egreso';
   public Funcionario: any = JSON.parse(localStorage.getItem('User'));
   public coinDefault: string;
+  public flag: boolean;
 
   public EgresoModel: EgresoModel = new EgresoModel();
 
@@ -53,7 +55,9 @@ export class ModalegresoComponent implements OnInit {
     private _grupoService: GrupoterceroService,
     private _monedaService: MonedaService,
     private _terceroService: TerceroService,
-    private _normalizeService: NormailizerService
+    private _normalizeService: NormailizerService,
+    private _consolidadoService: ConsolidadosService
+
   ) {
     this.GetGrupos();
 
@@ -159,10 +163,25 @@ export class ModalegresoComponent implements OnInit {
       return;
     }
 
+
+    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+      if (this.EgresoModel.Id_Moneda == element[3]) {
+        if (parseFloat(element[1]) < parseFloat(this.EgresoModel.Valor)) {
+          this.flag = true;
+        }
+      }
+    });
+
+
+    if (this.flag) {
+      this.flag = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
+
     this.EgresoModel.Fecha = this._generalService.FechaActual;
     this.EgresoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
     this.EgresoModel = this._generalService.limpiarString(this.EgresoModel);
-    // console.log(this.EgresoModel);
 
     let info = this._normalizeService.normalize(JSON.stringify(this.EgresoModel));
 
@@ -173,7 +192,7 @@ export class ModalegresoComponent implements OnInit {
     if (this.Editar) {
       this._EgresoService.editEgreso(datos)
         .catch(error => {
-          //console.log('An error occurred:', error);
+          console.log('An error occurred:', error);
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
@@ -183,23 +202,14 @@ export class ModalegresoComponent implements OnInit {
             this.CerrarModal();
             this.Editar = false;
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
-
-            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            // this._toastService.ShowToast(toastObj);
           } else {
             this.ShowSwal('warning', 'Alerta', data);
-            // this._swalService.ShowMessage(data);
           }
         });
     } else {
       this._EgresoService.saveEgreso(datos)
         .catch(error => {
-          //console.log('An error occurred:', error);
-          // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-          // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un error!');
-
-
           return this.handleError(error);
         })
         .subscribe((data: any) => {
@@ -207,11 +217,8 @@ export class ModalegresoComponent implements OnInit {
             this.ActualizarTabla.emit();
             this.CerrarModal();
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
-            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-            // this._toastService.ShowToast(toastObj);
           } else {
             this.ShowSwal('warning', 'Alerta', data);
-            // this._swalService.ShowMessage(data);
           }
         });
     }

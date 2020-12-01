@@ -4,7 +4,7 @@ import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
-export class TrasladofilterService  {
+export class TrasladofilterService {
 
   public RutaGifCargando: string;
   public CargandoGiros: boolean = false;
@@ -89,7 +89,7 @@ export class TrasladofilterService  {
 
   CargarCambiosDiarios() {
     this.Cambios = [];
-    this.http.get(this.globales.ruta + 'php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+    this.http.get(this.globales.rutaNueva + 'cambios', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;
         this.SetInformacionPaginacion(data.query_data)

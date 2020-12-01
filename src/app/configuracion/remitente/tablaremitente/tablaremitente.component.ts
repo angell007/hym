@@ -122,8 +122,11 @@ export class TablaremitenteComponent implements OnInit {
     this._remitenteService.cambiarEstadoRemitente(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastyService.ShowToast(toastObj);
+
+        this.swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente!']);
+        
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastyService.ShowToast(toastObj);
       }else{
         this.swalService.ShowMessage(data); 
       }

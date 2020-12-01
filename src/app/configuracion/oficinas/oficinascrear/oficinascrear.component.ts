@@ -46,7 +46,7 @@ export class OficinascrearComponent implements OnInit {
     let moneda = JSON.stringify(this.CamposMoneda);
     let datos = new FormData();
     //this.OcultarFormulario(modal);
-    console.log(info);
+    // console.log(info);
     datos.append("modulo", 'Oficina');
     datos.append("datos", info);
     datos.append("monedas", moneda);

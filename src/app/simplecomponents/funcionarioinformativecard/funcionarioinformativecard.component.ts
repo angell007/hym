@@ -24,11 +24,16 @@ export class FuncionarioinformativecardComponent implements OnInit {
     this.SesionAbierta = this.Funcionario.Hora_Cierre == '00:00:00' ? true : false;
   }
 
-  AbrirCierreFuncionario() {
+  AbrirCierreFuncionario(funcionario: any) {
+
+    let user = funcionario;
+    // console.log(user);
+    
     if (this.Fecha == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'La fecha para la consulta del cierre esta vacia, contacte con el administrador del sistema!']);
     } else {
-      this.router.navigate(['/consolidado', this.Funcionario.Identificacion_Funcionario]);
+      this.router.navigate(['/consolidado', user]);
     }
   }
+
 }

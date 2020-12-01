@@ -384,9 +384,8 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label class="floating-label">Oficinas dependientes</label>
-                        <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="oficinas"
-                          name="Oficinas_Asociadas" [(ngModel)]="oficinas_dependientes" [loading]="true"
-                          [multiple]="true"></ng-select>
+                        <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="oficinas" (click)="onSelectAll()"
+                          name="Oficinas_Asociadas" [(ngModel)]="oficinas_dependientes" [multiple]="true"></ng-select>
                       </div>
                     </div>
                   </div>

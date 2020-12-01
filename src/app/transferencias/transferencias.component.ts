@@ -100,8 +100,8 @@ export class TransferenciasComponent implements OnInit {
           this.DatosDevolucion = {Fecha:'',Motivo_Devolucion:''};
           this.ShowDatosDevolucion = false;
         }        
-        console.log(this.ShowDatosPago);
-        console.log(this.ShowDatosDevolucion);
+        // console.log(this.ShowDatosPago);
+        // console.log(this.ShowDatosDevolucion);
         this.ModalVerTransferencia.show();
       }else{
 

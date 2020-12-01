@@ -114,7 +114,7 @@ export class TablatransferenciasrealizadasComponent implements OnInit, OnChanges
   }
 
   RealizarDevolucion() {    
-    console.log(this.DevolucionModel);
+    // console.log(this.DevolucionModel);
 
     let info = this.generalService.normalize(JSON.stringify(this.DevolucionModel));
     let datos = new FormData();

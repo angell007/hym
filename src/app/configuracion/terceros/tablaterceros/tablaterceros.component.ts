@@ -163,7 +163,7 @@ export class TablatercerosComponent implements OnInit {
     this.terceroService.getTercero(idTercero).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TerceroModel = data.query_data;
-        console.log(this.TerceroModel.Id_Tercero);
+        // console.log(this.TerceroModel.Id_Tercero);
         this.IdTerceroOld = this.TerceroModel.Id_Tercero
         this.GetMunicipiosList(this.TerceroModel.Id_Departamento);
         this.ModalTercero.show();
@@ -275,7 +275,7 @@ export class TablatercerosComponent implements OnInit {
   VerificarIdentificacion() {
     let id = this.TerceroModel.Id_Tercero;
     this.generalService.checkIdentificacion(id).subscribe((data: any) => {
-      console.log(['Data verificacion de documento', data]);
+      // console.log(['Data verificacion de documento', data]);
       if (data.codigo != 'success') {
         this.TerceroModel.Id_Tercero = '';
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
@@ -299,7 +299,7 @@ export class TablatercerosComponent implements OnInit {
 
     if (this.Edicion) {
       this.terceroService.customEditTercero(datos).subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (data.codigo == 'success') {
           let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
           this._toastService.ShowToast(toastObj);

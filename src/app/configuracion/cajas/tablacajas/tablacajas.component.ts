@@ -59,8 +59,12 @@ export class TablacajasComponent implements OnInit {
       }else{
 
         this.Oficinas = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['warning', 'Alerta', 'No se has podido encontrar Cajas']);
+
+
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
+
       }
     });
   }
@@ -149,8 +153,9 @@ export class TablacajasComponent implements OnInit {
     this._cajaService.cambiarEstadoCaja(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }else{
         this._swalService.ShowMessage(data); 
       }

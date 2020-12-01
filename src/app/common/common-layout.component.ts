@@ -167,7 +167,7 @@ export class CommonLayoutComponent implements OnInit {
         public qz: QzTrayService,
         private http: HttpClient,
         private globales: Globales,
-        private toastyService: ToastyService,
+        public toastyService: ToastyService,
         private toastyConfig: ToastyConfig,
         private cajaService: CajaService,
         private swalService: SwalService,
@@ -217,7 +217,7 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas();
-        console.log(localStorage);
+        // console.log(localStorage);
 
         this.SetOficina();
         this.SetCaja();
@@ -918,8 +918,8 @@ export class CommonLayoutComponent implements OnInit {
         });
     }
 
-    AsignarPaises() {
-        this.Paises = this.globales.Paises;
+    async AsignarPaises() {
+        this.Paises = await this.globales.Paises;
     }
 
     GuardarOficinaCaja() {
@@ -983,12 +983,13 @@ export class CommonLayoutComponent implements OnInit {
         }
 
         switch (tipo) {
-            case 'default': this.toastyService.default(toastOptions); break;
-            case 'info': this.toastyService.info(toastOptions); break;
-            case 'success': this.toastyService.success(toastOptions); break;
-            case 'wait': this.toastyService.wait(toastOptions); break;
-            case 'error': this.toastyService.error(toastOptions); break;
-            case 'warning': this.toastyService.warning(toastOptions); break;
+            // case 'default': this.toastyService.default(toastOptions); break;
+            // case 'info': this.toastyService.info(toastOptions); break;
+            // case 'success': this.toastyService.success(toastOptions); break;
+            // case 'wait': this.toastyService.wait(toastOptions); break;
+            // case 'error': this.toastyService.error(toastOptions); break;
+            // case 'warning': this.toastyService.warning(toastOptions); break;
+            // default : console.log(tipo); break;
         }
     }
 
@@ -1001,9 +1002,21 @@ export class CommonLayoutComponent implements OnInit {
 
     SetNombreOficina(idOficina: string) {
 
+        localStorage.removeItem('monedaDefault');
+
         if (this.Oficinas.length > 0) {
             let oficinaObj = this.Oficinas.find(x => x.Id_Oficina == idOficina);
             this.NombreOficina = oficinaObj.Nombre;
+
+            this.http.get(this.globales.ruta + 'php/oficinas/get_montos.php', { params: { id_oficina: oficinaObj.Id_Oficina } }).subscribe((data: any) => {
+                localStorage.setItem('Montos', JSON.stringify(data.query_data));
+            });
+
+            this.globales.Monedas.forEach(element => {
+                if (element.MDefault == '1') {
+                    localStorage.setItem('monedaDefault', JSON.stringify(element));
+                }
+            });
         }
     }
 
@@ -1070,8 +1083,21 @@ export class CommonLayoutComponent implements OnInit {
                 console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
+
+                        // console.log(data);
+
+                        // if (d.limites.query_data.length > 0) {
+                        //     this.MonedasSistema.forEach((element: any, index: number) => {
+                        //       d.limites.query_data.forEach((element2: any) => {
+                        //         if (element.Id_Moneda == element2.Id_Moneda) {
+                        //           this.OficinaModel[element.Nombre] = element2.Monto
+                        //         }
+                        //       })
+                        //     });
+                        //   }
+
                         if (data.mensaje == 'Se han encontrado registros!') {
-                            console.log(data.query_data.Id_Oficina)
+                            // console.log(data.query_data.Id_Oficina)
                             this.oficina_seleccionada = data.query_data.Id_Oficina;
                             this.caja_seleccionada = data.query_data.Id_Caja;
 
@@ -1085,10 +1111,7 @@ export class CommonLayoutComponent implements OnInit {
                             setTimeout(() => {
                                 this.salir();
                             }, 10000);
-
                         }
-
-
                     });
                     //this.modalOficinaCaja.show();
                 } else {

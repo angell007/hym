@@ -73,6 +73,8 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
 
       if (data.id_destinatario != "0" && data.accion == 'editar') {
@@ -140,18 +142,19 @@ export class ModaldestinatarioComponent implements OnInit {
   }
   // Solo para iniciar cuando se abre por primera vez //TODO se carga por defecto venezuela en identificacion
   /**-----------------------------------------------------------------------------------------------*/
+
   async GetPaises() {
-
-    this.Paises = await this.generalService.getPaises();
-    let fullPais = await this.Paises.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
-    this.paisDefault = fullPais.Id_Pais;
-    this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+    await this.generalService.getPaises().then((result) => {
+      this.Paises = result;
+      let fullPais = result.find((pais: { Nombre: string; }) => pais.Nombre == 'Venezuela');
+      this.paisDefault = fullPais.Id_Pais;
+      this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
+    }).catch((err) => {
+      console.log(err);
+    });
     this.GetBancosPais(this.rowDefault.fila);
-
-
     this.FiltrarDatosNacionalidad();
     this.GetTiposCuenta();
-
   }
   /**-----------------------------------------------------------------------------------------------*/
 
@@ -196,6 +199,7 @@ export class ModaldestinatarioComponent implements OnInit {
     data.append('modelo', modelo);
 
     if (this.Editar) {
+
       this.destinatarioService.editDestinatario(data)
         .catch(error => {
           this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
@@ -223,12 +227,14 @@ export class ModaldestinatarioComponent implements OnInit {
           this.swalService.ShowMessage(data);
         });
     } else {
+
       this.destinatarioService.saveDestinatario(data)
         .catch(error => {
           this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
         .subscribe((data: any) => {
+
           if (data.codigo == 'success') {
             switch (this.accion) {
               case 'crear':
@@ -501,7 +507,7 @@ export class ModaldestinatarioComponent implements OnInit {
               // Se usa variable auxiliar para formatear la longitud del input 
               let aux = nroCuenta.replace(/-/g, '')
               let longitud = aux.length;
-              console.log(longitud);
+              // console.log(longitud);
 
 
               if (longitud != parseInt(countryObject.Cantidad_Digitos_Cuenta)) {

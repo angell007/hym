@@ -113,7 +113,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this.Cargando = true;
     this._corresponsalService.GetRegistrosDiarios(p).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       if (data.codigo == 'success') {
         this.RegistrosCorresponsales = data.query_data;

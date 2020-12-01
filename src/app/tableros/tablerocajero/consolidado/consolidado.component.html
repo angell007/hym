@@ -31,10 +31,12 @@
           <ng-container *ngFor="let dato of datos; index as i;">
             <div role="tabpanel" id="default-tab-{{i}}"
               [ngClass]="{'active':  i == 0, 'tab-pane fade in  card-body ': true }">
-              <h5> {{ dato.Nombre }} Saldo inicial <span
-                  class="font-size-15 font-weight-bold">{{ValoresMonedasApertura2[i].Codigo}}
-                  {{ ValoresMonedasApertura2[i].Valor_Moneda_Apertura}}
-                </span> </h5>
+              <h5> {{ dato.Nombre }} Saldo inicial
+                <span
+                  class="font-size-15 font-weight-bold">{{(ValoresMonedasApertura2[i]) ? ValoresMonedasApertura2[i]['codigo'] : '' }}
+                  {{ (ValoresMonedasApertura2[i]) ? ValoresMonedasApertura2[i]['Valor_Moneda_Apertura'] : '' }}
+                </span>
+              </h5>
               <table class="table table-striped table-sm table-bordered">
                 <thead class="rounded">
                   <tr>

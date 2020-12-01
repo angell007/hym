@@ -15,55 +15,54 @@ import { RemitenteGiroModel } from '../../Modelos/RemitenteGiroModel';
 })
 export class ModalremitentegiroComponent implements OnInit {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  
-  @ViewChild('ModalRemitenteGiro') ModalRemitenteGiro:any;
+  @Input() AbrirModal: Observable<any> = new Observable();
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
-  public TiposDocumento:Array<any> = [];
-  public openSubscription:any;
-  public Editar:boolean = false;
-  public MensajeGuardar:string = 'Se dispone a guardar este remitente';
+  @ViewChild('ModalRemitenteGiro') ModalRemitenteGiro: any;
 
-  public RemitenteModel:RemitenteGiroModel = new RemitenteGiroModel();
+  public TiposDocumento: Array<any> = [];
+  public openSubscription: any;
+  public Editar: boolean = false;
+  public MensajeGuardar: string = 'Se dispone a guardar este remitente';
+
+  public RemitenteModel: RemitenteGiroModel = new RemitenteGiroModel();
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _validacionService:ValidacionService,
-              private _toastService:ToastService,
-              private _remitenteService:RemitentegiroService,
-              private _tipoDocumentoService:TipodocumentoService) 
-  {
+    private _swalService: SwalService,
+    private _validacionService: ValidacionService,
+    private _toastService: ToastService,
+    private _remitenteService: RemitentegiroService,
+    private _tipoDocumentoService: TipodocumentoService) {
     this.GetTiposDocumento();
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:string) => {
-      
+    this.openSubscription = this.AbrirModal.subscribe((data: string) => {
+
       if (data != "0") {
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
-        let p = {id_remitente:data};
-        
-        this._remitenteService.getRemitente(p).subscribe((d:any) => {
+        let p = { id_remitente: data };
+
+        this._remitenteService.getRemitente(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
-            this.ModalRemitenteGiro.show();  
-          }else{
-            
+            this.ModalRemitenteGiro.show();
+          } else {
+
             this._swalService.ShowMessage(d);
           }
-          
+
         });
-      }else{
+      } else {
         this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
         this.ModalRemitenteGiro.show();
       }
     });
   }
-  
-  ngOnDestroy(){    
+
+  ngOnDestroy() {
     if (this.openSubscription != undefined) {
       this.openSubscription.unsubscribe();
     }
@@ -71,95 +70,107 @@ export class ModalremitentegiroComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetTiposDocumento(){
-    this._tipoDocumentoService.getTiposDocumentosNacionales().subscribe((data:any) => {
+  GetTiposDocumento() {
+    this._tipoDocumentoService.getTiposDocumentosNacionales().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TiposDocumento = data.query_data;
-      }else{
-
+      } else {
         this.TiposDocumento = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
+        this._swalService.ShowMessage(['warning', data.titulo, data.mensaje]);
+
+        // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  VerificarIdentificacion(){
+  VerificarIdentificacion() {
     if (this.RemitenteModel.Documento_Remitente != '') {
-      let p = {id:this.RemitenteModel.Documento_Remitente};
-      this._remitenteService.checkIdentificacionRemitente(p).subscribe((data:any) => {
+      let p = { id: this.RemitenteModel.Documento_Remitente };
+      this._remitenteService.checkIdentificacionRemitente(p).subscribe((data: any) => {
         if (data.codigo != 'success') {
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj); 
+          this._swalService.ShowMessage(['info', data.titulo, data.mensaje]);
+
+          // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+          // this._toastService.ShowToast(toastObj); 
           this.RemitenteModel.Documento_Remitente = '';
         }
       });
     }
   }
 
-  GuardarRemitenteGiro(){
+  GuardarRemitenteGiro() {
 
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
 
     //console.log(this.RemitenteModel);
-    
+
     this.RemitenteModel = this._generalService.limpiarString(this.RemitenteModel);
-    
+
     let info = this._generalService.normalize(JSON.stringify(this.RemitenteModel));
     let datos = new FormData();
-    datos.append("modelo",info);
+    datos.append("modelo", info);
 
     if (this.Editar) {
+
+      console.log(this.Editar);
+
       this._remitenteService.editRemitente(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Editar = false;
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }else{
+        .catch(error => {
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            this.Editar = false;
+
+            this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
+          } else {
+            this._swalService.ShowMessage(data);
+          }
+        });
+    } else {
       this._remitenteService.saveRemitente(datos)
-      .catch(error => { 
-        //console.log('An error occurred:', error);
-        this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastService.ShowToast(toastObj);
-        }else{
-          this._swalService.ShowMessage(data);
-        }
-      });
-    }    
+        .catch(error => {
+          //console.log('An error occurred:', error);
+          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+
+            this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
+
+            // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            // this._toastService.ShowToast(toastObj);
+          } else {
+            this._swalService.ShowMessage(data);
+          }
+        });
+    }
   }
 
-  ValidateBeforeSubmit():boolean{
-    
+  ValidateBeforeSubmit(): boolean {
+
     if (!this._validacionService.validateString(this.RemitenteModel.Documento_Remitente, 'Documento remitente')) {
       return false;
-    }else if (!this._validacionService.validateString(this.RemitenteModel.Nombre_Remitente, 'Nombre Remitente')) {
+    } else if (!this._validacionService.validateString(this.RemitenteModel.Nombre_Remitente, 'Nombre Remitente')) {
       return false;
-    }else if (!this._validacionService.validateNumber(this.RemitenteModel.Id_Tipo_Documento, 'Tipo Documento')) {
+    } else if (!this._validacionService.validateNumber(this.RemitenteModel.Id_Tipo_Documento, 'Tipo Documento')) {
       return false;
-    }else if (!this._validacionService.validateString(this.RemitenteModel.Telefono_Remitente, 'Telefono Remitente')) {
+    } else if (!this._validacionService.validateString(this.RemitenteModel.Telefono_Remitente, 'Telefono Remitente')) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -168,12 +179,12 @@ export class ModalremitentegiroComponent implements OnInit {
     return Observable.throw(error);
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalRemitenteGiro.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.RemitenteModel = new RemitenteGiroModel();
   }
 

@@ -1,6 +1,6 @@
 <app-modal-basic [dialogClass]="'modal-lg'" #ModalTraslado>
   <div class="app-modal-header">
-    <h4 class="modal-title">Traslado</h4>
+    <h4 class="modal-title">Datos otro Traslado</h4>
     <button type="button" class="close basic-close" (click)="CerrarModal()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -57,7 +57,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Moneda</label>
-            <select id="origen" name="Moneda" class="form-control" [(ngModel)]="TrasladoModel.Moneda" required>
+            <select id="origen"name="Moneda" class="form-control" [(ngModel)]="TrasladoModel.Moneda"
+              required  (ngModelChange)="settearMoneda()" >
               <option value="" selected>Seleccione</option>
               <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
             </select>
@@ -65,9 +66,9 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label>Valor</label>
+            <label>Valor en {{Mymoneda}}</label>
             <input type="text" name="Valor" class="form-control" [(ngModel)]="TrasladoModel.Valor" placeholder="Valor"
-              required currencyMask  [options]="{ thousands: '.', decimal: ',' }">
+              required currencyMask [options]="{ thousands: '.', decimal: ',' }">
           </div>
         </div>
       </div>

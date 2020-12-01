@@ -128,7 +128,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
     this.Cargando = true;
     this._transferenciaService.getRecibosTransferenciasFuncionario2(p).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
@@ -154,9 +154,9 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -181,7 +181,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
     let datos = new FormData();
 
     let info = this._normalizeService.normalize(JSON.stringify(this.MotivoAnulacion));
-    console.log(info);
+    // console.log(info);
 
     datos.append("id_transferencia", this.Id_Transferencia_Anular);
     datos.append("motivo_anulacion", info);

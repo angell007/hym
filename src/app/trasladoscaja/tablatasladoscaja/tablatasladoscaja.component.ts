@@ -259,7 +259,7 @@ export class TablatasladoscajaComponent implements OnInit {
   }
 
   CompletarOrigen(value){
-    console.log(value);
+    // console.log(value);
     if (typeof(value) == 'object') {
       this.Filtros.origen =  value.Identificacion_Funcionario;      
       this.ConsultaFiltrada();
@@ -273,7 +273,7 @@ export class TablatasladoscajaComponent implements OnInit {
   }
 
   CompletarDestino(value){
-    console.log(value);
+    // console.log(value);
     
     if (typeof(value) == 'object') {
       this.Filtros.destino = value.Identificacion_Funcionario;

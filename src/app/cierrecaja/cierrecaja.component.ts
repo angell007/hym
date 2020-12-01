@@ -28,7 +28,7 @@ export class CierrecajaComponent implements OnInit {
   public Funcionario = JSON.parse(localStorage['User']);
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
-  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
+  public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios']; public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -53,6 +53,8 @@ export class CierrecajaComponent implements OnInit {
   public MostrarTotal: any = [];
   public InhabilitarBotonGuardar = true;
   public ValoresMonedasApertura: any = [];
+  public sizeColunm: any = 0 + '%';
+  public flagLimites: boolean = false;
 
   constructor(public globales: Globales, private cliente: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService, private _funcionarioService: NuevofuncionarioService) {
   }
@@ -61,7 +63,12 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
+<<<<<<< HEAD
     console.log(this.solo_ver);
+=======
+    // console.log(this.solo_ver);
+
+>>>>>>> development
   }
 
   ConsultarNombreFuncionario() {
@@ -84,14 +91,21 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
+<<<<<<< HEAD
     this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
       //Total ingresos 
+=======
+    this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
+
+>>>>>>> development
       this.MonedasSistema = data.monedas;
+      const divi = (90 / this.MonedasSistema.length)
+      this.sizeColunm = divi + '%'
+
       let t = data.totales_ingresos_egresos;
 
 
       for (const k in t) {
-
         let arr = t[k];
         this.Totales[k] = arr;
 
@@ -160,6 +174,10 @@ export class CierrecajaComponent implements OnInit {
         this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
       });
 
+<<<<<<< HEAD
+=======
+      // console.log(this.MostrarTotal);
+>>>>>>> development
 
       this.MonedasSistema.forEach((m, i) => {
         let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
@@ -254,6 +272,22 @@ export class CierrecajaComponent implements OnInit {
   }
 
   CalcularDiferencia(value, pos) {
+    let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
+    montos[0].forEach((element, index) => {
+      if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
+        console.log(element['Monto'] < value);
+        if (parseFloat(element['Monto']) < parseFloat(value)) {
+          this.flagLimites = true
+        }
+      }
+    });
+
+    if (this.flagLimites) {
+      this.flagLimites = false;
+      this.ShowSwal('warning', 'Alerta', 'La cantidad digitada supera los limites para esta oficina');
+      this.Diferencias[pos].Diferencia = -1;
+      return false;
+    }
 
     if (value == '') {
       this.Diferencias[pos].Diferencia = 0;
@@ -263,8 +297,13 @@ export class CierrecajaComponent implements OnInit {
     }
 
     let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
-
     let entregar = total_entregar;
+
+
+<<<<<<< HEAD
+    let entregar = total_entregar;
+=======
+>>>>>>> development
     let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }
@@ -303,7 +342,7 @@ export class CierrecajaComponent implements OnInit {
 
   AsignarFieldsDisabled() {
     this.TotalRestaIngresosEgresos.forEach(valor => {
-      console.log(valor);
+      // console.log(valor);
 
       if (valor == 0 || valor == '') {
         this.FieldsDisabled.push(true);
@@ -312,7 +351,7 @@ export class CierrecajaComponent implements OnInit {
       }
     });
 
-    console.log(this.FieldsDisabled);
+    // console.log(this.FieldsDisabled);
   }
 
   InhabilitarBoton() {
@@ -331,7 +370,7 @@ export class CierrecajaComponent implements OnInit {
         data.valores_diario.forEach((valores, i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
         });
-        console.log(this.ValoresMonedasApertura);
+        // console.log(this.ValoresMonedasApertura);
 
       });
   }

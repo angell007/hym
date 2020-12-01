@@ -96,7 +96,7 @@ export class FuncionarioverComponent implements OnInit {
       this.Grupo=data.Grupo;
       this.Dependencia=data.Dependencia;
       this.ContactoEmergencia = data.Contacto_Emergencia.length == 0 ? this.ContactoEmergencia : data.Contacto_Emergencia;
-      console.log(this.ContactoEmergencia);
+      // console.log(this.ContactoEmergencia);
       
       for(let i = 0; i < data.Experiencia_Laboral.length; ++i)
       {               

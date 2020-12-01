@@ -28,7 +28,7 @@ export class ModalpagostransferenciaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      console.log(data);
+      // console.log(data);
       this.TransferenciaModel = data.model;
       this.Id_Apertura = data.id_apertura;
       this.ModalPagosTransferencia.show();
@@ -52,7 +52,7 @@ export class ModalpagostransferenciaComponent implements OnInit, OnDestroy {
   public GetPagosTransferencia(){
     let p = {id_transferencia:this.TransferenciaModel.Id_Transferencia_Destinatario, id_funcionario:this._generalService.Funcionario.Identificacion_Funcionario};
     this._transferenciaService.GetPagosTransferencias(p).subscribe((transferencias:any) => {
-      console.log(transferencias);
+      // console.log(transferencias);
       if (transferencias.codigo == 'success') {
         this.TransferenciasRealizadas = transferencias.query_data;
       }else{
