@@ -6,28 +6,28 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class EgresoService {
 
-  constructor(private client:HttpClient, private globales:Globales) { }
+  constructor(private client: HttpClient, private globales: Globales) { }
 
-  private _rutaBase:string = this.globales.ruta+'php/egresos/';
+  private _rutaBase: string = this.globales.ruta + 'php/egresos/';
 
-  getEgreso(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'get_egreso_by_id.php', {params:p});
+  getEgreso(p: any): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_egreso_by_id.php', { params: p });
   }
 
-  getListaEgresos(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'get_lista_egresos.php', {params:p});
+  getListaEgresos(p: any): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_lista_egresos.php', { params: p });
   }
 
-  saveEgreso(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_egreso.php', datos);
+  saveEgreso(datos: FormData): Observable<any> {
+    return this.client.post(this.globales.rutaNueva + 'egresos', datos);
   }
 
-  editEgreso(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'editar_egreso.php', datos);
+  editEgreso(datos: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'editar_egreso.php', datos);
   }
 
-  anularEgreso(data:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'anular_egreso.php', data);
+  anularEgreso(data: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'anular_egreso.php', data);
   }
 
 }

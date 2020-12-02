@@ -837,12 +837,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               }
             }
           });
-
-          if (this.flagVenta) {
-            this.flagVenta = false;
-            this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-            return false
-          }
+          //TODO. validacion  de saldos en cambio 
+          // if (this.flagVenta) {
+          //   this.flagVenta = false;
+          //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+          //   return false
+          // }
           this.CambioModel.Tipo = 'Venta';
           this.CambioModel.Estado = 'Realizado';
 
@@ -3217,25 +3217,25 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       this.AsignarValoresPersonaGiro(modelo, tipo_persona);
 
-    // } else if (typeof (modelo) == 'string') {
+      // } else if (typeof (modelo) == 'string') {
 
-    //   if (modelo == '') {
-    //     if (tipo_persona == 'remitente') {
-    //       this.EditarRemitenteGiro = false;
-    //       this.CrearRemitenteGiro = false;
-    //     } else {
-    //       this.EditarDestinatarioGiro = false;
-    //       this.CrearDestinatarioGiro = false;
-    //     }
-    //   } else {
-    //     if (tipo_persona == 'remitente') {
-    //       this.EditarRemitenteGiro = false;
-    //       this.CrearRemitenteGiro = true;
-    //     } else {
-    //       this.EditarDestinatarioGiro = false;
-    //       this.CrearDestinatarioGiro = true;
-    //     }
-      }
+      //   if (modelo == '') {
+      //     if (tipo_persona == 'remitente') {
+      //       this.EditarRemitenteGiro = false;
+      //       this.CrearRemitenteGiro = false;
+      //     } else {
+      //       this.EditarDestinatarioGiro = false;
+      //       this.CrearDestinatarioGiro = false;
+      //     }
+      //   } else {
+      //     if (tipo_persona == 'remitente') {
+      //       this.EditarRemitenteGiro = false;
+      //       this.CrearRemitenteGiro = true;
+      //     } else {
+      //       this.EditarDestinatarioGiro = false;
+      //       this.CrearDestinatarioGiro = true;
+      //     }
+    }
 
     //   this.VaciarValoresPersonaGiro(tipo_persona, true);
     // }
@@ -3286,9 +3286,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.GiroModel.Telefono_Remitente = modelo.Telefono;
       this.EditarRemitenteGiro = true;
       this.CrearRemitenteGiro = false;
-      
+
     } else if (tipo_persona == 'destinatario') {
-      
+
       console.log('AsignarValoresPersonaGiro Destinatario', modelo.Id_Transferencia_Remitente, tipo_persona);
       this.GiroModel.Documento_Destinatario = modelo.Id_Transferencia_Remitente;
       this.GiroModel.Nombre_Destinatario = modelo.Nombre;
@@ -3651,7 +3651,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarDatos(data: any) {
-    console.log('Cargar datos ',data );
+    console.log('Cargar datos ', data);
     if (data.tipo == 'remitente') {
 
       this.Remitente_Giro = data.model;
@@ -3735,12 +3735,13 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     });
 
+    //TODO: validar saldo en traslados 
 
-    if (this.flag) {
-      this.flag = false;
-      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-      return false
-    }
+    // if (this.flag) {
+    //   this.flag = false;
+    //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+    //   return false
+    // }
 
     this.TrasladoModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
     this.TrasladoModel.Id_Caja = this.generalService.SessionDataModel.idCaja;
@@ -4410,8 +4411,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getMonedasTraslado() {
     this.MonedasTraslados = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.MonedasTraslados = data.query_data;
+      console.log(data);
+      if (data != null) {
+        this.MonedasTraslados = data;
       } else {
         this.MonedasTraslados = [];
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };

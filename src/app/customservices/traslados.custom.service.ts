@@ -135,7 +135,7 @@ export class TrasladosCustomService {
   GetCajerosTraslados() {
     this.CajerosTraslados = [];
     this.cajeroService.getCajerosTraslados(this.user.Identificacion_Funcionario).subscribe((data: any) => {
-      // console.log(data);
+      console.log(data);
       if (data.codigo == 'success') {
         this.CajerosTraslados = data.query_data;
       } else {

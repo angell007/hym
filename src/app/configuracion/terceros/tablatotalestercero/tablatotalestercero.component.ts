@@ -10,29 +10,29 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 })
 export class TablatotalesterceroComponent implements OnInit {
 
-  @Input() Id_Tercero:string = '';
-  
-  public Monedas:Array<any> = [];
-  public MostrarTablas:boolean = false;
-  public MonedaSeleccionada:string = '';
+  @Input() Id_Tercero: string = '';
 
-  constructor(private _monedaService:MonedaService,
-              private _toastService:ToastService,
-              private _swalService:SwalService) 
-  {
+  public Monedas: Array<any> = [];
+  public MostrarTablas: boolean = false;
+  public MonedaSeleccionada: string = '';
+
+  constructor(private _monedaService: MonedaService,
+    private _toastService: ToastService,
+    private _swalService: SwalService) {
     this.GetMonedas();
   }
 
-  ngOnInit() {    
+  ngOnInit() {
   }
 
-  GetMonedas(){
-    this._monedaService.getMonedas().subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
+      console.log(data);
+      if (data != null) {
+        this.Monedas = data;
         this.MonedaSeleccionada = this.Monedas[0].Id_Moneda;
         this.MostrarTablas = true;
-      }else{
+      } else {
         this.Monedas = [];
         this.MonedaSeleccionada = '';
         this.MostrarTablas = false;
@@ -41,11 +41,11 @@ export class TablatotalesterceroComponent implements OnInit {
     });
   }
 
-  CambiarValoresTabla(idMoneda:string){
+  CambiarValoresTabla(idMoneda: string) {
     this.MonedaSeleccionada = idMoneda;
   }
 
-  Test(value){
+  Test(value) {
     //this._swalService.ShowMessage(['success', 'Funciono', value]);
   }
 

@@ -15,67 +15,66 @@ import { GeneralService } from '../../../shared/services/general/general.service
 })
 export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
-  @Input() Id_Moneda:string;
-  @Input() Id_Tercero:string;
+  @Input() Id_Moneda: string;
+  @Input() Id_Tercero: string;
 
-  public MovimientosTercero:Array<any> = [];
-  public Movimientos:Array<any> = [];
-  public MostrarTotales:boolean = false;
-  public Balance:string = "0";
-  public TotalesMonedas:Array<any> = [];
-  public totalObj:any = {Total:"0"};
-  public AbrirModalAgregar:Subject<any> = new Subject<any>();  
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  public CodigoMonedaActual:string = '';
-  
-  public Filtros:any = {
+  public MovimientosTercero: Array<any> = [];
+  public Movimientos: Array<any> = [];
+  public MostrarTotales: boolean = false;
+  public Balance: string = "0";
+  public TotalesMonedas: Array<any> = [];
+  public totalObj: any = { Total: "0" };
+  public AbrirModalAgregar: Subject<any> = new Subject<any>();
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+  public CodigoMonedaActual: string = '';
+
+  public Filtros: any = {
     fecha: '',
-    movimiento:'',
-    cajero:'',
-    detalle:''
-  };  
+    movimiento: '',
+    cajero: '',
+    detalle: ''
+  };
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
- 
-  constructor(private _monedaService:MonedaService,
-              private _toastService:ToastService,
-              private _swalService:SwalService,
-              private _movimientoService:MovimientoterceroService,
-              private _customCurrency:CustomcurrencyPipe,
-              private _terceroService:TerceroService,
-              private _generalService:GeneralService) 
-  {
-    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
-    
+
+  constructor(private _monedaService: MonedaService,
+    private _toastService: ToastService,
+    private _swalService: SwalService,
+    private _movimientoService: MovimientoterceroService,
+    private _customCurrency: CustomcurrencyPipe,
+    private _terceroService: TerceroService,
+    private _generalService: GeneralService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+
   }
 
   ngOnInit() {
     this.ConsultaFiltrada();
   }
 
-  ngOnChanges(changes:SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.Id_Moneda.previousValue != undefined) {
       this.ConsultaFiltrada();
     }
   }
 
-  GetTotalesMonedas(){
-    this._terceroService.getTotalesMonedasTercero(this.Id_Tercero).subscribe((data:any) => {
+  GetTotalesMonedas() {
+    this._terceroService.getTotalesMonedasTercero(this.Id_Tercero).subscribe((data: any) => {
       if (data.length > 0) {
         this.TotalesMonedas = data;
-      }else{
-        this.TotalesMonedas = [];        
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+      } else {
+        this.TotalesMonedas = [];
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
 
@@ -83,7 +82,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     });
   }
 
-  GetMovimientos(){
+  GetMovimientos() {
     // // if (this.Id_Moneda != '' && this.Id_Moneda != undefined) {
     // //   this._movimientoService.getMovimientosTercero(this.Id_Tercero, this.Id_Moneda).subscribe((data:any) => {
     // //     if (data.codigo == 'success') {
@@ -97,50 +96,50 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     // //       let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
     // //       this._toastService.ShowToast(toastObj);
     // //     }  
-        
+
     // //     this.GetTotalesMonedas();
     // //   });  
     // }    
   }
 
-  ActualizarBalance(){
-    if (this.TotalesMonedas.length > 0) {     
-      this.totalObj = this.TotalesMonedas.find(x => x.Id_Moneda == this.Id_Moneda);        
+  ActualizarBalance() {
+    if (this.TotalesMonedas.length > 0) {
+      this.totalObj = this.TotalesMonedas.find(x => x.Id_Moneda == this.Id_Moneda);
       this.Balance = this._customCurrency.transform(this.totalObj.Total, this.totalObj.Codigo);
-    }else{
+    } else {
       this.Balance = '0';
     }
   }
 
-  AbrirModal(idMovimiento:string){
-    let obj = {id_movimiento:idMovimiento, id_moneda:this.Id_Moneda, id_tercero:this.Id_Tercero};
+  AbrirModal(idMovimiento: string) {
+    let obj = { id_movimiento: idMovimiento, id_moneda: this.Id_Moneda, id_tercero: this.Id_Tercero };
     this.AbrirModalAgregar.next(obj);
   }
 
-  AnularMovimientoTercero(idMovimiento:string){
+  AnularMovimientoTercero(idMovimiento: string) {
     let datos = new FormData();
     datos.append("id_movimiento", idMovimiento);
-    this._movimientoService.anularMovimientoTercero(datos).subscribe((data:any) => {
-      if (data.codigo == 'success') { 
+    this._movimientoService.anularMovimientoTercero(datos).subscribe((data: any) => {
+      if (data.codigo == 'success') {
         this.GetMovimientos();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
-      }else{
-        this._swalService.ShowMessage(data); 
+      } else {
+        this._swalService.ShowMessage(data);
       }
     });
   }
 
-  private SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  private SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.id_tercero = this.Id_Tercero;
     params.id_moneda = this.Id_Moneda;
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -164,12 +163,13 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     return params;
   }
 
-  public ConsultaFiltrada(paginacion:boolean = false) {
+  public ConsultaFiltrada(paginacion: boolean = false) {
 
     var p = this.SetFiltros(paginacion);
-    
+
     this.Cargando = true;
-    this._movimientoService.getMovimientosTercero(p).subscribe((data:any) => {
+    this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
+
       if (data.codigo == 'success') {
         this.MovimientosTercero = data.query_data;
         this.Movimientos = data.query_data.movimientos;
@@ -177,24 +177,24 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
         this.TotalItems = data.numReg;
         this.Balance = data.balance;
         this.CodigoMonedaActual = data.codigo_moneda;
-      }else{
+      } else {
         this.MovimientosTercero = [];
         this.Movimientos = [];
         this.CodigoMonedaActual = data.codigo_moneda;
         this.Balance = '0';
         this.MostrarTotales = false;
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  private SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  private SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;

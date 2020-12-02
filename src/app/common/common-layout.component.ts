@@ -959,9 +959,9 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     ShowSwal(tipo: string, titulo: string, msg: string) {
-        this.alertSwal.type = tipo;
-        this.alertSwal.title = titulo;
-        this.alertSwal.text = msg;
+        // this.alertSwal.type = tipo;
+        // this.alertSwal.title = titulo;
+        // this.alertSwal.text = msg;
         this.alertSwal.show();
     }
 

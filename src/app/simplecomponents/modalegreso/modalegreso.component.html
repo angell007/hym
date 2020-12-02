@@ -8,36 +8,51 @@
   <div class="app-modal-body">
     <form #FormEgreso="ngForm">
       <div class="form-row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class=" font-size-18">Grupo</label>
-            <select id="grupo" class="form-control  font-size-18" name="Id_Grupo" [(ngModel)]="EgresoModel.Id_Grupo"
-              (change)="GetTercerosGrupo()" required tabindex="1">
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let g of Grupos" [value]="g.Id_Grupo_Tercero">{{g.Nombre_Grupo}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-<<<<<<< HEAD
-            <label>Tercero</label>
-            <select id="grupo" class="form-control" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
-=======
-            <label class=" font-size-18">Tercero</label>
 
-            <select id="grupo" class="form-control  font-size-18" name="Id_Tercero" [(ngModel)]="EgresoModel.Id_Tercero" required>
->>>>>>> development
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let t of Terceros" [value]="t.Id_Tercero">{{t.Nombre}}</option>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class=" font-size-18">Seleccione Tipo </label>
+            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
+              (change)="limpiarImputCliente()">
+              <option> Seleccione</option>
+              <option value="Cliente">Clientes</option>
+              <option value="Proveedor">Proveedores</option>
+              <option value="Cuentas">Cuentas</option>
             </select>
           </div>
         </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class=" font-size-18">Forma de pago </label>
+            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomFormaPago>
+              <option> Seleccione</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="credito">Credito</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-size-18">Número de documento</label>
+            <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
+              placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
+              [ngbTypeahead]="search_destino3" [(ngModel)]="potencial" [inputFormatter]="formatterModel"
+              [resultTemplate]="clienteModalEgreso" (ngModelChange)="getData()">
+          </div>
+        </div>
+
+        <div class="col-md-12 my-2">
+          <span *ngIf="verCupo">Cupo: {{cupo}}</span>
+        </div>
+
         <div class="col-md-3">
           <div class="form-group">
             <label class=" font-size-18">Moneda</label>
-            <select id="moneda" class="form-control  font-size-18" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda" required>
-              <!-- <option value="{{ coinDefault.Id_Moneda }}" selected>{{ coinDefault.Nombre }}</option> -->
+            <select id="moneda" class="form-control  font-size-18" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda"
+              required>
               <option *ngFor="let m of Monedas" [value]="m.Id_Moneda" [selected]="EgresoModel.Id_Moneda">{{m.Nombre}}
               </option>
             </select>
@@ -47,7 +62,8 @@
           <div class="form-group">
             <label class=" font-size-18">Valor</label>
             <input type="text" placeholder="Valor egreso" class="form-control  font-size-18" name="Valor" currencyMask
-              [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required>
+              [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required
+              (ngModelChange)="calcularEgreso()">
           </div>
         </div>
       </div>
@@ -73,3 +89,9 @@
   </div>
 </app-modal-basic>
 <swal #alertSwal title="" html="" type="" text=""></swal>
+
+<ng-template #clienteModalEgreso let-r="result" let-t="term">
+  <span class="f-9">{{ r.Id_Tercero }}
+    <strong>{{r.Nombre}}</strong>
+  </span>
+</ng-template>

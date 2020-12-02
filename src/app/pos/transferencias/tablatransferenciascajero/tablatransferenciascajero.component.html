@@ -10,6 +10,7 @@
       <th class="custom-thead">Transferido</th>
       <th class="custom-thead">Tasa</th>
       <th class="custom-thead">Estado</th>
+      <th class="custom-thead">Pagada por </th>
       <th class="custom-thead">Acciones</th>
     </tr>
 
@@ -66,6 +67,7 @@
       <td class="text-right"> {{rt.Monto_Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td>
       <td class=" text-right"> {{rt.Tasa_Cambio }}</td>
       <td class=" text-center"> {{rt.Estado }}</td>
+      <td class=" text-right"> {{rt.Pagador }}</td>
       <td class="text-center">
         <div *ngIf="rt.Estado != 'Anulada' && rt.Estado != 'Pagada' " class="text-center">
           <button class="clean-btn-table" type="button" (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">

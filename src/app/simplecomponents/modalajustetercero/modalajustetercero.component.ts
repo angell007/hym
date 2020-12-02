@@ -15,60 +15,59 @@ import { MovimientoterceroService } from '../../shared/services/movimientosterce
 })
 export class ModalajusteterceroComponent implements OnInit {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
-  @Input() MonedaPrecargada:boolean = false;
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  
-  @ViewChild('ModalAjusteTercero') ModalAjusteTercero:any;
+  @Input() AbrirModal: Observable<any> = new Observable();
+  @Input() MonedaPrecargada: boolean = false;
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
-  public BancosPais:Array<any> = [];
-  public Monedas:any = [];
+  @ViewChild('ModalAjusteTercero') ModalAjusteTercero: any;
 
-  public openSubscription:any;
-  public Editar:boolean = false;
-  public MensajeGuardar:string = 'Se dispone a guardar este movimiento';
+  public BancosPais: Array<any> = [];
+  public Monedas: any = [];
 
-  public MovimientoTerceroModel:MovimientoTerceroModel = new MovimientoTerceroModel();
+  public openSubscription: any;
+  public Editar: boolean = false;
+  public MensajeGuardar: string = 'Se dispone a guardar este movimiento';
+
+  public MovimientoTerceroModel: MovimientoTerceroModel = new MovimientoTerceroModel();
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _validacionService:ValidacionService,
-              private _monedaService:MonedaService,
-              private _toastService:ToastService,
-              private _movimientoTerceroService:MovimientoterceroService) 
-  {
+    private _swalService: SwalService,
+    private _validacionService: ValidacionService,
+    private _monedaService: MonedaService,
+    private _toastService: ToastService,
+    private _movimientoTerceroService: MovimientoterceroService) {
     this.GetMonedas();
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:any) => {
-      
+    this.openSubscription = this.AbrirModal.subscribe((data: any) => {
+
       this.MovimientoTerceroModel.Id_Moneda_Valor = data.id_moneda;
-      this.MovimientoTerceroModel.Id_Tercero = data.id_tercero;      
-      
+      this.MovimientoTerceroModel.Id_Tercero = data.id_tercero;
+
       if (data.id_movimiento != "0") {
         this.Editar = true;
         this.MensajeGuardar = 'Se dispone a actualizar este movimiento';
-        
-        this._movimientoTerceroService.getMovimientoTercero(data.id_movimiento).subscribe((d:any) => {
+
+        this._movimientoTerceroService.getMovimientoTercero(data.id_movimiento).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.MovimientoTerceroModel = d.query_data;
-            this.ModalAjusteTercero.show();  
-          }else{
-            
+            this.ModalAjusteTercero.show();
+          } else {
+
             this._swalService.ShowMessage(d);
           }
-          
+
         });
-      }else{
+      } else {
         this.MensajeGuardar = 'Se dispone a guardar este movimiento';
         this.Editar = false;
         this.ModalAjusteTercero.show();
       }
     });
   }
-  
-  ngOnDestroy(){    
+
+  ngOnDestroy() {
     if (this.openSubscription != undefined) {
       this.openSubscription.unsubscribe();
     }
@@ -76,82 +75,83 @@ export class ModalajusteterceroComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetMonedas(){
-    this._monedaService.getMonedas().subscribe((d:any) => {
-      if (d.codigo == 'success') {
-        this.Monedas = d.query_data; 
-      }else{
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((d: any) => {
+
+      if (d != null) {
+        this.Monedas = d;
+      } else {
         this.Monedas = [];
         this._swalService.ShowMessage(d);
       }
-      
+
     });
   }
 
-  GuardarAjusteTercero(){
+  GuardarAjusteTercero() {
 
     if (!this.ValidateBeforeSubmit()) {
       return;
-    }else{
+    } else {
       this.MovimientoTerceroModel.Id_Tipo_Movimiento = '3';
       this.MovimientoTerceroModel.Valor_Tipo_Movimiento = '0';
       this.MovimientoTerceroModel.Fecha = this._generalService.FechaActual;
       this.MovimientoTerceroModel = this._generalService.limpiarString(this.MovimientoTerceroModel);
       console.log(this.MovimientoTerceroModel);
-      
+
       let info = this._generalService.normalize(JSON.stringify(this.MovimientoTerceroModel));
       let datos = new FormData();
-      datos.append("modelo",info);
-      datos.append("funcionario",this._generalService.Funcionario.Identificacion_Funcionario);
+      datos.append("modelo", info);
+      datos.append("funcionario", this._generalService.Funcionario.Identificacion_Funcionario);
 
       if (this.Editar) {
         this._movimientoTerceroService.editMovimientoTercero(datos)
-        .catch(error => { 
-          //console.log('An error occurred:', error);
-          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-          return this.handleError(error);
-        })
-        .subscribe((data:any)=>{
-          if (data.codigo == 'success') { 
-            this.ActualizarTabla.emit();       
-            this.CerrarModal();
-            this.Editar = false;
-            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-            this._toastService.ShowToast(toastObj);
-          }else{
-            this._swalService.ShowMessage(data);
-          }
-        });
-      }else{
+          .catch(error => {
+            //console.log('An error occurred:', error);
+            this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+            return this.handleError(error);
+          })
+          .subscribe((data: any) => {
+            if (data.codigo == 'success') {
+              this.ActualizarTabla.emit();
+              this.CerrarModal();
+              this.Editar = false;
+              let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+              this._toastService.ShowToast(toastObj);
+            } else {
+              this._swalService.ShowMessage(data);
+            }
+          });
+      } else {
         this._movimientoTerceroService.saveMovimientoTercero(datos)
-        .catch(error => { 
-          //console.log('An error occurred:', error);
-          this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-          return this.handleError(error);
-        })
-        .subscribe((data:any)=>{
-          if (data.codigo == 'success') { 
-            this.ActualizarTabla.emit();       
-            this.CerrarModal();
-            let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-            this._toastService.ShowToast(toastObj);
-          }else{
-            this._swalService.ShowMessage(data);
-          }
-        });
+          .catch(error => {
+            //console.log('An error occurred:', error);
+            this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+            return this.handleError(error);
+          })
+          .subscribe((data: any) => {
+            if (data.codigo == 'success') {
+              this.ActualizarTabla.emit();
+              this.CerrarModal();
+              let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+              this._toastService.ShowToast(toastObj);
+            } else {
+              this._swalService.ShowMessage(data);
+            }
+          });
       }
-    }    
+    }
   }
 
-  ValidateBeforeSubmit():boolean{
-    
+  ValidateBeforeSubmit(): boolean {
+
     if (!this._validacionService.validateString(this.MovimientoTerceroModel.Tipo, 'Tipo Movimiento')) {
       return false;
-    }else if (!this._validacionService.validateString(this.MovimientoTerceroModel.Id_Moneda_Valor, 'Moneda')) {
+    } else if (!this._validacionService.validateString(this.MovimientoTerceroModel.Id_Moneda_Valor, 'Moneda')) {
       return false;
-    }else if (!this._validacionService.validateNumber(this.MovimientoTerceroModel.Valor, 'Valor Movimiento')) {
+    } else if (!this._validacionService.validateNumber(this.MovimientoTerceroModel.Valor, 'Valor Movimiento')) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -160,16 +160,16 @@ export class ModalajusteterceroComponent implements OnInit {
     return Observable.throw(error);
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalAjusteTercero.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.MovimientoTerceroModel = new MovimientoTerceroModel();
   }
 
-  InputSoloNumerosYDecimal(e:KeyboardEvent){    
+  InputSoloNumerosYDecimal(e: KeyboardEvent) {
     return this._generalService.KeyboardOnlyNumbersAndDecimal(e);
   }
 

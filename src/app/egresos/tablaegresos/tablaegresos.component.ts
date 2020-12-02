@@ -63,7 +63,7 @@ export class TablaegresosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.SetInformacionPaginacion();
+    // this.SetInformacionPaginacion();
   }
 
   GetMonedas() {

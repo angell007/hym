@@ -63,12 +63,8 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
-<<<<<<< HEAD
-    console.log(this.solo_ver);
-=======
     // console.log(this.solo_ver);
 
->>>>>>> development
   }
 
   ConsultarNombreFuncionario() {
@@ -91,13 +87,8 @@ export class CierrecajaComponent implements OnInit {
       p.fecha = this.fechaSoloVer;
     }
 
-<<<<<<< HEAD
-    this.cliente.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_Nuevo.php', { params: p }).subscribe((data: any) => {
-      //Total ingresos 
-=======
     this.cliente.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: p }).subscribe((data: any) => {
 
->>>>>>> development
       this.MonedasSistema = data.monedas;
       const divi = (90 / this.MonedasSistema.length)
       this.sizeColunm = divi + '%'
@@ -174,10 +165,7 @@ export class CierrecajaComponent implements OnInit {
         this.TotalRestaIngresosEgresos.push((suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(2));
       });
 
-<<<<<<< HEAD
-=======
       // console.log(this.MostrarTotal);
->>>>>>> development
 
       this.MonedasSistema.forEach((m, i) => {
         let obj = { Moneda: m.Id_Moneda, Entregado: "", Codigo: m.Codigo, Nombre: m.Nombre };
@@ -300,10 +288,6 @@ export class CierrecajaComponent implements OnInit {
     let entregar = total_entregar;
 
 
-<<<<<<< HEAD
-    let entregar = total_entregar;
-=======
->>>>>>> development
     let resta = value - entregar;
     this.Diferencias[pos].Diferencia = resta;
   }

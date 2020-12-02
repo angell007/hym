@@ -37,14 +37,11 @@ export class ConsolidadosService {
       this.getValoresApertura().then(() => {
         this.MonedasSistema.forEach((moneda, i) => {
           let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-
           let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
           this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
           this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
           let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
-
           this.TotalRestaIngresosEgresos.push([moneda.Codigo, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(), moneda.Nombre, moneda.Id_Moneda]);
-
         })
       })
 

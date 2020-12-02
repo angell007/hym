@@ -244,27 +244,26 @@
                                 <th class="table-filters"></th>
                                 <th class="table-filters"></th>
 
-
-
-
-                              <tr *ngIf="Cargando">
+                                <!-- <tr *ngIf="Cargando">
                                 <td colspan="7" class="text-center">
                                   <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                                     <h2>CARGANDO CAMBIOS</h2>
                                     <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                                   </div>
                                 </td>
-                              </tr>
+                              </tr> -->
 
+                                <!-- //TODO: validar cargando de cambios  -->
                               <tr *ngIf="fc.Cambios.length == 0 && !Cargando">
-                                <td colspan="7" class="text-center">
+                                <td colspan="9" class="text-center">
                                   <i class="ti-alert font-size-20 text-warning"></i>
                                   <h4>No hay Cambios para mostrar!</h4>
                                 </td>
                               </tr>
 
                             </thead>
-                            <tbody *ngIf="!Cargando">
+
+                            <tbody>
                               <tr
                                 *ngFor="let cambio of fc.Cambios | paginate: {  id: 'cambios', itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }"
                                 [ngClass]="{'bg-anulada':cambio.Estado == 'Anulado'}">
@@ -1579,15 +1578,15 @@
                               </th>
                               <th class="table-filters"></th>
                             </tr>
-
-                            <tr *ngIf="Cargando">
+                            <!-- //TODO: verificar cargandos no funcionan   -->
+                            <!-- <tr *ngIf="Cargando">
                               <td colspan="8" class="text-center">
                                 <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                                   <h2>CARGANDO RECIBOS DE TRANSFERENCIA</h2>
                                   <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                                 </div>
                               </td>
-                            </tr>
+                            </tr> -->
 
                             <tr *ngIf="_trasladosCustomService.Traslados.length == 0 ">
                               <td colspan="7" class="text-center">
@@ -1635,7 +1634,7 @@
                               </div>
 
                             </div>
-                          </div> -->
+                          </div>
 
                         </div>
 
@@ -1691,14 +1690,15 @@
                                   <th class="table-filters"></th>
                                 </tr>
 
-                                <tr *ngIf="Cargando">
+                                <!-- <tr *ngIf="Cargando">
                                   <td colspan="8" class="text-center">
                                     <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                                       <h2>CARGANDO RECIBOS DE TRANSFERENCIA</h2>
                                       <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                                     </div>
                                   </td>
-                                </tr>
+                                </tr> -->
+
                                 <tr *ngIf="_trasladosCustomService.TrasladosRecibidos.length == 0 ">
                                   <td colspan="7" class="text-center">
                                     <i class="ti-alert font-size-20 text-warning"></i>
@@ -1918,14 +1918,17 @@
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
 
-                            <tr *ngIf="Cargando">
+                              <!-- //TODO: validar cargado servicios externos  -->
+
+                              <!-- <tr *ngIf="Cargando">
                               <td colspan="8" class="text-center">
                                 <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                                   <h2>CARGANDO SERVICIOS EXTERNOS</h2>
                                   <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
                                 </div>
                               </td>
-                            </tr>
+                            </tr> -->
+
                             <tr *ngIf="_sexternos.Servicios.length == 0 ">
                               <td colspan="7" class="text-center">
                                 <i class="ti-alert font-size-20 text-warning"></i>

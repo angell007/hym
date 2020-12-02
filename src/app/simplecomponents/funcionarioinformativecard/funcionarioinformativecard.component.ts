@@ -28,12 +28,27 @@ export class FuncionarioinformativecardComponent implements OnInit {
 
     let user = funcionario;
     // console.log(user);
-    
+
     if (this.Fecha == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'La fecha para la consulta del cierre esta vacia, contacte con el administrador del sistema!']);
     } else {
       this.router.navigate(['/consolidado', user]);
     }
+  }
+
+
+  Abrir(id) {
+
+    const params = new FormData();
+    params.append('id', id)
+    this.client.post(this.globales.rutaNueva + 'cierre-caja/funcionario', params).subscribe((data: any) => {
+      console.log(data);
+    });
+  }
+
+  Cerrar(id) {
+
+    console.log('Cerrando');
   }
 
 }
