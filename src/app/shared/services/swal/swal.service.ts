@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { timer } from 'd3';
 import { Subject } from 'rxjs/Subject';
 import { isArray } from 'util';
 
@@ -10,7 +11,7 @@ export class SwalService {
   private SwalObj: any = {
     type: 'warning',
     title: 'Alerta',
-    msg: 'Default message!'
+    msg: 'Default message!',
   };
 
   constructor() { }
@@ -21,6 +22,9 @@ export class SwalService {
   }
 
   private SetSwalData(data: any) {
+
+    console.log(data);
+
     if (typeof (data) == 'object') {
       if (isArray(data)) {
         let i = 0;

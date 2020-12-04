@@ -55,6 +55,7 @@ export class CommonLayoutComponent implements OnInit {
     EntregadoIngresosPesos: number = 0;
     EntregadoIngresosBolivares: number = 0;
     EntregadoEgresosBolivares: number = 0;
+    TotalTraslados: any
     public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos'];
 
     @ViewChild('confirmSwal') confirmSwal: any;

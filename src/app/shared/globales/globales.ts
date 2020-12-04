@@ -5,7 +5,7 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 @Injectable()
 export class Globales {
   ruta: string = 'https://softwarehym.com/customback/';
-  rutaNueva: string = 'http://softhym.test/';
+  rutaNueva: string = 'https://backnew.softwarehym.com/';
   public urlRiff = '';
   public Monedas: any = [];
   public Paises: any = [];
@@ -17,8 +17,7 @@ export class Globales {
   public Departamentos: any = [];
   public TipoDocumentoNacionales: any = [];
   public TiposCuenta: any = [];
-  //llamar de base de datos para obtener los datos de configuración
-  //se declara constructor para poderlo inicalizar
+
   constructor(private client: HttpClient) {
     this.BuscarMonedas();
     this.BuscarPaises();

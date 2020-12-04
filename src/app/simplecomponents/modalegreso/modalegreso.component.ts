@@ -192,6 +192,7 @@ export class ModalegresoComponent implements OnInit {
             this.EgresoModel.Id_Tercero = '';
 
             this.CerrarModal();
+
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
           } else {
             this.ShowSwal('warning', 'Alerta', data);
@@ -237,6 +238,7 @@ export class ModalegresoComponent implements OnInit {
   }
   CerrarModal() {
     this.LimpiarModelo();
+    this.potencial = ''
     this.ModalEgreso.hide();
   }
 

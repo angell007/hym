@@ -185,7 +185,6 @@
                 <div class="info">
                   <b class="text-dark font-size-22">Cambios Efectivo</b>
                   <p class="no-mrg-btm ">{{tituloCambio}}</p>
-                  <button (click)="veralertas()"> </button>
                 </div>
               </li>
             </ul>
@@ -383,10 +382,11 @@
                                 placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
                                 [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
                                 [(ngModel)]="CambioModel.Id_Tercero" [inputFormatter]="formatterClienteCambioCompra"
-                                (ngModelChange)="CambioModel.Id_Tercero" required>
+                                (ngModelChange)="CambioModel.Id_Tercero">
                             </div>
                           </div>
                         </div>
+
                       </div>
 
                       <div class="col-md-6">
@@ -411,7 +411,7 @@
                         </label>
                         <select class="inputfield font-size-18  form-control form-control-lg" placeholder="id_fomapago"
                           id="id_fomapago" name="id_fomapago" required [(ngModel)]="CambioModel.fomapago">
-                          <option value=""> Seleccione Moneda</option>
+                          <!-- <option value=""> Seleccione Moneda</option> -->
                           <option *ngFor="let fp of formasPago" [value]="fp.id"> {{ fp.nombre }} </option>
                         </select>
                       </div>
@@ -460,7 +460,8 @@
                       </div>
 
                       <div class="col-md-4 mt-1" *ngIf="Venta">
-                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Valor en pesos
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Valor en
+                          pesos
                           a cambiar
                         </label>
                         <input type="text" placeholder="Entrega" name="Valor_Destino"
@@ -769,9 +770,7 @@
                               </div>
                               <div class="col-md-5">
                                 <div class="form-group">
-                                  <label class="transferencia font-size-18">Cuenta
-                                    {{destinatario.Id_Destinatario_Cuenta}}</label>
-                                  <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
+                                  <label class="transferencia font-size-18">Cuenta</label>
                                   <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
                                     [(ngModel)]="destinatario.Id_Destinatario_Cuenta" class="form-control font-size-18"
                                     autocomplete="off"

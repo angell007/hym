@@ -2381,29 +2381,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.TransferenciaPesos = false;
         this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).subscribe((data: any) => {
           this.MonedaParaTransferencia.Valores = data.query_data;
-
-          // Buscando Valores de moneda
-          // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
           this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
-
-          // this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Venta_Transferencia;
-          // Comision_Efectivo_Transferencia: "30"
-          // Costo_Transferencia: "3000"
-          // Id_Moneda: "12"
-          // Id_Valor_Moneda: "6"
-          // Max_Compra_Efectivo: "3350"
-          // Max_Venta_Efectivo: "5000"
-          // Max_Venta_Transferencia: "405"
-          // Min_Compra_Efectivo: "2000"
-          // Min_No_Cobro_Transferencia: "1000"
-          // Min_Venta_Efectivo: "3450"
-          // Min_Venta_Transferencia: "205"
-          // Pagar_Comision_Desde: "0"
-          // Sugerido_Compra_Efectivo: "3300"
-          // Sugerido_Venta_Efectivo: "3500"
-          // Sugerido_Venta_Transferencia: "105"
-          // console.log(['Recogiendo valores de moneda ', data.query_data]);
-
           if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
             this.InputBolsaBolivares = true;
           } else {
@@ -2924,7 +2902,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
 
     if (typeof (modelo) == 'object') {
-      console.log('compltando', modelo);
 
       // console.log('Autocompletando- object ', modelo);
       this.TransferenciaModel.Documento_Origen = '';
@@ -3198,7 +3175,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }];
 
   AutoCompletarDatosPersonalesGiro(modelo, tipo_persona: string) {
-    // console.log(modelo);
 
     if (typeof (modelo) == 'object') {
 
@@ -3208,37 +3184,35 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       };
 
       if (tipo_persona == 'remitente') {
-        //this.EditarDestinatarioGiro = false;
         this.CrearDestinatarioGiro = false;
       } else {
-        //this.EditarRemitenteGiro = false;
         this.CrearRemitenteGiro = false;
       }
 
       this.AsignarValoresPersonaGiro(modelo, tipo_persona);
 
-      // } else if (typeof (modelo) == 'string') {
+    } else if (typeof (modelo) == 'string') {
 
-      //   if (modelo == '') {
-      //     if (tipo_persona == 'remitente') {
-      //       this.EditarRemitenteGiro = false;
-      //       this.CrearRemitenteGiro = false;
-      //     } else {
-      //       this.EditarDestinatarioGiro = false;
-      //       this.CrearDestinatarioGiro = false;
-      //     }
-      //   } else {
-      //     if (tipo_persona == 'remitente') {
-      //       this.EditarRemitenteGiro = false;
-      //       this.CrearRemitenteGiro = true;
-      //     } else {
-      //       this.EditarDestinatarioGiro = false;
-      //       this.CrearDestinatarioGiro = true;
-      //     }
+      if (modelo == '') {
+        if (tipo_persona == 'remitente') {
+          this.EditarRemitenteGiro = false;
+          this.CrearRemitenteGiro = false;
+        } else {
+          this.EditarDestinatarioGiro = false;
+          this.CrearDestinatarioGiro = false;
+        }
+      } else {
+        if (tipo_persona == 'remitente') {
+          this.EditarRemitenteGiro = false;
+          this.CrearRemitenteGiro = true;
+        } else {
+          this.EditarDestinatarioGiro = false;
+          this.CrearDestinatarioGiro = true;
+        }
+      }
+
+      this.VaciarValoresPersonaGiro(tipo_persona, true);
     }
-
-    //   this.VaciarValoresPersonaGiro(tipo_persona, true);
-    // }
   }
 
   ValidarRemitenteDestinatario(id_persona, tipo_persona: string) {
@@ -3280,8 +3254,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   AsignarValoresPersonaGiro(modelo, tipo_persona) {
 
     if (tipo_persona == 'remitente') {
-      console.log('AsignarValoresPersonaGiro remitente', modelo.Id_Transferencia_Remitente.Id_Transferencia_Remitente, tipo_persona);
-      this.GiroModel.Documento_Remitente = modelo.Id_Transferencia_Remitente.Id_Transferencia_Remitente;
+      console.log('AsignarValoresPersonaGiro remitente', modelo.Id_Transferencia_Remitente, tipo_persona);
+      this.GiroModel.Documento_Remitente = modelo.Id_Transferencia_Remitente;
       this.GiroModel.Nombre_Remitente = modelo.Nombre;
       this.GiroModel.Telefono_Remitente = modelo.Telefono;
       this.EditarRemitenteGiro = true;
@@ -4363,8 +4337,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.Monedas = data;
       } else {
         this.MonedasTransferencia = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       }
     });
   }

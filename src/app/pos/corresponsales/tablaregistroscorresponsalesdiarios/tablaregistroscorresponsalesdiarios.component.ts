@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
@@ -15,6 +15,9 @@ import { HourPipe } from '../../../hour.pipe';
 export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnDestroy {
 
   @Input() ActualizarTabla: Observable<any> = new Observable();
+
+  @ViewChild('modalMensaje') modalMensaje: any
+
   private _updateTablaSubscription: any;
 
   public RegistrosCorresponsales: Array<any> = [];
@@ -29,6 +32,24 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     tasa: '',
     estado: ''
   };
+
+  public corresponsalEdit: any = {
+    Consignacion: '',
+    Fecha: '',
+    Funcionario: '',
+    Hora: '',
+    Id_Caja: '',
+    Id_Corresponsal_Bancario: '',
+    Id_Corresponsal_Diario: '',
+    Id_Moneda: '',
+    Id_Oficina: '',
+    Identificacion_Funcionario: '',
+    Nombre: '',
+    Retiro: '',
+    Total_Corresponsal: '',
+  }
+
+  public CorresponsalesBancarios: Array<any> = [];
 
   //Paginación
   public maxSize = 5;
@@ -140,9 +161,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   }
 
   SetInformacionPaginacion(data: any) {
-    // console.log(data);
     this.TotalItems = data.length
-    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -151,4 +170,39 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
+  GetCorresponsalesBancarios() {
+    this._corresponsalService.getCorresponsales().subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.CorresponsalesBancarios = data.query_data;
+      } else {
+        this.CorresponsalesBancarios = [];
+        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
+      }
+    });
+  }
+
+  editarCorresponsal(data: any) {
+
+    this.corresponsalEdit.Consignacion = data.Consignacion
+    this.corresponsalEdit.Fecha = data.Fecha
+    this.corresponsalEdit.Funcionario = data.Funcionario
+    this.corresponsalEdit.Hora = data.Hora
+    this.corresponsalEdit.Id_Caja = data.Id_Caja
+    this.corresponsalEdit.Id_Corresponsal_Bancario = data.Id_Corresponsal_Bancario
+    this.corresponsalEdit.Id_Corresponsal_Diario = data.Id_Corresponsal_Diario
+    this.corresponsalEdit.Id_Moneda = data.Id_Moneda
+    this.corresponsalEdit.Id_Oficina = data.Id_Oficina
+    this.corresponsalEdit.Identificacion_Funcionario = data.Identificacion_Funcionario
+    this.corresponsalEdit.Nombre = data.Nombre
+    this.corresponsalEdit.Retiro = data.Retiro
+    this.corresponsalEdit.Total_Corresponsal = data.Total_Corresponsal
+    this.modalMensaje.show()
+
+  }
+
+
+  CerrarModal(id: any) {
+    this.modalMensaje.hide()
+  }
 }

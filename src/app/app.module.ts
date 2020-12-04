@@ -301,13 +301,20 @@ export const customCurrencyMaskConfig = {
         ToastyModule.forRoot(),
         NgxMasonryModule,
         ScrollToModule.forRoot(),
+
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
             confirmButtonClass: 'btn btn-outline-primary btn-rounded',
-            cancelButtonClass: 'btn btn-outline-danger btn-rounded',
-            timer: 1500
+            cancelButtonClass: 'btn btn-outline-danger btn-rounded'
         }),
+        // SweetAlert2Module.forRoot({
+        //     buttonsStyling: false,
+        //     customClass: 'modal-content',
+        //     confirmButtonClass: 'btn btn-outline-primary btn-rounded',
+        //     cancelButtonClass: 'btn btn-outline-danger btn-rounded',
+        //     timer: 1500
+        // }),
         NgxMaskModule.forRoot(),
         NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
         MDBBootstrapModule.forRoot(),

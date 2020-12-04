@@ -30,7 +30,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public CodigoMonedaActual: string = '';
 
   public Filtros: any = {
-    fecha: '',
+    fecha: new Date().toISOString().slice(0, 10),
     movimiento: '',
     cajero: '',
     detalle: ''
@@ -55,6 +55,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     private _terceroService: TerceroService,
     private _generalService: GeneralService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+    console.log(this.Filtros.fecha);
 
   }
 
