@@ -36,7 +36,7 @@ export class CorresponsalbancarioService {
   }
 
   public updateCorrespnsal(data: FormData): Observable<any> {
-    return this.client.put(`${this.globales.rutaNuevax}corresponsales-diarios/update`, data);
+    return this.client.put(`${this.globales.rutaNueva}corresponsales-diarios/update`, data);
   }
 
 }
