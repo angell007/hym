@@ -242,6 +242,9 @@ export class CommonLayoutComponent implements OnInit {
 
     async ngOnInit() {
         this.swalService.event.subscribe((data: any) => {
+
+            console.log('subs:', data);
+
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
@@ -960,9 +963,9 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     ShowSwal(tipo: string, titulo: string, msg: string) {
-        // this.alertSwal.type = tipo;
-        // this.alertSwal.title = titulo;
-        // this.alertSwal.text = msg;
+        this.alertSwal.type = tipo;
+        this.alertSwal.title = titulo;
+        this.alertSwal.text = msg;
         this.alertSwal.show();
     }
 

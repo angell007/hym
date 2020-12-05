@@ -77,12 +77,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
   public CalcularTotalCorresponsal() {
     let consignaciones = this.CorresponsalModel.Consignacion != '' ? parseFloat(this.CorresponsalModel.Consignacion) : 0;
     let retiro = this.CorresponsalModel.Retiro != '' ? parseFloat(this.CorresponsalModel.Retiro) : 0;
-
-    // if (consignaciones == 0 || retiro == 0) {
-    //   this.CorresponsalModel.Total_Corresponsal = '0';
-    // } else {
     this.CorresponsalModel.Total_Corresponsal = (consignaciones - retiro).toString();
-    // }
   }
 
   async settearMoneda() {

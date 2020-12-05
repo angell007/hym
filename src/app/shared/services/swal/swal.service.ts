@@ -22,9 +22,6 @@ export class SwalService {
   }
 
   private SetSwalData(data: any) {
-
-    console.log(data);
-
     if (typeof (data) == 'object') {
       if (isArray(data)) {
         let i = 0;

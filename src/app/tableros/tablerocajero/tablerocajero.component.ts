@@ -2352,7 +2352,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     if (value != '') {
       this._actualizarCuentasDestinatarios();
 
-      let c = this.Monedas.find(x => x.Id_Moneda == value);
+      let c = {
+        Nombre: ''
+      }
+
+      c.Nombre = this.Monedas.find(x => x.Id_Moneda == value);
 
       this.MonedaParaTransferencia.nombre = c.Nombre;
 

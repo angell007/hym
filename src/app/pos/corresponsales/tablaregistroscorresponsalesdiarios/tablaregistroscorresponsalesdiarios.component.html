@@ -80,7 +80,7 @@
       <div class="app-modal-body">
 
         <form #FormCorresponsal="ngForm">
-          <h4>Datos del corresponsal</h4>
+          <h4>Datos del corresponsal a actualizar</h4>
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
@@ -113,7 +113,7 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <!-- <label class="font-weight-bold font-size-18">Total Corresponsal en {{  monedaPeso['Nombre']   }}</label> -->
+                <label class="font-weight-bold font-size-18">Total Corresponsal en {{  monedaPeso['Nombre']   }}</label>
                 <label class="block-element">{{corresponsalEdit.Total_Corresponsal | customcurrency}}</label>
               </div>
             </div>
@@ -129,18 +129,6 @@
             </div>
           </div>
         </form>
-        <div class="row">
-          <div class="col-md-10">
-            <button type="submit" class="btn btn-sm btn-info btn-block font-size-20"
-              [disabled]="!FormCorresponsal.valid"
-              [swal]="{title : '¿Está Seguro?', text: '¿Está Seguro?, Se van guardar los datos del corresponsal para el dia de hoy!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
-              (confirm)="GuardarCorresponsalDiario()">Guardar</button>
-          </div>
-          <div class="col-md-2">
-            <button class="btn btn-secondary btn-sm btn-block font-size-20"
-              (click)="VolverTablaRegistros()">Volver</button>
-          </div>
-        </div>
 
       </div>
       <div class="app-modal-footer">
@@ -148,8 +136,8 @@
           <button type="button" class="btn btn-outline-danger btn-rounded btn-sm"
             (click)="CerrarModal()">Cancelar</button>
           <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-            [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
-            (confirm)="GuardarEgreso()" [disabled]="!FormCorresponsal.valid">Editar
+            [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: 'Si Actualizar', cancelButtonText:'No, Comprobar!'}"
+            (confirm)="EditarCorresponsalDiario()" [disabled]="!FormCorresponsal.valid">Actualizar
           </button>
         </div>
       </div>

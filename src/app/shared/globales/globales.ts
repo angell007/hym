@@ -6,6 +6,7 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 export class Globales {
   ruta: string = 'https://softwarehym.com/customback/';
   rutaNueva: string = 'https://backnew.softwarehym.com/';
+  rutaNuevax: string = 'http://softhym.test/';
   public urlRiff = '';
   public Monedas: any = [];
   public Paises: any = [];

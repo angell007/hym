@@ -5,6 +5,7 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { CorresponsalbancarioService } from '../../../shared/services/corresponsalesbancarios/corresponsalbancario.service';
 import { HourPipe } from '../../../hour.pipe';
+import { MonedaService } from '../../../shared/services/monedas/moneda.service';
 
 @Component({
   selector: 'app-tablaregistroscorresponsalesdiarios',
@@ -49,6 +50,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     Total_Corresponsal: '',
   }
 
+  public monedaPeso: Array<any> = [];
   public CorresponsalesBancarios: Array<any> = [];
 
   //Paginación
@@ -64,7 +66,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
-    // private _toastService: ToastService,
+    private _monedaService: MonedaService,
     private _corresponsalService: CorresponsalbancarioService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -73,6 +75,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   ngOnInit() {
     this._updateTablaSubscription = this.ActualizarTabla.subscribe(data => {
       this.ConsultaFiltrada();
+      this.GetCorresponsalesBancarios()
     });
   }
 
@@ -85,7 +88,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   SetFiltros(paginacion: boolean) {
     let params: any = {};
 
-    // params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if (paginacion === true) {
@@ -94,31 +96,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
-
-    // if (this.Filtros.remitente.trim() != "") {
-    //   params.remitente = this.Filtros.remitente;
-    // }
-
-    // if (this.Filtros.recibo.trim() != "") {
-    //   params.recibo = this.Filtros.recibo;
-    // }
-
-    // if (this.Filtros.recibido.trim() != "") {
-    //   params.recibido = this.Filtros.recibido;
-    // }
-
-    // if (this.Filtros.transferido.trim() != "") {
-    //   params.transferido = this.Filtros.transferido;
-    // }
-
-    // if (this.Filtros.tasa.trim() != "") {
-    //   params.tasa = this.Filtros.tasa;
-    // }
-
-    // if (this.Filtros.estado.trim() != "") {
-    //   params.estado = this.Filtros.estado;
-    // }
-
     return params;
   }
 
@@ -133,12 +110,8 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
     this.Cargando = true;
     this._corresponsalService.GetRegistrosDiarios(p).subscribe((data: any) => {
-
-      // console.log(data);
-
       if (data.codigo == 'success') {
         this.RegistrosCorresponsales = data.query_data;
-        // this.TotalItems = data.numReg;
       } else {
         this.RegistrosCorresponsales = [];
         this._swalService.ShowMessage(data);
@@ -172,18 +145,36 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
   GetCorresponsalesBancarios() {
     this._corresponsalService.getCorresponsales().subscribe((data: any) => {
+
+      console.log(data);
       if (data.codigo == 'success') {
         this.CorresponsalesBancarios = data.query_data;
       } else {
         this.CorresponsalesBancarios = [];
-        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        // this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  editarCorresponsal(data: any) {
+  async settearMoneda() {
+    await this.GetMonedas().then((monedas) => {
+      this.monedaPeso = monedas.filter((moneda: any) => {
+        return moneda.Nombre == 'Pesos'
+      })
+    })
+    this.monedaPeso = await Object.assign({}, this.monedaPeso[0])
+  }
 
+  // Custom pesos 
+  async GetMonedas() {
+    return await this._monedaService.getMonedas().pipe().toPromise().then((data: any) => {
+      if (data != null) {
+        return data;
+      } else {
+        return [];
+      }
+    });
+  }
+  editarCorresponsal(data: any) {
     this.corresponsalEdit.Consignacion = data.Consignacion
     this.corresponsalEdit.Fecha = data.Fecha
     this.corresponsalEdit.Funcionario = data.Funcionario
@@ -198,11 +189,26 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this.corresponsalEdit.Retiro = data.Retiro
     this.corresponsalEdit.Total_Corresponsal = data.Total_Corresponsal
     this.modalMensaje.show()
-
   }
-
 
   CerrarModal(id: any) {
     this.modalMensaje.hide()
+  }
+
+
+  public CalcularTotalCorresponsal() {
+    let consignaciones = this.corresponsalEdit.Consignacion != '' ? parseFloat(this.corresponsalEdit.Consignacion) : 0;
+    let retiro = this.corresponsalEdit.Retiro != '' ? parseFloat(this.corresponsalEdit.Retiro) : 0;
+    this.corresponsalEdit.Total_Corresponsal = (consignaciones - retiro).toString();
+  }
+
+  EditarCorresponsalDiario() {
+    this._corresponsalService.updateCorrespnsal(this.corresponsalEdit).subscribe((data: any) => {
+      this.modalMensaje.hide()
+      this.ConsultaFiltrada()
+      console.log(data);
+
+      this._swalService.ShowMessage(data);
+    });
   }
 }
