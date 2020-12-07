@@ -29,7 +29,7 @@
           <th class="table-filters">
             Fecha Inicio
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_inicio">
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_inicio">
             <div class="w-100"></div>
             Fecha Fin
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
@@ -51,14 +51,7 @@
           <th class="table-filters"></th>
           <th class="table-filters"></th>
         </tr>
-        <!-- <tr *ngIf="Cargando">
-          <td colspan="7" class="text-center">
-            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
-              <h2>CARGANDO MOVIMIENTOS</h2>
-              <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
-            </div>
-          </td>
-        </tr> -->
+
         <tr *ngIf="Movimientos.length == 0 && !Cargando">
           <td colspan="7" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
@@ -69,8 +62,6 @@
       <tbody>
         <tr *ngIf="MostrarTotales">
           <td colspan="6" class="text-center custom-cell font-size-17">Total</td>
-          <!-- <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.ingreso">{{MovimientosTercero.totales.ingreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.egreso">{{MovimientosTercero.totales.egreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td> -->
           <td class="text-right custom-cell font-size-17" appColorsaldo [value]="MovimientosTercero.totales.balance">
             {{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
           <td class="custom-cell"></td>

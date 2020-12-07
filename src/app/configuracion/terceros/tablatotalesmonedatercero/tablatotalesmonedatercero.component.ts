@@ -146,7 +146,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     if (paginacion === true) {
       params.pag = this.page;
     } else {
-      this.page = 1; // Volver a la página 1 al filtrar
+      this.page = 1;
       params.pag = this.page;
     }
 
@@ -156,6 +156,10 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
     if (this.Filtros.fecha_fin.trim() != "") {
       params.fecha_fin = this.Filtros.fecha_fin;
+    }
+
+    if (params.fecha_fin == params.fecha_inicio) {
+      params.filtrado = 'No'
     }
 
     if (this.Filtros.movimiento.trim() != "") {
@@ -176,8 +180,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public ConsultaFiltrada(paginacion: boolean = false) {
 
     var p = this.SetFiltros(paginacion);
-
-    console.log(p);
 
     this.Cargando = true;
     this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {

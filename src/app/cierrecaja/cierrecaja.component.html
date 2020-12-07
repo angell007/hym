@@ -10,7 +10,7 @@
           <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
         </div>
 
-        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
+        <!-- <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <thead>
             <tr>
               <th style="width:10% !important;min-width:10% !important;max-width:10% !important;"></th>
@@ -48,14 +48,12 @@
                 [ngStyle]="{'background-color':mt.Color}">{{mt.Total | customcurrency:''}}</td>
             </tr>
           </tbody>
-        </table>
-      </div>
-      <!-- </div> -->
+        </table> -->
 
-      <!-- this.sizeColunm -->
-      <!-- <div class="row card-body" *ngIf="!solo_ver"> -->
+      </div>
+
       <div class="col-md-12">
-        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
+        <!-- <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Armado">
           <tbody>
             <tr>
               <td [ngStyle]="{'width':10% !important,'min-width':10% !important, 'max-width':10% !important}">
@@ -100,7 +98,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
       <div class="col-md-12" *ngIf="Armado">
         <label class="block-element">Observaciones</label>
@@ -117,7 +115,6 @@
           </div>
         </div>
       </div>
-      <!-- </div> -->
     </div>
   </div>
 </div>

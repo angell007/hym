@@ -73,7 +73,7 @@
     <app-modal-basic [dialogClass]="'modal-lg'" #modalMensaje>
       <div class="app-modal-header">
         <h4 class="modal-title">Egreso</h4>
-        <button type="button" class="close basic-close" (click)="CerrarModal()">
+        <button type="button" class="close basic-close" (click)="CerrarModal(0)">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -134,9 +134,9 @@
       <div class="app-modal-footer">
         <div class="text-right">
           <button type="button" class="btn btn-outline-danger btn-rounded btn-sm"
-            (click)="CerrarModal()">Cancelar</button>
+            (click)="CerrarModal(0)">Cancelar</button>
           <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-            [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: 'Si Actualizar', cancelButtonText:'No, Comprobar!'}"
+            [swal]="{title:'¿Está Seguro?',text : 'MensajeGuardar' , type:'warning', showCancelButton: true, confirmButtonText: 'Si Actualizar', cancelButtonText:'No, Comprobar!'}"
             (confirm)="EditarCorresponsalDiario()" [disabled]="!FormCorresponsal.valid">Actualizar
           </button>
         </div>
