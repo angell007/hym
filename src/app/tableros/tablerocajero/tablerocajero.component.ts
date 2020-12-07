@@ -317,8 +317,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public NombreMonedaTasaCambio: string = '';
   public MonedasCambio: any = [];
   public TextoMensajeGuardar: string = 'compra';
-  public MonedaDestino: string = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
-  public MonedaOrigen: string = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
+  public MonedaDestino: string = '';
+  public MonedaOrigen: string = '';
 
   //#endregion
 
@@ -608,7 +608,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._getTodasMonedas();
     this.AsignarMonedas();
     this.settearMoneda();
-    console.log('Moneda por defecto', JSON.parse(localStorage.getItem('monedaDefault'))['Nombre']);
+
+    this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
+    this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
+
   }
 
   CierreCajaAyerBolivares = 0;
@@ -3258,7 +3261,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   AsignarValoresPersonaGiro(modelo, tipo_persona) {
 
     if (tipo_persona == 'remitente') {
-      console.log('AsignarValoresPersonaGiro remitente', modelo.Id_Transferencia_Remitente, tipo_persona);
+      // console.log('AsignarValoresPersonaGiro remitente', modelo.Id_Transferencia_Remitente, tipo_persona);
       this.GiroModel.Documento_Remitente = modelo.Id_Transferencia_Remitente;
       this.GiroModel.Nombre_Remitente = modelo.Nombre;
       this.GiroModel.Telefono_Remitente = modelo.Telefono;
@@ -3267,7 +3270,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     } else if (tipo_persona == 'destinatario') {
 
-      console.log('AsignarValoresPersonaGiro Destinatario', modelo.Id_Transferencia_Remitente, tipo_persona);
+      // console.log('AsignarValoresPersonaGiro Destinatario', modelo.Id_Transferencia_Remitente, tipo_persona);
       this.GiroModel.Documento_Destinatario = modelo.Id_Transferencia_Remitente;
       this.GiroModel.Nombre_Destinatario = modelo.Nombre;
       this.GiroModel.Telefono_Destinatario = modelo.Telefono;
@@ -3307,7 +3310,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.GiroModel.Comision = minComision
     }
 
-    console.log(this.GiroModel.Comision);
+    // console.log(this.GiroModel.Comision);
 
 
     if (flag) {
@@ -3629,7 +3632,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarDatos(data: any) {
-    console.log('Cargar datos ', data);
+    // console.log('Cargar datos ', data);
     if (data.tipo == 'remitente') {
 
       this.Remitente_Giro = data.model;
@@ -3648,7 +3651,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   EditarPersonaGiro(idRemitente: string, tipoPersona: string, accion: string) {
 
-    console.log('EditarPersonaGiro', idRemitente, tipoPersona, accion);
+    // console.log('EditarPersonaGiro', idRemitente, tipoPersona, accion);
     let data = {};
 
     if (tipoPersona == 'remitente') {
@@ -3791,7 +3794,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     this.http.post(this.globales.ruta + 'php/trasladocaja/verify_traslado.php', datos).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       if (data.titulo != 'Advertencia') {
         this.http.post(this.globales.ruta + 'php/pos/decision_traslado.php', datos).subscribe((data: any) => {
@@ -4324,7 +4327,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getTodasMonedas() {
     this.MonedasTransferencia = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.Monedas = data;
       // if (data.codigo == 'success') {
       // } else {
@@ -4389,7 +4392,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   private _getMonedasTraslado() {
     this.MonedasTraslados = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       if (data != null) {
         this.MonedasTraslados = data;
       } else {
@@ -4811,7 +4814,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http
       .get(this.globales.ruta + 'php/diario/verificar_apertura_diario.php', { params: { id_funcionario: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
-        console.log(data);
+        // console.log(data);
         if (data == '0') {
           this.GetRegistroDiario();
         }
@@ -5232,7 +5235,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   public limpiarClientes() {
-    console.log('Limpiando');
+    // console.log('Limpiando');
     this.Clientes = []
   }
 
@@ -5311,7 +5314,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: respuestaModal.id_destinatario, moneda: this.MonedaParaTransferencia.id, solo_extranjeras: '1' } }).subscribe((data: any) => {
 
-        console.log(this.ListaDestinatarios[this.PosicionDestinatarioActivo]);
+        // console.log(this.ListaDestinatarios[this.PosicionDestinatarioActivo]);
 
 
         if (data != '') {
@@ -5407,9 +5410,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   getInfo(Tercero: any, otro: any, another: any) {
-    console.log(Tercero, otro, another);
+    // console.log(Tercero, otro, another);
     this.CambioModel.Id_Tercero = Tercero.Id_Tercero
-    console.log(this.CambioModel.Id_Tercero);
+    // console.log(this.CambioModel.Id_Tercero);
   }
 
   setFormaPago() {
@@ -5427,7 +5430,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   devolverCambio(id: any, modal: any) {
 
     this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
-      console.log(data);
+
+      // console.log(data);
 
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
@@ -5442,7 +5446,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   printCambio(id) {
     this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id }, responseType: 'blob' }).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       const link = document.createElement('a');
       link.setAttribute('target', '_blank');
       const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
@@ -5473,7 +5477,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
     this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
     })
   };
 

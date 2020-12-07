@@ -242,9 +242,6 @@ export class CommonLayoutComponent implements OnInit {
 
     async ngOnInit() {
         this.swalService.event.subscribe((data: any) => {
-
-            console.log('subs:', data);
-
             this.ShowSwal(data.type, data.title, data.msg);
         });
 
@@ -267,7 +264,7 @@ export class CommonLayoutComponent implements OnInit {
             // cajero
             case "3": {
                 this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                    console.log(' obteniendo notificaciones', data);
+                    // console.log(' obteniendo notificaciones', data);
                     data = data.filter(x => x.Estado == "Pendiente")
                     this.TotalTraslados = data.length
                 });
@@ -1125,7 +1122,7 @@ export class CommonLayoutComponent implements OnInit {
                 }
             },
             err => {
-                console.log(err);
+                // console.log(err);
             }
         );
         setTimeout(() => {

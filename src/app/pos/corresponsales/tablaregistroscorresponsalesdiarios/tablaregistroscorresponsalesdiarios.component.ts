@@ -146,7 +146,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   GetCorresponsalesBancarios() {
     this._corresponsalService.getCorresponsales().subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
       if (data.codigo == 'success') {
         this.CorresponsalesBancarios = data.query_data;
       } else {
@@ -206,7 +206,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this._corresponsalService.updateCorrespnsal(this.corresponsalEdit).subscribe((data: any) => {
       this.modalMensaje.hide()
       this.ConsultaFiltrada()
-      console.log(data);
+      // console.log(data);
 
       this._swalService.ShowMessage(data);
     });

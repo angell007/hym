@@ -287,24 +287,24 @@
                                 <td class="text-right " style="font-size: 14px;">{{cambio.Tasa}}</td>
 
                                 <td class="text-center">
-                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                  <button class="clean-btn-table" type="button" title="Ver Decoluciones" style="margin:0;"
                                     *ngIf="cambio.Tipo != 'Compra' || cambio.Estado != 'Anulado'"
                                     (click)="verDevoluciones(cambio.Id_Cambio,AbrirModalverDevoluciones) ">
                                     <i class="ti-eye text-warning" style="font-size: 14px;"></i>
                                   </button>
 
-                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                  <button class="clean-btn-table" type="button" title="Ver cambio" style="margin:0;"
                                     (click)="VerCambio(cambio.Id_Cambio,ModalVerCambio)">
                                     <i class="ti-search text-primary" style="font-size: 14px;"></i>
                                   </button>
 
-                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                  <button class="clean-btn-table" type="button" title="Devolver cambio" style="margin:0;"
                                     *ngIf="cambio.Tipo != 'Compra'"
                                     (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
                                     <i class="ti-shift-left text-info" style="font-size: 14px;"></i>
                                   </button>
 
-                                  <button class="clean-btn-table" type="button" style="margin:0;"
+                                  <button class="clean-btn-table" type="button"title="Imprimir cambio" style="margin:0;"
                                     (click)="printCambio(cambio.Id_Cambio)">
                                     <i class="ti-desktop text-warnin" style="font-size: 14px;"></i>
                                   </button>
@@ -2724,11 +2724,7 @@
           </tr>
 
           <tr>
-            <!-- <td>Valor Destino {{devCambio.Codigo_Moneda_Destino }}</td>
-            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio.Valor_Destino" currencyMask
-              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
-          </tr> -->
+           
 
             <td>Cantidad a devolver {{devCambio['Codigo_Moneda_Destino']}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
@@ -2741,11 +2737,6 @@
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
               [(ngModel)]="devCambio['Valor_Devuelto']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}">
-
-            <!-- <td>Valor en  {{devCambio.Codigo_Moneda_Origen}}</td>
-            <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
-              [(ngModel)]="devCambio.Valor_Origen" currencyMask
-              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}"> -->
 
           </tr>
 
@@ -2763,7 +2754,7 @@
             <td>Observación</td>
             <textarea name="observacion" type="text" placeholder="observacion" style="width: 100%;"
               [(ngModel)]="devCambio['Observacion']"
-              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}"></textarea>
+             ></textarea>
           </tr>
 
         </tbody>
@@ -2774,7 +2765,7 @@
   <div class="app-modal-footer">
     <div class="text-right">
       <button class="btn btn-default" (click)="AbrirModalDevolucion.hide()">Cerrar</button>
-      <button class="btn btn-primary" (click)="saveDevolucion()" [disabled]='savebtn'>Guardar</button>
+      <button class="btn btn-primary" (click)="saveDevolucion()">Guardar</button>
     </div>
   </div>
 </app-modal-basic>

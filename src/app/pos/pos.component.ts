@@ -1409,7 +1409,7 @@ export class PosComponent implements OnInit {
       let TotalTransferenciaDestinatario = 0;
 
       this.ListaDestinatarios.forEach(e => {
-        console.log(e.Valor_Transferencia);
+        // console.log(e.Valor_Transferencia);
         
         if (e.Valor_Transferencia == undefined || isNaN(e.Valor_Transferencia) || e.Valor_Transferencia == '') {
           TotalTransferenciaDestinatario += 0;

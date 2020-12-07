@@ -21,14 +21,10 @@ export class TablaverterceroComponent implements OnInit, OnChanges {
               private _generalService:GeneralService,
               private _swalService:SwalService,
               private _toastService:ToastService)
-  { 
-    // this.GetTercero();
-    // console.log(this.Id_Tercero);
-  }
+  { }
 
   ngOnInit() {
-    this.GetTercero();
-    
+    this.GetTercero();  
   }
 
   ngOnChanges(changes:SimpleChanges): void {

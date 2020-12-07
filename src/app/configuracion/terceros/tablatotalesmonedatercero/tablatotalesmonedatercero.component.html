@@ -27,8 +27,13 @@
         </tr>
         <tr>
           <th class="table-filters">
+            Fecha Inicio
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
-              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha">
+            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_inicio">
+            <div class="w-100"></div>
+            Fecha Fin
+            <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_fin">
           </th>
           <th class="table-filters">
             <input type="text" class="form-control form-control-sm" placeholder="Filtro movimiento"

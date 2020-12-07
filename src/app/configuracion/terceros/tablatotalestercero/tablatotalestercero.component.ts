@@ -22,12 +22,12 @@ export class TablatotalesterceroComponent implements OnInit {
     this.GetMonedas();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   GetMonedas() {
-    this._monedaService.getMonedas().subscribe((data: any) => {
-      console.log(data);
+    this._monedaService.getMonedas().subscribe((data: any) => {      
+      
+      
       if (data != null) {
         this.Monedas = data;
         this.MonedaSeleccionada = this.Monedas[0].Id_Moneda;
@@ -45,8 +45,6 @@ export class TablatotalesterceroComponent implements OnInit {
     this.MonedaSeleccionada = idMoneda;
   }
 
-  Test(value) {
-    //this._swalService.ShowMessage(['success', 'Funciono', value]);
-  }
+  Test(value) {}
 
 }

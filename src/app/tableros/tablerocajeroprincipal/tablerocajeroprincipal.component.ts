@@ -38,7 +38,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public TotalesMunicipio: Array<any> = [];
   public TotalesOficina: Array<any> = [];
   public FechaSeleccionada: any = '2019-02-09';
-  public Fecha_Consulta: any = '';
+  public Fecha_inicio: any = '';
+  public Fecha_fin: any = '';
   public CajerosAbiertos: number = 0;
   public CajerosTotales: number = 0;
   public Totales: Array<any> = [];
@@ -68,7 +69,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
   InicializarFecha() {
     let d = new Date();
     this.FechaActual = d.toISOString().split("T")[0];
-    this.Fecha_Consulta = d.toISOString().split("T")[0];
+    this.Fecha_inicio = d.toISOString().split("T")[0];
+    this.Fecha_fin = d.toISOString().split("T")[0];
   }
 
   AsignarPaises() {
@@ -116,7 +118,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
     if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
       //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-      p = { fecha: this.Fecha_Consulta };
+      p = { fecha: this.Fecha_fin };
       this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
         // console.log(data);
@@ -133,7 +135,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
     } else if (this.Funcionario.Id_Perfil == 2) {
       //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-      p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_Consulta };
+      p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
       this._cajaService.getCajasAbiertasFuncionario(p).subscribe((data: any) => {
 
         // console.log(data);
@@ -153,7 +155,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
   ConsultarTotalesDepartamento() {
 
-    if (this.Fecha_Consulta == '') {
+    if (this.Fecha_fin == '') {
       // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
       this.Totales = [];
       return;
@@ -162,9 +164,11 @@ export class TablerocajeroprincipalComponent implements OnInit {
       let p = {};
 
       if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6 || this.Funcionario.Id_Perfil == 2) {
-        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-        p = { id_departamento: this.DepartamentoId, fechas: this.Fecha_Consulta };
+        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin};
         this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
+
+          // console.log(data);
+          
           if (data.codigo == 'success') {
 
 
@@ -192,7 +196,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
       } else if (this.Funcionario.Id_Perfil == 2) {
         //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fechas: this.Fecha_Consulta };
+        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId,  fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin };
         this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
           if (data.codigo == 'success') {
 
@@ -242,9 +246,9 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
   dateRangeChanged(event) {
     if (event.formatted != "") {
-      this.Fecha_Consulta = event.formatted;
+      this.Fecha_fin = event.formatted;
     } else {
-      this.Fecha_Consulta = '';
+      this.Fecha_fin = '';
     }
 
     this.ConsultarTotalesDepartamento();
@@ -256,7 +260,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   Test() {
-    // console.log(this.Fecha_Consulta);
+    // console.log(this.Fecha_fin);
   }
 
   ShowSwal(tipo: string, titulo: string, msg: string) {

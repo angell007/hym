@@ -104,7 +104,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
 
     let info = JSON.stringify(this.CorresponsalModel);
 
-    console.log(this.CorresponsalModel);
+    // console.log(this.CorresponsalModel);
 
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Bancario');
@@ -133,7 +133,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
       params: { modulo: 'Corresponsal_Bancario', id: id }
     }).subscribe((data: any) => {
 
-      console.log(data);
+      // console.log(data);
 
       this.CorresponsalModel.Cupo = parseInt(data.Cupo);
       this.CorresponsalModel.Nombre = data.Nombre;

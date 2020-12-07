@@ -68,7 +68,7 @@ export class Corresponsal {
         }
 
         if (id_funcionario == '') {
-            console.log("No hay funcionario asignado para corresponsal bancario!");
+            // console.log("No hay funcionario asignado para corresponsal bancario!");
             return;
         }
 

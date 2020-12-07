@@ -130,7 +130,7 @@ export class Cambios {
         }
 
         if (this.Filtros.codigo.trim() != "") {
-            console.log(this.Filtros.codigo);
+            // console.log(this.Filtros.codigo);
             params.codigo = this.Filtros.codigo;
         }
 

@@ -123,10 +123,10 @@ export class AutocompletarService {
 
   CargarTransferencias() {
     this.RecibosTransferencia = [];
-    console.log('Cargando transferencias ');
+    // console.log('Cargando transferencias ');
 
     this.http.get(this.globales.ruta + 'php/transferencias/get_recibos_transferencias_funcionario.php', { params: { id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-      console.log('tranferencias cargadas', data);
+      // console.log('tranferencias cargadas', data);
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.SetInformacionPaginacion(data.query_data)
@@ -145,9 +145,9 @@ export class AutocompletarService {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
+    // console.log(data);
     this.TotalItems = data.length
-    console.log('', this.TotalItems);
+    // console.log('', this.TotalItems);
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;

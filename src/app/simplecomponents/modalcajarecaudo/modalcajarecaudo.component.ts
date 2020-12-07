@@ -118,7 +118,7 @@ export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
     if (this.Editar) {
       this._cajaRecaudoService.editCajaRecaudo(datos)
       .catch(error => { 
-        console.log('An error occurred:', error);
+        // console.log('An error occurred:', error);
         this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })
@@ -137,7 +137,7 @@ export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
     }else{
       this._cajaRecaudoService.saveCajaRecaudo(datos)
       .catch(error => { 
-        console.log('An error occurred:', error);
+        // console.log('An error occurred:', error);
         this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })

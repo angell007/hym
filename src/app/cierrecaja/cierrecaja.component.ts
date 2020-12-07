@@ -63,7 +63,6 @@ export class CierrecajaComponent implements OnInit {
     this.GetRegistroDiario();
     this.ConsultarTotalesCierre();
     this.ConsultarNombreFuncionario();
-    // console.log(this.solo_ver);
 
   }
 
@@ -136,7 +135,7 @@ export class CierrecajaComponent implements OnInit {
             this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };
             this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);
             this.SumatoriaTotales[m.Nombre].Egreso_Total += parseFloat(monObj[1].Egreso_Total);
-            console.log(this.SumatoriaTotales[m.Nombre], ['ingreso', monObj[0].Ingreso_Total, 'egreso', monObj[1].Egreso_Total]);
+            // console.log(this.SumatoriaTotales[m.Nombre], ['ingreso', monObj[0].Ingreso_Total, 'egreso', monObj[1].Egreso_Total]);
           } else {
 
             this.SumatoriaTotales[m.Nombre] = { Ingreso_Total: 0, Egreso_Total: 0 };

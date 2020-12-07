@@ -30,7 +30,8 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public CodigoMonedaActual: string = '';
 
   public Filtros: any = {
-    fecha: new Date().toISOString().slice(0, 10),
+    fecha_inicio: new Date().toISOString().slice(0, 10),
+    fecha_fin: new Date().toISOString().slice(0, 10),
     movimiento: '',
     cajero: '',
     detalle: ''
@@ -55,7 +56,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     private _terceroService: TerceroService,
     private _generalService: GeneralService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
-    console.log(this.Filtros.fecha);
 
   }
 
@@ -135,6 +135,11 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     let params: any = {};
 
     params.id_tercero = this.Id_Tercero;
+
+    if (this.Id_Moneda == '') {
+      this.Id_Moneda = '1';
+    }
+
     params.id_moneda = this.Id_Moneda;
     params.tam = this.pageSize;
 
@@ -145,8 +150,12 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       params.pag = this.page;
     }
 
-    if (this.Filtros.fecha.trim() != "") {
-      params.fecha = this.Filtros.fecha;
+    if (this.Filtros.fecha_inicio.trim() != "") {
+      params.fecha_inicio = this.Filtros.fecha_inicio;
+    }
+
+    if (this.Filtros.fecha_fin.trim() != "") {
+      params.fecha_fin = this.Filtros.fecha_fin;
     }
 
     if (this.Filtros.movimiento.trim() != "") {
@@ -167,6 +176,8 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public ConsultaFiltrada(paginacion: boolean = false) {
 
     var p = this.SetFiltros(paginacion);
+
+    console.log(p);
 
     this.Cargando = true;
     this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {

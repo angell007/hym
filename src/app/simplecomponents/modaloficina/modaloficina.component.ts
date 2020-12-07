@@ -149,7 +149,7 @@ export class ModaloficinaComponent implements OnInit {
     if (this.Editar) {
       this._oficinaService.editOficina(datos)
         .catch(error => {
-          console.log('An error occurred:', error);
+          // console.log('An error occurred:', error);
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })

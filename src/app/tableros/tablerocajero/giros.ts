@@ -274,7 +274,7 @@ export class Giros {
     }];
 
     AutoCompletarDatosPersonalesGiro(modelo, tipo_persona: string) {
-        console.log(modelo);
+        // console.log(modelo);
 
         if (typeof (modelo) == 'object') {
 

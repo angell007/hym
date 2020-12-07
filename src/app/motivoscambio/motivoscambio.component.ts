@@ -57,7 +57,7 @@ export class MotivoscambioComponent implements OnInit {
     const datos = new FormData();
     datos.append("data", JSON.stringify(this.motivoModel));
     this.http.post(this.globales.rutaNueva + 'motivos-devolucion', datos).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.getMotivos()
       this.Ocultar();
     })
@@ -67,7 +67,7 @@ export class MotivoscambioComponent implements OnInit {
     const datos = new FormData();
     datos.append("id", JSON.stringify(id));
     this.http.post(this.globales.rutaNueva + `motivos-devolucion/${id}`, datos).subscribe((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.getMotivos()
     })
   }

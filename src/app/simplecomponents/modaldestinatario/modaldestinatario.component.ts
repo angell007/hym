@@ -150,7 +150,7 @@ export class ModaldestinatarioComponent implements OnInit {
       this.paisDefault = fullPais.Id_Pais;
       this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
     this.GetBancosPais(this.rowDefault.fila);
     this.FiltrarDatosNacionalidad();

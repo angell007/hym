@@ -114,7 +114,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
       datos.append("modulo", 'Corresponsal_Diario');
       datos.append("modelo", info);
 
-      console.log('Guardando');
+      // console.log('Guardando');
 
       this._corresponsalService.saveCorresponsalDiario(datos).subscribe(data => {
         if (data.codigo == 'success') {

@@ -79,7 +79,7 @@ export class ModalservicioexternoComponent implements OnInit, OnDestroy {
     if (this.Editar) {
       this.servicioService.editServicio(datos)
       .catch(error => { 
-        console.log('An error occurred:', error);
+        // console.log('An error occurred:', error);
         this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })
@@ -95,7 +95,7 @@ export class ModalservicioexternoComponent implements OnInit, OnDestroy {
     }else{
       this.servicioService.saveServicio(datos)
       .catch(error => { 
-        console.log('An error occurred:', error);
+        // console.log('An error occurred:', error);
         this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
         return this.handleError(error);
       })

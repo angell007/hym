@@ -16,7 +16,7 @@ export class ModaldevoluccionComponent implements OnInit {
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: string) => {
 
-      console.log('data', data);
+      // console.log('data', data);
       // if (data != "0") {
         // this.Editar = true;
         // this.MensajeGuardar = 'Se dispone a actualizar este egreso';

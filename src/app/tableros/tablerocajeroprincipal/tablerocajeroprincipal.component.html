@@ -17,14 +17,17 @@
                           <i class="ti-info-alt text-info font-size-15" style="margin-right:4px;"></i>
                           <span>{{CajerosAbiertos}} Cajeros abrieron de {{CajerosTotales}} totales</span>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                           <div class="pull-right">
                             <div class="form-row align-items-center">
-                              <div class="col-auto">
-                                <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
-                                  [(ngModel)]="Fecha_Consulta" (change)="onDataChange()" [attr.max]="FechaActual">
 
-                              </div>
+                              <label for="">Fecha inicio</label>
+                                <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
+                                [(ngModel)]="Fecha_inicio" (change)="onDataChange()" [attr.max]="FechaActual">
+                                
+                                <label for="">Fecha fin</label>
+                                <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
+                                  [(ngModel)]="Fecha_fin" (change)="onDataChange()" [attr.max]="FechaActual">
 
                             </div>
                           </div>

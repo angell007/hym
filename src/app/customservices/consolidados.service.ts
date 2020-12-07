@@ -48,7 +48,7 @@ export class ConsolidadosService {
       return this.TotalRestaIngresosEgresos;
 
     }).catch((err) => {
-      console.log('Error  ', err);
+      // console.log('Error  ', err);
     })
   }
 

@@ -125,7 +125,7 @@ export class Externos {
     AsignarComisionServicioExterno() {
 
         let valorAsignado = this.ServicioExternoModel.Valor;
-        console.log(this.ServicioExternoModel);
+        // console.log(this.ServicioExternoModel);
 
 
         if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {
@@ -145,7 +145,7 @@ export class Externos {
     AsignarComisionServicioExterno2() {
 
         let valorAsignado = this.ServicioExternoModel.Valor;
-        console.log(valorAsignado);
+        // console.log(valorAsignado);
 
         if (valorAsignado == '' || valorAsignado == undefined || valorAsignado == '0') {
             this.ShowSwal('warning', 'Alerta', 'El valor no puede estar vacio ni ser 0!');

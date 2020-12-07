@@ -89,8 +89,8 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
+      if (data != null) {
+        this.Monedas = data;
       } else {
 
         this.Monedas = [];
@@ -119,6 +119,8 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
     } else if (this.TrasladoModel.Destino == 'Cuenta Bancaria') {
       return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
+    } else if (this.TrasladoModel.Destino == 'Cajero') {
+      return this._cuentaBancariaService.getFiltrarCajero(match);
     }
   }
 
@@ -131,7 +133,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           this.ConsultaOrigen(term)
             .map(response => response)
             .do(data => {
-              // console.log(data);
               return data;
             })
         )
@@ -163,11 +164,11 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     });
 
 
-    if (this.flag) {
-      this.flag = false;
-      this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
-      return false
-    }
+    // if (this.flag) {
+    //   this.flag = false;
+    //   this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
+    //   return false
+    // }
 
 
     if (!this.ValidateBeforeSubmit()) {
@@ -207,7 +208,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
         this._trasladoService.saveTraslado(datos)
 
           .catch(error => {
-            console.log('An error occurred:', error);
+            // console.log('An error occurred:', error);
             // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
             return this.handleError(error);
           })
@@ -229,7 +230,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   public settearMoneda() {
 
-    console.log(this.TrasladoModel.Moneda);
+    // console.log(this.TrasladoModel.Moneda);
     this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
       if (this.TrasladoModel.Moneda == element[3]) {
         this.Mymoneda = element[2]
@@ -243,20 +244,20 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     // console.log(this.TrasladoModel);
     if (!this._validacionService.validateString(this.TrasladoModel.Origen, 'Tipo Origen')) {
       return false;
-    } else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origen')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Destino, 'Destino')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Moneda, 'Moneda')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Valor, 'Valorx')) {
-      return false;
-    } else if (!this._validacionService.validateString(this.TrasladoModel.Detalle, 'Detalle')) {
+      // } else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
+      //   return false;
+      // } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origen')) {
+      //   return false;
+      // } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Destino, 'Destino')) {
+      //   return false;
+      // } else if (!this._validacionService.validateNumber(this.TrasladoModel.Moneda, 'Moneda')) {
+      //   return false;
+      // } else if (!this._validacionService.validateString(this.TrasladoModel.Valor, 'Valorx')) {
+      //   return false;
+      // } else if (!this._validacionService.validateString(this.TrasladoModel.Detalle, 'Detalle')) {
       // console.log(this.TrasladoModel);
 
-      return false;
+      // return false;
     } else {
       // console.log('validado');
       return true;
@@ -291,7 +292,22 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   CompletarDestino(value) {
 
     if (typeof (value) == 'object') {
-      this.TrasladoModel.Id_Destino = this.TrasladoModel.Destino == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
+
+      switch (this.TrasladoModel.Destino) {
+        case 'Cuenta Bancaria':
+          this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria
+          break;
+
+        case 'Cajero':
+          this.TrasladoModel.Id_Destino = value.Identificacion_Funcionario
+
+          break;
+
+        default:
+          this.TrasladoModel.Id_Destino = value.Id_Tercero
+          break;
+      }
+
     } else {
       this.TrasladoModel.Id_Destino = '';
     }

@@ -43,7 +43,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     //   this.ModalPermiso.show(); 
     // });
     this.openModalSubscription = this.permisoService.openModalPermiso.subscribe(d => {
-      console.log(d);
+      // console.log(d);
       
       this.accion = d.accion;
       this.response.accion = d.accion;

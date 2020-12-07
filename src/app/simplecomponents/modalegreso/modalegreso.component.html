@@ -44,6 +44,13 @@
           </div>
         </div>
 
+        <div class="col-md-12">
+          <div class="form-group" *ngIf="booleancuentas">
+            <label class="font-size-18">Titular</label>
+            <label class="font-size-18">{{titular}}</label>
+          </div>
+        </div>
+
         <div class="col-md-12 my-2">
           <span *ngIf="verCupo">Cupo: {{cupo}}</span>
         </div>
