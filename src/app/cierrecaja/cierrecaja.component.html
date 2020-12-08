@@ -92,7 +92,7 @@
               <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
                 <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
                   placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
-                  [disabled]="FieldsDisabled[ind]">
+                  [disabled]="FieldsDisabled[i]">
               </th>
 
             </tr>

@@ -27,29 +27,31 @@
         </tr>
         <tr>
           <th class="table-filters">
-            Fecha Inicio
+            <my-date-range-picker name="" [options]="myDateRangePickerOptions"
+              (dateRangeChanged)="ConsultaFiltrada(false,$event)" placeholder="Filtro Fechas"></my-date-range-picker>
+            <!-- Fecha Inicio
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
               (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_inicio">
             <div class="w-100"></div>
             Fecha Fin
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
-              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_fin">
+              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_fin"> -->
           </th>
-          <th class="table-filters">
+          <th class="table-filters text-center">
             <input type="text" class="form-control form-control-sm" placeholder="Filtro movimiento"
               (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.movimiento">
           </th>
-          <th class="table-filters">
+          <th class="table-filters text-center">
             <input type="text" class="form-control form-control-sm" placeholder="Filtro cajero"
               (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cajero">
           </th>
-          <th class="table-filters">
+          <th class="table-filters text-center">
             <input type="text" class="form-control form-control-sm" placeholder="Filtro detalle"
               (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.detalle">
           </th>
-          <th class="table-filters"></th>
-          <th class="table-filters"></th>
-          <th class="table-filters"></th>
+          <th class="table-filters text-center"></th>
+          <th class="table-filters text-center"></th>
+          <th class="table-filters text-center"></th>
         </tr>
 
         <tr *ngIf="Movimientos.length == 0 && !Cargando">

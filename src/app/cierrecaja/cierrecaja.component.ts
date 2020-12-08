@@ -30,7 +30,6 @@ export class CierrecajaComponent implements OnInit {
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
   public Modulos: Array<string> = []; public MonedasSistema: any = [];
-  // public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -121,35 +120,34 @@ export class CierrecajaComponent implements OnInit {
       data.append("diferencias", diferencias);
       data.append("modelo", model);
       data.append("funcionario", this.id_funcionario);
-      // data.append("0resumen_movimientos", resumen);
 
-      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
+      //   this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
 
-        console.log(data);
+      //     console.log(data);
 
-        if (data.tipo == 'error') {
+      //     if (data.tipo == 'error') {
 
-          this.ShowSwal(data.tipo, 'Error', data.mensaje);
-        } else {
+      //       this.ShowSwal(data.tipo, 'Error', data.mensaje);
+      //     } else {
 
-          this.LimpiarModelos();
-          this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
-          this.salir();
-        }
-      });
+      //       this.LimpiarModelos();
+      //       this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+      //       this.salir();
+      //     }
+      //   });
     }
   }
 
   ValidarMontos() {
 
-    for (let index = 0; index < this.TotalRestaIngresosEgresos.length; index++) {
-      if (this.TotalRestaIngresosEgresos[index] != 0) {
-
-        if (this.TotalEntregado[index].Entregado == 0) {
-          this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
-          return false;
-        }
-      }
+    for (let index = 0; index < this.Modulos.length; index++) {
+      console.log(this.Modulos[index]);
+      // if (this.Modulos[index] != 0) {
+      //   if (this.TotalEntregado[index].Entregado == 0) {
+      //     this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
+      //     return false;
+      //   }
+      // }
     }
 
     return true;
@@ -173,10 +171,9 @@ export class CierrecajaComponent implements OnInit {
       return false;
     }
 
-    console.log([ingresado, calculado, pos]);
-
     let resta = ingresado - calculado;
-    this.Diferencias[pos] = resta;
+    this.Diferencias[pos] = (resta < 0) ? -1 : resta;
+
 
     // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
     // montos[0].forEach((element, index) => {
@@ -252,8 +249,6 @@ export class CierrecajaComponent implements OnInit {
         this.FieldsDisabled.push(false);
       }
     });
-
-    // console.log(this.FieldsDisabled);
   }
 
   InhabilitarBoton() {
@@ -300,7 +295,7 @@ export class CierrecajaComponent implements OnInit {
   reduce(a) {
     let suma = 0;
     a.forEach((element) => {
-      suma += element.Ingreso_Total - element.Egreso_Total
+      suma += parseFloat(element.Ingreso_Total) - parseFloat(element.Egreso_Total)
     })
     return suma;
   }

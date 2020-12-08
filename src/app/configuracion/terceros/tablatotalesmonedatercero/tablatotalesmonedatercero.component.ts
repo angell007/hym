@@ -7,6 +7,10 @@ import { CustomcurrencyPipe } from '../../../common/Pipes/customcurrency.pipe';
 import { TerceroService } from '../../../shared/services/tercero/tercero.service';
 import { Subject } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
+import { IMyDrpOptions } from 'mydaterangepicker';
+
+
+
 
 @Component({
   selector: 'app-tablatotalesmonedatercero',
@@ -29,9 +33,18 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public RutaGifCargando: string;
   public CodigoMonedaActual: string = '';
 
+  myDateRangePickerOptions: IMyDrpOptions = {
+    width: '180px',
+    height: '21px',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
+    selectionTxtFontSize: '10px',
+    dateFormat: 'yyyy-mm-dd',
+  };
+
   public Filtros: any = {
     fecha_inicio: new Date().toISOString().slice(0, 10),
-    fecha_fin: new Date().toISOString().slice(0, 10),
+    fecha_fin: '',
     movimiento: '',
     cajero: '',
     detalle: ''
@@ -131,7 +144,10 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     });
   }
 
-  private SetFiltros(paginacion: boolean) {
+  private SetFiltros(paginacion: boolean, fecha: any = '') {
+
+    console.log(fecha);
+
     let params: any = {};
 
     params.id_tercero = this.Id_Tercero;
@@ -150,12 +166,13 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       params.pag = this.page;
     }
 
-    if (this.Filtros.fecha_inicio.trim() != "") {
-      params.fecha_inicio = this.Filtros.fecha_inicio;
-    }
+    if (fecha != "") {
+      const myFecha = fecha.split(' - ')
+      params.fecha_inicio = myFecha[0];
+      params.fecha_fin = myFecha[1];
 
-    if (this.Filtros.fecha_fin.trim() != "") {
-      params.fecha_fin = this.Filtros.fecha_fin;
+      console.log(params.fecha_inicio, params.fecha_fin);
+
     }
 
     if (params.fecha_fin == params.fecha_inicio) {
@@ -177,9 +194,16 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     return params;
   }
 
-  public ConsultaFiltrada(paginacion: boolean = false) {
+  public ConsultaFiltrada(paginacion: boolean = false, fecha: any = false) {
 
-    var p = this.SetFiltros(paginacion);
+
+    if (fecha == false) {
+      console.log('1');
+      var p = this.SetFiltros(paginacion);
+    } else {
+      var p = this.SetFiltros(paginacion, fecha.formatted);
+    }
+
 
     this.Cargando = true;
     this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
