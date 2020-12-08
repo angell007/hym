@@ -96,6 +96,9 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
+
+      console.log(data);
+
       this.Modulos = data;
     });
   }
@@ -140,8 +143,17 @@ export class CierrecajaComponent implements OnInit {
 
   ValidarMontos() {
 
+
+    // this.Diferencias[pos]
+
     for (let index = 0; index < this.Modulos.length; index++) {
-      console.log(this.Modulos[index]);
+
+      if (this.Diferencias[index] < 0) {
+        console.log(this.Diferencias[index]);
+      }
+
+      return false;
+
       // if (this.Modulos[index] != 0) {
       //   if (this.TotalEntregado[index].Entregado == 0) {
       //     this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
@@ -165,14 +177,15 @@ export class CierrecajaComponent implements OnInit {
     return true;
   }
 
-  CalcularDiferencia(ingresado, calculado, pos) {
+  CalcularDiferencia(ingresado, calculado, pos, multiplicador = 1) {
 
     if (ingresado == '' || calculado == '') {
       return false;
     }
 
-    let resta = ingresado - calculado;
-    this.Diferencias[pos] = (resta < 0) ? -1 : resta;
+
+    let resta = (ingresado * multiplicador) - calculado;
+    this.Diferencias[pos] = (resta < 0) ? resta : resta;
 
 
     // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));

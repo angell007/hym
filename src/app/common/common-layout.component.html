@@ -242,7 +242,7 @@
                 <!-- </a> -->
               </li>
               <!-- //TODO: customizar este permiso  -->
-              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2  " class="mt-2 pt-1">
+              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6  " class="mt-2 pt-1">
                 <div class="pl-2">
                   <label for="" style="display:block;">Oficina: {{NombreOficina}}</label>
                   <label for="" style="display:block;">Caja: {{NombreCaja}}</label>
@@ -251,7 +251,7 @@
             </ul>
 
             <ul class="nav-left">
-              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
+              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
                 <!-- NOTIFICACIONES SALDOS -->
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-money"></i> Saldos
@@ -272,7 +272,7 @@
             </ul>
 
             <ul class="nav-left">
-              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
                 <a [routerLink]="[ '/consolidado', user.Identificacion_Funcionario ]" routerLinkActive="active">
                   <i class="ti-clipboard"></i> Consolidado
                 </a>
@@ -281,7 +281,7 @@
 
 
             <ul class="nav-left">
-              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
+              <li class="notifications dropdown" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
                 <!-- NOTIFICACIONES -->
                 <span class="counter">{{  counter }}</span>
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
@@ -319,7 +319,7 @@
 
 
             <ul class="nav-right">
-              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2">
+              <li class="notifications" *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
                 <button *ngIf="!OcultarConsultor" class="btn btn-mini btn-outline-danger" title=" Cerrar Caja"
                   style="margin-top: 10px" (click)="VerificarAntesDeCierre()">
                   <i class="fa fa-lock"></i>

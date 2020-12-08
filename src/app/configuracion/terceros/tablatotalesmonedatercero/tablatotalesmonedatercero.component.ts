@@ -35,7 +35,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '180px',
-    height: '21px',
+    height: '18px',
     selectBeginDateTxt: 'Inicio',
     selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
@@ -146,7 +146,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   private SetFiltros(paginacion: boolean, fecha: any = '') {
 
-    console.log(fecha);
 
     let params: any = {};
 
@@ -170,9 +169,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       const myFecha = fecha.split(' - ')
       params.fecha_inicio = myFecha[0];
       params.fecha_fin = myFecha[1];
-
-      console.log(params.fecha_inicio, params.fecha_fin);
-
     }
 
     if (params.fecha_fin == params.fecha_inicio) {

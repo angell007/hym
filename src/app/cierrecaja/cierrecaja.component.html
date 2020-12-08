@@ -90,9 +90,113 @@
             <tr>
               <td>Entregado</td>
               <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
+
                 <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
                   placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
                   [disabled]="FieldsDisabled[i]">
+
+                <ng-container *ngIf="i == 1">
+                  Fajo Entero
+
+                  <select class="form-control sp-text" name="" id="">
+                    <option value="">100</option>
+                  </select>
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 100 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 50 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 20 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 10 )">
+                  Medio Fajo
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">100</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 100 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 50 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 20 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 10 )">
+                  Suelto
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">100</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 100 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 50 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 20 )">
+
+                  <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10</option>
+                  </select>
+
+                  <input type="text" class="form-control sp-text"
+                    (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i, 10 )">
+                </ng-container>
+
+
+
               </th>
 
             </tr>
