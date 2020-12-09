@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header alert alert-primary">
+          <div class="row  justify-content-center">
+            <div class="col-md-6 text-center mt-3">
+
+              MOVIMIENTOS DE CUENTA : <span class="text font-weight-bold">
+                {{CuentaBancariaModel.Apodo}}  {{CuentaBancariaModel.Numero_Cuenta | mask:'0000-0000-0000-0000-0000'}}
+              </span>
+
+            </div>
+            <div *ngIf="Accion == 'Ajustar'" class="col-md-6 text-right">
+              <button class="btn btn-outline-success btn-rounded btn-sm" type="button"
+                (click)="CompraCuenta()">Compra</button>
+              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
+                (click)="Ajustar()">Ajuste</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+
+
+          <table class="table table-hover table-sm table-striped table-bordered custom-table">
+            <thead>
+              <tr>
+                <th class="custom-thead">Fecha</th>
+                <th class="custom-thead">Recibo</th>
+                <th class="custom-thead text-center">Ingreso</th>
+                <th class="custom-thead text-center">Egreso</th>
+                <th class="custom-thead text-center">Saldo</th>
+              </tr>
+              <tr>
+                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Monto
+                  Apertura:</td>
+                <td class="custom-cell text-right font-size-16 font-weight-bold text-success">
+                  {{Apertura | customcurrency:Codigo_Moneda}}</td>
+              </tr>
+              <tr *ngIf="Movimientos.length == 0">
+                <td colspan="5" class="text-center">
+                  <i class="ti-alert font-size-20 text-warning"></i>
+                  <h4>No se encontraron movimientos en esta cuenta!</h4>
+                </td>
+              </tr>
+            </thead>
+            <tbody *ngIf="Movimientos.length > 0">
+              <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
+                <td class="text-center ">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
+                <td class=" text-center">{{m.Recibo}}</td>
+                <td class="text-right " appColorsaldo [value]="m.Ingreso"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
+                <td class="text-right " appColorsaldo [value]="m.Egreso"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
+                <td class="text-right " appColorsaldo [value]="m.Total"
+                  [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Total
+                  Cuenta:</td>
+                <td class="custom-cell text-right font-size-16 font-weight-bold text-success">
+                  {{Balance | customcurrency:Codigo_Moneda}}</td>
+              </tr>
+            </tfoot>
+          </table>
+          <!-- <div class="row mb-2">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+              <table class="table table-striped custom-table">
+                <tr>
+                  <td class="custom-cell text-center font-size-16 font-weight-bold" style="color:black;">Total Cuenta:</td>
+                  <td class="custom-cell text-right font-size-16 font-weight-bold" style="color:black;">{{Balance | customcurrency:Codigo_Moneda}}</td>
+                </tr>
+              </table>
+            </div>
+          </div> -->
+        </div>
+        <div class="card-footer">
+          <div class="text-right">
+            <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="VolverAlCierre()">Volver
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modalajustecuenta [AbrirModal]="AbrirModalAjuste.asObservable()" (ActualizarTabla)="GetMovimientosCuenta()">
+</app-modalajustecuenta>
+
+<app-modalabonocompracuenta [AbrirModal]="AbrirModalCompra.asObservable()" (ActualizarDatos)="GetMovimientosCuenta()">
+</app-modalabonocompracuenta>

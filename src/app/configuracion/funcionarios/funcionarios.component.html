@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <!-- <div class="page-title">
+        <h4 class="pull-left">Funcionarios</h4>
+        <button class="pull-right btn btn-primary" [routerLink]="['/funcionariocrear']">
+            <i class="ti-plus"></i> Agregar Nuevo Funcionario</button>
+    </div>
+    <div class="clearfix"></div> -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <app-tablafuncionarios></app-tablafuncionarios>
+                <!-- <div class="card-block">
+                    <p>Todos los funcionarios que laboran en nuestra compañía</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th>Funcionario</th>
+                                    <th style="width:170px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let funcionario of funcionarios" class=" {{funcionario.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                                    <td>
+                                        <ul class="list-unstyled list-info">
+                                            <li>
+                                                <div class="pdd-vertical-10 pdd-horizon-20">
+
+                                                    <div  style="text-align: center">
+                                                            <label style="display: block" for="Foto">
+                                                                <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == NULL " src="{{globales.ruta}}/assets/images/user.jpg"  style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">
+                                                                <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != NULL" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}" style="height: 50px;width: 50px; cursor: pointer;" class="thumb-img img-circle" id="foto_visual">                      
+                                                            </label>
+                                                    </div>
+
+                                                    <div class="info">
+                                                        <a href="" class="title no-pdd-vertical text-semibold inline-block">{{funcionario.Nombres}} {{funcionario.Apellidos}}</a>
+                                                        <span class="sub-title">
+                                                            <span>{{funcionario.Cargo}}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/funcionariover',funcionario.Identificacion_Funcionario]">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [routerLink]="['/funcionarioeditar',funcionario.Identificacion_Funcionario]">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;">
+                                            <i class="ti-id-badge"></i>
+                                        </button>
+
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a inactivar/activar de estado en este funcionario' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, inactivar/activar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                        (confirm)="EliminarFuncionario(funcionario.Identificacion_Funcionario, funcionario.Estado)">
+                                        <i class=" {{funcionario.Estado == 'Inactivo' ? 'fa fa-check' : 'ti-close' }} " ></i>
+                                    </button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<swal #deleteSwal
+  title="Funcionario eliminado"
+  text="Se ha eliminado correctamente el funcionario"
+  type="success"
+  >
+</swal>
+<swal #confirmacionSwal title="" text="" type=""></swal>

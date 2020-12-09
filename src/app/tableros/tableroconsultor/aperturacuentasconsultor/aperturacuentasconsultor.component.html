@@ -1,0 +1,115 @@
+<!-- <div class="container-fluid "> -->
+<div class="row h-100">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header alert alert-primary">
+        <label class="text font-weight-bold">Cuentas Disponibles</label>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12 table-responsive-md ">
+            <table class="table table-striped table-bordered table table-hover">
+              <thead>
+                <th class="custom-thead">Titular</th>
+                <th class="custom-thead">Banco</th>
+                <th class="custom-thead">Moneda</th>
+                <th class="custom-thead">Nro. Cuenta</th>
+                <!-- <th class="custom-thead" style="width:10%;">Monto Apertura</th>
+                    <th class="custom-thead" style="width:10%;">Monto Último Cierre</th> -->
+              </thead>
+              <tr *ngIf="Cargando">
+                <td colspan="4" class="text-center">
+                  <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                    <h2>CARGANDO CUENTAS BANCARIAS</h2>
+                    <img src="{{generalService.RutaImagenes}}GIFS/reloj_arena_cargando.gif" style="width:250px;"
+                      alt="CARGANDO">
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="CuentasBancarias.length == 0 && !Cargando">
+                <td colspan="4" class="text-center">
+                  <i class="ti-alert font-size-20 text-warning"></i>
+                  <h4>No hay cuentas cerradas para aperturar!</h4>
+                </td>
+              </tr>
+              <tbody *ngIf="!Cargando" style="font-size: 0.9em;">
+                <tr *ngFor="let cb of CuentasBancarias; let i = index;"
+                  [ngClass]="{'bg-selected': cb.Seleccionada == 1}" style="cursor: pointer;">
+                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
+                    {{cb.Nombre_Titular | uppercase }}</td>
+                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
+                    {{cb.Apodo  | uppercase}}
+                  </td>
+                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
+                    {{cb.Nombre_Moneda }}</td>
+                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-right">
+                    {{cb.Numero_Cuenta | mask:'0000-0000-0000-0000-0000' }}</td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header alert alert-primary">
+        <label class="text font-weight-bold">Cuentas Seleccionadas</label>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12 table-responsive-md">
+            <table class="table table-striped table-bordered custom-table">
+              <thead>
+                <tr>
+                  <th class="custom-thead">Titular</th>
+                  <th class="custom-thead">Nro. Cuenta</th>
+                  <th class="custom-thead">Banco</th>
+                  <th class="custom-thead">Monto Apertura</th>
+                  <th class="custom-thead">Monto Último Cierre</th>
+                  <th class="custom-thead">Diferencia</th>
+                </tr>
+                <tr *ngIf="CuentasBancariasSeleccionadas.length == 0">
+                  <td colspan="6" class="text-center">
+                    <i class="ti-alert font-size-20 text-warning"></i>
+                    <h4>No ha seleccionado cuentas!</h4>
+                  </td>
+                </tr>
+              </thead>
+              <tbody *ngIf="CuentasBancariasSeleccionadas.length > 0" style="font-size: 0.9em;">
+                <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;"
+                  [ngClass]="{'bg-anulada':cb.Correccion_Cuenta == '1'}">
+                  <td class="text-right">{{cb.Nombre_Titular | uppercase}}</td>
+                  <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000-0000'}}</td>
+                  <td class="text-center">{{cb.Apodo}}</td>
+                  <td class="text-center">
+                    <input class="text-right form-control-sm" type="text" [(ngModel)]="cb.Monto_Apertura"
+                      (blur)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)" currencyMask
+                      [options]="{ thousands: '.' }" min="1" minlength="1">
+                  </td>
+                  <td class="text-right">{{cb.Monto_Ultimo_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
+                  <td class="text-right">{{cb.Diferencia | customcurrency:cb.Codigo_Moneda}} </td>
+                </tr>
+
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="">
+        <div class="text-right">
+          <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" *ngIf="MostrarBotonAjusteCuentas"
+            (click)="CargarMovimientosAperturaAnterior()">Ajustar Cuentas</button>
+          <button type="button" class="btn btn-outline-primary btn-rounded btn-sm" (click)="SiguientePaso()"
+            [disabled]="CuentasBancariasSeleccionadasId.length == 0 ">Siguiente
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- </div> -->

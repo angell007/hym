@@ -1,0 +1,204 @@
+<div class="container-fluid">
+    <div class="page-title">
+        <h4 class="pull-left">Grupos</h4>
+        <button class="pull-right btn btn-info" (click)="ModalGrupo.show()">
+            <i class="ti-plus"></i> Agregar Nuevo Grupo</button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-block">
+                    <p>Tenemos los grupos de nuestra empresa</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th style="width:100px">Detalle</th>
+                                    <th style="width:80px;">Padre</th>
+                                    <th style="width:130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let grupo of grupos">
+                                    <td style="vertical-align: middle;">{{grupo.Nombre}}</td>
+                                    <td style="vertical-align: middle;">{{grupo.Detalle}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">{{grupo.Padre}}</td>
+                                    <td style="vertical-align: middle;" class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerGrupo(grupo.Id_Grupo, ModalVerGrupo)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGrupo(grupo.Id_Grupo, ModalEditarGrupo)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Anular este Grupo, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+                                            (confirm)="EliminarGrupo(grupo.Id_Grupo)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalGrupo" #ModalGrupo>
+    <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
+        <h4>Nuevo grupo</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormGrupo="ngForm">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Grupo" class="form-control" name="Nombre" ngModel="" (focus)="$event.target.select()"
+                            (focusout)="boolNombre = true" required #nombreGrupo="ngModel">
+                        <div *ngIf="!nombreGrupo.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreGrupo.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Padre</label>
+                        <select class="form-control" required name="Padre" ngModel="Ninguno" [(ngModel)]="padreDefault">
+                            <option value="Ninguno">--Ninguno--</option>
+                            <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel=""></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!nombreGrupo.valid " [swal]="{title : '¿Está Seguro?', text: 'Se dispone Actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarGrupo(FormGrupo, ModalGrupo)">Actualizar Información</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerGrupo" #ModalVerGrupo>
+    <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
+        <h4>Ver grupo</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormVerGrupo="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre: </label>
+                        <label>{{Nombre}}</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Padre: </label>
+                        <label>{{Padre}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>
+                            <label>Detalles: </label>
+                        </strong>
+                        <label>{{Detalle}}</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="Cerrar(ModalVerGrupo)">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarGrupo" #ModalEditarGrupo>
+    <div class="app-modal-header">
+        <button class="btn-close" style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+            (click)="OcultarFormularios()">X</button>
+        <h4>Editar grupo</h4>
+    </div>
+    <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+        <form #FormEditarGrupo="ngForm">
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <label>Identificación</label>
+                    <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre" ngModel="{{Nombre}}" (focus)="$event.target.select()"
+                            (focusout)="boolNombre = true" required #nombreGrupoEd="ngModel">
+                        <div *ngIf="!nombreGrupoEd.valid && boolNombre==true" style="color:red">Campo inválido</div>
+                        <div *ngIf="nombreGrupoEd.valid && boolNombre==true" style="color:green">Datos correctos!</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Padre</label>
+                        <select class="form-control" required name="Padre" ngModel="{{Padre}}">
+                            <option value="Ninguno">--Ninguno--</option>
+                            <option *ngFor="let grupo of grupos" [value]="grupo.Id_Grupo">{{grupo.Nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalles</label>
+                        <textarea class="form-control" placeholder="Detalles de este grupo" name="Detalle" ngModel="{{Detalle}}"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="!nombreGrupoEd.valid" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar este grupo' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                (confirm)="GuardarGrupo(FormEditarGrupo, ModalEditarGrupo)">Guardar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Grupo eliminado" text="Se ha eliminado correctamente el grupo" type="success">
+</swal>

@@ -1,0 +1,92 @@
+<swal #alertSwal title="" text="" type=""></swal>
+
+<div class="container-fluid card">
+
+  <ul class="list-unstyled list-info mt-4 mb-3">
+    <li>
+      <span class="thumb-img pdd-top-10 ">
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Crear Compra</b>
+        <p class="no-mrg-btm ">Gestión de compras</p>
+      </div>
+    </li>
+  </ul>
+
+
+  <div class="card-body">
+    <form #FormCompra="ngForm">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <label for="">Moneda</label>
+          <select class="custom-select form-control form-control-sm" name="Id_Moneda" id="Id_Moneda"
+            [(ngModel)]="CompraModel.Id_Moneda_Compra" (change)="SetCodigoMoneda()" required>
+            <option value="">Seleccione</option>
+            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Proveedor</label>
+          <select class="custom-select form-control form-control-sm" name="Id_Tercero" id="Id_Tercero"
+            [(ngModel)]="CompraModel.Id_Tercero" [disabled]="CompraModel.Id_Moneda_Compra == ''" required>
+            <option value="">Seleccione</option>
+            <option *ngFor="let p of Proveedores" [value]="p.Id_Tercero">{{p.Nombre}}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Valor Compra</label>
+          <label style="display:block;" for="">{{CompraModel.Valor_Compra | customcurrency:CodigoMoneda}}</label>
+        </div>
+        <div class="form-group col-md-2">
+          <label for="">Tasa</label>
+          <input type="number" class="form-control" id="Tasa" name="Tasa" placeholder="Tasa"
+            [(ngModel)]="CompraModel.Tasa"  (blur)="CalcularCambio()" [disabled]="CompraModel.Id_Moneda_Compra == ''" required>
+        </div>
+        <!-- <div class="form-group col-md-2">
+                <label for="">Tasa</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="Tasa" 
+                  name="Tasa"
+                  placeholder="Tasa"
+                  [(ngModel)]="CompraModel.Tasa"
+                  (blur)="CalcularCambio()"
+                  [disabled]="CompraModel.Id_Moneda_Compra == ''"
+                  required>
+              </div> -->
+        <div class="form-group col-md-2">
+          <label for="">Valor Pesos</label>
+          <!-- <label style="display:block;" for="">{{CompraModel.Valor_Peso | customcurrency}}</label>-->
+          <input type="number" class="form-control" id="Valor_Peso" name="Valor_Peso" placeholder="Valor_Peso"
+            [(ngModel)]="CompraModel.Valor_Peso" required>
+
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-success btn-rounded btn-sm mt-3" [disabled]="!FormCompra.valid"
+            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a guardar esta compra' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Guardar', cancelButtonText:'No, Comprobar!'}"
+            (confirm)="GuardarCompra()">
+            <i class="ti-save"></i> Guardar Compra
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- </div> -->
+  <!-- </div>
+  </div> -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <app-tablacompras [Id_Moneda]="CompraModel.Id_Moneda_Compra" [CodigoMoneda]="CodigoMoneda"
+            (MostrarSwal)="MostrarMensajeTabla($event)" (ActualizarCompra)="ActualizarValoresCompra($event)">
+          </app-tablacompras>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #mensajeSwal title="" text="" type=""></swal>

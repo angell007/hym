@@ -1,0 +1,673 @@
+<div class="container-fluid card">
+
+  <ul class="list-unstyled list-info my-5">
+    <li>
+      <span class="thumb-img pdd-top-10 ">
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Transferencias</b>
+        <p class="no-mrg-btm ">Gestion de Transferencias</p>
+      </div>
+    </li>
+  </ul>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table table responsive">
+            <table class="table table-bordered table-sm table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center">Fecha</th>
+                  <th class="text-center">Recibo</th>
+                  <th class="text-center">Cajero</th>
+                  <th class="text-center">Tipo Transferencia</th>
+                  <th class="text-center">Estado</th>
+                  <th class="text-center">Moneda</th>
+                  <th class="text-center">Recibido</th>
+                  <th class="text-center">Realizada por</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+                <tr>
+                  <th class="table-filters"><input type="date" class="form-control" [(ngModel)]="Filtros.fecha"
+                      (change)="ConsultaFiltrada()"></th>
+                  <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.recibo"
+                      (change)="ConsultaFiltrada()"></th>
+                  <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.cajero"
+                      (change)="ConsultaFiltrada()"></th>
+                  <th class="table-filters">
+                    <select class="custom-select form-control" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
+                      <option value="" selected>Todos</option>
+                      <option value="Efectivo">Efectivo</option>
+                      <option value="Consignacion">Consignacion</option>
+                      <option value="Credito">Credito</option>
+                    </select>
+                  </th>
+                  <th class="table-filters">
+                    <select class="custom-select form-control" [(ngModel)]="Filtros.estado"
+                      (change)="ConsultaFiltrada()">
+                      <option value="" selected>Todos</option>
+                      <option value="Pendiente">Pendiente</option>
+                      <option value="Pagada">Pagada</option>
+                      <option value="Anulada">Anulada</option>
+                      <option value="Devuelta">Devuelta</option>
+                    </select>
+                  </th>
+                  <th class="table-filters"></th>
+                  <th class="table-filters"></th>
+                  <th class="table-filters"></th>
+                </tr>
+                <tr *ngIf="Cargando">
+                  <th colspan="8" class="text-center">
+                    <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                    <h1>CARGANDO</h1>
+                  </th>
+                </tr>
+                <tr *ngIf="transferencias.length == 0 && !Cargando">
+                  <td colspan="8" class="text-center">
+                    <i class="ti-alert font-size-20 text-warning"></i>
+                    <h4>No hay transferencias para mostrar!</h4>
+                  </td>
+                </tr>
+              </thead>
+              <tbody *ngIf="!Cargando">
+                <tr *ngFor="let t of transferencias"
+                  [ngClass]="{'bg-selected': t.Estado == 'Pagada', 'bg-anulada': t.Estado == 'Anulada', 'bg-devuelta': t.Estado == 'Devuelta'}">
+                  <td class="text-center">{{t.Fecha | date:"dd-MM-yyyy HH:mm" | uppercase }}</td>
+                  <td class="text-center">{{t.Recibo}}</td>
+                  <td class="text-center">{{t.Nombre_Cajero}}</td>
+                  <td class="text-center">{{t.Tipo}}</td>
+                  <td class="text-center">{{t.Estado}}</td>
+                  <td class="text-center">{{t.Codigo_Moneda_Destino}}</td>
+                  <td class="text-right">{{t.Valor_Origen | customcurrency:''}}</td>
+                  <td class="text-center">{{t.Realizada_Por}}</td>
+                  <td class="text-center"> <a class=" waves-effect  accionable"
+                      (click)="GetDetalleTransferencia(t.Id_Transferencia)">
+                      <i class="ti-search text-info"></i> </a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="paginacion-container" *ngIf="transferencias.length > 0">
+            <div class="row">
+              <div class="col-md-3">
+                <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+                    {{ InformacionPaginacion.total }}</b></p>
+              </div>
+              <div class="col-md-9">
+                <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+                  [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Destinatario Eliminado" text="Se ha Eliminado Correctamente la transferencia" type="success">
+</swal>
+
+<swal #bloqueoSwal title="Transferencia Desbloqueada" text="Se ha Desbloqueado Correctamente la transferencia"
+  type="success">
+</swal>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTransferencia" #ModalVerTransferencia>
+  <div class="app-modal-header">
+    <button type="button" class="close basic-close" (click)="CerrarModalDetalle()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4>Detalle transferencia</h4>
+  </div>
+  <div class="app-modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th class="text-center">Fecha</th>
+              <th class="text-center">Recibo</th> 
+              <th class="text-center">Tipo Transferencia</th>
+              <th class="text-center">Transferido</th>
+              <th class="text-center">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">{{DetalleTransferencia.Fecha | date:"dd-MM-yyyy HH:mm"}}</td>
+              <td class="text-center">{{DetalleTransferencia.Recibo}}</td>
+              <td class="text-center">{{DetalleTransferencia.Tipo}}</td>
+              <td class="text-right">
+                {{DetalleTransferencia.Valor_Destino | customcurrency:DetalleTransferencia.Codigo_Moneda_Destino}}</td>
+              <td class="text-center">{{DetalleTransferencia.Estado}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-12">
+        <div id="accordion">
+          <div class="card p-0">
+            <div class="card-header alert-primary" id="headingOne">
+              <h5 class="mb-0 ">
+                <i class="ti-user text-info font-size-15"></i>
+                Destinatarios
+              </h5>
+            </div>
+
+            <div class="card-body p-1">
+              <table class="table table-bordered table-sm" *ngIf="Destinatarios.length > 0">
+                <thead>
+                  <tr>
+                    <th class="text-center">Destinatario</th>
+                    <th class="text-center">Numero Cuenta</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let d of Destinatarios">
+                    <td>{{d.Nombre_Destinatario}}</td>
+                    <td class="text-right">{{d.Numero_Cuenta_Destinatario | mask: '0000-0000-0000-0000'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table class="table table-bordered table-sm" *ngIf="Destinatarios.length == 0">
+                <thead>
+                  <tr>
+                    <th class="text-center">Destinatario</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center">{{DetalleTransferencia.Destinatario}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12" *ngIf="ShowDatosPago">
+        <div id="accordion2">
+          <div class="card p-0">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseTwo"
+                  aria-expanded="true" aria-controls="collapseTwo"><i class="ti-money text-success font-size-15"></i>
+                  Detalle de pago
+                </button>
+              </h5>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
+              <div class="card-body p-1">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th class="text-center">Fecha</th>
+                      <th class="text-center">Cajero Pago</th>
+                      <th class="text-center">Monto</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let dp of DatosPago;">
+                      <td class="text-center">{{dp.Fecha | date:"dd-MM-yyyy HH:mm"}}</td>
+                      <td class="text-center">{{dp.Nombre_Funcionario_Pago}}</td>
+                      <td class="text-right">{{dp.Valor | customcurrency:dp.Codigo_Moneda}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12" *ngIf="ShowDatosDevolucion">
+                <div id="accordion3">
+                    <div class="card p-0">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"><i class="ti-shift-left text-danger font-size-15"></i> Detalle de devolución
+                                </button>
+                            </h5>
+                        </div>
+                    
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
+                            <div class="card-body p-1">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Datos Devolución</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{DatosDevolucion.Fecha | date:"medium" | uppercase}}</td>
+                                            <td class="text-center">{{DatosDevolucion.Motivo_Devolucion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" (click)="CerrarModalDetalle()">Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<!--<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDevolucionTransferencia" #ModalDevolucionTransferencia>
+    <div class="app-modal-header">
+        <h4>Devolución Transferencia</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormDevolucionTransferencia="ngForm">
+            <input hidden name="Id_Transferencia_Destino" type="text" [(ngModel)]="Identificacion">
+            <input hidden name="Valor" type="text" [(ngModel)]="valorDevolverTransferencia">
+            <input hidden name="Id_Pago_Transfenecia" type="text" [(ngModel)]="PagoTransferencia">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Motivo Devolución</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalles del Banco" name="Motivo_Devolucion"
+                            ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormDevolucionTransferencia.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="RealizarDevolucion(FormDevolucionTransferencia, ModalDevolucionTransferencia)">Devolver</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearTransferenciaBanesco" #ModalCrearTransferenciaBanesco>
+    <div class="app-modal-header">
+        <h4>Crear Transferencia</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCrearTransferenciaBanesco="ngForm">
+            <input hidden class="form-control" name="Id_Transferencia_Destino" type="text" [(ngModel)]="idTransferencia"
+                required>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cuenta Origen</label>
+                        <input class="form-control" name="Banco" type="text" [(ngModel)]="NombreBancoEmpresa" required
+                            readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cuenta Destino</label>
+                        <input class="form-control" name="Cuenta_Destino" type="text" [(ngModel)]="CuentaDestino"
+                            required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Para</label>
+                        <input class="form-control" name="Recibe" type="text" [(ngModel)]="Recibe" required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cedula Destino</label>
+                        <input class="form-control" name="CedulaDestino" type="text" [(ngModel)]="CedulaDestino"
+                            required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Monto</label>
+                        <input class="form-control" name="Valor" type="text" [(ngModel)]="Monto" required>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Numero Transferencia</label>
+                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Recibo</label>
+                        <input class="form-control" name="Recibo" type="text" [(ngModel)]="Recibo" required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Cajero</label>
+                        <input class="form-control" name="Cajero" type="text" [(ngModel)]="Cajero" required>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaBanesco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="CrearTransferencia(FormCrearTransferenciaBanesco, ModalCrearTransferenciaBanesco)">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaBanesco,FormCrearTransferenciaBanesco)">
+                Volver</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearTransferenciaOtroBanco" #ModalCrearTransferenciaOtroBanco>
+    <div class="app-modal-header">
+        <h4>Crear Transferencia</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCrearTransferenciaOtroBanco="ngForm">
+            <input hidden class="form-control" name="Id_Transferencia_Destino" type="text" [(ngModel)]="idTransferencia"
+                required>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cuenta Origen</label>
+                        <input class="form-control" name="Banco" type="text" [(ngModel)]="NombreBancoEmpresa" required
+                            readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Para</label>
+                        <input class="form-control" name="Recibe" type="text" [(ngModel)]="Recibe" required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cedula Destino</label>
+                        <input class="form-control" name="CedulaDestino" type="text" [(ngModel)]="CedulaDestino"
+                            required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Cuenta Destino</label>
+                        <input class="form-control" name="Cuenta_Destino" type="text" [(ngModel)]="CuentaDestino"
+                            required readonly>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Monto</label>
+                        <input class="form-control" name="Valor" type="text" ngModel="{{Monto}}" required>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Numero Transferencia</label>
+                        <input class="form-control" name="Numero_Transferencia" type="text" ngModel required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Recibo</label>
+                        <input class="form-control" name="Recibo" type="text" [(ngModel)]="Recibo" required>
+                    </div>
+                </div>
+                <div class="col-md-12" hidden>
+                    <div class="form-group">
+                        <label>Cajero</label>
+                        <input class="form-control" name="Cajero" type="text" [(ngModel)]="Cajero" required>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!FormCrearTransferenciaOtroBanco.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta transferencia con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="CrearTransferencia(FormCrearTransferenciaOtroBanco, ModalCrearTransferenciaOtroBanco)">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="CancelarBloqueo(idTransferencia,ModalCrearTransferenciaOtroBanco,FormCrearTransferenciaOtroBanco)">
+                Volver</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
+    <div class="app-modal-header">
+        <h4>Recibo</h4>
+    </div>
+    <div class="app-modal-body">
+        <div class="table-overflow">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Fecha</td>
+                        <td>{{ item.Fecha }}</td>
+                        <td>Tipo Transferencia </td>
+                        <td colspan="3" style="text-align: center;">{{ item.Tipo_Transferencia }}</td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td>Total Pesos</td>
+                        <td>{{ item.Cantidad_Recibida | currency }}</td>
+                        <td>Total Bolivar</td>
+                        <td>{{item.Cantidad_Transferida | currency: "BsS."}}</td>
+                        <td>Al Cambio</td>
+                        <td>{{ item.Tasa_Cambio}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Destinatarios</td>
+                    </tr>
+                    <tr *ngFor="let item1 of DestinatarioRecibo">
+                        <td colspan="2">{{ item1.Nombre }}</td>
+                        <td colspan="2">{{ item1.Numero_Cuenta }}</td>
+                        <td colspan="2">{{ item1.Valor_Transferencia_Bolivar | currency: "BsS." }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Observaciones del recibo </td>
+                    </tr>
+                    <tr *ngFor="let item of EncabezadoRecibo">
+                        <td colspan="6">{{item.Observacion_Transferencia}}</td>
+                    </tr>
+
+                    <tr *ngIf="filaRecibo">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr *ngIf="filaRecibo">
+                        <td colspan="6" style="text-align: center;font-weight: bold;"> Devolución recibos </td>
+                    </tr>
+                    <tr *ngFor="let item3 of DevolucionesRecibo">
+                        <td colspan="2">{{item3.Nombre}}</td>
+                        <td colspan="2">{{item3.Motivo_Devolucion}}</td>
+                        <td>{{item3.Numero_Cuenta}}</td>
+                        <td>{{item3.Valor | currency: "BsS." }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerCompra" #ModalVerCompra>
+    <div class="app-modal-header">
+        <h4>Compra {{detalleCompra.Codigo}}</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormCrearMovimientoCuenta="ngForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>{{detalleCompra.Codigo}} - BsS. {{detalleCompra.Abono}}</label>
+                        <input hidden class="form-control" name="Id_Compra" type="text" [(ngModel)]="idCompra" readonly>
+                        <input hidden class="form-control" name="Id_Cuenta" type="text" [(ngModel)]="idCuenta" readonly>
+                        <input hidden class="form-control" name="Id_Compra_Cuenta" type="text" [(ngModel)]="idCompraCuenta"
+                            readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-12" *ngIf="HabilitarCobroBanesco">
+                    <div class="form-group">
+                        <label>Hecho antes de las 7 AM</label>
+                        <input class="form-control" name="Cobro_Banesco" type="text" ngModel="0" placeholder="Digite el cobro Banesco">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table  invoice-detail-table">
+                                    <tbody>
+                                        <tr *ngFor="let item of Pagos; let i = index" id="fila{{i}}">
+                                            <td>
+                                                <input class="form-control" name="Ingreso{{i}}" type="text" [(ngModel)]="item.Ingreso"
+                                                    placeholder="Digite el valor del ingreso" required (input)="agregarfilaIngresos(i)">
+                                            </td>
+                                            <td>
+                                                <input class="form-control" name="Transferencia{{i}}" type="text"
+                                                    [(ngModel)]="item.Transferencia" placeholder="Digite el número de transferencia"
+                                                    required (input)="agregarfilaIngresos(i)">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <table class="table  invoice-detail-table">
+                                    <tbody>
+                                        <tr *ngFor="let item of Abonos; let i = index" id="fila{{i}}">
+                                            <td>
+                                                <input class="form-control" name="Ingreso{{i}}" type="text" [(ngModel)]="item.Abono"
+                                                    placeholder="Digite el abono ocasional" required (input)="agregarfilaAbonos(i)">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a realizar esta actualización de compra con los valores indicados' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalReportarIngresoCuenta" #ModalReportarIngresoCuenta>
+    <div class="app-modal-header">
+        <h4>Reportar Ingreso Cuenta</h4>
+    </div>
+    <div class="app-modal-body">
+        <form #FormMovimientoCuenta="ngForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Cuenta</label>
+                    <select name="Id_Cuenta_Bancaria" class="form-control" ngModel>
+                        <option value="">Seleccione un Banco Venezolano</option>
+                        <option *ngFor="let Banco of BancosVenezolanos" value="{{Banco.Id_Cuenta_Bancaria}}">{{Banco.Nombre_Titular}}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Valor</label>
+                    <input class="form-control" name="Valor" type="text" ngModel required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Detalle</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalle" name="Detalle" ngModel></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este movimiento' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="RealizarReporte(FormMovimientoCuenta, ModalReportarIngresoCuenta)">Crear Reporte</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalSaldoInicialBanco" #ModalSaldoInicialBanco>
+        <div class="app-modal-header" style="margin: 0 auto;">
+            <h4>Apertura de Cuenta</h4>
+        </div>
+        <div class="app-modal-body">
+            <form #FormMontoInicialCuentaBancaria="ngForm">
+                <div class="col-md-12 ">
+                    <label>Banco Venezolanos</label>
+                    <select ngModel name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" required class="form-control" (change)="VerificarSaldo($event.target.value)">
+                        <option value=""> Seleccione Banco</option>
+                        <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
+                            ({{banco.Numero_Cuenta}}) </option>
+                    </select>
+                </div>
+                <hr>    
+                <div class="col-md-12 ">
+                    <label>Saldo Cuenta Bancaria</label>
+                    <input currencyMask type="text" class="form-control" name="Monto_Inicial" ngModel="{{SaldoInicialBanco}}"
+                        [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required >
+                </div>
+    
+            </form>
+        </div>
+        <div class="app-modal-footer" style="margin: 0 auto;">
+            <div class="text-center">
+                <button id="GuardarInicio" class="btn btn-primary btn-sm" (click)="GuardarMontoInicial(FormMontoInicialCuentaBancaria , ModalSaldoInicialBanco)">Iniciar
+                </button>
+            </div>
+        </div>
+    </app-modal-basic>-->

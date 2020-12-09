@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Recibo Transferencia</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-block">
+            <h4 class="pull-left">Datos Del Recibo</h4>
+          <div class="table-responsive">
+            <table class="table table-hover table-sm table-striped">
+              <tbody>
+                
+                <tr>
+                  <td>Codigo</td>
+                  <td>{{Transferencia.Codigo}}</td>
+                </tr>
+
+                <tr>
+                  <td>Fecha</td>
+                  <td>{{Transferencia.Fecha}}</td>
+                </tr>
+
+                <tr>
+                  <td>funcionario</td>
+                  <td>{{Transferencia.Nombres}}</td>
+                </tr>
+
+                <tr>
+                  <td>Caja</td>
+                  <td>{{Transferencia.NombreCaja}}</td>
+                </tr>
+                
+                <tr>
+                  <td>Oficina</td>
+                  <td>{{Transferencia.OficinaNombre}}</td>
+                </tr>
+
+                <tr>
+                  <td>Valor Transferencia</td>
+                  <td>{{Transferencia.Valor_Transferencia | currency }}</td>
+                </tr>
+
+                <tr>
+                  <td>Costo Transferencia</td>
+                  <td>{{Transferencia.Costo_Transferencia | currency}}</td>
+                </tr>
+
+                <tr>
+                  <td>Forma Pago</td>
+                  <td>{{Transferencia.Forma_Pago}}</td>
+                </tr>
+
+                <tr>
+                  <td>Estado Transferencia</td>
+                  <td>{{Transferencia.Estado}}</td>
+                </tr>
+
+                <tr>
+                  <td>Bloqueo</td>
+                  <td>{{Transferencia.Bloqueo}}</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-block">
+            <h4 class="pull-left">Transferencias Asociadas</h4>
+          <div class="table-responsive margin-top:10px;">
+            <table class="table table-hover table-sm table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

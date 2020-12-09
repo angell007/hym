@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Información Tercero</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="card">
+            <div style="border:.6px solid #007bff; border-radius:5px;" class="card-body">
+              <app-tablavertercero
+                [Id_Tercero]="id">
+              </app-tablavertercero>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="card">
+            <div class="card-body">
+              <app-tablatotalestercero
+                [Id_Tercero]="id">
+              </app-tablatotalestercero>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

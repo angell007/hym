@@ -1,0 +1,124 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalOficina>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Oficina</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormOficina="ngForm">
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre"
+              [(ngModel)]="OficinaModel.Nombre" required>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Departamento</label>
+            <select class="form-control" name="Id_Departamento" [(ngModel)]="OficinaModel.Id_Departamento"
+              (change)="GetMunicipiosDepartamento($event.target.value)" required>
+              <option value="">Seleccione</option>
+              <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Municipio</label>
+            <select class="form-control" required name="Id_Municipio" [(ngModel)]="OficinaModel.Id_Municipio" required>
+              <option value="">Seleccione</option>
+              <option *ngFor="let m of Municipios" [value]="m.Id_Municipio">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Telefono</label>
+            <input type="text" placeholder="Telefono" class="form-control" name="Telefono"
+              [(ngModel)]="OficinaModel.Telefono">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Celular</label>
+            <input type="text" placeholder="Celular" class="form-control" name="Celular"
+              [(ngModel)]="OficinaModel.Celular">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Correo</label>
+            <input type="text" placeholder="Correo" class="form-control" name="Correo"
+              [(ngModel)]="OficinaModel.Correo">
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <label>Direccion</label>
+            <input type="text" placeholder="Direccion Oficina" class="form-control" name="Direccion"
+              [(ngModel)]="OficinaModel.Direccion">
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3>Datos recibo</h3>
+      <div class="form-row">
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Lim. Transf.</label>
+            <input type="text" placeholder="Limite Transferencia Oficina" class="form-control"
+              name="Limite_Transferencia" [(ngModel)]="OficinaModel.Limite_Transferencia" required>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Nombre Establecimiento</label>
+            <input type="text" placeholder="Nombre Establecimiento" class="form-control" name="Nombre_Establecimiento"
+              [(ngModel)]="OficinaModel.Nombre_Establecimiento" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Lema</label>
+            <input type="text" placeholder="Lema" class="form-control" name="Lema" [(ngModel)]="OficinaModel.Lema">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Pie Pagina</label>
+            <input type="text" placeholder="Pie de Pagina" class="form-control" name="Pie_Pagina"
+              [(ngModel)]="OficinaModel.Pie_Pagina">
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <h3>Configuracion</h3>
+      <div class="form-row">
+        <div class="col-md-6" *ngFor="let item of MonedasSistema">
+          <div class="form-group">
+            <label>Lim. monto {{item.Nombre}}</label>
+            <input type="text" placeholder="Monto limites de cierre de caja" class="form-control"
+              name="Monto_limite_{{item.Nombre}}" [(ngModel)]="OficinaModel[item.Nombre]" required>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarOficina()" [disabled]="!FormOficina.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+

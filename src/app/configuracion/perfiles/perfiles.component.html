@@ -1,0 +1,88 @@
+<!-- <div class="container-fluid">
+        <div class="page-title">
+                <h4 class="pull-left">Perfiles de Privilegios</h4>
+                <button class="pull-right btn btn-info" [routerLink]="['/perfilcrear']">
+                        <i class="ti-plus"></i> Agregar Nuevo Perfil</button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                                <div class="card-block">
+                                        <p>Todos los perfiles con privilegios dentro del sistema</p>
+                                        <div class="table-responsive">
+                                             
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div> -->
+
+
+<div class="row card">
+  <!-- <div class="card-body"> -->
+  <div class="col-md-4 " style="display:flex; align-items:flex-end;">
+    <ul class="list-unstyled list-info mt-3">
+      <li>
+        <span class="thumb-img pdd-top-10 ">
+        </span>
+        <div class="info">
+          <b class="text-dark font-size-22">Perfiles de Privilegios</b>
+          <p class="no-mrg-btm ">Todos los perfiles con privilegios dentro del sistema</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="w-100"></div>
+  <div class="col-md-12">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-4">
+        <button class="btn btn-info btn-block mrg-top-10 btn-grande" [routerLink]="['/perfilcrear']">
+          Agregar Nuevo Perfil
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+
+  <div class="card-body">
+
+    <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+      <thead>
+        <tr>
+          <th>Nombre del Perfil</th>
+          <th style="width: 120px; align-self: center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let perfil of perfiles" class=" {{perfil.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+          <td>{{perfil.Nombre}}</td>
+          <td class="text-center">
+            <a class="" style="margin:0;" [routerLink]="['/perfil',perfil.Id_Perfil]">
+              <i class="ti-search"></i>
+            </a>
+            <a class="" style="margin:0;" [routerLink]="['/perfileditar',perfil.Id_Perfil]">
+              <i class="ti-pencil text-warning"></i>
+            </a>
+            <a class="" style="margin:0;"
+              [swal]="{ title : '¿Está Seguro?', text : 'Se dispone a Eliminar este Perfil, esta acción no se puede revertir' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Anular', cancelButtonText : 'No, Dejame Comprobar!' }"
+              (confirm)="EliminarPerfil(perfil.Id_Perfil)">
+              <i class="ti-trash text-danger"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el perfil" type="error">
+</swal>
+
+<swal #saveSwal title="Perfil guardado" text="Se ha guardado correctamente el perfil" type="success">
+</swal>
+
+<swal #deleteSwal title="Perfil Eliminado" text="Se ha eliminado correctamente el perfil" type="success">
+</swal>

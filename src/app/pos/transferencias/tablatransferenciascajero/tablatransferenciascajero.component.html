@@ -1,0 +1,128 @@
+<h5>Últimas Transferencia Registrados</h5>
+<table class="table table-striped table-sm table-bordered">
+  <thead class="rounded">
+    <tr>
+
+      <th class="custom-thead">Hora</th>
+      <th class="custom-thead">Código</th>
+      <th class="custom-thead">Remitente</th>
+      <th class="custom-thead">Recibido</th>
+      <th class="custom-thead">Transferido</th>
+      <th class="custom-thead">Tasa</th>
+      <th class="custom-thead">Estado</th>
+      <th class="custom-thead">Pagada por </th>
+      <th class="custom-thead">Acciones</th>
+    </tr>
+
+    <tr>
+      <th class="table-filters">
+      </th>
+      <th class="table-filters">
+        <input type="text" class="form-control" placeholder="Filtro Código" [(ngModel)]="Filtros.recibo"
+          (change)="ConsultaFiltrada()">
+      </th>
+      <th class="table-filters">
+        <input type="text" class="form-control" placeholder="Filtro remitente" [(ngModel)]="Filtros.remitente"
+          (change)="ConsultaFiltrada()">
+      </th>
+      <th class="table-filters">
+        <!-- <input type="text" class="form-control" placeholder="Filtro recibido" [(ngModel)]="Filtros.recibido"
+          (change)="ConsultaFiltrada()"> -->
+      </th>
+      <th class="table-filters">
+        <!-- <input type="text" class="form-control" placeholder="Filtro transferido" [(ngModel)]="Filtros.transferido"
+          (change)="ConsultaFiltrada()"> -->
+      </th>
+      <th class="table-filters">
+        <!-- <input type="text" class="form-control" placeholder="Filtro tasa" [(ngModel)]="Filtros.tasa"
+          (change)="ConsultaFiltrada()"> -->
+      </th>
+      <th class="table-filters">
+        <select id="estado" class="form-control" [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
+          <option value="" selected>Todos</option>
+          <option value="Activa">Activa</option>
+          <option value="Anulada">Anulada</option>
+        </select>
+      </th>
+      <th class="table-filters"></th>
+    </tr>
+
+    <tr *ngIf="RecibosTransferencia.length == 0 ">
+      <td colspan="8" class="text-center">
+        <i class="ti-alert font-size-20 text-warning"></i>
+        <h4>No hay RecibosTransferencia para mostrar!</h4>
+      </td>
+    </tr>
+
+  </thead>
+  <tbody *ngIf="!Cargando">
+    <!-- *ngFor="let cambio of fc.Cambios | paginate: {  id: 'cambios', itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }" -->
+    <tr
+      *ngFor="let rt of RecibosTransferencia  | paginate: {  id: 'transferencias', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
+      [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
+      <td class="text-center">{{rt.Fecha | date:"HH:mm" }}</td>
+      <td class="text-center">{{rt.CodigoRecibo}}</td>
+      <td class="text-center">{{rt.Remitente}}</td>
+      <td class="text-right"> {{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
+      <td class="text-right"> {{rt.Monto_Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td>
+      <td class=" text-right"> {{rt.Tasa_Cambio }}</td>
+      <td class=" text-center"> {{rt.Estado }}</td>
+      <td class=" text-right"> {{rt.Pagador }}</td>
+      <td class="text-center">
+        <div *ngIf="rt.Estado != 'Anulada' && rt.Estado != 'Pagada' " class="text-center">
+          <button class="clean-btn-table" type="button" (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
+            <i class="ti-trash text-danger" style="font-size: 12px;"></i>
+          </button>
+        </div>
+        <button class="clean-btn-table" type="button" (click)="AbrirDetalleRecibo(rt)">
+          <i class="ti-search text-primary" style="font-size: 12px;"></i>
+        </button>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+<div id="paginacion-container" *ngIf=" RecibosTransferencia.length > 0">
+  <div class="row">
+    <div class="col-md-12">
+
+      <pagination-controls id="transferencias" (pageChange)="page = $event " previousLabel="Anterior"
+        nextLabel="Siguiente" responsive="true"></pagination-controls>
+
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalAnularTransferencia" #ModalAnularTransferencia>
+  <div class="app-modal-header">
+    <h4>Anular Transferencia</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModalAnular()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormAnularTransferencia="ngForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Motivo Anulación</label>
+            <textarea placeholder="Motivo Anulacion" style="width: 100% ;" name="Motivo_Anulacion"
+              [(ngModel)]="MotivoAnulacion"></textarea>
+          </div>
+        </div>
+      </div>
+      <br>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm" (confirm)="AnularTransferencia()"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este recibo de transferencia!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}"
+        [disabled]="!FormAnularTransferencia.valid">Anular
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<app-modaldetallerecibotransferencia [AbrirModal]="AbrirModalDetalleRecibo.asObservable()">
+</app-modaldetallerecibotransferencia>

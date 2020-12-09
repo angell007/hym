@@ -1,0 +1,493 @@
+<div class="container-fluid">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-9">
+        <h2>Movimiento de caja {{ Titulo }} </h2>
+        <button *ngIf="botonVolver" class="btn btn-default btn-xs" type="button" style="margin:0;"
+          (click)="VolverTodos()">
+          Volver
+        </button>
+        <div class="card">
+          <div class="card-block">
+            <div class="row">
+              <div class="col-md-12">
+                <div>
+                  <table class="table table-bordered data-table" style="clear:none; font-size: 10px">
+                    <tbody>
+                      <tr>
+                        <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
+                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span>
+                        </td>
+                        <td style="width:160px;">Cambios Efectivo</td>
+                        <td style="width:150px;text-align:center;">{{ingresoCambio | currency :
+                                                    "$." }}</td>
+                        <td style="width:160px;text-align:center;">{{ingresoCambioBolivar |
+                                                    currency:
+                                                    "BsS.
+                                                    "}}</td>
+                        <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
+                            style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span>
+                        </td>
+                        <td style="width:160px;">Cambios Efectivo</td>
+                        <td style="width:150px;text-align:center;">{{egresoCambio | currency :
+                                                    "$." }}</td>
+                        <td style="width:160px;text-align:center;">{{egresoCambioBolivar |
+                                                    currency:
+                                                    "BsS.
+                                                    "}}</td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Recibo Transferencia</td>
+                        <td style="width:150px;text-align:center;">{{ingresoTransferencia |
+                                                    currency :
+                                                    "$."}}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                        <td style="width:160px;"></td>
+                        <td style="width:160px;"></td>
+                        <td style="width:150px;text-align:center;"></td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Giros</td>
+                        <td style="width:150px;text-align:center;">{{ ingresoGiro | currency :
+                                                    "$." }}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                        <td style="width:160px;">Giros</td>
+                        <td style="width:150px;text-align:center;">{{egresoGiro | currency :
+                                                    "$." }}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Comision de Giros</td>
+                        <td style="width:150px;text-align:center;">{{ GiroComision | currency :
+                                                    "$." }}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Traslados</td>
+                        <td style="width:150px;text-align:center;">{{ingresoTraslado | currency
+                                                    :
+                                                    "$."}}</td>
+                        <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar |
+                                                    currency:
+                                                    "BsS. "}}</td>
+                        <td style="width:160px;">Traslados</td>
+                        <td style="width:150px;text-align:center;">{{egresoTraslado | currency
+                                                    : "$."
+                                                    }}</td>
+                        <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar |
+                                                    currency:
+                                                    "BsS. " }}</td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Corresponsal Bancario</td>
+                        <td style="width:150px;text-align:center;">{{ingresoCorresponsal |
+                                                    currency :
+                                                    "$."}}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                        <td style="width:160px;">Gastos</td>
+                        <td style="width:150px;text-align:center;">$ 0</td>
+                        <td style="width:160px;text-align:center;">BsS. 0</td>
+                      </tr>
+                      <tr>
+                        <td style="width:160px;">Servicios Externos</td>
+                        <td style="text-align:center;">{{ingresoServicio | currency : "$."}}</td>
+                        <td style="width:160px;text-align:center;"></td>
+                        <td style="width:160px;"></td>
+                        <td style="text-align:center;"></td>
+                        <td style="text-align:center;"></td>
+                      </tr>
+                      <tr>
+                        <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                        <td style="text-align:center;"><strong>{{totalIngresosPesos | currency
+                                                        : "$."}}
+                          </strong></td>
+                        <td style="text-align:center;"><strong>{{totalIngresosBolivares |
+                                                        currency:
+                                                        "BsS.
+                                                        "}}</strong></td>
+                        <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                        <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency :
+                                                        "$." }}</strong></td>
+                        <td style="text-align:center;"><strong>{{TotalEgresosBolivares |
+                                                        currency:
+                                                        "BsS.
+                                                        "}}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <table style="width:350px;clear:none;float:left" class="table table-bordered data-table"
+                  style="font-size: 10px">
+                  <tr>
+                    <td>Saldo Inicial</td>
+                    <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
+                    <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
+                  </tr>
+                  <tr>
+                    <td style="background:#9BFFAC;">Ingreso</td>
+                    <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos |
+                                            currency :
+                                            "$."}}
+                    </td>
+                    <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares |
+                                            currency:
+                                            "BsS. "}} </td>
+
+                  </tr>
+                  <tr>
+                    <td style="background:#FF9B9B;">Egresos</td>
+                    <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos |
+                                            currency :
+                                            "$." }}
+                    </td>
+                    <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares |
+                                            currency:
+                                            "BsS. "}}</td>
+                  </tr>
+                  <tr>
+                    <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
+                    <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{
+                                                EntregadoIngresosPesos | currency : "$." }}</strong></td>
+                    <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar
+                                                | currency: "BsS. " }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Entregado</td>
+                    <td style="text-align:right;" id="mon_rec_cuadre">{{ entregadoPesos | currency
+                                            : "$."
+                                            }}</td>
+                    <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar |
+                                            currency :
+                                            "BsS."}}</td>
+
+                  </tr>
+                  <tr>
+                    <td>Diferencia</td>
+                    <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency :
+                                            "$." }}</td>
+                    <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency :
+                                            "BsS."
+                                            }}</td>
+                  </tr>
+                  <tr id="requerido" style="display:none;">
+                    <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto
+                      recibido y
+                      observaciones del día</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!--
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <table class="table table-bordered data-table" style="clear:none;">
+                                                    <tr>
+                                                        <th colspan="2">Fajo Entero (x100)</th>
+                                                        <th colspan="2">Medio Fajo (x50)</th>
+                                                        <th colspan="2">Billetes Sueltos</th>
+                                                    </tr>
+                                                    <tr *ngFor="let item of fajosPesos; let i= index">
+                                                        <td>{{ item.BilleteEntero100 | currency: "$." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero100')" /></td>
+                                                        <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero50')" /></td>
+                                                        <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletes($event.target.value,i,'ValorSuelto')" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3">Monedas</td>
+                                                        <td colspan="3">
+                                                            <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]"
+                                                                value="0" class="nume2" ngModel (input)="calcularFajoBilletes(0,i,'Moneda')"
+                                                                style=" width: 170px !important;" /></td>
+                                                    </tr>
+                
+                                                </table>
+                
+                                            </div>
+                
+                                            <div class="col-md-6">
+                                                <table class="table table-bordered data-table" style="clear:none;">
+                                                    <tr>
+                                                        <th colspan="2">Fajo Entero (x100)</th>
+                                                        <th colspan="2">Medio Fajo (x50)</th>
+                                                        <th colspan="2">Billetes Sueltos</th>
+                                                    </tr>
+                                                    <tr *ngFor="let item of fajosBolivares; let i= index">
+                                                        <td>{{ item.BilleteEntero100 | currency: "BsS." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero100')" /></td>
+                                                        <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero50')" /></td>
+                                                        <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                                                        <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                                                                class="nume2" (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorSuelto')" /></td>
+                                                    </tr>
+                
+                                                </table>
+                
+                                            </div>
+                
+                                        </div>
+                                    </div> 
+
+                            <div class="col-md-12">
+                                <h6 style="margin:0;">Observaciones</h6>
+                                <textarea id="Observacion" class="normal" name="datos[Observaciones]" required
+                                    placeholder="Escriba sus comentarios"></textarea>
+                                <input type="hidden" name="id">
+                                <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+                                <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+
+                            </div>-->
+
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-md-3">
+        <h2>Cajeros Abiertos</h2>
+        <input id="datefield" type="date" [(ngModel)]="fechaHoy" placeholder="Valor" class="form-control" name="Fecha"
+          (change)="Historial($event.target.value)">
+        <br>
+        <ul class="list-group">
+          <a href="" [routerLink]="" class="list-group-item list-group-item-action" *ngFor="let item of CajerosAbiertos"
+            (click)="MirarMovimientos(item.Identificacion_Funcionario)">
+            {{item.NombreCajero}}
+            <p><small> {{item.CajaNombre}} </small></p>
+            <p><small> Inicio: {{item.Hora_Apertura}} | Cierre : 2:00 AM </small></p>
+          </a>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-xl'" id="CierreCaja" #CierreCaja>
+  <div class="app-modal-header">
+    <h4>Cierre de caja</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCierreCaja="ngForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div>
+            <table class="table table-bordered data-table" style="clear:none; font-size: 10px">
+              <tbody>
+                <tr>
+                  <td rowspan="7" style="width:30px;background:#9BFFAC;vertical-align:middle;"><span
+                      style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;">Ingresos</span>
+                  </td>
+                  <td style="width:160px;">Cambios Efectivo</td>
+                  <td style="width:150px;text-align:center;">{{ingresoCambio | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;">{{ingresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
+                  <td rowspan="7" style="width:30px;background:#FF9B9B;vertical-align:middle;"><span
+                      style="-webkit-transform:rotate(-90deg);white-space:nowrap;display:block;font-weight:bold;fn">Egresos</span>
+                  </td>
+                  <td style="width:160px;">Cambios Efectivo</td>
+                  <td style="width:150px;text-align:center;">{{egresoCambio | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;">{{egresoCambioBolivar | currency: "BsS.
+                                        "}}</td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Recibo Transferencia</td>
+                  <td style="width:150px;text-align:center;">{{ingresoTransferencia | currency :
+                                        "$."}}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                  <td style="width:160px;"></td>
+                  <td style="width:160px;"></td>
+                  <td style="width:150px;text-align:center;"></td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Giros</td>
+                  <td style="width:150px;text-align:center;">{{ ingresoGiro | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                  <td style="width:160px;">Giros</td>
+                  <td style="width:150px;text-align:center;">{{egresoGiro | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Comision de Giros</td>
+                  <td style="width:150px;text-align:center;">{{ GiroComision | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Traslados</td>
+                  <td style="width:150px;text-align:center;">{{ingresoTraslado | currency : "$."}}</td>
+                  <td style="width:160px;text-align:center;">{{ingresoTrasladoBolivar | currency:
+                                        "BsS. "}}</td>
+                  <td style="width:160px;">Traslados</td>
+                  <td style="width:150px;text-align:center;">{{egresoTraslado | currency : "$." }}</td>
+                  <td style="width:160px;text-align:center;">{{egresoTrasladoBolivar | currency:
+                                        "BsS. " }}</td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Corresponsal Bancario</td>
+                  <td style="width:150px;text-align:center;">{{ingresoCorresponsal | currency :
+                                        "$."}}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                  <td style="width:160px;">Gastos</td>
+                  <td style="width:150px;text-align:center;">$ 0</td>
+                  <td style="width:160px;text-align:center;">BsS. 0</td>
+                </tr>
+                <tr>
+                  <td style="width:160px;">Servicios Externos</td>
+                  <td style="text-align:center;">{{ingresoServicio | currency : "$."}}</td>
+                  <td style="width:160px;text-align:center;"></td>
+                  <td style="width:160px;"></td>
+                  <td style="text-align:center;"></td>
+                  <td style="text-align:center;"></td>
+                </tr>
+                <tr>
+                  <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                  <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}}
+                    </strong></td>
+                  <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
+                  <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
+                  <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
+                  <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS.
+                                            "}}</strong></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <table style="width:350px;clear:none;float:left" class="table table-bordered data-table">
+            <tr>
+              <td>Saldo Inicial</td>
+              <td style="text-align:right;">{{SaldoInicialPesos | currency : "$." }}</td>
+              <td style="text-align:right;">{{SaldoInicialBolivares | currency: "BsS. "}}</td>
+            </tr>
+            <tr>
+              <td style="background:#9BFFAC;">Ingreso</td>
+              <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosPesos | currency : "$."}}
+              </td>
+              <td style="text-align:right;background:#9BFFAC;">+{{totalIngresosBolivares | currency:
+                                "BsS. "}} </td>
+
+            </tr>
+            <tr>
+              <td style="background:#FF9B9B;">Egresos</td>
+              <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosPesos | currency : "$." }}
+              </td>
+              <td style="text-align:right;background:#FF9B9B;">- {{TotalEgresosBolivares | currency:
+                                "BsS. "}}</td>
+            </tr>
+            <tr>
+              <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
+              <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{
+                                    EntregadoIngresosPesos | currency : "$." }}</strong></td>
+              <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar
+                                    | currency: "BsS. " }}</strong></td>
+            </tr>
+            <tr>
+              <td>Entregado</td>
+              <td style="text-align:right;" id="mon_rec_cuadre">{{ entregadoPesos | currency : "$." }}</td>
+              <td style="text-align:right;" id="mon_rec_cuadreBsS">{{entregadoBolivar | currency :
+                                "BsS."}}</td>
+
+            </tr>
+            <tr>
+              <td>Diferencia</td>
+              <td style="text-align:right;" id="diferencia">{{diferenciaPesos | currency : "$." }}</td>
+              <td style="text-align:right;" id="diferencia1">{{diferenciaBolivar | currency : "BsS." }}</td>
+            </tr>
+            <tr id="requerido" style="display:none;">
+              <td colspan="2" style="color:red;line-height:14px;">* Debe escribir el monto recibido y
+                observaciones del día</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table table-bordered data-table" style="clear:none; font-size: 10px">
+                <tr>
+                  <th colspan="2">Fajo Entero (x100)</th>
+                  <th colspan="2">Medio Fajo (x50)</th>
+                  <th colspan="2">Billetes Sueltos</th>
+                </tr>
+                <tr *ngFor="let item of fajosPesos; let i= index">
+                  <td>{{ item.BilleteEntero100 | currency: "$." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero100')" /></td>
+                  <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletes($event.target.value,i,'ValorEntero50')" /></td>
+                  <td>{{ item.BilleteEntero50 | currency: "$." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletes($event.target.value,i,'ValorSuelto')" /></td>
+                </tr>
+                <tr>
+                  <td colspan="3">Monedas</td>
+                  <td colspan="3">
+                    <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
+                      class="nume2" ngModel (input)="calcularFajoBilletes(0,0,'Moneda')"
+                      style=" width: 170px !important;" /></td>
+                </tr>
+
+              </table>
+
+            </div>
+
+            <div class="col-md-6">
+              <table class="table table-bordered data-table" style="clear:none;">
+                <tr>
+                  <th colspan="2">Fajo Entero (x100)</th>
+                  <th colspan="2">Medio Fajo (x50)</th>
+                  <th colspan="2">Billetes Sueltos</th>
+                </tr>
+                <tr *ngFor="let item of fajosBolivares; let i= index">
+                  <td>{{ item.BilleteEntero100 | currency: "BsS." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero100')" /></td>
+                  <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorEntero50')" /></td>
+                  <td>{{ item.BilleteEntero50 | currency: "BsS." }}</td>
+                  <td><input type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0" class="nume2"
+                      (input)="calcularFajoBilletesBolivar($event.target.value,i,'ValorSuelto')" /></td>
+                </tr>
+
+              </table>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h6 style="margin:0;">Observaciones</h6>
+          <textarea id="Observacion" class="normal" name="datos[Observaciones]" required
+            placeholder="Escriba sus comentarios"></textarea>
+          <input type="hidden" name="id">
+          <input type="hidden" id="reci_cuadre" name="recibido" value="0">
+          <input type="hidden" id="dif_cuadre" name="diferencia" value="0">
+
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+  <div class="app-modal-footer">
+
+  </div>
+</app-modal-basic>

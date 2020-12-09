@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="tab-info" *ngIf="MostrarTablas">
+      <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" *ngFor="let m of Monedas; let i = index;">
+              <a 
+                [attr.href]="'#nav-moneda'+i" 
+                class="nav-link" 
+                [ngClass]="{'active': i == 0}"
+                role="tab" 
+                data-toggle="tab"
+                (click)="CambiarValoresTabla(m.Id_Moneda)">{{m.Nombre}}
+              </a>
+          </li>
+      </ul>
+    </div>    
+    <app-tablatotalesmonedatercero
+      [Id_Moneda]="MonedaSeleccionada"
+      [Id_Tercero]="Id_Tercero">            
+    </app-tablatotalesmonedatercero>    
+  </div>
+</div>

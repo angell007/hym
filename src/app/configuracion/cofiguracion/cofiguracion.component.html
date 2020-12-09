@@ -1,0 +1,317 @@
+<div class="container-fluid">
+  <div id="accordion">
+    <div class="card m-0">
+      <div class="card-header alert-primary" id="headingOne">
+
+        <ul class="list-unstyled list-info mt-4 mb-3">
+          <li>
+            <span class="thumb-img pdd-top-10 ">
+            </span>
+            <div class="info">
+              <b class="text-dark font-size-22"> Configuracion General</b>
+              <p class="no-mrg-btm ">Configura información de la empresa y monedas.</p>
+            </div>
+          </li>
+        </ul>
+
+
+      </div>
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <form name="myForm" #FormEditarConfiguracion="ngForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h5>Información de la empresa</h5>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-4" hidden>
+                        <div class="form-group">
+                          <label>Identificación</label>
+                          <input readonly name="id" type="text" placeholder="Identificación" class="form-control"
+                            ngModel="{{configuracionGeneral.Id_Configuracion}}" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <strong><label>Nombre Empresa</label></strong>
+                          <input name="Nombre_Empresa" type="text" placeholder="Nombre empresa" class="form-control"
+                            ngModel="{{configuracionGeneral.Nombre_Empresa}}" required>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <strong><label>N.I.T.</label></strong>
+                          <input name="NIT" type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="N.I.T."
+                            class="form-control" ngModel="{{configuracionGeneral.NIT}}" required>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <strong><label>Teléfono</label></strong>
+                          <input name="Telefono" type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono"
+                            class="form-control" ngModel="{{configuracionGeneral.Telefono}}" required>
+
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <strong><label>Celular</label></strong>
+                          <input name="Celular" type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular"
+                            class="form-control" ngModel="{{configuracionGeneral.Celular}}" required>
+
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <strong><label>Correo</label></strong>
+                          <input name="Correo" type="email" email placeholder="Correo" class="form-control"
+                            ngModel="{{configuracionGeneral.Correo}}" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <strong><label>Dirección</label></strong>
+                          <input name="Direccion" type="text" placeholder="Dirección" class="form-control"
+                            ngModel="{{configuracionGeneral.Direccion}}" required>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <strong><label
+                              title="Escriba las fechas en formato año, mes, dia separado con guion(-), cada fecha separada por coma y sin espacio entre la coma y la siguiente fecha!">Fines
+                              de semana y feriados</label></strong>
+                          <input name="Fechas_Festivas" type="text" placeholder="Festivos" class="form-control"
+                            ngModel="{{configuracionGeneral.Fechas_Festivas}}" required>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h5>Consecutivos</h5>
+                    <hr>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="custom-thead" style="width:25%;"><b>Consecutivos</b></th>
+                          <th class="custom-thead"><b>Prefijo</b></th>
+                          <th class="custom-thead" style="width:25%;"><b>Consecutivo Actual</b></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Compras</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Compra}}" name="Prefijo_Compra">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Compra}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Transferencias</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Transferencia}}" name="Prefijo_Transferencia">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Transferencia}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Giros</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Giro}}" name="Prefijo_Giro">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Giro}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Traslados</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Traslado}}" name="Prefijo_Traslado">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Traslado}}</td>
+                        </tr>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Servicios Externos</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Servicio_Externo}}"
+                              name="Prefijo_Servicio_Externo">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Servicio_Externo}}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="custom-cell text-center"><b>Egresos</b></td>
+                          <td class="custom-cell">
+                            <input type="text" placeholder="" class="form-control form-control-sm" required
+                              ngModel="{{configuracionGeneral.Prefijo_Egreso}}" name="Prefijo_Egreso">
+                          </td>
+                          <td class="custom-cell" style="text-align:center;">{{configuracionGeneral.Egreso}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-xs-6">
+              <div class="text-right mrg-top-5">
+                <button type="submit" class="btn btn-outline-primary"
+                  [swal]="{title : '¿Está seguro?', text: 'Se dispone a actualizar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjeme comprobar!'}"
+                  (confirm)="GuardarConfiguracion(FormEditarConfiguracion)">Actualizar
+                  Información
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="card m-0">
+            <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Predeterminados
+                </button>
+            </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <app-managedefaults></app-managedefaults>
+            </div>
+            </div>
+        </div>
+        <div class="card m-0">
+            <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Collapsible Group Item #3
+                </button>
+            </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+            </div>
+        </div> -->
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <div class="row">
+            <div class="col-md-12">
+              <h4 class="ml-2">Monedas</h4>
+              <!--Accordion wrapper-->
+              <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+                <!-- Accordion card -->
+                <div class="card" *ngFor="let Moneda of Monedas; let i = index">
+
+                  <!-- Card header -->
+                  <div class="card-header" role="tab" id="headingOne1">
+                    <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne{{i}}" aria-expanded="true"
+                      aria-controls="collapseOne{{i}}">
+                      <h5 class="mb-0"> {{ Moneda.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
+                      </h5>
+                    </a>
+                  </div>
+
+                  <!-- Card body -->
+                  <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}"
+                    data-parent="#accordionEx">
+                    <div class="card-body">
+                      <form #FormPermisosMoneda="ngForm">
+
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <label>Identificación</label>
+                            <input name="Id_Moneda" type="text" placeholder="" class="form-control"
+                              ngModel="{{Moneda.Id_Moneda}}" readonly required>
+                          </div>
+                        </div>
+
+                        <div class="row" *ngFor="let Item of Moneda.Campos; let j = index">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label>{{Item.Campo_Visual}}</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <span class="switch switch-sm">
+                                <input type="checkbox" name="Diario_{{i}}_{{j}}" id="Diario_{{i}}_{{j}}"
+                                  [checked]="Item.Diario == '1' ? 'false' : ''" class="switch">
+                                <label for="Diario_{{i}}_{{j}}"></label>
+                              </span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label>Funcionarios</label>
+                              <select id="Identificacion_funcionario_{{i}}_{{j}}" class="form-control" required
+                                name="Identificacion_funcionario_{{i}}_{{j}}"
+                                [(ngModel)]="Item.Identificacion_Funcionario"
+                                (change)="asignarFuncionario(Item.Id_Moneda_Valor, $event.target.value)">
+                                <option value="">Seleccione un funcionario</option>
+                                <option *ngFor="let Funcionario of Funcionarios"
+                                  [value]="Funcionario.Identificacion_Funcionario">{{Funcionario.Nombres}}
+                                  {{Funcionario.Apellidos}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                      </form>
+                      <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                          <div class="text-right mrg-top-5">
+                            <button type="submit" class="btn btn-primary"
+                              (click)="GuardarMoneda(i,Moneda.Id_Moneda)">Actualizar
+                              datos de moneda</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <!-- Accordion card -->
+
+
+              </div>
+              <!-- Accordion wrapper -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento"
+    type="error">
+  </swal>
+
+  <swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+  </swal>
+
+  <swal #confirmswal title="" text="" type=""></swal>

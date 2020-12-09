@@ -1,0 +1,51 @@
+.tabla-destinatario{
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    border-collapse: initial;
+    background: #efefef;
+    width: 100%;
+    }
+
+.tabla-destinatario td{
+padding: 3px;
+/*border-bottom: 1px solid #9e9d9d; */
+}
+.color-campos{
+background-color: #fbfcfd;
+}
+.centar-datos{
+text-align: center;
+}
+
+.destinatario{
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    border-collapse: initial;
+    background: #ffffff;
+    width: 100%;
+  
+   
+}
+td{
+    border-bottom: 1px solid #fefefe !important;
+}
+
+.input-hover{
+    border-radius: 0 !important;
+    -webkit-border-top-left-radius: 5px !important;
+    -webkit-border-bottom-left-radius: 5px !important;
+    -moz-border-radius-topleft: 5px !important;
+    -moz-border-radius-bottomleft: 5px !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+    }
+    .btn-hover{
+    border-radius: 0 !important;
+    -webkit-border-top-right-radius: 5px !important;
+    -webkit-border-bottom-right-radius: 5px !important;
+    -moz-border-radius-topright: 5px !important;
+    -moz-border-radius-bottomright: 5px !important;
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+    padding: 0px 4px !important;
+    }

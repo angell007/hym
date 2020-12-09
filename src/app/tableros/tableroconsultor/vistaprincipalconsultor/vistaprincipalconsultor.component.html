@@ -1,0 +1,17 @@
+<div class="container-fluid card py-3">
+  <div class="row">
+    <!-- <div class="col-md-12">
+      <button class="btn btn-outline-primary btn-rounded" (click)="CambiarVista()">
+        Alternar Vista
+      </button>
+    </div> -->
+    <div class="col-md-12">
+      <ng-container *ngIf="Cargado">
+        <app-aperturacuentasconsultor *ngIf="MostrarApertura" (MostrarTablero)="ShowTablero($event)">
+        </app-aperturacuentasconsultor>
+        <app-tableroconsultor *ngIf="!MostrarApertura" (AbrirCuentas)="ShowAperturaCuentas($event)">
+        </app-tableroconsultor>
+      </ng-container>
+    </div>
+  </div>
+</div>

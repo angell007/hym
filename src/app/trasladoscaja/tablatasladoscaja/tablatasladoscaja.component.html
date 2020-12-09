@@ -1,0 +1,128 @@
+<div class="container-fluid card">
+
+  <ul class="list-unstyled list-info my-5">
+    <li>
+      <span class="thumb-img pdd-top-10 ">
+      </span>
+      <div class="info">
+        <b class="text-dark font-size-22">Traslados entre caja realizados</b>
+        <p class="no-mrg-btm ">Gestion traslados entre caja</p>
+      </div>
+    </li>
+  </ul>
+
+  <!-- <div class="row">
+    <div class="col-md-6" style="display:flex; align-items:flex-end;">
+      <h5>Traslados entre caja realizados</h5>
+    </div> -->
+  <!-- <div class="col-md-6">
+      <div class="pull-right">
+        <button class="btn btn-rounded btn-outline-primary btn-sm" style="display:flex; align-items:center;"
+          (click)="AbrirModal('0')">
+          <i class="ti-plus font-size-15 mr-2"></i> Nuevo traslado
+        </button>
+      </div>
+    </div> -->
+  <!-- </div> -->
+  <div class="card-body">
+    <table class="table table-bordered table-striped custom-table">
+      <thead>
+        <tr>
+          <th class="custom-thead" style="">Fecha</th>
+          <th class="custom-thead" style="">Código</th>
+          <th class="custom-thead">Origen</th>
+          <th class="custom-thead">Destino</th>
+          <th class="custom-thead" style="">Moneda</th>
+          <th class="custom-thead" style="">Valor</th>
+          <th class="custom-thead">Detalles</th>
+          <th class="custom-thead" style="">Estado</th>
+        </tr>
+        <tr>
+          <th class="table-filters">
+            <input type="date" class="form-control" placeholder="Filtro fecha" (change)="ConsultaFiltrada()"
+              [(ngModel)]="Filtros.fecha">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
+              [(ngModel)]="Filtros.codigo">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control" placeholder="Filtro origen" [(ngModel)]="Origen"
+              [ngbTypeahead]="search_origen" [resultTemplate]="rt_origen" [inputFormatter]="formatter_origen"
+              (change)="CompletarOrigen(Origen)">
+          </th>
+          <th class="table-filters">
+            <input type="text" class="form-control" placeholder="Filtro destino" [(ngModel)]="Destino"
+              [ngbTypeahead]="search_destino" [resultTemplate]="rt_destino" [inputFormatter]="formatter_destino"
+              (change)="CompletarDestino(Destino)">
+          </th>
+          <th class="table-filters">
+            <select id="moneda" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.moneda">
+              <option value="" selected>Seleccione</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </th>
+          <th class="table-filters"></th>
+          <th class="table-filters"></th>
+          <th class="table-filters">
+            <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
+              <option value="" selected>Todos</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Aprobado">Aprobado</option>
+              <option value="Negado">Negado</option>
+              <option value="Anulado">Anulado</option>
+            </select>
+          </th>
+        </tr>
+        <tr *ngIf="Cargando">
+          <td colspan="8" class="text-center">
+            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+              <h2>CARGANDO TRASLADOS ENTRE CAJA</h2>
+              <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="Traslados.length == 0 && !Cargando">
+          <td colspan="8" class="text-center">
+            <i class="ti-alert font-size-20 text-warning"></i>
+            <h4>No hay traslados entre cajas para mostrar!</h4>
+          </td>
+        </tr>
+      </thead>
+      <tbody *ngIf="!Cargando">
+        <tr *ngFor="let t of Traslados; let i = index;" [ngClass]="{'bg-anulada':t.Estado == 'Anulado'}">
+          <td class="text-center">{{t.Fecha_Traslado | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+          <td class="text-center">{{t.Codigo}}</td>
+          <td class="text-center">{{t.Nombre_Origen}}</td>
+          <td class="text-center">{{t.Nombre_Destino}}</td>
+          <td class="text-center">{{t.Nombre_Moneda}}</td>
+          <td class="text-right">{{t.Valor | customcurrency:t.Codigo_Moneda}}</td>
+          <td class="text-center">{{t.Detalle}}</td>
+          <td class="text-center ">{{t.Estado}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="paginacion-container" *ngIf="Traslados.length > 0">
+      <div class="row">
+        <div class="col-md-4">
+          <p style="font-size:11px;"><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}}
+              de {{ InformacionPaginacion.total }}</b></p>
+        </div>
+        <div class="col-md-8">
+          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+            [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #rt_origen let-r="result" let-t="term">
+  <strong>{{r.Nombre}}</strong>
+</ng-template>
+
+<ng-template #rt_destino let-r="result" let-t="term">
+  <strong>{{r.Nombre}}</strong>
+</ng-template>

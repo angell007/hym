@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="widget card">
+          <div class="card-block">
+            <h5 class="card-title">Indicadores Generales Transferencias</h5>
+            <div class="row mrg-top-30">
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasExitosas}}</h2>
+                  <p class="no-mrg-btm">Exitosas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasDevueltas}}</h2>
+                  <p class="no-mrg-btm">Devueltas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6 border right border-hide-md">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasCobradas}}</h2>
+                  <p class="no-mrg-btm">Cobradas</p>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6 col-6">
+                <div class="text-center pdd-vertical-10">
+                  <h2 class="font-primary no-mrg-top">{{conteoTransferencias.TransferenciasPendientes}}</h2>
+                  <p class="no-mrg-btm">Pendientes</p>
+                </div>
+              </div>
+          </div>
+            <div class="row mrg-top-35">
+              <div class="col-md-12">
+                <canvas baseChart height="150" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                  [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card">
+        <app-tablaagentesexternos></app-tablaagentesexternos>
+      </div>
+    </div>
+  </div>
+</div>

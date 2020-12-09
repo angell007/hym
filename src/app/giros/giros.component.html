@@ -1,0 +1,327 @@
+<div class="container-fluid">
+  <div class="row" id="informative-cards-container">
+    <div class="col-md-3">
+      <app-informativecard [CantidadMostrar]="Conteo.Totales" TituloCard="Giros totales" IconoCard="ti-shuffle"
+        CardClass="bg-info" AdditionalText="">
+      </app-informativecard>
+    </div>
+    <div class="col-md-3">
+      <app-informativecard [CantidadMostrar]="Conteo.Pendientes" TituloCard="Pendientes" IconoCard="ti-check"
+        CardClass="bg-success" AdditionalText="" (click)="ConsultaFiltradax('Pendiente')" style="cursor: pointer;">
+      </app-informativecard>
+    </div>
+    <div class="col-md-3">
+      <app-informativecard [CantidadMostrar]="Conteo.Pagados" TituloCard="Pagados" IconoCard="ti-back-right"
+        CardClass="bg-warning" AdditionalText="" TextColor="black" (click)="ConsultaFiltradax('Pagado')"
+        style="cursor: pointer;">
+      </app-informativecard>
+    </div>
+    <div class="col-md-3">
+      <app-informativecard [CantidadMostrar]="Conteo.Anulados" TituloCard="Anulados" IconoCard="ti-close"
+        CardClass="bg-danger" AdditionalText="">
+      </app-informativecard>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header alert-primary">
+          <h5>Giros Realizados
+            <span><i class="ti-reload text-info" style="cursor:pointer;" title="Actualizar tabla"
+                (click)="ActualizarTabla()"></i></span>
+            <!--<span><i class="fa fa-refresh fa-spin text-info" (click)="ActualizarTabla()"></i></span>-->
+          </h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover table-sm custom-table">
+            <thead>
+              <tr>
+                <th class="custom-thead" style="width:10%;">Fecha</th>
+                <th class="custom-thead">Oficina Origen</th>
+                <th class="custom-thead">Remitente</th>
+                <th class="custom-thead">Destinatario</th>
+                <th class="custom-thead" style="width:15%;">Monto</th>
+                <th class="custom-thead" style="width:10%;">Estado</th>
+                <th class="custom-thead" style="width:10%;">Acciones</th>
+              </tr>
+              <tr>
+                <th class="table-filters"><input type="date" class="form-control" [(ngModel)]="Filtros.fecha"
+                    (change)="ConsultaFiltrada()"></th>
+                <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.oficina"
+                    (change)="ConsultaFiltrada()"></th>
+                <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.remitente"
+                    (change)="ConsultaFiltrada()"></th>
+                <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.destinatario"
+                    (change)="ConsultaFiltrada()"></th>
+                <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.monto"
+                    (change)="ConsultaFiltrada()"></th>
+                <th class="table-filters">
+                  <select class="custom-select form-control" [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
+                    <option value="" selected>Todos</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Pagado">Pagada</option>
+                  </select>
+                </th>
+              </tr>
+              <tr *ngIf="Cargando">
+                <th colspan="6" class="text-center">
+                  <span><i class="fa fa-refresh fa-spin fa-3x text-info"></i></span>
+                  <h1>CARGANDO</h1>
+                </th>
+              </tr>
+            </thead>
+            <tbody *ngIf="!Cargando">
+              <tr *ngFor="let g of Giros"
+                [ngClass]="{'bg-selected': g.Estado == 'Pagado', 'bg-anulada': g.Estado == 'Anulado'}">
+                <td class="text-center">{{g.Fecha | date:"dd/MM/yyyy" }}</td>
+                <td class="text-center">{{g.Origen}}</td>
+                <td class="text-center">{{g.Nombre_Remitente}}</td>
+                <td class="text-center">{{g.Nombre_Destinatario}}</td>
+                <td class="text-center" class="text-right">{{g.Valor_Total | customcurrency:g.Codigo_Moneda }}</td>
+                <td class="text-center">{{g.Estado}}</td>
+
+                <td class="text-center">
+                  <a (click)="VerDetalleGiro(g.Id_Giro)" style="cursor: pointer;">
+                    <i class="ti-search text-info"></i>
+                  </a>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+          <div id="paginacion-container" *ngIf="Giros.length > 0">
+            <div class="row">
+              <div class="col-md-3">
+                <p>
+                  <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+                    {{ InformacionPaginacion.total }}</b>
+                </p>
+              </div>
+              <div class="col-md-9">
+                <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+                  [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--<div class="row">
+        <div class="col-md-4">
+            <div class="col-md-12 card min-heigth">
+                <div>
+                    <div id="chartdiv" style="height: 500px;font-size: 11px;width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="widget card">
+                <div class="card-block">
+                    <p>Giros realizados en nuestro Sistema</p>
+                    <div class="table-overflow">
+                        <table class="table table-hover table-sm table-striped" datatable [dtOptions]="dtOptions"
+                            [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th style="width:150px;">Fecha</th>
+                                    <th>Oficina Origen</th>
+                                    <th>Remitente</th>
+                                    <th>Destinatario</th>
+                                    <th style="width:80px">Monto</th>
+                                    <th>Estado</th>
+                                    <th style="width:130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let giro of giros" class="{{giro.Estado == 'Anulada' ? 'bg-danger text-white' : '' }} ">
+                                    <td>{{giro.Fecha | date:"dd/MM/yy" }}</td>
+                                    <td>{{giro.Origen}}</td>
+                                    <td>{{giro.Nombre_Remitente}}</td>
+                                    <td>{{giro.Nombre_Destinatario}}</td>
+                                    <td>{{giro.Valor_Total }}</td>
+                                    <td>{{giro.Estado}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="VerGiro(giro.Id_Giro, ModalVerGiro)">
+                                            <i class="ti-search"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="RealizarGiro(giro.Id_Giro)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="DevolverGiro(giro.Id_Giro)">
+                                            <i class="fa fa-undo"></i>
+                                        </button>
+                                        <button *ngIf="anulado(giro.Estado)" class="btn btn-default btn-xs" type="button" style="margin:0;" (click)="EditarGiro(giro.Id_Giro, ModalEditarGiro)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                        <button *ngIf="anulado(giro.Estado)" class="btn btn-default btn-xs" type="button" style="margin:0;" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a Anular esta Giro, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Eliminar', cancelButtonText:'No, Dejame Comprobar!'}"
+                                            (confirm)="AnularGiro(giro.Id_Giro)">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalDetalleGiro" #ModalDetalleGiro>
+  <div class="app-modal-header">
+    <button type="button" class="close basic-close" (click)="CerrarModalDetalle()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4>Detalle Giro</h4>
+  </div>
+  <div class="app-modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th class="text-center">Fecha</th>
+              <th class="text-center">Cajero</th>
+              <th class="text-center">Cobro</th>
+              <th class="text-center">Entregar</th>
+              <th class="text-center">Total</th>
+              <th class="text-center">Comisión</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{DetalleGiro.Fecha | date:"dd-MM-yyyy" | uppercase}}</td>
+              <td>{{DetalleGiro.Nombre_Cajero}}</td>
+              <td class="text-right">{{DetalleGiro.Valor_Total | customcurrency}}</td>
+              <td class="text-right">{{DetalleGiro.Valor_Entrega | customcurrency}}</td>
+              <td class="text-right">{{DetalleGiro.Valor_Total | customcurrency}}</td>
+              <td class="text-right">{{DetalleGiro.Comision | customcurrency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-12">
+        <div id="accordion">
+          <div class="card p-0">
+            <div class="card-header alert-primary">
+              <h5 class="mb-0">
+                <div class=" p-0 m-0"><i class="ti-location-pin text-info font-size-15"></i> Datos Origen
+                </div>
+              </h5>
+            </div>
+
+            <div aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body p-1">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th class="text-center">Remitente</th>
+                      <th class="text-center">Departamento</th>
+                      <th class="text-center">Municipio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center">{{DetalleGiro.Nombre_Remitente}}</td>
+                      <td class="text-center">{{DetalleGiro.Departamento_Remitente}}</td>
+                      <td class="text-center">{{DetalleGiro.Municipio_Remitente}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <div id="accordion2">
+          <div class="card p-0">
+            <div class="card-header alert-primary">
+              <h5 class="mb-0">
+                <div class="p-0 m-0"><i class="ti-map-alt text-info font-size-15"></i>
+                  Datos Destino
+                </div>
+              </h5>
+            </div>
+
+            <div>
+              <div class="card-body p-1">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th class="text-center">Destinatario</th>
+                      <th class="text-center">Departamento</th>
+                      <th class="text-center">Municipio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center">{{DetalleGiro.Nombre_Destinatario}}</td>
+                      <td class="text-center">{{DetalleGiro.Departamento_Destinatario}}</td>
+                      <td class="text-center">{{DetalleGiro.Municipio_Destinatario}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="col-md-12" *ngIf="ShowDatosDevolucion">
+                <div id="accordion3">
+                    <div class="card p-0">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link p-0 m-0" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"><i class="ti-shift-left text-danger font-size-15"></i> Detalle de devolución
+                                </button>
+                            </h5>
+                        </div>
+                    
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
+                            <div class="card-body p-1">
+                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Datos Devolución</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{DatosDevolucion.Fecha | date:"medium" | uppercase}}</td>
+                                            <td class="text-center">{{DatosDevolucion.Motivo_Devolucion}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" (click)="CerrarModalDetalle()">Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<swal #errorSwal title="Error al guardar" text="Se ha generado un error al intentar guardar el documento" type="error">
+</swal>
+
+<swal #saveSwal title="Documento guardado" text="Se ha guardado correctamente el documento" type="success">
+</swal>
+
+<swal #deleteSwal title="Traslado eliminado" text="Se ha Eliminado Correctamente el traslado" type="success">
+</swal>
+
+<swal #alertSwal title="" text="" type=""></swal>

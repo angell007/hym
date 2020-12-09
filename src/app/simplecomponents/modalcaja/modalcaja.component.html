@@ -1,0 +1,62 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalCaja>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Caja</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCaja="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Nombre Caja" class="form-control" name="Nombre"
+              [(ngModel)]="CajaModel.Nombre" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Oficina</label>
+            <select class="form-control" required name="Id_Oficina" [(ngModel)]="CajaModel.Id_Oficina" required>
+              <option value="">Seleccione una Oficina</option>
+              <option *ngFor="let o of Oficinas" [value]="o.Id_Oficina">{{o.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>MAC</label>
+            <input type="text" minlength="12" placeholder="MAC Caja" class="form-control" name="MAC" [(ngModel)]="CajaModel.MAC"
+              mask="AA:AA:AA:AA:AA:AA" required>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+            <div class="form-group">
+                <label>MAC</label>
+                <input type="text" placeholder="MAC" class="form-control" name="MAC" [(ngModel)]="" (focusout)="boolNombre = true"
+                    required>
+            </div>
+        </div> -->
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Detalles</label>
+            <textarea class="form-control" placeholder="Observaciones para esta caja" name="Detalle"
+              [(ngModel)]="CajaModel.Detalle"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarCaja()" [disabled]="!FormCaja.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

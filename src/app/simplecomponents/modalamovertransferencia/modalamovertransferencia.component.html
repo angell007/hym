@@ -1,0 +1,55 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalMoverTransferencia>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Mover transferencia a otra cuenta</h4>
+  </div>
+  <div class="app-modal-body">    
+    <form #FormMoverTransferencia="ngForm">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="block-element">Recibo</label>
+            <label>{{MoverTransferenciaModel.Recibo}}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="block-element">Valor</label>
+            <label>{{MoverTransferenciaModel.Valor | customcurrency:Codigo_Moneda}}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="block-element">Numero Transferencia</label>
+            <label>{{MoverTransferenciaModel.Numero_Transferencia}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="block-element">Cuenta Origen</label>
+            <label>{{Cuenta_Origen}}</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Cuentas Destino</label>
+            <select class="form-control custom-select" name="Cuenta_Destino" [(ngModel)]="MoverTransferenciaModel.Id_Cuenta_Destino" required>
+              <option value="">Seleccione</option>
+              <option *ngFor="let cb of Cuentas_Apertura;" [value]="cb.Id_Cuenta_Bancaria">{{cb.Codigo_Moneda}} - {{cb.Nombre_Titular}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : 'Se dispone a mover una transferencia a otra cuenta!' , type:'warning', showCancelButton: true, confirmButtonText: 'Si Mover', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="RealizarMovimientoTransferencia()" [disabled]="!FormMoverTransferencia.valid">Mover Transferencia
+      </button>
+    </div>
+  </div>  
+</app-modal-basic>

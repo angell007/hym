@@ -1,0 +1,63 @@
+<!--
+     <td> Traslados </td>
+     <td> Agentes Externos </td> 
+     <td> Giros </td>
+     <td> Corresponsales Bancarios </td>
+     <td> Servicios Externos </td>
+     <td> Egresos </td>
+-->
+<div class="page-body">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-md-offset-4">
+      <div class="card">
+        <div class="card-body" style="padding-bottom: 0px;">
+          <div class="row invoive-info" style="margin-bottom: 0; padding-bottom: 0px;">
+            <div class="col-md-12">
+              <h4>Perfil: <b>{{Cabecera.Nombre}}</b></h4>
+            </div>
+            
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Detalles</label>
+                {{Cabecera.Detalle}}
+              </div>
+            </div>
+
+          </div>
+          <hr>
+          <div class="row" style="margin-bottom: 10px">
+            <div class="col-md-12" style="text-align: center">
+              <h3>Privilegios</h3>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 text-left">
+              <table class="table  invoice-detail-table space">
+                <thead>
+                  <tr class="thead-default">
+                    <th> <b>Módulo</b> </th>
+                    <th><i class="fa fa-search"></i></th>
+                    <th><i class="fa fa-pencil"></i></th>
+                    <th><i class="fa fa-trash"></i></th>
+                    <th><i class="fa fa-plus"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let permiso of Permisos" >
+                    <td> {{permiso.Titulo_Modulo}} </td>
+                    <td> <i class=" {{permiso.Ver == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i> </td>
+                    <td> <i class=" {{permiso.Editar == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i></td>
+                    <td> <i class=" {{permiso.Eliminar == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i> </td>
+                    <td> <i class=" {{permiso.Crear == '1' ? 'fa fa-check' : 'fa fa-times' }} "></i></td>                   
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

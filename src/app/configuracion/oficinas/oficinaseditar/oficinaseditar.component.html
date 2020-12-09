@@ -1,0 +1,160 @@
+<div class="container-fluid">
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <div class="app-modal-header">
+            <h1>Editar Oficina</h1>
+            <hr>
+          </div>
+          <div class="app-modal-body">
+            <form #FormOficinaEditar="ngForm">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input hidden readonly type="text" name="id" ngModel="{{id}}">
+                    <strong>
+                      <label>Nombre </label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre" ngModel="{{oficina.Nombre}}">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Teléfono</label>
+                    </strong>
+                    <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                      name="Telefono" ngModel="{{oficina.Telefono}}">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Celular</label>
+                    </strong>
+                    <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="" class="form-control"
+                      name="Celular" ngModel="{{oficina.Celular}}">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Correo</label>
+                    </strong>
+                    <input type="email" email placeholder="Correo Oficina" class="form-control" name="Correo" ngModel="{{oficina.Correo}}">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Dirección</label>
+                    </strong>
+                    <input type="text" placeholder="Dirección Oficina" class="form-control" name="Direccion" ngModel="{{oficina.Direccion}}">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Departamento</label>
+                    </strong>
+                    <select class="form-control" required name="Id_Departamento" ngModel="{{oficina.Id_Departamento}}" [(ngModel)]="departamentoDefault"
+                      (change)="Municipios_Departamento($event.target.value)">
+                      <option [ngValue]="undefined" value="">Seleccione un Departamento</option>
+                      <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">{{Departamento.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <strong>
+                      <label>Municipio</label>
+                    </strong>
+                    <select class="form-control" required name="Id_Municipio" ngModel="{{oficina.Id_Municipio}}" [(ngModel)]="municipioDefault">
+                      <option value="">Seleccione un Municipio</option>
+                      <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+              <h3>Datos Recibo</h3>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <strong>
+                      <label>Limite Trans/Recibo</label>
+                    </strong>
+                    <input type="number" placeholder="Nombre Oficina" class="form-control" name="Limite_Transferencia" ngModel="{{oficina.Limite_Transferencia}}">
+                  </div>
+                </div>
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <strong>
+                      <label>Nombre Establecimiento</label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Nombre_Establecimiento" ngModel="{{oficina.Nombre_Establecimiento}}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <strong>
+                      <label>Lema</label>
+                    </strong>
+                    <input type="text" placeholder="Lema" class="form-control" name="Lema" ngModel="{{oficina.Lema}}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <strong>
+                      <label>Pie de página</label>
+                    </strong>
+                    <input type="text" placeholder="Nombre Oficina" class="form-control" name="Pie_Pagina" ngModel="{{oficina.Pie_Pagina}}">
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+              
+                <div class="row" style="margin-top: 10px; margin-bottom: 10px" *ngFor="let item of CamposMoneda; let i = index">
+                  <div class="col-md-12">
+                    <h5 > <span > {{item.Nombre}} </span></h5>
+                    <hr>
+                  </div>
+                  <div class="col-md-4" *ngFor="let item1 of item.Campos; let j = index">
+                    <div class="form-group">
+                      <label>{{item1.Campo_Visual}}</label>
+                      <input type="number" class="form-control" name="Diario_{{j}}" ngModel="{{item1.Valor}}" (blur)="agregarValor(i,j,$event.target.value)"> 
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <select *ngIf="ocultar" class="form-control" required name="Id_Moneda" ngModel (change)="habilitarCampo($event.target.value)">
+                      <option value="">Seleccione una Moneda</option>
+                      <option *ngFor="let moneda of Monedas" [value]="moneda.Id_Moneda">{{moneda.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+
+            </form>
+          </div>
+          <div class="app-modal-footer">
+            <div class="text-right">
+              <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/oficinas']">Volver</button>
+              <button type="button" class="btn btn-primary btn-sm" [swal]="{title:'¿Está Seguro?',text : 'Se dispone a editar esta oficina' , type:'warning', showCancelButton: true, confirmButtonText: 'Guardar cambios', cancelButtonText:'No, regresar a la edición'}"
+                (confirm)="GuardarOficina(FormOficinaEditar)">Guardar</button>
+            </div>
+            <!--[disabled]="departamento.value=='' || municipio.value=='' || !nombreOficina.valid || !telefono.valid || !celular.valid || !correo.valid || !direccion.valid || !comision.valid || !minCompra.valid || !maxCompra.valid || !minVenta.valid || !maxVenta.valid || !valores.valid"-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

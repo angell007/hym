@@ -1,0 +1,823 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Editar Funcionario</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-block">
+          <form #FormFuncionarioCrear="ngForm">
+            <form-wizard style="border:0 !important;">
+              <!--INICIO INFORMACION PERSONAL-->
+              <wizard-step [title]="'Información Personal'" >
+                <form #FormFuncionario="ngForm">
+                  <div class="content2">
+                    <div>
+                      <h5>Información Personal</h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <input type="text" name="Username" ngModel="{{funcionario.Username}}" class="letras form-control form-control-sm" />
+                            <label class="floating-label">Apellidos (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <input type="text" name="Password" ngModel="{{funcionario.Password}}" class="letras form-control form-control-sm" />
+                            <label class="floating-label">Apellidos (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div style="text-align: center">
+                            <label style="display: block" for="Foto">
+                              <img *ngIf="funcionario.Imagen == '' || funcionario.Imagen == null " src="{{globales.ruta}}/assets/images/user.jpg"
+                                style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
+                                id="foto_visual">
+                              <img *ngIf="funcionario.Imagen != '' && funcionario.Imagen != null" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{funcionario.Imagen}}"
+                                style="height: 200px;width: 200px; cursor: pointer;" class="thumb-img img-circle img-thumbnail img-responsive"
+                                id="foto_visual">
+                            </label>
+                            <div class="col-md-6">
+                              <input name="Foto" id="Foto" ngModel="" type="file" accept="image/png, image/jpeg" class="form-control form-control-sm text-right f-9"
+                                style="display: none" (change)="CargaFoto($event)">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-9">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input type="number" min="0" name="Identificacion_Funcionario" ngModel="{{funcionario.Identificacion_Funcionario}}"
+                                  class="form-control form-control-sm f-9" readonly />
+                                <label class="floating-label">Identificación (*)</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input type="text" name="Nombres" ngModel="{{funcionario.Nombres}}" class="letras form-control form-control-sm"
+                                  id="nombres" (focus)="$event.target.select()" (focusout)="boolNombresIP = true"
+                                  required #nombresInformacionPersonalEd="ngModel" />
+                                <label class="floating-label">Nombres (*)</label>
+
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input type="text" name="Apellidos" ngModel="{{funcionario.Apellidos}}" class="letras form-control form-control-sm"
+                                  id="apellidos" (focus)="$event.target.select()" (focusout)="boolApellidosIP = true"
+                                  required #apellidosInformacionPersonalEd="ngModel" />
+                                <label class="floating-label">Apellidos (*)</label>
+
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento" ngModel="{{funcionario.Fecha_Nacimiento}}"
+                                  id="fnac" required (focus)="$event.target.select()" (focusout)="boolNacimientoIP = true"
+                                  required #nacimientoInformacionPersonalEd="ngModel" />
+                                <label class="floating-label" for="text-input">Fecha de Nacimiento: (*)</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <input class="form-control form-control-sm" type="text" name="Lugar_Nacimiento" ngModel="{{funcionario.Lugar_Nacimiento}}"
+                                  id="lnac" (focus)="$event.target.select()" (focusout)="boolLugarNacimientoIP = true"
+                                  required #lugarnacimientoInformacionPersonalEd="ngModel" />
+                                <label class="floating-label">Lugar de Nacimiento (*)</label>
+
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <select class="form-control form-control-sm" name="Tipo_Sangre" ngModel="{{funcionario.Tipo_Sangre}}"
+                                  id="sangre" (focus)="$event.target.select()" (focusout)="boolTipoSangreIP = true"
+                                  required #tiposangreInformacionPersonalEd="ngModel">
+                                  <option value="">Seleccione</option>
+                                  <option value="O+">O+</option>
+                                  <option value="O-">O-</option>
+                                  <option value="A+">A+</option>
+                                  <option value="A-">A-</option>
+                                  <option value="B+">B+</option>
+                                  <option value="B-">B-</option>
+                                  <option value="AB+">AB+</option>
+                                  <option value="AB-">AB-</option>
+                                </select>
+                                <label class="floating-label">Tipo de sangre (*)</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <input type="number" name="Telefono" ngModel="{{funcionario.Telefono}}" class="telefono form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolTelefonoIP = true" required #telefonoInformacionPersonalEd="ngModel">
+                            <label class="floating-label">Teléfono Fijo</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <input type="number" name="Celular" ngModel="{{funcionario.Celular}}" class="celular form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolCelularIP = true" required #celularInformacionPersonalEd="ngModel">
+                            <label class="floating-label">Celular</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input type="email" name="Correo" ngModel="{{funcionario.Correo}}" class="form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolCorreoIP = true" required
+                              #correoInformacionPersonalEd="ngModel">
+                            <label class="floating-label">Correo electrónico</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <input type="text" name="Direccion_Residencia" ngModel="{{funcionario.Direccion_Residencia}}"
+                              class="form-control form-control-sm" id="residencia" (focus)="$event.target.select()"
+                              (focusout)="boolDireccionIP = true" required #direccionInformacionPersonalEd="ngModel" />
+                            <label class="floating-label">Dirección de Residencia (*)</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Estado_Civil" ngModel="{{funcionario.Estado_Civil}}"
+                              id="civil" (focus)="$event.target.select()" (focusout)="boolEstadoCivilIP = true"
+                              required #estadocivilInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="Soltero(a)">Soltero(a)</option>
+                              <option value="Casado(a)">Casado(a)</option>
+                              <option value="Divorciado(a)">Divorciado(a)</option>
+                              <option value="Viudo(a)">Viudo(a)</option>
+                              <option value="Union Libre">Union Libre</option>
+                            </select>
+                            <label class="floating-label">Estado Civil (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Hijos" ngModel="{{funcionario.Hijos}}"
+                              id="hijos" (focus)="$event.target.select()" (focusout)="boolHijosIP = true" required
+                              #hijosInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="0">0</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                            </select>
+                            <label class="floating-label">Hijos (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Grado_Instruccion" ngModel="{{funcionario.Grado_Instruccion}}"
+                              id="educacion" (focus)="$event.target.select()" (focusout)="boolGradoIP = true" required
+                              #gradoInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="Primarios">Primarios</option>
+                              <option value="Secundarios">Secundarios</option>
+                              <option value="Tecnicos">Técnicos</option>
+                              <option value="Tecnologos">Tecnólogos</option>
+                              <option value="Profesionales">Profesionales</option>
+                              <option value="Especializacion">Especialización</option>
+                              <option value="Maestria">Maestría</option>
+                            </select>
+                            <label class="floating-label">Grado de instrucción (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <input type="text" name="Titulo_Estudio" ngModel="{{funcionario.Titulo_Estudio}}" class="letras form-control form-control-sm"
+                              id="titulo" (focus)="$event.target.select()" (focusout)="boolTituloIP = true" required
+                              #tituloInformacionPersonalEd="ngModel" />
+                            <label class="floating-label">Nombre del Título (*)</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <h5>Información Empresa</h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Id_Grupo" ngModel="{{Grupo}}" (change)="GrupoDependencia($event.target.value)"
+                              (focus)="$event.target.select()" (focusout)="boolGrupoIP = true" required
+                              #grupoInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione Grupo</option>
+                              <option *ngFor="let Grupo of Grupos" value="{{Grupo.Id_Grupo}}">{{Grupo.Nombre}}</option>
+                            </select>
+                            <label class="floating-label">Grupo (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Id_Dependencia" ngModel="{{Dependencia}}"
+                              (change)="DependenciaCargo($event.target.value)" (focus)="$event.target.select()"
+                              (focusout)="boolDependenciaIP = true" required #dependenciaInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione Dependencia</option>
+                              <option *ngFor="let Dependencia of Dependencias " value="{{Dependencia.Id_Dependencia}}">{{Dependencia.Nombre}}</option>
+                            </select>
+                            <label class="floating-label">Dependencia(*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Id_Cargo" ngModel="{{Cargo}}" id="cargo"
+                              (focus)="$event.target.select()" (focusout)="boolCargoIP = true" required
+                              #cargoInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione Cargo</option>
+                              <option *ngFor="let Cargo of Cargos " value="{{Cargo.Id_Cargo}}">{{Cargo.Nombre}}</option>
+                            </select>
+                            <label class="floating-label">Cargo (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <input type="number" name="Salario" ngModel="{{funcionario.Salario}}" class="dinero form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolSalarioIP = true" required #salarioInformacionPersonalEd="ngModel" />
+                            <label class="floating-label">Salario (*)</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Fecha_Ingreso" ngModel="{{funcionario.Fecha_Ingreso}}"
+                              (focus)="$event.target.select()" (focusout)="boolIngresoIP = true" required
+                              #ingresoInformacionPersonalEd="ngModel" />
+                            <label for="text-input">Fecha de Ingreso: (*)</label>
+                          </div>
+                        </div>
+
+                      </div>
+                      <h5>Dotación</h5>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Talla_Camisa" ngModel="{{funcionario.Talla_Camisa}}"
+                              (focus)="$event.target.select()" (focusout)="boolCamisaIP = true" required
+                              #camisaInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="NA">N/A</option>
+                              <option value="XS">XS</option>
+                              <option value="S">S</option>
+                              <option value="M">M</option>
+                              <option value="L">L</option>
+                              <option value="XL">XL</option>
+                              <option value="XXL">XXL</option>
+                              <option value="XXXL">XXXL</option>
+                            </select>
+                            <label class="floating-label">Talla de Camisa (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Talla_Pantalon" ngModel="{{funcionario.Talla_Pantalon}}"
+                              (focus)="$event.target.select()" (focusout)="boolPantalonIP = true" required
+                              #pantalonInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="NA">N/A</option>
+                              <option value="0">0</option>
+                              <option value="2">2</option>
+                              <option value="4">4</option>
+                              <option value="6">6</option>
+                              <option value="8">8</option>
+                              <option value="10">10</option>
+                              <option value="12">12</option>
+                              <option value="14">14</option>
+                              <option value="16">16</option>
+                              <option value="18">18</option>
+                              <option value="20">20</option>
+                              <option value="22">22</option>
+                              <option value="24">24</option>
+                              <option value="26">26</option>
+                              <option value="28">28</option>
+                              <option value="30">30</option>
+                              <option value="32">32</option>
+                              <option value="34">34</option>
+                              <option value="36">36</option>
+                              <option value="38">38</option>
+                              <option value="40">40</option>
+                              <option value="42">42</option>
+                            </select>
+                            <label class="floating-label">Talla de Pantalón (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select class="form-control form-control-sm" name="Talla_Botas" ngModel="{{funcionario.Talla_Botas}}"
+                              (focus)="$event.target.select()" (focusout)="boolBotasIP = true" required
+                              #botasInformacionPersonalEd="ngModel">
+                              <option value="">Seleccione</option>
+                              <option value="NA">N/A</option>
+                              <option value="33">33</option>
+                              <option value="34">34</option>
+                              <option value="35">35</option>
+                              <option value="36">36</option>
+                              <option value="37">37</option>
+                              <option value="38">38</option>
+                              <option value="39">39</option>
+                              <option value="40">40</option>
+                              <option value="41">41</option>
+                              <option value="42">42</option>
+                              <option value="43">43</option>
+                              <option value="44">44</option>
+                              <option value="45">45</option>
+                              <option value="46">46</option>
+                            </select>
+                            <label class="floating-label">Talla de Calzado (*)</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </wizard-step>
+              <!--FIN INFORMACION PERSONAL-->
+
+              <!--INICIO INFORMACION CONTACTO EMERGENCIA-->
+              <wizard-step [title]="'Contacto Emergencia'" >
+                <form #FormContactoEmergencia="ngForm">
+                  <div class="content2">
+                    <div>
+                      <h5>Contacto Emergecia</h5>
+                      <hr>
+                      <div class="col-md-4" hidden>
+                        <div class="form-group">
+                          <input type="text" name="Identificacion_Funcionario_Contacto_Emergencia" ngModel="{{ContactoEmergencia.Identificacion_Funcionario_Contacto_Emergencia}}"
+                            class="letras form-control form-control-sm" />
+                          <label class="floating-label">Apellidos (*)</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input type="text" name="Nombre" ngModel="{{ContactoEmergencia.Nombre}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolNombreCE = true" required
+                              #nombreContactoEmergenciaEd="ngModel" />
+                            <label class="floating-label">Nombre Completo (*)</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <input type="text" name="Parentesco" ngModel="{{ContactoEmergencia.Parentesco}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolParentescoCE = true" required
+                              #parentescoContactoEmergenciaEd="ngModel" />
+                            <label class="floating-label">Parentesco (*)</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" id="3">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="number" name="Celular" ngModel="{{ContactoEmergencia.Celular}}" class="celular form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolCelularCE = true" required #celularContactoEmergenciaEd="ngModel" />
+                            <label class="floating-label">Celular</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="number" name="Telefono" ngModel="{{ContactoEmergencia.Telefono}}" class="telefono form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolTelefonoCE = true" required #telefonoContactoEmergenciaEd="ngModel" />
+                            <label class="floating-label">Teléfono Fijo</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Direccion" ngModel="{{ContactoEmergencia.Direccion}}" class="telefono form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolDireccionCE = true" required
+                              #direccionContactoEmergenciaEd="ngModel" />
+                            <label class="floating-label">Dirección de Residencia</label>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </wizard-step>
+              <!--FIN INFORMACION CONTACTO EMERGENCIA-->
+
+              <!--INICIO INFORMACION EXPERIENCIA LABORAL-->
+              <wizard-step [title]="'Experiencia Laboral'" >
+                <div class="content">
+                  <div>
+                    <h5>Experiencia Laboral 1</h5>
+                    <hr>
+                    <form #FormExperiencia1="ngForm">
+                      <div class="row">
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <input type="text" name="id_Funcionario_Experiencia_Laboral" ngModel="{{Experiencia[0].id_Funcionario_Experiencia_Laboral}}"
+                              class="letras form-control form-control-sm" />
+                            <label class="floating-label">Apellidos (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[0].Nombre_Empresa}}" class="form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL1 = true" 
+                              #empresaExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label">Empresa</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Cargo" ngModel="{{Experiencia[0].Cargo}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolCargoEL1 = true" 
+                              #cargoExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label">Cargo</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Jefe" ngModel="{{Experiencia[0].Jefe}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolJefeEL1 = true" 
+                              #jefeExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label">Jefe Inmediato</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[0].Ingreso_Empresa}}"
+                              (focusout)="boolFechaIngresoEL1 = true"  #fechaingresoExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[0].Retiro_Empresa}}"
+                              (focusout)="boolFechaRetiroEL1 = true"  #fecharetiroExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label" for="text-input">Fecha de retiro:</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Telefono" ngModel="{{Experiencia[0].Telefono}}" class="form-control"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolTelefonoEL1 = true"  #telefonoExperienciaLaboral1Ed="ngModel" />
+                            <label class="floating-label">Numero de Contacto</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <textarea name="Labores" ngModel="{{Experiencia[0].Labores}}" class="autosi form-control form-control-sm"
+                              cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
+                              (focus)="$event.target.select()" (focusout)="boolLaboresEL1 = true" 
+                              #laboresExperienciaLaboral1Ed="ngModel"></textarea>
+                            <label class="floating-label">Tareas Realizadas</label>
+
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                    <h5>Experiencia Laboral 2</h5>
+                    <hr>
+                    <form #FormExperiencia2="ngForm">
+                      <div class="row">
+                        <div class="col-md-4" hidden>
+                          <div class="form-group">
+                            <input type="text" name="id_Funcionario_Experiencia_Laboral" ngModel="{{Experiencia[1].id_Funcionario_Experiencia_Laboral}}"
+                              class="letras form-control form-control-sm" />
+                            <label class="floating-label">Apellidos (*)</label>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Nombre_Empresa" ngModel="{{Experiencia[1].Nombre_Empresa}}" class="form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolEmpresaEL2 = true" 
+                              #empresaExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label">Empresa</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Cargo" ngModel="{{Experiencia[1].Cargo}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolCargoEL2 = true" 
+                              #cargoExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label">Cargo</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Jefe" ngModel="{{Experiencia[1].Jefe}}" class="letras form-control form-control-sm"
+                              (focus)="$event.target.select()" (focusout)="boolJefeEL2 = true" 
+                              #jefeExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label">Jefe Inmediato</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" ngModel="{{Experiencia[1].Ingreso_Empresa}}"
+                              (focusout)="boolFechaIngresoEL2 = true"  #fechaingresoExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label" for="text-input">Fecha de ingreso:</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" ngModel="{{Experiencia[1].Retiro_Empresa}}"
+                              (focusout)="boolFechaRetiroEL2 = true"  #fecharetiroExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label" for="text-input">Fecha de retiro:</label>
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="Telefono" ngModel="{{Experiencia[1].Telefono}}" class="form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                              (focusout)="boolTelefonoEL2 = true"  #telefonoExperienciaLaboral2Ed="ngModel" />
+                            <label class="floating-label">Número de Contacto</label>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <textarea name="Labores" ngModel="{{Experiencia[1].Labores}}" class="autosi form-control form-control-sm"
+                              cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
+                              (focus)="$event.target.select()" (focusout)="boolLaboresEL2 = true" 
+                              #laboresExperienciaLaboral2Ed="ngModel"></textarea>
+                            <label class="floating-label">Tareas Realizadas</label>
+
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </wizard-step>
+              <!--FIN INFORMACION EXPERIENCIA LABORAL-->
+
+              <!--INICIO INFORMACION REFERENCIAS PERSONALES-->
+              <wizard-step [title]="'Referencias Personales'" >
+                <form #FormReferencia1="ngForm">
+                  <div class="content">
+                    <h5>Referencia 1</h5>
+                    <hr>
+                    <div class="row">
+                      <div class="col-md-4" hidden>
+                        <div class="form-group">
+                          <input type="text" name="id_Funcionario_Referencias" ngModel="{{Referencias[0].id_Funcionario_Referencias}}"
+                            class="letras form-control form-control-sm" />
+                          <label class="floating-label">Apellidos (*)</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <input type="text" name="Nombres" ngModel="{{Referencias[0].Nombres}}" class="letras form-control form-control-sm"
+                            (focus)="$event.target.select()" (focusout)="boolNombreRP1 = true" 
+                            #nombreReferenciasPersonales1Ed="ngModel" />
+                          <label class="floating-label" for="codigo">Nombre completo</label>
+
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <input type="text" name="Profesion" ngModel="{{Referencias[0].Profesion}}" class="letras form-control form-control-sm"
+                            (focus)="$event.target.select()" (focusout)="boolProfesionRP1 = true" 
+                            #profesionReferenciasPersonales1Ed="ngModel" />
+                          <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
+
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <input type="text" name="Empresa" ngModel="{{Referencias[0].Empresa}}" class="form-control form-control-sm"
+                            (focus)="$event.target.select()" (focusout)="boolEmpresaRP1 = true" 
+                            #empresaReferenciasPersonales1Ed="ngModel" />
+                          <label class="floating-label" for="codigo">Nombre de la empresa</label>
+
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                          <input type="text" name="Telefono" ngModel="{{Referencias[0].Telefono}}" class="celular form-control form-control-sm"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                            (focusout)="boolTelefonoRP1 = true"  #telefonoReferenciasPersonales1Ed="ngModel" />
+                          <label class="floating-label" for="codigo">Numero de contacto</label>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <h5>Referencia 2</h5>
+                <hr>
+                <form #FormReferencia2="ngForm">
+                  <div class="row">
+                    <div class="col-md-4" hidden>
+                      <div class="form-group">
+                        <input type="text" name="id_Funcionario_Referencias" ngModel="{{Referencias[1].id_Funcionario_Referencias}}"
+                          class="letras form-control form-control-sm" />
+                        <label class="floating-label">Apellidos (*)</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input type="text" name="Nombres" ngModel="{{Referencias[1].Nombres}}" class="letras form-control form-control-sm"
+                          (focus)="$event.target.select()" (focusout)="boolNombreRP2 = true" 
+                          #nombreReferenciasPersonales2Ed="ngModel" />
+                        <label class="floating-label" for="codigo">Nombre completo</label>
+
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" name="Profesion" ngModel="{{Referencias[1].Profesion}}" class="letras form-control form-control-sm"
+                          (focus)="$event.target.select()" (focusout)="boolProfesionRP2 = true" 
+                          #profesionReferenciasPersonales2Ed="ngModel" />
+                        <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
+
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" name="Empresa" ngModel="{{Referencias[1].Empresa}}" class="form-control form-control-sm"
+                          (focus)="$event.target.select()" (focusout)="boolEmpresaRP2 = true" 
+                          #empresaReferenciasPersonales2Ed="ngModel" />
+                        <label class="floating-label" for="codigo">Nombre de empresa</label>
+
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input type="text" name="Telefono" ngModel="{{Referencias[1].Telefono}}" class="celular form-control form-control-sm"
+                          onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focus)="$event.target.select()"
+                          (focusout)="boolTelefonoRP2 = true"  #telefonoReferenciasPersonales2Ed="ngModel" />
+                        <label class="floating-label" for="codigo">Numero de contacto</label>
+
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </wizard-step>
+
+              <!--INICIO INFORMACION PRIVILEGIOS-->
+              <wizard-step [title]="'Privilegios'" 
+              (onComplete)="GuardarFuncionario(FormFuncionario, FormContactoEmergencia, FormExperiencia1, FormExperiencia2, FormReferencia1, FormReferencia2)">
+
+              <form #FormPrivilegios="ngForm">
+                  <div class="row m-t-30">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Perfil</label>
+                          <select id="IdPerfil" class="form-control form-control-sm" required (change)="AsignarPermisos($event.target.value)" name="Id_Perfil"
+                            ngModel="{{Id_Perfil}}">                            
+                            <option value="">Seleccione</option>
+                            <option *ngFor="let Perfil of Perfiles; let i=index" [value]="Perfil.Id_Perfil">{{Perfil.Nombre}}</option>
+    
+                          </select>
+                        </div>
+                      </div>
+    
+                    </div>
+    
+                    <div class="row titulo">
+                      <div *ngFor="let item of Permisos; let i = index" id="fila{{i}}" class="col-md-3 borde">
+                        <h5 class="m-t-15">{{item.Titulo_Modulo}}</h5>
+    
+                        <div class="row m-t-20 m-b-10">
+                          <div class="col-md-3">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <span class="switch switch-sm">
+    
+                                    <input type="checkbox" name="Ver{{i}}" id="item.Ver{{i}}" (click)="CambiarVer(i)"
+                                      [checked]="item.Ver==='1' ? true : false" class="switch">
+                                    <!-- <input type="hidden" name="Ver"  [(ngModel)]="item.Ver" value="0" class="switch" >-->
+                                    <label for="item.Ver{{i}}"></label>
+                                  </span>
+                                  <label style="text-align: center; margin-left: 5px;"> Ver</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <span class="switch switch-sm">
+    
+                                    <input type="checkbox" name="Crear" id="item.Crear{{i}}" [checked]="item.Crear==='1' ? true : false"
+                                      class="switch" (click)="CambiarCrear(i)">
+                                    <label for="item.Crear{{i}}"></label>
+                                  </span>
+                                  <label style="text-align: center">Crear</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <span class="switch switch-sm">
+                                    <input type="checkbox" name="{{item.Modulo}}-Editar" id="{{item.Modulo}}-Editar"
+                                      [checked]="item.Editar==='1' ? true : false" class="switch" (click)="CambiarEditar(i)">
+                                    <label for="{{item.Modulo}}-Editar"></label>
+                                  </span>
+                                  <label style="text-align: center">Editar</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <span class="switch switch-sm">
+                                    <input type="checkbox" name="{{item.Modulo}}-Eliminar" id="{{item.Modulo}}-Eliminar"
+                                      [checked]="item.Eliminar==='1' ? true : false" class="switch" (click)="CambiarEliminar(i)">
+                                    <label for="{{item.Modulo}}-Eliminar"></label>
+                                  </span>
+                                  <label style="text-align: center">Eliminar</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-t-30">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div class="pull-right">
+                            <button class="btn btn-outline-primary btn-rounded btn-sm"
+                              [disabled]="!FormFuncionario.valid && !FormContactoEmergencia.valid && !FormPrivilegios.valid"
+                              [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este funcionario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Editar',cancelButtonText: 'No, Comprobar!'}"
+                              (confirm)="GuardarFuncionario(FormFuncionario, FormContactoEmergencia, FormExperiencia1, FormExperiencia2, FormReferencia1, FormReferencia2)">
+                              <i class="ti-save mr-2"></i> Guardar
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              </form>
+
+
+              </wizard-step>
+              <!--FIN INFORMACION PRIVILEGIOS-->
+
+            </form-wizard>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #errorSwal title="Error al editar" text="Se ha generado un error al intentar editar el funcionario" type="error">
+</swal>
+
+<swal #saveSwal title="Funcionario editado" text="Se ha editado correctamente el funcionario" type="success">
+</swal>
+
+<swal #confirmacionSwal title="" text="" type=""></swal>

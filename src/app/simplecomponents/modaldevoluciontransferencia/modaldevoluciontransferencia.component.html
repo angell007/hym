@@ -1,0 +1,60 @@
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalDevolucionTransferencia" #ModalDevolucionTransferencia>
+  <div class="app-modal-header">
+      <h4>Devolución Transferencia</h4>
+      <!-- <button type="button" class="close basic-close" (click)="CerrarModal()">
+          <span aria-hidden="true">&times;</span>
+      </button> -->
+  </div>
+  <div class="app-modal-body">
+      <form #FormDevolucionTransferencia="ngForm">
+        <div class="row">
+          <div class="col-md-12">
+              <label class="block-element">Monto a devolver</label>
+              <label>{{DevolucionModel.Valor | customcurrency:CodigoMoneda}}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Motivo Devolución</label>
+              <select name="Motivo_Devolucion" required id="motivo" [(ngModel)]="DevolucionModel.Id_Motivo_Devolucion" class="form-control custom-select">
+                <option value="" selected>Escoja el motivo</option>
+                <option *ngFor="let md of MotivosDevolucion;" [value]="md.Id_Motivo_Devolucion_Transferencia">{{md.Motivo_Devolucion}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nro. Comprobante Banco</label>
+              <input class="form-control" required name="Numero_Comprobante" type="text" [(ngModel)]="DevolucionModel.Numero_Comprobante_Banco">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="block-element">Observaciones</label>
+
+            <textarea style="width:100%;" rows="4"  placeholder="Observaciones" name="Observaciones" [(ngModel)]="DevolucionModel.Observaciones"></textarea>
+
+            <!-- <input style="width: 100%;" required name="Observaciones" type="text" [(ngModel)]="DevolucionModel.Observaciones"> -->
+          </div>
+        </div>
+      </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button 
+        id="cerrardevolucion" 
+        class="btn btn-outline-danger btn-sm btn-rounded"
+        (click)="CerrarModal()">Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-outline-primary btn-sm btn-rounded" 
+        [disabled]="!FormDevolucionTransferencia.valid" 
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a devolver esta transferencia' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Devolver',cancelButtonText: 'No, Comprobar!'}"
+        (confirm)="RealizarDevolucion()">Devolver
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

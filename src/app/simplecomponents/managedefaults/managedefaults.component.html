@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-md-12">
+    <form #DefaultsForm="ngForm">
+      <h4>Cambios</h4>
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="moneda_que_compra">Moneda que compra</label>
+            <select class="form-control custom-select" name="Cambio_Moneda_Compra" id="moneda_que_compra"
+              [(ngModel)]="ValoresPredeterminados.Moneda_Que_Compra">
+              <option value="">Ninguna</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="moneda_que_vende">Moneda que vende</label>
+            <select class="form-control custom-select" name="Cambio_Moneda_Vende" id="moneda_que_vende"
+              [(ngModel)]="ValoresPredeterminados.Moneda_Que_Recibe">
+              <option value="">Ninguna</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h4>Transferencias</h4>
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="moneda_que_recibe">Moneda que recibe</label>
+            <select class="form-control custom-select" name="Transferencia_Moneda_Recibe" id="moneda_que_recibe"
+              [(ngModel)]="ValoresPredeterminados.Moneda_Que_Recibe">
+              <option value="">Ninguna</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="moneda_cambio">Moneda para el cambio</label>
+            <select class="form-control custom-select" name="Transferencia_Moneda_Cambio" id="moneda_cambio"
+              [(ngModel)]="ValoresPredeterminados.Moneda_Para_El_Cambio">
+              <option value="">Ninguna</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="forma_pago">Forma de Pago</label>
+            <select class="form-control custom-select" name="Transferencia_Forma_Pago" id="forma_pago"
+              [(ngModel)]="ValoresPredeterminados.Forma_Pago">
+              <option value="">Ninguna</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Credito">Credito</option>
+              <option value="Consignacion">Consignación</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h4>Traslados</h4>
+      <div class="form-row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="moneda_traslado">Moneda</label>
+            <select class="form-control custom-select" name="Traslado_Moneda" id="moneda_traslado"
+              [(ngModel)]="ValoresPredeterminados.Moneda_Traslado">
+              <option value="">Ninguna</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12 text-right">
+    <button class="btn btn-outline-primary btn-rounded" (click)="GuardarPredeterminados()">
+      <i class="ti-plus"></i> Guardar Predeterminados
+    </button>
+  </div>
+</div>

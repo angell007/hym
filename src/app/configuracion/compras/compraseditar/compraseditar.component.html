@@ -1,0 +1,139 @@
+<div class="container-fluid">
+  <div class="page-title">
+    <h4 class="pull-left">Editar Compra</h4>
+  </div>
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="widget card">
+        <div class="card-block">
+
+          <form #FormCompra="ngForm">
+            <div class="row">
+              <!--generar compras-->
+              <div class="col-md-6">
+                <form #FormCompra="ngForm">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Proveedor</label>
+                        <select class="form-control" required id="Lista_Id_Tercero" name="Id_Tercero" ngModel="{{CompraEditar.Id_Tercero}}"
+                          (change)="nombreProveedor($event.target.value);">
+                          <option value="">Seleccione un Proveedor</option>
+                          <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+                        </select>
+                      </div>
+                      <input hidden name="nombreProveedor" [(ngModel)]="nombre">
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Valor Compra</label>
+                        <input readonly (blur)="ValidarValorCompra($event.target.value)" required class="form-control"
+                          name="Valor_Compra" ngModel="{{TotalCompra}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }">
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Tasa</label>
+                        <input required class="form-control" id="Tasa" name="Tasa" ngModel="{{CompraEditar.Tasa}}"
+                          (input)="calcularValorMoneda($event.target.value)">
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label>Valor en peso</label>
+                        <input required class="form-control" name="Valor_Peso" ngModel="{{tasa}}"
+                          readonly>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="table-responsive">
+                            <table class="table  invoice-detail-table">
+                              <tbody>
+                                <th>Titular</th>
+                                <th>Valor</th>
+                                <th></th>
+                                <tr *ngFor="let item of ListarCompra; let i = index" id="filaCompra{{i}}">
+                                  <td>
+                                    {{item.Nombre_Titular}}
+                                  </td>
+                                  <td>
+                                    {{item.Valor | currency: "BsS. "}}
+                                  </td>
+                                  <td>
+                                    <i class="fa fa-times" (click)="rectificar(item.Id_Compra_Cuenta,i)"></i>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Detalle</label>
+                        <textarea rows="4" cols="50" class="form-control" placeholder="Detalle Compra" name="Detalle"
+                        ngModel="{{CompraEditar.Detalle}}" ></textarea>
+                      </div>
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+
+              <!--compras pendientes-->
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="table-responsive">
+                      <table class="table  invoice-detail-table">
+                        <tbody>
+                          <th></th>
+                          <th>Titular</th>
+                          <th>Valor</th>
+                          <tr *ngFor="let item of ComprasPendientes; let i = index" id="fila{{i}}">
+                            <td>
+                              <input type="checkbox" id="pendiente{{i}}" value="{{i}}" (change)="cambiarEstado(item.Id_Compra_Cuenta)">
+                            </td>
+                            <td>
+                              {{item.Nombre_Titular}}
+                            </td>
+                            <td>
+                              {{item.Valor | currency: "BsS. "}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-10">
+              </div>
+              <div class="col-md-2 botonFlotante">
+                <button id="GenerarCompra" type="button" class="btn btn-primary btn-block btn-enviar" (click)="GuardarCompra(FormCompra)" >Generar Compra</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #mensajeSwal title="" text="" type="">
+</swal>

@@ -1,0 +1,64 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalAperturaCuenta>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Apertura de Cuentas</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">    
+    <div class="row">
+      <div class="col-md-12" style="max-height: 500px;overflow-y: scroll;">
+        <div class="form-group">
+          <table class="table table-striped table-bordered custom-table">
+            <thead>
+              <tr>
+                <th class="custom-thead" style="width:25%;">Titular</th>
+                <th class="custom-thead" style="width:20%;">Banco</th>
+                <th class="custom-thead" style="width:20%;">Nro. Cuenta</th>
+                <th class="custom-thead" style="width:15%;">Moneda</th>
+                <th class="custom-thead" style="width:10%;">Monto Apertura</th>
+                <th class="custom-thead" style="width:10%;">Monto Último Cierre</th>
+              </tr>
+              <tr *ngIf="Cargando">
+                <td colspan="11" class="text-center">
+                  <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                    <h2>CARGANDO CUENTAS BANCARIAS</h2>
+                    <img src="{{generalService.RutaImagenes}}GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="CARGANDO">
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="CuentasBancarias.length == 0 && !Cargando">
+                <td colspan="11" class="text-center">
+                    <i class="ti-alert font-size-20 text-warning"></i>
+                    <h4>No hay cuentas cerradas para aperturar!</h4>
+                </td>
+              </tr>
+            </thead>
+            <tbody *ngIf="!Cargando">                                            
+              <tr *ngFor="let cb of CuentasBancarias; let i = index;"
+                [ngClass]="{'bg-selected': cb.Seleccionada == 1}" style="cursor: pointer;">
+                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Nombre_Titular }}</td>
+                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Apodo}}</td>
+                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Numero_Cuenta}}</td>
+                <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Nombre_Moneda}}</td>                   
+                <td class="custom-cell">
+                  <input type="number" [(ngModel)]="cb.Monto_Apertura" [disabled]="cb.Habilitar_Monto == '0'" (change)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)">
+                </td>
+                <td class="text-right" (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="custom-cell">{{cb.Monto_Ultimo_Cierre}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-warning btn-rounded btn-sm" *ngIf="MostrarBotonAjusteCuentas" (click)="CargarMovimientosAperturaAnterior()">Ajustar Cuentas</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : 'Se realizará la aperturar de las cuentas bancarias seleccionadas' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Aperturar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarAperturaCuentas()" [disabled]="CuentasBancariasSeleccionadasId.length == 0">Realizar Apertura
+      </button>
+    </div>
+  </div>  
+</app-modal-basic>

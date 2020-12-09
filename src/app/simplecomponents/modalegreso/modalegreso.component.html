@@ -1,0 +1,104 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalEgreso>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Egreso</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormEgreso="ngForm">
+      <div class="form-row">
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class=" font-size-18">Seleccione Tipo </label>
+            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
+              (change)="limpiarImputCliente()">
+              <option> Seleccione</option>
+              <option value="Cliente">Clientes</option>
+              <option value="Proveedor">Proveedores</option>
+              <option value="Cuentas">Cuentas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class=" font-size-18">Forma de pago </label>
+            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomFormaPago>
+              <option> Seleccione</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="credito">Credito</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-size-18">Número de documento</label>
+            <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
+              placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
+              [ngbTypeahead]="search_destino3" [(ngModel)]="potencial" [inputFormatter]="formatterModel"
+              [resultTemplate]="clienteModalEgreso" (ngModelChange)="getData()">
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group" *ngIf="booleancuentas">
+            <label class="font-size-18">Titular</label>
+            <label class="font-size-18">{{titular}}</label>
+          </div>
+        </div>
+
+        <div class="col-md-12 my-2">
+          <span *ngIf="verCupo">Cupo: {{cupo}}</span>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class=" font-size-18">Moneda</label>
+            <select id="moneda" class="form-control  font-size-18" name="Id_Moneda" [(ngModel)]="EgresoModel.Id_Moneda"
+              required>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda" [selected]="EgresoModel.Id_Moneda">{{m.Nombre}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class=" font-size-18">Valor</label>
+            <input type="text" placeholder="Valor egreso" class="form-control  font-size-18" name="Valor" currencyMask
+              [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required
+              (ngModelChange)="calcularEgreso()">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class=" font-size-18">Observación</label>
+            <textarea style="width: 100%;" placeholder="Observaciones del egreso" name="Detalle"
+              [(ngModel)]="EgresoModel.Detalle"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="GuardarEgreso()" [disabled]="!FormEgreso.valid">{{Editar ? 'Actualizar' : 'Guardar'}}
+      </button>
+    </div>
+  </div>
+</app-modal-basic>
+<swal #alertSwal title="" html="" type="" text=""></swal>
+
+<ng-template #clienteModalEgreso let-r="result" let-t="term">
+  <span class="f-9">{{ r.Id_Tercero }}
+    <strong>{{r.Nombre}}</strong>
+  </span>
+</ng-template>
