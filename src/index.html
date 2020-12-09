@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,65 +33,109 @@
       height: 100%;
     }
 
-    .app-loading {
+
+    .lds-grid {
+      display: inline-block;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
+      width: 80px;
+      height: 80px;
     }
-
-    .app-loading .spinner {
-      height: 200px;
-      width: 200px;
-      animation: rotate 2s linear infinite;
-      transform-origin: center center;
+    .lds-grid div {
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #226db1;
+      animation: lds-grid 1.2s linear infinite;
     }
-
-    .app-loading .spinner .path {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
-      animation: dash 1.5s ease-in-out infinite;
-      stroke-linecap: round;
-      stroke: #002773;
+    .lds-grid div:nth-child(1) {
+      top: 8px;
+      left: 8px;
+      animation-delay: 0s;
     }
-
-    .app-loading .logo {
-      width: 60vw;
-      height: 100vh;
-      background: url("/assets/images/coin-loading.gif") center center no-repeat;
-      background-size: cover;
+    .lds-grid div:nth-child(2) {
+      top: 8px;
+      left: 32px;
+      animation-delay: -0.4s;
     }
-
-
-
-    h1 {
-      margin: 50px auto;
+    .lds-grid div:nth-child(3) {
+      top: 8px;
+      left: 56px;
+      animation-delay: -0.8s;
+    }
+    .lds-grid div:nth-child(4) {
+      top: 32px;
+      left: 8px;
+      animation-delay: -0.4s;
+    }
+    .lds-grid div:nth-child(5) {
+      top: 32px;
+      left: 32px;
+      animation-delay: -0.8s;
+    }
+    .lds-grid div:nth-child(6) {
+      top: 32px;
+      left: 56px;
+      animation-delay: -1.2s;
+    }
+    .lds-grid div:nth-child(7) {
+      top: 56px;
+      left: 8px;
+      animation-delay: -0.8s;
+    }
+    .lds-grid div:nth-child(8) {
+      top: 56px;
+      left: 32px;
+      animation-delay: -1.2s;
+    }
+    .lds-grid div:nth-child(9) {
+      top: 56px;
+      left: 56px;
+      animation-delay: -1.6s;
+    }
+    @keyframes lds-grid {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+    .cargando{
+      width:100%;
+      position:absolute;
+      top:50%;
       text-align: center;
-      text-shadow: -1px -1px 0px rgba(255, 255, 255, 0.3), 1px 1px 0px rgba(0, 0, 0, 0.8);
-      color: #333;
-      opacity: 0.4;
-      font: 700 80px 'Bitter';
     }
+    .cargando h3{
+      margin-top:20px;
+      color:#999;
+      font-size: 20px;
+      display:block !important;
+      opacity: 1 !important;
+    }
+
 
   </style>
 </head>
 
 <body>
   <app-root>
-    <div class="app-loading">
-      <div class="logo"></div>
-      <div style="color:gray;">
-        <h3>CARGANDO SISTEMA H&M</h3>
+    <div class="cargando">
+      <div class="lds-grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
+      <h3>CARGANDO SISTEMA H&M</h3>
     </div>
+    
   </app-root>
 </body>
 

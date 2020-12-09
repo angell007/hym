@@ -56,6 +56,13 @@
 						padding: 0 15px;
 					}
 				}
+				.logo{
+					>img{
+						@include screen-mobile{
+							max-width: 200px;
+						}
+					}
+				}
 			}
 			
 			.user-profile {
