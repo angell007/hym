@@ -39,7 +39,7 @@
               name="Tipo_Documento" required (change)="BuscarCNE()"
               [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
               <option value="">Seleccione Tipo Documento</option>
-              <option *ngFor="let documento of TiposDocumento; let i=index">
+              <option *ngFor="let documento of TiposDocumento; let i=index" Value="documento.Codigo">
                 {{documento.Codigo}}</option>
             </select>
           </div>

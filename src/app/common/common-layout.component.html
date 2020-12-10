@@ -580,8 +580,8 @@
                             <div class="col-6 border right"
                               *ngFor="let item of consolidadosService.TotalRestaIngresosEgresos">
                               <div class="pdd-vertical-10">
-                                <span class="font-size-18 text-dark">{{  item.saldo | currency:' ' }}</span><br>
-                                <small>{{ item.cod }}</small>
+                                <span class="font-size-18 text-dark">{{  item[1] | currency:' ' }}</span><br>
+                                <small>{{ item[0] }}</small>
                               </div>
                             </div>
                           </div>

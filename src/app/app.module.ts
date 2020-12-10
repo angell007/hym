@@ -301,6 +301,7 @@ export const customCurrencyMaskConfig = {
         ToastyModule.forRoot(),
         NgxMasonryModule,
         ScrollToModule.forRoot(),
+
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

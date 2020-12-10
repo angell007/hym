@@ -409,6 +409,7 @@ export class CommonLayoutComponent implements OnInit {
         });
     }
 
+
     muestra_tabla(id) {
 
         this.trasladosCustomService.CargarDatosTraslados();
@@ -1170,7 +1171,11 @@ export class CommonLayoutComponent implements OnInit {
 
 
 
+
     }
+    // DesconectarQz() {
+    //     this.qz.removePrinter();
+    // }
     DesconectarQz() {
         this.qz.removePrinter();
     }

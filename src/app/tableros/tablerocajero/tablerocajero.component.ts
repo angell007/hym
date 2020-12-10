@@ -96,6 +96,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
   @ViewChild('selectCustomClient') selectCustomClient: any;
 
+
+  /** VARIABLES CARGANDO CAJERO **/
+
+  public CargandoRecibos: boolean = true;
+  public CargandoGiros: boolean = true;
+  public CargandoEgresos: boolean = true;
+  public CargandoCorresponsal: boolean = true;
+  public CargandoServicios: boolean = true;
+  public CargandoTraslados: boolean = true;
+  public CargandoTraslados2: boolean = true;
+
+
+
   public DevolucionesCambio: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
@@ -573,7 +586,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //Fin nuevas variables
 
   public RutaGifCargando: string;
-  public CargandoGiros: boolean = false;
   public customClientes: Array<any> = [];
   public formasPago: Array<any> = [];
   public formasPagoAux: Array<any> = [];
@@ -629,6 +641,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.IdOficina = JSON.parse(localStorage.getItem('Oficina'));
       this.IdCaja = JSON.parse(localStorage.getItem('Caja'));
       this.CheckApertura();
+
     });
 
     this.comisionServicioSubscription = this.searchComisionService$.pipe(
@@ -838,7 +851,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               }
             }
           });
-          //TODO. validacion  de saldos en cambio
+          //TODO. validacion  de saldos en cambio 
           // if (this.flagVenta) {
           //   this.flagVenta = false;
           //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
@@ -1791,9 +1804,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (valor > total_transferir) {
         this.ListaDestinatarios[index].Valor_Transferencia = total_transferir - total_destinatarios_real;
         this.ShowSwal('warning', 'Alerta', 'El valor que coloco supera el total a transferir!');
+
+        // let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir!"], tipo: "warning", duracion: 4000 };
+
+        // this._toastService.ShowToast(toastObj);
       } else if (total_valor_destinatarios > total_transferir) {
         this.ListaDestinatarios[index].Valor_Transferencia = (total_valor_destinatarios - valor) - total_transferir;
         this.ShowSwal('warning', 'Alerta', 'El valor que coloco supera el total a transferir!');
+
+        // let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir!"], tipo: "warning", duracion: 4000 };
+        // this._toastService.ShowToast(toastObj);
       } else if (total_valor_destinatarios <= total_transferir) {
         let asignar = (parseFloat(valor));
         let asignar_siguiente = (total_transferir - total_valor_destinatarios);
@@ -2309,8 +2329,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   HabilitarCampoValor() {
-    // TODO: se comenta para que no se elimine el valor
-    // this.TransferenciaModel.Cantidad_Transferida = 0;
+    this.TransferenciaModel.Cantidad_Transferida = 0;
     if (this.ListaDestinatarios.length > 1) {
       this.DeshabilitarValor = false;
     } else {
@@ -5247,8 +5266,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   AsignarDatosDestinatarioNuevo(id): boolean {
     this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatarios.php', { params: { id_destinatario: id, moneda: this.MonedaParaTransferencia.id } }).subscribe((data: any) => {
-
-      console.log(data);
 
       if (data != '') {
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GeneralService } from '../shared/services/general/general.service';
 import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
+import { type } from 'jquery';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -122,18 +123,20 @@ export class CierrecajaComponent implements OnInit {
       data.append("modelo", model);
       data.append("funcionario", this.id_funcionario);
 
-      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
+      //   this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
 
-        if (data.tipo == 'error') {
+      //     console.log(data);
 
-          this.ShowSwal(data.tipo, 'Error', data.mensaje);
-        } else {
+      //     if (data.tipo == 'error') {
 
-          this.LimpiarModelos();
-          this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
-          this.salir();
-        }
-      });
+      //       this.ShowSwal(data.tipo, 'Error', data.mensaje);
+      //     } else {
+
+      //       this.LimpiarModelos();
+      //       this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+      //       this.salir();
+      //     }
+      //   });
     }
   }
 

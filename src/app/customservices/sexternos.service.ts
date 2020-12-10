@@ -78,6 +78,7 @@ export class SexternosService {
       if (data.codigo == 'success') {
         this.Servicios = data.query_data;
         this.SetInformacionPaginacion(data.query_data);
+        this.Cargando=false;
       }
     });
   }
@@ -105,6 +106,7 @@ export class SexternosService {
     this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params: { id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Servicios = data.query_data;
       this.SetInformacionPaginacion(data.query_data);
+      this.Cargando=false;
     });
   }
 

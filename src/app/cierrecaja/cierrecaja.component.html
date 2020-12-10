@@ -84,16 +84,15 @@
             <tr>
               <td>Total a Entregar</td>
               <th *ngFor="let m of Modulos" class="text-right p-2">
-                <span class="text-success"> {{reduce(m.Movimientos) | currency:'$' }} </span>
+                <span class="text-success"> {{reduce(m.Movimientos)}} </span>
               </th>
             </tr>
             <tr>
               <td>Entregado</td>
               <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
 
-                <input type="text" *ngIf="i != 1" class="form-control sp-text" name="Entregado_{{i}}"
-                  aria-describedby="basic-addon1" placeholder="0"
-                  (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
+                <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
+                  placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
                   [disabled]="FieldsDisabled[i]">
 
                 <ng-container *ngIf="i == 1">

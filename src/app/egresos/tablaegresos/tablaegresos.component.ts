@@ -17,7 +17,7 @@ export class TablaegresosComponent implements OnInit {
   public Egresos: Array<any> = [];
   public GruposTerceros: Array<any> = [];
   public Monedas: Array<any> = [];
-  public Cargando: boolean = false;
+  public Cargando: boolean = true;
   public RutaGifCargando: string;
 
   public AbrirModalAgregar: Subject<any> = new Subject<any>();
@@ -71,6 +71,7 @@ export class TablaegresosComponent implements OnInit {
 
       if (data.length > 0) {
         this.Monedas = data.query_data;
+
       } else {
 
         this.Monedas = [];
@@ -150,14 +151,16 @@ export class TablaegresosComponent implements OnInit {
           default:
             this.Egresos = data.query_data.filter((egreso) => egreso.Identificacion_Funcionario == JSON.parse(localStorage['User']).Identificacion_Funcionario && new Date().toISOString().slice(0, 10) == new Date(egreso.Fecha).toISOString().slice(0, 10))
             break;
-        }
+        }        
+        this.Cargando = false;
         // this.TotalItems = data.numReg;
       } else {
+        this.Cargando = false;
         this.Egresos = [];
         this._swalService.ShowMessage(data);
       }
 
-      this.Cargando = false;
+      
       this.SetInformacionPaginacion(this.Egresos);
     });
   }

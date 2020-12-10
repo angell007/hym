@@ -1,144 +1,141 @@
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-block">
-          <div class="tab-success">
+<h5>Registros del día</h5>
+<div class="tab-success table-responsive">
+  <table class="table table-striped table-sm table-bordered mrg-top-10" style="min-width: 900px;">
+    <thead class="rounded">
+      <tr>
+        <th class="custom-thead" style="width:60px;">Hora</th>
+        <th class="custom-thead">Corresponsal</th>
+        <th class="custom-thead" style="width:150px;">Monto Consignaciones</th>
+        <th class="custom-thead" style="width:150px;">Monto Retiros</th>
+        <th class="custom-thead" style="width:150px;">Total Consignado</th>
+        <th class="custom-thead" style="width:60px;">Acciones</th>
+      </tr>
 
-            <div class="card-body">
-              <h5>Últimos Registros</h5>
-              <table class="table table-striped table-sm table-bordered">
-                <thead class="rounded">
-                  <tr>
-                    <th class="custom-thead">Hora</th>
-                    <th class="custom-thead">Corresponsal</th>
-                    <th class="custom-thead">Monto Consignaciones</th>
-                    <th class="custom-thead">Monto Retiros</th>
-                    <th class="custom-thead">Total Consignado</th>
-                    <th class="custom-thead">Acciones</th>
-                  </tr>
-                  <tr>
+      <!-- <tr>
 
-                    <th class="table-filters"></th>
-                    <th class="table-filters"></th>
-                    <th class="table-filters"></th>
-                    <th class="table-filters"></th>
-                    <th class="table-filters"></th>
-                    <th></th>
+        <th class="table-filters"></th>
+        <th class="table-filters"></th>
+        <th class="table-filters"></th>
+        <th class="table-filters"></th>
+        <th class="table-filters"></th>
+        <th></th>
+      </tr>    -->
 
-
-                  <tr *ngIf="RegistrosCorresponsales.length == 0 ">
-                    <td colspan="5" class="text-center">
-                      <i class="ti-alert font-size-20 text-warning"></i>
-                      <h4>No se han registrado datos de corresponsales hoy!</h4>
-                    </td>
-                  </tr>
-
-                </thead>
-                <tbody *ngIf="!Cargando">
-                  <tr
-                    *ngFor="let cd of RegistrosCorresponsales  | paginate: {  id: 'corresponsales', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems}">
-                    <td class=" text-center">{{ cd.Hora | hour }}</td>
-                    <td class="text-center"> {{cd.Nombre}}</td>
-                    <td class=" text-right"> {{cd.Consignacion | customcurrency}}</td>
-                    <td class=" text-right"> {{cd.Retiro | customcurrency}}</td>
-                    <td class=" text-right"> {{cd.Total_Corresponsal | customcurrency}}</td>
-
-                    <td class="text-center">
-                      <button class="btn btn-default btn-xs" type="button" style="margin:0;"
-                        (click)="editarCorresponsal(cd)">
-                        <i class="ti-pencil"></i>
-                      </button>
-                    </td>
-
-                  </tr>
-                </tbody>
-              </table>
-              <div id="paginacion-container" *ngIf="RegistrosCorresponsales.length > 0">
-                <div class="row">
-                  <div class="col-md-12">
-                    <pagination-controls id="corresponsales" (pageChange)="page = $event " previousLabel="Anterior"
-                      nextLabel="Siguiente" responsive="true">
-                    </pagination-controls>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+    </thead>
+    <tbody>
+      <tr *ngIf="Cargando">
+        <td colspan="5" class="text-center">
+          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+            <h2>CARGANDO EGRESOS</h2>
+            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
           </div>
-        </div>
-      </div>
-    </div>
+        </td>
+      </tr>
+      <tr *ngIf="RegistrosCorresponsales.length == 0 && !Cargando">
+        <td colspan="5" class="text-center">
+          <i class="ti-alert font-size-20 text-warning"></i>
+          <h4>No se han registrado datos de corresponsales hoy!</h4>
+        </td>
+      </tr>
 
+      <tr
+        *ngFor="let cd of RegistrosCorresponsales  | paginate: {  id: 'corresponsales', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems}">
+        <td class=" text-center"> {{ cd.Hora | hour }}</td>
+        <td class="text-center">{{cd.Nombre}}</td>
+        <td class=" text-right">{{cd.Consignacion | customcurrency}}</td>
+        <td class=" text-right">{{cd.Retiro | customcurrency}}</td>
+        <td class=" text-right">{{cd.Total_Corresponsal | customcurrency}}</td>
 
-
-    <app-modal-basic [dialogClass]="'modal-lg'" #modalMensaje>
-      <div class="app-modal-header">
-        <h4 class="modal-title">Egreso</h4>
-        <button type="button" class="close basic-close" (click)="CerrarModal(0)">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="app-modal-body">
-
-        <form #FormCorresponsal="ngForm">
-          <h4>Datos del corresponsal a actualizar</h4>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="font-weight-bold font-size-18">Corresponsal</label>
-                <select required name="Id_Corresponsal_Bancario" class="form-control font-size-18"
-                  [(ngModel)]="corresponsalEdit.Id_Corresponsal_Bancario">
-                  <option value="">Seleccione un Corresponsal</option>
-                  <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="font-weight-bold font-size-18">Consignaciones</label>
-                <input required name="Consignacion" type="text" placeholder="Consignaciones"
-                  class="form-control font-size-18" [(ngModel)]="corresponsalEdit.Consignacion"
-                  (blur)="CalcularTotalCorresponsal()" currencyMask [options]="{ thousands: '.' }">
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="font-weight-bold font-size-18">Retiros</label>
-                <input required name="Retiro" type="text" placeholder="Retiros" class="form-control font-size-18"
-                  [(ngModel)]="corresponsalEdit.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask
-                  [options]="{ thousands: '.' }">
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="font-weight-bold font-size-18">Total Corresponsal en {{  monedaPeso['Nombre']   }}</label>
-                <label class="block-element">{{corresponsalEdit.Total_Corresponsal | customcurrency}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="row mrg-top-20">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label class="font-weight-bold font-size-18">Observaciones</label>
-                <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
-                  [(ngModel)]="corresponsalEdit.Detalle">
-                    </textarea>
-              </div>
-            </div>
-          </div>
-        </form>
-
-      </div>
-      <div class="app-modal-footer">
-        <div class="text-right">
-          <button type="button" class="btn btn-outline-danger btn-rounded btn-sm"
-            (click)="CerrarModal(0)">Cancelar</button>
-          <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
-            [swal]="{title:'¿Está Seguro?',text : 'MensajeGuardar' , type:'warning', showCancelButton: true, confirmButtonText: 'Si Actualizar', cancelButtonText:'No, Comprobar!'}"
-            (confirm)="EditarCorresponsalDiario()" [disabled]="!FormCorresponsal.valid">Actualizar
+        <td class="text-right">
+          <button class="btn btn-xs btn-success" type="button" style="margin:0;" (click)="editarCorresponsal(cd)">
+            <i class="ti-pencil"></i>
           </button>
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div id="paginacion-container" *ngIf="RegistrosCorresponsales.length > 0">
+  <div class="row">
+    <div class="col-md-12">
+      <pagination-controls id="corresponsales" (pageChange)="page = $event " previousLabel="Anterior"
+        nextLabel="Siguiente" responsive="true">
+      </pagination-controls>
+    </div>
+  </div>
+</div>
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" #modalMensaje>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Egreso</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal(0)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+
+    <form #FormCorresponsal="ngForm">
+      <h4>Datos del corresponsal a actualizar</h4>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold font-size-18">Corresponsal</label>
+            <select required name="Id_Corresponsal_Bancario" class="form-control font-size-18"
+              [(ngModel)]="corresponsalEdit.Id_Corresponsal_Bancario">
+              <option value="">Seleccione un Corresponsal</option>
+              <option *ngFor="let cb of CorresponsalesBancarios" [value]="cb.Id_Corresponsal_Bancario">{{cb.Nombre}}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
-    </app-modal-basic>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold font-size-18">Consignaciones</label>
+            <input required name="Consignacion" type="text" placeholder="Consignaciones"
+              class="form-control font-size-18" [(ngModel)]="corresponsalEdit.Consignacion"
+              (blur)="CalcularTotalCorresponsal()" currencyMask [options]="{ thousands: '.' }">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold font-size-18">Retiros</label>
+            <input required name="Retiro" type="text" placeholder="Retiros" class="form-control font-size-18"
+              [(ngModel)]="corresponsalEdit.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask
+              [options]="{ thousands: '.' }">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="font-weight-bold font-size-18">Total Corresponsal en {{  monedaPeso['Nombre']   }}</label>
+            <label class="block-element">{{corresponsalEdit.Total_Corresponsal | customcurrency}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="row mrg-top-20">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-weight-bold font-size-18">Observaciones</label>
+            <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
+              [(ngModel)]="corresponsalEdit.Detalle">
+                    </textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal(0)">Cancelar</button>
+      <button type="button" class="btn btn-outline-primary btn-rounded btn-sm"
+        [swal]="{title:'¿Está Seguro?',text : 'MensajeGuardar' , type:'warning', showCancelButton: true, confirmButtonText: 'Si Actualizar', cancelButtonText:'No, Comprobar!'}"
+        (confirm)="EditarCorresponsalDiario()" [disabled]="!FormCorresponsal.valid">Actualizar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

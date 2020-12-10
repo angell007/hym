@@ -99,6 +99,7 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
 
 
     // Custom pesos  
+
     this.GetMonedas().then((monedas) => {
       this.monedaPeso = monedas.filter((moneda: any) => {
         return moneda.Nombre == 'Pesos'
@@ -111,6 +112,8 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
       let datos = new FormData();
       datos.append("modulo", 'Corresponsal_Diario');
       datos.append("modelo", info);
+
+      // console.log('Guardando');
 
       this._corresponsalService.saveCorresponsalDiario(datos).subscribe(data => {
         if (data.codigo == 'success') {
