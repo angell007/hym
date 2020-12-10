@@ -4,7 +4,7 @@
         'is-opened': app.layout.isMenuOpened,
         'rtl' : app.layout.rtlActived
     }">
-  <div *ngIf="mostrarDatos" class="layout" [ngClass]="headerSelected">
+  <div *ngIf="mostrarDatos" class="layout header-info">
 
     <div [ngClass]="sidenavSelected">
       <!-- Side Nav START -->
@@ -433,21 +433,21 @@
                   <i class="fa fa-bars"></i>
                 </a>
                 <a *ngIf="OcultarCajero" href="" [routerLink]="['/tablero']" class="logo logo-dark">
-                  <img src="assets/images/logo/logo.png" />
+                  <img src="assets/images/logo/logo-white.png" />
                 </a>
               </li>
               <li class="d-flex justify-content-center h-100 hm-100 text-center user-profile"
                 style="box-sizing: border-box;">
                 <div class="text-center pr-2 pt-2 user-info">
-                  <p class="m-0">{{ myDate | date:'dd/MM/yyyy' }}</p>
-                  <p class="m-0">{{ myDate | date:'HH:mm:ss' }}</p>
+                  <p class="m-0 text-white">{{ myDate | date:'dd/MM/yyyy' }}</p>
+                  <p class="m-0 text-white">{{ myDate | date:'HH:mm:ss' }}</p>
                 </div>
               </li>
               <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6" class="user-profile"
                 style="box-sizing: border-box;">
                 <div class="pr-2 pt-2 user-info">
-                  <p class="m-0 pl-2"><strong>Oficina:</strong> {{NombreOficina}}</p>
-                  <p class="m-0 pl-2"><strong>Caja:</strong> {{NombreCaja}}</p>
+                  <p class="m-0 pl-2 text-white"><strong>Oficina:</strong> {{NombreOficina}}</p>
+                  <p class="m-0 pl-2 text-white"><strong>Caja:</strong> {{NombreCaja}}</p>
                 </div>
               </li>
             </ul>
