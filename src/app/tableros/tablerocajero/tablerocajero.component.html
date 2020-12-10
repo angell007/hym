@@ -259,7 +259,6 @@
                                   <h4>No hay Cambios para mostrar!</h4>
                                 </td>
                               </tr>
-
                             </thead>
 
                             <tbody>
@@ -271,17 +270,17 @@
                                 <td class="text-center" style="font-size: 14px;">{{cambio.Codigo}}</td>
                                 <td class="text-center" style="font-size: 14px;">{{cambio.Tipo}}</td>
                                 <td class="text-right" style="font-size: 14px;">
-                                  {{cambio.Valor_Origen | customcurrency:cambio.Codigo_Moneda_Origen}}
+                                  {{cambio.Recibido | customcurrency:cambio.codigo_origen }}
                                 </td>
                                 <td class="text-right" style="font-size: 14px;">
-                                  {{cambio.valor_recibido | customcurrency: ' '}}
+                                  {{cambio.valor_recibido | customcurrency:cambio.codigo_origen}}
                                 </td>
                                 <td class="text-right" style="font-size: 14px;">
-                                  {{cambio.Valor_Destino | customcurrency:cambio.Codigo_Moneda_Destino}}
+                                  {{cambio.Valor_Destino | customcurrency:cambio.codigo_destino}}
                                 </td>
 
                                 <td class="text-right" style="font-size: 14px;">
-                                  {{cambio.venta_final | customcurrency: ' '}}
+                                  {{cambio.venta_final | customcurrency:cambio.codigo_destino}}
                                 </td>
 
                                 <td class="text-right " style="font-size: 14px;">{{cambio.Tasa}}</td>

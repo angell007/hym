@@ -162,7 +162,7 @@ export class CierrecajaComponent implements OnInit {
   ValidarDiferencias() {
 
     for (let index = 0; index < this.Diferencias.length; index++) {
-      if (this.Diferencias[index].Diferencia < 0) {
+      if (this.Diferencias[index] < 0) {
         this.ShowSwal('warning', 'Alerta', 'No puede tener diferencias negativas!');
         return false;
       }

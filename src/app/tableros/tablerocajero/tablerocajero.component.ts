@@ -417,7 +417,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public TransferenciaPesos: boolean = false;
   public Cargando: boolean = true;
 
-  //#endregion 
+  //#endregion
 
   //#region DATOS GIROS
 
@@ -838,7 +838,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
               }
             }
           });
-          //TODO. validacion  de saldos en cambio 
+          //TODO. validacion  de saldos en cambio
           // if (this.flagVenta) {
           //   this.flagVenta = false;
           //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
@@ -1623,25 +1623,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   Asignar(valor, total_destinatarios, count) {
+
+    console.log(valor, total_destinatarios, count);
+
     // if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
     //   let valor_bolsa = (parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
     //   let nuevo_valor = valor + valor_bolsa;
 
-    // console.log(valor);
-    // console.log(valor_bolsa);
-    // console.log(nuevo_valor);        
-    // console.log(total_destinatarios);
-
     //   if (nuevo_valor > total_destinatarios) {
 
-    //     if(this.ListaDestinatarios[(count - 1)].Valor_Transferencia == ''){
+    //     if (this.ListaDestinatarios[(count - 1)].Valor_Transferencia == '') {
     //       this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
     //     }
     //     let v_transferir = (parseFloat(this.ListaDestinatarios[(count - 1)].Valor_Transferencia));
     //     let operacion = v_transferir + (nuevo_valor - total_destinatarios);
     //     this.ListaDestinatarios[(count - 1)].Valor_Transferencia = operacion;
 
-    //   }else if (nuevo_valor < total_destinatarios) {
+    //   } else if (nuevo_valor < total_destinatarios) {
 
     //     let resta = total_destinatarios;
 
@@ -1654,34 +1652,37 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     //         this.ListaDestinatarios[index - 1].Valor_Transferencia = '0';
 
-    //       }else if (resta < nuevo_valor && resta > valor) {
+    //       } else if (resta < nuevo_valor && resta > valor) {
     //         let asignar = nuevo_valor - resta;
-    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
+    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;
     //         if (asignar > 0) {
     //           break;
-    //         }   
+    //         }
 
-    //       }else if (resta < nuevo_valor && resta < valor) {
+    //       } else if (resta < nuevo_valor && resta < valor) {
     //         let asignar = valor - resta;
-    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;    
+    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;
     //         if (asignar > 0) {
     //           break;
-    //         }   
+    //         }
 
-    //       }else if (resta == nuevo_valor) {
-    //         break;   
-    //       }        
+    //       } else if (resta == nuevo_valor) {
+    //         break;
+    //       }
     //     }
     //   }
+    // }
 
-    // }else{
+
 
     if (this.ListaDestinatarios[0].Valor_Transferencia == '') {
       this.ListaDestinatarios[0].Valor_Transferencia = '0';
     }
 
     let v_transferir = parseFloat(this.ListaDestinatarios[0].Valor_Transferencia);
+    console.log(v_transferir);
     let operacion = (v_transferir + (valor - total_destinatarios));
+    console.log(operacion);
     this.ListaDestinatarios[0].Valor_Transferencia = operacion;
 
     // this.VerificarDestinatariosConTransferenciaMayorAlTotal();
@@ -2286,7 +2287,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       // if(listaDestinatarios[index].Valor_Transferencia == '' || listaDestinatarios[index].Valor_Transferencia === undefined){
       //   this.ShowSwal('warning', 'Alerta', 'Debe anexar la información del(de los) destinatario(s) antes de agregar uno nuevo');
       //   return;
-      // }      
+      // }
     }
 
     let nuevoDestinatario = {
@@ -2308,7 +2309,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   HabilitarCampoValor() {
-    // TODO: se comenta para que no se elimine el valor 
+    // TODO: se comenta para que no se elimine el valor
     // this.TransferenciaModel.Cantidad_Transferida = 0;
     if (this.ListaDestinatarios.length > 1) {
       this.DeshabilitarValor = false;
@@ -2767,7 +2768,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     //   this._getMonedas();
     // }else if ( valor == 'Credito' ) {
     //   this._getMonedaExtranjeras();
-    // }   
+    // }
 
     if (valor == 'Credito') {
       this.TransferenciaModel.Tipo_Transferencia = 'Transferencia';
@@ -2853,10 +2854,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // this.Transferencia = [];
     // this._transferenciaService.getRecibosTransferenciasFuncionario(this.funcionario_data.Identificacion_Funcionario).subscribe((data: any) => {
     //   if (data.codigo == 'success') {
-    //     this.Transferencia = data.query_data;  
+    //     this.Transferencia = data.query_data;
     //   }else{
 
-    //     this.Transferencia = []; 
+    //     this.Transferencia = [];
     //     let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
     //     this._toastService.ShowToast(toastObj);
     //   }
@@ -3080,7 +3081,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //#endregion
 
-  //#region FUNCIONES GIROS  
+  //#region FUNCIONES GIROS
 
   public ActualizarTablasGiros() {
     this.giroService.CargarGirosDiarios();
@@ -3337,9 +3338,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // //   value,
     // //   parseInt(value),
     // //   Number(value),
-    // //   Number(value.replace(".","")),     
-    // //   parseInt(value.replace(".","")),     
-    // //   parseFloat(value.replace(".","")),     
+    // //   Number(value.replace(".","")),
+    // //   parseInt(value.replace(".","")),
+    // //   parseFloat(value.replace(".","")),
     // //   this.GiroModel.Valor_Total,
     // //   this.GiroModel.Valor_Entrega
     // // ]);
@@ -3688,7 +3689,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     });
 
-    //TODO: validar saldo en traslados 
+    //TODO: validar saldo en traslados
 
     // if (this.flag) {
     //   this.flag = false;
@@ -4114,7 +4115,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //#endregion
 
-  //#region FUNCIONES GENERALES 
+  //#region FUNCIONES GENERALES
 
   SetDatosIniciales() {
     this.CargarDatosCambios();
@@ -4276,7 +4277,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._getMonedasExtranjeras();
     // this.globales.Monedas.forEach(moneda => {
     //   if (moneda.Nombre != 'Pesos') {
-    //     this.MonedasTransferencia.push(moneda);     
+    //     this.MonedasTransferencia.push(moneda);
     //   }
     // });
 
@@ -4902,7 +4903,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }).do((data) => {
     return data
   })));
-  formatterClienteCambioCompra = (x: { Nombre: string }) => x.Nombre;
+  formatterClienteCambioCompra = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
 
 
 
@@ -5364,7 +5365,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
 
-  // Custom pesos 
+  // Custom pesos
   async GetMonedas() {
     return await this._monedaService.getMonedas().pipe().toPromise().then((data: any) => {
       if (data.codigo == 'success') {
@@ -5405,9 +5406,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   devolverCambio(id: any, modal: any) {
 
     this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
-
-      // console.log(data);
-
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
@@ -5450,7 +5448,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.swalService.ShowMessage(['success', 'Exito', 'Operación realizada correctamente']);
-        this.AbrirModalDevolucion.hide()
+      } else {
+        this.swalService.ShowMessage(['warning', 'Advertencia', 'No puedes realizar esta operación']);
       }
       this.AbrirModalDevolucion.hide()
     })
