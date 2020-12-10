@@ -1,93 +1,44 @@
-<<<<<<< HEAD
 .maps {
-	width: 100%;
-    height: 100%;
-    display: inline-block;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  overflow: hidden;
 
-    &.map-fs {
-        .ammap {
-            min-height: calc(100vh - #{$header-height});
-        }
+  &.map-fs {
+    .ammap {
+      min-height: calc(100vh - #{$header-height});
+    }
 
-        ngui-map {
-            min-height: calc(100vh - #{$header-height}) !important;
-        }
-    } 
+    ngui-map {
+      min-height: calc(100vh - #{$header-height}) !important;
+    }
+  }
 
-    &.map-300 {
-        .ammap {
-            min-height: 300px;
-            max-height: 300px;
+  &.map-300 {
+    .ammap {
+      min-height: 300px;
+      max-height: 300px;
 
-            @include screen-mobile {
-                min-height: 250px;
-            } 
-        }
-    } 
+      @include screen-mobile {
+        min-height: 250px;
+      }
+    }
+  }
 
-    &.map-500 {
-        .ammap {
-            min-height: 500px;
-            max-height: 500px;
+  &.map-500 {
+    .ammap {
+      min-height: 500px;
+      max-height: 500px;
 
-            @include screen-mobile {
-                min-height: 250px;
-            } 
-        }
-    }  
+      @include screen-mobile {
+        min-height: 250px;
+      }
+    }
+  }
 }
 
 #google-container {
-    width: 100%;
-    height: 100%!important;
-    min-height: calc(100vh - #{$header-height});
+  width: 100%;
+  height: 100% !important;
+  min-height: calc(100vh - #{$header-height});
 }
-
-=======
-.maps {
-	width: 100%;
-    height: 100%;
-    display: inline-block;
-    overflow: hidden;
-
-    &.map-fs {
-        .ammap {
-            min-height: calc(100vh - #{$header-height});
-        }
-
-        ngui-map {
-            min-height: calc(100vh - #{$header-height}) !important;
-        }
-    } 
-
-    &.map-300 {
-        .ammap {
-            min-height: 300px;
-            max-height: 300px;
-
-            @include screen-mobile {
-                min-height: 250px;
-            } 
-        }
-    } 
-
-    &.map-500 {
-        .ammap {
-            min-height: 500px;
-            max-height: 500px;
-
-            @include screen-mobile {
-                min-height: 250px;
-            } 
-        }
-    }  
-}
-
-#google-container {
-    width: 100%;
-    height: 100%!important;
-    min-height: calc(100vh - #{$header-height});
-}
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b

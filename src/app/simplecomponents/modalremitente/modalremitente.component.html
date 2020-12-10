@@ -12,11 +12,7 @@
           <label>Número Documento</label>
           <input *ngIf="!Editar" type="text" name="Id_Transferencia_Remitente" id="Id_Transferencia_Remitente"
             class="form-control" [(ngModel)]="RemitenteModel.Id_Transferencia_Remitente" required currencyMask
-<<<<<<< HEAD
             [options]="{thousands: '.' , decimal: '.' , precision:'0'}" disabled>
-=======
-            [options]="{thousands: '.' , decimal: '.' , precision:'0'}" readonly>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           <label *ngIf="Editar" class="block-element">{{RemitenteModel.Id_Transferencia_Remitente}}</label>
         </div>
       </div>

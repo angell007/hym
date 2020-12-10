@@ -1,5 +1,4 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCajaRecaudo" #ModalCajaRecaudo>
-<<<<<<< HEAD
   <div class="app-modal-header">
     <h4>Caja Recaudo</h4>
     <button type="button" class="close basic-close" (click)="CerrarModal()">
@@ -75,79 +74,3 @@
     </div>
   </div>
 </app-modal-basic>
-=======
-    <div class="app-modal-header">
-        <h4>Destinatario</h4>
-        <button type="button" class="close basic-close" (click)="CerrarModal()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="app-modal-body">
-        <form #FormCajaRecaudo="ngForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" placeholder="Nombre" class="form-control" name="Nombre" [(ngModel)]="CajaRecaudoModel.Nombre"
-                        required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" placeholder="Nombre de usuario" class="form-control" name="Username" 
-                          [(ngModel)]="CajaRecaudoModel.Username" required>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Password</label>
-                        <div class="input-group mb-3">
-                          <input [attr.type]="PasswordType" placeholder="Contrasena" class="form-control" name="Password" 
-                            [(ngModel)]="CajaRecaudoModel.Password" required>
-                          <div class="input-group-append">
-                            <span class="input-group-text" style="padding:0 10px;">
-                              <i style="cursor:pointer;" (click)="CambiarInputType()" 
-                                class="fa font-size-12" [ngClass]="{'fa-eye': !VerPassWord, 'fa-eye-slash': VerPassWord}" ></i></span>
-                          </div>
-                        </div>
-                        <!-- <input type="password" placeholder="Contrasena" class="form-control" name="Password" 
-                          [(ngModel)]="CajaRecaudoModel.Password" required> -->
-                    </div>
-                </div>
-                
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" [(ngModel)]="CajaRecaudoModel.Id_Departamento" 
-                          (change)="GetMunicipiosDepartamento()">
-                            <option value="">Seleccione un departamento</option>
-                            <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" [(ngModel)]="CajaRecaudoModel.Id_Municipio">
-                            <option value="">Seleccione un municipio</option>
-                            <option *ngFor="let m of Municipios" [value]="m.Id_Municipio">{{m.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-          <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
-            <button id="BotonGuardarCajaRecaudo" class="btn btn-outline-primary btn-rounded btn-sm" [disabled]="!FormCajaRecaudo.valid"
-                [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCajaRecaudo()">{{Editar ? 'Actualizar' : 'Guardar'}}
-            </button>
-        </div>
-    </div>
-  </app-modal-basic>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b

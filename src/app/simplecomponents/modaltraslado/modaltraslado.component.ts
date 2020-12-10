@@ -89,13 +89,8 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
-<<<<<<< HEAD
       if (data != null) {
         this.Monedas = data;
-=======
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       } else {
 
         this.Monedas = [];
@@ -124,11 +119,8 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
     } else if (this.TrasladoModel.Destino == 'Cuenta Bancaria') {
       return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
-<<<<<<< HEAD
     } else if (this.TrasladoModel.Destino == 'Cajero') {
       return this._cuentaBancariaService.getFiltrarCajero(match);
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     }
   }
 
@@ -141,10 +133,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           this.ConsultaOrigen(term)
             .map(response => response)
             .do(data => {
-<<<<<<< HEAD
-=======
-              // console.log(data);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               return data;
             })
         )
@@ -176,19 +164,11 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     });
 
 
-<<<<<<< HEAD
     // if (this.flag) {
     //   this.flag = false;
     //   this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
     //   return false
     // }
-=======
-    if (this.flag) {
-      this.flag = false;
-      this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
-      return false
-    }
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
 
     if (!this.ValidateBeforeSubmit()) {
@@ -228,11 +208,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
         this._trasladoService.saveTraslado(datos)
 
           .catch(error => {
-<<<<<<< HEAD
             // console.log('An error occurred:', error);
-=======
-            console.log('An error occurred:', error);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             // this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
             return this.handleError(error);
           })
@@ -254,11 +230,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   public settearMoneda() {
 
-<<<<<<< HEAD
     // console.log(this.TrasladoModel.Moneda);
-=======
-    console.log(this.TrasladoModel.Moneda);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
       if (this.TrasladoModel.Moneda == element[3]) {
         this.Mymoneda = element[2]
@@ -272,7 +244,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     // console.log(this.TrasladoModel);
     if (!this._validacionService.validateString(this.TrasladoModel.Origen, 'Tipo Origen')) {
       return false;
-<<<<<<< HEAD
       // } else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
       //   return false;
       // } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origen')) {
@@ -287,22 +258,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
       // console.log(this.TrasladoModel);
 
       // return false;
-=======
-    } else if (!this._validacionService.validateString(this.TrasladoModel.Destino, 'Tipo Destino')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Origen, 'Origen')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Id_Destino, 'Destino')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Moneda, 'Moneda')) {
-      return false;
-    } else if (!this._validacionService.validateNumber(this.TrasladoModel.Valor, 'Valorx')) {
-      return false;
-    } else if (!this._validacionService.validateString(this.TrasladoModel.Detalle, 'Detalle')) {
-      // console.log(this.TrasladoModel);
-
-      return false;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     } else {
       // console.log('validado');
       return true;
@@ -337,7 +292,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   CompletarDestino(value) {
 
     if (typeof (value) == 'object') {
-<<<<<<< HEAD
 
       switch (this.TrasladoModel.Destino) {
         case 'Cuenta Bancaria':
@@ -354,9 +308,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           break;
       }
 
-=======
-      this.TrasladoModel.Id_Destino = this.TrasladoModel.Destino == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     } else {
       this.TrasladoModel.Id_Destino = '';
     }

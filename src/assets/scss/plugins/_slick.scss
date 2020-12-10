@@ -1,110 +1,54 @@
-<<<<<<< HEAD
-.slick-prev, 
+.slick-prev,
 .slick-next {
-	z-index: 10;
-	@include transform(translateY(-50%));
-	
-	&:before {
-		font-family: 'themify';
-		font-size: 25px;
-		line-height: 1;
-		opacity: .75;
-		color: $default-white;
-	}
+  z-index: 10;
+  @include transform(translateY(-50%));
+
+  &:before {
+    font-family: 'themify';
+    font-size: 25px;
+    line-height: 1;
+    opacity: .75;
+    color: $default-white;
+  }
 }
 
 .slick-next {
-	right: 15px;
-	
-	&:before {
-		content: "\e649";
-	}
+  right: 15px;
+
+  &:before {
+    content: "\e649";
+  }
 }
 
 .slick-prev {
-	left: 15px;
-	
-	&:before {
-		content: "\e64a";
-	}
+  left: 15px;
+
+  &:before {
+    content: "\e64a";
+  }
 }
 
 .slick-dots {
-	bottom: 10px;
-	
-	li {
-		button {
-			&:before {
-				font-family: 'themify';
-				content: "\e724";
-				font-size: 16px;
-				opacity: 0.5;
-				color: $default-white;
-			}
-		}
-		
-		&.slick-active {
-			button {
-				&:before {
-					color: $default-white;
-					opacity: 1;
-				}
-			}
-		}
-	} 
-=======
-.slick-prev, 
-.slick-next {
-	z-index: 10;
-	@include transform(translateY(-50%));
-	
-	&:before {
-		font-family: 'themify';
-		font-size: 25px;
-		line-height: 1;
-		opacity: .75;
-		color: $default-white;
-	}
-}
+  bottom: 10px;
 
-.slick-next {
-	right: 15px;
-	
-	&:before {
-		content: "\e649";
-	}
-}
+  li {
+    button {
+      &:before {
+        font-family: 'themify';
+        content: "\e724";
+        font-size: 16px;
+        opacity: 0.5;
+        color: $default-white;
+      }
+    }
 
-.slick-prev {
-	left: 15px;
-	
-	&:before {
-		content: "\e64a";
-	}
-}
-
-.slick-dots {
-	bottom: 10px;
-	
-	li {
-		button {
-			&:before {
-				font-family: 'themify';
-				content: "\e724";
-				font-size: 16px;
-				opacity: 0.5;
-				color: $default-white;
-			}
-		}
-		
-		&.slick-active {
-			button {
-				&:before {
-					color: $default-white;
-					opacity: 1;
-				}
-			}
-		}
-	} 
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
+    &.slick-active {
+      button {
+        &:before {
+          color: $default-white;
+          opacity: 1;
+        }
+      }
+    }
+  }
 }

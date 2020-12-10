@@ -1,92 +1,44 @@
-<<<<<<< HEAD
-
 .note-editor {
-	
-	box-shadow: none;
 
-	&.note-frame {
-		border: 1px solid $border-color;
-		border-radius: 0px;
-		
-		.note-statusbar {
-			background-color: lighten($border-color,5%);
-		}
-	}
+  box-shadow: none;
 
-	.btn-default {
-		margin-bottom: 0px;
-	}
+  &.note-frame {
+    border: 1px solid $border-color;
+    border-radius: 0px;
 
-	.modal.in {
-		z-index: 99999;
-	}
+    .note-statusbar {
+      background-color: lighten($border-color, 5%);
+    }
+  }
 
-	.panel-heading {
-		background-color: transparent;
-		border-bottom: 1px solid $border-color;
-	}
-	
-	&.fullscreen {
-		.note-toolbar {
-			background-color: $default-white;
-		}
-	}
-	
-	.note-btn {
-		&.active {
-			background-color: lighten($border-color, 2%);
-		}
-	}
-}	
+  .btn-default {
+    margin-bottom: 0px;
+  }
 
-.note-popover { 
-	&.popover {
-		display:none;
-	}
-=======
+  .modal.in {
+    z-index: 99999;
+  }
 
-.note-editor {
-	
-	box-shadow: none;
+  .panel-heading {
+    background-color: transparent;
+    border-bottom: 1px solid $border-color;
+  }
 
-	&.note-frame {
-		border: 1px solid $border-color;
-		border-radius: 0px;
-		
-		.note-statusbar {
-			background-color: lighten($border-color,5%);
-		}
-	}
+  &.fullscreen {
+    .note-toolbar {
+      background-color: $default-white;
+    }
+  }
 
-	.btn-default {
-		margin-bottom: 0px;
-	}
+  .note-btn {
+    &.active {
+      background-color: lighten($border-color, 2%);
+    }
+  }
+}
 
-	.modal.in {
-		z-index: 99999;
-	}
-
-	.panel-heading {
-		background-color: transparent;
-		border-bottom: 1px solid $border-color;
-	}
-	
-	&.fullscreen {
-		.note-toolbar {
-			background-color: $default-white;
-		}
-	}
-	
-	.note-btn {
-		&.active {
-			background-color: lighten($border-color, 2%);
-		}
-	}
-}	
-
-.note-popover { 
-	&.popover {
-		display:none;
-	}
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
-}	
+.note-popover {
+  &.popover {
+    display: none;
+  }
+}

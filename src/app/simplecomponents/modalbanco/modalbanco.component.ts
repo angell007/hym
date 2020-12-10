@@ -14,20 +14,20 @@ import { Globales } from '../../shared/globales/globales';
 })
 export class ModalbancoComponent implements OnInit, OnDestroy {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  
-  @ViewChild('ModalBanco') ModalBanco:any;
+  @Input() AbrirModal: Observable<any> = new Observable();
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
-  public openSubscription:any;
-  public Paises:any = [];
-  public Monedas:any = [];
-  public Colombia:boolean = false;
-  public Venezuela:boolean = false;
-  private Editar:boolean = false;
+  @ViewChild('ModalBanco') ModalBanco: any;
+
+  public openSubscription: any;
+  public Paises: any = [];
+  public Monedas: any = [];
+  public Colombia: boolean = false;
+  public Venezuela: boolean = false;
+  private Editar: boolean = false;
 
   //Banco Model
-  public BancoModel:any = {
+  public BancoModel: any = {
     Nombre: '',
     Id_Moneda: '',
     Id_Pais: '',
@@ -50,41 +50,40 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
   };
 
   constructor(private generalService: GeneralService,
-              private swalService:SwalService,
-              private bancoService:BancoService,
-              private monedaService:MonedaService,
-              public globales:Globales) 
-  {
+    private swalService: SwalService,
+    private bancoService: BancoService,
+    private monedaService: MonedaService,
+    public globales: Globales) {
     setTimeout(() => {
-      this.AsignarPaises();  
-    }, 800);    
+      this.AsignarPaises();
+    }, 800);
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:string) => {
-      
+    this.openSubscription = this.AbrirModal.subscribe((data: string) => {
+
       if (data != "0") {
         this.Editar = true;
-        let p = {id_banco:data};
-        this.bancoService.getBanco(p).subscribe((d:any) => {
+        let p = { id_banco: data };
+        this.bancoService.getBanco(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.BancoModel = d.query_data;
             this.CargarMonedasPais();
-            this.ModalBanco.show();  
-          }else{
+            this.ModalBanco.show();
+          } else {
 
             this.swalService.ShowMessage(data);
           }
-          
+
         });
-      }else{
+      } else {
         this.Editar = false;
         this.ModalBanco.show();
       }
     });
   }
-  
-  ngOnDestroy(){    
+
+  ngOnDestroy() {
     if (this.openSubscription != undefined) {
       this.openSubscription.unsubscribe();
     }
@@ -92,68 +91,60 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
     this.CerrarModal();
   }
 
-  AsignarPaises(){      
+  AsignarPaises() {
     this.Paises = this.globales.Paises;
   }
 
-  GuardarBanco(){
+  GuardarBanco() {
     // console.log(this.BancoModel);
     this.FillEmptyValues(this.BancoModel);
-    
+
     let info = this.generalService.normalize(JSON.stringify(this.BancoModel));
     let datos = new FormData();
-    datos.append("modulo",'Banco');
-    datos.append("modelo",info);
+    datos.append("modulo", 'Banco');
+    datos.append("modelo", info);
     if (this.Editar) {
       this.bancoService.editBanco(datos)
-      .catch(error => { 
-<<<<<<< HEAD
-        // console.log('An error occurred:', error);
-=======
-        console.log('An error occurred:', error);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
-        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Colombia = false;
-          this.Venezuela = false;
-          this.Editar = false;
-        }
-        
-        this.swalService.ShowMessage(data);
-      });
-    }else{
+        .catch(error => {
+          // console.log('An error occurred:', error);
+          this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            this.Colombia = false;
+            this.Venezuela = false;
+            this.Editar = false;
+          }
+
+          this.swalService.ShowMessage(data);
+        });
+    } else {
       this.bancoService.saveBanco(datos)
-      .catch(error => { 
-<<<<<<< HEAD
-        // console.log('An error occurred:', error);
-=======
-        console.log('An error occurred:', error);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
-        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Colombia = false;
-          this.Venezuela = false;
-        }
-        
-        this.swalService.ShowMessage(data);
-      });
-    }    
+        .catch(error => {
+          // console.log('An error occurred:', error);
+          this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            this.Colombia = false;
+            this.Venezuela = false;
+          }
+
+          this.swalService.ShowMessage(data);
+        });
+    }
   }
 
-  FillEmptyValues(obj:any, value:string = '0'){
+  FillEmptyValues(obj: any, value: string = '0') {
     for (const key in obj) {
       if (obj[key] == '') {
-        obj[key] = value;        
+        obj[key] = value;
       }
     }
   }
@@ -162,30 +153,30 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
     return Observable.throw(error);
   }
 
-  SeleccionarPais(Pais){
+  SeleccionarPais(Pais) {
     //1 para colombia
     //2 para venezuela
 
-    switch(Pais){
-      case "1":{
+    switch (Pais) {
+      case "1": {
         this.Colombia = true;
         this.Venezuela = false;
         break;
       }
-      case "2":{
+      case "2": {
         this.Colombia = false;
         this.Venezuela = true;
         break;
       }
-      default:{
+      default: {
         this.Colombia = false;
         this.Venezuela = false;
       }
     }
-    
+
   }
 
-  CargarMonedasPais(){
+  CargarMonedasPais() {
     if (this.BancoModel.Id_Pais == '') {
       this.Monedas = [];
       //this.swalService.ShowMessage(['warning', 'Alerta', 'No se encontraron moneddas asociadas al pais seleccionado!']);
@@ -195,27 +186,27 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
 
     this.SeleccionarPais(this.BancoModel.Id_Pais);
 
-    let p = {id_pais:this.BancoModel.Id_Pais};
-    this.monedaService.getMonedasPais(p).subscribe((data:any) => {
+    let p = { id_pais: this.BancoModel.Id_Pais };
+    this.monedaService.getMonedasPais(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
 
-        this.Monedas = data.query_data;        
-      }else{
+        this.Monedas = data.query_data;
+      } else {
 
-        this.swalService.ShowMessage(data);  
+        this.swalService.ShowMessage(data);
         this.Monedas = [];
         this.BancoModel.Id_Moneda = '';
       }
-      
+
     });
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalBanco.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.BancoModel = {
       Nombre: '',
       Id_Moneda: '',

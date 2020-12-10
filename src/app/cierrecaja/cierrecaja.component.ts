@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GeneralService } from '../shared/services/general/general.service';
 import { NuevofuncionarioService } from '../shared/services/funcionarios/nuevofuncionario.service';
-import { type } from 'jquery';
 
 @Component({
   selector: 'app-cierrecaja',
@@ -30,10 +29,6 @@ export class CierrecajaComponent implements OnInit {
   public Id_Caja = JSON.parse(localStorage['Caja']);
   public Id_Oficina = JSON.parse(localStorage['Oficina']);
   public Modulos: Array<string> = []; public MonedasSistema: any = [];
-<<<<<<< HEAD
-=======
-  // public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios', 'Egresos']; public MonedasSistema: any = [];
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   public Totales: any = [];
   public CeldasIngresoEgresoEncabezado: any = [];
   public CeldasIngresoEgresoValores: any = [];
@@ -100,12 +95,9 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
-<<<<<<< HEAD
 
       console.log(data);
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this.Modulos = data;
     });
   }
@@ -125,19 +117,10 @@ export class CierrecajaComponent implements OnInit {
       let resumen = JSON.stringify(this.ResumenMovimiento);
       let model = JSON.stringify(this.CierreCajaModel);
       let data = new FormData();
-<<<<<<< HEAD
-
-=======
-      console.log(resumen);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       data.append("entregado", entregado);
       data.append("diferencias", diferencias);
       data.append("modelo", model);
       data.append("funcionario", this.id_funcionario);
-<<<<<<< HEAD
-=======
-      data.append("resumen_movimientos", resumen);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
       this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
 
@@ -156,7 +139,6 @@ export class CierrecajaComponent implements OnInit {
 
   ValidarMontos() {
 
-<<<<<<< HEAD
 
     // this.Diferencias[pos]
 
@@ -172,16 +154,6 @@ export class CierrecajaComponent implements OnInit {
       //     return false;
       //   }
       // }
-=======
-    for (let index = 0; index < this.TotalRestaIngresosEgresos.length; index++) {
-      if (this.TotalRestaIngresosEgresos[index] != 0) {
-
-        if (this.TotalEntregado[index].Entregado == 0) {
-          this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
-          return false;
-        }
-      }
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     }
 
     return true;
@@ -199,7 +171,6 @@ export class CierrecajaComponent implements OnInit {
     return true;
   }
 
-<<<<<<< HEAD
 
   CalcularSumaImput(ingresado, calculado, pos) {
 
@@ -287,19 +258,6 @@ export class CierrecajaComponent implements OnInit {
     this.Diferencias[pos] = resta;
 
 
-=======
-  CalcularDiferencia(ingresado, calculado, pos) {
-
-    if (ingresado == '' || calculado == '') {
-      return false;
-    }
-
-    console.log([ingresado, calculado, pos]);
-
-    let resta = ingresado - calculado;
-    this.Diferencias[pos] = resta;
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
     // montos[0].forEach((element, index) => {
     //   if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
@@ -374,11 +332,6 @@ export class CierrecajaComponent implements OnInit {
         this.FieldsDisabled.push(false);
       }
     });
-<<<<<<< HEAD
-=======
-
-    // console.log(this.FieldsDisabled);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   InhabilitarBoton() {
@@ -425,11 +378,7 @@ export class CierrecajaComponent implements OnInit {
   reduce(a) {
     let suma = 0;
     a.forEach((element) => {
-<<<<<<< HEAD
       suma += parseFloat(element.Ingreso_Total) - parseFloat(element.Egreso_Total)
-=======
-      suma += element.Ingreso_Total - element.Egreso_Total
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     })
     return suma;
   }

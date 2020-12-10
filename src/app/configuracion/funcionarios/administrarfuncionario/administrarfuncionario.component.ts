@@ -106,14 +106,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
         }
       });
 
-<<<<<<< HEAD
       this.oficinas.push({ value: '', label: 'Todos' });
       // console.log( this.oficinas);
 
-=======
-      // console.log( this.oficinas);
-      
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     });
 
   }
@@ -184,12 +179,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   GetDatosFuncionario() {
     this._funcionarioService.getDatosFuncionario(this._idFuncionario).subscribe((data: any) => {
-<<<<<<< HEAD
 
       console.log(data);
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       if (data.codigo == 'success') {
         this.FuncionarioModel = data.query_data;
         this.ContactoEmergenciaModel = data.Contacto_Emergencia;
@@ -241,7 +233,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let contacto_emergencia = this._generalService.normalize(JSON.stringify(this.ContactoEmergenciaModel));
     let permisos = this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
     let cuentas = this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
-<<<<<<< HEAD
 
     if (this.oficinas_dependientes.length > 0) {
       this.oficinas_dependientes.forEach((element) => {
@@ -253,10 +244,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
 
     let oficinas = this._generalService.normalize(JSON.stringify(this.oficinas_dependientes));
-=======
-    let oficinas = this._generalService.normalize(JSON.stringify(this.oficinas_dependientes));
-    // console.log([cuentas, oficinas]);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
     let datos = new FormData();
     datos.append("modelo", funcionario);
@@ -271,7 +258,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {
 
-<<<<<<< HEAD
         console.log(['editar', response]);
 
         if (response.codigo == 'success') {
@@ -285,20 +271,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
           this._swalService.ShowMessage(response);
         }
 
-=======
-        // console.log(['editar', response]);
-
-        // if (response.codigo == 'success') {
-        //   this._swalService.ShowMessage(response);
-        //   this.LimpiarModelo();
-        //   setTimeout(() => {
-        //     this.router.navigate(['/funcionarios']);
-        //   }, 500);
-        // } else {
-          
-        //   this._swalService.ShowMessage(response);
-        // }
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       });
     } else {
       this._funcionarioService.saveFuncionario(datos).subscribe((response: any) => {
@@ -484,7 +456,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   Cargo_Dependencia() { }
 
-<<<<<<< HEAD
 
   public onSelectAll() {
     if (this.oficinas_dependientes.length > 0) {
@@ -495,6 +466,4 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
       })
     }
   }
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 }

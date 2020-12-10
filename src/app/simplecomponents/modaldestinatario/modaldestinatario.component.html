@@ -13,14 +13,9 @@
           <div class="form-group">
             <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais"
               required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
-<<<<<<< HEAD
               <option value="null">Seleccione pais</option>
               <!-- Se agrega select a  cuentas asociadas -->
               <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
-=======
-              <option value="">Seleccione pais</option>
-              <option *ngFor="let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             </select>
           </div>
         </div>
@@ -44,11 +39,7 @@
               name="Tipo_Documento" required (change)="BuscarCNE()"
               [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
               <option value="">Seleccione Tipo Documento</option>
-<<<<<<< HEAD
               <option *ngFor="let documento of TiposDocumento; let i=index">
-=======
-              <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
                 {{documento.Codigo}}</option>
             </select>
           </div>
@@ -94,15 +85,10 @@
                   <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais"
                     (change)="GetBancosPais(i);" required>
                     <option value="">Seleccione País</option>
-<<<<<<< HEAD
                     <!-- Se agrega select a  cuentas asociadas -->
                     <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
                   </select>
 
-=======
-                    <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                  </select>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
                 </td>
                 <td width="25%">
                   <!-- TODO se cambia mascara de cuenta -->

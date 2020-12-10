@@ -38,12 +38,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public TotalesMunicipio: Array<any> = [];
   public TotalesOficina: Array<any> = [];
   public FechaSeleccionada: any = '2019-02-09';
-<<<<<<< HEAD
   public Fecha_inicio: any = '';
   public Fecha_fin: any = '';
-=======
-  public Fecha_Consulta: any = '';
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   public CajerosAbiertos: number = 0;
   public CajerosTotales: number = 0;
   public Totales: Array<any> = [];
@@ -73,12 +69,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
   InicializarFecha() {
     let d = new Date();
     this.FechaActual = d.toISOString().split("T")[0];
-<<<<<<< HEAD
     this.Fecha_inicio = d.toISOString().split("T")[0];
     this.Fecha_fin = d.toISOString().split("T")[0];
-=======
-    this.Fecha_Consulta = d.toISOString().split("T")[0];
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   AsignarPaises() {
@@ -126,11 +118,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
     if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
       //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-<<<<<<< HEAD
       p = { fecha: this.Fecha_fin };
-=======
-      p = { fecha: this.Fecha_Consulta };
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
         // console.log(data);
@@ -147,11 +135,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
     } else if (this.Funcionario.Id_Perfil == 2) {
       //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-<<<<<<< HEAD
       p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
-=======
-      p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_Consulta };
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this._cajaService.getCajasAbiertasFuncionario(p).subscribe((data: any) => {
 
         // console.log(data);
@@ -171,11 +155,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
   ConsultarTotalesDepartamento() {
 
-<<<<<<< HEAD
     if (this.Fecha_fin == '') {
-=======
-    if (this.Fecha_Consulta == '') {
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
       this.Totales = [];
       return;
@@ -184,17 +164,11 @@ export class TablerocajeroprincipalComponent implements OnInit {
       let p = {};
 
       if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6 || this.Funcionario.Id_Perfil == 2) {
-<<<<<<< HEAD
-        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin};
+        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
 
           // console.log(data);
-          
-=======
-        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
-        p = { id_departamento: this.DepartamentoId, fechas: this.Fecha_Consulta };
-        this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
+
           if (data.codigo == 'success') {
 
 
@@ -222,11 +196,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
       } else if (this.Funcionario.Id_Perfil == 2) {
         //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-<<<<<<< HEAD
-        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId,  fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin };
-=======
-        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fechas: this.Fecha_Consulta };
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
+        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
           if (data.codigo == 'success') {
 
@@ -276,15 +246,9 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
   dateRangeChanged(event) {
     if (event.formatted != "") {
-<<<<<<< HEAD
       this.Fecha_fin = event.formatted;
     } else {
       this.Fecha_fin = '';
-=======
-      this.Fecha_Consulta = event.formatted;
-    } else {
-      this.Fecha_Consulta = '';
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     }
 
     this.ConsultarTotalesDepartamento();
@@ -296,11 +260,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   Test() {
-<<<<<<< HEAD
     // console.log(this.Fecha_fin);
-=======
-    // console.log(this.Fecha_Consulta);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   ShowSwal(tipo: string, titulo: string, msg: string) {

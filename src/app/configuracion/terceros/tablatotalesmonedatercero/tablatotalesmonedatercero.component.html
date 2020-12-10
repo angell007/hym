@@ -2,49 +2,31 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-9">
-<<<<<<< HEAD
         <h5 class="pt-2"><i class="fa fa-money text-success"></i>
-=======
-        <h5 class="pt-2"><i class="fa fa-money text-success"></i> 
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           Balance: <span appColorsaldo [value]="totalObj.Total">{{ Balance | customcurrency:CodigoMonedaActual}}</span>
         </h5>
       </div>
       <div class="col-md-3">
-<<<<<<< HEAD
         <button class="btn btn-outline-primary btn-rounded btn-sm pull-right" (click)="AbrirModal('0')"><i
             class="ti-plus"></i>
-=======
-        <button class="btn btn-outline-primary btn-rounded btn-sm pull-right" (click)="AbrirModal('0')"><i class="ti-plus"></i>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           Movimiento de Ajuste
         </button>
       </div>
     </div>
-<<<<<<< HEAD
     <table class="table">
-    <!-- <table class="table table-hover table-sm table-striped table-bordered ustom-table"> -->
-=======
-    <table class="table table-hover table-sm table-striped table-bordered custom-table">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
+      <!-- <table class="table table-hover table-sm table-striped table-bordered ustom-table"> -->
       <thead>
         <tr>
           <th class="custom-thead" style="width:12%;">Fecha</th>
           <th class="custom-thead" style="width:12%;">Movimiento</th>
-<<<<<<< HEAD
           <th class="custom-thead">Cajero</th>
           <th class="custom-thead">Detalle</th>
-=======
-          <th class="custom-thead" >Cajero</th>
-          <th class="custom-thead" >Detalle</th>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
           <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
           <th class="custom-thead" class="text-center" style="width:15%">Saldo</th>
           <th class="custom-thead" class="text-center" style="width:6%;"></th>
         </tr>
         <tr>
-<<<<<<< HEAD
           <th class="custom-thead">
 
 
@@ -82,66 +64,21 @@
           <td colspan="7" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
             <h4>No existen movimientos en esta moneda!</h4>
-=======
-          <th class="table-filters">
-            <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
-            (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha">
-          </th>
-          <th class="table-filters">
-            <input type="text" class="form-control form-control-sm" placeholder="Filtro movimiento"
-              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.movimiento">
-          </th>
-          <th class="table-filters">
-            <input type="text" class="form-control form-control-sm" placeholder="Filtro cajero"
-              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.cajero">
-          </th>
-          <th class="table-filters">
-            <input type="text" class="form-control form-control-sm" placeholder="Filtro detalle"
-              (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.detalle">
-          </th>
-          <th class="table-filters"></th>
-          <th class="table-filters"></th>
-          <th class="table-filters"></th>
-        </tr>
-        <tr *ngIf="Cargando">
-          <td colspan="7" class="text-center">
-            <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
-              <h2>CARGANDO MOVIMIENTOS</h2>
-              <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="Movimientos.length == 0 && !Cargando">
-          <td colspan="7" class="text-center">
-              <i class="ti-alert font-size-20 text-warning"></i>
-              <h4>No existen movimientos en esta moneda!</h4>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           </td>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="MostrarTotales">
           <td colspan="6" class="text-center custom-cell font-size-17">Total</td>
-<<<<<<< HEAD
           <td class="text-right custom-cell font-size-17" appColorsaldo [value]="MovimientosTercero.totales.balance">
             {{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
           <td class="custom-cell"></td>
         </tr>
         <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Anulado'}">
-=======
-          <!-- <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.ingreso">{{MovimientosTercero.totales.ingreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="MovimientosTercero.totales.egreso">{{MovimientosTercero.totales.egreso | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td> -->
-          <td class="text-right custom-cell font-size-17" appColorsaldo [value]="MovimientosTercero.totales.balance">{{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
-          <td class="custom-cell"></td>
-        </tr>
-        <tr *ngFor="let m of Movimientos ; let i = index" 
-          [ngClass]="{'bg-anulada':m.Estado == 'Anulado'}">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
           <td class="custom-cell text-center">{{m.Movimiento}}</td>
           <td class="custom-cell text-center">{{m.Cajero}}</td>
           <td class="custom-cell">{{m.Detalle}}</td>
-<<<<<<< HEAD
           <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso"
             [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
@@ -164,29 +101,12 @@
                     <i
                       [ngClass]="{'ti-na text-danger':m.Estado == 'Activo', 'ti-back-right text-success':m.Estado == 'Anulado'}"></i>
                     {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
-=======
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Total" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
-          <td>
-            <div *ngIf="m.Movimiento === 'Ajuste' && m.Estado != 'Anulado'" class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button ngbDropdownToggle class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i class="ti-angle-down"></i></button>
-                <div ngbDropdownMenu>
-                  <a *ngIf="m.Estado != 'Anulado'" class="dropdown-item waves-light waves-effect caja-botones accionable" (click)="AbrirModal(m.Id_Movimiento_Tercero)">
-                    <i class="ti-pencil text-warning"></i> Editar</a>
-                  <a *ngIf="m.Estado == 'Activo'" class="dropdown-item waves-light waves-effect caja-botones accionable" (confirm)="AnularMovimientoTercero(m.Id_Movimiento_Tercero)"
-                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de esta oficina' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                      <i [ngClass]="{'ti-na text-danger':m.Estado == 'Activo', 'ti-back-right text-success':m.Estado == 'Anulado'}"></i> 
-                      {{m.Estado == 'Activo' ? 'Anular' : 'Activar'}}</a>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
                 </div>
               </div>
             </div>
           </td>
         </tr>
       </tbody>
-<<<<<<< HEAD
     </table>
     <div id="paginacion-container" *ngIf="Movimientos.length > 0">
       <div class="row">
@@ -198,31 +118,12 @@
           <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
             [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
           </ngb-pagination>
-=======
-    </table>    
-    <div id="paginacion-container" *ngIf="Movimientos.length > 0">
-      <div class="row">
-        <div class="col-md-3">
-          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-        </div>
-        <div class="col-md-9">
-          <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize"
-            size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true"></ngb-pagination>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<<<<<<< HEAD
 <app-modalajustetercero [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="GetMovimientos()"
   MonedaPrecargada="true">
 </app-modalajustetercero>
-=======
-<app-modalajustetercero
-  [AbrirModal]="AbrirModalAgregar.asObservable()"
-  (ActualizarTabla)="GetMovimientos()"
-  MonedaPrecargada="true">
-</app-modalajustetercero>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b

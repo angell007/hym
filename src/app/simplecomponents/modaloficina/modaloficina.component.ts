@@ -56,7 +56,7 @@ export class ModaloficinaComponent implements OnInit {
         this._oficinaService.getOficina(p).subscribe((d: any) => {
 
           if (d.codigo == 'success') {
-            
+
             this.OficinaModel = d.query_data;
             if (d.limites.query_data.length > 0) {
               this.MonedasSistema.forEach((element: any, index: number) => {
@@ -149,11 +149,7 @@ export class ModaloficinaComponent implements OnInit {
     if (this.Editar) {
       this._oficinaService.editOficina(datos)
         .catch(error => {
-<<<<<<< HEAD
           // console.log('An error occurred:', error);
-=======
-          console.log('An error occurred:', error);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })

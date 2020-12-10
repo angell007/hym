@@ -1,6 +1,5 @@
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalServicioExterno" #ModalServicioExterno>
   <div class="app-modal-header">
-<<<<<<< HEAD
     <h4>Nuevo Servico Externo</h4>
     <button type="button" class="close basic-close" (click)="CerrarModal()">
       <span aria-hidden="true">&times;</span>
@@ -34,38 +33,5 @@
         [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este registro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
         (confirm)="GuardarServicioExterno()" [disabled]="!FormServicioExterno.valid">Guardar</button>
     </div>
-=======
-      <h4>Nuevo Servico Externo</h4>
-      <button type="button" class="close basic-close" (click)="CerrarModal()">
-          <span aria-hidden="true">&times;</span>
-      </button>
-  </div>
-  <div class="app-modal-body">
-      <form #FormServicioExterno="ngForm">
-          <div class="row">
-              <div class="col-md-9">
-                  <div class="form-group">
-                      <label>Nombre Servicio</label>
-                      <input type="text" placeholder="Nombre servicio" class="form-control" name="Nombre" [(ngModel)]="ServicioExternoModel.Nombre"
-                      required>
-                  </div>
-              </div>
-              <div class="col-md-3">
-                  <div class="form-group">
-                    <label>Comisión Servicio</label>
-                    <input type="text" placeholder="$0.00" class="form-control text-right" name="Comision" [(ngModel)]="ServicioExternoModel.Comision"
-                    required>
-                  </div>
-              </div>
-          </div>
-      </form>
-  </div>
-  <div class="app-modal-footer">
-      <div class="text-right">
-          <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
-          <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone guardar este registro' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No, Comprobar!'}"
-              (confirm)="GuardarServicioExterno()" [disabled]="!FormServicioExterno.valid">Guardar</button>
-      </div>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   </div>
 </app-modal-basic>

@@ -150,11 +150,7 @@ export class ModaldestinatarioComponent implements OnInit {
       this.paisDefault = fullPais.Id_Pais;
       this.Lista_Cuentas_Destinatario[this.rowDefault.posicion].Id_Pais = this.paisDefault //Para asignar venezuela al default 
     }).catch((err) => {
-<<<<<<< HEAD
       // console.log(err);
-=======
-      console.log(err);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     });
     this.GetBancosPais(this.rowDefault.fila);
     this.FiltrarDatosNacionalidad();
@@ -165,10 +161,6 @@ export class ModaldestinatarioComponent implements OnInit {
   GetTiposCuenta() {
     setTimeout(() => {
       this.TiposCuenta = this.generalService.getTiposCuenta();
-<<<<<<< HEAD
-=======
-      console.log(this.TiposCuenta);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     }, 1000);
   }
 
@@ -193,10 +185,6 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   GuardarDestinatario() {
-<<<<<<< HEAD
-
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this.DestinatarioModel.Cuentas = this.Lista_Cuentas_Destinatario;
 
     if (!this.ValidateBeforeSubmit()) {
@@ -252,10 +240,6 @@ export class ModaldestinatarioComponent implements OnInit {
               case 'crear':
                 this.ActualizarTabla.emit();
                 break;
-<<<<<<< HEAD
-=======
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               case 'crear especial':
                 let objRespuesta = { willdo: "actualizar", id_destinatario: this.DestinatarioModel.Id_Destinatario };
                 this.IncluirDestinatarioEnTransferencia.emit(objRespuesta);
@@ -341,10 +325,6 @@ export class ModaldestinatarioComponent implements OnInit {
 
     let p = { id_pais: this.DestinatarioModel.Id_Pais };
     this.tipoDocumentoService.getTiposDocumentoPais(p).subscribe((data: any) => {
-<<<<<<< HEAD
-=======
-      console.log(data);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       if (data.codigo == 'success') {
         this.TiposDocumento = data.query_data;
         if (!conservarTipoDocumento)

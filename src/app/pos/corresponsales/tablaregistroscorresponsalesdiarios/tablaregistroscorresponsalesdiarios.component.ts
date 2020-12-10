@@ -1,18 +1,11 @@
-<<<<<<< HEAD
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-=======
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 import { Observable } from 'rxjs';
 import { GeneralService } from '../../../shared/services/general/general.service';
 import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { CorresponsalbancarioService } from '../../../shared/services/corresponsalesbancarios/corresponsalbancario.service';
 import { HourPipe } from '../../../hour.pipe';
-<<<<<<< HEAD
 import { MonedaService } from '../../../shared/services/monedas/moneda.service';
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
 @Component({
   selector: 'app-tablaregistroscorresponsalesdiarios',
@@ -23,12 +16,9 @@ import { MonedaService } from '../../../shared/services/monedas/moneda.service';
 export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnDestroy {
 
   @Input() ActualizarTabla: Observable<any> = new Observable();
-<<<<<<< HEAD
 
   @ViewChild('modalMensaje') modalMensaje: any
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   private _updateTablaSubscription: any;
 
   public RegistrosCorresponsales: Array<any> = [];
@@ -44,7 +34,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     estado: ''
   };
 
-<<<<<<< HEAD
   public corresponsalEdit: any = {
     Consignacion: '',
     Fecha: '',
@@ -64,8 +53,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   public monedaPeso: Array<any> = [];
   public CorresponsalesBancarios: Array<any> = [];
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
@@ -79,11 +66,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
-<<<<<<< HEAD
     private _monedaService: MonedaService,
-=======
-    // private _toastService: ToastService,
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     private _corresponsalService: CorresponsalbancarioService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
@@ -92,10 +75,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   ngOnInit() {
     this._updateTablaSubscription = this.ActualizarTabla.subscribe(data => {
       this.ConsultaFiltrada();
-<<<<<<< HEAD
       this.GetCorresponsalesBancarios()
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     });
   }
 
@@ -108,10 +88,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   SetFiltros(paginacion: boolean) {
     let params: any = {};
 
-<<<<<<< HEAD
-=======
-    // params.tam = this.pageSize;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if (paginacion === true) {
@@ -120,34 +96,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
-<<<<<<< HEAD
-=======
-
-    // if (this.Filtros.remitente.trim() != "") {
-    //   params.remitente = this.Filtros.remitente;
-    // }
-
-    // if (this.Filtros.recibo.trim() != "") {
-    //   params.recibo = this.Filtros.recibo;
-    // }
-
-    // if (this.Filtros.recibido.trim() != "") {
-    //   params.recibido = this.Filtros.recibido;
-    // }
-
-    // if (this.Filtros.transferido.trim() != "") {
-    //   params.transferido = this.Filtros.transferido;
-    // }
-
-    // if (this.Filtros.tasa.trim() != "") {
-    //   params.tasa = this.Filtros.tasa;
-    // }
-
-    // if (this.Filtros.estado.trim() != "") {
-    //   params.estado = this.Filtros.estado;
-    // }
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     return params;
   }
 
@@ -162,17 +110,8 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
     this.Cargando = true;
     this._corresponsalService.GetRegistrosDiarios(p).subscribe((data: any) => {
-<<<<<<< HEAD
       if (data.codigo == 'success') {
         this.RegistrosCorresponsales = data.query_data;
-=======
-
-      // console.log(data);
-
-      if (data.codigo == 'success') {
-        this.RegistrosCorresponsales = data.query_data;
-        // this.TotalItems = data.numReg;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       } else {
         this.RegistrosCorresponsales = [];
         this._swalService.ShowMessage(data);
@@ -195,13 +134,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
   }
 
   SetInformacionPaginacion(data: any) {
-<<<<<<< HEAD
     this.TotalItems = data.length
-=======
-    // console.log(data);
-    this.TotalItems = data.length
-    // console.log('', this.TotalItems);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
@@ -210,7 +143,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-<<<<<<< HEAD
   GetCorresponsalesBancarios() {
     this._corresponsalService.getCorresponsales().subscribe((data: any) => {
 
@@ -279,6 +211,4 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
       this._swalService.ShowMessage(data);
     });
   }
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 }

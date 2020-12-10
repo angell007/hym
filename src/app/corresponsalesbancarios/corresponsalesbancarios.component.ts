@@ -88,43 +88,11 @@ export class CorresponsalesbancariosComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   GuardarCorresponsal() {
     let info = JSON.stringify(this.CorresponsalModel);
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Bancario');
     datos.append("datos", info);
-=======
-  // GuardarCorresponsal(formulario: NgForm, modal: any) {
-  //   let info = JSON.stringify(formulario.value);
-  //   console.log(formulario);
-
-  //   // let datos = new FormData();
-
-  //   // datos.append("modulo", 'Corresponsal_Bancario');
-  //   // datos.append("datos", info);
-
-  //   // this.OcultarFormulario(modal);
-  //   // this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos).subscribe((data: any) => {
-  //   //   this.saveSwal.show();
-  //   //   this.ActualizarVista();
-  //   //   formulario.reset();
-  //   //   this.InicializarBool();
-  //   //   this.municipioDefault = "";
-  //   //   this.departamentoDefault = "";
-  //   // });
-  // }
-
-  GuardarCorresponsal() {
-    let info = JSON.stringify(this.CorresponsalModel);
-    // console.log(CorresponsalModel);
-
-    let datos = new FormData();
-
-    datos.append("modulo", 'Corresponsal_Bancario');
-    datos.append("datos", info);
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this._corresponsalService.GuardarCorresponsalBancario(datos).subscribe((data: any) => {
       this.ActualizarVista();
       this.CerrarModalGuardar();
@@ -132,7 +100,6 @@ export class CorresponsalesbancariosComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
   GuardarCorresponsalEditado() {
 
     let info = JSON.stringify(this.CorresponsalModel);
@@ -149,8 +116,6 @@ export class CorresponsalesbancariosComponent implements OnInit {
     })
   }
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   VerCorresponsal(id, modal) {
     this.http.get(this.globales.ruta + 'php/corresponsalesbancarios/detalle_corresponsales.php', {
       params: { modulo: 'Corresponsal', id: id }
@@ -159,15 +124,6 @@ export class CorresponsalesbancariosComponent implements OnInit {
       this.CorresponsalModel.Nombre = data.Nombre;
       this.CorresponsalModel.Departamento = data.Departamento;
       this.CorresponsalModel.Municipio = data.Municipio;
-<<<<<<< HEAD
-=======
-      // this.Nombre=data.Nombre;
-      // this.Cupo=data.Cupo;
-      // this.Departamento=data.Departamento;
-      // this.Municipio=data.Municipio;
-      // this.Identificacion = id;
-
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this.ModalVerCorresponsal.show();
     });
   }
@@ -177,7 +133,6 @@ export class CorresponsalesbancariosComponent implements OnInit {
       params: { modulo: 'Corresponsal_Bancario', id: id }
     }).subscribe((data: any) => {
 
-<<<<<<< HEAD
       // console.log(data);
 
       this.CorresponsalModel.Cupo = parseInt(data.Cupo);
@@ -185,27 +140,11 @@ export class CorresponsalesbancariosComponent implements OnInit {
       this.CorresponsalModel.Departamento = data.Id_Departamento;
       this.CorresponsalModel.Id_Corresponsal_Bancario = data.Id_Corresponsal_Bancario;
       this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
-=======
-      // console.log(id);
-      this.CorresponsalModel.Cupo = parseInt(data.Cupo);
-      this.CorresponsalModel.Nombre = data.Nombre;
-      this.CorresponsalModel.Departamento = data.Departamento;
-      this.CorresponsalModel.Municipio = data.Municipio;
-      // this.Identificacion = id;
-      // this.Nombre = data.Nombre;
-      // this.Departamento = data.Id_Departamento;
-      // this.Cupo = data.Cupo;
-      // this.AutoSleccionarMunicipio(data.Id_Departamento, data.Id_Municipio);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this.ModalEditarCorresponsal.show();
     });
   }
 
   EliminarCorresponsal(id) {
-<<<<<<< HEAD
-=======
-    // console.log(id);
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Bancario');
     datos.append("id", id);
@@ -218,11 +157,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
   AutoSleccionarMunicipio(Departamento, Municipio) {
     this.http.get(this.globales.ruta + 'php/genericos/municipios_departamento.php', { params: { id: Departamento } }).subscribe((data: any) => {
       this.Municipios = data;
-<<<<<<< HEAD
       this.CorresponsalModel.Municipio = Municipio;
-=======
-      this.Municipio = Municipio;
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     });
   }
 
@@ -248,11 +183,7 @@ export class CorresponsalesbancariosComponent implements OnInit {
 
   public CerrarModalVer() {
     this._limpiarModelo();
-<<<<<<< HEAD
     this.ModalVerCorresponsal.hide();
-=======
-    this.ModalEditarCorresponsal.hide();
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   private _limpiarModelo() {

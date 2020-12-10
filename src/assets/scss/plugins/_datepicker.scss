@@ -1,125 +1,63 @@
-<<<<<<< HEAD
-@import '../variables'; 
+@import '../variables';
 
 
 .bg-light {
-    background-color: $default-white !important;
+  background-color: $default-white !important;
 }
 
 .ngb-dp-week {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 .ngb-dp-weekdays {
-    border-bottom: 0px !important;
+  border-bottom: 0px !important;
 }
 
 [_nghost-c2] {
-    color: $default-text-color;
-    width: 36px !important;
-    height: 32px !important;
-    border-radius: 0 !important;
+  color: $default-text-color;
+  width: 36px !important;
+  height: 32px !important;
+  border-radius: 0 !important;
 }
 
-.ngb-dp-day[_ngcontent-c4], .ngb-dp-weekday[_ngcontent-c4], .ngb-dp-week-number[_ngcontent-c4] {
-    width: 36px !important;
-    height: 32px !important;
-}
-
-.ngb-dp-weekday {
-    color: $default-text-color !important;
-    font-weight: bold;
-    font-style: normal !important;
-    font-size: 13px;
-}
-
-select[_ngcontent-c5] {
-    width: calc(50% - 10px) !important;
-    margin: 0px 5px !important;
-}
-
-.ngb-dp-arrow-btn {
-    margin: 0px !important;
-}
-
-.ngb-dp-navigation-chevron:before {
-    border-width: 1px 1px 0 0 !important;
-}
-
-.btn-link {
-    color: $default-text-color;
-
-    &:hover,
-    &:focus {
-        color: $default-dark;
-        background-color: $default-gray;
-    }
-}
-
-.ngb-dp-month-name {
-    margin: 10px 0px;
-    color: $default-dark;
-}
-=======
-@import '../variables'; 
-
-
-.bg-light {
-    background-color: $default-white !important;
-}
-
-.ngb-dp-week {
-    padding-bottom: 5px;
-}
-
-.ngb-dp-weekdays {
-    border-bottom: 0px !important;
-}
-
-[_nghost-c2] {
-    color: $default-text-color;
-    width: 36px !important;
-    height: 32px !important;
-    border-radius: 0 !important;
-}
-
-.ngb-dp-day[_ngcontent-c4], .ngb-dp-weekday[_ngcontent-c4], .ngb-dp-week-number[_ngcontent-c4] {
-    width: 36px !important;
-    height: 32px !important;
+.ngb-dp-day[_ngcontent-c4],
+.ngb-dp-weekday[_ngcontent-c4],
+.ngb-dp-week-number[_ngcontent-c4] {
+  width: 36px !important;
+  height: 32px !important;
 }
 
 .ngb-dp-weekday {
-    color: $default-text-color !important;
-    font-weight: bold;
-    font-style: normal !important;
-    font-size: 13px;
+  color: $default-text-color !important;
+  font-weight: bold;
+  font-style: normal !important;
+  font-size: 13px;
 }
 
 select[_ngcontent-c5] {
-    width: calc(50% - 10px) !important;
-    margin: 0px 5px !important;
+  width: calc(50% - 10px) !important;
+  margin: 0px 5px !important;
 }
 
 .ngb-dp-arrow-btn {
-    margin: 0px !important;
+  margin: 0px !important;
 }
 
 .ngb-dp-navigation-chevron:before {
-    border-width: 1px 1px 0 0 !important;
+  border-width: 1px 1px 0 0 !important;
 }
 
 .btn-link {
-    color: $default-text-color;
+  color: $default-text-color;
 
-    &:hover,
-    &:focus {
-        color: $default-dark;
-        background-color: $default-gray;
-    }
+  &:hover,
+  &:focus {
+    color: $default-dark;
+    background-color: $default-gray;
+  }
 }
 
 .ngb-dp-month-name {
-    margin: 10px 0px;
-    color: $default-dark;
+  margin: 10px 0px;
+  color: $default-dark;
 }
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b

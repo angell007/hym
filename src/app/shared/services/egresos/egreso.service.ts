@@ -30,8 +30,4 @@ export class EgresoService {
     return this.client.post(this._rutaBase + 'anular_egreso.php', data);
   }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b

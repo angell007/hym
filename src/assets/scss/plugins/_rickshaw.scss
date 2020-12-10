@@ -1,22 +1,10 @@
-<<<<<<< HEAD
-
 .rickshaw_graph {
-	.x_ticks_d3,
-	.y_ticks {
 
-		path {
-			stroke: darken($border-color, 10%);
-		}
-	}
-=======
+  .x_ticks_d3,
+  .y_ticks {
 
-.rickshaw_graph {
-	.x_ticks_d3,
-	.y_ticks {
-
-		path {
-			stroke: darken($border-color, 10%);
-		}
-	}
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
+    path {
+      stroke: darken($border-color, 10%);
+    }
+  }
 }

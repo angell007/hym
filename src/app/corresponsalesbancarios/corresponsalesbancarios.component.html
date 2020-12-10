@@ -99,11 +99,7 @@
           <div class="form-group">
             <label>Cupo</label>
             <input type="text" placeholder="Cupo" class="form-control" name="Cupo" [(ngModel)]="CorresponsalModel.Cupo"
-<<<<<<< HEAD
               currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }" required>
-=======
-              [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             <!-- <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
                         <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div> -->
           </div>
@@ -207,13 +203,8 @@
       <div class="col-md-4" hidden>
         <div class="form-group">
           <label>Identificación</label>
-<<<<<<< HEAD
           <input name="id" type="text" placeholder="Identificación" class="form-control"
             [(ngModel)]="CorresponsalModel.Identificacion" required>
-=======
-          <input name="id" type="text" placeholder="Identificación" class="form-control" ngModel="{{Identificacion}}"
-            required>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
         </div>
       </div>
 
@@ -222,13 +213,8 @@
           <div class="form-group">
             <label>Corresponsal</label>
             <input type="text" placeholder="Nombre Corresponsal Bancario" class="form-control" name="Nombre"
-<<<<<<< HEAD
               [(ngModel)]="CorresponsalModel.Nombre" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
               (focusout)="boolCorresponsal = true" required #corresponsalEd="ngModel">
-=======
-              ngModel="{{Nombre}}" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-              (focus)="$event.target.select()" (focusout)="boolCorresponsal = true" required #corresponsalEd="ngModel">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             <!-- <div *ngIf="!corresponsalEd.valid && boolCorresponsal==true" style="color:red">Campo inválido</div>
                         <div *ngIf="corresponsalEd.valid && boolCorresponsal==true" style="color:green">Datos correctos!</div> -->
           </div>
@@ -236,13 +222,8 @@
         <div class="col-md-3">
           <div class="form-group">
             <label>Cupo</label>
-<<<<<<< HEAD
             <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo"
               [(ngModel)]="CorresponsalModel.Cupo" [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-=======
-            <input type="text" currencyMask placeholder="Cupo" class="form-control" name="Cupo" ngModel="{{Cupo}}"
-              [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" (focus)="$event.target.select()"
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               (focusout)="boolCupo = true" required #cupoEd="ngModel">
             <!-- <div *ngIf="!cupoEd.valid && boolCupo==true" style="color:red">Campo inválido</div>
                         <div *ngIf="cupoEd.valid && boolCupo==true" style="color:green">Datos correctos!</div> -->
@@ -253,15 +234,9 @@
         <div class="col-md-6">
           <div class="form-group">
             <label>Departamento</label>
-<<<<<<< HEAD
             <select class="form-control" required name="Id_Departamento" [(ngModel)]="CorresponsalModel.Departamento"
               (change)="Municipios_Departamento($event.target.value)" (focusout)="boolDepartamento = true" required
               #departamentoEd="ngModel">
-=======
-            <select class="form-control" required name="Id_Departamento" ngModel="{{Departamento}}"
-              (change)="Municipios_Departamento($event.target.value)" (focus)="$event.target.select()"
-              (focusout)="boolDepartamento = true" required #departamentoEd="ngModel">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               <option value="">Seleccione un Departamento</option>
               <option *ngFor="let Departamento of Departamentos" [value]="Departamento.Id_Departamento">
                 {{Departamento.Nombre}}</option>
@@ -273,13 +248,8 @@
         <div class="col-md-5">
           <div class="form-group">
             <label>Municipio</label>
-<<<<<<< HEAD
             <select class="form-control" required name="Id_Municipio" [(ngModel)]="CorresponsalModel.Municipio"
               (focusout)="boolMunicipio = true" required #municipioEd="ngModel">
-=======
-            <select class="form-control" required name="Id_Municipio" ngModel="{{Municipio}}"
-              (focus)="$event.target.select()" (focusout)="boolMunicipio = true" required #municipioEd="ngModel">
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               <option value="">Seleccione un Municipio</option>
               <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}
               </option>
@@ -290,23 +260,16 @@
         </div>
       </div>
     </form>
-<<<<<<< HEAD
 
     {{CorresponsalModel.Cupo}}
 
-=======
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   </div>
   <div class="app-modal-footer">
     <div class="text-right">
       <button class="btn btn-outline-primary btn-sm btn-rounded"
         [disabled]="!corresponsalEd.valid || !cupoEd.valid || departamentoEd.value=='' || municipioEd.value==''"
         [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este corresponsal' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-<<<<<<< HEAD
         (confirm)="GuardarCorresponsalEditado()">Guardar</button>
-=======
-        (confirm)="GuardarCorresponsal()">Guardar</button>
->>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     </div>
   </div>
 </app-modal-basic>
