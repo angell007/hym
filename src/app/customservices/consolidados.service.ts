@@ -29,6 +29,7 @@ export class ConsolidadosService {
       });
   }
 
+<<<<<<< HEAD
 
   reduce(a) {
     let suma = 0;
@@ -58,12 +59,45 @@ export class ConsolidadosService {
       });
     });
 
+=======
+  async GetData() {
+    this.TotalRestaIngresosEgresos = []
+    this.SumatoriaTotales = []
+
+    this.getValoresIniciales().then(() => {
+      this.getValoresApertura().then(() => {
+        this.MonedasSistema.forEach((moneda, i) => {
+          let objMoneda = this.SumatoriaTotales[moneda.Nombre];
+
+          let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
+          this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
+          this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
+          let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
+
+          this.TotalRestaIngresosEgresos.push([moneda.Codigo, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(), moneda.Nombre, moneda.Id_Moneda]);
+
+        })
+      })
+
+      return this.TotalRestaIngresosEgresos;
+
+    }).catch((err) => {
+      console.log('Error  ', err);
+    })
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   async getValoresIniciales() {
 
+<<<<<<< HEAD
     await this.http.get(`${this.globales.ruta}/php/cierreCaja/Cierre_Caja_Nuevo.php`, { params: { id: this.user.Identificacion_Funcionario } }).pipe()
       .toPromise().then((data: any) => {
+=======
+    await this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: { id: this.user.Identificacion_Funcionario } }).pipe()
+      .toPromise().then((data: any) => {
+
+
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
         this.MonedasSistema = data.monedas;
         let t = data.totales_ingresos_egresos;
 
@@ -74,9 +108,15 @@ export class ConsolidadosService {
 
         this.MonedasSistema.forEach((m) => {
           this.Modulos.forEach((mod) => {
+<<<<<<< HEAD
             let obj = this.Totales[mod];
 
             
+=======
+
+            let obj = this.Totales[mod];
+
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
             if (this.SumatoriaTotales[m.Nombre]) {
               this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);

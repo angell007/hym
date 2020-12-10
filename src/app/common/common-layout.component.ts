@@ -31,8 +31,8 @@ import { TrasladosCustomService } from '../customservices/traslados.custom.servi
 
 export class CommonLayoutComponent implements OnInit {
 
-    public mostrarDatos : boolean = false;
-    public CargandoLabels : Array<any> = [
+    public mostrarDatos: boolean = false;
+    public CargandoLabels: Array<any> = [
         'Cargando Monedas',
         'Cargando Oficinas',
         'Cargando Cajas',
@@ -41,7 +41,7 @@ export class CommonLayoutComponent implements OnInit {
         'Cargando Mac',
         'Cargando Listas Generales'
     ]
-    public fraseCargando : any  = 'Cargando Datos';
+    public fraseCargando: any = 'Cargando Datos';
     public app: any;
     public headerThemes: any;
     public changeHeader: any;
@@ -175,7 +175,7 @@ export class CommonLayoutComponent implements OnInit {
     public NombreCaja: string = '';
     public NombreOficina: string = '';
 
-        
+
     constructor(private router: Router,
         private activeRoute: ActivatedRoute,
         public qz: QzTrayService,
@@ -196,8 +196,8 @@ export class CommonLayoutComponent implements OnInit {
         private _funcionarioService: NuevofuncionarioService,
         private consolidadosService: ConsolidadosService) {
 
-        
-        this.Cargar();       
+
+        this.Cargar();
 
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
@@ -244,8 +244,8 @@ export class CommonLayoutComponent implements OnInit {
         }
 
     }
-    
-    
+
+
     startTimer() {
         setInterval(() => {
             this.myDate = new Date();
@@ -259,17 +259,17 @@ export class CommonLayoutComponent implements OnInit {
 
     timer = ms => new Promise(res => setTimeout(res, ms))
 
-    async Cargar(){
+    async Cargar() {
         for (var i = 0; i < this.CargandoLabels.length; i++) {
-          await this.timer(1500); // then the created Promise can be awaited
-          this.fraseCargando=this.CargandoLabels[i];
-          if(i==this.CargandoLabels.length-1){
-            i=0;
-          }
+            await this.timer(1500); // then the created Promise can be awaited
+            this.fraseCargando = this.CargandoLabels[i];
+            if (i == this.CargandoLabels.length - 1) {
+                i = 0;
+            }
         }
     }
     async ngOnInit() {
-        
+
         this.swalService.event.subscribe((data: any) => {
             this.ShowSwal(data.type, data.title, data.msg);
         });
@@ -278,7 +278,7 @@ export class CommonLayoutComponent implements OnInit {
             this.ShowToasty(data.textos, data.tipo, data.duracion);
         });
 
-        switch (this.user.Id_Perfil) { 
+        switch (this.user.Id_Perfil) {
             // administrador
             case "1": {
                 this.OcultarCajero = false;
@@ -408,7 +408,6 @@ export class CommonLayoutComponent implements OnInit {
             this.confirmSwal.show();
         });
     }
-
 
     muestra_tabla(id) {
 
@@ -1135,13 +1134,13 @@ export class CommonLayoutComponent implements OnInit {
 
                             this.SetNombreOficina(this.oficina_seleccionada);
                             this.SetNombreCaja(this.caja_seleccionada);
-                            this.mostrarDatos=true;
+                            this.mostrarDatos = true;
                             this.DesconectarQz();
                         } else {
                             this.macSwal.title = "Equipo No Registrado"
-                            this.macSwal.html = "La Mac <strong>"+macFormatted+"</strong> NO se encuentra registrada en el Sistema, por favor contacte al administrador para que lo registre."
+                            this.macSwal.html = "La Mac <strong>" + macFormatted + "</strong> NO se encuentra registrada en el Sistema, por favor contacte al administrador para que lo registre."
                             this.macSwal.type = "error"
-                            this.macSwal.show(); 
+                            this.macSwal.show();
                             this.DesconectarQz();
 
 
@@ -1157,7 +1156,7 @@ export class CommonLayoutComponent implements OnInit {
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);
-                    this.mostrarDatos=true;
+                    this.mostrarDatos = true;
                     this.DesconectarQz();
                 }
             },
@@ -1165,15 +1164,15 @@ export class CommonLayoutComponent implements OnInit {
                 this.macSwal.title = "QZ TRY NO ENCONTRADO O NO HABILITADO"
                 this.macSwal.html = "El Software QzTry NO ha sido habilitado o no ha sido encontrado en el sistema, por favor descarguelo <a  href='https://qz.io/' target='_blank'>aquí</a> y siga <a href='' target='_blank'>estas instucciones</a> para volver a intentarlo"
                 this.macSwal.type = "error"
-                this.macSwal.show();                
+                this.macSwal.show();
             }
         );
-        
+
 
 
     }
-    DesconectarQz(){
-        this.qz.removePrinter(); 
+    DesconectarQz() {
+        this.qz.removePrinter();
     }
 
 }

@@ -3,6 +3,10 @@ import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { SwalService } from '../../shared/services/swal/swal.service';
+<<<<<<< HEAD
+=======
+import { param } from 'jquery';
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
 @Component({
   selector: 'app-funcionarioinformativecard',
@@ -36,7 +40,10 @@ export class FuncionarioinformativecardComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   Abrir(id) {
 
     const params = new FormData();

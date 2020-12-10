@@ -67,7 +67,11 @@
             </tr>
             <tr>
               <td><b>Montos Iniciales</b></td>
+<<<<<<< HEAD
               <td class="mx-1" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
+=======
+              <td class="mx-1" *ngFor="let vm of ValoresMonedasApertura" >{{vm | customcurrency:''}}</td>
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             </tr>
             <tr>
               <td>Ingreso</td>
@@ -77,19 +81,29 @@
             </tr>
             <tr>
               <td>Egreso</td>
+<<<<<<< HEAD
               <th *ngFor="let m of Modulos" class="text-right p-2">
+=======
+              <th *ngFor="let m of Modulos" class="text-right p-2" >
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
                 <span class="text-success"> {{Egresos(m.Movimientos)}} </span>
               </th>
             </tr>
             <tr>
               <td>Total a Entregar</td>
+<<<<<<< HEAD
               <th *ngFor="let m of Modulos" class="text-right p-2">
                 <span class="text-success"> {{reduce(m.Movimientos) | currency:'$' }} </span>
+=======
+              <th *ngFor="let m of Modulos" class="text-right p-2" >
+                <span class="text-success"> {{reduce(m.Movimientos)}} </span>
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               </th>
             </tr>
             <tr>
               <td>Entregado</td>
               <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
+<<<<<<< HEAD
 
                 <input type="text" *ngIf="i != 1" class="form-control sp-text" name="Entregado_{{i}}"
                   aria-describedby="basic-addon1" placeholder="0"
@@ -203,12 +217,21 @@
 
 
 
+=======
+                <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
+                  placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
+                  [disabled]="FieldsDisabled[ind]">
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               </th>
 
             </tr>
             <tr>
               <td>Diferencia</td>
+<<<<<<< HEAD
               <td class="mx-1" *ngFor="let d of Diferencias; ">
+=======
+              <td class="mx-1" *ngFor="let d of Diferencias; let ind = index">
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
                 {{d | customcurrency:''}}
               </td>
             </tr>

@@ -24,11 +24,14 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase+'/filtrar_cuentas_bancarias.php', {params:p});
   }
 
+<<<<<<< HEAD
   getFiltrarCajero(match:string):Observable<any>{
     let p = {match:match};
     return this.client.get(this.globales.rutaNueva+'filtrar-cajeros', {params:p});
   }
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   getListaCuentasBancarias(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'/get_lista_cuentas_bancarias.php', {params:p});
   }

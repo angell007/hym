@@ -17,5 +17,8 @@ export class TerceroModel{
     public Id_Grupo_Tercero:string = '';
     public Tipo_Tercero:string = 'Cliente';
     public Estado:string = 'Activo';
+<<<<<<< HEAD
     public recauda:string = 'Activo';
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 }

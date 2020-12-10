@@ -1,472 +1,475 @@
 <div class="container-fluid">
-    <div class="clearfix"></div>
-    <div class="row">
+  <div class="clearfix"></div>
+  <div class="row">
 
+    <div class="col-md-12">
+      <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <app-tablatraslados></app-tablatraslados>
-                    </div>
-                </div>
-            </div>
+          <div class="card">
+            <app-tablatraslados></app-tablatraslados>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalTraslado" #ModalTraslado>
-    <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalTraslado.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <h4>Nuevo Traslado</h4>
-    </div>
-    <div class="app-modal-body">
-        <form #FormTraslado="ngForm">
-            <input name="Identificacion_Funcionario" type="text" hidden [(ngModel)]="IdentificacionFuncionario">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Origen</label>
-                        </strong>
-                        <select class="form-control" name="Origen" (change)="Origen($event.target.value)" ngModel
-                            required>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Proveedor">Proveedor</option>
-                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Destino</label>
-                        </strong>
-                        <select class="form-control" name="Destino" (change)="Destino($event.target.value)" ngModel
-                            required>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Proveedor">Proveedor</option>
-                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6" *ngIf="ClienteOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de origen</label>
-                        </strong>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen"
-                            ngModel (change)="ClienteDestinatario($event.target.value)" required>
-                            <option value="">Seleccione cliente de origen</option>
-                            <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="proveedorOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de origen</label>
-                        </strong>
-                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen"
-                            ngModel (change)="proveedorDestinatario($event.target.value)" required>
-                            <option value="">Seleccione proveedor de origen</option>
-                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cuentaBancariaOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cuenta Bancaria Origen</label>
-                        </strong>
-                        <select type="text" placeholder="Cuenta Bancaria de origen" class="form-control" name="Id_Origen"
-                            ngModel (change)="cuentaBancariaDestinatario($event.target.value)" required>
-                            <option value="">Seleccione banco de origen</option>
-                            <option *ngFor="let Banco of CuentaBancariaOrigen" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cajaOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Caja Recaudo Origen</label>
-                        </strong>
-                        <select type="text" placeholder="Caja Recaudo de origen" class="form-control" name="Id_Origen"
-                            ngModel (change)="CajaRecaudoDestinatario($event.target.value)" required>
-                            <option value="">Seleccione Caja Recaudo de origen</option>
-                            <option *ngFor="let Caja of CajaRecaudo" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="proveedorDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de destino</label>
-                        </strong>
-                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"
-                            ngModel required>
-                            <option value="">Seleccione proveedor de destino</option>
-                            <option *ngFor="let Proveedor of ProveedoresDestino" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cuentaBancariaDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cuenta Bancaria Destino</label>
-                        </strong>
-                        <select type="text" placeholder="Cuenta Bancaria de destino" class="form-control" name="Id_Destino"
-                            ngModel (change)="ObtenerOrigen($event.target.value, 'banco')" required>
-                            <option value="">Seleccione banco de Destino</option>
-                            <option *ngFor="let Banco of CuentaBancariaDestino" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="ClienteDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de destino</label>
-                        </strong>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Destino"
-                            ngModel required>
-                            <option value="">Seleccione cliente de Destino</option>
-                            <option *ngFor="let Cliente of ClientesDestino" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cajaDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Caja Recaudo Destino</label>
-                        </strong>
-                        <select type="text" placeholder="Caja Recaudo de Destino" class="form-control" name="Id_Destino"
-                            ngModel required>
-                            <option value="">Seleccione Caja Recaudo de Destino</option>
-                            <option *ngFor="let Caja of CajaRecaudoDestino" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Moneda</label>
-                        </strong>
-                        <select class="form-control" name="Moneda" ngModel required>
-                            <option value="" selected>Seleccione tipo de moneda</option>
-                            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Valor</label>
-                        </strong>
-                        <input currencyMask class="form-control" name="Valor" ngModel=0 [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }"
-                            required>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <strong>
-                            <label>Detalles</label>
-                        </strong>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel></textarea>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormTraslado.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar Información</button>
+  <div class="app-modal-header">
+    <button type="button" class="close basic-close" (click)="ModalTraslado.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4>Nuevo Traslado</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormTraslado="ngForm">
+      <input name="Identificacion_Funcionario" type="text" hidden [(ngModel)]="IdentificacionFuncionario">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Origen</label>
+            </strong>
+            <select class="form-control" name="Origen" (change)="Origen($event.target.value)" ngModel required>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+              <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
+            </select>
+          </div>
         </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Destino</label>
+            </strong>
+            <select class="form-control" name="Destino" (change)="Destino($event.target.value)" ngModel required>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+              <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6" *ngIf="ClienteOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Cliente de origen</label>
+            </strong>
+            <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen" ngModel
+              (change)="ClienteDestinatario($event.target.value)" required>
+              <option value="">Seleccione cliente de origen</option>
+              <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="proveedorOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Proveedor de origen</label>
+            </strong>
+            <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen" ngModel
+              (change)="proveedorDestinatario($event.target.value)" required>
+              <option value="">Seleccione proveedor de origen</option>
+              <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cuentaBancariaOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Cuenta Bancaria Origen</label>
+            </strong>
+            <select type="text" placeholder="Cuenta Bancaria de origen" class="form-control" name="Id_Origen" ngModel
+              (change)="cuentaBancariaDestinatario($event.target.value)" required>
+              <option value="">Seleccione banco de origen</option>
+              <option *ngFor="let Banco of CuentaBancariaOrigen" [value]="Banco.Id_Cuenta_Bancaria">
+                {{Banco.Numero_Cuenta}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cajaOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Caja Recaudo Origen</label>
+            </strong>
+            <select type="text" placeholder="Caja Recaudo de origen" class="form-control" name="Id_Origen" ngModel
+              (change)="CajaRecaudoDestinatario($event.target.value)" required>
+              <option value="">Seleccione Caja Recaudo de origen</option>
+              <option *ngFor="let Caja of CajaRecaudo" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="proveedorDestino">
+          <div class="form-group">
+            <strong>
+              <label>Proveedor de destino</label>
+            </strong>
+            <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino" ngModel
+              required>
+              <option value="">Seleccione proveedor de destino</option>
+              <option *ngFor="let Proveedor of ProveedoresDestino" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cuentaBancariaDestino">
+          <div class="form-group">
+            <strong>
+              <label>Cuenta Bancaria Destino</label>
+            </strong>
+            <select type="text" placeholder="Cuenta Bancaria de destino" class="form-control" name="Id_Destino" ngModel
+              (change)="ObtenerOrigen($event.target.value, 'banco')" required>
+              <option value="">Seleccione banco de Destino</option>
+              <option *ngFor="let Banco of CuentaBancariaDestino" [value]="Banco.Id_Cuenta_Bancaria">
+                {{Banco.Numero_Cuenta}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="ClienteDestino">
+          <div class="form-group">
+            <strong>
+              <label>Cliente de destino</label>
+            </strong>
+            <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Destino" ngModel required>
+              <option value="">Seleccione cliente de Destino</option>
+              <option *ngFor="let Cliente of ClientesDestino" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cajaDestino">
+          <div class="form-group">
+            <strong>
+              <label>Caja Recaudo Destino</label>
+            </strong>
+            <select type="text" placeholder="Caja Recaudo de Destino" class="form-control" name="Id_Destino" ngModel
+              required>
+              <option value="">Seleccione Caja Recaudo de Destino</option>
+              <option *ngFor="let Caja of CajaRecaudoDestino" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Moneda</label>
+            </strong>
+            <select class="form-control" name="Moneda" ngModel required>
+              <option value="" selected>Seleccione tipo de moneda</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Valor</label>
+            </strong>
+            <input currencyMask class="form-control" name="Valor" ngModel=0
+              [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <strong>
+              <label>Detalles</label>
+            </strong>
+            <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel></textarea>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!FormTraslado.valid"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarTraslado(FormTraslado, ModalTraslado)">Guardar Información</button>
     </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerTraslado" #ModalVerTraslado>
-    <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="app-modal-header">
+    <button type="button" class="close basic-close" (click)="ModalVerTraslado.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <div class="modal-body">
+      <div class="col-md-12">
+        <table class="table table-hover table-sm table-striped tabla-traslado">
+          <thead>
+            <tr class="color-campos">
+              <td colspan="4"><img class="img-responsive inline-block" src="assets/images/logo/logo.png"
+                  alt=" Logo HyM"></td>
+              <td class="centar-datos"><strong>Traslado N°:</strong> {{codigo_Formato}}</td>
+            </tr>
+            <tr class="color-campos">
+              <td><strong>Funcionario: </strong></td>
+              <td colspan="3">{{verTraslado.Nombre_Funcionario}}</td>
+              <td class="centar-datos"><strong>Estado: </strong> {{verTraslado.Estado}}</td>
+            </tr>
+            <tr class="color-campos">
+              <td><strong>Fecha: </strong></td>
+              <td colspan="4">{{verTraslado.Fecha | date:"dd/MM/yy" }}</td>
+            </tr>
+            <tr class="centar-datos">
+              <th>Origen</th>
+              <th>Destino</th>
+              <th>Moneda</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="text-align: center;">
+              <td>{{verTraslado.Origen}}</td>
+              <td>{{verTraslado.Destino}}</td>
+              <td>{{verTraslado.Nombre_Moneda}}</td>
+              <td colspan="2">{{verTraslado.Valor | number | puntos}}</td>
+            </tr>
+            <tr class="color-campos" style="text-align: center;">
+              <td><strong>Detalles: </strong></td>
+              <td colspan="4">{{verTraslado.Detalle}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="app-modal-body">
-        <div class="modal-body">
-            <div class="col-md-12">
-                <table class="table table-hover table-sm table-striped tabla-traslado">
-                    <thead>
-                        <tr class="color-campos">
-                            <td colspan="4"><img class="img-responsive inline-block" src="assets/images/logo/logo.png"
-                                    alt=" Logo HyM"></td>
-                            <td class="centar-datos"><strong>Traslado N°:</strong> {{codigo_Formato}}</td>
-                        </tr>
-                        <tr class="color-campos">
-                            <td><strong>Funcionario: </strong></td>
-                            <td colspan="3">{{verTraslado.Nombre_Funcionario}}</td>
-                            <td class="centar-datos"><strong>Estado: </strong> {{verTraslado.Estado}}</td>
-                        </tr>
-                        <tr class="color-campos">
-                            <td><strong>Fecha: </strong></td>
-                            <td colspan="4">{{verTraslado.Fecha | date:"dd/MM/yy" }}</td>
-                        </tr>
-                        <tr class="centar-datos">
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Moneda</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="text-align: center;">
-                            <td>{{verTraslado.Origen}}</td>
-                            <td>{{verTraslado.Destino}}</td>
-                            <td>{{verTraslado.Nombre_Moneda}}</td>
-                            <td colspan="2">{{verTraslado.Valor | number | puntos}}</td>
-                        </tr>
-                        <tr class="color-campos" style="text-align: center;">
-                            <td><strong>Detalles: </strong></td>
-                            <td colspan="4">{{verTraslado.Detalle}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary btn-sm" (click)="ModalVerTraslado.hide()">Cerrar</button>
     </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="button" class="btn btn-primary btn-sm" (click)="ModalVerTraslado.hide()">Cerrar</button>
-        </div>
-    </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalEditarTraslado" #ModalEditarTraslado>
-    <div class="app-modal-header">
-        <button type="button" class="close basic-close" (click)="ModalEditarTraslado.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <h4>Editar Traslado</h4>
-    </div>
-    <div class="app-modal-body">
-        <form #FormTrasladoEditar="ngForm">
-            <input name="id" type="text" hidden [(ngModel)]="Identificacion">
-            <input name="Identificacion_Funcionario" type="text" hidden [(ngModel)]="IdentificacionFuncionario">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Origen</label>
-                        </strong>
-                        <select class="form-control" name="Origen" (change)="Origen($event.target.value)" ngModel="{{edicionTraslado.Origen}}"
-                            required>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Proveedor">Proveedor</option>
-                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Destino</label>
-                        </strong>
-                        <select class="form-control" name="Destino" (change)="Destino($event.target.value)" ngModel="{{edicionTraslado.Destino}}"
-                            required>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Proveedor">Proveedor</option>
-                            <option value="Cuenta Bancaria">Cuenta Bancaria</option>
-                            <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6" *ngIf="ClienteOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de origen</label>
-                        </strong>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen"
-                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="ClienteDestinatario($event.target.value)"
-                            required>
-                            <option value="">Seleccione cliente de origen</option>
-                            <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="proveedorOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de origen</label>
-                        </strong>
-                        <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen"
-                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="proveedorDestinatario($event.target.value)"
-                            required>
-                            <option value="">Seleccione proveedor de origen</option>
-                            <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cuentaBancariaOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cuenta Bancaria Origen</label>
-                        </strong>
-                        <select type="text" placeholder="Cuenta Bancaria de origen" class="form-control" name="Id_Origen"
-                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="cuentaBancariaDestinatario($event.target.value)"
-                            required>
-                            <option value="">Seleccione banco de origen</option>
-                            <option *ngFor="let Banco of CuentaBancariaOrigen" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cajaOrigen">
-                    <div class="form-group">
-                        <strong>
-                            <label>Caja Recaudo Origen</label>
-                        </strong>
-                        <select type="text" placeholder="Caja Recaudo de origen" class="form-control" name="Id_Origen"
-                            ngModel="{{edicionTraslado.Id_Origen}}" (change)="CajaRecaudoDestinatario($event.target.value)"
-                            required>
-                            <option value="">Seleccione Caja Recaudo de origen</option>
-                            <option *ngFor="let Caja of CajaRecaudo" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="proveedorDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Proveedor de destino</label>
-                        </strong>
-                        <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"
-                            ngModel="{{edicionTraslado.Id_Destino}}" required>
-                            <option value="">Seleccione proveedor de destino</option>
-                            <option *ngFor="let Proveedor of ProveedoresDestino" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cuentaBancariaDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cuenta Bancaria Destino</label>
-                        </strong>
-                        <select type="text" placeholder="Cuenta Bancaria de destino" class="form-control" name="Id_Destino"
-                            ngModel="{{edicionTraslado.Id_Destino}}" (change)="ObtenerOrigen($event.target.value, 'banco')"
-                            required>
-                            <option value="">Seleccione banco de Destino</option>
-                            <option *ngFor="let Banco of CuentaBancariaDestino" [value]="Banco.Id_Cuenta_Bancaria">{{Banco.Numero_Cuenta}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="ClienteDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Cliente de destino</label>
-                        </strong>
-                        <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Destino"
-                            ngModel="{{edicionTraslado.Id_Destino}}" required>
-                            <option value="">Seleccione cliente de Destino</option>
-                            <option *ngFor="let Cliente of ClientesDestino" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6" *ngIf="cajaDestino">
-                    <div class="form-group">
-                        <strong>
-                            <label>Caja Recaudo Destino</label>
-                        </strong>
-                        <select type="text" placeholder="Caja Recaudo de Destino" class="form-control" name="Id_Destino"
-                            ngModel="{{edicionTraslado.Id_Destino}}" required>
-                            <option value="">Seleccione Caja Recaudo de Destino</option>
-                            <option *ngFor="let Caja of CajaRecaudoDestino" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Moneda</label>
-                        </strong>
-                        <select class="form-control" name="Moneda" ngModel="{{edicionTraslado.Moneda}}" required>
-                            <option value="">Seleccione tipo de moneda</option>                            
-                            <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <strong>
-                            <label>Valor</label>
-                        </strong>
-                        <input currencyMask class="form-control" name="Valor" ngModel="{{edicionTraslado.Valor}}"
-                            [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <strong>
-                            <label>Detalles</label>
-                        </strong>
-                        <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle" ngModel="{{edicionTraslado.Detalle}}"></textarea>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button type="submit" class="btn btn-primary" [disabled]="!FormTrasladoEditar.valid" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarTraslado(FormTrasladoEditar, ModalEditarTraslado)">Guardar Información</button>
+  <div class="app-modal-header">
+    <button type="button" class="close basic-close" (click)="ModalEditarTraslado.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4>Editar Traslado</h4>
+  </div>
+  <div class="app-modal-body">
+    <form #FormTrasladoEditar="ngForm">
+      <input name="id" type="text" hidden [(ngModel)]="Identificacion">
+      <input name="Identificacion_Funcionario" type="text" hidden [(ngModel)]="IdentificacionFuncionario">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Origen</label>
+            </strong>
+            <select class="form-control" name="Origen" (change)="Origen($event.target.value)"
+              ngModel="{{edicionTraslado.Origen}}" required>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+              <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
+            </select>
+          </div>
         </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Destino</label>
+            </strong>
+            <select class="form-control" name="Destino" (change)="Destino($event.target.value)"
+              ngModel="{{edicionTraslado.Destino}}" required>
+              <option value="Cliente">Cliente</option>
+              <option value="Proveedor">Proveedor</option>
+              <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+              <!--<option value="Caja Recaudo">Caja Recaudo</option>-->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6" *ngIf="ClienteOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Cliente de origen</label>
+            </strong>
+            <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Origen"
+              ngModel="{{edicionTraslado.Id_Origen}}" (change)="ClienteDestinatario($event.target.value)" required>
+              <option value="">Seleccione cliente de origen</option>
+              <option *ngFor="let Cliente of Clientes" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="proveedorOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Proveedor de origen</label>
+            </strong>
+            <select type="text" placeholder="Proveedor de origen" class="form-control" name="Id_Origen"
+              ngModel="{{edicionTraslado.Id_Origen}}" (change)="proveedorDestinatario($event.target.value)" required>
+              <option value="">Seleccione proveedor de origen</option>
+              <option *ngFor="let Proveedor of Proveedores" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cuentaBancariaOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Cuenta Bancaria Origen</label>
+            </strong>
+            <select type="text" placeholder="Cuenta Bancaria de origen" class="form-control" name="Id_Origen"
+              ngModel="{{edicionTraslado.Id_Origen}}" (change)="cuentaBancariaDestinatario($event.target.value)"
+              required>
+              <option value="">Seleccione banco de origen</option>
+              <option *ngFor="let Banco of CuentaBancariaOrigen" [value]="Banco.Id_Cuenta_Bancaria">
+                {{Banco.Numero_Cuenta}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cajaOrigen">
+          <div class="form-group">
+            <strong>
+              <label>Caja Recaudo Origen</label>
+            </strong>
+            <select type="text" placeholder="Caja Recaudo de origen" class="form-control" name="Id_Origen"
+              ngModel="{{edicionTraslado.Id_Origen}}" (change)="CajaRecaudoDestinatario($event.target.value)" required>
+              <option value="">Seleccione Caja Recaudo de origen</option>
+              <option *ngFor="let Caja of CajaRecaudo" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="proveedorDestino">
+          <div class="form-group">
+            <strong>
+              <label>Proveedor de destino</label>
+            </strong>
+            <select type="text" placeholder="Proveedor de destino" class="form-control" name="Id_Destino"
+              ngModel="{{edicionTraslado.Id_Destino}}" required>
+              <option value="">Seleccione proveedor de destino</option>
+              <option *ngFor="let Proveedor of ProveedoresDestino" [value]="Proveedor.Id_Tercero">{{Proveedor.Nombre}}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cuentaBancariaDestino">
+          <div class="form-group">
+            <strong>
+              <label>Cuenta Bancaria Destino</label>
+            </strong>
+            <select type="text" placeholder="Cuenta Bancaria de destino" class="form-control" name="Id_Destino"
+              ngModel="{{edicionTraslado.Id_Destino}}" (change)="ObtenerOrigen($event.target.value, 'banco')" required>
+              <option value="">Seleccione banco de Destino</option>
+              <option *ngFor="let Banco of CuentaBancariaDestino" [value]="Banco.Id_Cuenta_Bancaria">
+                {{Banco.Numero_Cuenta}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="ClienteDestino">
+          <div class="form-group">
+            <strong>
+              <label>Cliente de destino</label>
+            </strong>
+            <select type="text" placeholder="Cliente de origen" class="form-control" name="Id_Destino"
+              ngModel="{{edicionTraslado.Id_Destino}}" required>
+              <option value="">Seleccione cliente de Destino</option>
+              <option *ngFor="let Cliente of ClientesDestino" [value]="Cliente.Id_Tercero">{{Cliente.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6" *ngIf="cajaDestino">
+          <div class="form-group">
+            <strong>
+              <label>Caja Recaudo Destino</label>
+            </strong>
+            <select type="text" placeholder="Caja Recaudo de Destino" class="form-control" name="Id_Destino"
+              ngModel="{{edicionTraslado.Id_Destino}}" required>
+              <option value="">Seleccione Caja Recaudo de Destino</option>
+              <option *ngFor="let Caja of CajaRecaudoDestino" [value]="Caja.Id_Caja_Recaudos">{{Caja.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Moneda</label>
+            </strong>
+            <select class="form-control" name="Moneda" ngModel="{{edicionTraslado.Moneda}}" required>
+              <option value="">Seleccione tipo de moneda</option>
+              <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <strong>
+              <label>Valor</label>
+            </strong>
+            <input currencyMask class="form-control" name="Valor" ngModel="{{edicionTraslado.Valor}}"
+              [options]="{ prefix: '$ ', thousands: '.', decimal: ',' }" required>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <strong>
+              <label>Detalles</label>
+            </strong>
+            <textarea class="form-control" placeholder="Detalles de Cuenta Bancaria" name="Detalle"
+              ngModel="{{edicionTraslado.Detalle}}"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" [disabled]="!FormTrasladoEditar.valid"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta información' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarTraslado(FormTrasladoEditar, ModalEditarTraslado)">Guardar Información</button>
     </div>
+  </div>
 </app-modal-basic>
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
 
-<swal #errorSwal title="Error al Guardar" text="Se ha generado un error al intentar guardar la información" type="error">
+<swal #errorSwal title="Error al Guardar" text="Se ha generado un error al intentar guardar la información"
+  type="error">
 </swal>
 
 <swal #saveSwal title="Información Guardada" text="Se ha guardado correctamente la información" type="success">

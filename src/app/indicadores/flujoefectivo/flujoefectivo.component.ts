@@ -305,7 +305,11 @@ export class FlujoefectivoComponent implements OnInit {
   }
 
   SetMesNumerico(mes:string){
+<<<<<<< HEAD
     // console.log(mes);
+=======
+    console.log(mes);
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     
     this.Filtros.mes_numero = (this.Meses.findIndex(x => x == mes)) +1;
 

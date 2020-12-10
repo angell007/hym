@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .content-footer {
 	padding: 0px 30px;
 
@@ -10,4 +11,18 @@
     		float: right;
     	}
     }
+=======
+.content-footer {
+	padding: 0px 30px;
+
+    .footer {
+    	padding: 20px 0;
+    	font-size: 90%;
+    	border-top: 1px solid $border-color;
+
+    	.go-right {
+    		float: right;
+    	}
+    }
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 }

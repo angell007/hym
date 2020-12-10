@@ -63,7 +63,10 @@ export class TablaegresosComponent implements OnInit {
   }
 
   ngOnInit() {
+<<<<<<< HEAD
     // this.SetInformacionPaginacion();
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   GetMonedas() {
@@ -71,7 +74,10 @@ export class TablaegresosComponent implements OnInit {
 
       if (data.length > 0) {
         this.Monedas = data.query_data;
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       } else {
 
         this.Monedas = [];

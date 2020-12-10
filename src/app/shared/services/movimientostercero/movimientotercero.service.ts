@@ -11,6 +11,10 @@ export class MovimientoterceroService {
   private _rutaBase:string = this.globales.ruta+'php/movimientos/';
 
   getMovimientosTercero(p:any):Observable<any>{
+<<<<<<< HEAD
+=======
+    // let p = {id_tercero:idTercero, id_moneda:idMoneda};
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     return this.client.get(this._rutaBase+'get_movimientos_tercero.php', {params: p});
   }
 

@@ -39,11 +39,18 @@ export class ModalegresoComponent implements OnInit {
   public Funcionario: any = JSON.parse(localStorage.getItem('User'));
   public coinDefault: string;
   public flag: boolean;
+<<<<<<< HEAD
   public booleancuentas: boolean;
   public potencial: any = [];
   public cupo: any;
   public verCupo: boolean = false;
   public titular: string;
+=======
+
+  public potencial: any = [];
+  public cupo: any;
+  public verCupo: boolean = false;
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
   public EgresoModel: EgresoModel = new EgresoModel();
 
@@ -103,6 +110,7 @@ export class ModalegresoComponent implements OnInit {
     switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter',
       { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } })
       .map((response) => {
+<<<<<<< HEAD
 
         // Asignada: "No"
         // Comision_Bancaria: "2500.00"
@@ -125,6 +133,8 @@ export class ModalegresoComponent implements OnInit {
         if (this.selectCustomClient.nativeElement.value == 'Cuentas') {
           this.titular == response['Nombre_Titular']
         }
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
         return response;
       }).do((data) => {
         return data
@@ -135,7 +145,11 @@ export class ModalegresoComponent implements OnInit {
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
+<<<<<<< HEAD
       // console.log(data);
+=======
+      console.log(data);
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this.Monedas = data;
       let monedaDefault: any[] = this.Monedas.filter((x: any) => {
         return x.Nombre == 'Pesos'
@@ -167,6 +181,7 @@ export class ModalegresoComponent implements OnInit {
       }
     });
 
+<<<<<<< HEAD
     //TODO validar saldos.
 
     // if (this.flag) {
@@ -174,6 +189,14 @@ export class ModalegresoComponent implements OnInit {
     //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
     //   return false
     // }
+=======
+
+    if (this.flag) {
+      this.flag = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
 
     this.EgresoModel.Fecha = this._generalService.FechaActual;
     this.EgresoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
@@ -188,7 +211,11 @@ export class ModalegresoComponent implements OnInit {
     if (this.Editar) {
       this._EgresoService.editEgreso(datos)
         .catch(error => {
+<<<<<<< HEAD
           // console.log('An error occurred:', error);
+=======
+          console.log('An error occurred:', error);
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
@@ -215,7 +242,10 @@ export class ModalegresoComponent implements OnInit {
             this.EgresoModel.Id_Tercero = '';
 
             this.CerrarModal();
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
           } else {
             this.ShowSwal('warning', 'Alerta', data);
@@ -255,18 +285,24 @@ export class ModalegresoComponent implements OnInit {
 
   limpiarImputCliente() {
     this.EgresoModel.Id_Tercero = '';
+<<<<<<< HEAD
     this.booleancuentas = false;
     if (this.selectCustomClient.nativeElement.value == 'Cuentas') {
       this.booleancuentas = true;
 
     }
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
   handleError(error: Response) {
     return Observable.throw(error);
   }
   CerrarModal() {
     this.LimpiarModelo();
+<<<<<<< HEAD
     this.potencial = ''
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this.ModalEgreso.hide();
   }
 

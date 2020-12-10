@@ -133,8 +133,13 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
       } else {
+<<<<<<< HEAD
         // this.RecibosTransferencia = [];
         // this._swalService.ShowMessage(data);
+=======
+        this.RecibosTransferencia = [];
+        this._swalService.ShowMessage(data);
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       }
 
       this.Cargando = false;

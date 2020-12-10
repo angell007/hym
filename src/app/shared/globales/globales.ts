@@ -18,7 +18,6 @@ export class Globales {
   public Departamentos: any = [];
   public TipoDocumentoNacionales: any = [];
   public TiposCuenta: any = [];
-
   constructor(private client: HttpClient) {
     this.BuscarMonedas();
     this.BuscarPaises();

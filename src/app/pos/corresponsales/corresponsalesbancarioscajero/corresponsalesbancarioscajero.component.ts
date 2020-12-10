@@ -77,7 +77,16 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
   public CalcularTotalCorresponsal() {
     let consignaciones = this.CorresponsalModel.Consignacion != '' ? parseFloat(this.CorresponsalModel.Consignacion) : 0;
     let retiro = this.CorresponsalModel.Retiro != '' ? parseFloat(this.CorresponsalModel.Retiro) : 0;
+<<<<<<< HEAD
     this.CorresponsalModel.Total_Corresponsal = (consignaciones - retiro).toString();
+=======
+
+    // if (consignaciones == 0 || retiro == 0) {
+    //   this.CorresponsalModel.Total_Corresponsal = '0';
+    // } else {
+    this.CorresponsalModel.Total_Corresponsal = (consignaciones - retiro).toString();
+    // }
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
   }
 
   async settearMoneda() {
@@ -89,7 +98,11 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
     this.monedaPeso = await Object.assign({}, this.monedaPeso[0])
   }
 
+<<<<<<< HEAD
   GuardarCorresponsalDiario() {
+=======
+  public GuardarCorresponsalDiario() {
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this.CorresponsalModel.Identificacion_Funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
     this.CorresponsalModel.Id_Caja = this._generalService.SessionDataModel.idCaja;
     this.CorresponsalModel.Id_Oficina = this._generalService.SessionDataModel.idOficina;
@@ -99,21 +112,33 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
 
 
     // Custom pesos  
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
     this.GetMonedas().then((monedas) => {
       this.monedaPeso = monedas.filter((moneda: any) => {
         return moneda.Nombre == 'Pesos'
       })
 
+<<<<<<< HEAD
       this.CorresponsalModel.Id_Moneda = this.monedaPeso[0].Id_Moneda;
       let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
 
 
+=======
+      this.CorresponsalModel.Id_Moneda = this.monedaPeso[0]['Id_Moneda'];
+      let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
+
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       let datos = new FormData();
       datos.append("modulo", 'Corresponsal_Diario');
       datos.append("modelo", info);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       this._corresponsalService.saveCorresponsalDiario(datos).subscribe(data => {
         if (data.codigo == 'success') {
           this.LimpiarModeloCorresponsal();
@@ -137,8 +162,13 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
   // Custom pesos 
   async GetMonedas() {
     return await this._monedaService.getMonedas().pipe().toPromise().then((data: any) => {
+<<<<<<< HEAD
       if (data != null) {
         return data;
+=======
+      if (data.codigo == 'success') {
+        return data.query_data;
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
       } else {
         return [];
       }

@@ -27,11 +27,17 @@ border-radius: 25em;">
                 <small>{{Funcionario.Hora_Apertura}}</small>
                 <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
                 <small>{{Funcionario.Hora_Cierre}}</small>
+<<<<<<< HEAD
                 <i style="margin: 0.1em;"
                   [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
                   (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
                 <i style="margin: 0.1em;" Class="ti-bar-chart text-info"
                   (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)"></i>
+=======
+                <i style="margin-right: 0.1em;"
+                  [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
+                  (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
+>>>>>>> de4f37a2ab29e5d58678930a3c1a3dffabe1b05b
               </div>
             </div>
           </div>
