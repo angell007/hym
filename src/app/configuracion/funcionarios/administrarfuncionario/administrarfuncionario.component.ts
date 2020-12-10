@@ -179,6 +179,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   GetDatosFuncionario() {
     this._funcionarioService.getDatosFuncionario(this._idFuncionario).subscribe((data: any) => {
+
+      console.log(data);
+
       if (data.codigo == 'success') {
         this.FuncionarioModel = data.query_data;
         this.ContactoEmergenciaModel = data.Contacto_Emergencia;

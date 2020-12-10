@@ -99,7 +99,7 @@
           <div class="form-group">
             <label>Cupo</label>
             <input type="text" placeholder="Cupo" class="form-control" name="Cupo" [(ngModel)]="CorresponsalModel.Cupo"
-              currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '2' }" required>
+              currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }" required>
             <!-- <div *ngIf="!cupo.valid && boolCupo==true" style="color:red">Campo inválido</div>
                         <div *ngIf="cupo.valid && boolCupo==true" style="color:green">Datos correctos!</div> -->
           </div>

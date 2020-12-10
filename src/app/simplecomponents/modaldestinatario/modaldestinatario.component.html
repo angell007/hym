@@ -39,7 +39,7 @@
               name="Tipo_Documento" required (change)="BuscarCNE()"
               [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
               <option value="">Seleccione Tipo Documento</option>
-              <option *ngFor="let documento of TiposDocumento; let i=index" Value="documento.Codigo">
+              <option *ngFor="let documento of TiposDocumento; let i=index">
                 {{documento.Codigo}}</option>
             </select>
           </div>
@@ -95,9 +95,7 @@
                   <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
                     name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
                     (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required
-                    mask="0000-0000-0000-0000-0000"
-                    
-                    >
+                    mask="0000-0000-0000-0000-0000">
                 </td>
                 <td width="20%">
                   <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana"

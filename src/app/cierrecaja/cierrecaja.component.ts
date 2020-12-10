@@ -124,20 +124,18 @@ export class CierrecajaComponent implements OnInit {
       data.append("modelo", model);
       data.append("funcionario", this.id_funcionario);
 
-      //   this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
+      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
 
-      //     console.log(data);
+        if (data.tipo == 'error') {
 
-      //     if (data.tipo == 'error') {
+          this.ShowSwal(data.tipo, 'Error', data.mensaje);
+        } else {
 
-      //       this.ShowSwal(data.tipo, 'Error', data.mensaje);
-      //     } else {
-
-      //       this.LimpiarModelos();
-      //       this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
-      //       this.salir();
-      //     }
-      //   });
+          this.LimpiarModelos();
+          this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
+          this.salir();
+        }
+      });
     }
   }
 

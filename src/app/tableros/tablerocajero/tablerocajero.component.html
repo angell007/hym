@@ -455,7 +455,7 @@
                         <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
                           class="inputfield font-size-18  form-control form-control-lg" name="Valor_Origen" id="Cambia"
                           [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')"
-                          currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '2' }"
+                          currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }"
                           [disabled]="HabilitarCampos" required tabindex="3">
                       </div>
 
@@ -789,14 +789,16 @@
 
                               <div class="col-md-2">
                                 <div class="form-group">
-                                  <label class="transferencia font-size-18"> {{MonedaParaTransferencia.Nombre }}</label>
+                                  <label class="transferencia font-size-18">
+                                    <!-- {{MonedaParaTransferencia |  json }} -->
+                                  </label>
                                   <div class="row">
                                     <div class="col-md-10">
                                       <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
                                         [disabled]="DeshabilitarValor" class="font-size-18 form-control alinear-derecha"
                                         name="Valor_Transferencia_{{i}}" [(ngModel)]="destinatario.Valor_Transferencia"
                                         required (blur)="ValidarValorTransferirDestinatario2($event.target.value, i)"
-                                        currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                                        currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
                                     </div>
                                     <div class="col-md-2">
                                       <i *ngIf="i > 0" class="ti-trash" style="color:red; cursor:pointer;"
@@ -857,9 +859,8 @@
                               <div class="form-group text-center">
                                 <label class="transferencia font-size-18">Moneda de Transferencia
                                 </label>
-                                <label
-                                  class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre
-                                  == "" ? "Moneda" : MonedaParaTransferencia.Nombre}}</label>
+                                <!-- <label class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre
+                                  == "" ? "Moneda" : MonedaParaTransferencia.nombre  }}</label> -->
                               </div>
 
                               <div class="form-group">
@@ -868,15 +869,15 @@
                                   class="font-size-18 form-control alinear-derecha"
                                   [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
                                   required (blur)="CalcularCambioMoneda($event.target.value, 'por destino')"
-                                  currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}"
+                                  currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}"
                                   tabindex="8">
 
-                                <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'" id="Cantidad_Transferida"
+                                <!-- <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'" id="Cantidad_Transferida"
                                   type="text" placeholder="Valor Transferencia"
                                   class="font-size-18 form-control alinear-derecha"
                                   [(ngModel)]="TransferenciaModel.Cantidad_Transferida" name="Cantidad_Transferida"
                                   (blur)="CalcularCambioMoneda($event.target.value, 'por destino')" currencyMask
-                                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4' }" tabindex="8">
+                                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4' }" tabindex="8"> -->
 
                               </div>
                             </div>
@@ -894,7 +895,7 @@
                                   type="text" (blur)="ColocarMontoSoloPesos($event.target.value)" autocomplete="off"
                                   placeholder="Monto Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
                                   name="Cantidad_Recibida" required currencyMask
-                                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
                               </div>
                             </div>
                           </div>
@@ -948,8 +949,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">Teléfono</label>
-                                <label class="font-size-18"
-                                  style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono
+                                <label class="font-size-18" style="display:block;">{{TransferenciaModel.Telefono_Remitente == "" ? "Telefono
                                   Remitente" : TransferenciaModel.Telefono_Remitente}}</label>
                               </div>
                             </div>
@@ -1798,7 +1798,7 @@
                           <label class="font-size-18">Valor {{MonedaSeleccionadaTraslado}}</label>
                           <input name="Valor" type="text" placeholder="$ 100.000"
                             class="form-control font-size-18 text-right" [(ngModel)]="TrasladoModel.Valor" required
-                            currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                            currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
                         </div>
                       </div>
                     </div>
@@ -2321,7 +2321,7 @@
                 <label class="font-size-18">Valor</label>
                 <input name="Valor" type="text" placeholder="$ 100.000" class="form-control font-size-18"
                   [(ngModel)]="TrasladoModel.Valor" required currencyMask
-                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
               </div>
             </div>
           </div>
@@ -2381,7 +2381,7 @@
                 <label>Valor</label>
                 <input type="text" class="form-control" name="Valor" [(ngModel)]="ServicioExternoModel.Valor"
                   (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
-                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
               </div>
             </div>
             <div class="col-md-3">
@@ -2389,7 +2389,7 @@
                 <label>Comisión</label>
                 <input name="Comision" type="text" placeholder="Comisión" class="form-control"
                   [(ngModel)]="ServicioExternoModel.Comision" currencyMask
-                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}"
+                  [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}"
                   [disabled]="ServicioExternoModel.Valor == ''" (blur)="AprobarCambioComision()">
               </div>
             </div>
@@ -2397,7 +2397,7 @@
               <div class="form-group">
                 <label class="block-element">Total</label>
                 <input name="Total" type="text" placeholder="Total" class="form-control" [(ngModel)]="Total_Servicio"
-                  disabled currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '4'}">
+                  disabled currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
 
               </div>
             </div>
@@ -2635,8 +2635,8 @@
       <div class="row" *ngFor="let vma of ValoresMonedasApertura; let i = index">
         <div class="col-md-12">
           <div class="form-group">
-            <label><b>{{vma.NombreMoneda}}</b></label>
-            <label class="block-element">{{vma.Valor_Moneda_Apertura | customcurrency:vma.Codigo}}</label>
+            <label><b>{{vma.Codigo}}</b></label>
+            <label class="block-element">{{vma.Valor_Moneda_Cierre | customcurrency:vma.Codigo}}</label>
 
           </div>
         </div>

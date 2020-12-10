@@ -1,215 +1,215 @@
-<div  class="app" [ngClass]="
+<div class="app" [ngClass]="
     {
         'is-collapsed': app.layout.isMenuCollapsed,
         'is-opened': app.layout.isMenuOpened,
         'rtl' : app.layout.rtlActived
     }">
-  <div *ngIf="mostrarDatos"  class="layout" [ngClass]="headerSelected">
+  <div *ngIf="mostrarDatos" class="layout" [ngClass]="headerSelected">
 
     <div [ngClass]="sidenavSelected">
       <!-- Side Nav START -->
       <div class="side-nav" sideBar *ngIf="!OcultarCajero">
         <div class="side-nav-inner">
-            <div class="side-nav-logo">
-                <a href="index.html">
-                    <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
-                    <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
-                </a>
-                <div class="mobile-toggle side-nav-toggle">
-                    <a href="">
-                        <i class="ti-arrow-circle-left"></i>
-                    </a>
-                </div>
+          <div class="side-nav-logo">
+            <a href="index.html">
+              <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
+              <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
+            </a>
+            <div class="mobile-toggle side-nav-toggle">
+              <a href="">
+                <i class="ti-arrow-circle-left"></i>
+              </a>
             </div>
-            <ul class="side-nav-menu scrollable">
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/tablero']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-stats-up"></i>
-                  </span>
-                  <span class="title">Tablero</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/agentesexternos']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-medall"></i>
-                  </span>
-                  <span class="title">Agentes Externos</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/transferencias']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-control-shuffle"></i>
-                  </span>
-                  <span class="title">Transferencias</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/traslados']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-reload"></i>
-                  </span>
-                  <span class="title">Traslados Terceros</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/trasladoscaja']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder" style="transform: rotate(90deg)">
-                    <i class="ti-exchange-vertical"></i>
-                  </span>
-                  <span class="title">Traslados entre Cajas</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/pos']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-dashboard"></i>
-                  </span>
-                  <span class="title">POS</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/compras']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-shopping-cart"></i>
-                  </span>
-                  <span class="title">Compras</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/egresos']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-share"></i>
-                  </span>
-                  <span class="title">Egresos</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/giros']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-wallet"></i>
-                  </span>
-                  <span class="title">Giros</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/cuentasbancarias']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="ti-home"></i>
-                  </span>
-                  <span class="title">Cuentas Bancarias</span>
-                </a>
-              </li>
-              <li clas="nav-item">
-                <a href="" [routerLink]="['/terceros']" routerLinkActive="menu-link-active">
-                  <span class="icon-holder">
-                    <i class="fa fa-users"></i>
-                  </span>
-                  <span class="title">Terceros</span>
-                </a>
-              </li>
-  
-              <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                  <span class="icon-holder">
-                    <i class="ti-bar-chart"></i>
-                  </span>
-                  <span class="title">Indicadores</span>
-                  <span class="arrow">
-                    <i class="ti-angle-right"></i>
-                  </span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="" [routerLink]="['/balancegeneral']" routerLinkActive="menu-link-active">Balance General</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/flujoefectivo']" routerLinkActive="menu-link-active">Flujo de efectivo</a>
-                  </li>
-                </ul>
-              </li>
-  
-              <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                  <span class="icon-holder">
-                    <i class="ti-settings"></i>
-                  </span>
-                  <span class="title">Configuración</span>
-                  <span class="arrow">
-                    <i class="ti-angle-right"></i>
-                  </span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="" [routerLink]="['/configuraciongeneral']" routerLinkActive="menu-link-active">Configuración
-                      General</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/motivos-cambios']" routerLinkActive="menu-link-active">Motivos de
-                      devolución</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/cargo']" routerLinkActive="menu-link-active">Cargo</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/oficinas']" routerLinkActive="menu-link-active">Oficinas</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/cajas']" routerLinkActive="menu-link-active">Cajas</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/bancos']" routerLinkActive="menu-link-active">Bancos</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/gruposterceros']" routerLinkActive="menu-link-active">Grupos Terceros</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/corresponsalesbancarios']"
-                      routerLinkActive="menu-link-active">Corresponsales Bancarios</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/serviciosexternos']" routerLinkActive="menu-link-active">Servicios
-                      Externos</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/destinatarios']" routerLinkActive="menu-link-active">Destinatarios</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/cajarecaudos']" routerLinkActive="menu-link-active">Cajas Recaudos</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/perfiles']" routerLinkActive="menu-link-active">Perfiles</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/remitente']" routerLinkActive="menu-link-active">Remitente</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/funcionarios']" routerLinkActive="menu-link-active">Funcionarios</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/tipodocumento']" routerLinkActive="menu-link-active">Tipos de
-                      Documentos</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/tipocuenta']" routerLinkActive="menu-link-active">Tipos de Cuentas</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/monedas']" routerLinkActive="menu-link-active">Monedas</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/informaciongiros']" routerLinkActive="menu-link-active">Informacion
-                      Giros</a>
-                  </li>
-                  <li>
-                    <a href="" [routerLink]="['/log']" routerLinkActive="menu-link-active">Log del Sistema</a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+          </div>
+          <ul class="side-nav-menu scrollable">
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/tablero']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-stats-up"></i>
+                </span>
+                <span class="title">Tablero</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/agentesexternos']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-medall"></i>
+                </span>
+                <span class="title">Agentes Externos</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/transferencias']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-control-shuffle"></i>
+                </span>
+                <span class="title">Transferencias</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/traslados']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-reload"></i>
+                </span>
+                <span class="title">Traslados Terceros</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/trasladoscaja']" routerLinkActive="menu-link-active">
+                <span class="icon-holder" style="transform: rotate(90deg)">
+                  <i class="ti-exchange-vertical"></i>
+                </span>
+                <span class="title">Traslados entre Cajas</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/pos']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-dashboard"></i>
+                </span>
+                <span class="title">POS</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/compras']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-shopping-cart"></i>
+                </span>
+                <span class="title">Compras</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/egresos']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-share"></i>
+                </span>
+                <span class="title">Egresos</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/giros']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-wallet"></i>
+                </span>
+                <span class="title">Giros</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/cuentasbancarias']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="ti-home"></i>
+                </span>
+                <span class="title">Cuentas Bancarias</span>
+              </a>
+            </li>
+            <li clas="nav-item">
+              <a href="" [routerLink]="['/terceros']" routerLinkActive="menu-link-active">
+                <span class="icon-holder">
+                  <i class="fa fa-users"></i>
+                </span>
+                <span class="title">Terceros</span>
+              </a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                  <i class="ti-bar-chart"></i>
+                </span>
+                <span class="title">Indicadores</span>
+                <span class="arrow">
+                  <i class="ti-angle-right"></i>
+                </span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="" [routerLink]="['/balancegeneral']" routerLinkActive="menu-link-active">Balance General</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/flujoefectivo']" routerLinkActive="menu-link-active">Flujo de efectivo</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="dropdown-toggle" href="javascript:void(0);">
+                <span class="icon-holder">
+                  <i class="ti-settings"></i>
+                </span>
+                <span class="title">Configuración</span>
+                <span class="arrow">
+                  <i class="ti-angle-right"></i>
+                </span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="" [routerLink]="['/configuraciongeneral']" routerLinkActive="menu-link-active">Configuración
+                    General</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/motivos-cambios']" routerLinkActive="menu-link-active">Motivos de
+                    devolución</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/cargo']" routerLinkActive="menu-link-active">Cargo</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/oficinas']" routerLinkActive="menu-link-active">Oficinas</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/cajas']" routerLinkActive="menu-link-active">Cajas</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/bancos']" routerLinkActive="menu-link-active">Bancos</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/gruposterceros']" routerLinkActive="menu-link-active">Grupos Terceros</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/corresponsalesbancarios']"
+                    routerLinkActive="menu-link-active">Corresponsales Bancarios</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/serviciosexternos']" routerLinkActive="menu-link-active">Servicios
+                    Externos</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/destinatarios']" routerLinkActive="menu-link-active">Destinatarios</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/cajarecaudos']" routerLinkActive="menu-link-active">Cajas Recaudos</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/perfiles']" routerLinkActive="menu-link-active">Perfiles</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/remitente']" routerLinkActive="menu-link-active">Remitente</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/funcionarios']" routerLinkActive="menu-link-active">Funcionarios</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/tipodocumento']" routerLinkActive="menu-link-active">Tipos de
+                    Documentos</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/tipocuenta']" routerLinkActive="menu-link-active">Tipos de Cuentas</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/monedas']" routerLinkActive="menu-link-active">Monedas</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/informaciongiros']" routerLinkActive="menu-link-active">Informacion
+                    Giros</a>
+                </li>
+                <li>
+                  <a href="" [routerLink]="['/log']" routerLinkActive="menu-link-active">Log del Sistema</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
-      </div> 
+      </div>
 
 
       <!-- LO COMENTO AUGUSTO EL 8/12/2020 -SUSTITUI POR EL DE ARRIBA LE QUIDE ALGUNAS COSAS A VER SI FUNCIONA EL RESPENSIVE MEJOR
@@ -426,191 +426,203 @@
 
         <div class="header navbar {{OcultarCajero ? 'header2': '' }}">
           <div class="header-container">
-              <ul class="nav-left">
+            <ul class="nav-left">
+              <li>
+                <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);"
+                  (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
+                  <i class="fa fa-bars"></i>
+                </a>
+                <a *ngIf="OcultarCajero" href="" [routerLink]="['/tablero']" class="logo logo-dark">
+                  <img src="assets/images/logo/logo.png" />
+                </a>
+              </li>
+              <li class="d-flex justify-content-center h-100 hm-100 text-center user-profile"
+                style="box-sizing: border-box;">
+                <div class="text-center pr-2 pt-2 user-info">
+                  <p class="m-0">{{ myDate | date:'dd/MM/yyyy' }}</p>
+                  <p class="m-0">{{ myDate | date:'HH:mm:ss' }}</p>
+                </div>
+              </li>
+              <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6" class="user-profile"
+                style="box-sizing: border-box;">
+                <div class="pr-2 pt-2 user-info">
+                  <p class="m-0 pl-2"><strong>Oficina:</strong> {{NombreOficina}}</p>
+                  <p class="m-0 pl-2"><strong>Caja:</strong> {{NombreCaja}}</p>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav-right">
+              <li class="user-profile dropdown">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                  <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">
+                    <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
+                  </ng-template>
+                  <ng-template #loggedOut>
+                    <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}"
+                      alt="">
+                  </ng-template>
+                  <div class="user-info">
+                    <span class="name pdd-right-5">{{user.Nombres.split(" ")[0]}}
+                      {{user.Apellidos.split(" ")[0]}}</span>
+                    <i class="ti-angle-down font-size-10"></i>
+                  </div>
+                </a>
+                <ul class="dropdown-menu">
                   <li>
-                      <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);">
-                        <i class="fa fa-bars"></i>
-                      </a>
-                      <a *ngIf="OcultarCajero" href="" [routerLink]="['/tablero']" class="logo logo-dark">
-                        <img src="assets/images/logo/logo.png" />
-                      </a>
+                    <a href="javascript:void(0);" (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
+                      <i class="ti-settings pdd-right-10"></i>
+                      <span>Mi Perfil
+                      </span>
+                    </a>
                   </li>
-                  <li class="d-flex justify-content-center h-100 hm-100 text-center user-profile" style="box-sizing: border-box;">                
-                    <div class="text-center pr-2 pt-2 user-info">
-                      <p class="m-0">{{ myDate | date:'dd/MM/yyyy' }}</p>
-                      <p class="m-0">{{ myDate | date:'HH:mm:ss' }}</p>
-                    </div>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="javascript:void(0);" (click)="salir()">
+                      <i class="ti-power-off pdd-right-10"></i>
+                      <span>Cerrar Sesión</span>
+                    </a>
                   </li>
-                  <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6" class="user-profile" style="box-sizing: border-box;">
-                    <div class="pr-2 pt-2 user-info">
-                      <p class="m-0 pl-2"><strong>Oficina:</strong> {{NombreOficina}}</p>
-                      <p class="m-0 pl-2"><strong>Caja:</strong> {{NombreCaja}}</p>
-                    </div>
-                  </li>
-              </ul>
-              <ul class="nav-right">
-                  <li class="user-profile dropdown">
-                      <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                          <ng-template [ngIf]=" user.Imagen == '' " [ngIfElse]="loggedOut">
-                            <img class="profile-img img-fluid" src="assets/images/user.jpg" alt="">
-                          </ng-template>
-                          <ng-template #loggedOut>
-                            <img class="profile-img img-fluid" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}"
-                              alt="">
-                          </ng-template>
-                          <div class="user-info">
-                              <span class="name pdd-right-5">{{user.Nombres.split(" ")[0]}} {{user.Apellidos.split(" ")[0]}}</span>
-                              <i class="ti-angle-down font-size-10"></i>
-                          </div>
-                      </a>
-                      <ul class="dropdown-menu">
-                          <li>
-                              <a href="javascript:void(0);"  (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
-                                  <i class="ti-settings pdd-right-10"></i>
-                                  <span>Mi Perfil
-                                  </span>
-                              </a>
-                          </li>
-                          <li role="separator" class="divider"></li>
-                          <li>
-                            <a href="javascript:void(0);" (click)="salir()">
-                              <i class="ti-power-off pdd-right-10"></i>
-                              <span>Cerrar Sesión</span>
-                            </a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li class="notifications dropdown">
-                      <span class="counter">{{  counter }}</span>
-                      <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-refresh"></i>
-                      </a>
+                </ul>
+              </li>
+              <li class="notifications dropdown">
+                <span class="counter">{{  counter }}</span>
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-refresh"></i>
+                </a>
 
-                      <ul class="dropdown-menu ">
-                          <li class="notice-header">
-                              <i class="ti-bell pdd-right-10"></i>
-                              <span>Traslados Recibidos</span>
-                          </li>
-                          <li>
-                              <ul class="list-info overflow-y-auto relative scrollable">
-                                <li *ngFor="let alerta of  _notificacionService.alertasCajas">
-                                  <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
-                                    <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
-                                    <img class="thumb-img" *ngIf=" alerta.Imagen != '' "
-                                      src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
-                                    <div class="info">
-                                      <span class="title">
-            
-                                        <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
-                                        </span>
-                                        <span class="text-gray"> Le ha realizado un traslado por </span>
-                                        <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
-                                        <span class="text-gray"> con código </span>
-                                        <span class="font-size-14 text-semibold">{{alerta.Codigo}}
-                                        </span>
-                                      </span>
-                                      <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span>
-                                    </div>
-                                  </a>
-                                </li>
-                              </ul>
-                          </li>
-                          <li class="notice-footer">
-                              <span>
-                                  <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')" class="text-gray">Ver Todos los Traslados <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
+                <ul class="dropdown-menu ">
+                  <li class="notice-header">
+                    <i class="ti-bell pdd-right-10"></i>
+                    <span>Traslados Recibidos</span>
+                  </li>
+                  <li>
+                    <ul class="list-info overflow-y-auto relative scrollable">
+                      <li *ngFor="let alerta of  _notificacionService.alertasCajas">
+                        <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                          <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
+                          <img class="thumb-img" *ngIf=" alerta.Imagen != '' "
+                            src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
+                          <div class="info">
+                            <span class="title">
+
+                              <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
                               </span>
-                          </li>
-                      </ul>
+                              <span class="text-gray"> Le ha realizado un traslado por </span>
+                              <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
+                              <span class="text-gray"> con código </span>
+                              <span class="font-size-14 text-semibold">{{alerta.Codigo}}
+                              </span>
+                            </span>
+                            <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
                   </li>
-                  <li>
-                      <a class="side-panel-toggle" href="javascript:void(0);" (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
-                          <i class="ti-align-right"></i>
-                      </a>
+                  <li class="notice-footer">
+                    <span>
+                      <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')" class="text-gray">Ver Todos los
+                        Traslados <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
+                    </span>
                   </li>
-              </ul>
+                </ul>
+              </li>
+              <li>
+                <a class="side-panel-toggle" href="javascript:void(0);"
+                  (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
+                  <i class="ti-align-right"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-      </div>
+        </div>
 
-      <div class="side-panel" [ngClass]="{'side-panel-open' : app.layout.sidePanelOpen}">
-        <div class="side-panel-wrapper bg-white">
+        <div class="side-panel" [ngClass]="{'side-panel-open' : app.layout.sidePanelOpen}">
+          <div class="side-panel-wrapper bg-white">
             <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link" href="#perfil" role="tab" data-toggle="tab">
-                        <span>Mi Perfil</span>
-                    </a>
-                </li>
-                <li class="panel-close">
-                    <a class="side-panel-toggle" href="javascript:void(0);" (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
-                        <i class="ti-close"></i>
-                    </a>
-                </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#perfil" role="tab" data-toggle="tab">
+                  <span>Mi Perfil</span>
+                </a>
+              </li>
+              <li class="panel-close">
+                <a class="side-panel-toggle" href="javascript:void(0);"
+                  (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
+                  <i class="ti-close"></i>
+                </a>
+              </li>
             </ul>
             <div class="tab-content">
-                <div id="perfil" role="tabpanel" class="tab-pane fade in active">
-                    <div class="profile scrollable">
-                        <div class="pdd-horizon-20 pdd-top-20">
-                            <div class="border bottom">
-                                <div class="text-center mrg-top-20">
-                                    <div class="row">
-                                        <div class="col-6 ml-auto mr-auto text-center">
-                                            <img *ngIf="user.Imagen==''" class="img-fluid border-radius-round" src="assets/images/user.jpg" alt="">
-                                            <img *ngIf="user.Imagen!=''" class="img-fluid border-radius-round" src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
-                                        </div>
-                                    </div>
-                                    <h4 class="mrg-top-20">{{user.Nombres.split(" ")[0]}} {{user.Apellidos.split(" ")[0]}}</h4>
-                                    <span class="">{{NombreOficina}} <br> ({{NombreCaja}})</span>
-                                </div>
-                                <div class="row text-center pdd-vertical-20 ">
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                          <div class="col-sm-12 col-xs-12 border top">
-                                            <h4 class="mt-1">Mis Saldos</h4>
-                                          </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6 border right" *ngFor="let item of consolidadosService.TotalRestaIngresosEgresos">
-                                                <div class="pdd-vertical-10">
-                                                    <span class="font-size-18 text-dark">{{  item.saldo | currency:' ' }}</span><br>
-                                                    <small>{{ item.cod }}</small>
-                                                </div>
-                                            </div>                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+              <div id="perfil" role="tabpanel" class="tab-pane fade in active">
+                <div class="profile scrollable">
+                  <div class="pdd-horizon-20 pdd-top-20">
+                    <div class="border bottom">
+                      <div class="text-center mrg-top-20">
+                        <div class="row">
+                          <div class="col-6 ml-auto mr-auto text-center">
+                            <img *ngIf="user.Imagen==''" class="img-fluid border-radius-round"
+                              src="assets/images/user.jpg" alt="">
+                            <img *ngIf="user.Imagen!=''" class="img-fluid border-radius-round"
+                              src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{user.Imagen}}" alt="">
+                          </div>
                         </div>
-                        <div class="pdd-horizon-20 pdd-top-20">
-                            <div class="border bottom">
-                                <h5 class="text-dark mrg-btm-20">Acciones</h5>
-                                <ul class="list-unstyled list-link font-size-16 pdd-btm-20">
-                                    <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
-                                        <a [routerLink]="[ '/consolidado', user.Identificacion_Funcionario ]" routerLinkActive="active">
-                                            <i class="fa fa-clipboard pdd-right-10"></i>
-                                            <span>Consolidado Movimientos</span>
-                                        </a>
-                                    </li>
-                                    <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
-                                        <a href="javascript:void(0);" *ngIf="!OcultarConsultor" (click)="VerificarAntesDeCierre()" >
-                                            <i class="fa fa-lock pdd-right-10"></i>
-                                            <span>Cierre de Caja</span>
-                                            <span class="label label-warning mrg-left-5"><i class="fa fa-exclamation-triangle"></i></span>
-                                        </a>
-                                    </li>
-                                    <!--
+                        <h4 class="mrg-top-20">{{user.Nombres.split(" ")[0]}} {{user.Apellidos.split(" ")[0]}}</h4>
+                        <span class="">{{NombreOficina}} <br> ({{NombreCaja}})</span>
+                      </div>
+                      <div class="row text-center pdd-vertical-20 ">
+                        <div class="col-sm-12">
+                          <div class="row">
+                            <div class="col-sm-12 col-xs-12 border top">
+                              <h4 class="mt-1">Mis Saldos</h4>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6 border right"
+                              *ngFor="let item of consolidadosService.TotalRestaIngresosEgresos">
+                              <div class="pdd-vertical-10">
+                                <span class="font-size-18 text-dark">{{  item.saldo | currency:' ' }}</span><br>
+                                <small>{{ item.cod }}</small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pdd-horizon-20 pdd-top-20">
+                    <div class="border bottom">
+                      <h5 class="text-dark mrg-btm-20">Acciones</h5>
+                      <ul class="list-unstyled list-link font-size-16 pdd-btm-20">
+                        <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
+                          <a [routerLink]="[ '/consolidado', user.Identificacion_Funcionario ]"
+                            routerLinkActive="active">
+                            <i class="fa fa-clipboard pdd-right-10"></i>
+                            <span>Consolidado Movimientos</span>
+                          </a>
+                        </li>
+                        <li *ngIf="user.Id_Perfil == 3 || user.Id_Perfil == 2 || user.Id_Perfil == 6">
+                          <a href="javascript:void(0);" *ngIf="!OcultarConsultor" (click)="VerificarAntesDeCierre()">
+                            <i class="fa fa-lock pdd-right-10"></i>
+                            <span>Cierre de Caja</span>
+                            <span class="label label-warning mrg-left-5"><i
+                                class="fa fa-exclamation-triangle"></i></span>
+                          </a>
+                        </li>
+                        <!--
                                     <li>
                                         <a href="">
                                             <i class="ti-settings pdd-right-10"></i>
                                             <span>Settings</span>
                                         </a>
                                     </li> -->
-                                </ul>
-                            </div>
-                        </div>
+                      </ul>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-      </div>
 
         <!--
         <div class="header navbar contenido {{OcultarCajero ? 'header2': '' }}">
@@ -785,8 +797,8 @@
     </div>
   </div>
   <div *ngIf="!mostrarDatos" class="cargando-sin-datos">
-      <img src="assets/images/cargando-interna.gif" style="width:600px;" >
-      <h3>{{ fraseCargando }}...</h3>
+    <img src="assets/images/cargando-interna.gif" style="width:600px;">
+    <h3>{{ fraseCargando }}...</h3>
   </div>
 </div>
 
@@ -1047,10 +1059,11 @@
 <swal #errorSwal title="" text="" type="">
 </swal>
 
-<swal #mensajeSwal title="" text="" type="" html=""  >
+<swal #mensajeSwal title="" text="" type="" html="">
 </swal>
 
-<swal #macSwal title="" text="" type="" html="" [showCancelButton]="false" [showConfirmButton]="false" [allowOutsideClick]="false">
+<swal #macSwal title="" text="" type="" html="" [showCancelButton]="false" [showConfirmButton]="false"
+  [allowOutsideClick]="false">
 </swal>
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
