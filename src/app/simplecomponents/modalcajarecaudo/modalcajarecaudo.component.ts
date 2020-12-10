@@ -16,60 +16,59 @@ import { ToastService } from '../../shared/services/toasty/toast.service';
 })
 export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
 
-  @Input() AbrirModal:Observable<any> = new Observable();
-  @Output() ActualizarTabla:EventEmitter<any> = new EventEmitter();
-  
-  @ViewChild('ModalCajaRecaudo') ModalCajaRecaudo:any;
+  @Input() AbrirModal: Observable<any> = new Observable();
+  @Output() ActualizarTabla: EventEmitter<any> = new EventEmitter();
 
-  public openSubscription:any;
-  public Departamentos:any = [];
-  public Municipios:any = [];
-  public Editar:boolean = false;
+  @ViewChild('ModalCajaRecaudo') ModalCajaRecaudo: any;
+
+  public openSubscription: any;
+  public Departamentos: any = [];
+  public Municipios: any = [];
+  public Editar: boolean = false;
   public VerPassWord = false;
   public PasswordType = 'password';
-  public MensajeGuardar:string = 'Se dispone a guardar esta caja recaudo';
+  public MensajeGuardar: string = 'Se dispone a guardar esta caja recaudo';
 
   //Banco Model
-  public CajaRecaudoModel:CajaRecaudoModel =  new CajaRecaudoModel();
+  public CajaRecaudoModel: CajaRecaudoModel = new CajaRecaudoModel();
 
   constructor(private generalService: GeneralService,
-              private swalService:SwalService,
-              private _toastyService:ToastService,
-              private _cajaRecaudoService:CajarecaudoService,
-              private _municipioService:MunicipioService,
-              private _departamentoService:DepartamentoService,
-              private validacionService:ValidacionService) 
-  {
+    private swalService: SwalService,
+    private _toastyService: ToastService,
+    private _cajaRecaudoService: CajarecaudoService,
+    private _municipioService: MunicipioService,
+    private _departamentoService: DepartamentoService,
+    private validacionService: ValidacionService) {
     this.GetDepartamentos();
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:string) => {
-      
+    this.openSubscription = this.AbrirModal.subscribe((data: string) => {
+
       if (data != "0") {
         this.MensajeGuardar = 'Se dispone a actualizar esta caja recaudo';
         this.Editar = true;
-        let p = {id_caja_recaudo:data};
-        this._cajaRecaudoService.getCajaRecaudo(p).subscribe((d:any) => {
+        let p = { id_caja_recaudo: data };
+        this._cajaRecaudoService.getCajaRecaudo(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.CajaRecaudoModel = d.query_data;
             this.GetMunicipiosDepartamento();
-            this.ModalCajaRecaudo.show();  
-          }else{
+            this.ModalCajaRecaudo.show();
+          } else {
 
             this.swalService.ShowMessage(data);
           }
-          
+
         });
-      }else{
+      } else {
         this.MensajeGuardar = 'Se dispone a guardar esta caja recaudo';
         this.Editar = false;
         this.ModalCajaRecaudo.show();
       }
     });
   }
-  
-  ngOnDestroy(){    
+
+  ngOnDestroy() {
     if (this.openSubscription != undefined) {
       this.openSubscription.unsubscribe();
     }
@@ -77,104 +76,104 @@ export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
     this.CerrarModal();
   }
 
-  GetDepartamentos(){
-    this._departamentoService.getDepartamentos().subscribe((data:any) => {
+  GetDepartamentos() {
+    this._departamentoService.getDepartamentos().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Departamentos = data.query_data;
-      }else{
+      } else {
         this.Departamentos = [];
         this.swalService.ShowMessage(data);
       }
     });
   }
 
-  GetMunicipiosDepartamento(){
+  GetMunicipiosDepartamento() {
     if (this.CajaRecaudoModel.Id_Departamento == '') {
       this.CajaRecaudoModel.Id_Municipio = '';
       this.Municipios = [];
-    }else{
+    } else {
 
-      let p = {id_departamento:this.CajaRecaudoModel.Id_Departamento};
-      this._municipioService.getMunicipiosDepartamento(p).subscribe((data:any) => {
+      let p = { id_departamento: this.CajaRecaudoModel.Id_Departamento };
+      this._municipioService.getMunicipiosDepartamento(p).subscribe((data: any) => {
         if (data.codigo == 'success') {
           this.Municipios = data.query_data;
-        }else{
+        } else {
           this.Municipios = [];
           this.swalService.ShowMessage(data);
         }
       });
-    }    
+    }
   }
 
-  GuardarCajaRecaudo(){   
+  GuardarCajaRecaudo() {
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
-    
+
     let info = this.generalService.normalize(JSON.stringify(this.CajaRecaudoModel));
     let datos = new FormData();
-    datos.append("modelo",info);
+    datos.append("modelo", info);
 
     if (this.Editar) {
       this._cajaRecaudoService.editCajaRecaudo(datos)
-      .catch(error => { 
-        // console.log('An error occurred:', error);
-        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          this.Editar = false;
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastyService.ShowToast(toastObj);
-        }else{
+        .catch(error => {
+          // console.log('An error occurred:', error);
+          this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            this.Editar = false;
+            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            this._toastyService.ShowToast(toastObj);
+          } else {
 
-          this.swalService.ShowMessage(data); 
-        }
-      });
-    }else{
+            this.swalService.ShowMessage(data);
+          }
+        });
+    } else {
       this._cajaRecaudoService.saveCajaRecaudo(datos)
-      .catch(error => { 
-        // console.log('An error occurred:', error);
-        this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
-        return this.handleError(error);
-      })
-      .subscribe((data:any)=>{
-        if (data.codigo == 'success') { 
-          this.ActualizarTabla.emit();       
-          this.CerrarModal();
-          let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-          this._toastyService.ShowToast(toastObj);
-        }else{
+        .catch(error => {
+          // console.log('An error occurred:', error);
+          this.swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
+          return this.handleError(error);
+        })
+        .subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.ActualizarTabla.emit();
+            this.CerrarModal();
+            let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+            this._toastyService.ShowToast(toastObj);
+          } else {
 
-          this.swalService.ShowMessage(data);
-        }
-      });
-    }    
+            this.swalService.ShowMessage(data);
+          }
+        });
+    }
   }
 
-  ValidateBeforeSubmit(){
+  ValidateBeforeSubmit() {
     if (!this.validacionService.validateString(this.CajaRecaudoModel.Nombre, 'Nombre Caja Recaudo')) {
       return false;
-    }else if (!this.validacionService.validateString(this.CajaRecaudoModel.Id_Departamento, 'Departamento')) {
+    } else if (!this.validacionService.validateString(this.CajaRecaudoModel.Id_Departamento, 'Departamento')) {
       return false;
-    }else if (!this.validacionService.validateString(this.CajaRecaudoModel.Id_Municipio, 'Municipio')) {
+    } else if (!this.validacionService.validateString(this.CajaRecaudoModel.Id_Municipio, 'Municipio')) {
       return false;
-    }else if (!this.validacionService.validateString(this.CajaRecaudoModel.Username, 'Nombre de usuario')) {
+    } else if (!this.validacionService.validateString(this.CajaRecaudoModel.Username, 'Nombre de usuario')) {
       return false;
-    }else if (!this.validacionService.validateString(this.CajaRecaudoModel.Password, 'Constraseña')) {
+    } else if (!this.validacionService.validateString(this.CajaRecaudoModel.Password, 'Constraseña')) {
       return false;
     }
 
     return true;
   }
 
-  FillEmptyValues(obj:any, value:string = '0'){
+  FillEmptyValues(obj: any, value: string = '0') {
     for (const key in obj) {
       if (obj[key] == '') {
-        obj[key] = value;        
+        obj[key] = value;
       }
     }
   }
@@ -183,21 +182,21 @@ export class ModalcajarecaudoComponent implements OnInit, OnDestroy {
     return Observable.throw(error);
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.LimpiarModelo();
     this.ModalCajaRecaudo.hide();
   }
 
-  LimpiarModelo(){
+  LimpiarModelo() {
     this.CajaRecaudoModel = new CajaRecaudoModel();
   }
 
-  CambiarInputType(){
+  CambiarInputType() {
     this.VerPassWord = !this.VerPassWord;
 
-    if (this.VerPassWord) {      
+    if (this.VerPassWord) {
       this.PasswordType = 'text';
-    }else{
+    } else {
       this.PasswordType = 'password';
     }
   }

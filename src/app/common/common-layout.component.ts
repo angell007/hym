@@ -31,6 +31,17 @@ import { TrasladosCustomService } from '../customservices/traslados.custom.servi
 
 export class CommonLayoutComponent implements OnInit {
 
+    public mostrarDatos: boolean = false;
+    public CargandoLabels: Array<any> = [
+        'Cargando Monedas',
+        'Cargando Oficinas',
+        'Cargando Cajas',
+        'Cargando Saldos',
+        'Cargando Impresoras',
+        'Cargando Mac',
+        'Cargando Listas Generales'
+    ]
+    public fraseCargando: any = 'Cargando Datos';
     public app: any;
     public headerThemes: any;
     public changeHeader: any;
@@ -64,6 +75,7 @@ export class CommonLayoutComponent implements OnInit {
     @ViewChild('errorSwal') errorSwal: any;
     @ViewChild('ModalCambiarBanco') ModalCambiarBanco: any;
     @ViewChild('mensajeSwal') mensajeSwal: any;
+    @ViewChild('macSwal') macSwal: any;
     @ViewChild('ModalResumenCuenta') ModalResumenCuenta: any;
     @ViewChild('ModalCierreCuentaBancaria') ModalCierreCuentaBancaria: any;
     @ViewChild('ModalAjuste') ModalAjuste: any;
@@ -163,6 +175,7 @@ export class CommonLayoutComponent implements OnInit {
     public NombreCaja: string = '';
     public NombreOficina: string = '';
 
+
     constructor(private router: Router,
         private activeRoute: ActivatedRoute,
         public qz: QzTrayService,
@@ -182,6 +195,10 @@ export class CommonLayoutComponent implements OnInit {
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
         private consolidadosService: ConsolidadosService) {
+
+
+        this.Cargar();
+
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
 
@@ -218,7 +235,6 @@ export class CommonLayoutComponent implements OnInit {
         this.AsignarMonedas();
         this.AsignarMonedasApertura();
         this.ListarOficinas();
-        // console.log(localStorage);
 
         this.SetOficina();
         this.SetCaja();
@@ -228,6 +244,7 @@ export class CommonLayoutComponent implements OnInit {
         }
 
     }
+
 
     startTimer() {
         setInterval(() => {
@@ -240,7 +257,19 @@ export class CommonLayoutComponent implements OnInit {
     ListaBancos = [];
     nombreBanco = "";
 
+    timer = ms => new Promise(res => setTimeout(res, ms))
+
+    async Cargar() {
+        for (var i = 0; i < this.CargandoLabels.length; i++) {
+            await this.timer(1500); // then the created Promise can be awaited
+            this.fraseCargando = this.CargandoLabels[i];
+            if (i == this.CargandoLabels.length - 1) {
+                i = 0;
+            }
+        }
+    }
     async ngOnInit() {
+
         this.swalService.event.subscribe((data: any) => {
             this.ShowSwal(data.type, data.title, data.msg);
         });
@@ -264,7 +293,6 @@ export class CommonLayoutComponent implements OnInit {
             // cajero
             case "3": {
                 this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-                    // console.log(' obteniendo notificaciones', data);
                     data = data.filter(x => x.Estado == "Pendiente")
                     this.TotalTraslados = data.length
                 });
@@ -448,7 +476,7 @@ export class CommonLayoutComponent implements OnInit {
         this.EntregadoIngresosPesos = 0;
 
         this.http.get(this.globales.ruta + 'php/cierreCaja/Cierre_Caja_V2.php', { params: { id: this.user.Identificacion_Funcionario } }).pipe
-            (tap(x => { console.log('obteniendo consultyya de cierre de caja ', x); })).subscribe((data: any) => {
+            (tap(x => { /*console.log('obteniendo consultyya de cierre de caja ', x);*/ })).subscribe((data: any) => {
 
                 var ingresos = data.Ingresos;
                 var egresos = data.Egresos;
@@ -1072,6 +1100,7 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     CheckCajaOficina() {
+        console.log("estoy entrando aca");
         var macFormatted = '';
         this.qz.getMac().subscribe(
             data => {
@@ -1081,7 +1110,6 @@ export class CommonLayoutComponent implements OnInit {
                         macFormatted += ":";
                     }
                 }
-                console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
 
@@ -1107,29 +1135,49 @@ export class CommonLayoutComponent implements OnInit {
 
                             this.SetNombreOficina(this.oficina_seleccionada);
                             this.SetNombreCaja(this.caja_seleccionada);
+                            this.mostrarDatos = true;
+                            this.DesconectarQz();
                         } else {
-                            this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
-                            setTimeout(() => {
+                            this.macSwal.title = "Equipo No Registrado"
+                            this.macSwal.html = "La Mac <strong>" + macFormatted + "</strong> NO se encuentra registrada en el Sistema, por favor contacte al administrador para que lo registre."
+                            this.macSwal.type = "error"
+                            this.macSwal.show();
+                            this.DesconectarQz();
+
+
+                            //this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
+                            /*setTimeout(() => {
                                 this.salir();
-                            }, 10000);
+                            }, 10000);*/
                         }
                     });
                     //this.modalOficinaCaja.show();
                 } else {
+                    //console.log("entro al else");
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);
+                    this.mostrarDatos = true;
+                    this.DesconectarQz();
                 }
             },
             err => {
-                // console.log(err);
+                this.macSwal.title = "QZ TRY NO ENCONTRADO O NO HABILITADO"
+                this.macSwal.html = "El Software QzTry NO ha sido habilitado o no ha sido encontrado en el sistema, por favor descarguelo <a  href='https://qz.io/' target='_blank'>aquí</a> y siga <a href='' target='_blank'>estas instucciones</a> para volver a intentarlo"
+                this.macSwal.type = "error"
+                this.macSwal.show();
             }
         );
-        setTimeout(() => {
-            this.qz.removePrinter();
-        }, 10000);
 
 
+
+
+    }
+    // DesconectarQz() {
+    //     this.qz.removePrinter();
+    // }
+    DesconectarQz() {
+        this.qz.removePrinter();
     }
 
 }

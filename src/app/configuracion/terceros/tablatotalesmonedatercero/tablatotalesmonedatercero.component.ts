@@ -110,7 +110,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     // //       let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
     // //       this._toastService.ShowToast(toastObj);
     // //     }  
-
     // //     this.GetTotalesMonedas();
     // //   });  
     // }    

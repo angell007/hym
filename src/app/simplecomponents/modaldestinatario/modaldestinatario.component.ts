@@ -240,7 +240,6 @@ export class ModaldestinatarioComponent implements OnInit {
               case 'crear':
                 this.ActualizarTabla.emit();
                 break;
-
               case 'crear especial':
                 let objRespuesta = { willdo: "actualizar", id_destinatario: this.DestinatarioModel.Id_Destinatario };
                 this.IncluirDestinatarioEnTransferencia.emit(objRespuesta);

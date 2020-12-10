@@ -1,265 +1,266 @@
 .rtl {
-	text-align: right;
+  text-align: right;
 
-	.side-nav {
-		right: 0px;
-		left: auto;
+  .side-nav {
+    right: 0px;
+    left: auto;
 
-		@include screen-tablet {
-			right: -280px;
-		}
+    @include screen-tablet {
+      right: -280px;
+    }
 
-		@include screen-laptop-only {
-			&:hover {
-				.side-nav-inner .side-nav-menu > li > a .icon-holder {
-					float: right;
-					margin-left: 14px;
-				}
-			}
-		}	
+    @include screen-laptop-only {
+      &:hover {
+        .side-nav-inner .side-nav-menu>li>a .icon-holder {
+          float: right;
+          margin-left: 14px;
+        }
+      }
+    }
 
-		.side-nav-inner {
+    .side-nav-inner {
 
-			.side-nav-menu {
-				border-right:0px;
-				border-left: 1px solid $border-color;
+      .side-nav-menu {
+        border-right: 0px;
+        border-left: 1px solid $border-color;
 
-				> li {
-					> a {    
-	   					line-height: 2.5;
+        >li {
+          >a {
+            line-height: 2.5;
 
-	   					.icon-holder {
-	   						float: right;
-		    				margin-right: 0px;
-		   					margin-left: 14px;
+            .icon-holder {
+              float: right;
+              margin-right: 0px;
+              margin-left: 14px;
 
-		   					@include screen-laptop-only {
-		   						float: none;
-		   						margin-left: 0px;
-		   					}
-	   					}
-					}
+              @include screen-laptop-only {
+                float: none;
+                margin-left: 0px;
+              }
+            }
+          }
 
-					&.dropdown {
+          &.dropdown {
 
-						.arrow {
-							line-height: 28px;
-							right: auto;
-							left: 30px;
+            .arrow {
+              line-height: 28px;
+              right: auto;
+              left: 30px;
 
-							i {
-								&:before {
-									content: "\e64a";
-								}
-							}
-						}
+              i {
+                &:before {
+                  content: "\e64a";
+                }
+              }
+            }
 
-						&.open {
-							.arrow {
-								@include transform(rotate(-90deg));
-							}
-						}
+            &.open {
+              .arrow {
+                @include transform(rotate(-90deg));
+              }
+            }
 
-						ul {
-							&.dropdown-menu {
-								padding-left: 0px;
-								padding-right: 30px;
+            ul {
+              &.dropdown-menu {
+                padding-left: 0px;
+                padding-right: 30px;
 
-								> li {
-									> a {
-										text-align: right;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+                >li {
+                  >a {
+                    text-align: right;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
-			.side-nav-logo {
-				border-right: 0px;
-				border-left: 1px solid $border-color;
+      .side-nav-logo {
+        border-right: 0px;
+        border-left: 1px solid $border-color;
 
-				.mobile-toggle {
-					float: left;
-					@include transform(rotate(180deg));
-				}
-			}
-		}
-	}
+        .mobile-toggle {
+          float: left;
+          @include transform(rotate(180deg));
+        }
+      }
+    }
+  }
 
-	&.is-collapsed {
-		.side-nav {
+  &.is-collapsed {
+    .side-nav {
 
-			@include screen-tablet {
-				left: auto;
-				right: 0px;
-			}
+      @include screen-tablet {
+        left: auto;
+        right: 0px;
+      }
 
-			@include screen-laptop-above {
-				&:hover {
-					.side-nav-inner .side-nav-menu > li > a .icon-holder {
-						float: right;
-						margin-left: 14px;
-					}
-				}
+      @include screen-laptop-above {
+        &:hover {
+          .side-nav-inner .side-nav-menu>li>a .icon-holder {
+            float: right;
+            margin-left: 14px;
+          }
+        }
 
-				.side-nav-inner .side-nav-menu > li > a .icon-holder {
-					float: none;
-					margin-left: 4px;
-				}
-			} 
+        .side-nav-inner .side-nav-menu>li>a .icon-holder {
+          float: none;
+          margin-left: 4px;
+        }
+      }
 
-			@include screen-laptop-only {
-				.side-nav-inner .side-nav-menu > li > a .icon-holder {
-					float: right;
-					margin-left: 14px;
-				}	
-			}	
-		}
+      @include screen-laptop-only {
+        .side-nav-inner .side-nav-menu>li>a .icon-holder {
+          float: right;
+          margin-left: 14px;
+        }
+      }
+    }
 
-		.page-container {
-			@include screen-laptop-above{
-				padding-right: $collapsed-size;
-			}
-		}
-	}
+    .page-container {
+      @include screen-laptop-above {
+        padding-right: $collapsed-size;
+      }
+    }
+  }
 
-	.page-container {
-		padding-left: 0px;
+  .page-container {
+    padding-left: 0px;
 
-		@include screen-laptop-above {
-			padding-right: $offscreen-size;
-		}
+    @include screen-laptop-above {
+      padding-right: $offscreen-size;
+    }
 
-		@include screen-laptop-only {
-			padding-right: $collapsed-size;
-		}	
+    @include screen-laptop-only {
+      padding-right: $collapsed-size;
+    }
 
-	}	
+  }
 
-	.header {
-		.header-container {
+  .header {
+    .header-container {
 
-			.nav-left {
-				float: right;
-				margin-right: 15px;
+      .nav-left {
+        float: right;
+        margin-right: 15px;
 
-				> li {
-					float: right;
-				}
-			}
+        >li {
+          float: right;
+        }
+      }
 
-			.nav-right {
-				float: left;
+      .nav-right {
+        float: left;
 
-				> li {
-					float: right;
-				}
+        >li {
+          float: right;
+        }
 
-				.user-profile {
-					border-right: 0px;
-				}
+        .user-profile {
+          border-right: 0px;
+        }
 
-				.dropdown-menu {
-					left: 0px;
-   					right: auto;
-   					@include transform-origin(top left);
-				}
-			}
-		}
-		.search-input {
-			.advanced-search {
-				left: -120px;
-			}
-		}	
-	}
+        .dropdown-menu {
+          left: 0px;
+          right: auto;
+          @include transform-origin(top left);
+        }
+      }
+    }
 
-	.side-panel {
+    .search-input {
+      .advanced-search {
+        left: -120px;
+      }
+    }
+  }
 
-		.side-panel-wrapper {
-			border-left: 0px;
-			border-right: 1px solid $border-color;
-			left: calc(0px - 600px); 
+  .side-panel {
 
-			.nav-tabs {
+    .side-panel-wrapper {
+      border-left: 0px;
+      border-right: 1px solid $border-color;
+      left: calc(0px - 600px);
 
-				.panel-close {
-					border-left: 0px;
-				}
-			}	
-		}	
+      .nav-tabs {
 
-		&.side-panel-open  {
-			.side-panel-wrapper {
-			    left: 0px; 
-			}	
-		}
-	}
+        .panel-close {
+          border-left: 0px;
+        }
+      }
+    }
 
-	.pull-right {
-		float: left !important;
-	}
+    &.side-panel-open {
+      .side-panel-wrapper {
+        left: 0px;
+      }
+    }
+  }
 
-	.list-info {
-		.info {
-			padding-left: 0px;
-			padding-right: 55px;
+  .pull-right {
+    float: left !important;
+  }
 
-			.sub-title {
-				max-width: 100%;
-			}
+  .list-info {
+    .info {
+      padding-left: 0px;
+      padding-right: 55px;
 
-			.float-object {
-				right: auto;
-				left: 15px;
-			}
-		}
+      .sub-title {
+        max-width: 100%;
+      }
 
-		.thumb-img {
-			float: right;
-		}
-	}
+      .float-object {
+        right: auto;
+        left: 15px;
+      }
+    }
 
-	.progress-bar {
-		margin-left: auto;
-	}
+    .thumb-img {
+      float: right;
+    }
+  }
 
-	.chat {
+  .progress-bar {
+    margin-left: auto;
+  }
 
-		.chat-user-list {
+  .chat {
 
-			.chat-user {
+    .chat-user-list {
 
-				.user-info {
-					padding-left: 0px;
-					padding-right: 55px;
-				}
+      .chat-user {
 
-				.status {
-					right: auto;
-					left: 20px;
-				}
+        .user-info {
+          padding-left: 0px;
+          padding-right: 55px;
+        }
 
-				.thumb-img {
-					float: right;
-				}
-			}
-		}
+        .status {
+          right: auto;
+          left: 20px;
+        }
 
-		.conversation {
-			text-align: left;
-		}
-	} 
+        .thumb-img {
+          float: right;
+        }
+      }
+    }
 
-	.status {
-		right: 0px;
-		left: auto;
-	}
+    .conversation {
+      text-align: left;
+    }
+  }
 
-	
-	.pdd-left-20 {
-		padding-right: 20px !important;
-	}
+  .status {
+    right: 0px;
+    left: auto;
+  }
+
+
+  .pdd-left-20 {
+    padding-right: 20px !important;
+  }
 
 }

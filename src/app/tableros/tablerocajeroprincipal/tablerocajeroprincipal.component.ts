@@ -164,11 +164,11 @@ export class TablerocajeroprincipalComponent implements OnInit {
       let p = {};
 
       if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6 || this.Funcionario.Id_Perfil == 2) {
-        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin};
+        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
 
           // console.log(data);
-          
+
           if (data.codigo == 'success') {
 
 
@@ -196,7 +196,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
 
       } else if (this.Funcionario.Id_Perfil == 2) {
         //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
-        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId,  fecha_inicio: this.Fecha_inicio, fecha_fin : this.Fecha_fin };
+        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
           if (data.codigo == 'success') {
 

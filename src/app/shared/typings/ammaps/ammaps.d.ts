@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 /// AmCharts object (it's not a class) is create automatically when amcharts.js or amstock.js file is included in a web page.
 declare namespace AmCharts {
-    
+
     /** Set it to true if you have base href set for your page. This will fix rendering problems in Firefox caused by base href. */
     var baseHref: boolean;
 
@@ -30,7 +30,7 @@ declare namespace AmCharts {
     function clear(): void;
 
     var isReady: any;
-    var AmMap : any;
+    var AmMap: any;
     var maps: any;
     var ValueLegend: any;
 
@@ -1027,7 +1027,7 @@ If you do not set properties such as dashLength, lineAlpha, lineColor, etc - val
             bold - specifies if text is bold (true/false),
             url - url
         */
-        addLabel(x: number|string, y: number|string, text: string, align: string, size?: number, color?: string, rotation?: number, alpha?: number, bold?: boolean, url?: string): any;
+        addLabel(x: number | string, y: number | string, text: string, align: string, size?: number, color?: string, rotation?: number, alpha?: number, bold?: boolean, url?: string): any;
         /** Adds a legend to the chart.
             By default, you don't need to create div for your legend, however if you want it to be positioned in some different way, you can create div anywhere you want and pass id or reference to your div as a second parameter.
             (NOTE: This method will not work on StockPanel.)
@@ -2589,6 +2589,6 @@ Your function should return string.*/
         menu: Object;
         config: any;
         capture(config: any, callback: () => void): any;
-        toJPG(config: any, callback: (config:any) => void): any;
+        toJPG(config: any, callback: (config: any) => void): any;
     }
 }

@@ -12,6 +12,8 @@ export class SwalService {
     type: 'warning',
     title: 'Alerta',
     msg: 'Default message!',
+    timer: null,
+    html: '<a href="">Link</a>'
   };
 
   constructor() { }

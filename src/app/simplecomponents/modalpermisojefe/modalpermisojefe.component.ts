@@ -11,92 +11,91 @@ import { PermisoService } from '../../shared/services/permisos/permiso.service';
 })
 export class ModalpermisojefeComponent implements OnInit, OnDestroy {
 
-  @Input() AbrirModalEvent:Observable<any>;
+  @Input() AbrirModalEvent: Observable<any>;
 
-  @Output() RespuestaCodigo:EventEmitter<boolean> = new EventEmitter();
-  @Output() MostrarSwal:EventEmitter<any> = new EventEmitter();
+  @Output() RespuestaCodigo: EventEmitter<boolean> = new EventEmitter();
+  @Output() MostrarSwal: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('ModalPermiso') ModalPermiso:any;  
+  @ViewChild('ModalPermiso') ModalPermiso: any;
 
   private suscripcion: any;
-  private openModalSubscription:any;
-  public Codigo:string = "";
+  private openModalSubscription: any;
+  public Codigo: string = "";
 
-  public SwalDataObj:any = {
+  public SwalDataObj: any = {
     type: 'warning',
     title: 'Alerta',
     msg: 'Default'
   };
 
-  private accion:string = '';
+  private accion: string = '';
 
-  private response = {valor:'', aux_value:'', verificado:false, accion:''};
+  private response = { valor: '', aux_value: '', verificado: false, accion: '' };
 
-  constructor(private generalService:GeneralService,
-              private swalService:SwalService,
-              private permisoService:PermisoService) {
+  constructor(private generalService: GeneralService,
+    private swalService: SwalService,
+    private permisoService: PermisoService) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     // this.suscripcion = this.AbrirModalEvent.subscribe((data) => 
     // {
     //   this.ModalPermiso.show(); 
     // });
     this.openModalSubscription = this.permisoService.openModalPermiso.subscribe(d => {
       // console.log(d);
-      
+
       this.accion = d.accion;
       this.response.accion = d.accion;
       if (d.accion == 'transferencia_cajero') {
         this.response.valor = d.value;
-      }else if(d.accion == 'servicio_externo'){
+      } else if (d.accion == 'servicio_externo') {
         this.response.valor = d.value;
       }
-      this.ModalPermiso.show(); 
+      this.ModalPermiso.show();
     });
   }
-  
+
   ngOnDestroy() {
     this.openModalSubscription.unsubscribe();
     this.CerrarModal();
   }
 
-  VerificarCodigo(){
-    this.generalService.verifyMajorCode(this.Codigo).subscribe((data:any) => 
-    {
+  VerificarCodigo() {
+    this.generalService.verifyMajorCode(this.Codigo).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.CerrarModal();
         this.permisoService.permisoAceptado = data.query_data;
         if (this.accion == 'transferencia_cajero') {
           this.response.verificado = data.query_data;
           this.permisoService._subject.next(this.response);
-        }else if (this.accion == 'servicio_externo') {
+        } else if (this.accion == 'servicio_externo') {
           this.response.verificado = data.query_data;
           this.permisoService._subject.next(this.response);
-        }else{
+        } else {
           this.permisoService._subject.next(data.query_data);
         }
-      }else{
+      } else {
 
         this.swalService.ShowMessage(data);
       }
     });
   }
 
-  CerrarModal(){
+  CerrarModal() {
     this.Codigo = "";
     this.ModalPermiso.hide();
 
     if (this.accion == 'transferencia_cajero') {
-    }else if (this.accion == 'servicio_externo') {
+    } else if (this.accion == 'servicio_externo') {
       this.response.verificado = false;
       this.permisoService._subject.next(this.response);
-    }else{
+    } else {
       this.permisoService._subject.next(this.response);
     }
   }
 
-  SetDatosMensaje(data:any){
+  SetDatosMensaje(data: any) {
     this.SwalDataObj.type = data.codigo;
     this.SwalDataObj.title = data.titulo;
     this.SwalDataObj.msg = data.mensaje;

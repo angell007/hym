@@ -125,7 +125,6 @@ export class GirosService {
     }
 
     this.http.get(this.globales.ruta + 'php/giros/listar_giros_funcionario_filter_aprobados.php?', { params: p }).subscribe((data: any) => {
-      // console.log(data);
       if (data.codigo == 'success') {
         this.GirosAprobados = data.query_data;
         this.SetInformacionPaginacionAprobados(data.query_data);

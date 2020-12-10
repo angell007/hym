@@ -118,7 +118,6 @@ export class CierrecajaComponent implements OnInit {
       let resumen = JSON.stringify(this.ResumenMovimiento);
       let model = JSON.stringify(this.CierreCajaModel);
       let data = new FormData();
-
       data.append("entregado", entregado);
       data.append("diferencias", diferencias);
       data.append("modelo", model);
@@ -152,8 +151,6 @@ export class CierrecajaComponent implements OnInit {
         console.log(this.Diferencias[index]);
       }
 
-      return false;
-
       // if (this.Modulos[index] != 0) {
       //   if (this.TotalEntregado[index].Entregado == 0) {
       //     this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
@@ -168,7 +165,7 @@ export class CierrecajaComponent implements OnInit {
   ValidarDiferencias() {
 
     for (let index = 0; index < this.Diferencias.length; index++) {
-      if (this.Diferencias[index].Diferencia < 0) {
+      if (this.Diferencias[index] < 0) {
         this.ShowSwal('warning', 'Alerta', 'No puede tener diferencias negativas!');
         return false;
       }
@@ -177,15 +174,91 @@ export class CierrecajaComponent implements OnInit {
     return true;
   }
 
-  CalcularDiferencia(ingresado, calculado, pos, multiplicador = 1) {
 
-    if (ingresado == '' || calculado == '') {
+  CalcularSumaImput(ingresado, calculado, pos) {
+
+    let saldo = 0;
+
+    const elementos = Array.from(document.querySelectorAll('.input_pesos'))
+    elementos.forEach(function (input, index) {
+
+      switch (index) {
+        case 0:
+
+          saldo += input['value'] * 100 * 100000
+          break;
+        case 1:
+
+          saldo += input['value'] * 100 * 50000
+          break;
+        case 2:
+
+          saldo += input['value'] * 100 * 20000
+          break;
+        case 3:
+
+          saldo += input['value'] * 100 * 10000
+          break;
+        case 4:
+
+          saldo += input['value'] * 50 * 100000
+          break;
+        case 5:
+
+          saldo += input['value'] * 50 * 50000
+          break;
+        case 6:
+
+          saldo += input['value'] * 50 * 20000
+          break;
+        case 7:
+
+          saldo += input['value'] * 50 * 10000
+          break;
+        case 8:
+
+          saldo += input['value'] * 100000
+          break;
+        case 9:
+
+          saldo += input['value'] * 50000
+          break;
+        case 10:
+
+          saldo += input['value'] * 20000
+          break;
+        case 11:
+
+          saldo += input['value'] * 10000
+          break;
+
+        case 12:
+
+          saldo += input['value'] * 1
+          break;
+
+        default:
+          break;
+      }
+
+    });
+
+    this.CalcularDiferencia(saldo, calculado, pos)
+
+  }
+
+
+  CalcularDiferencia(ingresado, calculado, pos) {
+
+
+    if (calculado == '') {
       return false;
     }
 
+    let resta = ingresado - calculado;
 
-    let resta = (ingresado * multiplicador) - calculado;
-    this.Diferencias[pos] = (resta < 0) ? resta : resta;
+
+    this.Diferencias[pos] = resta;
 
 
     // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));

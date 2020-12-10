@@ -108,7 +108,6 @@ export class CorresponsalesbancarioscajeroComponent implements OnInit, OnDestroy
       this.CorresponsalModel.Id_Moneda = this.monedaPeso[0].Id_Moneda;
       let info = this._generalService.normalize(JSON.stringify(this.CorresponsalModel));
 
-      // console.log('Guardando 1');
 
       let datos = new FormData();
       datos.append("modulo", 'Corresponsal_Diario');

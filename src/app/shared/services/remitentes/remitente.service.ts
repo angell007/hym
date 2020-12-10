@@ -11,7 +11,6 @@ export class RemitenteService {
   private _rutaBase: string = this.globales.ruta + 'php/remitentes/';
   private rutaNueva: string = this.globales.rutaNueva;
 
-
   getRemitente(p: any): Observable<any> {
     return this.client.get(this._rutaBase + 'get_remitente_by_id.php', { params: p });
   }

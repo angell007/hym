@@ -29,27 +29,35 @@ export class ConsolidadosService {
       });
   }
 
+
+  reduce(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Ingreso_Total) - parseFloat(element.Egreso_Total)
+    })
+    return suma;
+  }
+
   async GetData() {
+
+
+
     this.TotalRestaIngresosEgresos = []
     this.SumatoriaTotales = []
 
-    this.getValoresIniciales().then(() => {
-      this.getValoresApertura().then(() => {
-        this.MonedasSistema.forEach((moneda, i) => {
-          let objMoneda = this.SumatoriaTotales[moneda.Nombre];
-          let monto_inicial_moneda = (this.ValoresMonedasApertura[i].Valor_Moneda_Apertura == "") ? 0 : this.ValoresMonedasApertura[i].Valor_Moneda_Apertura;
-          this.TotalesIngresosMonedas.push(objMoneda.Ingreso_Total.toFixed(2));
-          this.TotalesEgresosMonedas.push(objMoneda.Egreso_Total.toFixed(2));
-          let suma_inicial_ingreso = parseFloat(objMoneda.Ingreso_Total) + parseFloat(monto_inicial_moneda);
-          this.TotalRestaIngresosEgresos.push([moneda.Codigo, (suma_inicial_ingreso - objMoneda.Egreso_Total).toFixed(), moneda.Nombre, moneda.Id_Moneda]);
-        })
-      })
+    // this.getValoresIniciales().then(() => {
+    //   this.getValoresApertura().then(() => {
 
-      return this.TotalRestaIngresosEgresos;
 
-    }).catch((err) => {
-      // console.log('Error  ', err);
-    })
+    let p: any = { id: this.user.Identificacion_Funcionario };
+    this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
+      this.Modulos = data;
+
+      data.forEach(element => {
+        this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo })
+      });
+    });
+
   }
 
   async getValoresIniciales() {
@@ -67,6 +75,8 @@ export class ConsolidadosService {
         this.MonedasSistema.forEach((m) => {
           this.Modulos.forEach((mod) => {
             let obj = this.Totales[mod];
+
+
             let monObj = obj.filter(x => x.Moneda_Id == m.Id_Moneda);
             if (this.SumatoriaTotales[m.Nombre]) {
               this.SumatoriaTotales[m.Nombre].Ingreso_Total += parseFloat(monObj[0].Ingreso_Total);

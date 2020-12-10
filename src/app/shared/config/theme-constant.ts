@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ThemeConstants {
-    
+
     private colorConfig: any;
-    
+
     constructor() {
         this.colorConfig = {
             colors: {
@@ -24,7 +24,7 @@ export class ThemeConstants {
             }
         };
     }
-    
+
     get() {
         return this.colorConfig;
     }

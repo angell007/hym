@@ -36,7 +36,6 @@ export class FuncionarioinformativecardComponent implements OnInit {
     }
   }
 
-
   Abrir(id) {
 
     const params = new FormData();

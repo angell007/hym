@@ -13,35 +13,34 @@ import { TerceroModel } from '../../../Modelos/TerceroModel';
 })
 export class TablaverterceroComponent implements OnInit, OnChanges {
 
-  @Input() Id_Tercero:string = '';
+  @Input() Id_Tercero: string = '';
 
-  public TerceroModel:TerceroVerModel = new TerceroVerModel();
+  public TerceroModel: TerceroVerModel = new TerceroVerModel();
 
-  constructor(private _terceroService:TerceroService,
-              private _generalService:GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService)
-  { }
+  constructor(private _terceroService: TerceroService,
+    private _generalService: GeneralService,
+    private _swalService: SwalService,
+    private _toastService: ToastService) { }
 
   ngOnInit() {
-    this.GetTercero();  
+    this.GetTercero();
   }
 
-  ngOnChanges(changes:SimpleChanges): void {
-    
+  ngOnChanges(changes: SimpleChanges): void {
+
     if (changes.Id_Tercero.currentValue != undefined) {
       this.GetTercero();
     }
   }
 
-  GetTercero(){
+  GetTercero() {
     if (this.Id_Tercero != '') {
-      this._terceroService.getTerceroVer(this.Id_Tercero).subscribe((data:any) => {
+      this._terceroService.getTerceroVer(this.Id_Tercero).subscribe((data: any) => {
         if (data.codigo == 'success') {
           this.TerceroModel = data.query_data;
-          
-        }else{
-  
+
+        } else {
+
           this._swalService.ShowMessage(data);
           this.TerceroModel = new TerceroVerModel();
         }

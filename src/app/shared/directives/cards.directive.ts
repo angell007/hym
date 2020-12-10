@@ -7,14 +7,14 @@ declare var $: any; // JQuery
 })
 export class cardPortletRefresh implements OnInit {
     constructor(private el: ElementRef) { }
-    ngOnInit():any {
-        $(this.el.nativeElement).on('click',function(e) {
+    ngOnInit(): any {
+        $(this.el.nativeElement).on('click', function (e) {
             $(this).parents('.card').addClass('card-refresh');
-		    setTimeout(()=>{ 
-		        $(this).parents('.card').removeClass('card-refresh');
-		    }, 2000);
-		    e.preventDefault();
-		    e.stopPropagation();
+            setTimeout(() => {
+                $(this).parents('.card').removeClass('card-refresh');
+            }, 2000);
+            e.preventDefault();
+            e.stopPropagation();
         });
     }
 }
@@ -25,14 +25,14 @@ export class cardPortletRefresh implements OnInit {
 })
 export class cardPortletDelete implements OnInit {
     constructor(private el: ElementRef) { }
-    ngOnInit():any {
-        $(this.el.nativeElement).on('click',function(e) {
-		    $(this).parents('.card').addClass('animated zoomOut');
-		    $(this).parents('.card').bind('animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd', ()=>{ 
-		        $(this).parents('.card').remove();
-		    });
-		    e.preventDefault();
-		    e.stopPropagation();
+    ngOnInit(): any {
+        $(this.el.nativeElement).on('click', function (e) {
+            $(this).parents('.card').addClass('animated zoomOut');
+            $(this).parents('.card').bind('animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd', () => {
+                $(this).parents('.card').remove();
+            });
+            e.preventDefault();
+            e.stopPropagation();
         });
     }
 }

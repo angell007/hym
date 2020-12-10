@@ -289,6 +289,17 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-2">
+        <div class="form-group">
+          <label>Recauda?</label>
+          <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.recauda">
+            <option selected value="No">No</option>
+            <option value="Si">Si</option>
+          </select>
+        </div>
+      </div>
+
     </form>
   </div>
   <div class="app-modal-footer">
@@ -299,6 +310,6 @@
         [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
         (confirm)="GuardarTercero()" [disabled]="!FormTercero.valid"> {{Edicion ? 'Actualizar' : 'Guardar'}}</button>
     </div>
-    {{ Edicion  | json }}
+    <!-- {{ Edicion  | json }} -->
   </div>
 </app-modal-basic>

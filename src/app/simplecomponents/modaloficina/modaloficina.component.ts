@@ -56,7 +56,7 @@ export class ModaloficinaComponent implements OnInit {
         this._oficinaService.getOficina(p).subscribe((d: any) => {
 
           if (d.codigo == 'success') {
-            
+
             this.OficinaModel = d.query_data;
             if (d.limites.query_data.length > 0) {
               this.MonedasSistema.forEach((element: any, index: number) => {

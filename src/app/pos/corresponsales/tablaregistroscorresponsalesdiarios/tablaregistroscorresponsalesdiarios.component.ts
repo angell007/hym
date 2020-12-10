@@ -145,8 +145,6 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
 
   GetCorresponsalesBancarios() {
     this._corresponsalService.getCorresponsales().subscribe((data: any) => {
-
-      // console.log(data);
       if (data.codigo == 'success') {
         this.CorresponsalesBancarios = data.query_data;
       } else {
@@ -164,7 +162,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     this.monedaPeso = await Object.assign({}, this.monedaPeso[0])
   }
 
-  // Custom pesos 
+  // Custom pesos
   async GetMonedas() {
     return await this._monedaService.getMonedas().pipe().toPromise().then((data: any) => {
       if (data != null) {
@@ -175,6 +173,7 @@ export class TablaregistroscorresponsalesdiariosComponent implements OnInit, OnD
     });
   }
   editarCorresponsal(data: any) {
+    this.GetCorresponsalesBancarios()
     this.corresponsalEdit.Consignacion = data.Consignacion
     this.corresponsalEdit.Fecha = data.Fecha
     this.corresponsalEdit.Funcionario = data.Funcionario
