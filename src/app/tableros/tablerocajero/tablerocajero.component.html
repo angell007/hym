@@ -316,7 +316,7 @@
                           </button>
 
                           <button class="btn btn-xs btn-warning" type="button" title="Devolver cambio" style="margin:0;"
-                            *ngIf="cambio.Tipo != 'Compra'"
+                            *ngIf="cambio.Tipo != 'Compra' && cambio.Estado != 'Anulado'"
                             (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
                             <i class="ti-shift-left"></i>
                           </button>
@@ -799,7 +799,7 @@
                           </div>
                           <div class="col-md-2">
                             <div class="form-group">
-                              <label class="transferencia font-size-18"> {{MonedaParaTransferencia.nombre}}</label>
+                              <!-- <label class="transferencia font-size-18"> {{MonedaParaTransferencia.nombre}}</label> -->
                               <div class="row">
                                 <div class="col-md-10">
                                   <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
@@ -841,12 +841,12 @@
                               name="Cantidad_Recibida" required currencyMask
                               [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" tabindex="7">
 
-                            <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'"
+                            <!-- <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'"
                               class="font-size-18 form-control alinear-derecha" id="Cantidad_Recibida" type="text"
                               (blur)="CalcularCambioMoneda($event.target.value, 'por origen')" autocomplete="off"
                               placeholder="Valor Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
                               name="Cantidad_Recibida" currencyMask
-                              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" tabindex="7">
+                              [options]="{ thousands: '.' , decimal: ',' ,  precision: '2'}" tabindex="7"> -->
                           </div>
                         </div>
                         <div class="col-md-4">
@@ -867,8 +867,8 @@
                           <div class="form-group text-center">
                             <label class="transferencia font-size-18">Moneda de Transferencia
                             </label>
-                            <label
-                              class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label>
+                            <!-- <label
+                              class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label> -->
                           </div>
 
                           <div class="form-group">
@@ -1077,7 +1077,7 @@
                               <th class="table-filters"></th>
                             </tr>
 
-                            <tr *ngIf="giroService.Giros.length == 0">
+                            <tr *ngIf="giroService.Giros.length == 0 && !Cargando">
                               <td colspan="7" class="text-center">
                                 <i class="ti-alert font-size-20 text-warning"></i>
                                 <h4>No hay Giros para mostrar!</h4>
