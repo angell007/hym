@@ -6,9 +6,10 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class FiltroService {
 
+  public CargandoCambios : boolean = true;
   public RutaGifCargando: string;
   public CargandoGiros: boolean = false;
-  public Cargando: boolean = true;
+
   public Filtros: any = {
     codigo: '',
     funcionario: '',
@@ -72,6 +73,7 @@ export class FiltroService {
     this.http.get(this.globales.ruta + 'php/cambio/get_filtre_cambios.php?', { params: p }).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Cambios = data.query_data;
+        this.CargandoCambios=false;
         this.SetInformacionPaginacion(data.query_data);
       }
     });
@@ -91,8 +93,9 @@ export class FiltroService {
     this.Cambios = [];
     this.http.get(this.globales.rutaNueva + 'cambios', { params: { funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       // console.log(data);
-      if (data.codigo == 'success') {
+      if (data.codigo == 'success') {        
         this.Cambios = data.query_data;
+        this.CargandoCambios=false;
         this.SetInformacionPaginacion(data.query_data)
       } else {
         this.ShowSwal('success', 'Success', 'Debe recalcular el monto a entregar!');

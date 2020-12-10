@@ -89,6 +89,7 @@ export class TrasladosCustomService {
       if (data.codigo == 'success') {
         this.Traslados = data.query_data;
         this.SetInformacionPaginacion(data)
+        this.Cargando=false;
       }
     });
   }
@@ -106,6 +107,7 @@ export class TrasladosCustomService {
       if (data.codigo == 'success') {
         this.TrasladosRecibidos = data.query_data;
         this.SetInformacionPaginacionRecibidos(data)
+        this.Cargando=false;
       }
     });
   }
@@ -138,6 +140,7 @@ export class TrasladosCustomService {
       //console.log(data);
       if (data.codigo == 'success') {
         this.CajerosTraslados = data.query_data;
+        this.Cargando=false;
       } else {
       }
     });
@@ -148,6 +151,7 @@ export class TrasladosCustomService {
     this.http.get(this.globales.ruta + 'php/pos/listar_traslado_funcionario.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.Traslados = data;
       this.SetInformacionPaginacion(data)
+      this.Cargando=false;
     });
   }
 
@@ -157,6 +161,7 @@ export class TrasladosCustomService {
     this.http.get(this.globales.ruta + 'php/pos/traslado_recibido.php', { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
       this.TrasladosRecibidos = data;
       // console.log(data);
+      this.Cargando=false;
       this.SetInformacionPaginacionRecibidos(data)
     });
 

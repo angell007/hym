@@ -61,6 +61,9 @@
 						@include screen-mobile{
 							max-width: 200px;
 						}
+						@include screen-small-mobile{
+							max-width: 120px;
+						}
 					}
 				}
 			}

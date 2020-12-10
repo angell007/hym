@@ -97,6 +97,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   @ViewChild('ModalAperturaCaja') ModalAperturaCaja: any;
   @ViewChild('selectCustomClient') selectCustomClient: any;
 
+
+  /** VARIABLES CARGANDO CAJERO **/
+  
+  public CargandoRecibos : boolean = true;
+  public CargandoGiros : boolean = true;
+  public CargandoEgresos : boolean = true;
+  public CargandoCorresponsal : boolean = true;
+  public CargandoServicios : boolean = true;
+  public CargandoTraslados : boolean = true;
+  public CargandoTraslados2 : boolean = true;
+
+
+
   public DevolucionesCambio: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
@@ -573,8 +586,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#endregion
   //Fin nuevas variables
 
-  public RutaGifCargando: string;
-  public CargandoGiros: boolean = false;
+  public RutaGifCargando: string;  
   public customClientes: Array<any> = [];
   public formasPago: Array<any> = [];
   public formasPagoAux: Array<any> = [];

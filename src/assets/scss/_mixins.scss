@@ -59,6 +59,12 @@
     }
 }
 
+@mixin screen-small-mobile {
+    @media only screen and (max-width: 600px) {
+        @content;
+    }
+}
+
 // usage : @include print {...} 
 @mixin print {
     @media print {

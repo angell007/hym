@@ -1100,7 +1100,6 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     CheckCajaOficina() {
-        console.log("estoy entrando aca");
         var macFormatted = '';
         this.qz.getMac().subscribe(
             data => {
@@ -1153,7 +1152,6 @@ export class CommonLayoutComponent implements OnInit {
                     });
                     //this.modalOficinaCaja.show();
                 } else {
-                    //console.log("entro al else");
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);

@@ -1,8 +1,17 @@
 // head
+.nav-pills > li > a{
+  padding: 5px !important;
+}
 .my-pagination /deep/ .ngx-pagination .current {
   font-size: 8px
 }
-
+.btn-xs{
+  font-size: 10px !important;
+  padding: 3px !important;
+}
+.my-pagination /deep/  .ngx-pagination{
+  padding:0 !important;
+} 
 .contenido {
   margin-top: 30px !important;
 }
@@ -55,6 +64,16 @@ input:focus {
     border-color: #51b6c5;
   }
 }
+
+.btn-superior{
+  font-size: 14px !important;
+  padding: 7px !important;
+}
+.header-modulos{
+  padding: 2px 11px !important;
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
 
 .btn-pulse {
   animation: bluepulse 2s infinite;
