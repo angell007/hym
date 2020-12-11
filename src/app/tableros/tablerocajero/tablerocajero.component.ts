@@ -252,6 +252,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public DeshabilitarTasa: boolean = true;
   public flag: boolean = false;
 
+
   public Perfil = JSON.parse(localStorage['User'])
 
   public DiarioModel: any = {
@@ -382,7 +383,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Tipo_Transferencia: 'Transferencia',
 
     //DATOS DEL CAMBIO
-    Moneda_Origen: JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
+    Moneda_Origen: '',
     Moneda_Destino: '',
     Cantidad_Recibida: '',
     Cantidad_Transferida: '',
@@ -415,6 +416,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       Nombre_Destinatario: '',
       Id_Destinatario_Cuenta: '',
       Valor_Transferencia: '',
+      copia: '',
       Cuentas: [],
       Id_Moneda: '',
       EditarVisible: false
@@ -620,6 +622,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.AsignarMonedas();
     this.settearMoneda();
 
+    this.TransferenciaModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
 
@@ -1458,7 +1461,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   ValidarCupoTercero(tipo: string, bolsa: number) {
 
-    console.log();
 
     //EL TIPO SE REFIERE A ORIGEN DEL CAMBIO SI ES DESDE MONEDA RECBIDA O DESDE MONEDA DE TRANSFERENCIA
     //Valores: recibido para moneda recibida, transferencia para moneda de transferencia
@@ -1538,7 +1540,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         conversion_moneda = (valor / tasa);
         this.TransferenciaModel.Cantidad_Transferida = conversion_moneda;
         let conversion_con_bolsa = (valor / tasa) + bolsa;
-        // this.AsignarValorDestinatarios(conversion_moneda, TotalTransferenciaDestinatario, count);
         this.AsignarValorTransferirDestinatario(conversion_con_bolsa);
         break;
 
@@ -1635,96 +1636,66 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   Asignar(valor, total_destinatarios, count) {
-
-    // if (this.TransferenciaModel.Bolsa_Bolivares != '' && this.TransferenciaModel.Bolsa_Bolivares != '0') {
-    //   let valor_bolsa = (parseFloat(this.TransferenciaModel.Bolsa_Bolivares));
-    //   let nuevo_valor = valor + valor_bolsa;
-
-    //   if (nuevo_valor > total_destinatarios) {
-
-    //     if (this.ListaDestinatarios[(count - 1)].Valor_Transferencia == '') {
-    //       this.ListaDestinatarios[(count - 1)].Valor_Transferencia = '0';
-    //     }
-    //     let v_transferir = (parseFloat(this.ListaDestinatarios[(count - 1)].Valor_Transferencia));
-    //     let operacion = v_transferir + (nuevo_valor - total_destinatarios);
-    //     this.ListaDestinatarios[(count - 1)].Valor_Transferencia = operacion;
-
-    //   } else if (nuevo_valor < total_destinatarios) {
-
-    //     let resta = total_destinatarios;
-
-    //     for (let index = count; index > 0; index--) {
-    //       let valor_pos = (parseFloat(this.ListaDestinatarios[index - 1].Valor_Transferencia));
-
-    //       resta -= (Number(valor_pos));
-
-    //       if (resta > nuevo_valor) {
-
-    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = '0';
-
-    //       } else if (resta < nuevo_valor && resta > valor) {
-    //         let asignar = nuevo_valor - resta;
-    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;
-    //         if (asignar > 0) {
-    //           break;
-    //         }
-
-    //       } else if (resta < nuevo_valor && resta < valor) {
-    //         let asignar = valor - resta;
-    //         this.ListaDestinatarios[index - 1].Valor_Transferencia = asignar;
-    //         if (asignar > 0) {
-    //           break;
-    //         }
-
-    //       } else if (resta == nuevo_valor) {
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
-
-
-    // valor_transferir 1000
-    // tablerocajero.component.ts:1696 valor 200000
-    // tablerocajero.component.ts:1698 total_destinatarios 20000
-    // tablerocajero.component.ts:1702 operacion 181000
-
-
+    let MultiplicadorDeConversion = 0;
+    // Valor que entra valor que estaba total destinataris
+    // console.log([valor, total_destinatarios, count]);
 
     if (this.ListaDestinatarios[0].Valor_Transferencia == '') {
       this.ListaDestinatarios[0].Valor_Transferencia = '0';
     }
+    this.Monedas.forEach(element => {
 
-    // for (let i = this.ListaDestinatarios.length; i <= 0; i--) {
-    //   console.log(i);
-    //   console.log(this.ListaDestinatarios[i]);
-    // }
+      if (element.Id_Moneda == this.TransferenciaModel.Moneda_Destino) {
+        MultiplicadorDeConversion = element.valor_moneda.Sugerido_Compra_Efectivo
+      }
 
-    for (let i = this.ListaDestinatarios.length; i >= 0; i--) {
-      console.log(i);
-      console.log(this.ListaDestinatarios[i]);
-    }
+    });
 
-    // this.ListaDestinatarios.forEach(element => {
-    //   console.log(element);
-    // });
+
 
     // let v_transferir = parseFloat(this.ListaDestinatarios[0].Valor_Transferencia);
-
-    // console.log("valor_transferir", v_transferir)
-
-    // console.log("valor", valor)
-
-    // console.log("total_destinatarios", total_destinatarios)
-
     // let operacion = (v_transferir + (valor - total_destinatarios));
-
-    // console.log("operacion", operacion);
-
     // this.ListaDestinatarios[0].Valor_Transferencia = operacion;
 
-    // this.VerificarDestinatariosConTransferenciaMayorAlTotal();
-    // }
+    let aTransferir = 0;
+    for (let i = this.ListaDestinatarios.length - 1; i >= 0; i--) {
+      aTransferir += this.ListaDestinatarios[i]['Valor_Transferencia'];
+    }
+
+    if (aTransferir == 0) {
+      this.ListaDestinatarios[0].Valor_Transferencia = valor;
+      this.ListaDestinatarios[0].copia = valor * MultiplicadorDeConversion;
+    }
+
+    if (valor > aTransferir) {
+      for (let i = this.ListaDestinatarios.length - 1; i >= 0; i--) {
+        this.ListaDestinatarios[i]['Valor_Transferencia'] = 0;
+        this.ListaDestinatarios[i].copia = 0;
+      }
+      this.ListaDestinatarios[0].Valor_Transferencia = valor;
+      this.ListaDestinatarios[0].copia = valor * MultiplicadorDeConversion;
+    }
+
+
+    if (valor < aTransferir) {
+      let diferencia = aTransferir - valor
+      for (let i = this.ListaDestinatarios.length - 1; i >= 0; i--) {
+
+        if (diferencia >= this.ListaDestinatarios[i]['Valor_Transferencia']) {
+          diferencia = diferencia - this.ListaDestinatarios[i]['Valor_Transferencia']
+          this.ListaDestinatarios[i]['Valor_Transferencia'] = 0;
+          this.ListaDestinatarios[i].copia = 0;
+        }
+
+        else {
+          this.ListaDestinatarios[i]['Valor_Transferencia'] = this.ListaDestinatarios[i]['Valor_Transferencia'] - diferencia;
+          this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i]['Valor_Transferencia'] * MultiplicadorDeConversion;
+          diferencia = 0
+        }
+
+      }
+    }
+
   }
 
   VerificarDestinatariosConTransferenciaMayorAlTotal() {
@@ -1869,6 +1840,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   private _asignarValoresSinBolsaBolivares(valor, i) {
+
+
+    let MultiplicadorDeConversion = 0;
+
+    this.Monedas.forEach(element => {
+
+      if (element.Id_Moneda == this.TransferenciaModel.Moneda_Destino) {
+        MultiplicadorDeConversion = element.valor_moneda.Sugerido_Compra_Efectivo
+      }
+
+    });
+
     if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
 
       this.ListaDestinatarios[i].Valor_Transferencia = '';
@@ -1898,6 +1881,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     if (valor > total_transferir) {
       this.ListaDestinatarios[i].Valor_Transferencia = '0';
       this.ListaDestinatarios[i].Valor_Transferencia = total_transferir - total_destinatarios_real;
+      this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
 
       // console.log('testeando listados  ...', this.ListaDestinatarios[i].Valor_Transferencia, valor);
 
@@ -1910,7 +1894,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       this.ListaDestinatarios[i].Valor_Transferencia = '0';
       this.ListaDestinatarios[i].Valor_Transferencia = (total_valor_destinatarios - valor) - total_transferir;
-
+      this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
       // console.log(this.ListaDestinatarios[i].Valor_Transferencia);
 
       let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! --2--"], tipo: "warning", duracion: 4000 };
@@ -1920,9 +1904,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       let asignar = (valor);
       let asignar_siguiente = (total_transferir - total_valor_destinatarios);
       this.ListaDestinatarios[i].Valor_Transferencia = asignar;
+      this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
 
       if (i < conteo) {
         this.ListaDestinatarios[(i + 1)].Valor_Transferencia = parseFloat(this.ListaDestinatarios[(i + 1)].Valor_Transferencia) > 0 ? this.ListaDestinatarios[(i + 1)].Valor_Transferencia : asignar_siguiente;
+        this.ListaDestinatarios[(i + 1)].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
       }
       this.VerificarDestinatariosConTransferenciaMayorAlTotal();
     }
@@ -1937,13 +1923,22 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     } else if (total_valor_destinatarios <= total_transferir) {
       let asignar_siguiente = total_transferir - total_valor_destinatarios;
       this.ListaDestinatarios[i].Valor_Transferencia = valor;
+      this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
 
       if (i < conteo) {
-        this.ListaDestinatarios[(i + 1)].Valor_Transferencia = parseFloat(this.ListaDestinatarios[(i + 1)].Valor_Transferencia) > 0 ? this.ListaDestinatarios[(i + 1)].Valor_Transferencia : asignar_siguiente;
+        if (parseFloat(this.ListaDestinatarios[(i + 1)].Valor_Transferencia) > 0) {
+          this.ListaDestinatarios[(i + 1)].Valor_Transferencia = this.ListaDestinatarios[(i + 1)].Valor_Transferencia
+        } else {
+          this.ListaDestinatarios[(i + 1)].Valor_Transferencia = asignar_siguiente
+        }
+        this.ListaDestinatarios[(i + 1)].copia = this.ListaDestinatarios[(i + 1)].Valor_Transferencia * MultiplicadorDeConversion
       }
 
       this.VerificarDestinatariosConTransferenciaMayorAlTotal();
     }
+    /********************************************************************************************************************************************* */
+
+
   }
 
   private _asignarValoresConBolsaBolivares(valor, i) {
@@ -2354,7 +2349,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   HabilitarCampoValor() {
-    this.TransferenciaModel.Cantidad_Transferida = 0;
+    // this.TransferenciaModel.Cantidad_Transferida = 0;
     if (this.ListaDestinatarios.length > 1) {
       this.DeshabilitarValor = false;
     } else {
@@ -2918,7 +2913,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   EliminarDestinatarioTransferencia(index) {
     this.ListaDestinatarios.splice(index, 1);
     this.HabilitarCampoValor();
-    this.TransferenciaModel.Cantidad_Transferida = 0;
+    // this.TransferenciaModel.Cantidad_Transferida = 0;
 
   }
 
@@ -5504,6 +5499,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.AbrirModalverDevoluciones.show();
     })
   };
+
+  doConversion(valor, i) {
+    let MultiplicadorDeConversion = 0;
+    this.Monedas.forEach(element => {
+      if (element.Id_Moneda == this.TransferenciaModel.Moneda_Destino) {
+        MultiplicadorDeConversion = element.valor_moneda.Sugerido_Compra_Efectivo
+      }
+    });
+
+    valor = parseFloat(valor.replace(/\./g, ''));
+    let nuevoValorConvertido = valor / MultiplicadorDeConversion
+    this.ValidarValorTransferirDestinatario2(nuevoValorConvertido.toString(), i)
+  }
 }
 
 
