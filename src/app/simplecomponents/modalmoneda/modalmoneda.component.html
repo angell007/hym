@@ -166,12 +166,25 @@
               <label class="form-check-label" for="defaultCheck">Asignar por defecto</label>
             </div>
 
+            <div class="form-check" #checkDefaultVenta>
+              <input type="checkbox" name="MDefaultVenta" class="form-check-input" id="defaultCheckVenta"
+                [(ngModel)]="MonedaModel.MDefaultVenta">
+              <label class="form-check-label" for="defaultCheck">Asignar por defecto cambio venta</label>
+            </div>
+
+            <div class="form-check" #checkDefaultCompra>
+              <input type="checkbox" name="MDefaultCompra" class="form-check-input" id="defaultCheckCompra"
+                [(ngModel)]="MonedaModel.MDefaultCompra">
+              <label class="form-check-label" for="defaultCheck">Asignar por defecto cambio compra</label>
+            </div>
+
+
           </div>
         </div>
       </div>
 
-
     </form>
+
   </div>
   <div class="app-modal-footer">
     <div class="text-right">

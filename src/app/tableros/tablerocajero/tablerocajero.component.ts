@@ -253,6 +253,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public flag: boolean = false;
 
 
+  public monedaDefectoVenta: '';
+  public monedaDefectoCompra: '';
+
+
   public Perfil = JSON.parse(localStorage['User'])
 
   public DiarioModel: any = {
@@ -824,6 +828,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   guardarCambio(formulario: NgForm, item) {
 
     console.log(this.CambioModel);
+
+    return false;
+
     if (this.selectCustomClient.nativeElement.value != '' && this.CambioModel.Id_Tercero == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe Ingresar la identificacion de un tercero');
       return false
@@ -4272,16 +4279,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   CargarDatosCambios() {
     this.fc.CargarCambiosDiarios();
-    this.MonedasCambio = [];
-    this._monedaService.getMonedasExtranjeras().subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.MonedasCambio = data.query_data;
-      } else {
-        this.MonedasCambio = [];
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
-      }
-    });
   }
 
   searchClientes() {
@@ -4470,19 +4467,21 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CambiarVista(tipo) {
+    this.MonedasCambio = [];
 
     switch (tipo) {
       case "Compra": {
+        this.setMonedaDefefault();
         this.Venta = false;
         this.TextoBoton = "Comprar"
         this.Tipo = "Compra";
         this.tituloCambio = "Compras"
         this.CambioModel.Moneda_Destino = localStorage.getItem('monedaDefault')['d_Moneda'];
         this.setFormaPago();
-
         break;
       }
       case "Venta": {
+        this.setMonedaDefefault();
         this.Venta = true;
         this.TextoBoton = "Vender"
         this.Tipo = "Venta";
@@ -5417,6 +5416,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.CambioModel.Id_Tercero = '';
     if (this.selectCustomClient.nativeElement.value == '') {
       this.setFormaPago();
+      this.setMonedaDefefault();
     } else {
       this.formasPago = this.formasPagoAux;
     }
@@ -5434,10 +5434,36 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.formasPagoAux = data;
       for (const forma of this.formasPagoAux) {
         if (forma['nombre'] == "Efectivo") {
+          this.CambioModel.fomapago = forma['id']
           this.formasPago.push(forma);
         }
       }
     });
+  }
+
+  setMonedaDefefault() {
+
+    this._monedaService.getMonedasDefauls().subscribe((data: any) => {
+      data.query_data.forEach(moneda => {
+        if (moneda['MDefaultVenta'] == '1') {
+          this.monedaDefectoVenta = moneda
+        }
+        if (moneda['MDefaultCompra'] == '1') {
+          this.monedaDefectoCompra = moneda
+        }
+      })
+    });
+
+    if (this.Venta) {
+      this._monedaService.getMonedasExtranjeras().subscribe((data: any) => {
+        this.MonedasCambio = data.query_data
+      });
+    }
+    if (!this.Venta) {
+      this._monedaService.getMonedasExtranjerasCompra().subscribe((data: any) => {
+        this.MonedasCambio = data.query_data;
+      });
+    }
   }
 
   devolverCambio(id: any, modal: any) {
@@ -5486,8 +5512,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (data.codigo == 'success') {
         this.swalService.ShowMessage(['success', 'Exito', 'Operación realizada correctamente']);
       } else {
-        this.swalService.ShowMessage(['warning', 'Advertencia', 'No puedes realizar esta operación']);
+        this.swalService.ShowMessage(['warning', 'Advertencia', data['message']]);
       }
+      this.fc.CargarCambiosDiarios()
       this.AbrirModalDevolucion.hide()
     })
   };

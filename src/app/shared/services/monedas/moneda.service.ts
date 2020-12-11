@@ -15,8 +15,16 @@ export class MonedaService {
     return this.client.get(this._rutaBase + 'get_monedas_por_pais.php', { params: p });
   }
 
+  getMonedasDefauls(): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_monedas_defaults.php');
+  }
+
   getMonedasExtranjeras(): Observable<any> {
     return this.client.get(this._rutaBase + 'get_monedas_extranjeras.php');
+  }
+
+  getMonedasExtranjerasCompra(): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_monedas_extranjeras_compra.php');
   }
 
   getListaMonedas(p: any): Observable<any> {

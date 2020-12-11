@@ -49,11 +49,12 @@ export class TablamonedasComponent implements OnInit {
   ngOnInit() {
   }
 
-  GetPaises() {
-    setTimeout(() => {
-      this.Paises = this._generalService.getPaises();
-    }, 1000);
+  async GetPaises() {
+    // setTimeout(() => {
+    this.Paises = await this._generalService.getPaises();
+    // }, 1000);
   }
+
 
   AbrirModal(idMoneda: string) {
     this.AbrirModalMoneda.next(idMoneda);

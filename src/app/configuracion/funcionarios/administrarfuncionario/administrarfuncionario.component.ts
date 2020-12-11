@@ -274,15 +274,12 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
       });
     } else {
       this._funcionarioService.saveFuncionario(datos).subscribe((response: any) => {
-
-        // console.log(['Crear', response]);
-
         if (response.codigo == 'success') {
-          // this._swalService.ShowMessage(response);
-          // this.LimpiarModelo();
-          // setTimeout(() => {
-          //   this.router.navigate(['/funcionarios']);
-          // }, 500);
+          this._swalService.ShowMessage(response);
+          this.LimpiarModelo();
+          setTimeout(() => {
+            this.router.navigate(['/funcionarios']);
+          }, 500);
         } else {
 
           this._swalService.ShowMessage(response);
