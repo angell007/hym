@@ -404,7 +404,7 @@
                       </label>
                       <select *ngIf="!Venta" class="inputfield font-size-18  form-control form-control-lg"
                         placeholder="Origen" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
-                        [(ngModel)]="monedaDefectoCompra.Id_Moneda " required tabindex="1">
+                        [(ngModel)]="monedaDefectoCompra['Id_Moneda'] " required tabindex="1">
                         <option value=""> Seleccione Moneda</option>
                         <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
                           ({{ m.Codigo }}) </option>
@@ -419,20 +419,12 @@
                         Forma de pago
                       </label>
                       <select class="inputfield font-size-18  form-control form-control-lg" placeholder="id_fomapago"
-                        id="id_fomapago" name="id_fomapago" [(ngModel)]="CambioModel.fomapago">
+                        id="id_fomapago" name="id_fomapago" [(ngModel)]="CambioModel.fomapago"
+                        (change)="setformasPago()">
                         <option *ngFor="let fp of formasPago" [value]="fp.id"> {{ fp.nombre }}
                         </option>
                       </select>
                     </div>
-
-
-                    <!-- <div class="col-md-12" *ngIf="CambioModel.fomapago == '3'">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                        Cupo de Tercero
-                      </label>
-                      {{ CambioModel | json }}
-                    </div> -->
-
 
                     <!--ESCOGER MONEDA PARA VENTA-->
                     <div class="col-md-6">
@@ -485,8 +477,9 @@
                         class="inputfield font-size-18  form-control form-control-lg" autocomplete="false"
                         id="Precio_Sugerido" name="Tasa" (blur)="conversionMoneda('o', 'e')"
                         [disabled]="HabilitarCampos" required currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' , precision:    (MonedaParaCambio.nombre =='Dolares') ? '0' :   '2'}"
-                        tabindex="5" [(ngModel)]="CambioModel.Tasa">
+                        [options]="{ thousands: '.' , decimal: ',' , precision: '0' }" tabindex="5"
+                        [(ngModel)]="CambioModel.Tasa">
+                      <!-- TODO: viejitos cambiar  -->
                     </div>
 
                     <div class="col-md-4 mt-1" *ngIf="!Venta">
@@ -502,7 +495,7 @@
 
                     <div class="col-md-4" *ngIf="Venta">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion de
-                        peso a
+                        pesos a
                         {{ MonedaParaCambio.nombre}}</label>
                       <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
                         class="inputfield font-size-18  form-control form-control-lg" name="Valor_Origen" id="Cambia"
@@ -514,26 +507,28 @@
                   </div>
 
                   <div class="row">
-                    <div *ngIf="!Venta" class="col-md-6">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
-                        Con</label>
-                      <input id="pagocon" type="text" placeholder="Paga con"
-                        class="inputfield font-size-18  form-control form-control-lg" currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
-                        (blur)="ObtenerVueltosEnCompra()" [(ngModel)]="CambioModel.Recibido"
-                        [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
-                        tabindex="7">
-                    </div>
+                    <ng-container *ngIf="mostrarPagaCon">
+                      <div *ngIf="!Venta" class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
+                          Con</label>
+                        <input id="pagocon" type="text" placeholder="Paga con"
+                          class="inputfield font-size-18  form-control form-control-lg" currencyMask
+                          [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
+                          (blur)="ObtenerVueltosEnCompra()" [(ngModel)]="CambioModel.Recibido"
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
+                          tabindex="7">
+                      </div>
+                    </ng-container>
 
-
-
-                    <div *ngIf="!Venta" class="col-md-6">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
-                      <input readonly type="text" placeholder="Vueltos"
-                        class="inputfield font-size-18  form-control form-control-lg" currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
-                        [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
-                    </div>
+                    <ng-container *ngIf="mostrarDevueltos">
+                      <div *ngIf="!Venta" class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
+                        <input readonly type="text" placeholder="Vueltos"
+                          class="inputfield font-size-18  form-control form-control-lg" currencyMask
+                          [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
+                          [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
+                      </div>
+                    </ng-container>
 
                     <ng-container *ngIf="mostrarPagaCon">
                       <div *ngIf="Venta" class="col-md-6">
@@ -556,6 +551,17 @@
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
                           [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
+                      </div>
+                    </ng-container>
+
+
+                    <ng-container *ngIf="tipoCliente != ''">
+                      <div class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
+                          {{ (Venta) ? Entregado a : Recibido de      }}</label>
+                        <textarea type="text" cols="10" class="inputfield font-size-12  form-control form-control-lg"
+                          name="observacion" [(ngModel)]="CambioModel.observacion" [required]="tipoCliente != ''"
+                          tabindex="8"></textarea>
                       </div>
                     </ng-container>
 
@@ -763,14 +769,14 @@
                                   <i class="ti-pencil" style="cursor:pointer;" *ngIf="destinatario.EditarVisible"
                                     (click)="EditarDest2(destinatario.Numero_Documento_Destino, 'editar cuentas', i)"></i>
                                 </label>
-                                <!-- <input type="text" class="form-control font-size-18" name="Destino_{{i}}"
+                                <input type="text" class="form-control font-size-18" name="Destino_{{i}}"
                                   id="Destino_{{i}}" [(ngModel)]="destinatario.id_destinatario_transferencia"
                                   [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
                                   [inputFormatter]="formatterClienteCambioCompra"
                                   (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                   (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                   (blur)="validateInputDocumentRetard(destinatario.Numero_Documento_Destino, 'crear especial', i, destinatario)"
-                                  required tabindex="5"> -->
+                                  required tabindex="5">
                                 <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                               </div>
                             </div>

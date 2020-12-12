@@ -254,8 +254,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public flag: boolean = false;
 
 
-  public monedaDefectoVenta: any;
-  public monedaDefectoCompra: any;
+  public monedaDefectoVenta: any = [];
+  public monedaDefectoCompra: any = [];
   public tipoCliente: any = '';
 
 
@@ -307,6 +307,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Recibido: '',
     Id_Tercero: '',
     fomapago: '',
+    observacion: '',
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario
   };
 
@@ -630,11 +631,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   ) {
     this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
+    this.setMonedaDefefault()
     this._getMonedas();
     this._getTodasMonedas();
     this.AsignarMonedas();
     this.settearMoneda();
-    this.setMonedaDefefault()
     this.TransferenciaModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
@@ -744,15 +745,18 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   //#region FUNCIONES CAMBIOS
 
   async BuscarMoneda(value) {
-    let c = this.MonedasCambio.find(x => x.Id_Moneda == value);
-    return await c
+    let c = await this.MonedasCambio.find(x => x.Id_Moneda == value);
+    return c
   }
 
   async SetMonedaCambio(value) {
-
     this.MonedaParaCambio.id = value;
-    console.log(this.BuscarMoneda(value));
+    this.CambioModel.Valor_Origen = ''
+    this.CambioModel.Valor_Destino = ''
 
+    // this.BuscarMoneda(value);
+
+    let monedaFind = await this.BuscarMoneda(value)
 
     if (value != '') {
       let xx = await this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).toPromise().then((data) => {
@@ -760,7 +764,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (data['codigo'] == 'success') {
 
           this.MonedaParaCambio.Valores = data['query_data'];
-          this.MonedaParaCambio.nombre = 'viejitos';
+          this.MonedaParaCambio.nombre = monedaFind.Nombre;
           this.CambioModel.Recibido = '';
 
           if (this.Venta) {
@@ -1308,7 +1312,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         this.ShowSwal('warning', 'Alerta', 'Debe recalcular el monto a entregar!');
         return false;
 
-      } else if (this.CambioModel.Recibido == '') {
+        //TODO: Mejorar la logica
+      } else if (this.CambioModel.fomapago != 3 && this.CambioModel.Recibido == '') {
 
         this.ShowSwal('warning', 'Alerta', 'Debe colocar el monto en el campo "Paga Con"!');
         return false;
@@ -4619,6 +4624,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.vueltos = 0;
     this.entregar = 0;
     this.tasaCambiaria = "";
+    this.tituloCambio = 'Compras o Ventas';
 
     this.LimpiarModeloCambio();
   }
@@ -5436,7 +5442,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   limpiarImputCliente() {
     this.CambioModel.Id_Tercero = '';
     if (this.selectCustomClient.nativeElement.value == '') {
-
       this.setFormaPago();
       this.mostrarImputDocumento = false
       this.setMonedaDefefault();
@@ -5454,36 +5459,50 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   setFormaPago() {
     this.formasPago = [];
+    this.mostrarPagaCon = true;
+    this.mostrarDevueltos = true;
+    this.mostrarImputDocumento = false
     this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
       this.formasPagoAux = data;
       for (const forma of this.formasPagoAux) {
-
         if (forma['nombre'] == "Efectivo") {
           this.CambioModel.fomapago = forma['id']
           this.formasPago.push(forma);
+          this.mostrarImputDocumento = false
         }
       }
-
     });
   }
 
 
   setFormaPagoOtros() {
     this.formasPago = [];
+    this.mostrarPagaCon = true;
+    this.mostrarDevueltos = true;
+    this.mostrarImputDocumento = true
     this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
       this.formasPagoAux = data;
       for (const forma of this.formasPagoAux) {
-        if (this.Venta) {
-          if (forma['nombre'] == "Credito") {
-            this.CambioModel.fomapago = forma['id']
-            this.mostrarPagaCon = false;
-            this.mostrarDevueltos = false;
-            this.mostrarImputDocumento = true
-          }
+        if (forma['nombre'] == "Credito") {
+          this.CambioModel.fomapago = forma['id']
+        }
+        if (this.CambioModel.fomapago == 3) {
+          this.mostrarPagaCon = false;
+          this.mostrarDevueltos = false;
         }
         this.formasPago.push(forma);
       }
     });
+  }
+
+  setformasPago() {
+    if (this.CambioModel.fomapago != 3) {
+      this.mostrarPagaCon = true;
+      this.mostrarDevueltos = true;
+    } else {
+      this.mostrarPagaCon = false;
+      this.mostrarDevueltos = false;
+    }
   }
 
 
@@ -5508,12 +5527,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           if (moneda['MDefaultVenta'] == '1') {
             this.monedaDefectoVenta = moneda
             this.SetMonedaCambio(moneda['Id_Moneda'])
-          } else { this.monedaDefectoVenta = [] }
+          } else { this.monedaDefectoVenta['Id_Moneda'] = 0 }
         } else {
           if (moneda['MDefaultCompra'] == '1') {
             this.monedaDefectoCompra = moneda
             this.SetMonedaCambio(moneda['Id_Moneda'])
-          } else { this.monedaDefectoVenta = [] }
+          } else { this.monedaDefectoCompra['Id_Moneda'] = 0 }
         }
       })
     });
