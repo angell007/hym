@@ -16,6 +16,8 @@ export class MonedaModel {
     public Giro: boolean = false;
     public Cambio: boolean = false;
     public MDefault: string = '';
+    public MDefaultCompra: string = '';
+    public MDefaultVenta: string = '';
     public Monto_Maximo_Diferencia_Transferencia: string = '';
     public ValoresMoneda: ValoresMonedaModel = new ValoresMonedaModel();
 }

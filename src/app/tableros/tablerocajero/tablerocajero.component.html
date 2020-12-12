@@ -368,7 +368,7 @@
                       </label>
 
                       <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
-                        (change)="limpiarImputCliente()">
+                        (change)="limpiarImputCliente()" [(ngModel)]="tipoCliente" name="Forma_Pago">
                         <option value=""> Publico</option>
                         <option value="Cliente">Clientes</option>
                         <option value="Proveedor">Proveedores</option>
@@ -376,7 +376,7 @@
                     </div>
 
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" *ngIf="mostrarImputDocumento">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         Tercero
                       </label>
@@ -385,19 +385,12 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label class="font-size-18">Número de documento
-                              <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;"
-                                *ngIf="EditarRemitenteGiro"
-                                (click)="EditarPersonaGiro(GiroModel.Documento_Remitente, 'remitente', 'editar desde giro')"></i>
-                              <i class="ti-plus text-success pl-2 font-size-17" style="cursor:pointer;"
-                                *ngIf="CrearRemitenteGiro"
-                                (click)="EditarPersonaGiro(Remitente_Giro, 'remitente', 'crear desde giro')"></i>
-                            </label>
+                            <!-- <label class="font-size-18">Número de documento</label> -->
                             <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
                               placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
                               [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
                               [(ngModel)]="CambioModel.Id_Tercero" [inputFormatter]="formatterClienteCambioCompra"
-                              (ngModelChange)="CambioModel.Id_Tercero">
+                              (ngModelChange)="CambioModel.Id_Tercero" [required]="tipoCliente != ''">
                           </div>
                         </div>
                       </div>
@@ -433,12 +426,12 @@
                     </div>
 
 
-                    <div class="col-md-12" *ngIf="CambioModel.fomapago == '3'">
+                    <!-- <div class="col-md-12" *ngIf="CambioModel.fomapago == '3'">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         Cupo de Tercero
                       </label>
                       {{ CambioModel | json }}
-                    </div>
+                    </div> -->
 
 
                     <!--ESCOGER MONEDA PARA VENTA-->
@@ -447,7 +440,7 @@
                         {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
                       </label>
                       <select *ngIf="Venta" class="inputfield  form-control form-control-lg font-size-18"
-                        placeholder="Destino" id="Destino" name="Destino" [(ngModel)]="monedaDefectoVenta.Id_Moneda"
+                        placeholder="Destino" id="Destino" name="Destino" [(ngModel)]="monedaDefectoVenta['Id_Moneda']"
                         (change)="SetMonedaCambio($event.target.value);" required tabindex="2">
                         <option value=""> Seleccione Moneda</option>
                         <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
@@ -533,6 +526,7 @@
                     </div>
 
 
+
                     <div *ngIf="!Venta" class="col-md-6">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
                       <input readonly type="text" placeholder="Vueltos"
@@ -541,25 +535,29 @@
                         [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
                     </div>
 
-                    <div *ngIf="Venta" class="col-md-6">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
-                        Con</label>
-                      <input id="pagocon" type="text" placeholder="Paga con"
-                        class="inputfield font-size-18  form-control form-control-lg" currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
-                        (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido"
-                        [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
-                        tabindex="7">
-                    </div>
+                    <ng-container *ngIf="mostrarPagaCon">
+                      <div *ngIf="Venta" class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
+                          Con</label>
+                        <input id="pagocon" type="text" placeholder="Paga con"
+                          class="inputfield font-size-18  form-control form-control-lg" currencyMask
+                          [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
+                          (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido"
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
+                          tabindex="7">
+                      </div>
+                    </ng-container>
 
 
-                    <div *ngIf="Venta" class="col-md-6">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
-                      <input readonly type="text" placeholder="Vueltos"
-                        class="inputfield font-size-18  form-control form-control-lg" currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
-                        [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
-                    </div>
+                    <ng-container *ngIf="mostrarDevueltos">
+                      <div *ngIf="Venta" class="col-md-6">
+                        <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
+                        <input readonly type="text" placeholder="Vueltos"
+                          class="inputfield font-size-18  form-control form-control-lg" currencyMask
+                          [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
+                          [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
+                      </div>
+                    </ng-container>
 
                   </div>
                 </form>
