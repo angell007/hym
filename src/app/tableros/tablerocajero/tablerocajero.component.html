@@ -404,13 +404,14 @@
 
                     </div>
 
+
                     <div class="col-md-6">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         {{ !Venta ? 'Moneda que compra' : 'Moneda que recibe'}}
                       </label>
                       <select *ngIf="!Venta" class="inputfield font-size-18  form-control form-control-lg"
                         placeholder="Origen" id="Origen" name="Origen" (change)="SetMonedaCambio($event.target.value);"
-                        required tabindex="1">
+                        [(ngModel)]="monedaDefectoCompra.Id_Moneda " required tabindex="1">
                         <option value=""> Seleccione Moneda</option>
                         <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
                           ({{ m.Codigo }}) </option>
@@ -446,8 +447,7 @@
                         {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
                       </label>
                       <select *ngIf="Venta" class="inputfield  form-control form-control-lg font-size-18"
-                        placeholder="Destino" id="Destino" name="Destino"
-                        [(ngModel)]="(Venta) ? monedaDefectoVenta.Id_Moneda : monedaDefectoCompra.Id_Moneda"
+                        placeholder="Destino" id="Destino" name="Destino" [(ngModel)]="monedaDefectoVenta.Id_Moneda"
                         (change)="SetMonedaCambio($event.target.value);" required tabindex="2">
                         <option value=""> Seleccione Moneda</option>
                         <option *ngFor="let m of MonedasCambio" [value]="m.Id_Moneda">{{m.Nombre}}
@@ -459,7 +459,6 @@
                   </div>
 
                   <div class="row">
-
                     <div class="col-md-4" *ngIf="!Venta">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         Compra
@@ -766,14 +765,14 @@
                                   <i class="ti-pencil" style="cursor:pointer;" *ngIf="destinatario.EditarVisible"
                                     (click)="EditarDest2(destinatario.Numero_Documento_Destino, 'editar cuentas', i)"></i>
                                 </label>
-                                <input type="text" class="form-control font-size-18" name="Destino_{{i}}"
+                                <!-- <input type="text" class="form-control font-size-18" name="Destino_{{i}}"
                                   id="Destino_{{i}}" [(ngModel)]="destinatario.id_destinatario_transferencia"
                                   [ngbTypeahead]="search_destino2" [resultTemplate]="rt_destino"
                                   [inputFormatter]="formatterClienteCambioCompra"
                                   (ngModelChange)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                   (change)="AutoCompletarDestinatario(destinatario.id_destinatario_transferencia, i, ListaDestinatarios,destinatario)"
                                   (blur)="validateInputDocumentRetard(destinatario.Numero_Documento_Destino, 'crear especial', i, destinatario)"
-                                  required tabindex="5">
+                                  required tabindex="5"> -->
                                 <!-- [disabled]="MonedaParaTransferencia.id == ''" -->
                               </div>
                             </div>

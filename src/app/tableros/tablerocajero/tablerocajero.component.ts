@@ -625,7 +625,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._getTodasMonedas();
     this.AsignarMonedas();
     this.settearMoneda();
-
+    this.setMonedaDefefault()
     this.TransferenciaModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
@@ -827,9 +827,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   guardarCambio(formulario: NgForm, item) {
 
-    console.log(this.CambioModel);
-
-    return false;
+    // console.log(this.CambioModel);
+    // return false;
 
     if (this.selectCustomClient.nativeElement.value != '' && this.CambioModel.Id_Tercero == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe Ingresar la identificacion de un tercero');
