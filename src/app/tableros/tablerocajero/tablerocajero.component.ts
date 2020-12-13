@@ -552,7 +552,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Comision: '',
     Valor: '',
     Detalle: '',
-    Id_Moneda: JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'],
+    Id_Moneda: '',
     Estado: 'Activo',
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
     Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
@@ -640,6 +640,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.CorresponsalModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+    this.ServicioExternoModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
 
   }
 
@@ -1009,6 +1010,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // console.log(tipo_cambio);
     // console.log(tipo_moneda_origen);
 
+    const multiplier = 1 / 100;
+
     if (tipo_cambio == 'o') {
 
       if (this.CambioModel.Valor_Origen == '' || this.CambioModel.Valor_Origen === undefined) {
@@ -1018,13 +1021,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
         if (tipo_moneda_origen == 'l') {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = cambio;
-          console.log('if', cambio);
+          this.CambioModel.Valor_Destino = Math.round(cambio * multiplier) / multiplier;
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
 
           this.CambioModel.Valor_Destino = cambio;
-          // console.log('else', cambio);
         }
       }
     } else if (tipo_cambio == 'd') {
@@ -1037,12 +1038,15 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (tipo_moneda_origen == 'l') {
 
           var cambio = Math.floor(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Origen = cambio;
-
+          if (this.MonedaParaCambio.id == 1) {
+            this.CambioModel.Valor_Origen = Math.round(cambio * multiplier) / multiplier;
+          } else {
+            this.CambioModel.Valor_Origen = cambio;
+          }
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Origen = cambio;
-          console.log('else2', cambio);
+          // this.CambioModel.Valor_Origen = Math.round(cambio * multiplier) / multiplier;
         }
       }
     }

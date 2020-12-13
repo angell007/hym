@@ -293,8 +293,12 @@
                         <td class="text-right" style="font-size: 14px;">
                           {{cambio.valor_recibido | customcurrency:cambio.codigo_destino}}
                         </td>
+
+                        <!-- [ngClass]="{'bg-warning': cambio.fomapago_id == 3}" -->
                         <td class="text-right" style="font-size: 14px;">
-                          {{cambio.Valor_Destino | customcurrency:cambio.codigo_destino}}
+                          <span *ngIf="cambio.fomapago_id == 3"> ( </span>
+                          {{ cambio.Valor_Destino | customcurrency:cambio.codigo_destino }}
+                          <span *ngIf="cambio.fomapago_id == 3"> ) </span>
                         </td>
 
                         <td class="text-right" style="font-size: 14px;">
@@ -315,16 +319,20 @@
                             <i class="ti-search"></i>
                           </button>
 
-                          <button class="btn btn-xs btn-warning" type="button" title="Devolver cambio" style="margin:0;"
-                            *ngIf="cambio.Tipo != 'Compra' && cambio.Estado != 'Anulado'"
-                            (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
-                            <i class="ti-shift-left"></i>
-                          </button>
+                          <ng-container *ngIf="cambio.fomapago_id != 3">
+                            <button class="btn btn-xs btn-warning" type="button" title="Devolver cambio"
+                              style="margin:0;" *ngIf="cambio.Tipo != 'Compra' && cambio.Estado != 'Anulado'"
+                              (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
+                              <i class="ti-shift-left"></i>
+                            </button>
+                          </ng-container>
 
-                          <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
-                            (click)="printCambio(cambio.Id_Cambio)">
-                            <i class="ti-desktop"></i>
-                          </button>
+                          <ng-container *ngIf="cambio.Estado != 'Anulado'">
+                            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                              style="margin:0;" (click)="printCambio(cambio.Id_Cambio)">
+                              <i class="ti-desktop"></i>
+                            </button>
+                          </ng-container>
 
                           <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
                             *ngIf="cambio.Estado != 'Anulado'"
@@ -429,7 +437,8 @@
                     <!--ESCOGER MONEDA PARA VENTA-->
                     <div class="col-md-6">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                        {{ Venta ? 'Moneda que vende' : 'Moneda que entrega'}}
+                        {{ Venta ? 'Moneda que vende' : (CambioModel.fomapago != 1) ? 'Moneda que entrega' : 'Moneda
+                        Abonada'}}
                       </label>
                       <select *ngIf="Venta" class="inputfield  form-control form-control-lg font-size-18"
                         placeholder="Destino" id="Destino" name="Destino" [(ngModel)]="monedaDefectoVenta['Id_Moneda']"
@@ -470,6 +479,7 @@
                         (ngModelChange)="conversionMoneda('d', 'l')" [disabled]="HabilitarCampos" required tabindex="4">
                     </div>
 
+                    <!-- //TODO ver como no setear bolivares -->
                     <div class="col-md-4 mt-1">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                         Cambio </label>
@@ -477,14 +487,17 @@
                         class="inputfield font-size-18  form-control form-control-lg" autocomplete="false"
                         id="Precio_Sugerido" name="Tasa" (blur)="conversionMoneda('o', 'e')"
                         [disabled]="HabilitarCampos" required currencyMask
-                        [options]="{ thousands: '.' , decimal: ',' , precision: '0' }" tabindex="5"
-                        [(ngModel)]="CambioModel.Tasa">
+                        [options]="{ thousands: '.' , decimal: ',' , precision: (MonedaParaCambio.id == 1) ? '2' : '0' }"
+                        tabindex="5" [(ngModel)]="CambioModel.Tasa">
                       <!-- TODO: viejitos cambiar  -->
                     </div>
 
                     <div class="col-md-4 mt-1" *ngIf="!Venta">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Entrega
-                        {{MonedaDestino}}
+                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
+
+                        {{ Venta ? '' : (CambioModel.fomapago != 1) ? 'Abono a cuenta por valor de':
+                        'Entrega ' + MonedaDestino}}
+
                       </label>
                       <input type="text" placeholder="Entrega" name="Valor_Destino"
                         class="inputfield font-size-18  form-control form-control-lg" autocomplete="false" id="Entrega"
@@ -558,7 +571,8 @@
                     <ng-container *ngIf="tipoCliente != ''">
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                          {{ (Venta) ? Entregado a : Recibido de      }}</label>
+                          {{ Venta ? 'Entrega a :' : 'Recibe de :'}}
+                        </label>
                         <textarea type="text" cols="10" class="inputfield font-size-12  form-control form-control-lg"
                           name="observacion" [(ngModel)]="CambioModel.observacion" [required]="tipoCliente != ''"
                           tabindex="8"></textarea>
