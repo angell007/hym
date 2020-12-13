@@ -32,7 +32,7 @@ export class Globales {
   }
 
   BuscarMonedas(): void {
-    this.client.get(this.rutaNueva + 'monedas ').subscribe((data) => {
+    this.client.get(this.rutaNueva + 'monedas').subscribe((data) => {
       this.Monedas = data;
     });
   }

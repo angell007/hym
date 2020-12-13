@@ -21,6 +21,8 @@ export class ModalmonedaComponent implements OnInit {
 
   @ViewChild('ModalMoneda') ModalMoneda: any;
   @ViewChild('checkDefault') checkDefault: any;
+  @ViewChild('checkDefaultCompra') checkDefaultCompra: any;
+  @ViewChild('checkDefaultVenta') checkDefaultVenta: any;
 
   public BancosPais: Array<any> = [];
   public Paises: any = [];
@@ -33,7 +35,7 @@ export class ModalmonedaComponent implements OnInit {
   public MensajeGuardar: string = 'Se dispone a guardar esta moneda';
 
   public MonedaModel: MonedaModel = new MonedaModel();
-  public MonedasSistema: any =  [];
+  public MonedasSistema: any = [];
   constructor(private _generalService: GeneralService,
     private _swalService: SwalService,
     private _validacionService: ValidacionService,
@@ -67,18 +69,42 @@ export class ModalmonedaComponent implements OnInit {
                 } else {
                   this.checkDefault.nativeElement.style.display = 'none';
                 }
+                if (moneda['MDefaultCompra'] == '1') {
+                  this.checkDefaultCompra.nativeElement.style.display = 'block';
+                } else {
+                  this.checkDefaultCompra.nativeElement.style.display = 'none';
+                }
+                if (moneda['MDefaultVenta'] == '1') {
+                  this.checkDefaultVenta.nativeElement.style.display = 'block';
+                } else {
+                  this.checkDefaultVenta.nativeElement.style.display = 'none';
+                }
               }
             })
 
             let count = 0;
+            let countCompra = 0;
+            let countVenta = 0;
             this.MonedasSistema.forEach((moneda) => {
               if (moneda['MDefault'] != '1') {
                 count++
+              }
+              if (moneda['MDefaultCompra'] != '1') {
+                countCompra++
+              }
+              if (moneda['MDefaultVenta'] != '1') {
+                countVenta++
               }
             })
 
             if (this.MonedasSistema.length == count) {
               this.checkDefault.nativeElement.style.display = 'block';
+            }
+            if (this.MonedasSistema.length == countCompra) {
+              this.checkDefaultCompra.nativeElement.style.display = 'block';
+            }
+            if (this.MonedasSistema.length == countVenta) {
+              this.checkDefaultVenta.nativeElement.style.display = 'block';
             }
 
             count = 0;
@@ -103,7 +129,7 @@ export class ModalmonedaComponent implements OnInit {
               count++
             }
           })
-          
+
           if (this.MonedasSistema.length == count) {
             this.checkDefault.nativeElement.style.display = 'block';
           } else {
@@ -128,10 +154,10 @@ export class ModalmonedaComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetPaises() {
-    setTimeout(() => {
-      this.Paises = this._generalService.getPaises();
-    }, 1000);
+  async GetPaises() {
+    // setTimeout(() => {
+    this.Paises = await this._generalService.getPaises();
+    // }, 1000);
   }
 
   GuardarMoneda() {
