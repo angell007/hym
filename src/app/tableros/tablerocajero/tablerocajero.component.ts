@@ -892,10 +892,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
             if (this.MonedaParaCambio.id == element.id) {
-              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Destino)) {
-                this.flagCompra = true;
+
+              if (this.CambioModel.fomapago != 3) {
+                if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Destino)) {
+                  this.flagCompra = true;
+                }
               }
             }
+
           });
 
           if (this.flagCompra) {
