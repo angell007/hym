@@ -54,7 +54,7 @@ export class ConsolidadosService {
       this.Modulos = data;
 
       data.forEach(element => {
-        this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo })
+        this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
       });
     });
 

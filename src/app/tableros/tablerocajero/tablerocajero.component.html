@@ -489,7 +489,6 @@
                         [disabled]="HabilitarCampos" required currencyMask
                         [options]="{ thousands: '.' , decimal: ',' , precision: (MonedaParaCambio.id == 1) ? '2' : '0' }"
                         tabindex="5" [(ngModel)]="CambioModel.Tasa">
-                      <!-- TODO: viejitos cambiar  -->
                     </div>
 
                     <div class="col-md-4 mt-1" *ngIf="!Venta">
@@ -658,7 +657,6 @@
               </div>
             </div>
 
-            <!-- TODO se modifica paga con, vueltos  -->
             <div class="row" id="transferencias2" *ngIf="Transferencia2" style="margin-top: 50px">
               <div class="col-md-12">
                 <form #FormTransferencia="ngForm">
@@ -2107,7 +2105,7 @@
               <div class="col-md-12">
                 <div class="mrg-top-30">
                   <form #FormTraslado="ngForm">
-                    <h4>Datos del traslado</h4>
+                    <!-- <h4>Datos del traslado</h4> -->
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">

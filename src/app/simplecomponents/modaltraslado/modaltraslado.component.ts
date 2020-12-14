@@ -154,21 +154,19 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   formatter_destino = (x: { Nombre: string }) => x.Nombre;
 
   GuardarTraslado() {
-
     this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-      if (this.TrasladoModel.Moneda == element[3]) {
-        if (parseFloat(element[1]) < parseFloat(this.TrasladoModel.Valor)) {
+      if (this.TrasladoModel.Moneda == element.id) {
+        if (parseFloat(element.saldo) < parseFloat(this.TrasladoModel.Valor)) {
           this.flag = true;
         }
       }
     });
 
-
-    // if (this.flag) {
-    //   this.flag = false;
-    //   this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
-    //   return false
-    // }
+    if (this.flag) {
+      this.flag = false;
+      this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
+      return false
+    }
 
 
     if (!this.ValidateBeforeSubmit()) {

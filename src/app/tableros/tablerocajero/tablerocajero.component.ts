@@ -868,33 +868,31 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.CambioModel.Tipo = 'Compra';
           this.CambioModel.Recibido = '0';
           this.CambioModel.Estado = 'Realizado';
-          this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-            if (this.MonedaParaCambio.nombre == element[2]) { }
-          });
-
         }
+
         if (this.Venta) {
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-            if (this.MonedaParaCambio.nombre == element[2]) {
-              if (parseFloat(element[1]) < parseFloat(this.CambioModel.Valor_Destino)) {
+            console.log(parseInt(this.MonedaParaCambio.id) == element.id);
+            if (this.MonedaParaCambio.id == element.id) {
+              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Destino)) {
                 this.flagVenta = true;
               }
             }
           });
-          //TODO. validacion  de saldos en cambio 
-          // if (this.flagVenta) {
-          //   this.flagVenta = false;
-          //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-          //   return false
-          // }
+
+          if (this.flagVenta) {
+            this.flagVenta = false;
+            this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+            return false
+          }
           this.CambioModel.Tipo = 'Venta';
           this.CambioModel.Estado = 'Realizado';
 
         } else {
 
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-            if (this.MonedaParaCambio.nombre == element[2]) {
-              if (parseFloat(element[1]) < parseFloat(this.CambioModel.Valor_Origen)) {
+            if (this.MonedaParaCambio.id == element.id) {
+              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Origen)) {
                 this.flagCompra = true;
               }
             }
@@ -1070,7 +1068,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  // TODO validando origen
   ValidacionTipoCambio(tipo: string): boolean {
     if (tipo == 'o') {
       // console.log("entro a validar origen");
@@ -1099,7 +1096,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO validacion de la tasa
   ValidacionTasa(tipo_cambio: string): boolean {
 
     // console.log(["entro a validar tasa", this.MonedaParaCambio]);
@@ -2219,26 +2215,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     ];
 
-    // this.MonedaParaTransferencia = {
-    //   id: 0,
-    //   nombre: '',
-    //   Valores: {
-    //     Min_Venta_Efectivo: '',
-    //     Max_Venta_Efectivo: '',
-    //     Sugerido_Venta_Efectivo: '',
-    //     Min_Compra_Efectivo: '',
-    //     Max_Compra_Efectivo: '',
-    //     Sugerido_Compra_Efectivo: '',
-    //     Min_Venta_Transferencia: '',
-    //     Max_Venta_Transferencia: '',
-    //     Sugerido_Venta_Transferencia: '',
-    //     Costo_Transferencia: '',
-    //     Comision_Efectivo_Transferencia: '',
-    //     Pagar_Comision_Desde: '',
-    //     Min_No_Cobro_Transferencia: '',
-    //   }
-    // };
-    // ********************
     this.id_remitente = '';
     this.tercero_credito = '';
   }
@@ -3752,20 +3728,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   RealizarTraslado(formulario: NgForm, modal) {
 
     this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-      if (this.TrasladoModel.Id_Moneda == element[3]) {
-        if (parseFloat(element[1]) < parseFloat(this.TrasladoModel.Valor)) {
+      if (this.TrasladoModel.Id_Moneda == element.id) {
+        if (parseFloat(element.saldo) < parseFloat(this.TrasladoModel.Valor)) {
           this.flag = true;
         }
       }
     });
 
-    //TODO: validar saldo en traslados
 
-    // if (this.flag) {
-    //   this.flag = false;
-    //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-    //   return false
-    // }
+    if (this.flag) {
+      this.flag = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
 
     this.TrasladoModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
     this.TrasladoModel.Id_Caja = this.generalService.SessionDataModel.idCaja;
@@ -4027,6 +4002,21 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       return
     }
 
+    //TODO: monedas 
+    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+      if (2 == element.id) {
+        if (parseFloat(element.saldo) < parseFloat(this.ServicioExternoModel.Valor)) {
+          this.flag = true;
+        }
+      }
+    });
+
+
+    if (this.flag) {
+      this.flag = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
 
 
     let info = this.generalService.normalize(JSON.stringify(this.ServicioExternoModel));
@@ -5359,11 +5349,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     else if (respuestaModal.willdo == 'actualizar') {
 
       setTimeout(() => {
-        this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: respuestaModal.id_destinatario, moneda: this.MonedaParaTransferencia.id, solo_extranjeras: '1' } }).subscribe((data: any) => {
+        this.http.get(this.globales.ruta + 'php/destinatarios/filtrar_destinatario_por_id.php', { params: { id_destinatario: respuestaModal.id_destinatario, moneda: this.MonedaParaTransferencia.id } }).subscribe((data: any) => {
           if (data != '') {
 
-            // this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0].Id_Destinatario;
-            // this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
             this.ListaDestinatarios[this.PosicionDestinatarioActivo].Nombre_Destinatario = data[0].Nombre;
             this.ListaDestinatarios[this.PosicionDestinatarioActivo].Numero_Documento_Destino = data[0].Id_Destinatario;
             this.ListaDestinatarios[this.PosicionDestinatarioActivo].id_destinatario_transferencia = data[0];

@@ -69,7 +69,6 @@ export class ModalegresoComponent implements OnInit {
     public globales: Globales,
 
   ) {
-    // this.GetGrupos();
   }
 
   ngOnInit() {
@@ -104,24 +103,6 @@ export class ModalegresoComponent implements OnInit {
       { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } })
       .map((response) => {
 
-        // Asignada: "No"
-        // Comision_Bancaria: "2500.00"
-        // Detalle: "Cuenta de prueba"
-        // Estado: "Activa"
-        // Estado_Apertura: "Cerrada"
-        // Fecha: "2019-10-03 17:35:24"
-        // Funcionario_Seleccion: 987654321
-        // Id_Banco: 81
-        // Id_Cuenta_Bancaria: 30
-        // Id_Moneda: 1
-        // Id_Pais: 2
-        // Identificacion_Titular: 1248965
-        // Monto_Inicial: "50000000"
-        // Nombre_Titular: "Prueba"
-        // Numero_Cuenta: "01025489632598654285"
-        // Tipo: "1"
-        // Tipo_Cuenta: "Empresarial"
-
         if (this.selectCustomClient.nativeElement.value == 'Cuentas') {
           this.titular == response['Nombre_Titular']
         }
@@ -135,7 +116,6 @@ export class ModalegresoComponent implements OnInit {
 
   GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
-      // console.log(data);
       this.Monedas = data;
       let monedaDefault: any[] = this.Monedas.filter((x: any) => {
         return x.Nombre == 'Pesos'
@@ -160,20 +140,19 @@ export class ModalegresoComponent implements OnInit {
 
 
     this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-      if (this.EgresoModel.Id_Moneda == element[3]) {
-        if (parseFloat(element[1]) < parseFloat(this.EgresoModel.Valor)) {
+      if (this.EgresoModel.Id_Moneda == element.id) {
+        if (parseFloat(element.saldo) < parseFloat(this.EgresoModel.Valor)) {
           this.flag = true;
         }
       }
     });
 
-    //TODO validar saldos.
 
-    // if (this.flag) {
-    //   this.flag = false;
-    //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-    //   return false
-    // }
+    if (this.flag) {
+      this.flag = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
 
     this.EgresoModel.Fecha = this._generalService.FechaActual;
     this.EgresoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
@@ -255,6 +234,8 @@ export class ModalegresoComponent implements OnInit {
 
   limpiarImputCliente() {
     this.EgresoModel.Id_Tercero = '';
+    this.cupo = ''
+    this.verCupo = false
     this.booleancuentas = false;
     if (this.selectCustomClient.nativeElement.value == 'Cuentas') {
       this.booleancuentas = true;
@@ -265,9 +246,20 @@ export class ModalegresoComponent implements OnInit {
     return Observable.throw(error);
   }
   CerrarModal() {
+    this.selectCustomFormaPago.nativeElement.value = 'efectivo'
+    this.selectCustomClient.nativeElement.value = 'Cliente'
+    this.limpiarImputCliente()
     this.LimpiarModelo();
     this.potencial = ''
     this.ModalEgreso.hide();
+  }
+
+  limpiarCampos() {
+    if (this.selectCustomFormaPago.nativeElement.value == 'efectivo') {
+      this.verCupo = false
+    } else {
+
+    }
   }
 
   LimpiarModelo() {

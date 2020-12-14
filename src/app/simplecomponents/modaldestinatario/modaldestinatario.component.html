@@ -91,7 +91,6 @@
 
                 </td>
                 <td width="25%">
-                  <!-- TODO se cambia mascara de cuenta -->
                   <input [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control"
                     name="Numero_Cuenta{{i}}" type="text" [(ngModel)]="item.Numero_Cuenta"
                     (blur)="codigoBanco(i,'input')" (change)="validarBanco(i,$event.target.value)" required

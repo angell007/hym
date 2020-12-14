@@ -25,7 +25,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label class=" font-size-18">Forma de pago </label>
-            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomFormaPago>
+            <select class="inputfield font-size-18  form-control form-control-lg" (change)="limpiarCampos()"
+              #selectCustomFormaPago>
               <option> Seleccione</option>
               <option value="efectivo">Efectivo</option>
               <option value="credito">Credito</option>
@@ -69,7 +70,7 @@
           <div class="form-group">
             <label class=" font-size-18">Valor</label>
             <input type="text" placeholder="Valor egreso" class="form-control  font-size-18" name="Valor" currencyMask
-              [options]="{ thousands: '.', decimal: ',' }" [(ngModel)]="EgresoModel.Valor" required
+              [options]="{ thousands: '.', decimal: ',', precision: '0'}" [(ngModel)]="EgresoModel.Valor" required
               (ngModelChange)="calcularEgreso()">
           </div>
         </div>
