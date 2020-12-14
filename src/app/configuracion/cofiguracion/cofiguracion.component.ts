@@ -211,34 +211,35 @@ export class CofiguracionComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     }).subscribe((data: any) => {
-      // console.log(data);
-      
       this.Identificacion = '1';
       this.configuracionGeneral = data;
     });
   }
 
   HabilitarFuncionario(i,j,pos){
+
+    var posicion = this.MonedaValor.findIndex(x => x.Id_Moneda_Valor == pos);
     var checkeado = ((document.getElementById("Diario_" + i + "_" + j) as HTMLInputElement).checked);
 
-    switch(checkeado){
+    switch(checkeado){      
       case true:{
        (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = false;
-       this.MonedaValor[(pos-1)].Diario = 1;
+       this.MonedaValor[posicion].Diario = 1;
         break;
       }
       case false:{
         (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = true;
-        this.MonedaValor[(pos-1)].Identificacion_Funcionario = null;
-        this.MonedaValor[(pos-1)].Diario = 0;
+        this.MonedaValor[posicion].Identificacion_Funcionario = "0";
+        this.MonedaValor[posicion].Diario = "0";
         break;
       }
     }
   }
 
   asignarFuncionario(id, funcionario){
-    this.MonedaValor[(id-1)].Identificacion_Funcionario = funcionario;
-    this.MonedaValor[(id-1)].Diario = 1;
+    var posicion = this.MonedaValor.findIndex(x => x.Id_Moneda_Valor == id);
+    this.MonedaValor[posicion].Identificacion_Funcionario = funcionario;
+    this.MonedaValor[posicion].Diario = 1;
   }
 
   GuardarMoneda(pos, moneda) {

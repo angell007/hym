@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Globales } from '../shared/globales/globales';
+import { GeneralService } from '../shared/services/general/general.service';
 import { SwalService } from '../shared/services/swal/swal.service';
 
 
@@ -18,6 +19,8 @@ export class MotivoscambioComponent implements OnInit {
   public pageSize: number = 0;
   public page: number = 0;
   public TotalItems: number = 0;
+  public Cargando : boolean = true;
+  public RutaGifCargando: string;
 
 
   public motivoModel = {
@@ -27,8 +30,11 @@ export class MotivoscambioComponent implements OnInit {
   constructor(
     private globales: Globales,
     private http: HttpClient,
-    private swalService: SwalService
-  ) { }
+    private swalService: SwalService,
+    private generalService: GeneralService,
+  ) { 
+    this.RutaGifCargando = generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif'; 
+  }
 
   ngOnInit() {
     this.getMotivos()
@@ -36,6 +42,7 @@ export class MotivoscambioComponent implements OnInit {
 
   getMotivos() {
     this.http.get(this.globales.rutaNueva + 'motivos-devolucion').subscribe((data: any) => {
+      this.Cargando=false;
       this.motivos = data;
     })
   }

@@ -1,8 +1,17 @@
 // @import '../node_modules/ng2-toasty/bundles/style-bootstrap.css';
+.btn-xs{
+  font-size: 10px !important;
+  padding: 3px !important;
+}
+
+.btn-superior{
+  font-size: 14px !important;
+  padding: 7px !important;
+}
 
 .bg-anulada {
-  background-color: #9c3636ba !important;
-  color: white;
+  font-weight: bold !important;
+  color: red;
 }
 
 .bg-devuelta {
