@@ -892,7 +892,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
             if (this.MonedaParaCambio.id == element.id) {
-              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Origen)) {
+              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Destino)) {
                 this.flagCompra = true;
               }
             }
@@ -903,7 +903,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
             return false
           }
-
           this.CambioModel.Tipo = 'Compra';
           this.CambioModel.Recibido = '0';
           this.CambioModel.Estado = 'Realizado';
