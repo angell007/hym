@@ -2900,22 +2900,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   CargarTransferenciasDiarias() {
-    // this.Transferencia = [];
-    // this._transferenciaService.getRecibosTransferenciasFuncionario(this.funcionario_data.Identificacion_Funcionario).subscribe((data: any) => {
-    //   if (data.codigo == 'success') {
-    //     this.Transferencia = data.query_data;
-    //   }else{
+    this.Transferencia = [];
+    this._transferenciaService.getRecibosTransferenciasFuncionario(this.funcionario_data.Identificacion_Funcionario).subscribe((data: any) => {
+      console.log(data);
+      if (data.codigo == 'success') {
+        this.Transferencia = data.query_data;
+      } else {
 
-    //     this.Transferencia = [];
-    //     let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-    //     this._toastService.ShowToast(toastObj);
-    //   }
+        this.Transferencia = [];
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+        this._toastService.ShowToast(toastObj);
+      }
 
-    // });
-    // this.Transferencia = [];
-    // this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php' , {params: {funcionario:this.funcionario_data.Identificacion_Funcionario} } ).subscribe((data: any) => {
-    //   this.Transferencia = data;
-    // });
+    });
+    this.Transferencia = [];
+    this.http.get(this.globales.ruta + 'php/pos/lista_recibos_transferencia.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).subscribe((data: any) => {
+      this.Transferencia = data;
+    });
 
     this.ActulizarTablaRecibos.next();
   }

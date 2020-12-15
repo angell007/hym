@@ -15,29 +15,28 @@ import { ActualizarService } from '../../customservices/actualizar.service';
 })
 export class ModaldevoluciontransferenciaComponent implements OnInit {
 
-  @Output() RecargarPagos:EventEmitter<any> = new EventEmitter();
-  @Input() AbrirModal:Observable<any> = new Observable();
-  private openSubscription:ISubscription;
-  
+  @Output() RecargarPagos: EventEmitter<any> = new EventEmitter();
+  @Input() AbrirModal: Observable<any> = new Observable();
+  private openSubscription: ISubscription;
+
   // private Id_Apertura_Consultor:string = localStorage.getItem('Apertura_Consultor');
-  private Id_Apertura_Consultor:string = '';
+  private Id_Apertura_Consultor: string = '';
 
-  @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia:any;
+  @ViewChild('ModalDevolucionTransferencia') ModalDevolucionTransferencia: any;
 
-  public MotivosDevolucion:Array<any> = [];
-  public CodigoMoneda:string = '';
-  public DevolucionModel:DevolucionTransferenciaModel = new DevolucionTransferenciaModel();
+  public MotivosDevolucion: Array<any> = [];
+  public CodigoMoneda: string = '';
+  public DevolucionModel: DevolucionTransferenciaModel = new DevolucionTransferenciaModel();
 
-  constructor(private _generalService:GeneralService,
-              private _transferenciaService:TransferenciaService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _actualizar: ActualizarService) 
-  { 
+  constructor(private _generalService: GeneralService,
+    private _transferenciaService: TransferenciaService,
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _actualizar: ActualizarService) {
   }
 
   ngOnInit() {
-    this.openSubscription = this.AbrirModal.subscribe((data:any) => {
+    this.openSubscription = this.AbrirModal.subscribe((data: any) => {
       // console.log(data);
       this.CodigoMoneda = data.codigo_moneda;
       this._setDatosModelo(data.transferencia);
@@ -50,44 +49,37 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
     });
   }
 
-  public GetMotivosDevolucion(){
-    this._generalService.GetMotivosDevolucion().subscribe((response:any) => {
+  public GetMotivosDevolucion() {
+    this._generalService.GetMotivosDevolucion().subscribe((response: any) => {
       // console.log(response);
       if (response.codigo == 'success') {
         this.MotivosDevolucion = response.query_data;
-      }else{
+      } else {
         this.MotivosDevolucion = [];
       }
     });
   }
 
-  private _setDatosModelo(transferenciaModel:any){
+  private _setDatosModelo(transferenciaModel: any) {
     this.DevolucionModel.Id_Pago_Transferencia = transferenciaModel.Id_Pago_Transfenecia;
     this.DevolucionModel.Id_Transferencia_Destinatario = transferenciaModel.Id_Transferencia_Destino;
     this.DevolucionModel.Valor = transferenciaModel.Valor_Pagado;
     // console.log(this.DevolucionModel);    
   }
 
-  RealizarDevolucion() {    
+  RealizarDevolucion() {
     this.DevolucionModel.Id_Funcionario = this._generalService.Funcionario.Identificacion_Funcionario;
-    // console.log(this.DevolucionModel);
-
     let info = this._generalService.normalize(JSON.stringify(this.DevolucionModel));
     let datos = new FormData();
     datos.append("modelo", info);
     datos.append("id_apertura", this.Id_Apertura_Consultor);
-    this._transferenciaService.DevolverTransferencia(datos).subscribe((response:any) => {
-      // console.log(response);
+    this._transferenciaService.DevolverTransferencia(datos).subscribe((response: any) => {
       if (response.codigo == 'success') {
-
         this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
-        
-        // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
-        // this._toastService.ShowToast(toastObj);
         this.CerrarModal();
         this._actualizar.cardListing.next()
         this.RecargarPagos.emit();
-      }else{
+      } else {
         this._swalService.ShowMessage(['warning', response.titulo, response.mensaje]);
         // let toastObj = {textos:[response.titulo, response.mensaje], tipo:response.codigo, duracion:4000};
         // this._toastService.ShowToast(toastObj);
@@ -95,14 +87,14 @@ export class ModaldevoluciontransferenciaComponent implements OnInit {
     });
   }
 
-  private _limpiarModelo(){
+  private _limpiarModelo() {
     this.DevolucionModel = new DevolucionTransferenciaModel();
   }
 
-  public CerrarModal(){
+  public CerrarModal() {
     this.ModalDevolucionTransferencia.hide();
     this._limpiarModelo();
   }
-  
+
 
 }
