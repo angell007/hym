@@ -148,11 +148,11 @@ export class ModalegresoComponent implements OnInit {
     });
 
 
-    if (this.flag) {
-      this.flag = false;
-      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
-      return false
-    }
+    // if (this.flag) {
+    //   this.flag = false;
+    //   this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+    //   return false
+    // }
 
     this.EgresoModel.Fecha = this._generalService.FechaActual;
     this.EgresoModel.Identificacion_Funcionario = this.Funcionario.Identificacion_Funcionario;
