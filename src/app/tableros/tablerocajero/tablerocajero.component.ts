@@ -35,6 +35,7 @@ import { element } from 'protractor';
 import { saveAs } from 'file-saver';
 import { parse } from 'querystring';
 import { exit } from 'process';
+import { round } from 'd3';
 
 
 
@@ -907,6 +908,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
             return false
           }
+
           this.CambioModel.Tipo = 'Compra';
           this.CambioModel.Recibido = '0';
           this.CambioModel.Estado = 'Realizado';
@@ -1011,8 +1013,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // console.log(tipo_cambio);
     // console.log(tipo_moneda_origen);
 
-    const multiplier = 1 / 100;
-
     if (tipo_cambio == 'o') {
 
       if (this.CambioModel.Valor_Origen == '' || this.CambioModel.Valor_Origen === undefined) {
@@ -1021,33 +1021,29 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
         if (tipo_moneda_origen == 'l') {
+          console.log(parseFloat(this.CambioModel.Valor_Origen), parseFloat(this.CambioModel.Tasa));
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = Math.round(cambio * multiplier) / multiplier;
+          console.log(cambio);
+          this.CambioModel.Valor_Destino = round(cambio, 100);
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
-
-          this.CambioModel.Valor_Destino = cambio;
+          this.CambioModel.Valor_Destino = round(cambio, 100);
         }
       }
-    } else if (tipo_cambio == 'd') {
 
+    } else if (tipo_cambio == 'd') {
       if (this.CambioModel.Valor_Destino == '' || this.CambioModel.Valor_Destino === undefined) {
         return false
       }
 
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
         if (tipo_moneda_origen == 'l') {
-
           var cambio = Math.floor(parseFloat(this.CambioModel.Valor_Destino) / parseFloat(this.CambioModel.Tasa));
-          if (this.MonedaParaCambio.id == 1) {
-            this.CambioModel.Valor_Origen = Math.round(cambio * multiplier) / multiplier;
-          } else {
-            this.CambioModel.Valor_Origen = cambio;
-          }
+          console.log(cambio);
+          this.CambioModel.Valor_Origen = round(cambio, 100);
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Origen = cambio;
-          // this.CambioModel.Valor_Origen = Math.round(cambio * multiplier) / multiplier;
+          this.CambioModel.Valor_Origen = round(cambio, 100);
         }
       }
     }
@@ -5479,14 +5475,30 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http.get(`${this.globales.rutaNueva}foma-pago`).subscribe((data: any) => {
       this.formasPagoAux = data;
       for (const forma of this.formasPagoAux) {
-        if (forma['nombre'] == "Credito") {
-          this.CambioModel.fomapago = forma['id']
+
+        // this.selectCustomClient.nativeElement.value != ''
+
+        if (this.selectCustomClient.nativeElement.value != '') {
+
+          if (forma['nombre'] != "Efectivo") {
+            this.formasPago.push(forma);
+          }
+
+          if (forma['nombre'] == "Credito") {
+            this.CambioModel.fomapago = forma['id']
+          }
+
+          if (this.CambioModel.fomapago == 3) {
+            this.mostrarPagaCon = false;
+            this.mostrarDevueltos = false;
+          }
+
+          if (this.selectCustomClient.nativeElement.value != '') {
+            if (forma['nombre'] == "Efectivo") {
+              this.CambioModel.fomapago = forma['id']
+            }
+          }
         }
-        if (this.CambioModel.fomapago == 3) {
-          this.mostrarPagaCon = false;
-          this.mostrarDevueltos = false;
-        }
-        this.formasPago.push(forma);
       }
     });
   }
