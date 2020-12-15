@@ -68,8 +68,6 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
   GetRecibosTransferencias() {
     this._transferenciaService.getRecibosTransferenciasFuncionario(this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario).subscribe(data => {
-
-      console.log(this.RecibosTransferencia);
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
       } else {
@@ -130,13 +128,12 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
     this.Cargando = true;
     this._transferenciaService.getRecibosTransferenciasFuncionario2(p).subscribe((data: any) => {
-      console.log(this.RecibosTransferencia);
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
       } else {
         this.RecibosTransferencia = [];
-        this._swalService.ShowMessage(data);
+        // this._swalService.ShowMessage(data);
       }
 
       this.Cargando = false;

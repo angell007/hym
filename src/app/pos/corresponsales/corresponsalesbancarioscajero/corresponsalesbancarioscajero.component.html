@@ -20,7 +20,7 @@
           <label class="font-weight-bold font-size-18">Consignaciones</label>
           <input required name="Consignacion" type="text" placeholder="Consignaciones" class="form-control font-size-18"
             [(ngModel)]="CorresponsalModel.Consignacion" (blur)="CalcularTotalCorresponsal()" currencyMask
-            [options]="{ thousands: '.' }">
+            [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }">
         </div>
       </div>
       <div class="col-md-4">
@@ -28,7 +28,7 @@
           <label class="font-weight-bold font-size-18">Retiros</label>
           <input required name="Retiro" type="text" placeholder="Retiros" class="form-control font-size-18"
             [(ngModel)]="CorresponsalModel.Retiro" (blur)="CalcularTotalCorresponsal()" currencyMask
-            [options]="{ thousands: '.' }">
+            [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }">
         </div>
       </div>
       <div class="col-md-4">
