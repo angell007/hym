@@ -197,7 +197,7 @@ export class ModalegresoComponent implements OnInit {
 
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
           } else {
-            this.ShowSwal('warning', 'Alerta', data);
+            this.ShowSwal('warning', 'Alerta',  'Ha ocurrido un error!' );
           }
         });
     }
