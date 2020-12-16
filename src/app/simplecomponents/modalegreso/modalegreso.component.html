@@ -53,7 +53,7 @@
         </div>
 
         <div class="col-md-12 my-2">
-          <span *ngIf="verCupo">Cupo: {{cupo}}</span>
+          <span *ngIf="verCupo">Cupo: {{cupo |  customcurrency: '$'}}</span>
         </div>
 
         <div class="col-md-3">

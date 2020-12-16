@@ -66,19 +66,25 @@ export class TablaegresosComponent implements OnInit {
     // this.SetInformacionPaginacion();
   }
 
-  GetMonedas() {
+
+  // if (data != null) {
+  //   this.Monedas = data;
+  //   this.MonedaSeleccionada = this.Monedas[0].Id_Moneda;
+  //   this.MostrarTablas = true;
+  // } else {
+  //   this.Monedas = [];
+  //   this.MonedaSeleccionada = '';
+  //   this.MostrarTablas = false;
+
+  // }
+
+  async GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
-
       if (data.length > 0) {
-        this.Monedas = data.query_data;
-
+        this.Monedas = data;
       } else {
-
         this.Monedas = [];
         this.ShowSwal('warning', 'Warning', 'No se encontraron registros!');
-
-        // let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        // this._toastService.ShowToast(toastObj);
       }
     });
   }
@@ -151,7 +157,7 @@ export class TablaegresosComponent implements OnInit {
           default:
             this.Egresos = data.query_data.filter((egreso) => egreso.Identificacion_Funcionario == JSON.parse(localStorage['User']).Identificacion_Funcionario && new Date().toISOString().slice(0, 10) == new Date(egreso.Fecha).toISOString().slice(0, 10))
             break;
-        }        
+        }
         this.Cargando = false;
         // this.TotalItems = data.numReg;
       } else {
@@ -160,7 +166,7 @@ export class TablaegresosComponent implements OnInit {
         this._swalService.ShowMessage(data);
       }
 
-      
+
       this.SetInformacionPaginacion(this.Egresos);
     });
   }

@@ -93,7 +93,7 @@
 
                 <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
                   placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
-                  [disabled]="FieldsDisabled[i]">
+                  [disabled]="reduce(m.Movimientos) == 0">
 
                 <ng-container *ngIf="i == 1">
                   Fajo Entero
