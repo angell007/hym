@@ -527,7 +527,7 @@
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
                           (blur)="ObtenerVueltosEnCompra()" [(ngModel)]="CambioModel.Recibido"
-                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" [required]="mostrarPagaCon"
                           tabindex="7">
                       </div>
                     </ng-container>
@@ -538,7 +538,7 @@
                         <input readonly type="text" placeholder="Vueltos"
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
-                          [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
+                          [(ngModel)]="CambioModel.Vueltos" [required]="mostrarPagaCon" tabindex="8">
                       </div>
                     </ng-container>
 
@@ -550,7 +550,7 @@
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
                           (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido"
-                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" required
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" [required]="mostrarPagaCon"
                           tabindex="7">
                       </div>
                     </ng-container>
@@ -562,7 +562,7 @@
                         <input readonly type="text" placeholder="Vueltos"
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" name="Vueltos"
-                          [(ngModel)]="CambioModel.Vueltos" required tabindex="8">
+                          [(ngModel)]="CambioModel.Vueltos" [required]="mostrarPagaCon" tabindex="8">
                       </div>
                     </ng-container>
 
