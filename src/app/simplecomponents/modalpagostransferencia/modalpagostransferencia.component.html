@@ -21,19 +21,20 @@
               <td colspan="5" class="text-center">
                 <i class="ti-alert font-size-20 text-warning"></i>
                 <h4>No se han realizado pagos!</h4>
-              </td>              
+              </td>
             </tr>
           </thead>
           <tbody *ngIf="TransferenciasRealizadas.length > 0">
             <tr *ngFor="let tr of TransferenciasRealizadas; let i = index;"
-            [ngClass]="{'bg-anulada':tr.Devuelta == 'Si'}">              
+              [ngClass]="{'bg-anulada':tr.Devuelta == 'Si'}">
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Fecha | date:"dd-MM-yyyy" }}</td>
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Recibo}}</td>
-              <td class="custom-cell text-right" style="text-align:right;cursor:pointer;">{{tr.Valor_Pagado | customcurrency:tr.Codigo_Moneda}}</td>
+              <td class="custom-cell text-right" style="text-align:right;cursor:pointer;">
+                {{tr.Valor_Pagado | customcurrency:tr.Codigo_Moneda}}</td>
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Destinatario}}</td>
               <td class="custom-cell text-center">
-                <button *ngIf="tr.Devuelta == 'No'" class="btn btn-default btn-xs" type="button" title="Devolver Transferencia"
-                  style="margin:0;" (click)="DevolverTransferencia(tr)">
+                <button *ngIf="tr.Devuelta == 'No'" class="btn btn-default btn-xs" type="button"
+                  title="Devolver Transferencia" style="margin:0;" (click)="DevolverTransferencia(tr)">
                   <i class="ti-back-right text-danger"></i>
                 </button>
               </td>
@@ -47,10 +48,9 @@
     <div class="text-right">
       <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
     </div>
-  </div>  
+  </div>
 </app-modal-basic>
 
-<app-modaldevoluciontransferencia
-  [AbrirModal]="AbrirModalDevolver.asObservable()"
+<app-modaldevoluciontransferencia [AbrirModal]="AbrirModalDevolver.asObservable()"
   (RecargarPagos)="GetPagosTransferencia()">
 </app-modaldevoluciontransferencia>
