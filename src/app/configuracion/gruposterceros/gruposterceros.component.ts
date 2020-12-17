@@ -88,7 +88,7 @@ export class GrupostercerosComponent implements OnInit {
   GetGruposPadreEdicion(idGrupo:string):void{
     this.grupoTerceroService.getGruposPadreEditar(idGrupo).subscribe((data:any) => {
       
-      if (data.codigo == 'success') {
+      if (data.codigo == 'success') { 
         this.GruposPadre = data.query_data;
 
       }else{

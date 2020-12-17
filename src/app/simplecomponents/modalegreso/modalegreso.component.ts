@@ -133,7 +133,7 @@ export class ModalegresoComponent implements OnInit {
   }
 
   GuardarEgreso() {
-    this.EgresoModel['formaPago'] = this.selectCustomFormaPago.nativeElement.value;
+
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
@@ -163,6 +163,7 @@ export class ModalegresoComponent implements OnInit {
     let datos = new FormData();
     datos.append("modelo", info);
 
+    //****************************************************************************************************** */
 
     if (this.Editar) {
       this._EgresoService.editEgreso(datos)
@@ -197,7 +198,7 @@ export class ModalegresoComponent implements OnInit {
 
             this.ShowSwal('success', 'Éxito', 'Operacion realizada correctamente!');
           } else {
-            this.ShowSwal('warning', 'Alerta',  'Ha ocurrido un error!' );
+            this.ShowSwal('warning', 'Alerta', 'Ha ocurrido un error!');
           }
         });
     }
@@ -216,20 +217,20 @@ export class ModalegresoComponent implements OnInit {
 
   getData() {
     this.EgresoModel.Id_Tercero = this.potencial['Id_Tercero'];
-    this.verCupo = false;
-    if (this.selectCustomFormaPago.nativeElement.value == 'credito') {
-      this.cupo = this.potencial['Cupo'];
-      this.verCupo = true;
-    }
+    // this.verCupo = false;
+    // if (this.selectCustomFormaPago.nativeElement.value == 'credito') {
+    //   this.cupo = this.potencial['Cupo'];
+    //   this.verCupo = true;
+    // }
   }
 
   calcularEgreso() {
-    if (this.selectCustomFormaPago.nativeElement.value == 'credito') {
-      if (this.potencial['Cupo'] < this.EgresoModel.Valor) {
-        this.ShowSwal('warning', 'Alerta', 'Operacion No puede ser realizada!');
-        this.EgresoModel.Valor = '';
-      };
-    }
+    // if (this.selectCustomFormaPago.nativeElement.value == 'credito') {
+    // if (this.potencial['Cupo'] < this.EgresoModel.Valor) {
+    //   this.ShowSwal('warning', 'Alerta', 'Operacion No puede ser realizada!');
+    //   this.EgresoModel.Valor = '';
+    // };
+    // }
   }
 
   limpiarImputCliente() {
@@ -246,7 +247,7 @@ export class ModalegresoComponent implements OnInit {
     return Observable.throw(error);
   }
   CerrarModal() {
-    this.selectCustomFormaPago.nativeElement.value = 'efectivo'
+    // this.selectCustomFormaPago.nativeElement.value = 'efectivo'
     this.selectCustomClient.nativeElement.value = 'Cliente'
     this.limpiarImputCliente()
     this.LimpiarModelo();
@@ -255,11 +256,11 @@ export class ModalegresoComponent implements OnInit {
   }
 
   limpiarCampos() {
-    if (this.selectCustomFormaPago.nativeElement.value == 'efectivo') {
-      this.verCupo = false
-    } else {
-
-    }
+    // if (this.selectCustomFormaPago.nativeElement.value == 'efectivo') {
+    this.verCupo = false
+    // } else {
+    // 
+    // }
   }
 
   LimpiarModelo() {

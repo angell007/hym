@@ -9,7 +9,7 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-cargos',
   templateUrl: './cargos.component.html',
-  styleUrls: ['./cargos.component.scss']
+  styleUrls: ['./cargos.component.scss','../../../style.scss']
 })
 export class CargosComponent implements OnInit {
 
@@ -42,6 +42,9 @@ export class CargosComponent implements OnInit {
   }
 
   ActualizarVista(){
+    console.log('actualizando');
+    
+
     this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
       params:{modulo:'Grupo_Tercero'}
     }).subscribe((data:any)=>{
@@ -164,27 +167,28 @@ export class CargosComponent implements OnInit {
 
   EliminarGrupo(id){
     let datos = new FormData();
-    datos.append("modulo", 'Grupo_Tercero');
+    //datos.append("modulo", 'Grupo_Tercero');
     datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php ', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/cargos/inactivar_grupo_cargo.php', datos ).subscribe((data: any) => {
       this.ActualizarVista();
     });
   }
 
   EliminarDependencia(id){
     let datos = new FormData();
-    datos.append("modulo", 'Dependencia');
+    //datos.append("modulo", 'Dependencia');
     datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php ', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/dependencias/inactivar_dependencia.php', datos ).subscribe((data: any) => {
+      console.log('actualizando1111q1');
       this.ActualizarVista();
     });
   }
 
   EliminarCargo(id){
     let datos = new FormData();
-    datos.append("modulo", 'Cargo');
+  //  datos.append("modulo", 'Cargo');
     datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/genericos/eliminar_generico.php ', datos ).subscribe((data: any) => {
+    this.http.post(this.globales.ruta + 'php/cargos/inactivar_cargo.php', datos ).subscribe((data: any) => {
        this.ActualizarVista();
     });
   }
