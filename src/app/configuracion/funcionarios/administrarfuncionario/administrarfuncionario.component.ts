@@ -72,6 +72,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     //this.SetPerfiles();
     this.GetPerfiles();
     this.GetCuentasBancarias();
+    this.getOficinasDependientes();
     this.getOficinas();
 
     if (this._idFuncionario != 'nuevo') {
@@ -105,9 +106,26 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
           label: oficina.Nombre,
         }
       });
-
+    
       this.oficinas.push({ value: '', label: 'Todos' });
       // console.log( this.oficinas);
+
+
+    });
+
+  }
+  
+  getOficinasDependientes() {
+    this._funcionarioService.getFuncionarioOficinasDependencias(this._idFuncionario).subscribe((data: any) => {
+      // console.log(data);
+     
+      data.forEach((oficina) => {
+        this.oficinas_dependientes.push(oficina.Id_Oficina);
+      });
+    
+   
+      console.log( this.oficinas_dependientes);
+
 
     });
 
@@ -175,7 +193,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   SetPerfiles() {
     this.PerfilesPermisos = this._generalService.PerfilesPermisos;
-  }
+  } 
 
   GetDatosFuncionario() {
     this._funcionarioService.getDatosFuncionario(this._idFuncionario).subscribe((data: any) => {

@@ -57,10 +57,10 @@ export class TablabancosComponent implements OnInit {
   ngOnInit() {
   }  
 
-  AsignarPaises(){      
-    this.Paises = this.globales.Paises;
-    // console.log(this.Paises);
-    // console.log(this.globales.Paises);
+  async AsignarPaises(){      
+     this.Paises = await this.globales.Paises;
+    console.log(this.Paises);
+    console.log(this.globales.Paises);
   }
 
   AbrirModal(idBanco:string){
