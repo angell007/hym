@@ -252,6 +252,8 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let permisos = this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
     let cuentas = this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
 
+    //console.log(this.oficinas_dependientes);
+
     if (this.oficinas_dependientes.length > 0) {
       this.oficinas_dependientes.forEach((element) => {
         if (element == "") {
@@ -269,9 +271,9 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     datos.append("permisos", permisos);
     datos.append('cuentas_asociadas', cuentas);
 
-    if (this.FuncionarioModel.Id_Perfil == '2') {
+    //if (this.FuncionarioModel.Id_Perfil == '2') {
       datos.append('Oficinas_Asociadas', oficinas);
-    }
+  //  }
 
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {
