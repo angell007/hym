@@ -5,6 +5,8 @@ import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { TransferenciaService } from '../../../shared/services/transferencia/transferencia.service';
 import { Observable, Subject } from 'rxjs';
 import { NormailizerService } from '../../../normailizer.service';
+import { HttpClient } from '@angular/common/http';
+import { Globales } from '../../../shared/globales/globales';
 
 @Component({
   selector: 'app-tablatransferenciascajero',
@@ -46,6 +48,8 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   }
 
   constructor(private _generalService: GeneralService,
+    private http: HttpClient,
+    public globales: Globales,
     private _swalService: SwalService,
     private _toastService: ToastService,
     private _normalizeService: NormailizerService,
@@ -201,6 +205,19 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
 
   AbrirDetalleRecibo(transferencia: any) {
     this.AbrirModalDetalleRecibo.next(transferencia);
+  }
+
+  printReciboTransferencia(id: string) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'transferencia' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
   }
 
 }
