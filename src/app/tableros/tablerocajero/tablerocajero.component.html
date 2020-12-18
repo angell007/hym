@@ -527,8 +527,8 @@
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
                           (blur)="ObtenerVueltosEnCompra()" [(ngModel)]="CambioModel.Recibido"
-                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" [required]="mostrarPagaCon"
-                          tabindex="7">
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'"
+                          [required]="mostrarPagaCon" tabindex="7">
                       </div>
                     </ng-container>
 
@@ -550,8 +550,8 @@
                           class="inputfield font-size-18  form-control form-control-lg" currencyMask
                           [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" name="Recibido"
                           (blur)="ObtenerVueltos()" [(ngModel)]="CambioModel.Recibido"
-                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'" [required]="mostrarPagaCon"
-                          tabindex="7">
+                          [disabled]="CambioModel.Valor_Origen == '' || CambioModel.Valor_Origen == '0'"
+                          [required]="mostrarPagaCon" tabindex="7">
                       </div>
                     </ng-container>
 
@@ -570,7 +570,7 @@
                     <ng-container *ngIf="tipoCliente != ''">
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                          {{ (Venta) ? 'Entregado a' : 'Recibido de'   }}</label>
+                          {{ (Venta) ? 'Entregado a ' : 'Recibido de '   }}</label>
                         <textarea type="text" cols="10" class="inputfield font-size-12  form-control form-control-lg"
                           name="observacion" [(ngModel)]="CambioModel.observacion" [required]="tipoCliente != ''"
                           tabindex="8"></textarea>

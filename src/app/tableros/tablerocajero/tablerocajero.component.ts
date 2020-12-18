@@ -873,9 +873,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
             if (this.CambioModel.Moneda_Destino == element.id) {
               // if (this.CambioModel.fomapago != 3) {
-                // console.log([parseFloat(element.saldo) , this.CambioModel]);
-                if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Origen)) {
-                  this.flagVenta = true;
+              // console.log([parseFloat(element.saldo) , this.CambioModel]);
+              if (parseFloat(element.saldo) < parseFloat(this.CambioModel.Valor_Origen)) {
+                this.flagVenta = true;
                 // }else{
                 // }
               }
@@ -965,7 +965,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           this.CambioModel.Recibido = '';
           return;
         } else {
-          this.CambioModel.Vueltos = parseFloat(this.CambioModel.Recibido) - (parseFloat(this.CambioModel.Tasa) * parseFloat(this.CambioModel.Valor_Origen))
+
+          // console.log('calculando', this.CambioModel.Valor_Origen)
+          // if (this.CambioModel.Moneda_Destino == 1) {
+          //   this.CambioModel.Vueltos = Math.round(parseFloat(this.CambioModel.Recibido) - (parseFloat(this.CambioModel.Tasa) * parseFloat(this.CambioModel.Valor_Origen)) * (1 / 100)) / (1 / 100)
+          // this.CambioModel.Valor_Destino = Math.round(cambio * (1 / 100)) / (1 / 100);
+          // } else {
+          this.CambioModel.Vueltos = Math.round((parseFloat(this.CambioModel.Recibido) - (parseFloat(this.CambioModel.Tasa) * parseFloat(this.CambioModel.Valor_Origen))) * (1 / 100)) / (1 / 100)
+          // this.CambioModel.Valor_Destino = round(cambio);
+          // }
+
           // let vuelto = pagoCon - recibido;
           // this.CambioModel.TotalPago = pagoCon;
           // this.CambioModel.Vueltos = vuelto;
@@ -1020,13 +1029,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       if (this.ValidarAntesDeConversion(tipo_cambio)) {
         // Venta viejitos ingresando datos en valor coversion
         if (tipo_moneda_origen == 'l') {
-          console.log('estoy aqui');
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = round(cambio, 100);
+          this.CambioModel.Valor_Destino = round(cambio);
         } else {
           // Venta viejitos ingresando datos en valor coversion
+          // console.log(this.CambioModel);
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
-          this.CambioModel.Valor_Destino = round(cambio, 100);
+          if (this.CambioModel.Moneda_Destino == 1) {
+            this.CambioModel.Valor_Destino = Math.round(cambio * (1 / 100)) / (1 / 100);
+          } else {
+            this.CambioModel.Valor_Destino = round(cambio);
+          }
         }
       }
 
@@ -4687,7 +4700,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.http
       .get(this.globales.ruta + 'php/diario/verificar_apertura_diario.php', { params: { id_funcionario: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
-        // console.log(data);
         if (data == '0') {
           this.GetRegistroDiario();
         }
@@ -5388,7 +5400,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   printCambio(id) {
-    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id }, responseType: 'blob' }).subscribe((data: any) => {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'cambio' }, responseType: 'blob' }).subscribe((data: any) => {
       const link = document.createElement('a');
       link.setAttribute('target', '_blank');
       const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));

@@ -20,6 +20,7 @@ export class ConsolidadoComponent implements OnInit {
   public ValoresMonedasApertura: any = [];
   public ValoresMonedasApertura2: any = [];
   public saldo: any;
+  public saldoFinal = 0;
 
   constructor(public globales: Globales, private http: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService) {
     this.myDate = new Date();
@@ -35,9 +36,12 @@ export class ConsolidadoComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/consolidados/getConsolidados.php', { params: { id_funcionario: this.id_funcionario, pag: '1000' } }).subscribe(async (data: any) => {
       this.datos = data;
       await this.datos.forEach(async (element: any, index: number) => {
-        element.query_data.forEach((elements: any) => {
+        let datos = element.query_data.reverse()
+        this.saldoFinal = 0;
+        datos.forEach((elements: any) => {
           this.ValoresMonedasApertura[index] += elements.Ingreso - elements.Egreso
           elements.saldo = this.ValoresMonedasApertura[index]
+          console.log(elements.saldo);
           elements.codigo = this.ValoresMonedasApertura2[index]['Codigo']
         });
       });
@@ -56,10 +60,15 @@ export class ConsolidadoComponent implements OnInit {
   }
 
 
-  calculateSaldo(ingreso) {
-    // console.log(ingreso);
-    return ingreso
-  }
+  // calculateSaldo(Egreso, Ingreso) {
+  //   this.saldoFinal += parseFloat((Ingreso) ? Ingreso : 0) - parseFloat((Egreso) ? Egreso : 0)
+  //   return this.saldoFinal
+  // }
+
+
+  // calculateSaldo(ingreso) {
+  //   return ingreso
+  // }
 
 
   isEqual(str1: string, str2: string) {

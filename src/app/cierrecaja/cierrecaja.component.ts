@@ -19,8 +19,6 @@ export class CierrecajaComponent implements OnInit {
 
   @ViewChild('alertSwal') alertSwal: any;
 
-
-
   id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
   public solo_ver: boolean = this.activeRoute.snapshot.params["solo_ver"];
   public fechaSoloVer: string = this.activeRoute.snapshot.params["fechaSoloVer"];
@@ -96,10 +94,12 @@ export class CierrecajaComponent implements OnInit {
     }
 
     this.cliente.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
-
-      console.log(data);
-
       this.Modulos = data;
+
+      for (let i = 0; i < this.Modulos.length; i++) {
+        this.TotalEntregado[i] = 0;
+        this.Diferencias[i] = 0;
+      }
     });
   }
 
@@ -111,27 +111,22 @@ export class CierrecajaComponent implements OnInit {
       return;
     } else {
       this.ArmarResumenMovimientos();
-      console.log(this.ResumenMovimiento);
 
       let entregado = JSON.stringify(this.TotalEntregado);
       let diferencias = JSON.stringify(this.Diferencias);
       let resumen = JSON.stringify(this.ResumenMovimiento);
       let model = JSON.stringify(this.CierreCajaModel);
       let data = new FormData();
+
       data.append("entregado", entregado);
       data.append("diferencias", diferencias);
       data.append("modelo", model);
       data.append("funcionario", this.id_funcionario);
 
-      this.cliente.post(this.globales.ruta + 'php/diario/guardar_cierre_caja.php', data).subscribe((data: any) => {
-
-        console.log(data);
-
+      this.cliente.post(this.globales.rutaNueva + 'cierre-caja/cajero/guardar', { entregado: entregado, diferencias: diferencias, modelo: model, funcionario: this.id_funcionario }).subscribe((data: any) => {
         if (data.tipo == 'error') {
-
           this.ShowSwal(data.tipo, 'Error', data.mensaje);
         } else {
-
           this.LimpiarModelos();
           this.ShowSwal(data.tipo, 'Registro Exitoso', data.mensaje);
           this.salir();
@@ -141,22 +136,18 @@ export class CierrecajaComponent implements OnInit {
   }
 
   ValidarMontos() {
-
-
-    // this.Diferencias[pos]
-
     for (let index = 0; index < this.Modulos.length; index++) {
 
       if (this.Diferencias[index] < 0) {
-        console.log(this.Diferencias[index]);
+        console.log('estoy aqui');
       }
 
-      // if (this.Modulos[index] != 0) {
       //   if (this.TotalEntregado[index].Entregado == 0) {
       //     this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
       //     return false;
       //   }
-      // }
+
+
     }
 
     return true;
@@ -250,47 +241,12 @@ export class CierrecajaComponent implements OnInit {
 
   CalcularDiferencia(ingresado, calculado, pos) {
 
-
     if (calculado == '') {
       return false;
     }
-
+    this.TotalEntregado[pos] = ingresado;
     let resta = ingresado - calculado;
-
-
     this.Diferencias[pos] = resta;
-
-
-    // let montos = Array.of(JSON.parse(localStorage.getItem('Montos')));
-    // montos[0].forEach((element, index) => {
-    //   if (element['Id_Moneda'] === this.Diferencias[pos]['Moneda']) {
-    //     console.log(element['Monto'] < value);
-    //     if (parseFloat(element['Monto']) < parseFloat(value)) {
-    //       this.flagLimites = true
-    //     }
-    //   }
-    // });
-
-    // if (this.flagLimites) {
-    //   this.flagLimites = false;
-    //   this.ShowSwal('warning', 'Alerta', 'La cantidad digitada supera los limites para esta oficina');
-    //   this.Diferencias[pos].Diferencia = -1;
-    //   return false;
-    // }
-
-    // if (value == '') {
-    //   this.Diferencias[pos].Diferencia = 0;
-    //   return;
-    // } else {
-    //   value = parseFloat(value);
-    // }
-
-    // let total_entregar = this.TotalRestaIngresosEgresos[pos] != '' ? parseFloat(this.TotalRestaIngresosEgresos[pos]) : 0;
-    // let entregar = total_entregar;
-
-
-    // let resta = value - entregar;
-    // this.Diferencias[pos].Diferencia = resta;
   }
 
   ArmarResumenMovimientos() {
@@ -325,17 +281,15 @@ export class CierrecajaComponent implements OnInit {
 
   }
 
-  AsignarFieldsDisabled() {
-    this.TotalRestaIngresosEgresos.forEach(valor => {
-      // console.log(valor);
-
-      if (valor == 0 || valor == '') {
-        this.FieldsDisabled.push(true);
-      } else {
-        this.FieldsDisabled.push(false);
-      }
-    });
-  }
+  // AsignarFieldsDisabled() {
+  //   this.TotalRestaIngresosEgresos.forEach(valor => {
+  //     if (valor == 0 || valor == '') {
+  //       this.FieldsDisabled.push(true);
+  //     } else {
+  //       this.FieldsDisabled.push(false);
+  //     }
+  //   });
+  // }
 
   InhabilitarBoton() {
     for (let index = 0; index < this.TotalRestaIngresosEgresos.length; index++) {
@@ -350,7 +304,6 @@ export class CierrecajaComponent implements OnInit {
     this.cliente
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.id_funcionario } })
       .subscribe((data: any) => {
-        console.log(data);
         data.valores_diario.forEach((valores, i) => {
           this.ValoresMonedasApertura.push(valores.Valor_Moneda_Apertura);
         });

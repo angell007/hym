@@ -48,7 +48,7 @@
         </td>
       </tr>
       <tr *ngIf="RecibosTransferencia.length == 0 ">
-        <td colspan="8" class="text-center">
+        <td colspan="9" class="text-center">
           <i class="ti-alert font-size-20 text-warning"></i>
           <h4>No hay RecibosTransferencia para mostrar!</h4>
         </td>
@@ -74,6 +74,14 @@
             (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
             <i class="ti-close"></i>
           </button>
+
+          <ng-container *ngIf="rt.Estado != 'Anulada'">
+            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
+              (click)="printReciboTransferencia(rt.Id_Transferencia)">
+              <i class="ti-desktop"></i>
+            </button>
+          </ng-container>
+
         </td>
       </tr>
     </tbody>

@@ -45,10 +45,6 @@ export class ConsolidadosService {
     this.TotalRestaIngresosEgresos = []
     this.SumatoriaTotales = []
 
-    // this.getValoresIniciales().then(() => {
-    //   this.getValoresApertura().then(() => {
-
-
     let p: any = { id: this.user.Identificacion_Funcionario };
     this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
       this.Modulos = data;

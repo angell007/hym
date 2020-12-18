@@ -12,9 +12,9 @@
         <div class="col-md-6">
           <div class="form-group">
             <label class=" font-size-18">Seleccione Tipo </label>
-            <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
-              (change)="limpiarImputCliente()">
-              <option> Seleccione</option>
+            <select name="Tipo" class="inputfield font-size-18  form-control form-control-lg"
+              [(ngModel)]="EgresoModel.tipo" #selectCustomClient (change)="limpiarImputCliente()">
+              <option value=""> Seleccione</option>
               <option value="Cliente">Clientes</option>
               <option value="Proveedor">Proveedores</option>
               <option value="Cuentas">Cuentas</option>
@@ -22,7 +22,9 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+
+
+        <!-- <div class="col-md-6">
           <div class="form-group">
             <label class=" font-size-18">Forma de pago </label>
             <select class="inputfield font-size-18  form-control form-control-lg" (change)="limpiarCampos()"
@@ -32,7 +34,7 @@
               <option value="credito">Credito</option>
             </select>
           </div>
-        </div>
+        </div> -->
 
 
         <div class="col-md-12">
@@ -53,7 +55,7 @@
         </div>
 
         <div class="col-md-12 my-2">
-          <span *ngIf="verCupo">Cupo: {{cupo}}</span>
+          <span *ngIf="verCupo">Cupo: {{cupo |  customcurrency: '$'}}</span>
         </div>
 
         <div class="col-md-3">

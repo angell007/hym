@@ -11,6 +11,13 @@ clave 1234567891
 4144411
 
 
+<ng-container *ngIf="cambio.Estado != 'Anulado'">
+  <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
+    (click)="printCambio(cambio.Id_Cambio)">
+    <i class="ti-desktop"></i>
+  </button>
+</ng-container>
+
 <div class="row card">
   <div class="card-body">
     <div class="col-md-4 " style="display:flex; align-items:flex-end;">

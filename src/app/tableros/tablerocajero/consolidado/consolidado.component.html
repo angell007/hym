@@ -56,12 +56,14 @@
                     </td>
                   </tr>
 
-                  <tr *ngFor="let mov of dato.query_data; index as x;">
+                  <tr *ngFor="let mov of (dato.query_data).sort(); index as x;">
                     <td> {{mov.Detalle}}</td>
                     <td> {{mov.Tipo}}</td>
-                    <td> {{(mov.Ingreso) ? mov.Ingreso : 0  |  currency:' ' }}</td>
-                    <td> {{(mov.Egreso) ? mov.Egreso : 0  |  currency:' ' }}</td>
-                    <td> {{mov.codigo }} {{mov.saldo |  currency:' ' }} </td>
+                    <td> {{mov.Ingreso |  currency:' ' }}</td>
+                    <td> {{mov.Egreso  |  currency:' ' }}</td>
+                    <td> {{mov.codigo }}
+                      {{ mov.saldo | currency:' ' }}
+                    </td>
                   </tr>
                 </tbody>
               </table>

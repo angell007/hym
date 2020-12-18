@@ -7,6 +7,8 @@ import { MonedaService } from '../../shared/services/monedas/moneda.service';
 import { PaisService } from '../../shared/services/paises/pais.service';
 import { ToastService } from '../../shared/services/toasty/toast.service';
 import { element } from 'protractor';
+import { Globales } from '../../shared/globales/globales';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-tablerocajeroprincipal',
@@ -45,7 +47,10 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public Totales: Array<any> = [];
   public model: any;
 
-  constructor(private _generalService: GeneralService,
+  constructor(
+    public globales: Globales,
+    private http: HttpClient,
+    private _generalService: GeneralService,
     private _departamentoService: DepartamentoService,
     private _cajaService: CajaService,
     private _monedaService: MonedaService,
@@ -268,6 +273,18 @@ export class TablerocajeroprincipalComponent implements OnInit {
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
     this.alertSwal.show();
+  }
+
+  printCambio(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'cambio' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
   }
 
 }

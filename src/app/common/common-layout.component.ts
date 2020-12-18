@@ -1110,6 +1110,8 @@ export class CommonLayoutComponent implements OnInit {
                         macFormatted += ":";
                     }
                 }
+
+                console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted ,id_funcionario:this.user.Identificacion_Funcionario} }).subscribe((data: any) => {
 

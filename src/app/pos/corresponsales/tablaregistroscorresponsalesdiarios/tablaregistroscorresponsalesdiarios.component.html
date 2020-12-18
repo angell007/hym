@@ -24,7 +24,7 @@
     </thead>
     <tbody>
       <tr *ngIf="Cargando">
-        <td colspan="5" class="text-center">
+        <td colspan="6" class="text-center">
           <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
             <h2>CARGANDO EGRESOS</h2>
             <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
@@ -32,7 +32,7 @@
         </td>
       </tr>
       <tr *ngIf="RegistrosCorresponsales.length == 0 && !Cargando">
-        <td colspan="5" class="text-center">
+        <td colspan="6" class="text-center">
           <i class="ti-alert font-size-20 text-warning"></i>
           <h4>No se han registrado datos de corresponsales hoy!</h4>
         </td>
@@ -98,7 +98,8 @@
             <label class="font-weight-bold font-size-18">Consignaciones</label>
             <input required name="Consignacion" type="text" placeholder="Consignaciones"
               class="form-control font-size-18" [(ngModel)]="corresponsalEdit.Consignacion"
-              (blur)="CalcularTotalCorresponsal()" currencyMask [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }">
+              (blur)="CalcularTotalCorresponsal()" currencyMask
+              [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }">
           </div>
         </div>
         <div class="col-md-4">

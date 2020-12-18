@@ -90,6 +90,14 @@
                     [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este egreso' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
                     <i [ngClass]="{'ti-close':e.Estado == 'Activo', 'ti-back-right':e.Estado == 'Anulado'}"></i>
                     {{e.Estado == 'Activo' ? '' : ''}}</a>
+
+                  <ng-container *ngIf="e.Estado != 'Anulado'">
+                    <button class="btn btn-xs btn-success" type="button" title="Imprimir" style="margin:0;"
+                      (click)="printCambio(e.Id_Egreso)">
+                      <i class="ti-desktop"></i>
+                    </button>
+                  </ng-container>
+
                 </td>
               </tr>
             </tbody>
