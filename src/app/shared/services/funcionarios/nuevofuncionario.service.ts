@@ -11,6 +11,11 @@ export class NuevofuncionarioService {
 
   private _rutaBase:string = this.globales.ruta+'php/funcionarios/';
 
+  getFuncionarioOficinasDependencias(idFuncionario:string){
+    let p = {id_funcionario:idFuncionario};
+    return this.client.get(this._rutaBase+'get_funcionario_oficinas_dependencias.php', {params:p});
+  }
+
   validarIdentificacion(idFuncionario:string):Observable<any>{
     let p = {id:idFuncionario};
     return this.client.get(this._rutaBase+'verificar_identificacion_funcionario.php', {params:p});

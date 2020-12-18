@@ -570,8 +570,7 @@
                     <ng-container *ngIf="tipoCliente != ''">
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                          {{ Venta ? 'Entrega a :' : 'Recibe de :'}}
-                        </label>
+                          {{ (Venta) ? 'Entregado a' : 'Recibido de'   }}</label>
                         <textarea type="text" cols="10" class="inputfield font-size-12  form-control form-control-lg"
                           name="observacion" [(ngModel)]="CambioModel.observacion" [required]="tipoCliente != ''"
                           tabindex="8"></textarea>

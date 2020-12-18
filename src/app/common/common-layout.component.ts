@@ -1111,7 +1111,7 @@ export class CommonLayoutComponent implements OnInit {
                     }
                 }
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
-                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted } }).subscribe((data: any) => {
+                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted ,id_funcionario:this.user.Identificacion_Funcionario} }).subscribe((data: any) => {
 
                         // console.log(data);
 
@@ -1138,9 +1138,9 @@ export class CommonLayoutComponent implements OnInit {
                             this.mostrarDatos = true;
                             this.DesconectarQz();
                         } else {
-                            this.macSwal.title = "Equipo No Registrado"
-                            this.macSwal.html = "La Mac <strong>" + macFormatted + "</strong> NO se encuentra registrada en el Sistema, por favor contacte al administrador para que lo registre."
-                            this.macSwal.type = "error"
+                            this.macSwal.title = data.titulo;
+                            this.macSwal.html = data.mensaje;
+                            this.macSwal.type = data.codigo;
                             this.macSwal.show();
                             this.DesconectarQz();
 

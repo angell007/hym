@@ -91,8 +91,8 @@ export class ModalbancoComponent implements OnInit, OnDestroy {
     this.CerrarModal();
   }
 
-  AsignarPaises() {
-    this.Paises = this.globales.Paises;
+  async AsignarPaises() {
+    this.Paises = await this.globales.Paises;
   }
 
   GuardarBanco() {
