@@ -59,12 +59,16 @@
         [ngClass]="{'bg-anulada':rt.Estado == 'Anulada'}">
         <td class="text-center">{{rt.Fecha | date:"HH:mm" }}</td>
         <td class="text-center">{{rt.CodigoRecibo}}</td>
-        <td class="text-center">{{rt.Remitente}}</td>
+        <td class=" text-center">{{rt.Remitente}}</td>
         <td class="text-right"> {{rt.Cantidad_Recibida | customcurrency:rt.Codigo_Moneda_Origen}}</td>
         <td class="text-right"> {{rt.Monto_Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td>
         <td class=" text-right"> {{rt.Tasa_Cambio }}</td>
         <td class=" text-center"> {{rt.Estado }}</td>
-        <td class=" text-right"> {{rt.Pagador }}</td>
+
+        <td class="text-center" *ngIf="rt.Devuelta == 'Si'">Devuelta</td>
+        <td class=" text-center" *ngIf="rt.Devuelta == 'No'">{{ rt.Pagador }}</td>
+        <td class=" text-center" *ngIf="rt.Devuelta == ''"></td>
+
         <td class="text-right">
           <button class="btn btn-xs btn-info" type="button" (click)="AbrirDetalleRecibo(rt)" style="margin:0;">
             <i class="ti-search"></i>
