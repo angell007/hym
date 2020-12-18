@@ -88,13 +88,13 @@
                   <td class="text-center">
                     <input class="text-right form-control-sm" type="text" [(ngModel)]="cb.Monto_Apertura"
                       (blur)="Validardiferencia(i, $event.target.value, cb.Id_Moneda)" currencyMask
-                      [options]="{ thousands: '.' }" min="1" minlength="1">
+                      [options]="{ thousands: '.' , precision: '0'}" min="1" minlength="1">
                   </td>
                   <td class="text-right">{{cb.Monto_Ultimo_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
                   <td class="text-right">{{cb.Diferencia | customcurrency:cb.Codigo_Moneda}} </td>
                 </tr>
 
-                
+
               </tbody>
             </table>
           </div>

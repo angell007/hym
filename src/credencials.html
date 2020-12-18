@@ -11,6 +11,13 @@ clave 1234567891
 4144411
 
 
+$query='UPDATE Tercero Set Cupo_Disponible = Cupo_Disponible - '.$valorDescontar.'
+WHERE Id_Tercero = '.$idTercero;
+
+$oCon = new consulta();
+$oCon->setQuery($query);
+$oCon->createData();
+
 <ng-container *ngIf="cambio.Estado != 'Anulado'">
   <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
     (click)="printCambio(cambio.Id_Cambio)">

@@ -1874,7 +1874,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     if (this.TransferenciaModel.Cantidad_Transferida == '' || this.TransferenciaModel.Cantidad_Transferida == '0' || this.TransferenciaModel.Cantidad_Transferida == undefined) {
 
       this.ListaDestinatarios[i].Valor_Transferencia = '';
-      this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir! --4--');
+      this.ShowSwal('warning', 'Alerta', 'Debe colocar primero el valor a transferir! ');
       return;
     }
 
@@ -1900,7 +1900,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       // console.log('testeando   ...', this.ListaDestinatarios[i].Valor_Transferencia, valor);
 
-      let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! --3--"], tipo: "warning", duracion: 4000 };
+      let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! "], tipo: "warning", duracion: 4000 };
       this._toastService.ShowToast(toastObj);
 
       // console.log('testeando valores 1  ...', total_valor_destinatarios, total_transferir);
@@ -1912,7 +1912,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
       // console.log(this.ListaDestinatarios[i].Valor_Transferencia);
 
-      let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! --2--"], tipo: "warning", duracion: 4000 };
+      let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! "], tipo: "warning", duracion: 4000 };
       this._toastService.ShowToast(toastObj);
 
     } else if (total_valor_destinatarios <= total_transferir) {
@@ -1934,7 +1934,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     if ((valor > total_transferir) || (total_valor_destinatarios > total_transferir)) {
       this.ListaDestinatarios[i].Valor_Transferencia = valor - (total_valor_destinatarios - total_transferir);
-      this.ShowSwal('warning', 'Alerta', 'El valor que coloco supera el total a transferir --1--');
+      this.ShowSwal('warning', 'Alerta', 'El valor que coloco supera el total a transferir ');
     } else if (total_valor_destinatarios <= total_transferir) {
       let asignar_siguiente = total_transferir - total_valor_destinatarios;
       this.ListaDestinatarios[i].Valor_Transferencia = valor;
@@ -5424,6 +5424,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   saveDevolucion() {
+    if (this.devCambio['Motivo'] == '') {
+      this.swalService.ShowMessage(['warning', 'alerta', 'Complete todos los campos']);
+      return false;
+    }
+
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
     this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {

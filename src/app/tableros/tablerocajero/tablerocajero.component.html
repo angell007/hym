@@ -728,7 +728,7 @@
                             <label>Cupo Tercero</label>
                             <input name="Cupo_T" [(ngModel)]="TransferenciaModel.Cupo_Tercero" type="text" disabled
                               class="form-control font-size-18" placeholder="Cupo disponible" currencyMask
-                              [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }">
+                              [options]="{  prefix: '$ ', thousands: '.' , decimal: ',' ,  precision: '0' }">
                           </div>
                           <div *ngIf="InputBolsaBolivares" class="col-md-4">
                             <label>Bolsa de Bolivares</label>
@@ -2744,6 +2744,7 @@
 
   </div>
   <div class="app-modal-body">
+
     <div class="table-overflow">
       <table class="table table-hover table-sm  modified-table">
         <thead>
