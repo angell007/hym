@@ -3133,9 +3133,36 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.ModalAprobarGiro.show();
   }
 
+  async getInfoGiro(id) {
+    let infGiro: any
+    await this.http.get(this.globales.rutaNueva + `giros/${id}`)
+      .toPromise().then(data => {
+        infGiro = data
+      })
+    return infGiro
+  }
 
-  PagarGiro(id, modal, value) {
+  async PagarGiro(id, modal, value) {
     let datos = new FormData();
+    let flagGiro: Boolean = false;
+    let infGiro: any
+
+    infGiro = await this.getInfoGiro(id);
+
+    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+      if (infGiro['Id_Moneda'] == element.id) {
+        if (parseFloat(element.saldo) < parseFloat(infGiro['Valor_Entrega'])) {
+          flagGiro = true;
+        }
+      }
+    });
+
+    if (flagGiro) {
+      flagGiro = false;
+      this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+      return false
+    }
+
     datos.append("id", id);
     datos.append("caja", this.generalService.SessionDataModel.idCaja);
     datos.append("id_funcionario", JSON.parse(localStorage['User']).Identificacion_Funcionario);
@@ -5424,10 +5451,11 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   saveDevolucion() {
-    if (this.devCambio['Motivo'] == '') {
-      this.swalService.ShowMessage(['warning', 'alerta', 'Complete todos los campos']);
-      return false;
-    }
+
+    // if (this.devCambio['Motivo'] == '') {
+    //   this.swalService.ShowMessage(['warning', 'alerta', 'Complete todos los campos']);
+    //   return false;
+    // }
 
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
