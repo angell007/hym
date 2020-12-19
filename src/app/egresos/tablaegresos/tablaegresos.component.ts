@@ -67,20 +67,8 @@ export class TablaegresosComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.SetInformacionPaginacion();
+    this.ConsultaFiltrada();
   }
-
-
-  // if (data != null) {
-  //   this.Monedas = data;
-  //   this.MonedaSeleccionada = this.Monedas[0].Id_Moneda;
-  //   this.MostrarTablas = true;
-  // } else {
-  //   this.Monedas = [];
-  //   this.MonedaSeleccionada = '';
-  //   this.MostrarTablas = false;
-
-  // }
 
   async GetMonedas() {
     this._monedaService.getMonedas().subscribe((data: any) => {
@@ -139,8 +127,6 @@ export class TablaegresosComponent implements OnInit {
   ConsultaFiltrada(paginacion: boolean = false) {
 
     var p = this.SetFiltros(paginacion);
-
-    // console.log('consulta filtrada ', p );
     if (p === '') {
       this.ResetValues();
       return;
@@ -149,8 +135,6 @@ export class TablaegresosComponent implements OnInit {
     // Danilo Custom switch para egresos 
     this.Cargando = true;
     this._egresoService.getListaEgresos(p).subscribe((data: any) => {
-
-      console.log('data egresos ', data);
 
       if (data.codigo == 'success') {
         let user = JSON.parse(localStorage['User']);
@@ -163,7 +147,6 @@ export class TablaegresosComponent implements OnInit {
             break;
         }
         this.Cargando = false;
-        // this.TotalItems = data.numReg;
       } else {
         this.Cargando = false;
         this.Egresos = [];
@@ -217,7 +200,7 @@ export class TablaegresosComponent implements OnInit {
     });
   }
 
- 
+
 
 
   public GetGrupos() {
