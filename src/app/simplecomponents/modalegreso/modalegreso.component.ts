@@ -72,6 +72,7 @@ export class ModalegresoComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.openSubscription = this.AbrirModal.subscribe((data: string) => {
 
       if (data != "0") {

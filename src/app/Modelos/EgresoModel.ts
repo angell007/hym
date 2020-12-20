@@ -9,5 +9,5 @@ export class EgresoModel {
     public Identificacion_Funcionario: string = '';
     public Fecha: string = '';
     public Codigo: string = '';
-    public Tipo: string = '';
+    public Tipo: string = 'Cliente';
 }
