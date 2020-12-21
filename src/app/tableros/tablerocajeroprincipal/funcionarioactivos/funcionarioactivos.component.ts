@@ -37,17 +37,20 @@ export class FuncionarioactivosComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.client.get(this.globales.ruta + 'php/funcionarios/cajeros_activos.php', { params: { fecha: this.Fecha_Consulta } }).subscribe((data: any) => {
+    let funcionaroCurrent = JSON.parse(localStorage['User']).Identificacion_Funcionario
+    this.client.get(this.globales.ruta + 'php/funcionarios/cajeros_activos.php', { params: { fecha: this.Fecha_Consulta, funcionaroCurrent: funcionaroCurrent } }).subscribe((data: any) => {
       this.FuncionariosFiltrados = [];
 
-      if (data.codigo == 'success') {
+      localStorage.setItem('oficinas_dependientes', JSON.stringify(data['oficinas']));
 
+      if (data.codigo == 'success') {
         this.Funcionarios_Activos = data.funcionarios_activos;
         const aux = data.funcionarios_activos;
         aux.forEach((element: any) => {
           if (element.Identificacion_Funcionario != JSON.parse(localStorage['User']).Identificacion_Funcionario) {
-            // console.log(element);
+            console.log(this.FuncionariosFiltrados);
             this.FuncionariosFiltrados.push(element)
+            console.log(this.FuncionariosFiltrados);
           }
         })
 

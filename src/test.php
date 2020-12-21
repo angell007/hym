@@ -4,146 +4,187 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header('Content-Type: application/json');
 
 require_once('../../config/start.inc.php');
-include_once('../../class/class.lista.php');
-include_once('../../class/class.complex.php');
-include_once('../../class/class.consulta.php');
+include_once('../../class/class.querybasedatos.php');
+include_once('../../class/class.departamento.php');
+include_once('../../class/class.oficina.php');
+include_once('../../class/class.caja.php');
+include_once('../../class/class.cajero.php');
+include_once('../../class/class.utility.php');
+include_once('../../class/class.moneda.php');
+include_once('../../class/class.http_response.php');
 
-date_default_timezone_set('America/Los_Angeles');
+$queryObj = new QueryBaseDatos();
+$departamento = new Departamento($queryObj);
+$oficina = new Oficina($queryObj);
+$caja = new Caja($queryObj);
+$cajero = new Cajero($queryObj);
+$util = new Utility();
+$moneda = new Moneda($queryObj);
+$http_response = new HttpResponse();
+$resultado = [];
 
-$id = (isset($_REQUEST['id']) ? $_REQUEST['id'] : '');
-$fecha_actual = isset($_REQUEST['fecha']) && $_REQUEST['fecha'] != ''  ? $_REQUEST['fecha'] : date('Y-m-d');
-$modulos = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
 
+//VALORES QUE LLEGAN DESDE LA VISTA PARA REALIZAR LAS CONSULTAS
+$Fecha_inicio = (isset($_REQUEST['Fecha_inicio']) && $_REQUEST['Fecha_inicio'] != '') ? $_REQUEST['Fecha_inicio'] : '';
+$Fecha_fin = (isset($_REQUEST['Fecha_fin']) && $_REQUEST['Fecha_fin'] != '') ? $_REQUEST['Fecha_fin'] : '';
+// $fechas_rango = $util->SepararFechas($fechas);
 
-$query = '
-		SELECT
-			Id_Moneda,
-			Nombre,
-			Codigo
-		FROM Moneda';
+//SE BUSCAN LOS DEPARTAMENTOS CON OFICINAS
+$departamentos_con_oficinas = $departamento->GetDepartamentoConOficinas();
 
-$oCon = new consulta();
-$oCon->setQuery($query);
-$oCon->setTipo('Multiple');
-$resultado['monedas'] = $oCon->getData();
-unset($oCon);
+//SE OBTIENEN LAS MONEDAS DEL SISTEMA
+$monedas = GetMonedas();
 
-AgregarColoresMoneda();
+//OBTENER ID DE LA MONEDA DESEADA, SIEMPRE Y CUANDO EXISTA EN EL SISTEMA
+$id_moneda_pesos = $moneda->GetIdMonedaXNombre("pesos");
 
-$in_condition = FormarCadenaIdMonedas($resultado['monedas']);
+//SE REALIZA UN RECORRIDO DE LOS DEPARTAMENTOS OBTENIDOS, POR CADA DEPARTAMENTO SE BUSCAN LAS OFICINAS EN DICHOS DEPARTAMENTOS, SE HACE UN RECORRIDO DE LAS OFICINAS CONSULTADAS, SI EXISTEN, POR CADA OFICINA SE CONSULTAN LOS CAJEROS QUE HAN OPERADO EN DICHAS OFICINAS, SI EXISTEN, SE HACE UN RECORRIDO DE LOS CAJEROS CONSULTADOS PARA OBTENER LOS TOTALES DE CADA CAJERO Y HACER LA SUMA EN RETROSPECTIVA PARA ASIGNAR LOS VALORES CORRESPONDIENTES A LOS NIVELES SUPERIORES DE OFICINA Y DEPARTAMENTO AL QUE PERTENECE CADA CAJERO.
+if (count($departamentos_con_oficinas) > 0) {
 
-$valores = array();
+    foreach ($departamentos_con_oficinas as $key => $d) {
 
-foreach ($modulos as $value) {
+        $dep = array('Nombre' => $d['Nombre'], 'Totales' => [], 'Oficinas' => []);
+        array_push($resultado, $dep);
 
-    $valores[$value] = array();
+        //OBTENER OFICINAS DEL DEPARTAMENTO DEL CICLO ACTIVO
+        $oficinas_departamento = $oficina->GetOficinasDepartamento($d['Id_Departamento']);
+        // var_dump($oficinas_departamento);
 
-    switch ($value) {
-        case 'Cambios':
-            ConsultarIngresosEgresosCambios($value, $id, $fecha_actual);
-            break;
+        if (count($oficinas_departamento) > 0) {
 
-        case 'Transferencias':
+            foreach ($oficinas_departamento as $k => $o) {
 
-            ConsultarIngresosEgresosTransferencias($value, $id, $fecha_actual);
-            break;
+                $of = array('Nombre' => $o['Nombre'], 'Totales' => [], 'Cajeros' => []);
+                array_push($resultado[$key]['Oficinas'], $of);
 
-        case 'Giros':
+                //OBTENER CAJEROS DE LAS OFICINA DEL CICLO ACTIVO
+                $cajeros_oficina = $cajero->GetCajerosOficina($o['Id_Oficina'], $Fecha_inicio, $Fecha_fin);
 
-            ConsultarIngresosEgresosGiros($value, $id, $fecha_actual);
-            break;
+                if (count($cajeros_oficina) > 0) {
 
-        case 'Traslados':
+                    foreach ($cajeros_oficina as $ind => $c) {
 
-            ConsultarIngresosEgresosTraslados($value, $id, $fecha_actual);
-            break;
+                        //OBTENER LOS INGRESOS Y EGRESOS DEL CAJERO DEL CICLO ACTIVO
+                        $total_cajero = GetIngresosEgresosFuncionario($c['Id_Funcionario'], $Fecha_inicio, $Fecha_fin, $o['Id_Oficina']);
 
-        case 'Corresponsal':
+                        $caj = array('Nombre' => $c['Nombre_Cajero'], 'Totales' => $total_cajero);
 
-            ConsultarIngresosEgresosCorresponsal($value, $id, $fecha_actual);
-            break;
+                        //LLENAR POSICIONES RESPECTIVAS DEL ARRAY DE RESULTADOS, PARA EL DEPARTAMENTO Y LA OFICINA EN CURSO
+                        foreach ($total_cajero as $i => $moneda) {
+                            $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Moneda'] = $moneda['Moneda'];
+                            $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Codigo'] = $moneda['Codigo'];
+                            $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Total'] += $moneda['Total'];
+                            $resultado[$key]['Totales'][$i]['Moneda'] = $moneda['Moneda'];
+                            $resultado[$key]['Totales'][$i]['Codigo'] = $moneda['Codigo'];
+                            $resultado[$key]['Totales'][$i]['Total'] += $moneda['Total'];
+                        }
 
-        case 'Servicios':
-
-            ConsultarIngresosEgresosServicios($value, $id, $fecha_actual);
-            break;
-
-        default:
-
-            break;
+                        array_push($resultado[$key]['Oficinas'][$k]['Cajeros'], $caj);
+                    }
+                } else {
+                    //LLENAR POSICIONES RESPECTIVAS DEL ARRAY DE RESULTADOS, PARA EL DEPARTAMENTO Y LA OFICINA EN CURSO
+                    foreach ($monedas as $i => $m) {
+                        $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Moneda'] = $m['Nombre'];
+                        $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Codigo'] = $m['Codigo'];
+                        $resultado[$key]['Oficinas'][$k]['Totales'][$i]['Total'] += 0;
+                        $resultado[$key]['Totales'][$i]['Moneda'] = $m['Nombre'];
+                        $resultado[$key]['Totales'][$i]['Codigo'] = $m['Codigo'];
+                        $resultado[$key]['Totales'][$i]['Total'] += 0;
+                    }
+                }
+            }
+        }
     }
+
+    $http_response->SetRespuesta(0, 'Consulta Exitosa', 'Se encontraron datos de consulta!');
+    $http_response->SetDatosRespuesta($resultado);
+    $result = $http_response->GetRespuesta();
+} else {
+    $http_response->SetRespuesta(2, 'Sin datos', 'No encontraron datos para las fechas escogidas!');
+    $http_response->SetDatosRespuesta($resultado);
+    $result = $http_response->GetRespuesta();
 }
 
-$resultado['totales_ingresos_egresos'] = $valores;
-echo json_encode($resultado);
+echo json_encode($result);
 
-function FormarCadenaIdMonedas($arrayMonedas)
+//OTENER INGRESOS Y EGRESOS DE UN CAJERO POR OFICINA
+function GetIngresosEgresosFuncionario($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
-    $cadena = '';
+    global $queryObj, $monedas;
+
+    $total_general = array();
+    $total = 0;
+
+    $ingresos_egresos_cambio = ConsultarIngresosEgresosCambios2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+    $ingresos_egresos_transferencia = ConsultarIngresosEgresosTransferencias2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+    $ingresos_egresos_giro = ConsultarIngresosEgresosGiros2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+    $ingresos_egresos_traslado = ConsultarIngresosEgresosTraslados2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+    $ingresos_egresos_corresponsal = ConsultarIngresosEgresosCorresponsal2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+    $ingresos_egresos_servicios = ConsultarIngresosEgresosServicios2($idFuncionario, $fechaIni, $fechaFin, $idOficina);
+
+
     $i = 0;
+    foreach ($ingresos_egresos_cambio as $moneda => $valores) {
+        $total_general[$i]['Moneda'] = $moneda;
+        $total_general[$i]['Codigo'] = $valores['Codigo'];
 
-    foreach ($arrayMonedas as $value) {
+        $total_general[$i]['Total'] = $valores['Total'] + $ingresos_egresos_transferencia[$moneda]['Total'] + $ingresos_egresos_giro[$moneda]['Total'] + $ingresos_egresos_traslado[$moneda]['Total'] + $ingresos_egresos_corresponsal[$moneda]['Total'] + $ingresos_egresos_servicios[$moneda]['Total'];
 
-        if (($i + 1) == count($arrayMonedas)) {
-            $cadena .= $value['Id_Moneda'];
-            return $cadena;
-        }
-
-        $cadena .= $value['Id_Moneda'] . ", ";
+        $total += $total_general[$moneda]['Total'];
         $i++;
     }
 
-    return $cadena;
+    return $total_general;
 }
 
-function ArmarValores($resultado)
+//OBTENER TODAS LAS MONEDAS DEL SISTEMA
+function GetMonedas()
 {
-    $max_cel_colspan = 0;
-    $valores_tabla = array();
 
-    if (count($resultado['monedas']) > 0) {
-        foreach ($resultado['monedas'] as $value) {
-            $ing = 'Ingresos';
-            $eg = 'Egresos';
-            array_push($valores_tabla, $ing, $eg);
-            $max_cel_colspan += 2;
-        }
-    }
+    $query = "
+			SELECT
+				Id_Moneda,
+				Nombre,
+				Codigo
+                FROM Moneda WHERE NOT Estado= 'Inactiva'";
 
-    $valores = array();
+    $oCon = new consulta();
+    $oCon->setQuery($query);
+    $oCon->setTipo('Multiple');
+    $monedas = $oCon->getData();
+    unset($oCon);
 
-    if (count($modulos) > 0) {
-        foreach ($modulos as $value) {
-
-            array_filter($resultado['monedas']);
-        }
-    }
+    return $monedas;
 }
 
-function ConsultarIngresosEgresosCambios($modulo, $id, $fecha_actual)
+//NUEVO
+//OBTENER TOTALES DE INGRESOS Y EGRESOS DE LOS CAJEROS POR OFICINA CONSULTADA
+function ConsultarIngresosEgresosCambios2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
-    global $valores, $resultado;
+    global $monedas;
 
-    $i = 0;
-    $color = '#ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    $ingresos_egresos_cambio = array();
 
-        $query_ingreso = '
+    foreach ($monedas as $val) {
+
+        $query_ingreso = "
 				SELECT 
-					IF(sum(Valor_Origen) > 0, sum(Valor_Origen), 0) AS Ingreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Cambio` t1
-				inner join Moneda t2 on t1.Moneda_Origen = t2.Id_Moneda
+					IFNULL(SUM(T1.Valor_Origen), 0) AS Ingreso_Total,				    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Cambio' AS Modulo
+				FROM Cambio T1
+				INNER JOIN Moneda T2 on T1.Moneda_Origen = T2.Id_Moneda
 				where
-					t1.Moneda_Origen = ' . $val['Id_Moneda'] . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND Identificacion_Funcionario = ' . $id . '
-					AND t1.Estado <> "Anulado"
-				group by t2.Id_Moneda';
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulado'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
+
+        // var_dump($query_ingreso);
+        // exit;
 
         $oCon = new consulta();
         $oCon->setQuery($query_ingreso);
@@ -152,28 +193,26 @@ function ConsultarIngresosEgresosCambios($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r1 === false) {
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr);
+            $ingresos_egresos_cambio[$val['Nombre']]['Ingresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r1);
+            $ingresos_egresos_cambio[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
         }
 
-        $query_egreso = '
+        $query_egreso = "
 				SELECT 
-					sum(Valor_Destino) AS Egreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Cambio` t1
-				inner join Moneda t2 on t1.Moneda_Destino = t2.Id_Moneda
+					IFNULL(SUM(T1.Valor_Destino), 0) AS Egreso_Total,				    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Cambio' AS Modulo
+				FROM Cambio T1
+				INNER JOIN Moneda T2 on T1.Moneda_Destino = T2.Id_Moneda
 				where
-					t1.Moneda_Destino = ' . $val['Id_Moneda'] . '
-					AND Identificacion_Funcionario = ' . $id . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND t1.Estado <> "Anulado"
-				group by t2.Id_Moneda';
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulado'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_egreso);
@@ -181,43 +220,43 @@ function ConsultarIngresosEgresosCambios($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r2 === false) {
-            $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr1);
+            $ingresos_egresos_cambio[$val['Nombre']]['Egresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r2);
+            $ingresos_egresos_cambio[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
         }
 
-        $i++;
+        $ingresos_egresos_cambio[$val['Nombre']]['Codigo'] = $val['Codigo'];
+
+        $ingresos_egresos_cambio[$val['Nombre']]['Total'] = $ingresos_egresos_cambio[$val['Nombre']]['Ingresos'] - $ingresos_egresos_cambio[$val['Nombre']]['Egresos'];
     }
+
+    return $ingresos_egresos_cambio;
 }
 
-function ConsultarIngresosEgresosTransferencias($modulo, $id, $fecha_actual)
+function ConsultarIngresosEgresosTransferencias2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
+    global $monedas;
 
-    global $valores, $resultado;
+    $ingresos_egresos_transferencia = array();
 
-    $i = 0;
-    $color = 'ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    foreach ($monedas as $val) {
 
-        $query_ingreso = '
+        $query_ingreso = "
 				SELECT 
-					sum(t1.Cantidad_Recibida) as Ingreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Transferencia` t1
-				inner join Moneda t2 on t1.Moneda_Origen = t2.Id_Moneda
+					IFNULL(SUM(T1.Cantidad_Recibida), 0) AS Ingreso_Total,				    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Transferencia' AS Modulo
+				FROM Transferencia T1
+				INNER JOIN Moneda T2 on T1.Moneda_Origen = T2.Id_Moneda
 				where
-					t1.Moneda_Origen = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND Identificacion_Funcionario = ' . $id . ' 
-					AND (t1.Estado = "Activa" OR  t1.Estado = "Pagada")
-					AND t1.Forma_Pago = "Efectivo"
-				group by t2.Id_Moneda';
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulada'
+					AND T1.Forma_Pago = 'Efectivo'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_ingreso);
@@ -226,29 +265,27 @@ function ConsultarIngresosEgresosTransferencias($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r1 === false) {
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr);
+            $ingresos_egresos_transferencia[$val['Nombre']]['Ingresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r1);
+            $ingresos_egresos_transferencia[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
         }
 
-        $query_egreso = '
+        $query_egreso = "
 				SELECT 
-				    0 as Egreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Transferencia` t1
-				inner join Moneda t2 on t1.Moneda_Destino = t2.Id_Moneda
+					0 AS Egreso_Total,			    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Transferencia' AS Modulo
+				FROM Transferencia T1
+				INNER JOIN Moneda T2 on T1.Moneda_Destino = T2.Id_Moneda
 				where
-					t1.Moneda_Destino = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND Identificacion_Funcionario = ' . $id . ' 
-					AND (t1.Estado = "Activa" OR  t1.Estado = "Pagada")
-					AND t1.Forma_Pago = "Efectivo"
-				group by t2.Id_Moneda';
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulada'
+					AND T1.Forma_Pago = 'Efectivo'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_egreso);
@@ -256,41 +293,41 @@ function ConsultarIngresosEgresosTransferencias($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r2 === false) {
-            $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $i % 2 == 0 ? '#d3d3d3' : "#ffffff"];
-
-            array_push($valores[$modulo], $arr1);
+            $ingresos_egresos_transferencia[$val['Nombre']]['Egresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r2);
+            $ingresos_egresos_transferencia[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
         }
-        $i++;
+
+        $ingresos_egresos_transferencia[$val['Nombre']]['Codigo'] = $val['Codigo'];
+        $ingresos_egresos_transferencia[$val['Nombre']]['Total'] = $ingresos_egresos_transferencia[$val['Nombre']]['Ingresos'] - $ingresos_egresos_transferencia[$val['Nombre']]['Egresos'];
     }
+
+    return $ingresos_egresos_transferencia;
 }
 
-function ConsultarIngresosEgresosGiros($modulo, $id, $fecha_actual)
+function ConsultarIngresosEgresosGiros2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
+    global $monedas;
 
-    global $valores, $resultado;
+    $ingresos_egresos_giros = array();
 
-    $i = 0;
-    $color = 'ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    foreach ($monedas as $val) {
 
-        $query_ingreso = '
+        $query_ingreso = "
 				SELECT 
-					(IFNULL((SELECT SUM(Valor_Total)), 0)) AS Ingreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Giro` t1
-				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					IFNULL(SUM(T1.Valor_Total), 0) AS Ingreso_Total,		    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Giro' AS Modulo
+				FROM Giro T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
 				where
-					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND t1.Identificacion_Funcionario = ' . $id . '
-					AND t1.Estado != "Anulado"
-				group by t2.Id_Moneda';
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulado'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_ingreso);
@@ -299,29 +336,26 @@ function ConsultarIngresosEgresosGiros($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r1 === false) {
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr);
+            $ingresos_egresos_giros[$val['Nombre']]['Ingresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r1);
+            $ingresos_egresos_giros[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
         }
 
-        $query_egreso = '
+        $query_egreso = "
 				SELECT 
-					(IFNULL((SELECT SUM(Valor_Entrega)), 0)) AS Egreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color,
-				    "Giros" as Modulo
-				FROM `Giro` t1
-				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					IFNULL(SUM(Valor_Entrega), 0) AS Egreso_Total,		    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Giro' AS Modulo
+				FROM Giro T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
 				where
-					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-					AND Funcionario_Pago = ' . $id . '
-					AND t1.Estado = "Pagado"
-				group by t2.Id_Moneda';
+					T1.Funcionario_Pago = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado = 'Pagado'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_egreso);
@@ -329,41 +363,40 @@ function ConsultarIngresosEgresosGiros($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r2 === false) {
-            $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr1);
+            $ingresos_egresos_giros[$val['Nombre']]['Egresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r2);
+            $ingresos_egresos_giros[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
         }
-        $i++;
+
+        $ingresos_egresos_giros[$val['Nombre']]['Codigo'] = $val['Codigo'];
+        $ingresos_egresos_giros[$val['Nombre']]['Total'] = $ingresos_egresos_giros[$val['Nombre']]['Ingresos'] - $ingresos_egresos_giros[$val['Nombre']]['Egresos'];
     }
+
+    return $ingresos_egresos_giros;
 }
 
-function ConsultarIngresosEgresosTraslados($modulo, $id, $fecha_actual)
+function ConsultarIngresosEgresosTraslados2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
+    global $monedas;
 
-    global $valores, $resultado;
+    $ingresos_egresos_traslados = array();
 
-    $i = 0;
-    $color = 'ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    foreach ($monedas as $val) {
 
-        $query_ingreso = '
+        $query_ingreso = "
 				SELECT 
-					(IFNULL((select sum(Valor)), 0)) as Ingreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Traslado_Caja` t1
-				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					IFNULL(SUM(T1.Valor), 0) AS Ingreso_Total,	    
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Traslado_Caja' AS Modulo
+				FROM Traslado_Caja T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
 				where
-					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha_Traslado) = "' . $fecha_actual . '" 
-					AND t1.Estado = "Aprobado"
-					AND t1.Funcionario_Destino = ' . $id . ' 
-				group by t1.Id_Moneda';
+					T1.Funcionario_Destino = $idFuncionario
+					AND DATE(T1.Fecha_Traslado) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Estado <> 'Anulado'
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_ingreso);
@@ -372,28 +405,26 @@ function ConsultarIngresosEgresosTraslados($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r1 === false) {
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr);
+            $ingresos_egresos_traslados[$val['Nombre']]['Ingresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r1);
+            $ingresos_egresos_traslados[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
         }
 
-        $query_egreso = '
+        $query_egreso = "
 				SELECT 
-		            (IFNULL((select sum(Valor)), 0)) as Egreso_Total,
-				    t2.Nombre as Moneda,
-				    t2.Codigo as Codigo,
-				    t2.Id_Moneda as Moneda_Id,
-				    "' . $color . '" AS Color
-				FROM `Traslado_Caja` t1
-				inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
+					IFNULL(SUM(T1.Valor), 0) AS Egreso_Total,   
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Traslado_Caja' AS Modulo
+				FROM Traslado_Caja T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
 				where
-					t1.Id_Moneda = ' . $val["Id_Moneda"] . '
-					AND DATE(t1.Fecha_Traslado) = "' . $fecha_actual . '" 
-					AND t1.Estado = "Aprobado"
-					AND t1.Id_Cajero_Origen = ' . $id . ' 
-				group by t1.Id_Moneda';
+					T1.Id_Cajero_Origen = $idFuncionario
+					AND DATE(T1.Fecha_Traslado) BETWEEN '$fechaIni' AND '$fechaFin'
+					ANd T1.Estado <> 'Anulado'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
         $oCon = new consulta();
         $oCon->setQuery($query_egreso);
@@ -401,70 +432,66 @@ function ConsultarIngresosEgresosTraslados($modulo, $id, $fecha_actual)
         unset($oCon);
 
         if ($r2 === false) {
-            $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-            array_push($valores[$modulo], $arr1);
+            $ingresos_egresos_traslados[$val['Nombre']]['Egresos'] += floatval(0);
         } else {
-            array_push($valores[$modulo], $r2);
+            $ingresos_egresos_traslados[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
         }
 
-        $i++;
+        $ingresos_egresos_traslados[$val['Nombre']]['Codigo'] = $val['Codigo'];
+        $ingresos_egresos_traslados[$val['Nombre']]['Total'] = $ingresos_egresos_traslados[$val['Nombre']]['Ingresos'] - $ingresos_egresos_traslados[$val['Nombre']]['Egresos'];
     }
+
+    return $ingresos_egresos_traslados;
 }
 
-function ConsultarIngresosEgresosCorresponsal($modulo, $id, $fecha_actual)
+function ConsultarIngresosEgresosCorresponsal2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
+    global $monedas, $id_moneda_pesos;
 
-    global $valores, $resultado;
+    $ingresos_egresos_corresponsal = array();
 
-    $i = 0;
-    $color = 'ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    foreach ($monedas as $val) {
 
-        if (strtolower($val['Nombre']) == 'pesos') {
-            $query_ingreso = '
+        if ($val['Id_Moneda'] == $id_moneda_pesos) {
+            $query_ingreso = "
 					SELECT 
-						IFNULL(sum(t1.Consignacion), 0) as Ingreso_Total,
-					    "' . $val['Nombre'] . '" as Moneda,
-					    "' . $val['Codigo'] . '" as Codigo,
-					    "' . $val['Id_Moneda'] . '" as Moneda_Id,
-					    "Corresponsal Bancario" as Modulo,
-				    	"' . $color . '" AS Color
-					FROM `Corresponsal_Diario_Nuevo` t1
+						IFNULL(SUM(T1.Consignacion), 0) AS Ingreso_Total,   
+					    T2.Nombre as Moneda,
+					    T2.Codigo as Codigo,
+					    T2.Id_Moneda as Moneda_Id,
+					    'Corresponsal' AS Modulo
+					FROM Corresponsal_Diario_Nuevo T1
+					INNER JOIN Moneda T2 on T2.Id_Moneda = $id_moneda_pesos
 					where
-						t1.Fecha = "' . $fecha_actual . '" 
-						AND t1.Identificacion_Funcionario = ' . $id . ' 
-					group by t1.Identificacion_Funcionario';
+						T1.Identificacion_Funcionario = $idFuncionario
+						AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+						AND T1.Id_Oficina = $idOficina";
 
             $oCon = new consulta();
             $oCon->setQuery($query_ingreso);
             $r1 = $oCon->getData();
 
-
             unset($oCon);
 
             if ($r1 === false) {
-                $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-                array_push($valores[$modulo], $arr);
+                $ingresos_egresos_corresponsal[$val['Nombre']]['Ingresos'] += floatval(0);
             } else {
-                array_push($valores[$modulo], $r1);
+                $ingresos_egresos_corresponsal[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
             }
 
-            $query_egreso = '
+            $query_egreso = "
 					SELECT 
-						IFNULL(sum(t1.Retiro), 0) as Egreso_Total,
-					    "' . $val['Nombre'] . '" as Moneda,
-					    "' . $val['Codigo'] . '" as Codigo,
-					    "' . $val['Id_Moneda'] . '" as Moneda_Id,
-					    "Corresponsal Bancario" as Modulo,
-				    	"' . $color . '" AS Color
-					FROM `Corresponsal_Diario_Nuevo` t1
+						IFNULL(SUM(T1.Retiro), 0) AS Egreso_Total,   
+					    T2.Nombre as Moneda,
+					    T2.Codigo as Codigo,
+					    T2.Id_Moneda as Moneda_Id,
+					    'Corresponsal' AS Modulo
+					FROM Corresponsal_Diario_Nuevo T1
+					INNER JOIN Moneda T2 on T2.Id_Moneda = $id_moneda_pesos
 					where
-						t1.Fecha = "' . $fecha_actual . '" 
-						AND t1.Identificacion_Funcionario = ' . $id . ' 
-					group by t1.Identificacion_Funcionario';
+						T1.Identificacion_Funcionario = $idFuncionario
+						AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+						AND T1.Id_Oficina = $idOficina";
 
             $oCon = new consulta();
             $oCon->setQuery($query_egreso);
@@ -472,85 +499,83 @@ function ConsultarIngresosEgresosCorresponsal($modulo, $id, $fecha_actual)
             unset($oCon);
 
             if ($r2 === false) {
-                $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-                array_push($valores[$modulo], $arr1);
+                $ingresos_egresos_corresponsal[$val['Nombre']]['Egresos'] += floatval(0);
             } else {
-                array_push($valores[$modulo], $r2);
+                $ingresos_egresos_corresponsal[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
             }
         } else {
-
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-            $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-            array_push($valores[$modulo], $arr);
-            array_push($valores[$modulo], $arr1);
+            $ingresos_egresos_corresponsal[$val['Nombre']]['Ingresos'] += floatval(0);
+            $ingresos_egresos_corresponsal[$val['Nombre']]['Egresos'] += floatval(0);
         }
 
-        $i++;
+        $ingresos_egresos_corresponsal[$val['Nombre']]['Codigo'] = $val['Codigo'];
+        $ingresos_egresos_corresponsal[$val['Nombre']]['Total'] = $ingresos_egresos_corresponsal[$val['Nombre']]['Ingresos'] - $ingresos_egresos_corresponsal[$val['Nombre']]['Egresos'];
     }
+
+    return $ingresos_egresos_corresponsal;
 }
 
-function ConsultarIngresosEgresosServicios($modulo, $id, $fecha_actual)
+function ConsultarIngresosEgresosServicios2($idFuncionario, $fechaIni, $fechaFin, $idOficina)
 {
+    global $monedas;
 
-    global $valores, $resultado;
+    $ingresos_egresos_servicio = array();
 
-    $i = 0;
-    $color = 'ffffff';
-    foreach ($resultado['monedas'] as $val) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
+    foreach ($monedas as $val) {
 
-        if (strtolower($val['Nombre']) == 'pesos') {
-            $query_ingreso = '
-					SELECT 
-						sum(t1.Valor + t1.Comision) as Ingreso_Total,
-					    t2.Nombre as Moneda,
-					    t2.Codigo as Codigo,
-					    t2.Id_Moneda as Moneda_Id,
-				    	"' . $color . '" AS Color
-					FROM `Servicio` t1
-					inner join Moneda t2 on t1.Id_Moneda = t2.Id_Moneda
-					where
-						t1.Id_Moneda = ' . $val["Id_Moneda"] . '
-						AND DATE(t1.Fecha) = "' . $fecha_actual . '" 
-						AND t1.Identificacion_Funcionario = ' . $id . ' 
-					group by t2.Id_Moneda';
+        $query_ingreso = "
+				SELECT 
+					IFNULL(SUM(T1.Valor + T1.Comision), 0) AS Ingreso_Total,
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Servicio' AS Modulo
+				FROM Servicio T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
+				where
+					T1.Identificacion_Funcionario = $idFuncionario
+					AND DATE(T1.Fecha) BETWEEN '$fechaIni' AND '$fechaFin'
+					AND T1.Id_Oficina = $idOficina
+					AND T2.Id_Moneda = $val[Id_Moneda]";
 
-            $oCon = new consulta();
-            $oCon->setQuery($query_ingreso);
-            $r1 = $oCon->getData();
+        $oCon = new consulta();
+        $oCon->setQuery($query_ingreso);
+        $r1 = $oCon->getData();
 
-            unset($oCon);
+        unset($oCon);
 
-            if ($r1 === false) {
-                $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-
-                array_push($valores[$modulo], $arr);
-            } else {
-                array_push($valores[$modulo], $r1);
-            }
+        if ($r1 === false) {
+            $ingresos_egresos_servicio[$val['Nombre']]['Ingresos'] += floatval(0);
         } else {
-
-            $arr = ['Ingreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-            array_push($valores[$modulo], $arr);
+            $ingresos_egresos_servicio[$val['Nombre']]['Ingresos'] += floatval($r1['Ingreso_Total']);
         }
 
-        $arr1 = ['Egreso_Total' => '0', "Moneda" => $val['Nombre'], 'Moneda_Id' => $val['Id_Moneda'], 'Codigo' => $val['Codigo'], 'Color' => $color];
-        array_push($valores[$modulo], $arr1);
+        $query_egreso = "
+				SELECT 
+					0 AS Egreso_Total,
+				    T2.Nombre as Moneda,
+				    T2.Codigo as Codigo,
+				    T2.Id_Moneda as Moneda_Id,
+				    'Servicio' AS Modulo
+				FROM Servicio T1
+				INNER JOIN Moneda T2 on T1.Id_Moneda = T2.Id_Moneda
+				WHERE
+					 T2.Id_Moneda = $val[Id_Moneda]";
 
-        $i++;
+        $oCon = new consulta();
+        $oCon->setQuery($query_egreso);
+        $r2 = $oCon->getData();
+        unset($oCon);
+
+        if ($r2 === false) {
+            $ingresos_egresos_servicio[$val['Nombre']]['Egresos'] += floatval(0);
+        } else {
+            $ingresos_egresos_servicio[$val['Nombre']]['Egresos'] += floatval($r2['Egreso_Total']);
+        }
+
+        $ingresos_egresos_servicio[$val['Nombre']]['Codigo'] = $val['Codigo'];
+        $ingresos_egresos_servicio[$val['Nombre']]['Total'] = $ingresos_egresos_servicio[$val['Nombre']]['Ingresos'] - $ingresos_egresos_servicio[$val['Nombre']]['Egresos'];
     }
-}
 
-function AgregarColoresMoneda()
-{
-    global $resultado;
-
-    $i = 0;
-    $color = '#ffffff';
-    foreach ($resultado['monedas'] as $key => $m) {
-        $color = $i % 2 == 0 ? '#d3d3d3' : "#ffffff";
-        $resultado['monedas'][$i]['Color'] = $color;
-        $i++;
-    }
+    return $ingresos_egresos_servicio;
 }

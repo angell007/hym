@@ -122,11 +122,8 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
     if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas_general.php';
       p = { fecha: this.Fecha_fin };
       this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
-
-        // console.log(data);
 
         if (data.success) {
           this.CajerosAbiertos = data.conteo.Activos;
@@ -139,21 +136,14 @@ export class TablerocajeroprincipalComponent implements OnInit {
       });
 
     } else if (this.Funcionario.Id_Perfil == 2) {
-      //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
+
       p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
-      this._cajaService.getCajasAbiertasFuncionario(p).subscribe((data: any) => {
+      this._cajaService.getCajasAbiertasFuncionarioCustom(p).subscribe((data: any) => {
 
-        // console.log(data);
+        console.log(data);
+        this.CajerosAbiertos = data.conteo.Activos;
+        this.CajerosTotales = data.conteo.Totales;
 
-
-        if (data.success) {
-          this.CajerosAbiertos = data.conteo.Activos;
-          this.CajerosTotales = data.conteo.Totales;
-        } else {
-
-          this.CajerosAbiertos = data.conteo.Activos;
-          this.CajerosTotales = data.conteo.Totales;
-        }
       });
     }
   }
@@ -161,7 +151,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
   ConsultarTotalesDepartamento() {
 
     if (this.Fecha_fin == '') {
-      // this.ShowSwal('error', 'Error', 'Ha ocurrido un error con la fecha en en el sistema, contacte con el administrador del sistema!');
       this.Totales = [];
       return;
     } else {
@@ -172,25 +161,23 @@ export class TablerocajeroprincipalComponent implements OnInit {
         p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
 
-          // console.log(data);
-
           if (data.codigo == 'success') {
-
-
             if (this.Funcionario.Id_Perfil == 2) {
               let nue = [];
+
               data.query_data.map((elemnt: any, i: number) => {
                 return elemnt['Oficinas'].map((oficina) => {
-                  if (oficina.Nombre == 'Oficina 1') {
-                    nue.push(elemnt)
-                  }
+                  JSON.parse(localStorage.getItem('oficinas_dependientes')).forEach(element => {
+                    if (oficina.Nombre == element.Nombre) {
+                      nue.push(oficina)
+                    }
+                  });
                 })
               })
-              // console.log(nue);
-              this.Totales = nue;
+
+              this.calcularTotales(nue);
             } else {
-              // console.log(data.query_data);
-              this.Totales = data.query_data
+              this.calcularTotales(data.query_data);
             }
 
 
@@ -200,7 +187,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
         });
 
       } else if (this.Funcionario.Id_Perfil == 2) {
-        //ruta = this.globales.ruta+'php/cajas/cajas_abiertas.php';
         p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
         this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
           if (data.codigo == 'success') {
@@ -221,6 +207,14 @@ export class TablerocajeroprincipalComponent implements OnInit {
       }
     }
   }
+
+
+  calcularTotales(nue) {
+
+    console.log(nue);
+
+  }
+
 
   AsignarDepartamentoSeleccionado(value) {
 
