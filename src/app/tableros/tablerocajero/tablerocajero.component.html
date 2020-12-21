@@ -282,7 +282,7 @@
                       </tr>
                       <tr
                         *ngFor="let cambio of fc.Cambios | paginate: {  id: 'cambios', itemsPerPage: fc.pageSize, currentPage: fc.page, totalItems: TotalItems }"
-                        [ngClass]="{'bg-anulada':cambio.Estado == 'Anulado'}">
+                        [ngClass]="{'bg-anulada':cambio.Estado == 'Anulado', 'bg-warning':cambio.valor_recibido != null}">
                         <td class="text-center" style="font-size: 14px;">{{cambio.Fecha | date:"HH:mm" }}
                         </td>
                         <td class="text-center" style="font-size: 14px;">{{cambio.Codigo}}</td>
@@ -319,7 +319,7 @@
                             <i class="ti-search"></i>
                           </button>
 
-                          <ng-container *ngIf="cambio.fomapago_id != 3">
+                          <ng-container *ngIf="cambio.fomapago_id != 3 && cambio.valor_recibido == null">
                             <button class="btn btn-xs btn-warning" type="button" title="Devolver cambio"
                               style="margin:0;" *ngIf="cambio.Tipo != 'Compra' && cambio.Estado != 'Anulado'"
                               (click)="devolverCambio(cambio.Id_Cambio,AbrirModalDevolucion) ">
@@ -334,12 +334,16 @@
                             </button>
                           </ng-container>
 
-                          <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
-                            *ngIf="cambio.Estado != 'Anulado'"
-                            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                            (confirm)="AnulaCambio(cambio.Id_Cambio)">
-                            <i class="ti-close"></i>
-                          </button>
+
+                          <ng-container *ngIf="cambio.Tipo != 'Venta'">
+                            <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
+                              *ngIf="cambio.Estado != 'Anulado'"
+                              [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                              (confirm)="AnulaCambio(cambio.Id_Cambio)">
+                              <i class="ti-close"></i>
+                            </button>
+                          </ng-container>
+
                         </td>
 
                       </tr>
@@ -570,7 +574,7 @@
                     <ng-container *ngIf="tipoCliente != ''">
                       <div class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
-                          {{ (Venta) ? 'Entregado a ' : 'Recibido de '   }}</label>
+                          {{ (Venta) ? 'Entregado a ' : 'Recibido de ' }}</label>
                         <textarea type="text" cols="10" class="inputfield font-size-12  form-control form-control-lg"
                           name="observacion" [(ngModel)]="CambioModel.observacion" [required]="tipoCliente != ''"
                           tabindex="8"></textarea>
@@ -822,6 +826,11 @@
                                 <!-- <label class="transferencia font-size-18"> {{MonedaParaTransferencia.nombre}}</label> -->
                                 <div class="row">
                                   <div class="col-md-10">
+                                    {{
+                                    (MonedaParaTransferencia.nombre != '' &&
+                                    MonedaParaTransferencia.nombre != undefined ) ?
+                                    MonedaParaTransferencia.nombre.Codigo : ''
+                                    }}
                                     <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
                                       [disabled]="DeshabilitarValor" class="font-size-18 form-control alinear-derecha"
                                       name="Valor_Transferencia_{{i}}" [(ngModel)]="destinatario.Valor_Transferencia"
@@ -830,7 +839,7 @@
                                   </div>
 
                                   <div class="col-md-10">
-                                    <input type="text" name="copia{{i}}" [disabled]="DeshabilitarValor"
+                                    <span>$</span> <input type="text" name="copia{{i}}" [disabled]="DeshabilitarValor"
                                       class="font-size-18 form-control alinear-derecha my-2"
                                       [(ngModel)]="destinatario.copia" (blur)="doConversion($event.target.value, i)"
                                       currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
@@ -900,6 +909,12 @@
                             </div>
 
                             <div class="form-group">
+                              {{
+                              (MonedaParaTransferencia.nombre != '' &&
+                              MonedaParaTransferencia.nombre != undefined ) ?
+                              MonedaParaTransferencia.nombre.Codigo : ''
+                              }}
+
                               <input *ngIf="TransferenciaModel.Bolsa_Bolivares == '0'" id="Cantidad_Transferida"
                                 type="text" placeholder="Valor Transferencia"
                                 class="font-size-18 form-control alinear-derecha"
@@ -2761,14 +2776,14 @@
           <tr>
 
 
-            <td>Cantidad a devolver {{devCambio['Codigo_Moneda_Destino']}}</td>
+            <td>Cantidad a devolve en {{codigoDestino}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
               [(ngModel)]="devCambio['Valor_Devolver']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
           <tr>
 
 
-            <td>Valor en {{devCambio['Codigo_Moneda_Origen']}}</td>
+            <td>Valor en {{codigoOrigen}}</td>
             <input name="tasa" type="text" placeholder="tasa" class="form-control" (keyup)="calcularDevolucion()"
               [(ngModel)]="devCambio['Valor_Devuelto']" currencyMask
               [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
@@ -2779,7 +2794,6 @@
 
             <td>Motivo devolución</td>
             <select id="grupo" class="form-control" [(ngModel)]="devCambio['Motivo']" required>
-              <option value="">Seleccione</option>
               <option *ngFor="let motivo of Motivos" value="{{motivo.id}}">{{motivo.nombre }}</option>
             </select>
 

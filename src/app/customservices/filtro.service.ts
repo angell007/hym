@@ -28,10 +28,8 @@ export class FiltroService {
   public Cambios: any = [];
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient
 
-  ) {
+  ) { }
 
-    // this.CargarCambiosDiarios()
-  }
   public filtroCustom: string;
 
   ShowSwal(tipo: string, titulo: string, msg: string, confirmCallback = null, cancelCallback = null) {

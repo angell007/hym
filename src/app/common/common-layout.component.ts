@@ -1100,7 +1100,7 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     CheckCajaOficina() {
-        console.log("estoy entrando aca");
+        // console.log("estoy entrando aca");
         var macFormatted = '';
         this.qz.getMac().subscribe(
             data => {

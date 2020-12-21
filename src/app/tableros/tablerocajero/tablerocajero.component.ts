@@ -1898,33 +1898,36 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ListaDestinatarios[i].Valor_Transferencia = total_transferir - total_destinatarios_real;
       this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
 
-      // console.log('testeando   ...', this.ListaDestinatarios[i].Valor_Transferencia, valor);
-
       let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! "], tipo: "warning", duracion: 4000 };
       this._toastService.ShowToast(toastObj);
 
-      // console.log('testeando valores 1  ...', total_valor_destinatarios, total_transferir);
 
     } else if (total_valor_destinatarios > total_transferir) {
 
       this.ListaDestinatarios[i].Valor_Transferencia = '0';
       this.ListaDestinatarios[i].Valor_Transferencia = (total_valor_destinatarios - valor) - total_transferir;
-      this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
-      // console.log(this.ListaDestinatarios[i].Valor_Transferencia);
+      if (this.ListaDestinatarios[i].Valor_Transferencia < 0) {
+        this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * -1 * MultiplicadorDeConversion;
+      } else {
+        this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
+      }
 
       let toastObj = { textos: ["Alerta", "El valor que coloco supera el total a transferir! "], tipo: "warning", duracion: 4000 };
       this._toastService.ShowToast(toastObj);
 
     } else if (total_valor_destinatarios <= total_transferir) {
+
       let asignar = (valor);
+
       let asignar_siguiente = (total_transferir - total_valor_destinatarios);
       this.ListaDestinatarios[i].Valor_Transferencia = asignar;
       this.ListaDestinatarios[i].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
 
-      if (i < conteo) {
-        this.ListaDestinatarios[(i + 1)].Valor_Transferencia = parseFloat(this.ListaDestinatarios[(i + 1)].Valor_Transferencia) > 0 ? this.ListaDestinatarios[(i + 1)].Valor_Transferencia : asignar_siguiente;
-        this.ListaDestinatarios[(i + 1)].copia = this.ListaDestinatarios[i].Valor_Transferencia * MultiplicadorDeConversion;
-      }
+      // if (i < conteo) {
+      //   this.ListaDestinatarios[(i + 1)].Valor_Transferencia = parseFloat(this.ListaDestinatarios[(i + 1)].Valor_Transferencia) > 0 ? this.ListaDestinatarios[(i + 1)].Valor_Transferencia : asignar_siguiente;
+      //   console.log(this.ListaDestinatarios[(i + 1)].Valor_Transferencia, 'sx');
+      //   // this.ListaDestinatarios[(i + 1)].copia = this.ListaDestinatarios[(i + 1)].Valor_Transferencia * MultiplicadorDeConversion;
+      // }
       this.VerificarDestinatariosConTransferenciaMayorAlTotal();
     }
 
@@ -2353,6 +2356,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   SetMonedaTransferencia(value) {
+
+
     this._getMonedas();
     this.MonedaParaTransferencia.id = value;
     this.TransferenciaModel.Moneda_Destino = value;
@@ -2394,6 +2399,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       } else {
         this.TransferenciaPesos = false;
         this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).subscribe((data: any) => {
+
+
           this.MonedaParaTransferencia.Valores = data.query_data;
           this.TransferenciaModel.Tasa_Cambio = data.query_data.Sugerido_Compra_Efectivo;
           if (this.MonedaParaTransferencia.nombre == 'Bolivares Soberanos') {
@@ -2401,6 +2408,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           } else {
             this.InputBolsaBolivares = false;
           }
+
+          console.log(this.MonedaParaTransferencia);
+
         });
       }
     } else {
@@ -5353,7 +5363,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.formasPago.push(forma);
           }
 
-          if (forma['nombre'] == "Credito") {
+          if (forma['nombre'] == "Crédito") {
             this.CambioModel.fomapago = forma['id']
           }
 
@@ -5412,11 +5422,28 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   }
 
+  public codigoDestino = '';
+  public codigoOrigen = '';
+
   devolverCambio(id: any, modal: any) {
 
     this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
+
+      data['Monedas'].forEach(element => {
+        if (element.Id_Moneda == data['cambio']['Moneda_Destino']) {
+          this.codigoDestino = element.Codigo
+        }
+      });
+
+      data['Monedas'].forEach(element => {
+        if (element.Id_Moneda == data['cambio']['Moneda_Origen']) {
+          this.codigoOrigen = element.Codigo
+        }
+      });
+
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
+      this.devCambio['Motivo'] = data['motivos'][0]['id']
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
       this.devCambio['Valor_Devuelto'] = this.devCambio['Valor_Devolver'] * this.devCambio['Tasa'];
       modal.show();
@@ -5452,11 +5479,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   saveDevolucion() {
 
-    // if (this.devCambio['Motivo'] == '') {
-    //   this.swalService.ShowMessage(['warning', 'alerta', 'Complete todos los campos']);
-    //   return false;
-    // }
-
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
     this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {
@@ -5478,6 +5500,29 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     })
   };
 
+  reduce(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Valor_Transferencia)
+    })
+    return suma;
+  }
+
+  reduceCopia(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.copia)
+    })
+    return suma;
+  }
+
+  cleanCopia() {
+    this.ListaDestinatarios.forEach((element, index) => {
+      this.ListaDestinatarios[index].copia = 0
+      this.ListaDestinatarios[index].Valor_Transferencia = 0
+    })
+  }
+
   doConversion(valor, i) {
     let MultiplicadorDeConversion = 0;
     this.Monedas.forEach(element => {
@@ -5486,9 +5531,29 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     });
 
-    valor = parseFloat(valor.replace(/\./g, ''));
-    let nuevoValorConvertido = valor / MultiplicadorDeConversion
-    this.ValidarValorTransferirDestinatario2(nuevoValorConvertido.toString(), i)
+
+    let valorNew = parseFloat(valor.replace(/\./g, ''));
+    let aEntregar = this.reduce(this.ListaDestinatarios)
+    let aEntregarCopia = this.reduceCopia(this.ListaDestinatarios)
+    //Valor real 
+    let nuevoValorConvertido1 = valorNew / MultiplicadorDeConversion
+    let nuevoValorConvertidoCopia1 = valorNew
+    //valor total convertido
+    let nuevoValorConvertido2 = this.TransferenciaModel.Cantidad_Recibida / MultiplicadorDeConversion
+    let nuevoValorConvertidoCopia2 = this.TransferenciaModel.Cantidad_Recibida
+
+
+    if (valorNew > this.TransferenciaModel.Cantidad_Recibida) {
+      this.ValidarValorTransferirDestinatario2(nuevoValorConvertido2.toString(), i)
+    } else {
+      if (aEntregarCopia > nuevoValorConvertidoCopia2) {
+        this.cleanCopia()
+        this.ListaDestinatarios[i].copia = nuevoValorConvertidoCopia2
+        this.ListaDestinatarios[i].Valor_Transferencia = nuevoValorConvertido2
+      } else {
+        this.ValidarValorTransferirDestinatario2(nuevoValorConvertido1.toString(), i)
+      }
+    }
   }
 }
 
