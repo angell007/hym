@@ -42,7 +42,7 @@ export class CajaService {
   }
 
   getCajasAbiertasFuncionarioCustom(p: any): Observable<any> {
-    return this.client.get(this._rutaBase + 'cajas_abiertas_custom.php', { params: p });
+    return this.client.get(this.globales.rutaNueva + 'calcular-totales-cajeros', { params: p });
   }
 
   getTotalesCajasGeneral(p: any): Observable<any> {

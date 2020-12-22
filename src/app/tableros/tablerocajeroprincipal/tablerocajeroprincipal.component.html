@@ -36,44 +36,45 @@
                     </div>
                   </div>
                   <div class="row" *ngIf="Totales.length > 0">
-                    <div class="col-md-12" style="margin-top: 15px;" *ngFor="let t of Totales">
-                      <table class="table" style="margin-bottom: 0 !important;">
-                        <thead>
-                          <tr>
-                            <th style="width: 40%; padding: 0;border: none;">
-                              <span class="font-size-17 font-weight-bold" style="color: black;">{{t.Nombre}}</span>
-                            </th>
-                            <th *ngFor="let tm of t.Totales" class="text-right font-weight-bold font-size-17"
-                              style="width:80px !important;max-width:80px !important; padding: 0 12px 0 0;border: none;color: black;">
-                              {{tm.Total | customcurrency:tm.Codigo}}
-                            </th>
-                          </tr>
-                        </thead>
-                      </table>
+                    <div class="col-md-12" style="margin-top: 15px;">
 
-                      <table class="table table-striped table-bordered" *ngFor="let o of t.Oficinas">
-                        <thead>
-                          <tr class="alert-primary">
-                            <th style="width: 40%;font-weight: normal;" class="custom-th text-uppercase ">{{o.Nombre}}
-                            </th>
-                            <th *ngFor="let tmo of o.Totales" class="text-right" appColorsaldo [value]="tmo.Total"
-                              style="width:80px !important;max-width:80px !important;">
-                              {{tmo.Total | customcurrency:tmo.Codigo}}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody *ngIf="o.Cajeros.length > 0">
-                          <tr *ngFor="let c of o.Cajeros">
-                            <td class="custom-td text-uppercase" style="padding-left: 30px; ">{{c.Nombre}}</td>
-                            <td *ngFor="let tmc of c.Totales" appColorsaldo [value]="tmc.Total" class="text-right"
-                              style="max-width:80px !important;">
-                              {{tmc.Total | customcurrency:tmc.Codigo}}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                      <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                          <tbody>
+
+                            <ng-container *ngFor="let total of Totales; index as i ">
+
+                              <tr class="bg-info text-white">
+                                <th scope="col">{{total['Oficina']}}</th>
+                                <th scope="col">Bolivares Soberanos</th>
+                                <th scope="col">Pesos</th>
+                                <th scope="col">Viejitos</th>
+                              </tr>
+
+                              <tr *ngFor="let  data of  total['Data'];  ">
+                                <th>{{ data['Funcionario_Nombre']  +  ' '  + ' '  + data['Funcionario_Nombre'] }}</th>
+                                <th *ngFor="let  dataFuncionario of  data.data;  ">
+                                  {{  reduce(dataFuncionario['Movimientos']) }}
+                                </th>
+                              </tr>
+
+
+                              <!-- <tr *ngFor="let  data of  total['Data']; ">
+                                <th></th>
+                                <th> {{  reduceAll(data.data, ii) }}</th>
+                              </tr> -->
+
+
+                            </ng-container>
+
+                          </tbody>
+                        </table>
+                      </div>
+
                     </div>
                   </div>
+
                   <div class="row" *ngIf="Totales.length == 0">
                     <div class="col-md-12 text-center">
                       <i class="ti-alert font-size-20 text-warning"></i>

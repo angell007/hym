@@ -68,7 +68,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ConsultarTotalesDepartamento();
+    // this.ConsultarTotalesDepartamento();
   }
 
   InicializarFecha() {
@@ -121,99 +121,100 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let ruta = '';
     let p = {};
 
-    if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-      p = { fecha: this.Fecha_fin };
-      this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
+    // if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
+    // p = { fecha: this.Fecha_fin };
+    // this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
-        if (data.success) {
-          this.CajerosAbiertos = data.conteo.Activos;
-          this.CajerosTotales = data.conteo.Totales;
-        } else {
+    // if (data.success) {
+    // this.CajerosAbiertos = data.conteo.Activos;
+    // this.CajerosTotales = data.conteo.Totales;
+    // }
+    //  else {
 
-          this.CajerosAbiertos = data.conteo.Activos;
-          this.CajerosTotales = data.conteo.Totales;
-        }
+    //   this.CajerosAbiertos = data.conteo.Activos;
+    //   this.CajerosTotales = data.conteo.Totales;
+    // }
+    // });
+
+    // } else if (this.Funcionario.Id_Perfil == 2) {
+
+    p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
+    this._cajaService.getCajasAbiertasFuncionarioCustom(p).subscribe((data: any) => {
+
+      this.Totales = data;
+      console.log(data);
+
+      this.Totales.forEach(element => {
+        console.log(element);
       });
 
-    } else if (this.Funcionario.Id_Perfil == 2) {
 
-      p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
-      this._cajaService.getCajasAbiertasFuncionarioCustom(p).subscribe((data: any) => {
+      //     this.CajerosAbiertos = data.conteo.Activos;
+      //     this.CajerosTotales = data.conteo.Totales;
 
-        console.log(data);
-        this.CajerosAbiertos = data.conteo.Activos;
-        this.CajerosTotales = data.conteo.Totales;
-
-      });
-    }
+    });
+    // }
   }
 
-  ConsultarTotalesDepartamento() {
+  // ConsultarTotalesDepartamento() {
 
-    if (this.Fecha_fin == '') {
-      this.Totales = [];
-      return;
-    } else {
-      let ruta = '';
-      let p = {};
+  //   if (this.Fecha_fin == '') {
+  //     this.Totales = [];
+  //     return;
+  //   } else {
+  //     let ruta = '';
+  //     let p = {};
 
-      if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6 || this.Funcionario.Id_Perfil == 2) {
-        p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
-        this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
+  // if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6 || this.Funcionario.Id_Perfil == 2) {
+  // p = { id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
+  // this._cajaService.getTotalesCajasGeneral(p).subscribe((data: any) => {
 
-          if (data.codigo == 'success') {
-            if (this.Funcionario.Id_Perfil == 2) {
-              let nue = [];
+  // if (data.codigo == 'success') {
+  //   if (this.Funcionario.Id_Perfil == 2) {
+  //     let nue = [];
 
-              data.query_data.map((elemnt: any, i: number) => {
-                return elemnt['Oficinas'].map((oficina) => {
-                  JSON.parse(localStorage.getItem('oficinas_dependientes')).forEach(element => {
-                    if (oficina.Nombre == element.Nombre) {
-                      nue.push(oficina)
-                    }
-                  });
-                })
-              })
+  //     data.query_data.map((elemnt: any, i: number) => {
+  //       return elemnt['Oficinas'].map((oficina) => {
+  //         JSON.parse(localStorage.getItem('oficinas_dependientes')).forEach(element => {
+  //           if (oficina.Nombre == element.Nombre) {
+  //             nue.push(oficina)
+  //           }
+  //         });
+  //       })
+  //     })
 
-              this.calcularTotales(nue);
-            } else {
-              this.calcularTotales(data.query_data);
-            }
-
-
-          } else {
-            this.Totales = [];
-          }
-        });
-
-      } else if (this.Funcionario.Id_Perfil == 2) {
-        p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
-        this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
-          if (data.codigo == 'success') {
-
-            // this.TotalesMunicipio = data.totales.municipios; 
-            // this.TotalesDepartamento = data.totales.departamento;
-
-            // this.MostrarTotales = [];
-            // this.ExtraerTotales();
-            this.Totales = data.query_data;
-          } else {
-            this.Totales = [];
-            // this.MostrarTotales = [];
-            // this.TotalesMunicipio = []; 
-            // this.TotalesDepartamento = [];
-          }
-        });
-      }
-    }
-  }
+  //     this.calcularTotales(nue);
+  //   } else {
+  //     this.calcularTotales(data.query_data);
+  //   }
 
 
-  calcularTotales(nue) {
+  // } else {
+  //   this.Totales = [];
+  // }
+  // });
 
-    console.log(nue);
+  // } else if (this.Funcionario.Id_Perfil == 2) {
+  //   p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, id_departamento: this.DepartamentoId, fecha_inicio: this.Fecha_inicio, fecha_fin: this.Fecha_fin };
+  //   this._cajaService.getTotalesCajasFuncionario(p).subscribe((data: any) => {
+  //     if (data.codigo == 'success') {
+  //       this.Totales = data.query_data;
+  //     } else {
+  //       this.Totales = [];
+  //     }
+  //   });
+  // }
+  //   }
+  // }
 
-  }
+
+  // calcularTotales(nue) {
+  //   let oficinas = new FormData()
+  //   oficinas.append('data', nue);
+  //   this.http.get(this.globales.rutaNueva + 'calcular-totales-cajeros', { params: { data: nue } }).subscribe((data: any) => {
+  //     console.log(data);
+  //   });
+  // }
 
 
   AsignarDepartamentoSeleccionado(value) {
@@ -229,7 +230,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
     this.DepartamentoId = value;
     let d = this.Departamentos.filter(x => x.Id_Departamento == value);
     this.DepartamentoSeleccionado = d[0].Nombre;
-    this.ConsultarTotalesDepartamento();
+    // this.ConsultarTotalesDepartamento();
   }
 
   ExtraerTotales() {
@@ -250,17 +251,17 @@ export class TablerocajeroprincipalComponent implements OnInit {
       this.Fecha_fin = '';
     }
 
-    this.ConsultarTotalesDepartamento();
+    // this.ConsultarTotalesDepartamento();
   }
 
   onDataChange() {
     this.ConteoCajeros();
-    this.ConsultarTotalesDepartamento();
+    // this.ConsultarTotalesDepartamento();
   }
 
-  Test() {
-    // console.log(this.Fecha_fin);
-  }
+  // Test() {
+  //   // console.log(this.Fecha_fin);
+  // }
 
   ShowSwal(tipo: string, titulo: string, msg: string) {
     this.alertSwal.type = tipo;
@@ -281,4 +282,35 @@ export class TablerocajeroprincipalComponent implements OnInit {
     });
   }
 
+  reduce(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Ingreso_Total) - parseFloat(element.Egreso_Total)
+    })
+    return suma;
+  }
+
+  public suma: any = [];
+
+  reduceAll(a, ii) {
+
+
+    // if (this.suma[ii] == '' || this.suma[ii] == undefined) {
+    //   this.suma[ii] = 0;
+    // }
+
+    // a.forEach((element) => {
+    //   this.suma[ii] += parseFloat(element.Ingreso_Total) - parseFloat(element.Egreso_Total)
+    // })
+
+    // return this.suma[ii];
+
+    // Object.values(a).forEach((ex) => {
+    //   let total = 0;
+    //   ex['data'].forEach((xx) => {
+    //     total += this.reduce(xx['Movimientos'])
+    //   });
+    //   this.suma[ii] = total;
+    // });
+  }
 }
