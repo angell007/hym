@@ -135,19 +135,19 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     })
 
     if (this.Funcionario.Id_Perfil == 4) {
-      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
-        .subscribe(() => {
-          this.ConsultaFiltradaObservable(false, this.filter);
-          this.ActualizarIndicadores.emit()
-          // this.ConsultaFiltradaObservable(false, this.filter);
-        });
-      }
-      
-      this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
-      .subscribe(() => {
-        this.ConsultaFiltradaObservable(false, this.filter);
-        this.ActualizarIndicadores.emit()
-      });
+      // this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
+      //   .subscribe(() => {
+      this.ConsultaFiltradaObservable(false, this.filter);
+      this.ActualizarIndicadores.emit()
+      // this.ConsultaFiltradaObservable(false, this.filter);
+      // });
+    }
+
+    // this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+    // .subscribe(() => {
+    this.ConsultaFiltradaObservable(false, this.filter);
+    this.ActualizarIndicadores.emit()
+    // });
     // console.log(this.Funcionario.Id_Perfil);
 
   }

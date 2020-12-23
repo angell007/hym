@@ -46,6 +46,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public CajerosTotales: number = 0;
   public Totales: Array<any> = [];
   public model: any;
+  public TotalesByCaja: any;
 
   constructor(
     public globales: Globales,
@@ -122,32 +123,29 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
     // if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-    // p = { fecha: this.Fecha_fin };
-    // this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
+    p = { fecha: this.Fecha_fin };
+    this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
-    // if (data.success) {
-    // this.CajerosAbiertos = data.conteo.Activos;
-    // this.CajerosTotales = data.conteo.Totales;
-    // }
-    //  else {
+      if (data.success) {
+        this.CajerosAbiertos = data.conteo.Activos;
+        this.CajerosTotales = data.conteo.Totales;
+      }
+      else {
 
-    //   this.CajerosAbiertos = data.conteo.Activos;
-    //   this.CajerosTotales = data.conteo.Totales;
-    // }
-    // });
+        this.CajerosAbiertos = data.conteo.Activos;
+        this.CajerosTotales = data.conteo.Totales;
+      }
+    });
 
-    // } else if (this.Funcionario.Id_Perfil == 2) {
+    // } 
 
     p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, fecha: this.Fecha_fin };
     this._cajaService.getCajasAbiertasFuncionarioCustom(p).subscribe((data: any) => {
 
-      this.Totales = data;
-      console.log(data);
+      this.Totales = data['FullMontos'];
+      this.TotalesByCaja = data['amountTotalByOficina'];
 
-      this.Totales.forEach(element => {
-        console.log(element);
-      });
-
+      console.log(this.TotalesByCaja);
 
       //     this.CajerosAbiertos = data.conteo.Activos;
       //     this.CajerosTotales = data.conteo.Totales;

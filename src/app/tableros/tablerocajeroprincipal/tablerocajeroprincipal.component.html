@@ -13,25 +13,30 @@
                   <div class="row">
                     <div class="col-md-12 mb-4" id="filter-container">
                       <div class="row">
-                        <div class="col-md-4" style="display:flex; align-items: center;">
+                        <div class="col-md-12" style="display:flex; align-items: center;">
                           <i class="ti-info-alt text-info font-size-15" style="margin-right:4px;"></i>
                           <span>{{CajerosAbiertos}} Cajeros abrieron de {{CajerosTotales}} totales</span>
                         </div>
-                        <div class="col-md-6">
-                          <div class="pull-right">
-                            <div class="form-row align-items-center">
 
-                              <label for="">Fecha inicio</label>
-                              <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
-                                [(ngModel)]="Fecha_inicio" (change)="onDataChange()" [attr.max]="FechaActual">
+                        <br>
+                        <br>
 
-                              <label for="">Fecha fin</label>
-                              <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
-                                [(ngModel)]="Fecha_fin" (change)="onDataChange()" [attr.max]="FechaActual">
+                        <div class="row col-md-12">
 
-                            </div>
+                          <div class="form-group col-4">
+                            <label for="">Fecha inicio</label>
+                            <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
+                              [(ngModel)]="Fecha_inicio" (change)="onDataChange()" [attr.max]="FechaActual">
                           </div>
+
+                          <div class="form-group col-4">
+                            <label for="">Fecha fin</label>
+                            <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm"
+                              [(ngModel)]="Fecha_fin" (change)="onDataChange()" [attr.max]="FechaActual">
+                          </div>
+
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -41,6 +46,7 @@
 
                       <div class="table-responsive">
                         <table class="table table-hover table-striped">
+
                           <tbody>
 
                             <ng-container *ngFor="let total of Totales; index as i ">
@@ -59,14 +65,13 @@
                                 </th>
                               </tr>
 
-
-                              <!-- <tr *ngFor="let  data of  total['Data']; ">
-                                <th></th>
-                                <th> {{  reduceAll(data.data, ii) }}</th>
-                              </tr> -->
-
+                              <tr class=" text-info font-weight-bold">
+                                <th> Total </th>
+                                <th *ngFor="let item of TotalesByCaja[i].Of"> {{  item.Monto | currency:' ' }} </th>
+                              </tr>
 
                             </ng-container>
+
 
                           </tbody>
                         </table>

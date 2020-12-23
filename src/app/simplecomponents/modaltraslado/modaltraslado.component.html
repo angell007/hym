@@ -41,7 +41,7 @@
             <input type="text" name="Id_Origen" class="form-control" placeholder="origen"
               [disabled]="TrasladoModel.Origen == ''" [(ngModel)]="Origen" [ngbTypeahead]="search_origen"
               [resultTemplate]="rt_origenm" [inputFormatter]="formatter_origen"
-              (ngModelChange)="CompletarOrigen(Origen)">
+              (ngModelChange)="CompletarOrigen(Origen)" required>
           </div>
         </div>
         <div class="col-md-6">
@@ -50,7 +50,7 @@
             <input type="text" name="Id_Destino" class="form-control" placeholder="destino"
               [disabled]="TrasladoModel.Destino == ''" [(ngModel)]="Destino" [ngbTypeahead]="search_destino"
               [resultTemplate]="rt_destinom" [inputFormatter]="formatter_destino"
-              (ngModelChange)="CompletarDestino(Destino)">
+              (ngModelChange)="CompletarDestino(Destino)" required>
           </div>
         </div>
       </div>
@@ -99,9 +99,11 @@
 </app-modal-basic>
 
 <ng-template #rt_origenm let-r="result" let-t="term">
-  <strong>{{r.Nombre}}</strong>
+  <span>{{r.Nombre}}</span>
+  <strong>{{r.Id_Tercero}}</strong>
 </ng-template>
 
 <ng-template #rt_destinom let-r="result" let-t="term">
-  <strong>{{r.Nombre}}</strong>
+  <span>{{r.Nombre}}</span>
+  <strong>{{r.Id_Tercero}}</strong>
 </ng-template>

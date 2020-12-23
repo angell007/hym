@@ -27,11 +27,19 @@ border-radius: 25em;">
                 <small>{{Funcionario.Hora_Apertura}}</small>
                 <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
                 <small>{{Funcionario.Hora_Cierre}}</small>
-                <i style="margin: 0.1em;"
-                  [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
-                  (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
+
+                <ng-container *ngIf="user.Id_Perfil != 2">
+
+
+                  <i style="margin: 0.1em;"
+                    [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
+                    (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
+
+                </ng-container>
+
                 <i style="margin: 0.1em;" Class="ti-bar-chart text-info"
                   (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)"></i>
+
               </div>
             </div>
           </div>

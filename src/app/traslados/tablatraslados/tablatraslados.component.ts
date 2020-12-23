@@ -16,48 +16,47 @@ import { CuentabancariaService } from '../../shared/services/cuentasbancarias/cu
 })
 export class TablatrasladosComponent implements OnInit {
 
-  public Traslados:Array<any> = [];
-  public Monedas:Array<any> = [];
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  
-  public AbrirModalAgregar:Subject<any> = new Subject<any>();
-  
-  public Filtros:any = {
-    fecha:'',
-    codigo:'',
-    funcionario:'',
-    origen:'',
-    destino:'',
-    tipo_origen:'',
-    tipo_destino:'',
-    moneda:'',
-    estado:''
+  public Traslados: Array<any> = [];
+  public Monedas: Array<any> = [];
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+
+  public AbrirModalAgregar: Subject<any> = new Subject<any>();
+
+  public Filtros: any = {
+    fecha: '',
+    codigo: '',
+    funcionario: '',
+    origen: '',
+    destino: '',
+    tipo_origen: '',
+    tipo_destino: '',
+    moneda: '',
+    estado: ''
   };
 
-  public Origen:any = '';
-  public Destino:any = '';
+  public Origen: any = '';
+  public Destino: any = '';
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _trasladoService:TrasladoService,
-              private _monedaService:MonedaService,
-              private _terceroService:TerceroService,
-              private _cuentaBancariaService:CuentabancariaService) 
-  {
-    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _trasladoService: TrasladoService,
+    private _monedaService: MonedaService,
+    private _terceroService: TerceroService,
+    private _cuentaBancariaService: CuentabancariaService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
   }
 
@@ -65,81 +64,74 @@ export class TablatrasladosComponent implements OnInit {
     this.GetMonedas();
   }
 
-  GetMonedas(){
-    this._monedaService.getMonedas().subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.Monedas = data.query_data;
-      }else{
-
-        this.Monedas = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-        this._toastService.ShowToast(toastObj);
-      }
+  async GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
+      this.Monedas = data;
     });
   }
 
-  ConsultaOrigen(match:string){
+  ConsultaOrigen(match: string) {
 
     if (this.Filtros.tipo_origen == 'Cliente') {
       return this._terceroService.getTercerosPorTipo('Cliente', match);
-    }else if (this.Filtros.tipo_origen == 'Proveedor') {
+    } else if (this.Filtros.tipo_origen == 'Proveedor') {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
-    }else if (this.Filtros.tipo_origen == 'Cuenta Bancaria') {
+    } else if (this.Filtros.tipo_origen == 'Cuenta Bancaria') {
       return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
     }
   }
 
-  ConsultaDestino(match:string){
+  ConsultaDestino(match: string) {
 
     if (this.Filtros.tipo_destino == 'Cliente') {
       return this._terceroService.getTercerosPorTipo('Cliente', match);
-    }else if (this.Filtros.tipo_destino == 'Proveedor') {
+    } else if (this.Filtros.tipo_destino == 'Proveedor') {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
-    }else if (this.Filtros.tipo_destino == 'Cuenta Bancaria') {
+    } else if (this.Filtros.tipo_destino == 'Cuenta Bancaria') {
       return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
     }
   }
 
 
   search_origen = (text$: Observable<string>) =>
-  text$
-  .pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    switchMap( term => term.length < 3 ? [] :
-      this.ConsultaOrigen(term)
-      .map(response => response)
-      .do(data => data)
-    )
-  );
+    text$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term => term.length < 3 ? [] :
+          this.ConsultaOrigen(term)
+            .map(response => response)
+            .do(data => data)
+        )
+      );
   formatter_origen = (x: { Nombre: string }) => x.Nombre;
 
 
   search_destino = (text$: Observable<string>) =>
-  text$
-  .pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    switchMap( term => term.length < 3 ? [] :
-      this.ConsultaDestino(term)
-      .map(response => response)
-      .do(data => data)
-    )
-  );
+    text$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term => term.length < 3 ? [] :
+          this.ConsultaDestino(term)
+            .map(response => response)
+            .do(data => data)
+        )
+      );
   formatter_destino = (x: { Nombre: string }) => x.Nombre;
 
-  AbrirModal(idTraslado:string){
+  AbrirModal(idTraslado: string) {
     this.AbrirModalAgregar.next(idTraslado);
   }
 
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -183,67 +175,67 @@ export class TablatrasladosComponent implements OnInit {
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
-    var p = this.SetFiltros(paginacion);    
+    var p = this.SetFiltros(paginacion);
 
-    if(p === ''){
+    if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this._trasladoService.getListaTraslados(p).subscribe((data:any) => {
+    this._trasladoService.getListaTraslados(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Traslados = data.query_data;
         this.TotalItems = data.numReg;
-      }else{
+      } else {
         this.Traslados = [];
         this._swalService.ShowMessage(data);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  BuscarOrigen(){
+  BuscarOrigen() {
     if (this.Filtros.tipo_origen == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'Debe escoger el tipo de origen primero']);
       this.Filtros.origen = '';
-    }else{
+    } else {
 
       this.ConsultaFiltrada();
     }
   }
 
-  BuscarDestino(){
+  BuscarDestino() {
     if (this.Filtros.tipo_destino == '') {
       this._swalService.ShowMessage(['warning', 'Alerta', 'Debe escoger el tipo de destino primero']);
       this.Filtros.destino = '';
-    }else{
+    } else {
 
       this.ConsultaFiltrada();
     }
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      fecha:'',
-      codigo:'',
-      funcionario:'',
-      origen:'',
-      destino:'',
-      tipo_origen:'',
-      tipo_destino:'',
-      moneda:'',
-      estado:''
+      fecha: '',
+      codigo: '',
+      funcionario: '',
+      origen: '',
+      destino: '',
+      tipo_origen: '',
+      tipo_destino: '',
+      moneda: '',
+      estado: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -251,61 +243,61 @@ export class TablatrasladosComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  AnularTraslado(modelo:any){
+  AnularTraslado(modelo: any) {
     let datos = new FormData();
     datos.append("modelo", JSON.stringify(modelo));
-    this._trasladoService.anularTraslado(datos).subscribe((data:any) => {
-      if (data.codigo == 'success') { 
+    this._trasladoService.anularTraslado(datos).subscribe((data: any) => {
+      if (data.codigo == 'success') {
         this.ConsultaFiltrada();
         this._swalService.ShowMessage(['success', 'Exito', 'Operacion realizada correctamente']);
         // let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
         // this._toastService.ShowToast(toastObj);
-      }else{
-        this._swalService.ShowMessage(data); 
+      } else {
+        this._swalService.ShowMessage(data);
       }
     });
   }
 
-  CompletarOrigen(value){
+  CompletarOrigen(value) {
 
-    if (typeof(value) == 'object') {
+    if (typeof (value) == 'object') {
       this.Filtros.origen = this.Filtros.tipo_origen == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
       this.ConsultaFiltrada();
-    }else{
+    } else {
       this.Filtros.origen = '';
       this.ConsultaFiltrada();
     }
-    
+
   }
 
-  CompletarDestino(value){
-    
-    if (typeof(value) == 'object') {
+  CompletarDestino(value) {
+
+    if (typeof (value) == 'object') {
       this.Filtros.destino = this.Filtros.tipo_destino == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
       this.ConsultaFiltrada();
-    }else{
+    } else {
       this.Filtros.destino = '';
       this.ConsultaFiltrada();
     }
   }
 
-  ConsultaSelectOrigen(){
+  ConsultaSelectOrigen() {
     if (this.Filtros.tipo_origen == '') {
       this.Origen = '';
       this.Filtros.origen = '';
       this.ConsultaFiltrada();
-    }else{
+    } else {
 
       this.ConsultaFiltrada();
     }
   }
 
-  ConsultaSelectDestino(){
+  ConsultaSelectDestino() {
     if (this.Filtros.tipo_destino == '') {
       this.Destino = '';
       this.Filtros.destino = '';
       this.ConsultaFiltrada();
-    }else{
+    } else {
 
       this.ConsultaFiltrada();
     }

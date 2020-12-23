@@ -133,6 +133,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           this.ConsultaOrigen(term)
             .map(response => response)
             .do(data => {
+              console.log(data);
               return data;
             })
         )

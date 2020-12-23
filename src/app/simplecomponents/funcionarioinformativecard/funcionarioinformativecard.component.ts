@@ -17,11 +17,14 @@ export class FuncionarioinformativecardComponent implements OnInit {
 
   public Funcionarios_Activos: Array<any> = [];
   public SesionAbierta: boolean = false;
+  public user: any = '';
+
 
   constructor(public globales: Globales, private client: HttpClient, public router: Router, private _swalService: SwalService) { }
 
   ngOnInit() {
     this.SesionAbierta = this.Funcionario.Hora_Cierre == '00:00:00' ? true : false;
+    this.user = JSON.parse(localStorage.User);
   }
 
   AbrirCierreFuncionario(funcionario: any) {
