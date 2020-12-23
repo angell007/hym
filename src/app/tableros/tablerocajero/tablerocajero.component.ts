@@ -2069,7 +2069,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             return this.handleError(error);
           })
           .subscribe((data: any) => {
-            console.log(data);
             this.LimpiarModeloTransferencia();
             this.SetTransferenciaDefault();
             this.movimientoExitosoSwal.show();
@@ -2900,7 +2899,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CargarTransferenciasDiarias() {
     this.Transferencia = [];
     this._transferenciaService.getRecibosTransferenciasFuncionario(this.funcionario_data.Identificacion_Funcionario).subscribe((data: any) => {
-      console.log(data);
       if (data.codigo == 'success') {
         this.Transferencia = data.query_data;
       } else {

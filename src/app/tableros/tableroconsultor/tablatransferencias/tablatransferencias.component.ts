@@ -143,12 +143,12 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
         });
     }
 
-    // this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
-    //   .subscribe(() => {
-    //     this.ConsultaFiltradaObservable(false, this.filter);
-    //     this.ActualizarIndicadores.emit()
-    //   });
-    // console.log(this.Funcionario.Id_Perfil);
+    this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+      .subscribe(() => {
+        // this.ConsultaFiltradaObservable(false, this.filter);
+        // this.ActualizarIndicadores.emit()
+      });
+    console.log(this.Funcionario.Id_Perfil);
 
   }
 

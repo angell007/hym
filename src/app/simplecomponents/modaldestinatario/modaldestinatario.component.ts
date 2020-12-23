@@ -185,11 +185,14 @@ export class ModaldestinatarioComponent implements OnInit {
   }
 
   GuardarDestinatario() {
+
     this.DestinatarioModel.Cuentas = this.Lista_Cuentas_Destinatario;
 
     if (!this.ValidateBeforeSubmit()) {
       return;
     }
+
+    console.log(this.DestinatarioModel);
 
     this.LimpiarBancosModelo();
     this.DestinatarioModel = this.generalService.limpiarString(this.DestinatarioModel);
