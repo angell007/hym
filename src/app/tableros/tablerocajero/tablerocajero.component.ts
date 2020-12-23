@@ -2020,6 +2020,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios();
     this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
 
+    // console.log(this.TransferenciaModel);
+
+
     if (!this.ValidateBeforeSubmit()) {
       return;
     }

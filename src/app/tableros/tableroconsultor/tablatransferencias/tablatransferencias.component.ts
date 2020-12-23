@@ -135,19 +135,19 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     })
 
     if (this.Funcionario.Id_Perfil == 4) {
-      // this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
-      //   .subscribe(() => {
-      this.ConsultaFiltradaObservable(false, this.filter);
-      this.ActualizarIndicadores.emit()
-      // this.ConsultaFiltradaObservable(false, this.filter);
-      // });
+      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+        .subscribe(() => {
+          this.ConsultaFiltradaObservable(false, this.filter);
+          this.ActualizarIndicadores.emit()
+          this.ConsultaFiltradaObservable(false, this.filter);
+        });
     }
 
     // this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
-    // .subscribe(() => {
-    this.ConsultaFiltradaObservable(false, this.filter);
-    this.ActualizarIndicadores.emit()
-    // });
+    //   .subscribe(() => {
+    //     this.ConsultaFiltradaObservable(false, this.filter);
+    //     this.ActualizarIndicadores.emit()
+    //   });
     // console.log(this.Funcionario.Id_Perfil);
 
   }
@@ -398,6 +398,9 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this._transferenciaService.GetTransferenciasConsultorObservable(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
+
+        console.log(data.query_data);
+
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
@@ -446,6 +449,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   public DevolverTransferencia(transferenciaModel: any) {
+
     let p = { model: transferenciaModel, id_apertura: this.Id_Apertura };
     this.AbrirModalDevolucion.next(p);
   }

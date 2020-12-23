@@ -26,7 +26,7 @@
               <th class="custom-thead">Recibo</th>
               <th class="custom-thead">Valor</th>
               <th class="custom-thead">Pendiente</th>
-              <th class="custom-thead">Cédula</th>
+              <th class="custom-thead">Documento</th>
               <th class="custom-thead">Cta. Destino</th>
               <th class="custom-thead">Destinatario</th>
               <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Realizada/Bloqueado Por</th>
@@ -243,6 +243,33 @@
 
         </div>
       </div>
+
+
+
+      <!-- 
+Cantidad_Transferida: "225000000"
+Codigo: "00321"
+Codigo_Moneda: "BsS"
+Cuenta_Destino: "01349898656598965656"
+Destinatario: "Pedro Juarez"
+Devolucion: "0"
+Doc_Destinatario: "1414141414"
+Estado: "Pendiente"
+Fecha: "2020-12-18 15:25:40"
+Funcionario_Bloqueo: "Disponible"
+Id_Transferencia: "195"
+Id_Transferencia_Destinatario: "205"
+NombreCajero: "Camilo Cajero"
+Numero_Documento_Destino: "1414141414"
+Orden_Consulta: "2"
+Pago_Parcial: "0"
+Tasa_Cambio: "0.02"
+Type_Documento: "documento.Codigo"
+Valor_Real: "5000000.00"
+Valor_Transferencia: "5000000.00" 
+-->
+
+
       <div class="form-row">
         <div class="col-md-6">
           <div class="form-group">
@@ -252,8 +279,9 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="">Cédula</label>
-            <label for="" style="display:block;"><b>{{TransferenciaModel.Numero_Documento_Destino}}</b></label>
+            <label for="" style="display:block;">Documento <span>
+                {{TransferenciaModel.Type_Documento }} :
+              </span><b>{{TransferenciaModel.Numero_Documento_Destino}}</b></label>
           </div>
         </div>
       </div>

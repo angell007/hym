@@ -123,7 +123,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
     // if (this.Funcionario.Id_Perfil == 1 || this.Funcionario.Id_Perfil == 5 || this.Funcionario.Id_Perfil == 6) {
-    p = { fecha: this.Fecha_fin };
+    p = { fecha: this.Fecha_fin, id: this.Funcionario.Identificacion_Funcionario, };
     this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
       if (data.success) {
