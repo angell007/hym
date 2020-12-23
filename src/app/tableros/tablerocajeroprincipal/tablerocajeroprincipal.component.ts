@@ -145,7 +145,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
       this.Totales = data['FullMontos'];
       this.TotalesByCaja = data['amountTotalByOficina'];
 
-      console.log(this.TotalesByCaja);
+      // console.log(this.Totales);
 
       //     this.CajerosAbiertos = data.conteo.Activos;
       //     this.CajerosTotales = data.conteo.Totales;

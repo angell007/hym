@@ -59,7 +59,7 @@
                               </tr>
 
                               <tr *ngFor="let  data of  total['Data'];  ">
-                                <th>{{ data['Funcionario_Nombre']  +  ' '  + ' '  + data['Funcionario_Nombre'] }}</th>
+                                <th>{{ data['Funcionario_Nombre']  +  ' '  + ' '  + data['Funcionario_Apellido'] }}</th>
                                 <th *ngFor="let  dataFuncionario of  data.data;  ">
                                   {{  reduce(dataFuncionario['Movimientos']) }}
                                 </th>
