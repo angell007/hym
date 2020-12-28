@@ -110,58 +110,39 @@
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="cursor:pointer;">{{ts.Destinatario}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="cursor:pointer;">{{ts.Funcionario_Opera}}</td>
+                style="cursor:pointer;">{{ts.Funcionario_Bloqueo}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="cursor:pointer;">{{ts.Estado}}</td>
               <td class="custom-cell text-center">
-                <!-- <button class="btn btn-default btn-xs" type="button" title="Pagar Transferencia" style="margin:0;"
+                <button class="btn btn-default btn-xs" type="button" title="Pagar Transferencia" style="margin:0;"
                   (click)="BloquearTransferencia(ts)">
                   <i class="ti-money text-success"></i>
-                </button> -->
+                </button>
               </td>
             </tr>
-            <tr *ngFor="let t of TransferenciasListar; let i = index;" style="cursor:pointer;" [ngClass]="
-               {
-                'bg-selected': t.Estado == 'Pagada',
-                'bg-info':      t.Seleccionada == 1,
-                'text-light':   t.Seleccionada == 1,
-                'bg-success': t.Bloqueada == 1,
-                'text-white':   t.Bloqueada == 1
-                }
-                ">
+            <tr *ngFor="let t of TransferenciasListar; let i = index;" style="cursor:pointer;"
+              [ngClass]="{'bg-selected': t.Estado == 'Pagada'}">
               <!--TRANSFERENCIAS DISPONIBLES-->
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell text-center">
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell text-center">
                 <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label>
                 {{t.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Codigo}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Codigo}}</td>
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">
                 {{t.Valor_Transferencia | customcurrency:t.Codigo_Moneda}}({{t.Tasa_Cambio}})</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">
                 {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell" style="text-align:right;">
                 {{t.Numero_Documento_Destino}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell">
                 {{t.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000' }}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Funcionario_Opera}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Estado}}</td>
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Funcionario_Bloqueo}}</td>
+              <td (click)="SeleccionarTransferencia(t)" class="custom-cell">{{t.Estado}}</td>
               <td class="custom-cell text-center">
-
-                <button *ngIf="t.Estado_Consultor == 'Abierta' " class="btn btn-danger btn-xs" type="button"
-                  title="Desbloquear" style="margin:0;">
-                  <i class="ti-lock text-light"></i>
-                </button>
-
-                <button *ngIf="t.Seleccionada == 1" class="btn btn-default btn-xs" type="button"
-                  title="Pagar Transferencia" style="margin:0;" (click)="BloquearTransferencia(t)">
-                  <i class="ti-money text-success"></i>
-                </button>
-
                 <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;"
                   (click)="DevolverTransferencia(t)">
                   <i class="ti-search text-primary"></i>
                 </button>
-
               </td>
             </tr>
           </tbody>
@@ -252,7 +233,9 @@
               <label for=""
                 style="display:block;"><b>{{ValorRealCuenta | customcurrency:CodigoMonedaValorReal}}</b></label>
             </div>
+
           </div>
+
         </div>
       </div>
       <div class="form-row">

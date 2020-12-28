@@ -26,7 +26,7 @@
             <select id="destino" name="Destino" class="form-control" [(ngModel)]="TrasladoModel.Destino" required
               (change)="CambiarTipo('destino')">
               <option value="" selected>Seleccione</option>
-              <option value="Cajero">Cajero</option>
+              <option *ngIf="TrasladoModel.Origen == 'Cuenta Bancaria'" value="Cajero">Cajero</option>
               <option value="Cliente">Cliente</option>
               <option value="Proveedor">Proveedor</option>
               <option value="Cuenta Bancaria">Cuenta Bancaria</option>
@@ -69,7 +69,7 @@
           <div class="form-group">
             <label>Valor en {{Mymoneda}}</label>
             <input type="text" name="Valor" class="form-control" [(ngModel)]="TrasladoModel.Valor" placeholder="Valor"
-              required currencyMask [options]="{ thousands: '.', decimal: ',' }">
+              required currencyMask [options]="{ thousands: '.', decimal: ',', precision: '0'}">
           </div>
         </div>
       </div>

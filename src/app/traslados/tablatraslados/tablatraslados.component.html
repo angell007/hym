@@ -166,5 +166,6 @@
   <strong>{{r.Nombre}}</strong>
 </ng-template>
 
-<app-modaltraslado [AbrirModal]="AbrirModalAgregar.asObservable()" (ActualizarTabla)="ConsultaFiltrada()">
+<app-modaltraslado [AbrirModal]="AbrirModalAgregar.asObservable()"
+  (ActualizarTabla)="cleanfilter(); ConsultaFiltrada() ">
 </app-modaltraslado>

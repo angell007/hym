@@ -7,7 +7,14 @@
           <i class="ti-clipboard font-size-30"></i>
         </span>
         <div class="info">
-          <b class="text-dark font-size-22">Consolidado </b>
+          <b class="text-dark font-size-22">Consolidado
+            <small class="text-right" *ngIf=" funcionarioConsolidado != undefined && funcionarioConsolidado != ''">
+
+              {{funcionarioConsolidado['Nombres'] }}
+              {{funcionarioConsolidado['Apellidos'] }}
+
+            </small>
+          </b>
           <p class="no-mrg-btm ">Movimientos hoy <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy' }}</span>
           </p>
         </div>

@@ -21,7 +21,7 @@
                         <br>
                         <br>
 
-                        <div class="row col-md-12">
+                        <div class="row col-md-12" *ngIf="Funcionario.Id_Perfil != 2">
 
                           <div class="form-group col-4">
                             <label for="">Fecha inicio</label>
@@ -63,8 +63,8 @@
 
                               <tr *ngFor="let  data of  total['Data'];  ">
                                 <th>{{ data['Funcionario_Nombre']  +  ' '  + ' '  + data['Funcionario_Apellido'] }}</th>
-                                <th *ngFor="let  dataFuncionario of  data.data;  ">
-                                  {{  reduce(dataFuncionario['Movimientos']) }}
+                                <th *ngFor="let  dataFuncionario of  data.data;  " class="text-right">
+                                  {{  reduce(dataFuncionario['Movimientos']) | currency:' '}}
                                 </th>
                               </tr>
 

@@ -68,9 +68,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
     this.ConteoCajeros();
   }
 
-  ngOnInit() {
-    // this.ConsultarTotalesDepartamento();
-  }
+  ngOnInit() { }
 
   InicializarFecha() {
     let d = new Date();

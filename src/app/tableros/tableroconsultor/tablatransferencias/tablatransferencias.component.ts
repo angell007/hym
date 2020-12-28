@@ -56,6 +56,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public Cargando: boolean = false;
   public ValorRealCuenta: number = 0;
   public CodigoMonedaValorReal: string = '';
+  public infoTranferencia: any = [];
 
   public custom = 0;
   public MovimientoBancoModel: any = {
@@ -135,20 +136,20 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     })
 
     if (this.Funcionario.Id_Perfil == 4) {
-      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
         .subscribe(() => {
           this.ConsultaFiltradaObservable(false, this.filter);
           this.ActualizarIndicadores.emit()
-          this.ConsultaFiltradaObservable(false, this.filter);
+          // this.ConsultaFiltradaObservable(false, this.filter);
         });
     }
 
     this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
-        // this.ConsultaFiltradaObservable(false, this.filter);
-        // this.ActualizarIndicadores.emit()
+        this.ConsultaFiltradaObservable(false, this.filter);
+        this.ActualizarIndicadores.emit()
       });
-    console.log(this.Funcionario.Id_Perfil);
+    // console.log(this.Funcionario.Id_Perfil);
 
   }
 
@@ -178,16 +179,29 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     });
   }
 
-  BloquearTransferencia(modelo: any) {
+  async BloquearTransferencia(modelo: any) {
+    await this.searchInfo(modelo)
+    if (this.bloqueadaTransferencia == false) {
+      this._swalService.ShowMessage(['warning', 'Alerta', `Este Recibo ha sido bloqueado por ! ${this.infoTranferencia.Funcionario_Opera}`]);
+      return false;
+    }
+    this.BloqueadaTransferencia(modelo)
     this.AsginarValoresModalCrear(modelo);
     this.ModalTransferencia.show();
   }
 
+
   DesbloquearTransferencia() {
+    this.habilitarTransferencia();
     this.TransferenciaModel = new TransfereciaViewModel();
     this._limpiarMovimientoBancoModel();
     this.ModalTransferencia.hide();
   }
+
+  public habilitarTransferencia() {
+    this.http.get(this.globales.rutaNueva + 'desbloquear', { params: this.infoTranferencia }).subscribe((data: any) => { });
+  }
+
 
   public SeleccionarTransferencia(modelo: any) {
     if (!this.BloquearSeleccion) {
@@ -398,9 +412,6 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this._transferenciaService.GetTransferenciasConsultorObservable(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
-
-        console.log(data.query_data);
-
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
@@ -449,7 +460,6 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   public DevolverTransferencia(transferenciaModel: any) {
-
     let p = { model: transferenciaModel, id_apertura: this.Id_Apertura };
     this.AbrirModalDevolucion.next(p);
   }
@@ -506,4 +516,30 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       this.DeseleccionarTransferencia(id_transf);
     }
   }
+
+  public ubicadoEnTransferencia: boolean = false;
+  public bloqueadaTransferencia: boolean = false;
+
+  // transferencia ubicado 
+  public UbicarseTransferencia(transferencia: any) {
+    this.http.get(this.globales.rutaNueva + 'ubicarse', { params: transferencia }).subscribe((data: any) => {
+    });
+  }
+
+  // transferencia bloqueada 
+  public BloqueadaTransferencia(transferencia: any) {
+    this.http.get(this.globales.rutaNueva + 'bloquear', { params: transferencia }).subscribe((data: any) => {
+    });
+  }
+
+
+  // transferencia bloqueada 
+  async searchInfo(transferencia: any) {
+    this.http.get(this.globales.rutaNueva + 'info', { params: transferencia }).subscribe((data: any) => {
+      this.infoTranferencia = data[0];
+      this.bloqueadaTransferencia = (this.infoTranferencia['Estado_Consultor'] == "Cerrada") ? true : false
+
+    });
+  }
+
 }

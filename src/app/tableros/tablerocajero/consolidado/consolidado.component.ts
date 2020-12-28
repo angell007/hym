@@ -21,6 +21,7 @@ export class ConsolidadoComponent implements OnInit {
   public ValoresMonedasApertura2: any = [];
   public saldo: any;
   public saldoFinal = 0;
+  public funcionarioConsolidado: any;
 
   constructor(public globales: Globales, private http: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService) {
     this.myDate = new Date();
@@ -34,7 +35,8 @@ export class ConsolidadoComponent implements OnInit {
   async getDatos() {
     await this.GetRegistroDiario();
     this.http.get(this.globales.ruta + 'php/consolidados/getConsolidados.php', { params: { id_funcionario: this.id_funcionario, pag: '1000' } }).subscribe(async (data: any) => {
-      this.datos = data;
+      this.datos = data.query_data;
+      this.funcionarioConsolidado = data.funcionario;
       await this.datos.forEach(async (element: any, index: number) => {
         let datos = element.query_data.reverse()
         this.saldoFinal = 0;

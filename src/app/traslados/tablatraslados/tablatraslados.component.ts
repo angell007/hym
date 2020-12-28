@@ -304,4 +304,17 @@ export class TablatrasladosComponent implements OnInit {
   }
 
 
+  cleanfilter() {
+    this.Filtros.fecha = '';
+    this.Filtros.codigo = '';
+    this.Filtros.funcionario = '';
+    this.Filtros.origen = '';
+    this.Filtros.destino = '';
+    this.Filtros.tipo_origen = '';
+    this.Filtros.tipo_destino = '';
+    this.Filtros.moneda = '';
+    this.Filtros.estado = '';
+  }
+
+
 }
