@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 // import { TransferenciasconsultorService } from '../../../customservices/transferenciasconsultor.service';
 import { providers } from 'ng2-toasty';
 import { TesCustomServiceService } from '../../../tes-custom-service.service';
+import swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-tablatransferencias',
@@ -25,11 +27,10 @@ import { TesCustomServiceService } from '../../../tes-custom-service.service';
 
 export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestroy {
 
-  // @Input() MonedaConsulta:string = '';
-  //@Input() CuentaConsultor:string = '';
   @Input() Id_Funcionario: string = '';
   @Input() Id_Apertura: string = '';
   @Input() CuentasBancariasSeleccionadas: any = [];
+  @ViewChild('OtraCosa') OtraCosa: any;
 
   @Output() ActualizarIndicadores = new EventEmitter();
   private TransferenciasActualizadas: ISubscription;
@@ -110,6 +111,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public filter: string = '';
   public SubscriptionTimer1: Subscription;
   public SubscriptionTimer2: Subscription;
+  public alertOption: any;
+  public temporal: any;
 
 
   constructor(private http: HttpClient, public globales: Globales,
@@ -122,7 +125,33 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     private _router: Router,
     private _TesCustomServiceService: TesCustomServiceService,
   ) {
+
+    this.alertOption = {
+      title: "¿Está Seguro?",
+      text: "Se dispone a Desbloquear esta transferencia",
+      showCancelButton: true,
+      cancelButtonText: "No, Dejame Comprobar!",
+      confirmButtonText: 'Si',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      type: 'info',
+      preConfirm: (value) => {
+        return new Promise((resolve) => {
+
+          console.log(value);
+          this.DesbloquearTransferencia2(this.temporal);
+
+        })
+      },
+      allowOutsideClick: () => !swal.isLoading()
+    }
+
     this._getMaximaHoraTransferencias();
+    if (localStorage.getItem('flagHabilitado') == undefined || localStorage.getItem('flagHabilitado') == 'true') {
+      this.flagHabilitado = true;
+    } else {
+      this.flagHabilitado = false;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -130,6 +159,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
 
   ngOnInit() {
+
+
 
     this.sub = this._TesCustomServiceService.subjec.subscribe((data: string) => {
       this.filter = data
@@ -179,15 +210,38 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     });
   }
 
+  public flagHabilitado: boolean = true;
+
   async BloquearTransferencia(modelo: any) {
-    await this.searchInfo(modelo)
-    if (this.bloqueadaTransferencia == false) {
-      this._swalService.ShowMessage(['warning', 'Alerta', `Este Recibo ha sido bloqueado por ! ${this.infoTranferencia.Funcionario_Opera}`]);
-      return false;
+
+    this.infoTranferencia = await this.searchInfo(modelo);
+
+    if (this.flagHabilitado) {
+      if (this.infoTranferencia['Estado_Consultor'] == 'Cerrada') {
+        this.BloqueadaTransferencia(modelo)
+        this.AsginarValoresModalCrear(modelo);
+        this.ModalTransferencia.show();
+        this.flagHabilitado = false;
+        localStorage.setItem('flagHabilitado', 'false')
+      }
+    } else {
+      if (this.infoTranferencia['Estado_Consultor'] == 'Abierta' && this.infoTranferencia['Funcionario_Opera'] == this.Funcionario.Identificacion_Funcionario) {
+      } else {
+        this._swalService.ShowMessage(['warning', 'Alerta', `No puede seleccionar mas de una transferencia a la vez!`]);
+      }
     }
-    this.BloqueadaTransferencia(modelo)
-    this.AsginarValoresModalCrear(modelo);
-    this.ModalTransferencia.show();
+
+    if (this.infoTranferencia['Estado_Consultor'] == 'Abierta' && this.infoTranferencia['Funcionario_Opera'] != this.Funcionario.Identificacion_Funcionario) {
+      this._swalService.ShowMessage(['warning', 'Alerta', `Este Recibo ha sido bloqueado por ! ${this.infoTranferencia['Funcionario_Opera']}`]);
+    }
+
+
+    if (this.infoTranferencia['Estado_Consultor'] == 'Abierta' && this.infoTranferencia['Funcionario_Opera'] == this.Funcionario.Identificacion_Funcionario) {
+      this.AsginarValoresModalCrear(modelo);
+      this.ModalTransferencia.show();
+    }
+
+
   }
 
 
@@ -196,6 +250,17 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this.TransferenciaModel = new TransfereciaViewModel();
     this._limpiarMovimientoBancoModel();
     this.ModalTransferencia.hide();
+    this.flagHabilitado = true
+    localStorage.setItem('flagHabilitado', 'true')
+
+  }
+
+  DesbloquearTransferencia2(infoTranferencia) {
+
+    this.http.get(this.globales.rutaNueva + 'desbloquear', { params: infoTranferencia }).subscribe((data: any) => { });
+    this.TransferenciaModel = new TransfereciaViewModel();
+    this._limpiarMovimientoBancoModel();
+
   }
 
   public habilitarTransferencia() {
@@ -252,6 +317,19 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   GuardarTransferencia(modal) {
+
+    if (this.custom < this.MovimientoBancoModel.Valor) {
+      this.ShowSwal('warning', 'Alerta', 'El valor registrado es mayor al de la transferencia!');
+      this.MovimientoBancoModel.Valor = 0;
+      return false;
+    }
+
+    if (this.MovimientoBancoModel.Valor > this.ValorRealCuenta) {
+      this.ShowSwal('warning', 'Alerta', 'El valor registrado es mayor al saldo en cuenta!');
+      this.MovimientoBancoModel.Valor = 0;
+      return false;
+    }
+
     if (!this._validarHoraTransferencia(true)) {
       return;
     } else {
@@ -263,6 +341,9 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
 
       this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+
+        this.flagHabilitado = true;
+        localStorage.setItem('flagHabilitado', 'true')
 
         this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
         this.ValorRealCuenta = 0;
@@ -522,24 +603,50 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
   // transferencia ubicado 
   public UbicarseTransferencia(transferencia: any) {
+    if (transferencia.Estado == 'Pagada') {
+      return false;
+    }
     this.http.get(this.globales.rutaNueva + 'ubicarse', { params: transferencia }).subscribe((data: any) => {
     });
   }
 
-  // transferencia bloqueada 
+
+
   public BloqueadaTransferencia(transferencia: any) {
-    this.http.get(this.globales.rutaNueva + 'bloquear', { params: transferencia }).subscribe((data: any) => {
-    });
+
+    if (transferencia.Estado_Consultor == 'Cerrada') {
+      transferencia['Funcionario'] = this.Funcionario['Identificacion_Funcionario']
+      this.http.get(this.globales.rutaNueva + 'bloquear', { params: transferencia }).subscribe((data: any) => {
+      });
+    }
   }
 
 
   // transferencia bloqueada 
   async searchInfo(transferencia: any) {
-    this.http.get(this.globales.rutaNueva + 'info', { params: transferencia }).subscribe((data: any) => {
-      this.infoTranferencia = data[0];
-      this.bloqueadaTransferencia = (this.infoTranferencia['Estado_Consultor'] == "Cerrada") ? true : false
-
+    return this.http.get(this.globales.rutaNueva + 'info', { params: transferencia }).toPromise().then(async (data: any) => {
+      return await data[0];
     });
+  }
+
+  alert(t) {
+    this.temporal = t;
+    this.OtraCosa.show(t);
+  }
+
+  suma1(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Valor_Transferencia)
+    })
+    return suma;
+  }
+  suma2(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += parseFloat(element.Valor_Real)
+    })
+    return suma;
   }
 
 }

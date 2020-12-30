@@ -642,6 +642,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
     this.CorresponsalModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.ServicioExternoModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+    this.TrasladoModel.Id_Moneda = 2;
+    this.SetMonedaTraslados(2);
 
   }
 
@@ -849,6 +851,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     // console.log(this.CambioModel);
     // return false;
+
+    if (this.CambioModel.Recibido == 0 && this.CambioModel.fomapago == 1 ) {
+      this.ShowSwal('warning', 'Alerta', 'Debe Ingresar valor valido en paga con');
+      return false
+
+    }
 
     if (this.selectCustomClient.nativeElement.value != '' && this.CambioModel.Id_Tercero == '') {
       this.ShowSwal('warning', 'Alerta', 'Debe Ingresar la identificacion de un tercero');
@@ -1325,8 +1333,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
         this.ShowSwal('warning', 'Alerta', 'Debe colocar una tasa para el cambio!');
         return false;
+      }
 
-      } else if (this.CambioModel.Valor_Destino == '') {
+      else if (this.CambioModel.Valor_Destino == '') {
 
         this.ShowSwal('warning', 'Alerta', 'Debe recalcular el monto a entregar!');
         return false;

@@ -6,7 +6,7 @@
           <span class="thumb-img pdd-top-10 ">
           </span>
           <div class="info">
-            <b class="text-dark font-size-18">Destinatario giros</b>
+            <b class="text-dark font-size-18">Destinatario pagos</b>
             <p class="no-mrg-btm "></p>
           </div>
         </li>
@@ -58,7 +58,7 @@
         <tr *ngIf="Cargando">
           <td colspan="5" class="text-center">
             <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
-              <h2>CARGANDO DESTINATARIO PARA GIROS</h2>
+              <h2>CARGANDO DESTINATARIO PARA Pagos</h2>
               <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
             </div>
           </td>
@@ -66,7 +66,7 @@
         <tr *ngIf="DestinatariosGiros.length == 0 && !Cargando">
           <td colspan="5" class="text-center">
             <i class="ti-alert font-size-20 text-warning"></i>
-            <h4>No hay destinatarios giros para mostrar!</h4>
+            <h4>No hay destinatarios pagos para mostrar!</h4>
           </td>
         </tr>
       </thead>
