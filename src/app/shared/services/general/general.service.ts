@@ -175,6 +175,10 @@ export class GeneralService {
     this.globales.buscarRiff();
   }
 
+  public searchCne() {
+    this.globales.buscarCne();
+  }
+
   public KeyboardOnlyNumbersAndDecimal($event: KeyboardEvent) {
     return $event.charCode >= 48 && $event.charCode <= 57;
   }

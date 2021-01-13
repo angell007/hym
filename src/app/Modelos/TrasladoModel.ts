@@ -12,4 +12,7 @@ export class TrasladoModel{
     public Codigo:string = '';
     public Estado:string = 'Activo';
     public Id_Caja:string = '';
+    public Id_Moneda_Origen:string = '';
+    public Id_Moneda_Destino:string = '';
+    public Id_Pais_Origen:string = '';
 }

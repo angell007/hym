@@ -38,8 +38,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.suscripcion = this.AbrirModalEvent.subscribe((data: any) => {
+      console.log(data,'->>>>>>>>>>>>>>>>>>>>>>Data!!!');
       this.accion = data.accion;
-      // console.log(data);
 
 
       if (data.id_remitente != "0" && data.accion == 'editar') {
@@ -57,11 +57,13 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
         });
       } else if (data.id_remitente != "0" && data.accion == 'editar desde giro') {
+        console.log('editar');
+        
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
         this.tipo_persona = data.tipo;
         let p = { id_remitente: data.id_remitente };
-        this._remitenteService.getRemitente(p).subscribe((d: any) => {
+        this._remitenteService.getRemitenteGiro(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
             this.ModalRemitente.show();
@@ -71,6 +73,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
           }
 
         });
+        
       } else if (data.id_remitente != "0" && data.accion == 'editar desde transferencia') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
@@ -98,6 +101,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
         this.Editar = false;
         //this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
+        
+        this.RemitenteModel.Tipo = data.tipo;
         this.ModalRemitente.show();
 
       } else {

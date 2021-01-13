@@ -12,7 +12,10 @@ export class TablatotalesterceroComponent implements OnInit {
 
   @Input() Id_Tercero: string = '';
 
-  public Monedas: Array<any> = [];
+  public Monedas: Array<any> = [{
+    Nombre:'Pesos',
+    Id_Moneda:2
+  }];
   public MostrarTablas: boolean = false;
   public MonedaSeleccionada: string = '';
 
@@ -25,7 +28,8 @@ export class TablatotalesterceroComponent implements OnInit {
   ngOnInit() { }
 
   GetMonedas() {
-    this._monedaService.getMonedas().subscribe((data: any) => {
+
+    /* this._monedaService.getMonedas().subscribe((data: any) => {
 
 
       if (data != null) {
@@ -38,7 +42,10 @@ export class TablatotalesterceroComponent implements OnInit {
         this.MostrarTablas = false;
 
       }
-    });
+    }); */
+
+    this.MonedaSeleccionada = '2'
+    this.MostrarTablas = true;
   }
 
   CambiarValoresTabla(idMoneda: string) {

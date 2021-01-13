@@ -118,15 +118,28 @@
                     <div class="form-group">
                         <label>Municipio</label>
                         <select class="form-control" name="Id_Municipio" ngModel="" [(ngModel)]="CorresponsalModel.Id_Municipio" required>
-              <option value="">Seleccione un Municipio</option>
-              <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}
-              </option>
-            </select>
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let Municipio of Municipios" [value]="Municipio.Id_Municipio">{{Municipio.Nombre}}
+                            </option>
+                        </select>
                         <!-- <div *ngIf="municipio.value && boolMunicipio==true" style="color:red">Campo inválido</div>
                         <div *ngIf="!municipio.value" style="color:green">Datos correctos!</div> -->
                     </div>
                 </div>
+
             </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Tercero</label>
+
+                    <input class="form-control font-size-18" name="Id_Tercero" type="text" placeholder="Nombre Tercero" [ngbTypeahead]="search_tercero_credito" [(ngModel)]="CorresponsalModel.Tercero" [resultTemplate]="rt_tercero_credito" [inputFormatter]="formatter_tercero_credito">
+                </div>
+                <!--   (ngModelChange)="AutoCompletarTerceroCredito(tercero_credito)" -->
+            </div>
+            <!--  <pre>{{CorresponsalModel | json}}</pre>
+            <pre>{{tercero_credito | json}}</pre> -->
+
         </form>
     </div>
     <div class="app-modal-footer">
@@ -265,3 +278,10 @@
 
 <swal #deleteSwal title="Corresponsal eliminado" text="Se ha Eliminado Correctamente el corresponsal" type="success">
 </swal>
+
+<ng-template #rt_tercero_credito let-r="result" let-t="term">
+    <span class="f-9">
+    {{r.Id_Tercero}}
+    <strong>{{r.Nombre}}</strong>
+  </span>
+</ng-template>

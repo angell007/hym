@@ -7,4 +7,5 @@ export class CorresponsalModel {
     public Departamento: string = '';
     public Municipio: string = '';
     public Identificacion: any;
+    public Tercero : any;
 }

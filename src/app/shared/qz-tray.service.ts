@@ -12,7 +12,7 @@ import { sha256 } from 'js-sha256';
 qz.api.setSha256Type(data => sha256(data));
 qz.api.setPromiseType(resolver => new Promise(resolver));
 
-qz.security.setCertificatePromise(function (resolve, reject) {
+/* qz.security.setCertificatePromise(function (resolve, reject) {
   $.ajax("https://softwarehym.com/assets/qztry/digital-certificate.txt").then(resolve, reject);
 });
 
@@ -20,7 +20,7 @@ qz.security.setSignaturePromise(function (toSign) {
   return function (resolve, reject) {
     $.ajax("https://softwarehym.com/assets/qztry/sign-message.php?request=" + toSign).then(resolve, reject);
   };
-});
+}); */
 
 @Injectable()
 export class QzTrayService {

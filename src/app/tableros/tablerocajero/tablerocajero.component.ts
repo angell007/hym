@@ -2,6 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+
 import { Globales } from '../../shared/globales/globales';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap, delay, tap } from 'rxjs/operators';
@@ -643,6 +644,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.CorresponsalModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.ServicioExternoModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
     this.TrasladoModel.Id_Moneda = 2;
+    console.log(this.TrasladoModel.Id_Moneda);
+    
     this.SetMonedaTraslados(2);
 
   }
@@ -2420,7 +2423,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.InputBolsaBolivares = false;
           }
 
-          console.log(this.MonedaParaTransferencia);
+        //  console.log(this.MonedaParaTransferencia);
 
         });
       }
@@ -2934,7 +2937,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   AutoCompletarRemitente(modelo: any) {
-
+  console.log(modelo);
+  
 
     if (typeof (modelo) == 'object') {
 
@@ -2946,11 +2950,16 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.EditRemitenteTransferencia = true;
 
     } else if (typeof (modelo) == 'string') {
-      this.TransferenciaModel.Documento_Origen = '';
+      console.log('else fi');
+      
+      //this.TransferenciaModel.Documento_Origen = '';
       this.TransferenciaModel.Telefono_Remitente = '';
       this.TransferenciaModel.Nombre_Remitente = '';
       this.EditRemitenteTransferencia = false;
     }
+
+    console.log(this.TransferenciaModel.Documento_Origen ,'tra after');
+    console.log(modelo,'modelo after');
   }
 
   removeAccents = (str: string) => {
@@ -3113,14 +3122,27 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //Editar o crear remitente para transferencia desde el panel crear transferencias
   EditarRemitenteTransferencia(idRemitente: any, accion: string) {
+
     let data = {};
-
-    if (typeof (this.id_remitente) == 'string') {
-      data = { id_remitente: idRemitente, tipo: "", accion: accion };
-    } else if (typeof (this.id_remitente) == 'object') {
-      data = { id_remitente: idRemitente.Id_Transferencia_Remitente, tipo: "", accion: accion };
+    console.log('id remitente',idRemitente);
+    console.log('accion',accion);
+    
+    //if (typeof (this.id_remitente) == 'string') {
+    if (typeof (idRemitente) == 'string') {
+      if(idRemitente.length <7){
+        this.ShowSwal('warning', 'alerta', 'El número de caracteres debe ser mayor a 6 !!');
+        return 
+      }
+      console.log('1');
+      data = { id_remitente: idRemitente, tipo: "Transferencia", accion: accion };
+    //} else if (typeof (this.id_remitente) == 'object') {
+    } else if (typeof (idRemitente) == 'object') {
+      console.log('2');
+      data = { id_remitente: idRemitente.Id_Transferencia_Remitente, tipo: "Transferencia", accion: accion };
     }
-
+    console.log('data',data);
+    console.log('2 id',idRemitente);
+    console.log('model',this.TransferenciaModel.Documento_Origen);
     this.openModalGiro.next(data);
   }
 
@@ -3708,6 +3730,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
     // console.log('EditarPersonaGiro', idRemitente, tipoPersona, accion);
     let data = {};
+    console.log('editar persona');
+    
+console.log('id ',idRemitente,'  Tipo ',tipoPersona, '  Accion ' ,accion);
 
     if (tipoPersona == 'remitente') {
       if (typeof (this.Remitente_Giro) == 'string') {
@@ -3723,6 +3748,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       }
     }
 
+console.log('data' ,data);
 
 
     this.openModalGiro.next(data);
@@ -3751,6 +3777,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     if (idMoneda == '') {
       this.MonedaSeleccionadaTraslado = idMoneda;
       this.TrasladoModel.Valor = '';
+     // console.log('traslado model set', this.TrasladoModel);
+      
       return;
     }
 
@@ -3896,7 +3924,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   LimpiarModeloTraslados(tipo: string) {
-
+  //console.log('creacion!!');
+  
     if (tipo == 'creacion') {
       this.TrasladoModel = {
         Id_Traslado_Caja: '',
@@ -3904,7 +3933,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         Id_Cajero_Origen: this.funcionario_data.Identificacion_Funcionario,
         Valor: '',
         Detalle: '',
-        Id_Moneda: '',
+        Id_Moneda: this.TransferenciaModel.Moneda_Origen,
         Estado: 'Pendiente',
         Identificacion_Funcionario: '',
         Aprobado: 'No'
@@ -3912,7 +3941,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       this.CajerosTraslados = [];
       this.MonedasTraslados = [];
-      this.MonedaSeleccionadaTraslado = '';
+      //this.MonedaSeleccionadaTraslado = '';
+     
     }
 
     if (tipo == 'edicion') {
@@ -4387,7 +4417,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.DepartamentosGiros = this.globales.Departamentos;
 
     this.Remitentes = [];
-    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Transferencia_Remitente' } }).subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/remitentesgiros/get_remitente_alias.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
       this.Remitentes = data;
     });
 
@@ -4400,13 +4430,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   CargarDatosTraslados() {
     this._trasladosCustomService.CargarDatosTraslados()
     this._getMonedasTraslado();
+
   }
 
   private _getMonedasTraslado() {
+
+    
     this.MonedasTraslados = [];
     this._monedaService.getMonedas().subscribe((data: any) => {
       if (data != null) {
         this.MonedasTraslados = data;
+ 
+        let monedaObj = this.MonedasTraslados.find(x => x.Id_Moneda == this.TransferenciaModel.Moneda_Origen);
+
+        if (!this.globales.IsObjEmpty(monedaObj)) {
+          this.MonedaSeleccionadaTraslado = monedaObj.Nombre;
+        }
+
       } else {
         this.MonedasTraslados = [];
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
@@ -4718,7 +4758,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
 
-        console.log(data);
+       
 
         if (data.DiarioNeto <= 0) {
           if (data.valores_anteriores.length == 0) {
@@ -5290,7 +5330,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             this.AbrirModalDestinatario.next(objModal);
 
           } else if (longitud <= 6) {
-            this.swalService.ShowMessage([data.codigo, data.titulo, 'El numero de caracteres debe ser mayor a 6 !']);
+            this.swalService.ShowMessage(['warning', data.titulo, 'El numero de caracteres debe ser mayor a 6 !']);
           }
         }
         if (data == 1) {

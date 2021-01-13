@@ -23,7 +23,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   @Input() Id_Tercero: string;
 
   public MovimientosTercero: Array<any> = [];
-  public Movimientos: Array<any> = [];
+  public Movimientos: any = [];
   public MostrarTotales: boolean = false;
   public Balance: string = "0";
   public TotalesMonedas: Array<any> = [];
@@ -113,6 +113,9 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     // //     this.GetTotalesMonedas();
     // //   });  
     // }    
+
+
+
   }
 
   ActualizarBalance() {
@@ -145,10 +148,11 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   private SetFiltros(paginacion: boolean, fecha: any = '') {
 
-
+  //console.log(this.Id_Tercero,'idte');
+  
     let params: any = {};
 
-    params.id_tercero = this.Id_Tercero;
+   
 
     if (this.Id_Moneda == '') {
       this.Id_Moneda = '1';
@@ -186,6 +190,8 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       params.detalle = this.Filtros.detalle;
     }
 
+    params.id_tercero = this.Id_Tercero;
+
     return params;
   }
 
@@ -195,21 +201,30 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     if (fecha == false) {
       console.log('1');
       var p = this.SetFiltros(paginacion);
+      console.log(p,'p');
     } else {
       var p = this.SetFiltros(paginacion, fecha.formatted);
     }
-
-
+    
+    console.log(p,'p1');
+    
+    //p = JSON.stringify(p);
+    console.log(p,'p2');
+  
     this.Cargando = true;
-    this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
+    //this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
+    this._movimientoService.getPesosTercero(p).subscribe((data: any) => {
 
       if (data.codigo == 'success') {
         this.MovimientosTercero = data.query_data;
-        this.Movimientos = data.query_data.movimientos;
+        this.Movimientos = data.query_data;
         this.MostrarTotales = true;
         this.TotalItems = data.numReg;
         this.Balance = data.balance;
         this.CodigoMonedaActual = data.codigo_moneda;
+
+        console.log(this.Movimientos,'movis');
+        
       } else {
         this.MovimientosTercero = [];
         this.Movimientos = [];
@@ -219,6 +234,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
+      
 
       this.Cargando = false;
       this.SetInformacionPaginacion();

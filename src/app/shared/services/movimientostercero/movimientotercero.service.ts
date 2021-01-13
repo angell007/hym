@@ -14,6 +14,12 @@ export class MovimientoterceroService {
     return this.client.get(this._rutaBase + 'get_movimientos_tercero.php', { params: p });
   }
 
+  getPesosTercero(datos:any):Observable<any>{
+    
+    return this.client.get( this.globales.ruta+'php/movimientos/get_movimientos_tercero_pesos.php', {params:datos});
+    
+  }
+
   getMovimientoTercero(idMovimientoTercero: string): Observable<any> {
     let p = { id_movimiento: idMovimientoTercero };
     return this.client.get(this._rutaBase + 'get_movimiento_tercero.php', { params: p });

@@ -7,6 +7,7 @@ export class Globales {
   ruta: string = 'https://softwarehym.com/customback/';
   rutaNueva: string = 'https://backnew.softwarehym.com/';
   public urlRiff = '';
+  public urlCne = '';
   public Monedas: any = [];
   public Paises: any = [];
   public TipoDocumentoExtranjero: any = [];
@@ -106,4 +107,9 @@ export class Globales {
     window.open(this.urlRiff, '_blank');
   }
 
+  buscarCne() {
+    this.urlCne = "http://www.cne.gob.ve/web/index.php";
+    //this.frameRiff = !this.frameRiff;
+    window.open(this.urlCne, '_blank');
+  }
 }

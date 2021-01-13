@@ -14,6 +14,9 @@ export class RemitenteService {
   getRemitente(p: any): Observable<any> {
     return this.client.get(this._rutaBase + 'get_remitente_by_id.php', { params: p });
   }
+  getRemitenteGiro(p: any): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_remitente_giros_by_id.php', { params: p });
+  }
 
   getListaRemitentes(p: any): Observable<any> {
     return this.client.get(this._rutaBase + 'get_lista_remitentes.php', { params: p });

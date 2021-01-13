@@ -5,7 +5,8 @@ import { CorresponsalModel } from '../Modelos/CorresponsalModel';
 import { CorresponsalbancarioService } from '../shared/services/corresponsalesbancarios/corresponsalbancario.service';
 import { SwalService } from '../shared/services/swal/swal.service';
 import { Globales } from '../shared/globales/globales';
-
+import { Observable } from 'rxjs/Observable';
+import { debounceTime, distinctUntilChanged, map, switchMap, delay, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-corresponsalesbancarios',
   templateUrl: './corresponsalesbancarios.component.html',
@@ -19,13 +20,13 @@ export class CorresponsalesbancariosComponent implements OnInit {
 
   public CorresponsalModel: CorresponsalModel = new CorresponsalModel();
   //variables que hacen referencia a los campos del formulario editar   
-
+  
   public Identificacion: any = [];
   public Nombre: any = [];
   public Cupo: any = [];
   public Departamento: any = [];
   public Municipio: any = [];
-
+  public tercero_credito:any = [];
   public boolCorresponsal: boolean = false;
   public boolCupo: boolean = false;
   public boolDepartamento: boolean = false;
@@ -54,6 +55,24 @@ export class CorresponsalesbancariosComponent implements OnInit {
       this.Departamentos = data;
     });
   }
+
+  
+search_tercero_credito = (text$: Observable<string>) =>
+text$
+  .pipe(
+    debounceTime(200),
+    distinctUntilChanged(),
+    switchMap(term => term.length < 3 ? [] :
+
+      this.http.get(this.globales.ruta + 'php/terceros/get_terceros_corresponsal.php', { params: { Nombre: term } })
+        .map(response => response)
+    )
+  );
+
+
+  formatter_tercero_credito = (x: { Nombre: string }) => x.Nombre;
+  
+  
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
@@ -89,6 +108,11 @@ export class CorresponsalesbancariosComponent implements OnInit {
   }
 
   GuardarCorresponsal() {
+    if( typeof (this.CorresponsalModel.Tercero) != 'object'){
+      this._swalService.ShowMessage(['warning','Datos Incompletos','Debe escoger un tercero']) 
+      return
+    }
+
     let info = JSON.stringify(this.CorresponsalModel);
     let datos = new FormData();
     datos.append("modulo", 'Corresponsal_Bancario');

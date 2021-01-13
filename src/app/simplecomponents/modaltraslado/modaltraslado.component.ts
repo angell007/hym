@@ -88,9 +88,15 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   }
 
   GetMonedas() {
+    console.log('monedas---------------');
+    
     this._monedaService.getMonedas().subscribe((data: any) => {
       if (data != null) {
         this.Monedas = data;
+        let mdefault= this.Monedas.find(m=>m.MDefault==1);
+        console.log('mdefault',mdefault);
+        
+        this.TrasladoModel.Moneda = mdefault['Id_Moneda']
       } else {
 
         this.Monedas = [];
@@ -118,7 +124,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     } else if (this.TrasladoModel.Destino == 'Proveedor') {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
     } else if (this.TrasladoModel.Destino == 'Cuenta Bancaria') {
-      return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
+      return this._cuentaBancariaService.getFiltrarCuentasBancarias(match,this.TrasladoModel.Id_Pais_Origen );
     } else if (this.TrasladoModel.Destino == 'Cajero') {
       return this._cuentaBancariaService.getFiltrarCajero(match);
     }
@@ -282,6 +288,33 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
     if (typeof (value) == 'object') {
       this.TrasladoModel.Id_Origen = this.TrasladoModel.Origen == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
+
+     
+
+      switch (this.TrasladoModel.Origen) {
+        case 'Cuenta Bancaria':
+         // this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria
+          console.log('cuentas bancarias', value);
+          
+          this.TrasladoModel.Moneda = value.Id_Moneda
+          this.TrasladoModel.Id_Moneda_Origen = value.Id_Moneda
+          this.TrasladoModel.Id_Pais_Origen = value.Id_Pais
+
+          break;
+
+        case 'Cajero':
+          //this.TrasladoModel.Id_Destino = value.Identificacion_Funcionario
+
+          break;
+
+        default:
+          //this.TrasladoModel.Id_Destino = value.Id_Tercero
+          break;
+      }
+
+          
+      console.log('cuentas2 ', this.TrasladoModel.Moneda);
+
     } else {
       this.TrasladoModel.Id_Origen = '';
     }
@@ -290,11 +323,15 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   CompletarDestino(value) {
 
+  
     if (typeof (value) == 'object') {
 
       switch (this.TrasladoModel.Destino) {
         case 'Cuenta Bancaria':
           this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria
+         // console.log('cuentas bancarias', value);
+          this.TrasladoModel.Id_Moneda_Destino = value.Id_Moneda
+        
           break;
 
         case 'Cajero':
@@ -314,9 +351,14 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   CambiarTipo(tipo: string) {
     if (tipo == 'origen') {
+      this.Origen = '';
       this.TipoOrigen = this.TrasladoModel.Origen;
+      this.TrasladoModel.Id_Origen = "";
+
     } else if (tipo == 'destino') {
       this.TipoDestino = this.TrasladoModel.Destino;
+      this.TrasladoModel.Id_Destino = "";
+      this.Destino = '';
     }
   }
 
