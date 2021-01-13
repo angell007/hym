@@ -1,3 +1,4 @@
+//tablerocajero
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, HostListener, ElementRef, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormArray, FormControl } from '@angular/forms';
@@ -3771,7 +3772,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     datos.append("datos", info);
     datos.append('id_oficina', this.IdOficina);
     this.http.post(this.globales.ruta + 'php/trasladocaja/guardar_traslado_caja.php', datos).subscribe((data: any) => {
-      if (data.codigo == 'success') {
+      if (data.codigo == 'success' || data.codigo == 'warning') {
 
         this.LimpiarModeloTraslados('creacion');
         this.volverTraslado();

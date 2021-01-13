@@ -1,3 +1,4 @@
+//modalegreso
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EgresoModel } from '../../Modelos/EgresoModel';
@@ -153,6 +154,12 @@ export class ModalegresoComponent implements OnInit {
   }
 
   GuardarEgreso() {
+
+    if( !this.EgresoModel['Id_Tercero'] ||  typeof this.EgresoModel['Id_Tercero'] == undefined ){
+      this._swalService.ShowMessage(['error', 'Error', 'El cliente digitado no se ha encontrado en el sistema.']);
+      return 
+    }
+    
     this.EgresoModel['formaPago'] = this.selectCustomFormaPago.nativeElement.value;
     if (!this.ValidateBeforeSubmit()) {
       return;
