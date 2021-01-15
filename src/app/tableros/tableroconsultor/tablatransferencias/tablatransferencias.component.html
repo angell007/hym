@@ -24,12 +24,15 @@
             <tr>
               <th class="custom-thead" style="width: 10%;">Fecha</th>
               <th class="custom-thead">Recibo</th>
+              <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Realizada/Bloqueado Por</th>
               <th class="custom-thead">Valor</th>
-              <th class="custom-thead">Pendiente</th>
-              <th class="custom-thead">Cédula</th>
+              <th class="custom-thead">Valor Recibido</th>
+              <th class="custom-thead">Cliente</th>
+              <th class="custom-thead">CC. Destino</th>
               <th class="custom-thead">Cta. Destino</th>
               <th class="custom-thead">Destinatario</th>
-              <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Realizada/Bloqueado Por</th>
+              <th class="custom-thead">Pendiente</th>
+
               <th class="custom-thead">Estado</th>
               <th class="custom-thead">Acciones</th>
             </tr>
@@ -44,10 +47,16 @@
                   (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.codigo">
               </th>
               <th class="table-filters">
+              </th>
+              <th class="table-filters">
                 <input type="text" class="form-control form-control-sm" placeholder="Filtro val."
                   (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.valor">
               </th>
               <th class="table-filters">
+              </th>
+              <th class="table-filters">
+                <input type="text" class="form-control form-control-sm" placeholder="Filtro cli."
+                (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cliente">
               </th>
               <th class="table-filters">
                 <input type="text" class="form-control form-control-sm" placeholder="Filtro ced."
@@ -72,7 +81,7 @@
                   <option value="devuelta">Devueltas</option>
                 </select>
               </th>
-              <th class="table-filters"></th>
+            <!--   <th class="table-filters"></th> -->
             </tr>
             <tr *ngIf="Cargando">
               <td colspan="9" class="text-center">
@@ -98,19 +107,27 @@
                 {{ts.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="cursor:pointer;">{{ts.Codigo}}</td>
+                <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
+                  style="cursor:pointer;">{{ts.Funcionario_Opera}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="text-align:right;cursor:pointer;">
                 {{ts.Valor_Transferencia | customcurrency:ts.Codigo_Moneda}}({{ts.Tasa_Cambio}})</td>
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+                <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
+                  style="text-align:right;cursor:pointer;">{{ts.Valor_Transferenci - ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+                
+              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center"
+              style="cursor:pointer;">
+              {{ts.Nombre_Remitente}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="text-align:right;cursor:pointer;">{{ts.Numero_Documento_Destino}}</td>
+                
+                <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
+                  style="cursor:pointer;">{{ts.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000'}}</td>
+                <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
+                  style="cursor:pointer;">{{ts.Destinatario}}</td>
+
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="cursor:pointer;">{{ts.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000'}}</td>
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="cursor:pointer;">{{ts.Destinatario}}</td>
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
-                style="cursor:pointer;">{{ts.Funcionario_Opera}}</td>
+                style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell"
                 style="cursor:pointer;">{{ts.Estado}}</td>
               <td class="custom-cell text-center">
@@ -134,16 +151,25 @@
                 <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label>
                 {{t.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Codigo}}</td>
+              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Funcionario_Opera}}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
                 {{t.Valor_Transferencia | customcurrency:t.Codigo_Moneda}}({{t.Tasa_Cambio}})</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
-                {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
-                {{t.Numero_Documento_Destino}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">
-                {{t.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000' }}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Funcionario_Opera}}</td>
+
+
+                <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                  {{t.Valor_Transferencia - t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
+                  
+                  <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center"
+                  style="cursor:pointer;">
+                  {{t.Nombre_Remitente}}</td>
+                  <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                    {{t.Numero_Documento_Destino}}</td>
+                    <td (click)="UbicarseTransferencia(t)" class="custom-cell">
+                      {{t.Cuenta_Destino  | mask: '0000-0000-0000-0000-0000' }}</td>
+                      <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
+                      
+                                      <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                                        {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Estado}}</td>
               <td class="custom-cell text-center">
 
@@ -167,12 +193,15 @@
             <tr>
               <td></td>
               <td></td>
+              <td></td>
               <td  class="custom-cell text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
+              <td  class="custom-cell text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+           
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td  class="custom-cell text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
             </tr>

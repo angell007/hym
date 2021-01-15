@@ -79,7 +79,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     cedula: '',
     cta_destino: '',
     nombre_destinatario: '',
-    estado: ''
+    estado: '',
+    cliente: ''
   };
 
   //Paginación
@@ -402,6 +403,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     //params.id_moneda = this.MonedaConsulta;
     params.id_funcionario = this.Id_Funcionario;
 
+
+
     if (paginacion === true) {
       params.pag = this.page;
     } else {
@@ -421,6 +424,11 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.Filtros.codigo.trim() != "") {
       params.codigo = this.Filtros.codigo;
     }
+
+    if (this.Filtros.cliente.trim() != "") {
+      params.cliente = this.Filtros.cliente;
+    }
+
 
     if (this.Filtros.cajero.trim() != "") {
       params.cajero = this.Filtros.cajero;
@@ -493,6 +501,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this._transferenciaService.GetTransferenciasConsultorObservable(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
+        console.log(this.TransferenciasListar,'transfers');
+        
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
@@ -648,5 +658,14 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     })
     return suma;
   }
+
+  suma3(a) {
+    let suma = 0;
+    a.forEach((element) => {
+      suma += ( parseFloat(element.Valor_Transferencia ) -  parseFloat( element.Valor_Real) )
+    })
+    return suma;
+  }
+
 
 }

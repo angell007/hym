@@ -993,6 +993,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         }
       }
     }
+    if(!this.Venta){
+      this.ObtenerVueltosEnCompra();
+    }
   }
 
   ObtenerVueltosEnCompra() {
@@ -1032,6 +1035,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     // console.log(tipo_cambio);
     // console.log(tipo_moneda_origen);
 
+  
     if (tipo_cambio == 'o') {
       // Venta viejitos ingresando datos en valor coversion
       if (this.CambioModel.Valor_Origen == '' || this.CambioModel.Valor_Origen === undefined) {

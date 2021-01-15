@@ -435,7 +435,7 @@
                                             <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
 
                         {{ Venta ? '' : (CambioModel.fomapago != 1) ? 'Abono a cuenta por valor de':
-                        'Entrega ' + MonedaDestino}}
+                        'Entregax ' + MonedaDestino}}
 
                       </label>
                                             <input type="text" placeholder="Entrega" name="Valor_Destino" class="inputfield font-size-18  form-control form-control-lg" autocomplete="false" id="Entrega" [(ngModel)]="CambioModel.Valor_Destino" [disabled]="HabilitarCampos" currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}"
