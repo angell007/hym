@@ -550,6 +550,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //MODELO SERVICIOS
   public ServicioExternoModel: any = {
+    Id_Caja_Destino : '',
     Id_Servicio: '',
     Servicio_Externo: '',
     Comision: '',
@@ -560,6 +561,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
     Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
   };
+
+  public cajas_externo;
 
   public ListaServiciosExternos: any = [];
   public ComisionServicio: any = [];
@@ -663,6 +666,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public boolTelefonoR: boolean = false;
 
   ngOnInit() {
+
+   
+
     this.aperturaSubscription = this._aperturaCajaService.event.subscribe((data: any) => {
       this.IdOficina = JSON.parse(localStorage.getItem('Oficina'));
       this.IdCaja = JSON.parse(localStorage.getItem('Caja'));
@@ -2765,6 +2771,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
 
+
   BuscarCedulaRepetida(object, index, dest: any) {
     let existe = false;
 
@@ -3170,6 +3177,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.giroService.CargarGirosAprobados();
     this.giroService.ResetValues();
 
+  }
+
+  public ActualizarTablasServiciosExternos(tipo?){
+    this._sexternos.CargarDatosServicios(tipo);
   }
 
   ModalVerGiro(id) {
@@ -4066,7 +4077,7 @@ console.log('data' ,data);
     });
   }
 
-  GuardarServicio(formulario: NgForm, modal, tipo: string = 'creacion') {
+  GuardarServicio(formulario: NgForm, modal, tipo: string = 'creacion', tipo2) {
 
     if (this.ServicioExternoModel.Servicio_Externo == '' || this.ServicioExternoModel.Valor == '' || this.ServicioExternoModel.Comision == '') {
       this.ShowSwal('warning', 'Alerta', 'Ingrese valores !');
@@ -4101,7 +4112,8 @@ console.log('data' ,data);
 
     this.http.post(this.globales.ruta + 'php/serviciosexternos/guardar_servicio.php', datos).subscribe((data: any) => {
       this.LimpiarModeloServicios(tipo);
-      this.ShowSwal('success', 'Registro Existoso', tipo == "creacion" ? 'Se ha registrado exitosamente el servicio!' : 'Se ha editado exitosamente el servicio!');
+      this.swalService.ShowMessage(data);
+     // this.ShowSwal('success', 'Registro Existoso', tipo == "creacion" ? 'Se ha registrado exitosamente el servicio!' : 'Se ha editado exitosamente el servicio!');
       modal.hide();
       this.volverServicio();
       this._sexternos.CargarServiciosDiarios();
@@ -4138,15 +4150,29 @@ console.log('data' ,data);
     });
   }
 
-  CambiarEstadoServicio(idServicio: string) {
+  aceptarServicio(id) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo: "Servicio" } }).subscribe((data: any) => {
+      this.ServicioExternoModel = data;
+      this.ListaServiciosExternos = this.globales.ServiciosExternos
+      this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
+      this.ModalServicioEditar.show();
+    });
+  }
+
+  CambiarEstadoServicio(idServicio: string,estado, tipo) {
     let datos = new FormData();
     datos.append("id_servicio", idServicio);
+    datos.append("estado", estado);
+    datos.append("id_funcionario", this.funcionario_data.Identificacion_Funcionario);
+   
     this._sexternos.cambiarEstadoServicio(datos).subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this._sexternos.CargarDatosServicios();
-      }
+      /* if (data.codigo == 'success') {
+        this._sexternos.CargarDatosServicios(tipo);
+      } */
 
       this.swalService.ShowMessage(data);
+
+      this._sexternos.CargarDatosServicios(tipo);
     });
   }
 
@@ -4217,6 +4243,15 @@ console.log('data' ,data);
       this.Servicios = data.query_data;
     });
   }
+
+  search_caja_oficina (){
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
+    
+    this.http.get(  this.globales.ruta + 'php/cajas/get_caja_oficinas.php' ).subscribe(data=>{
+      this.cajas_externo = data;
+    })
+  }
+
 
   public AprobarCambioComision() {
     let comision = this.ServicioExternoModel.Comision;
@@ -4466,7 +4501,9 @@ console.log('data' ,data);
 
   //Danilo CargarDatosEgresos
   CargarDatosEgresos() {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaa');
     this.CargarEgresosDiarios();
+   
     this.ListaServiciosExternos = [];
     this.ListaServiciosExternos = this.globales.ServiciosExternos;
   }
@@ -4569,6 +4606,7 @@ console.log('data' ,data);
         break;
 
       case "Servicio":
+        this.search_caja_oficina();
         this.Servicio2 = true;
         this.Servicio1 = false;
         this.ListaServiciosExternos = this.globales.ServiciosExternos
@@ -4896,6 +4934,7 @@ console.log('data' ,data);
     return response;
   }).do(data => { return data })));
 
+ 
 
   search_destino3 = (text$: Observable<string>) => text$.pipe(distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
     return response;
