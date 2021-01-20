@@ -562,6 +562,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     Id_Caja: this.IdCaja == '' ? '0' : this.IdCaja
   };
 
+  @ViewChild('ArchivoServicioExterno') ArchivoServicioExterno:ElementRef ;
   public cajas_externo;
 
   public ListaServiciosExternos: any = [];
@@ -4085,13 +4086,13 @@ console.log('data' ,data);
     }
 
     //TODO: monedas 
-    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+    /* this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
       if (2 == element.id) {
         if (parseFloat(element.saldo) < parseFloat(this.ServicioExternoModel.Valor)) {
           this.flag = true;
         }
       }
-    });
+    }); */
 
 
     if (this.flag) {
@@ -4099,11 +4100,15 @@ console.log('data' ,data);
       this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
       return false
     }
-
-
+    
     let info = this.generalService.normalize(JSON.stringify(this.ServicioExternoModel));
     let datos = new FormData();
-
+    
+    
+    if (this.ArchivoServicioExterno.nativeElement.files.length === 1) {     
+     let archivo = this.ArchivoServicioExterno.nativeElement.files[0];
+      datos.append('archivo',archivo);
+    }
 
     datos.append("modulo", 'Servicio');
     datos.append('id_oficina', this.IdOficina);
@@ -4111,12 +4116,15 @@ console.log('data' ,data);
 
 
     this.http.post(this.globales.ruta + 'php/serviciosexternos/guardar_servicio.php', datos).subscribe((data: any) => {
-      this.LimpiarModeloServicios(tipo);
+      if(data.codigo=='success'){
+
+        this.LimpiarModeloServicios(tipo);
+        modal.hide();
+        this.volverServicio();
+        this._sexternos.CargarServiciosDiarios(this._sexternos.FiltrosRealizados);
+      }
       this.swalService.ShowMessage(data);
      // this.ShowSwal('success', 'Registro Existoso', tipo == "creacion" ? 'Se ha registrado exitosamente el servicio!' : 'Se ha editado exitosamente el servicio!');
-      modal.hide();
-      this.volverServicio();
-      this._sexternos.CargarServiciosDiarios();
     });
   }
 
@@ -4159,7 +4167,29 @@ console.log('data' ,data);
     });
   }
 
-  CambiarEstadoServicio(idServicio: string,estado, tipo) {
+  CambiarEstadoServicio(idServicio: string,estado, tipo, total?) {
+
+    if(estado=='Pagado' && tipo=='Activo' ){
+      console.log('pagados',total);
+      console.log('conso',this._consolidadoService.TotalRestaIngresosEgresos);
+      
+      this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+        if (2 == element.id) {
+          if (parseFloat(element.saldo) < parseFloat(total)) {
+            this.flag = true;
+          }
+        }
+      });
+      
+      console.log(this.flag);
+
+      if (this.flag) {
+        this.flag = false;
+        this.ShowSwal('warning', 'alerta', 'No cuentas con suficiente Saldo !');
+        return false
+      }
+    }
+
     let datos = new FormData();
     datos.append("id_servicio", idServicio);
     datos.append("estado", estado);
@@ -4230,7 +4260,7 @@ console.log('data' ,data);
       Identificacion_Funcionario: this.funcionario_data.Identificacion_Funcionario,
       Id_Caja: this.generalService.SessionDataModel.idCaja
     };
-
+    this._sexternos.ResetValues();
     this.Total_Servicio = 0;
   }
 

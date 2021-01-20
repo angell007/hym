@@ -17,7 +17,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
   public Cargando: boolean = false;
   public Id_Funcionario: string = this._activeRoute.snapshot.params["id_funcionario"];
   public Id_Apertura: any = localStorage.getItem('Apertura_Consultor');
-
+  public CheckAll : any = false;
   constructor(private _cuentaBancariaService: CuentabancariaService,
     public generalService: GeneralService,
     private _activeRoute: ActivatedRoute,
@@ -29,6 +29,26 @@ export class CierrecuentasconsultorComponent implements OnInit {
   ngOnInit() {
     this.GetCuentasBancariasApertura();
   }
+ 
+
+  checkAlls(check_general){
+    //buscamos todos los checks de los productos
+    console.log('check',check_general);
+    
+    let cheks = document.getElementsByClassName("checks");
+
+   //activo/desactivo todos los checks dependiento de el general
+   for (let index = 0; index < cheks.length; index++) {
+     cheks[index]['checked'] = check_general;
+   }
+
+   this.CuentasBancarias.forEach(element => {
+      element.Check_C = check_general;
+   });
+   //busco cada item y le doy los valores de la nota
+  
+  }
+
 
   public GetCuentasBancariasApertura() {
     this.Cargando = true;
@@ -46,15 +66,25 @@ export class CierrecuentasconsultorComponent implements OnInit {
   }
 
   public GuardarCierreConsultor() {
+console.log(this.CuentasBancarias);
+
+   let selected =  this.CuentasBancarias.filter(cb=>cb.Check_C == true)
+   console.log(selected);
+   
+   if(!selected || selected.length==0){
+    this._swalService.ShowMessage(['warning', 'Adertencia', 'Debe seleccionar al menos una cuenta ']);
+    return;
+   }
+   
     let data = new FormData();
-    data.append('cuentas', JSON.stringify(this.CuentasBancarias));
+    data.append('cuentas', JSON.stringify(selected));
     data.append('id_funcionario', this.Id_Funcionario);
     data.append('id_apertura', this.Id_Apertura);
     data.append('id_oficina', this.generalService.SessionDataModel.idOficina);
     data.append('id_caja', this.generalService.SessionDataModel.idCaja);
 
     let flag = [];
-    this.CuentasBancarias.forEach(element => {
+    selected.forEach(element => {
       if (element.Monto_Cierre < 0) {
         flag.push(element)
       }
@@ -64,13 +94,19 @@ export class CierrecuentasconsultorComponent implements OnInit {
       this._cuentaBancariaService.GuardaCierreCuentasBancarias(data).subscribe((response: any) => {
         // console.log(response);
         if (response.codigo == 'success') {
-          this.CuentasBancarias = [];
-          localStorage.setItem('Apertura_Consultor', '');
-          localStorage.setItem('Volver_Apertura', 'Si');
-          this._swalService.ShowMessage(response);
-          setTimeout(() => {
-            this.CerrarSesion();
-          }, 500);
+          if(selected.length == this.CuentasBancarias.length){
+
+            this.CuentasBancarias = [];
+            localStorage.setItem('Apertura_Consultor', '');
+            localStorage.setItem('Volver_Apertura', 'Si');
+            this._swalService.ShowMessage(response);
+            setTimeout(() => {
+              this.CerrarSesion();
+            }, 500);
+
+          }else{
+            this.VolverATablero()
+          }
         } else {
           this._swalService.ShowMessage(response);
         }
