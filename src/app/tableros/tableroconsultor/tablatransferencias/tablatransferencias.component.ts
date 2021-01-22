@@ -170,7 +170,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.Funcionario.Id_Perfil == 4) {
       this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
         .subscribe(() => {
-          this.ConsultaFiltradaObservable(false, this.filter);
+          this.ConsultaFiltradaObservable(true, this.filter);
           this.ActualizarIndicadores.emit()
           // this.ConsultaFiltradaObservable(false, this.filter);
         });
@@ -178,7 +178,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
     this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
-        this.ConsultaFiltradaObservable(false, this.filter);
+        this.ConsultaFiltradaObservable(true, this.filter);
         this.ActualizarIndicadores.emit()
       });
     // console.log(this.Funcionario.Id_Perfil);
@@ -214,8 +214,13 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public flagHabilitado: boolean = true;
 
   async BloquearTransferencia(modelo: any) {
+    console.log('modelo' , modelo);
 
     this.infoTranferencia = await this.searchInfo(modelo);
+    console.log('infor' ,this.infoTranferencia);
+    
+    console.log('infor' ,this.flagHabilitado);
+    
 
     if (this.flagHabilitado) {
       if (this.infoTranferencia['Estado_Consultor'] == 'Cerrada') {
@@ -342,17 +347,22 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
 
       this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
+        if(data.codigo == 'success'){
+          this.flagHabilitado = true;
+          localStorage.setItem('flagHabilitado', 'true')
+  
+          this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
+          this.ValorRealCuenta = 0;
+          modal.hide();
+          this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
+          this.ActualizarIndicadores.emit(null);
+          this._limpiarMovimientoBancoModel();
+          // this.ConsultaFiltrada();
 
-        this.flagHabilitado = true;
-        localStorage.setItem('flagHabilitado', 'true')
-
-        this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
-        this.ValorRealCuenta = 0;
-        modal.hide();
-        this.DeseleccionarTransferencia(this.MovimientoBancoModel.Id_Transferencia_Destino);
-        this.ActualizarIndicadores.emit(null);
-        this._limpiarMovimientoBancoModel();
-        // this.ConsultaFiltrada();
+        }else{
+          this.ShowSwal(data.codigo, data.titulo, data.mensaje);
+        }
+      
       });
     }
   }
@@ -498,7 +508,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     // this.Cargando = true;
     // this.http.get(this.globales.ruta + 'php/transferencias/lista_transferencias_consultores.php', { params: p }).subscribe((data: any) => {
 
-    this._transferenciaService.GetTransferenciasConsultorObservable(p).subscribe((data: any) => {
+    this._transferenciaService.GetTransferenciasConsultorObservableDev(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
         console.log(this.TransferenciasListar,'transfers');

@@ -75,6 +75,7 @@ console.log(this.CuentasBancarias);
     this._swalService.ShowMessage(['warning', 'Adertencia', 'Debe seleccionar al menos una cuenta ']);
     return;
    }
+
    
     let data = new FormData();
     data.append('cuentas', JSON.stringify(selected));
@@ -82,6 +83,9 @@ console.log(this.CuentasBancarias);
     data.append('id_apertura', this.Id_Apertura);
     data.append('id_oficina', this.generalService.SessionDataModel.idOficina);
     data.append('id_caja', this.generalService.SessionDataModel.idCaja);
+    if(selected.length == this.CuentasBancarias.length){
+      data.append('cierre_completo','true'); 
+    }
 
     let flag = [];
     selected.forEach(element => {

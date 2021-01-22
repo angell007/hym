@@ -104,7 +104,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   public GetCuentasBancariasAperturaObservable() {
-    this._cuentaBancariaService.GetCuentasBancariasAperturaObservable(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data: any) => {
+    this._cuentaBancariaService.GetCuentasBancariasAperturaObservableDev(this.generalService.Funcionario.Identificacion_Funcionario).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
         // console.log(data.query_data);
@@ -162,7 +162,9 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
 
   public SeleccionarCuenta(seleccionada: string, cuenta: any) {
-
+    console.log(seleccionada, 'seleccionada');
+    console.log(cuenta, 'cuenta');
+    
     if (seleccionada == '0') {
 
       this._cuentaBancariaService.CheckEstadoAperturaCuenta(cuenta.Id_Cuenta_Bancaria).subscribe((data: any) => {

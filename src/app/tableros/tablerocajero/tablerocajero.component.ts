@@ -4104,10 +4104,12 @@ console.log('data' ,data);
     let info = this.generalService.normalize(JSON.stringify(this.ServicioExternoModel));
     let datos = new FormData();
     
-    
-    if (this.ArchivoServicioExterno.nativeElement.files.length === 1) {     
-     let archivo = this.ArchivoServicioExterno.nativeElement.files[0];
-      datos.append('archivo',archivo);
+    if(tipo == 'creacion'){
+
+      if (this.ArchivoServicioExterno.nativeElement.files.length === 1) {     
+       let archivo = this.ArchivoServicioExterno.nativeElement.files[0];
+        datos.append('archivo',archivo);
+      }
     }
 
     datos.append("modulo", 'Servicio');

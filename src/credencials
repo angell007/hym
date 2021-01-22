@@ -9,7 +9,13 @@ gerente 9999999
 cajero ppal: 1234567891
 clave 1234567891
 4144411
-
+  IFNULL( (SELECT CONCAT_WS(" ", F2.Nombres, F2.Apellidos)
+                                          FROM  Pago_Transfenecia PT2
+                                            INNER JOIN   Funcionario  F2 ON F2.Identificacion_Funcionario = PT2.Cajero
+                                          WHERE TD.Id_Transferencia_Destinatario = PT2.Id_Transferencia_Destino AND Devuelta = "No"
+                                          ORDER BY PT2.Id_Pago_Transfenecia DESC
+                                          LIMIT 1
+                ), ""   )
 
 /************************************************************************************************************************************************************************************
 <div class="container-fluid ">
