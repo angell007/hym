@@ -14,6 +14,7 @@
               <th class="custom-thead text-center" style="width:10%;">Nro. Cuenta</th>
               <th class="custom-thead text-center" style="width:10%;">Moneda</th>
               <th class="custom-thead text-center" style="width:12%;">Monto Actual</th>
+              <th class="custom-thead text-center" style="width:12%;">Monto Real</th>
               <th class="custom-thead text-center" style="width:8%;">Acciones</th>
             </tr>
             <tr *ngIf="Cargando">
@@ -38,6 +39,7 @@
               <td class="text-center">{{cb.Numero_Cuenta | mask: '0000-0000-0000-0000-0000' }}</td>
               <td class="text-center">{{cb.Nombre_Moneda}}</td>
               <td class="text-right">{{cb.Monto_Cierre | customcurrency:cb.Codigo_Moneda}}</td>
+              <td class="text-right">{{cb.Monto_Cierre_Real | customcurrency:cb.Codigo_Moneda}}</td>
               <td class="text-center">
                 <!-- <button class="btn btn-default btn-xs" type="button" title="Ver Movimientos Cuenta"
                   style="margin:0;" (click)="VerMovimientos(cb.Id_Cuenta_Bancaria)">

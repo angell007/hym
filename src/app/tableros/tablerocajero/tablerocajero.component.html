@@ -539,7 +539,7 @@
 
                                                 {{ Venta ? '' : (CambioModel.fomapago != 1) ? 'Abono a cuenta por valor
                                                 de':
-                                                'Entregax ' + MonedaDestino}}
+                                                'Entrega ' + MonedaDestino}}
 
                                             </label>
                                             <input type="text" placeholder="Entrega" name="Valor_Destino"
@@ -986,7 +986,7 @@
                               [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" tabindex="7"> -->
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" *ngIf="TransferenciaModel.Moneda_Destino !=2">
                                                         <div class="form-group text-center">
                                                             <label class="transferencia font-size-18">Tasa de Cambio
 
@@ -1000,8 +1000,8 @@
                                                                 placeholder="Tasa cambiaria">
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-4">
+                                                  
+                                                    <div class="col-md-4" *ngIf="TransferenciaModel.Moneda_Destino != 2" >
                                                         <div class="form-group text-center">
                                                             <label class="transferencia font-size-18">Moneda de
                                                                 Transferencia

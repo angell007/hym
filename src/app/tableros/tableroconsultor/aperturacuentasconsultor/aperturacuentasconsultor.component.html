@@ -11,11 +11,13 @@
             <table class="table table-striped table-bordered table table-hover">
               <thead>
                 <th class="custom-thead">Titular</th>
+                <th class="custom-thead">Alias</th>
                 <th class="custom-thead">Banco</th>
                 <th class="custom-thead">Estado</th>
                 <th class="custom-thead">Func. Selección</th>
-                <th class="custom-thead">Moneda</th>
-                <th class="custom-thead">Nro. Cuenta</th>
+                <!-- <th class="custom-thead">Moneda</th>
+                <th class="custom-thead">Nro. Cuenta</th> -->
+
                 <!-- <th class="custom-thead" style="width:10%;">Monto Apertura</th>
                     <th class="custom-thead" style="width:10%;">Monto Último Cierre</th> -->
               </thead>
@@ -44,6 +46,8 @@
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
                     {{cb.Nombre_Titular | uppercase }}</td>
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
+                    {{cb.Alias | uppercase }}</td>
+                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
                     {{cb.Apodo  | uppercase}}
                   </td>
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
@@ -52,10 +56,10 @@
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
                     {{cb.Nombre_Funcionario_Seleccion  | uppercase}}
                   </td>
-                  <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
+                <!--   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-center">
                     {{cb.Nombre_Moneda }}</td>
                   <td (click)="SeleccionarCuenta(cb.Seleccionada, cb)" class="text-right">
-                    {{cb.Numero_Cuenta | mask:'0000-0000-0000-0000-0000' }}</td>
+                    {{cb.Numero_Cuenta | mask:'0000-0000-0000-0000-0000' }}</td> -->
 
                 </tr>
               </tbody>
@@ -78,7 +82,8 @@
               <thead>
                 <tr>
                   <th class="custom-thead">Titular</th>
-                  <th class="custom-thead">Nro. Cuenta</th>
+                  <th class="custom-thead">Alias</th>
+  <!--                 <th class="custom-thead">Nro. Cuenta</th> -->
                   <th class="custom-thead">Banco</th>
                   <th class="custom-thead">Monto Apertura</th>
                   <th class="custom-thead">Monto Último Cierre</th>
@@ -95,7 +100,9 @@
                 <tr *ngFor="let cb of CuentasBancariasSeleccionadas; let i = index;"
                   [ngClass]="{'bg-anulada':cb.Correccion_Cuenta == '1'}">
                   <td class="text-right">{{cb.Nombre_Titular | uppercase}}</td>
-                  <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000-0000'}}</td>
+                  <td class="text-right">{{cb.Alias | uppercase}}</td>
+
+        <!--           <td class="text-right">{{cb.Numero_Cuenta  | mask:'0000-0000-0000-0000-0000'}}</td> -->
                   <td class="text-center">{{cb.Apodo}}</td>
                   <td class="text-center">
                     <input class="text-right form-control-sm" type="text" [(ngModel)]="cb.Monto_Apertura"
