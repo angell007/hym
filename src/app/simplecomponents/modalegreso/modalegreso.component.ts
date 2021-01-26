@@ -141,7 +141,7 @@ export class ModalegresoComponent implements OnInit {
       return 
     }
     
-    this.EgresoModel['formaPago'] = this.selectCustomFormaPago.nativeElement.value;
+    //this.EgresoModel['formaPago'] = this.selectCustomFormaPago.nativeElement.value;
     if (!this.ValidateBeforeSubmit()) {
       return;
     }

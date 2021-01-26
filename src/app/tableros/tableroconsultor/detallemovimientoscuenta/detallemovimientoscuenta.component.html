@@ -14,7 +14,9 @@
             <div *ngIf="Accion == 'Ajustar'" class="col-md-6 text-right">
               <button class="btn btn-outline-success btn-rounded btn-sm" type="button"
                 (click)="CompraCuenta()">Compra</button>
-              <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
+             
+       
+              <button *ngIf="_generalService.Funcionario.Id_Cargo == 5 "  class="btn btn-outline-primary btn-rounded btn-sm" type="button"
                 (click)="Ajustar()">Ajuste</button>
             </div>
           </div>

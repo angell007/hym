@@ -65,8 +65,8 @@
         <td class=" text-right"> {{rt.Tasa_Cambio }}</td>
         <td class=" text-center"> {{rt.Estado }}</td>
 
-        <td class="text-center" *ngIf="rt.Devuelta == 'Si'">Devuelta</td>
-        <td class=" text-center" *ngIf="rt.Devuelta == 'No'">{{ rt.Pagador }}</td>
+        <td class="text-center" *ngIf="rt.Devuelta == 'Si' && rt.Estado != 'Pagada' ">Devuelta</td>
+        <td class=" text-center" *ngIf="rt.Devuelta == 'No' ||  rt.Estado == 'Pagada'">{{ rt.Pagador }}</td>
         <td class=" text-center" *ngIf="rt.Devuelta == ''"></td>
 
         <td class="text-right">

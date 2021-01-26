@@ -11,7 +11,15 @@ export class SexternosService {
   public RutaGifCargando: string;
   public CargandoGiros: boolean = false;
   public Cargando: boolean = true;
-  public Filtros: any = {
+  public FiltrosPagados: any = {
+    codigo: '',
+    servicio: '',
+  };
+  public FiltrosPendientes: any = {
+    codigo: '',
+    servicio: '',
+  };
+  public FiltrosRealizados: any = {
     codigo: '',
     servicio: '',
   };
@@ -19,6 +27,10 @@ export class SexternosService {
   public pageSize = 10;
   public TotalItems: number;
   public page = 1;
+  public page1 = 1;
+  public page2 = 1;
+  public page3 = 1;
+  public TotalItems1: number;
   public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
@@ -26,6 +38,8 @@ export class SexternosService {
   }
   ListaServiciosExternos = [];
   Servicios = [];
+  Servicios_Caja = [];
+  Servicios_Pagos = [];
   public user = JSON.parse(localStorage['User']);
   constructor(private generalService: GeneralService, public globales: Globales, private http: HttpClient
 
@@ -43,9 +57,9 @@ export class SexternosService {
 
   @ViewChild('alertSwal') alertSwal: any;
 
-  SetFiltros(paginacion: boolean) {
+  SetFiltros(paginacion: boolean, filtro:any) {
     let params: any = {};
-    params.funcionario = this.user.Identificacion_Funcionario
+    params.id_funcionario = this.user.Identificacion_Funcionario
 
     if (paginacion === true) {
       params.pag = this.page;
@@ -54,28 +68,34 @@ export class SexternosService {
       params.pag = this.page;
     }
 
-    if (this.Filtros.codigo.trim() != "") {
-      params.codigo = this.Filtros.codigo;
+    if (filtro.codigo.trim() != "") {
+      params.codigo = filtro.codigo;
     }
 
-    if (this.Filtros.servicio.trim() != "") {
-      params.servicio = this.Filtros.servicio;
+    if (filtro.servicio.trim() != "") {
+      params.servicio = filtro.servicio;
     }
-
+    console.log(filtro,'filtro');
+    
     return params;
   }
 
-  ConsultaFiltrada(paginacion: boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false, filtro) {
     this.Servicios = [];
-    var p = this.SetFiltros(paginacion);
+    var p = this.SetFiltros(paginacion,filtro);
     if (p === '') {
       this.ResetValues();
       return;
     }
+    
 
-    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios_filter.php?', { params: p }).subscribe((data: any) => {
-      // console.log(data);
+    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php?', { params: p }).subscribe((data: any) => {
+       console.log('lista s1');
+       
       if (data.codigo == 'success') {
+        this.page1 = 1;
+        this.TotalItems1 =  this.TotalItems1 = data.query_data.length;
+
         this.Servicios = data.query_data;
         this.SetInformacionPaginacion(data.query_data);
         this.Cargando=false;
@@ -84,6 +104,7 @@ export class SexternosService {
   }
 
   SetInformacionPaginacion(data: any) {
+    this.page = 1;
     this.TotalItems = data.length
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;
@@ -91,27 +112,117 @@ export class SexternosService {
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
+
+    console.log(this.InformacionPaginacion , 'pag');
+    
   }
 
 
-  CargarDatosServicios() {
-    this.CargarServiciosDiarios();
+  CargarDatosServicios(tipo?) {
+    console.log(tipo);
+    this.Cargando=true;
+    this.Servicios = [];
+    this.Servicios_Caja = [];
+    this.Servicios_Pagos = [];
+    if(tipo=='Enviados'  ){
 
+      this.CargarServiciosDiarios(this.FiltrosRealizados);
+    }else if(tipo == 'Pagado' || tipo == 'Activo'){
+
+      this.CargarMisServicios(tipo);
+
+    }else if( !tipo ){
+
+      this.CargarServiciosDiarios(this.FiltrosRealizados);
+      this.CargarMisServicios( 'Activo' );
+      this.CargarMisServicios( 'Pagado' );
+    }
     this.ListaServiciosExternos = [];
     this.ListaServiciosExternos = this.globales.ServiciosExternos;
   }
 
-  CargarServiciosDiarios() {
+  CargarServiciosDiarios(filtro) {
+    console.log(filtro,'ff');
+    
     this.Servicios = [];
-    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params: { id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+    var p = this.SetFiltros(false,filtro);
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+    
+    
+
+    this.Servicios = [];
+    this.Cargando=true;
+    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params:p }).subscribe((data: any) => {
       this.Servicios = data.query_data;
+      console.log('lista s2');
       this.SetInformacionPaginacion(data.query_data);
+      this.page1 = 1;
+      this.TotalItems1 = data.query_data.length;
+
+      console.log(this.page1,this.TotalItems1,'   oneeee');
+      
+
       this.Cargando=false;
     });
   }
 
+  CargarMisServicios(tipo){
+    this.Cargando=true;
+    var filtro:any = {}
+
+    if (tipo == 'Activo') {
+      this.Servicios_Caja = [];
+      filtro = this.FiltrosPendientes
+    }else if('Pagado'){
+      this.Servicios_Pagos = [];
+      filtro = this.FiltrosPagados
+    }
+
+    console.log(filtro,'ff');
+    
+  
+      var p:any = this.SetFiltros(false,filtro);
+      if (p === '') {
+        this.ResetValues();
+        return;
+      }
+      p.Id_Caja = this.generalService.Caja
+      p.Estado = tipo 
+
+      this.http.get(this.globales.ruta + 'php/serviciosexternos/get_servicios_by_caja.php',
+                   { params: p 
+                            }).subscribe((data: any) => {
+        if(tipo== 'Activo'){
+          this.page2 = 1;
+          this.Servicios_Caja = data;
+
+        }else{
+          this.page3 = 1;
+          this.Servicios_Pagos = data;
+        }
+        this.Cargando=false;
+
+        this.SetInformacionPaginacion(data);
+      });
+ 
+    
+  }
+
+
+
   ResetValues() {
-    this.Filtros = {
+    this.FiltrosRealizados = {
+      codigo: '',
+      servicio: '',
+    };
+    this.FiltrosPagados = {
+      codigo: '',
+      servicio: '',
+    };
+    this.FiltrosPendientes = {
       codigo: '',
       servicio: '',
     };
@@ -120,4 +231,7 @@ export class SexternosService {
   cambiarEstadoServicio(datos: FormData): Observable<any> {
     return this.http.post(this.globales.ruta + 'php/serviciosexternos/cambiar_estado_servicio_custom.php', datos);
   }
+
+ 
+  
 }

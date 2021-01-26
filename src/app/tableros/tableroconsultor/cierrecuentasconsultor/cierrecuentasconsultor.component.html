@@ -11,6 +11,9 @@
         <table class="table table-striped table-bordered custom-table">
           <thead>
             <tr>
+              <th class="custom-thead" >  
+                <input type="checkbox" class="form-control"   #check1 title="Realizar Nota Credito" (change)="checkAlls($event.target.checked)" name="Nota1">
+              </th>
               <th class="custom-thead" style="">Titular</th>
               <th class="custom-thead" style="">Banco</th>
               <th class="custom-thead" style="">Nro. Cuenta</th>
@@ -38,6 +41,14 @@
           </thead>
           <tbody *ngIf="!Cargando">
             <tr *ngFor="let cb of CuentasBancarias; let i = index;">
+            
+              <td   class="text-center">
+          
+                <input
+                type="checkbox" class="checks" id="RealizarNota{{i}}" #check 
+                title="Seleccionar Cuenta" [(ngModel)]="cb.Check_C" name="che">
+               
+            </td>
               <td class="text-center">{{cb.Nombre_Titular }}</td>
               <td class="text-center">{{cb.Apodo}}</td>
               <td class="text-center">{{cb.Numero_Cuenta | mask: '0000-0000-0000-0000-0000' }}</td>

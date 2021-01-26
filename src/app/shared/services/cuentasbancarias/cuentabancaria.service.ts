@@ -43,6 +43,10 @@ export class CuentabancariaService {
     let p = { id_funcionario: idFuncionario };
     return this.client.get(this._rutaBase + '/get_cuentas_bancarias_apertura_observable.php', { params: p });
   }
+  public GetCuentasBancariasAperturaObservableDev(idFuncionario: string): Observable<any> {
+    let p = { id_funcionario: idFuncionario };
+    return this.client.get(this._rutaBase + '/get_cuentas_bancarias_apertura_observable_dev.php', { params: p });
+  }
 
   public GetCuentasBancariasCierre(p: any): Observable<any> {
     // let p = {id_funcionario:idFuncionario};

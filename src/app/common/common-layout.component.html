@@ -498,7 +498,7 @@
                   <li>
                     <ul class="list-info overflow-y-auto relative scrollable">
                       <li *ngFor="let alerta of  _notificacionService.alertasCajas">
-                        <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')">
+                        <a href="#{{alerta.Component}}" scrollTo (click)="muestra_tabla(alerta.Component)">
                           <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
                           <img class="thumb-img" *ngIf=" alerta.Imagen != '' "
                             src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
@@ -507,7 +507,7 @@
 
                               <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}}
                               </span>
-                              <span class="text-gray"> Le ha realizado un traslado por </span>
+                              <span class="text-gray"> Le ha realizado un {{alerta.tipo}} por </span>
                               <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
                               <span class="text-gray"> con código </span>
                               <span class="font-size-14 text-semibold">{{alerta.Codigo}}
