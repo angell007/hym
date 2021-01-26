@@ -216,8 +216,8 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     this._movimientoService.getPesosTercero(p).subscribe((data: any) => {
 
       if (data.codigo == 'success') {
-        this.MovimientosTercero = data.query_data;
-        this.Movimientos = data.query_data;
+        this.MovimientosTercero = data.query_data['movimientos'];
+        this.Movimientos = data.query_data['movimientos'];;
         this.MostrarTotales = true;
         this.TotalItems = data.numReg;
         this.Balance = data.balance;

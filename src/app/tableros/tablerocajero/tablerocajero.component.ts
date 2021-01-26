@@ -2105,7 +2105,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   // ************************************************** Termina aqui **********************************************************************************
   SaveTransferencia(bolsa = '') {
     this.TransferenciaModel.Id_Tercero_Destino = '0';
-
+    
     let info = this.generalService.normalize(JSON.stringify(this.TransferenciaModel));
     let destinatarios = this.generalService.normalize(JSON.stringify(this.ListaDestinatarios));
     //return;

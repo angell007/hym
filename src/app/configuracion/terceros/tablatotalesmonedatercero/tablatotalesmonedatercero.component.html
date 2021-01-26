@@ -22,6 +22,7 @@
                     <th class="custom-thead">Detalle</th>
                     <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
                     <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
+                    <th class="custom-thead" class="text-center" style="width:10%">Valor Pesos</th>
                     <th class="custom-thead" class="text-center" style="width:15%">Saldo</th>
                     <th class="custom-thead" class="text-center" style="width:6%;"></th>
                 </tr>
@@ -53,6 +54,7 @@
                     <th class="custom-thead"></th>
                     <th class="custom-thead"></th>
                     <th class="custom-thead"></th>
+                    <th class="custom-thead"></th>
                 </tr>
 
                 <tr *ngIf="Movimientos.length == 0 && !Cargando">
@@ -76,6 +78,7 @@
                     <td class="custom-cell">{{m.Detalle}}</td>
                     <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
                     <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
+                    <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.ValorPesos | customcurrency:m.ValorPesos}}</td>
                     <td class="text-right custom-cell" appColorsaldo [value]="m.Total" [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
                     <td>
                         <div *ngIf="m.Movimiento === 'Ajuste' && m.Estado != 'Anulado'" class="text-center">
