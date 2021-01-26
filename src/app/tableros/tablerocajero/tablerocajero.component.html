@@ -587,6 +587,7 @@
                                             <select id="Tipo_Transferencia" (change)="ControlarValoresSelect($event.target.value)" class="form-control font-size-18" name="Tipo_Transferencia" [(ngModel)]="TransferenciaModel.Tipo_Transferencia" required tabindex="2">
                         <option value="Transferencia">Transferencia</option>
                         <option value="Cliente" *ngIf="TransferenciaModel.Forma_Pago != 'Credito'">Cliente</option>
+                        <option value="Proveedor" *ngIf="TransferenciaModel.Forma_Pago != 'Credito'">Proveedor</option>
                       </select>
                                         </div>
 
@@ -601,7 +602,7 @@
                                         <div class="col-md-3" *ngIf="ControlVisibilidadTransferencia.SelectCliente">
                                             <label class="transferencia font-size-18">Seleccione Cliente</label>
 
-                                            <input class="form-control font-size-18" name="Id_Tercero" type="text" placeholder="Nombre Tercero" [ngbTypeahead]="search_tercero_credito" [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" [resultTemplate]="rt_tercero_credito" [inputFormatter]="formatter_tercero_credito">
+                                            <input class="form-control font-size-18" name="Id_Tercero" type="text" placeholder="Nombre Tercero" [ngbTypeahead]="search_tercero_credito_tipo" [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" [resultTemplate]="rt_tercero_credito" [inputFormatter]="formatter_tercero_credito">
 
                                             <!-- <input type="text" class="custom-input font-size-18" name="Id_Tercero_Destino" list="clientes"
                         [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" (keyup)="searchClientes($event)"

@@ -2044,7 +2044,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log(tipo_transferencia,'tipoo transfer');
     switch (tipo_transferencia) {
+      
       case 'Transferencia':
         if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
 
@@ -2071,8 +2073,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
           }
         }
         break;
-
-      case 'Cliente':
+      case ('Cliente'):
+      case ('Proveedor'):
 
         let info = this.generalService.normalize(JSON.stringify(this.TransferenciaModel));
         let datos = new FormData();
@@ -2556,7 +2558,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       return true;
 
-    } else if (Forma_Pago == 'Efectivo' && tipo == 'Cliente') {
+    } else if (Forma_Pago == 'Efectivo' &&  ( tipo == 'Cliente' || tipo == 'Proveedor' )) {
       //VALIDAR DESTINATARIO
       //VALIDAR DATOS DEL CAMBIO
       //VALIDAR DATOS DEL REMITENTE
@@ -2635,7 +2637,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       return true;
 
-    } else if (Forma_Pago == 'Credito' && tipo == 'Cliente') {
+    } else if (Forma_Pago == 'Credito' && (tipo == 'Cliente' ||tipo == 'Proveedor' )) {
       //AQUI NO SE HACEN VALIDACIONES YA QUE NO PUEDE HABER UNA TRANSFERENCIA CREDITO EN ESTE FORMATO
       this.ShowSwal('warning', 'Alerta', 'La forma de pago credito no permite tipos de pago a clientes!');
       return false;
@@ -2692,7 +2694,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
       return true;
 
-    } else if (Forma_Pago == 'Consignacion' && tipo == 'Cliente') {
+    } else if (Forma_Pago == 'Consignacion' && (tipo == 'Cliente' || tipo == 'Proveedor' )) {
       //VALIDAR DESTINATARIO
       //VALIDAR CONSIGNACION
       //VALIDAR DATOS DEL CAMBIO
@@ -2850,7 +2852,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ControlVisibilidadTransferencia.SelectCliente = false;
       this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
 
-    } else if (Forma_Pago == 'Efectivo' && tipo == 'Cliente') {
+    } else if (Forma_Pago == 'Efectivo' && (tipo == 'Cliente'  || tipo == 'Proveedor' ) ) {
       this._getMonedas();
       this.ControlVisibilidadTransferencia.DatosCambio = true;
       this.ControlVisibilidadTransferencia.Destinatarios = false;
@@ -2888,7 +2890,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ControlVisibilidadTransferencia.SelectCliente = false;
       this.TransferenciaModel.Moneda_Destino = this._getIdMoneda('bolivares soberanos');
 
-    } else if (Forma_Pago == 'Consignacion' && tipo == 'Cliente') {
+    } else if (Forma_Pago == 'Consignacion' && (tipo == 'Cliente'  || tipo == 'Proveedor' )  ) {
       this._getMonedas();
       this.ControlVisibilidadTransferencia.DatosCambio = true;
       this.ControlVisibilidadTransferencia.Destinatarios = false;
@@ -4934,6 +4936,17 @@ console.log('data' ,data);
         : this.Remitentes.filter(v => v.Numero_Cuenta.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
   formatter_cuenta = (x: { Numero_Cuenta: string }) => x.Numero_Cuenta;
+
+  search_tercero_credito_tipo = (text$: Observable<string>) =>
+    text$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.http.get(this.globales.ruta + 'php/terceros/filtrar_terceros_custom.php', { params: { nombre: term,tipo:this.TransferenciaModel.Tipo_Transferencia } })
+            .map(response => response)
+        )
+      );
 
   search_tercero_credito = (text$: Observable<string>) =>
     text$
