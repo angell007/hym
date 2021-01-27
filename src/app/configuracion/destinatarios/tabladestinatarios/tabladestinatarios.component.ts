@@ -15,14 +15,15 @@ export class TabladestinatariosComponent implements OnInit {
   public Paises:any = [];
   public Cargando:boolean = false;
   public RutaGifCargando:string;
-  
+  public TipoDestinatario = 'Transferencia';
   public AbrirModalCrear:Subject<any> = new Subject<any>();
   
   public Filtros:any = {
     identificacion: '',
     nombre:'',
     pais:'',
-    estado:''
+    estado:'',
+    tipo : ''
   };
 
   //Paginación
@@ -50,7 +51,12 @@ export class TabladestinatariosComponent implements OnInit {
 
   GetPaises(){
     setTimeout(() => {
-      this.Paises = this.generalService.getPaises();  
+      this.generalService.getPaises().then(data=>{
+      
+        this.Paises = data
+      });  
+  
+      
     }, 1000);
   }
 
@@ -86,7 +92,9 @@ export class TabladestinatariosComponent implements OnInit {
     if (this.Filtros.estado.trim() != "") {
       params.estado = this.Filtros.estado;
     }
-
+    if (this.Filtros.tipo.trim() != "") {
+      params.tipo = this.Filtros.tipo;
+    }
     return params;
   }
 
@@ -100,7 +108,7 @@ export class TabladestinatariosComponent implements OnInit {
     }
     
     this.Cargando = true;
-    this.destinatarioService.getListaDestinatarios(p).subscribe((data:any) => {
+    this.destinatarioService.getListaDestinatariosCustom(p).subscribe((data:any) => {
       if (data.codigo == 'success') {
         this.Destinatarios = data.query_data;
         this.TotalItems = data.numReg;
@@ -133,9 +141,11 @@ export class TabladestinatariosComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  CambiarEstadoDestinatario(idDestinatario:string){
+  CambiarEstadoDestinatario(destinatario){
+    console.log('dest',destinatario);
+    
     let datos = new FormData();
-    datos.append("id_destinatario", idDestinatario);
+    datos.append("id_destinatario", destinatario.id);
     this.destinatarioService.cambiarEstadoDestinatario(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();

@@ -119,7 +119,7 @@ export class DestinatariosComponent implements OnInit {
       this.TipoDocumentoExtranjero = data;
     });*/
 
-    this.http.get(this.globales.ruta + 'php/destinatarios/lista_destinatarios.php').subscribe((data: any) => {
+    this.http.get(this.globales.ruta + 'php/destinatarios/lista_destinatarios_custom.php').subscribe((data: any) => {
       this.destinatarios = data;
     });
   

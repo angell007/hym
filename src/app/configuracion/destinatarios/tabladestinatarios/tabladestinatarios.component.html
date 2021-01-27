@@ -46,16 +46,24 @@
                     </th>
                     <th class="table-filters">
                         <select id="pais" class="form-control form-control-sm" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.pais">
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
-            </select>
+                        <option value="" selected>Seleccione</option>
+                        <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                        </select>
+                     
                     </th>
                     <th class="table-filters">
                         <select id="pais" class="form-control form-control-sm" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
-              <option value="" selected>Seleccione</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select>
+                        <option value="" selected>Seleccione</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </th>
+
+                    <th class="table-filters">
+                        <select name="" id="" class="form-control form-control-sm" placeholder="Filtro identificacion" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.tipo">
+                            <option value="Transferencia">Transferencia</option>
+                            <option value="Giro">Giro</option>
+                        </select>
                     </th>
                     <th class="table-filters"></th>
                 </tr>
@@ -76,10 +84,11 @@
             </thead>
             <tbody *ngIf="!Cargando">
                 <tr *ngFor="let d of Destinatarios; let i = index;" [ngClass]="{'bg-inactive':d.Estado == 'Inactivo'}">
-                    <td class="text-center">{{d.Id_Destinatario}}</td>
+                    <td class="text-center">{{d.Id}}</td>
                     <td class="text-center">{{d.Nombre}}</td>
-                    <td class="text-center">{{d.Nombre_Pais}}</td>
+                    <td class="text-center">{{d.Pais}}</td>
                     <td class="text-center">{{d.Estado}}</td>
+                    <td class="text-center">{{d.Tipo}}</td>
                     <td class="text-center">
                         <div class="text-center">
                             <!-- <div ngbDropdown class="dropdown-primary"> -->
@@ -88,7 +97,7 @@
                             <!-- <div ngbDropdownMenu> -->
                             <a style="cursor: pointer;" class="" (click)="AbrirModal(d.Id_Destinatario, 'editar')">
                                 <i class="ti-pencil text-warning"></i></a>
-                            <a style="cursor: pointer;" class="" (confirm)="CambiarEstadoDestinatario(d.Id_Destinatario)" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                            <a style="cursor: pointer;" class="" (confirm)="CambiarEstadoDestinatario(d)" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este destinatario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
                                 <i [ngClass]="{'ti-trash text-danger':d.Estado == 'Activo', 'ti-back-right text-success':d.Estado == 'Inactivo'}"></i> {{d.Estado == 'Activo' ? '' : ''}}</a>
                             <!-- </div> -->
                             <!-- </div> -->

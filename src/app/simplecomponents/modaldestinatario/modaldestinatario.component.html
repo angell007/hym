@@ -9,13 +9,20 @@
         <form #FormCrearDestinatario="ngForm">
             <div class="row">
                 <div class="col-md-2">
+                    <select name="" id=""  class="form-control" [(ngModel)]="TipoDestinatario">
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Giro">Giro</option>
+                    </select>
+
+                </div>
+                <div class="col-md-2">
                     <label>País</label>
                     <div class="form-group">
                         <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais" required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
-              <option value="null">Seleccione pais</option>
-              <!-- Se agrega select a  cuentas asociadas -->
-              <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
-            </select>
+                        <option value="null">Seleccione pais</option>
+                        <!-- Se agrega select a  cuentas asociadas -->
+                        <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">

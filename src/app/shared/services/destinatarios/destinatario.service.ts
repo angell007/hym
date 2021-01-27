@@ -22,6 +22,9 @@ export class DestinatarioService {
   getListaDestinatarios(p:any):Observable<any>{
     return this.client.get(this._rutaBase+'/get_lista_destinatarios.php', {params:p});
   }
+  getListaDestinatariosCustom(p:any):Observable<any>{
+    return this.client.get(this._rutaBase+'/lista_destinatarios_custom.php', {params:p});
+  }
 
   saveDestinatario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/guardar_destinatario_nuevo.php', datos);
