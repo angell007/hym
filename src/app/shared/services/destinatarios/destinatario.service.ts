@@ -37,6 +37,9 @@ export class DestinatarioService {
   cambiarEstadoDestinatario(datos:FormData):Observable<any>{
     return this.client.post(this._rutaBase+'/cambiar_estado_destinatario.php', datos);
   }
+  cambiarEstadoDestinatarioCustom(datos:FormData):Observable<any>{
+    return this.client.post(this._rutaBase+'/cambiar_estado_destinatario_custom.php', datos);
+  }
 
   filtrarDestinatario(p:any):Observable<any>{
     return this.client.get(this.globales.ruta+'php/destinatarios/filtrar_destinatarios.php', {params:p});

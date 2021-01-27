@@ -2,21 +2,20 @@
     <div class="app-modal-header">
         <h4>Destinatario</h4>
         <button type="button" class="close basic-close" (click)="CerrarModal()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <span aria-hidden="true">&times;</span>
+  </button>
     </div>
     <div class="app-modal-body">
         <form #FormCrearDestinatario="ngForm">
             <div class="row">
-
                 <div class="col-md-2">
                     <label>País</label>
                     <div class="form-group">
                         <select [(ngModel)]="DestinatarioModel.Id_Pais" class="form-control" id="Pais_Destinatario" name="Id_Pais" required (change)="FiltrarDatosNacionalidad()" [disabled]="Editar">
-                        <option value="null">Seleccione pais</option>
-                        <!-- Se agrega select a  cuentas asociadas -->
-                        <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
-                        </select>
+                      <option value="null">Seleccione pais</option>
+                      <!-- Se agrega select a  cuentas asociadas -->
+                      <option *ngFor=" let p of Paises; let i=index" [value]="p.Id_Pais">{{p.Nombre}}</option>
+                      </select>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -24,11 +23,11 @@
                     <div class="form-group input-group input-group-button">
                         <input class="form-control input-hover" id="Id_Destinatario" name="Id_Destinatario" type="text" placeholder="Identificación Destinatario" (blur)="ValidarCedula()" [disabled]="Editar" [(ngModel)]="DestinatarioModel.Id_Destinatario " required [disabled]="DestinatarioModel.Id_Pais == 0">
                         <button class="btn btn-default btn-xs" type="button" style="margin:0;margin-left: 2px;" (click)="generalService.searchRiff()">
-              Riff
-            </button>
+            Riff
+          </button>
                         <button *ngIf="DestinatarioModel.Tipo_Documento == 'V'" class="btn btn-default btn-xs" type="button" style="margin:0; margin-left: 2px;" (click)="generalService.searchCne()">
-              CNE
-            </button>
+            CNE
+          </button>
 
                     </div>
                 </div>
@@ -36,10 +35,10 @@
                     <div class="form-group">
                         <label>Tipo Doc.</label>
                         <select [(ngModel)]="DestinatarioModel.Tipo_Documento" class="form-control" id="Tipo_Documento" name="Tipo_Documento" required [disabled]="DestinatarioModel.Id_Pais == '0' || Editar">
-              <option value="">Seleccione Tipo Documento</option>
-              <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">
-                {{documento.Codigo}}</option>
-            </select>
+            <option value="">Seleccione Tipo Documento</option>
+            <option *ngFor="let documento of TiposDocumento; let i=index" [value]="documento.Codigo">
+              {{documento.Codigo}}</option>
+          </select>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -59,8 +58,8 @@
             </div>
             <div class="col-md-6" style="text-align:right;">
                 <button class="btn btn-light" (click)="AgregarOtraCuenta()">
-          Agregar Cuenta <i class="ti-plus"></i>
-        </button>
+        Agregar Cuenta <i class="ti-plus"></i>
+      </button>
             </div>
         </div>
         <div class="row">
@@ -79,10 +78,10 @@
                             <tr *ngFor="let item of Lista_Cuentas_Destinatario; let i = index" id="fila{{i}}">
                                 <td width="15%">
                                     <select class="form-control" id="Id_Pais{{i}}" name="Id_Pais{{i}}" [(ngModel)]="item.Id_Pais" (change)="GetBancosPais(i);" required>
-                    <option value="">Seleccione País</option>
-                    <!-- Se agrega select a  cuentas asociadas -->
-                    <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
-                  </select>
+                  <option value="">Seleccione País</option>
+                  <!-- Se agrega select a  cuentas asociadas -->
+                  <option *ngFor="let Pais of Paises; let i=index" [value]="Pais.Id_Pais">{{Pais.Nombre}}</option>
+                </select>
 
                                 </td>
                                 <td width="25%">
@@ -90,21 +89,21 @@
                                 </td>
                                 <td width="20%">
                                     <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0 || item.EsVenezolana" class="form-control" id="Id_Banco{{i}}" name="Id_Banco{{i}}" [(ngModel)]="item.Id_Banco" required (change)="SetIdentificadorCuenta($event.target.value, i)">
-                    <option value="" selected>Seleccione Banco</option>
-                    <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">
-                      {{bc.Apodo}}</option>
-                  </select>
+                  <option value="" selected>Seleccione Banco</option>
+                  <option *ngFor="let bc of Lista_Cuentas_Destinatario[i].Bancos; let i=index" [value]="bc.Id_Banco">
+                    {{bc.Apodo}}</option>
+                </select>
                                 </td>
                                 <td width="15%">
                                     <select [disabled]="Lista_Cuentas_Destinatario[i].Id_Pais == 0" class="form-control" name="Tipo_Cuenta{{i}}" [(ngModel)]="item.Id_Tipo_Cuenta" required>
-                    <option value="">Seleccione Tipo</option>
-                    <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}
-                    </option>
-                  </select>
+                  <option value="">Seleccione Tipo</option>
+                  <option *ngFor="let tp of TiposCuenta; let i=index" [value]="tp.Id_Tipo_Cuenta">{{tp.Nombre}}
+                  </option>
+                </select>
                                 </td>
                                 <td class="text-center" style="width:5%;">
                                     <i class="ti-trash" style="color:red; cursor: pointer;" (confirm)="EliminarCuentaDestinatario(i)" [swal]="{title : 'Eliminar Cuenta Bancaria', text: '¿Está seguro de querer eliminar esta cuenta?' , type : 'error', showCancelButton : true , confirmButtonText: 'Sí, eliminar',cancelButtonText: '¡No, déjame comprobar!'}">
-                  </i>
+                </i>
                                 </td>
                             </tr>
                         </tbody>
@@ -118,17 +117,17 @@
             <button class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
             <button id="BotonGuardarDestinatario" class="btn btn-outline-primary btn-rounded btn-sm" [disabled]="!FormCrearDestinatario.valid" [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                 (confirm)="GuardarDestinatario()">{{Editar ? 'Actualizar' : 'Guardar'}}
-      </button>
+    </button>
         </div>
     </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalDestinatario" #ModalCNE hideFooter="true">
     <div class="app-modal-header">
-        <h4>CNE</h4>
+        <h4>CNEx</h4>
         <button type="button" class="close basic-close" (click)="ModalCNE.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <span aria-hidden="true">&times;</span>
+  </button>
     </div>
     <div class="app-modal-body">
         <div class="row">

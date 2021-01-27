@@ -24,7 +24,7 @@ export class DestinatariosComponent implements OnInit {
   public Nombre: any = [];
   public Cuentas: any = [];
   public IdBanco: any = [];
-  public Banco: any = [];
+  public Banco: any = []; 
   public IdPais: any = [];
   public Pais: any = [];
   public Detalle: any = [];

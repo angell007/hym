@@ -17,6 +17,7 @@ export class TabladestinatariosComponent implements OnInit {
   public RutaGifCargando:string;
   public TipoDestinatario = 'Transferencia';
   public AbrirModalCrear:Subject<any> = new Subject<any>();
+  public AbrirModalPagos:Subject<any> = new Subject<any>();
   
   public Filtros:any = {
     identificacion: '',
@@ -60,9 +61,17 @@ export class TabladestinatariosComponent implements OnInit {
     }, 1000);
   }
 
-  AbrirModal(idDestinatario:string, accion:string){
-    let objModal = {id_destinatario:idDestinatario, accion:accion};
+  AbrirModal(Destinatario:any, accion:string){
+
+  if(Destinatario.Tipo == 'Pagos'){
+    
+    this.AbrirModalPagos.next(Destinatario.Id);
+  }else{
+    
+    let objModal = {id_destinatario:Destinatario.Id, accion:accion};
     this.AbrirModalCrear.next(objModal);
+  }
+
   }
 
   SetFiltros(paginacion:boolean) {
@@ -120,6 +129,9 @@ export class TabladestinatariosComponent implements OnInit {
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
+    
+
+
   }
 
   ResetValues(){
@@ -145,8 +157,9 @@ export class TabladestinatariosComponent implements OnInit {
     console.log('dest',destinatario);
     
     let datos = new FormData();
-    datos.append("id_destinatario", destinatario.id);
-    this.destinatarioService.cambiarEstadoDestinatario(datos).subscribe((data:any) => {
+    datos.append("id_destinatario", destinatario.Id);
+    datos.append("tipo", destinatario.Tipo);
+    this.destinatarioService.cambiarEstadoDestinatarioCustom(datos).subscribe((data:any) => {
       if (data.codigo == 'success') { 
         this.ConsultaFiltrada();
       }
@@ -154,5 +167,8 @@ export class TabladestinatariosComponent implements OnInit {
       this.swalService.ShowMessage(data);
     });
   }
+
+  
+
 
 }
