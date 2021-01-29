@@ -3752,26 +3752,28 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     let data = {};
     console.log('editar persona');
     
-console.log('id ',idRemitente,'  Tipo ',tipoPersona, '  Accion ' ,accion);
+    console.log('id ',idRemitente,'  Tipo ',tipoPersona, '  Accion ' ,accion);
 
     if (tipoPersona == 'remitente') {
+    //  console.log('rem' ,data);
       if (typeof (this.Remitente_Giro) == 'string') {
         data = { id_remitente: idRemitente, tipo: tipoPersona, accion: 'crear desde giro' };
       } else if (typeof (this.Remitente_Giro) == 'object') {
         data = { id_remitente: idRemitente, tipo: tipoPersona, accion: accion };
       }
+      
     } else if (tipoPersona == 'destinatario') {
       if (typeof (this.Destinatario_Giro) == 'string') {
         data = { id_remitente: idRemitente, tipo: tipoPersona, accion: 'crear desde giro' };
       } else if (typeof (this.Destinatario_Giro) == 'object') {
         data = { id_remitente: idRemitente, tipo: tipoPersona, accion: accion };
       }
+      console.log('dest' ,data);
+      //this.AbrirModalDestinatario.next(data);
     }
-
-console.log('data' ,data);
-
-
     this.openModalGiro.next(data);
+
+
   }
 
   HabilitarEdicionComisionGiro() {
@@ -4498,7 +4500,7 @@ console.log('data' ,data);
     this.DestinatariosGiros = [];
     this.http.get(this.globales.ruta + 'php/destinatariosgiros/get_destinatario_giros.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
       this.DestinatariosGiros = data;
-      console.log('dessssssssss',this.DestinatariosGiros);
+     
   
     });
 

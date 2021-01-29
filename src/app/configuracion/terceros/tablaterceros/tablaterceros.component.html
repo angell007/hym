@@ -278,16 +278,24 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label>Recauda?</label>
-                    <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.recauda">
+                    <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.Recauda">
             <option selected value="No">No</option>
             <option value="Si">Si</option>
           </select>
+                </div>
+            </div>
+            <div class="col-md-2" *ngIf="TerceroModel.Recauda=='Si'">
+                <div class="form-group">
+                    <label>(%) Porcentaje Recaudacón </label>
+                    <input type="number" placeholder="Porcentaje" class="form-control" name="porcentaje" [(ngModel)]="TerceroModel.Porcentaje_Recauda">
+
                 </div>
             </div>
 
         </form>
     </div>
     <div class="app-modal-footer">
+
         <div class="text-right">
             <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModalTercero()">
         Cerrar</button>

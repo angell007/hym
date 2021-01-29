@@ -38,10 +38,11 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.suscripcion = this.AbrirModalEvent.subscribe((data: any) => {
-      console.log(data,'->>>>>>>>>>>>>>>>>>>>>>Data!!!');
+    
       this.accion = data.accion;
 
-
+  console.log('data.->>',data);
+  
       if (data.id_remitente != "0" && data.accion == 'editar') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
@@ -57,12 +58,13 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
         });
       } else if (data.id_remitente != "0" && data.accion == 'editar desde giro') {
-        console.log('editar');
+       
         
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
         this.tipo_persona = data.tipo;
-        let p = { id_remitente: data.id_remitente };
+        this.RemitenteModel.Tipo = data.tipo; 
+        let p = { id_remitente: data.id_remitente ,tipo_persona:this.tipo_persona};
         this._remitenteService.getRemitenteGiro(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
@@ -90,9 +92,21 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
         });
       } else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
-        this.MensajeGuardar = 'Se dispone a guardar este remitente';
+        console.clear()
+        console.log(data,'guardando');
+        
+        if(data.tipo=='destinatario'){
+      
+          this.MensajeGuardar = 'Se dispone a guardar este destinatario';
+        }else{
+          
+          this.MensajeGuardar = 'Se dispone a guardar este remitente';
+                
+        }
+        //this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
-        this.tipo_persona = data.tipo;
+        this.tipo_persona = data.tipo; 
+        this.RemitenteModel.Tipo = data.tipo; 
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
         this.ModalRemitente.show();
 
@@ -139,6 +153,8 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
     // console.log(this.RemitenteModel);
 
     let modelo = this._generalService.normalize(JSON.stringify(this.RemitenteModel));
+    console.log('modelosave',modelo);
+    
     let datos = new FormData();
     datos.append("modelo", modelo);
 
@@ -156,6 +172,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
                 break;
 
               case 'editar desde giro':
+
                 let rem = { tipo: this.tipo_persona, model: this.RemitenteModel };
                 this.CargarDatosRemitente.emit(rem);
                 break;

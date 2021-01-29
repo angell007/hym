@@ -65,14 +65,15 @@
 
                     <th class="table-filters">
                         <select name="" id="" class="form-control form-control-sm" placeholder="Filtro identificacion" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.tipo">
-                            <option value="Transferencia">Transferencias</option>
+                            <option value="" selected>Seleccione</option>
+                            <option value="Transferencias">Transferencias</option>
                             <option value="Pagos">Pagos</option>
                         </select>
                     </th>
                     <th class="table-filters"></th>
                 </tr>
                 <tr *ngIf="Cargando">
-                    <td colspan="5" class="text-center">
+                    <td colspan="7" class="text-center">
                         <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
                             <h2>CARGANDO DESTINATARIOS</h2>
                             <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
