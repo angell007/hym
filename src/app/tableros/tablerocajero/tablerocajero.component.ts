@@ -116,6 +116,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   public DevolucionesCambio: any = [];
   public Destinatarios: any = [];
   public Remitentes: any = [];
+  public DestinatariosGiros: any = [];
   public Paises: any = [];
   public Clientes: any = [];
   public CorresponsalesBancarios: any = [];
@@ -4494,6 +4495,12 @@ console.log('data' ,data);
     this.http.get(this.globales.ruta + 'php/remitentesgiros/get_remitente_alias.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
       this.Remitentes = data;
     });
+    this.DestinatariosGiros = [];
+    this.http.get(this.globales.ruta + 'php/destinatariosgiros/get_destinatario_giros.php', { params: { modulo: 'Giro_Remitente' } }).subscribe((data: any) => {
+      this.DestinatariosGiros = data;
+      console.log('dessssssssss',this.DestinatariosGiros);
+  
+    });
 
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Giro_Comision' } }).subscribe((data: any) => {
       this.GiroComision = data;
@@ -4985,6 +4992,14 @@ console.log('data' ,data);
       map(term => term.length < 2 ? []
         : this.Remitentes.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     );
+
+    search_destino4 = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 2 ? []
+        : this.DestinatariosGiros.filter(v => v.Id_Transferencia_Remitente.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    );
+
   formatter_remitente = (x: { Id_Transferencia_Remitente: string }) => x.Id_Transferencia_Remitente;
   formatter_remitente_custom = (x: { Id_Transferencia_Remitente: string }) => x;
 

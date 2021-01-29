@@ -15,4 +15,8 @@ export class ProveedorService {
     return this.client.get(this.globales.ruta+'php/terceros/get_terceros.php');
   }
 
+  getP2(){
+    return this.client.get(this.globales.ruta+'php/terceros/get_terceros_custom.php');
+  }
+
 }

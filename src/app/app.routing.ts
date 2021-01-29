@@ -70,6 +70,7 @@ import { ConsolidadosService } from './customservices/consolidados.service';
 import { ConsolidadoComponent } from './tableros/tablerocajero/consolidado/consolidado.component';
 import { TablerocajeroprincipalComponent } from './tableros/tablerocajeroprincipal/tablerocajeroprincipal.component';
 import { MotivoscambioComponent } from './motivoscambio/motivoscambio.component';
+import { LogComponent } from './configuracion/log/log.component';
 
 export const AppRoutes: Routes = [
     {
@@ -91,6 +92,10 @@ export const AppRoutes: Routes = [
     {
         path: 'cajas', component: CommonLayoutComponent,
         children: [{ path: '', component: CajasComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'log', component: CommonLayoutComponent,
+        children: [{ path: '', component: LogComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'bancos', component: CommonLayoutComponent,

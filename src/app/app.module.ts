@@ -261,6 +261,7 @@ import { ActualizarService } from './customservices/actualizar.service';
 import { NgxCurrencyModule } from "ngx-currency";
 import { ModaldevoluccionComponent } from './modaldevoluccion/modaldevoluccion.component';
 import { MotivoscambioComponent } from './motivoscambio/motivoscambio.component';
+import { LogComponent } from './configuracion/log/log.component';
 
 
 
@@ -478,7 +479,8 @@ export const customCurrencyMaskConfig = {
         HourPipe,
         ConsolidadoComponent,
         ModaldevoluccionComponent,
-        MotivoscambioComponent
+        MotivoscambioComponent,
+        LogComponent
         
     ],
     exports: [

@@ -1249,7 +1249,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label class="font-size-18">Número de Documento
+                                                            <label class="font-size-18">Número de Documento D
                                                                 <i class="ti-pencil text-info pl-2 font-size-17"
                                                                     style="cursor:pointer;"
                                                                     *ngIf="EditarDestinatarioGiro"
@@ -1260,7 +1260,7 @@
                                                                     *ngIf="CrearDestinatarioGiro"
                                                                     (click)="EditarPersonaGiro(Destinatario_Giro, 'destinatario', 'crear desde giro')"></i>
                                                             </label>
-                                                            <input id="DocumentoGiroDestinatario" type="text" class="form-control font-size-18" placeholder="Número Documento" autocomplete="off" name="Documento_Destinatario" [(ngModel)]="Destinatario_Giro" [ngbTypeahead]="search_remitente" [resultTemplate]="rt_remitente"
+                                                            <input id="DocumentoGiroDestinatario" type="text" class="form-control font-size-18" placeholder="Número Documento" autocomplete="off" name="Documento_Destinatario" [(ngModel)]="Destinatario_Giro" [ngbTypeahead]="search_destino4" [resultTemplate]="rt_remitente"
                                                                 [inputFormatter]="formatter_remitente" (ngModelChange)="AutoCompletarDatosPersonalesGiro(Destinatario_Giro, 'destinatario')" required>
                                                         </div>
                                                     </div>

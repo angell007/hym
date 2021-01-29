@@ -14,7 +14,7 @@ export class TablatipodocumentoComponent implements OnInit {
 
   public TipoDocumentos: Array<any> = [];
   public TipoDocumentosPais: Array<any> = [];
-  public Paises: Array<any> = [];
+  public Paises:any = [{Nombre:'',Id_Pais:''}];
   public Cargando: boolean = false;
   public RutaGifCargando: string;
 
@@ -45,16 +45,19 @@ export class TablatipodocumentoComponent implements OnInit {
     private _tipoDocumentoService: TipodocumentoService) {
     this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
-    this.GetPaises();
+   
   }
 
   ngOnInit() {
+    this.GetPaises();
   }
 
-  GetPaises() {
-    setTimeout(() => {
-      this.Paises = this._generalService.getPaises();
-    }, 1000);
+   async GetPaises() {
+
+   this.Paises = await this._generalService.getPaises()
+    
+
+    
   }
 
   FiltrarDocumentosPais(idPais: string) {
@@ -76,12 +79,12 @@ export class TablatipodocumentoComponent implements OnInit {
     }
   }
 
-  GetNombrePais(idPais): string {
-    if (this.Paises.length > 0) {
+  GetNombrePais(idPais) {
+   /*  if (this.Paises.length > 0) {
       return this.Paises.find(x => x.Id_Pais == idPais).Nombre;
     } else {
       return '';
-    }
+    } */
   }
 
   AbrirModal(idTipoDocumento: string) {

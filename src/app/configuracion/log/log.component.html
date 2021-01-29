@@ -1,0 +1,67 @@
+<div class="card">
+
+    <div class="card-header head">
+        <b class="text-dark font-size-22">Log del sistema</b>
+        <p class="no-mrg-btm ">Todos los acontecimientos registrados en el sistema.</p>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-striped table-bordered custom-table">
+            <thead>
+                <tr>
+                    <!--   <th class="custom-thead" style="width:10%;">Tipo Registro</th> -->
+                    <th class="custom-thead" style="width:17%;">Accion</th>
+                    <th class="custom-thead" style="width:20%;">Detalle</th>
+                    <th class="custom-thead" style="width:20%;">Funcionario</th>
+                    <th class="custom-thead" style="width:10%;">Fecha</th>
+
+                </tr>
+                <!--                 <tr>
+                    <th class="custom-thead" style="width:10%;">Tipo Registro</th>
+                    <th class="custom-thead" style="width:17%;">Accion</th>
+                    <th class="custom-thead" style="width:20%;">Detalle</th>
+                    <th class="custom-thead" style="width:20%;">Funcionario</th>
+                    <th class="custom-thead" style="width:10%;">Fecha</th>
+                </tr> -->
+
+                <tr *ngIf="Cargando">
+                    <td colspan="7" class="text-center">
+                        <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                            <h2>CARGANDO LOGS DEL SISTEMA</h2>
+                            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="Logs.length == 0 && !Cargando">
+                    <td colspan="7" class="text-center">
+                        <i class="ti-alert font-size-20 text-warning"></i>
+                        <h4>No hay cuentas logs para mostrar!</h4>
+                    </td>
+                </tr>
+            </thead>
+            <tbody *ngIf="!Cargando">
+                <tr *ngFor="let c of Logs; let i = index;" [ngClass]="{'bg-inactive':c.Estado == 'Inactiva'}">
+
+                    <!--    <td>{{c.Tipo_Registro}}</td> -->
+                    <td>{{c.Accion}}</td>
+                    <td>{{c.Detalle}}</td>
+                    <td>{{c.Funcionario}}</td>
+                    <td>{{c.Fecha_Registro}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div id="paginacion-container" *ngIf="Logs.length > 0">
+            <div class="row">
+                <div class="col-md-3">
+                    <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+              {{ InformacionPaginacion.total }}</b></p>
+                </div>
+                <div class="col-md-9">
+                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

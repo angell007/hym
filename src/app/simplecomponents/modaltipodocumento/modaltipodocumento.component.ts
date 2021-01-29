@@ -66,10 +66,10 @@ export class ModaltipodocumentoComponent implements OnInit {
     this.CerrarModal();
   }
 
-  GetPaises(){
-    setTimeout(() => {
-      this.Paises = this._generalService.getPaises();  
-    }, 1000);
+  async GetPaises(){
+  
+      this.Paises = await this._generalService.getPaises();  
+  
   }
 
   GuardarTipoDocumento(){

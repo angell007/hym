@@ -80,7 +80,7 @@ export class ComprascrearComponent implements OnInit {
   }
 
   GetProveedores(){
-    this.terceroService.getP().subscribe((data:any) => {
+    this.terceroService.getP2().subscribe((data:any) => {
       this.Proveedores = data.terceros;
     });
   }  
