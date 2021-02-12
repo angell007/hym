@@ -73,6 +73,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public Filtros: any = {
     fecha: null,
     codigo: '',
+    realiza: '',
     cajero: '',
     valor: '',
     pendiente: '',
@@ -170,7 +171,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.Funcionario.Id_Perfil == 4) {
       this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
         .subscribe(() => {
-          this.ConsultaFiltradaObservable(true, this.filter);
+          this.ConsultaFiltradaObservable(false, this.filter);
           this.ActualizarIndicadores.emit()
           // this.ConsultaFiltradaObservable(false, this.filter);
         });
@@ -178,7 +179,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
     this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
-        this.ConsultaFiltradaObservable(true, this.filter);
+        this.ConsultaFiltradaObservable(false, this.filter);
         this.ActualizarIndicadores.emit()
       });
     // console.log(this.Funcionario.Id_Perfil);
@@ -417,10 +418,14 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
     if (paginacion === true) {
       params.pag = this.page;
+      params.paginacion = true;
     } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
+      params.paginacion = false;
     }
+
+
 
     if (filter != '') {
       this.Filtros.estado = filter
@@ -467,6 +472,9 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.Filtros.estado.trim() != "") {
       params.estado = this.Filtros.estado;
     }
+    if (this.Filtros.realiza.trim() != "") {
+      params.realiza = this.Filtros.realiza;
+    }
 
 
     return params;
@@ -497,7 +505,11 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   ConsultaFiltradaObservable(paginacion: boolean = false, filter: string = '') {
-
+    if(this.Filtros.estado == 'Pagada'){
+      paginacion = true;
+    }
+  console.log('paginacion',paginacion);
+  
     var p = this.SetFiltros(paginacion, filter);
 
     if (p === '') {
@@ -531,6 +543,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       fecha: '',
       codigo: '',
       cajero: '',
+      realiza: '',
       valor: '',
       pendiente: '',
       cedula: '',
@@ -628,6 +641,13 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     }
     this.http.get(this.globales.rutaNueva + 'ubicarse', { params: transferencia }).subscribe((data: any) => {
     });
+  /*  let transfereciaSelect = this.TransferenciasSeleccionadas.find(t=>t.Seleccionada==1);
+   
+   if (transfereciaSelect) {
+     transfereciaSelect.Seleccionada = 0;
+   }
+
+   transferencia.Seleccionada = 1; */
   }
 
 

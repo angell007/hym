@@ -551,7 +551,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   //MODELO SERVICIOS
   public ServicioExternoModel: any = {
-    Id_Caja_Destino : '',
+    Id_Funcionario_Destino : '',
     Id_Servicio: '',
     Servicio_Externo: '',
     Comision: '',
@@ -4157,11 +4157,14 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   editarServicio(id) {
+    this.search_caja_oficina()
     this.http.get(this.globales.ruta + 'php/genericos/detalle.php', { params: { id: id, modulo: "Servicio" } }).subscribe((data: any) => {
       this.ServicioExternoModel = data;
       this.ListaServiciosExternos = this.globales.ServiciosExternos
       this.Total_Servicio = parseInt(this.ServicioExternoModel.Valor) + parseInt(this.ServicioExternoModel.Comision);
+    
       this.ModalServicioEditar.show();
+      
     });
   }
 
@@ -4282,9 +4285,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   search_caja_oficina (){
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxx');
     
-    this.http.get(  this.globales.ruta + 'php/cajas/get_caja_oficinas.php' ).subscribe(data=>{
+    console.log('serrrrrr');
+    this.http.get(  this.globales.ruta + 'php/cajas/get_caja_funcionarios.php' ).subscribe(data=>{
       this.cajas_externo = data;
     })
   }
@@ -4649,6 +4652,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         break;
 
       case "Servicio":
+        
         this.search_caja_oficina();
         this.Servicio2 = true;
         this.Servicio1 = false;

@@ -1737,8 +1737,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="font-size-18" for="">Cajas</label>
-                                                    <ng-select [ngClass]="'ng-select' " class="cuentas" required [options]="cajas_externo" name="cajas_externo" [(ngModel)]="ServicioExternoModel.Id_Caja_Destino"></ng-select>
+                                                    <label class="font-size-18" for="">Cajero</label>
+                                                    <ng-select [ngClass]="'ng-select' " class="cuentas" required [options]="cajas_externo" name="cajas_externo" [(ngModel)]="ServicioExternoModel.Id_Funcionario_Destino"></ng-select>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -2406,11 +2406,16 @@
             <div class="col-md-12">
                 <form #FormServicio="ngForm">
                     <div class="row">
-
-                        <div class="col-md-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cajero</label>
+                                <ng-select class="cajerosS" required [options]="cajas_externo" name="cajas_externo" [(ngModel)]="ServicioExternoModel.Id_Funcionario_Destino"></ng-select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Servicio</label>
-                                <select name="Servicio_Externo" class="form-control" [(ngModel)]="ServicioExternoModel.Servicio_Externo">
+                                <select name="Servicio_Externo" class="form-control  font-size-18" [(ngModel)]="ServicioExternoModel.Servicio_Externo">
                                             <option value="">Seleccione un Servicio</option>
                                             <option *ngFor="let se of ListaServiciosExternos"
                                                 value="{{se.Id_Servicio_Externo}}">{{se.Nombre}}
@@ -2418,22 +2423,24 @@
                                         </select>
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input type="text" class="form-control" name="Valor" [(ngModel)]="ServicioExternoModel.Valor" (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
+                                <input type="text" class="form-control  font-size-18" name="Valor" [(ngModel)]="ServicioExternoModel.Valor" (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Comisión</label>
-                                <input name="Comision" type="text" placeholder="Comisión" class="form-control" [(ngModel)]="ServicioExternoModel.Comision" currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" [disabled]="ServicioExternoModel.Valor == ''" (blur)="AprobarCambioComision()">
+                                <input name="Comision" type="text" placeholder="Comisión" class="form-control  font-size-18" [(ngModel)]="ServicioExternoModel.Comision" currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" [disabled]="ServicioExternoModel.Valor == ''"
+                                    (blur)="AprobarCambioComision()">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="block-element">Total</label>
-                                <input name="Total" type="text" placeholder="Total" class="form-control" [(ngModel)]="Total_Servicio" disabled currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
+                                <input name="Total" type="text" placeholder="Total" class="form-control  font-size-18" [(ngModel)]="Total_Servicio" disabled currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}">
 
                             </div>
                         </div>

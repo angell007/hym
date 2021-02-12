@@ -30,7 +30,7 @@
                     <th class="custom-thead">
 
 
-                        <my-date-range-picker class="form-control form-control-sm" [options]="myDateRangePickerOptions" (dateRangeChanged)="ConsultaFiltrada(false,$event)" placeholder="Filtro Fechas"></my-date-range-picker>
+                        <my-date-range-picker [(ngModel)]="fecha_filtro" class="form-control form-control-sm" [options]="myDateRangePickerOptions" (dateRangeChanged)="ConsultaFiltrada(false,$event)" placeholder="Filtro Fechas"></my-date-range-picker>
 
 
 
@@ -103,7 +103,7 @@
               {{ InformacionPaginacion.total }}</b></p>
                 </div>
                 <div class="col-md-9">
-                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true,fecha_filtro)" [boundaryLinks]="true">
                     </ngb-pagination>
                 </div>
             </div>

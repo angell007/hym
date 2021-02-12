@@ -89,4 +89,8 @@ export class TransferenciaService {
     return this.client.get(this._rutaBase+'/get_maxima_hora_transferencias.php');
   }
 
+  public AlertarTransferencia(p):Observable<any>{
+    return this.client.get(this._rutaBase+'/alertar_transferencia.php',{params:p});
+  }
+
 }

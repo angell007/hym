@@ -32,7 +32,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public Cargando: boolean = false;
   public RutaGifCargando: string;
   public CodigoMonedaActual: string = '';
-
+  public fecha_filtro= '';
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '180px',
     height: '18px',
