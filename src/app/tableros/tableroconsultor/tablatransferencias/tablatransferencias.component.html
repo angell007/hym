@@ -101,25 +101,25 @@
                     <tbody *ngIf="!Cargando">
                         <tr *ngFor="let ts of TransferenciasSeleccionadas; let i = index;" style="background-color: #f7ab31;">
                             <!--TRANSFERENCIA SELECCIONADA-->
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center" style="cursor:pointer;">
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
                                 {{ts.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.Codigo}}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.NombreCajero}}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.NombreFuncionarioOpera != '' ? ts.NombreFuncionarioOpera : ts.Funcionario_Bloqueo }}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.Codigo}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.NombreCajero}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.NombreFuncionarioOpera != '' ? ts.NombreFuncionarioOpera : ts.Funcionario_Bloqueo }}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd " style="text-align:right;cursor:pointer;">
                                 {{ts.Valor_Transferencia | customcurrency:ts.Codigo_Moneda}}({{ts.Tasa_Cambio}})</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">{{ts.Valor_Transferenci - ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Valor_Transferenci - ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
 
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center" style="cursor:pointer;">
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
                                 {{ts.Nombre_Remitente}}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">{{ts.Numero_Documento_Destino}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Numero_Documento_Destino}}</td>
 
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.Cuenta_Destino | mask: '0000-0000-0000-0000-0000'}}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.Destinatario}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="cursor:pointer;">{{ts.Cuenta_Destino | mask: '0000-0000-0000-0000-0000'}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.Destinatario}}</td>
 
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell" style="cursor:pointer;">{{ts.Estado}}</td>
-                            <td class="custom-cell text-center">
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="cursor:pointer;">{{ts.Estado}}</td>
+                            <td class="custom-cell specialtd text-center">
                                 <!-- <button class="btn btn-default btn-xs" type="button" title="Pagar Transferencia" style="margin:0;"
                   (click)="BloquearTransferencia(ts)">
                   <i class="ti-money text-success"></i>
@@ -138,32 +138,32 @@
 
                 ">
                             <!--TRANSFERENCIAS DISPONIBLES-->
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell text-center">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd text-center">
                                 <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label> {{t.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Codigo}}</td>
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.Codigo}}</td>
 
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.NombreCajero}}</td>
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.NombreCajero}}</td>
 
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.NombreFuncionarioOpera != '' ? t.NombreFuncionarioOpera : t.Funcionario_Bloqueo}}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.NombreFuncionarioOpera != '' ? t.NombreFuncionarioOpera : t.Funcionario_Bloqueo}}</td>
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                                 {{t.Valor_Transferencia | customcurrency:t.Codigo_Moneda}}({{t.Tasa_Cambio}})</td>
 
 
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                                 {{t.Valor_Transferencia - t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
 
-                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell text-center" style="cursor:pointer;">
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
                                 {{t.Nombre_Remitente}}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                                 {{t.Numero_Documento_Destino}}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">
                                 {{t.Cuenta_Destino | mask: '0000-0000-0000-0000-0000' }}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Destinatario}}</td>
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.Destinatario}}</td>
 
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell" style="text-align:right;">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                                 {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
-                            <td (click)="UbicarseTransferencia(t)" class="custom-cell">{{t.Estado}}</td>
-                            <td class="custom-cell text-center">
+                            <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.Estado}}</td>
+                            <td class="custom-cell specialtd text-center">
 
                                 <button *ngIf="t.Estado_Consultor == 'Abierta' " class="btn btn-danger btn-xs" type="button" title="Desbloquear" (click)="alert(t)" style="margin:0;">
                   <i class="ti-lock text-light"></i>
@@ -183,15 +183,15 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="custom-cell text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
-                            <td class="custom-cell text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
 
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="custom-cell text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
                             <td></td>
                             <td></td>
                         </tr>

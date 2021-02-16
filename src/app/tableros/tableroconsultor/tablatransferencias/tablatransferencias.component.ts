@@ -22,7 +22,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-tablatransferencias',
   templateUrl: './tablatransferencias.component.html',
-  styleUrls: ['./tablatransferencias.component.scss', '../../../../style.scss'],
+  styleUrls: [ '../../../../style.scss','./tablatransferencias.component.scss'],
 })
 
 export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestroy {
