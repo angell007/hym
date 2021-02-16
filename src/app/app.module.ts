@@ -166,6 +166,7 @@ import { TableroComponent } from './tablero/tablero.component';
 import { TablerocajeroComponent } from './tableros/tablerocajero/tablerocajero.component';
 import { TablerocajeroprincipalComponent } from './tableros/tablerocajeroprincipal/tablerocajeroprincipal.component';
 import { TableroconsultorComponent } from './tableros/tableroconsultor/tableroconsultor.component';
+import { TableroconsultorvisualComponent } from './tableros/tableroconsultor/tableroconsultorvisual/tableroconsultorvisual.component';
 import { TableroauditoriaComponent } from './tableros/tableroauditoria/tableroauditoria.component';
 import { TablerogerenciaComponent } from './tableros/tablerogerencia/tablerogerencia.component';
 import { TableroDirective } from "./tablero/tablero.directive";
@@ -180,6 +181,7 @@ import { SafePipe } from './common/Pipes/safe.pipe';
 import { InformativecardComponent } from './simplecomponents/informativecard/informativecard.component';
 import { GraficabarraComponent } from './graficabarra/graficabarra.component';
 import { TablatransferenciasComponent } from './tableros/tableroconsultor/tablatransferencias/tablatransferencias.component';
+import { TablatransferenciasvisualComponent } from './tableros/tableroconsultor/tablatransferenciasvisual/tablatransferenciasvisual.component';
 import { TablatransferenciasrealizadasComponent } from './tableros/tableroconsultor/tablatransferenciasrealizadas/tablatransferenciasrealizadas.component';
 import { TablatransferenciasdevueltasComponent } from './tableros/tableroconsultor/tablatransferenciasdevueltas/tablatransferenciasdevueltas.component';
 import { DatachartComponent } from './simplecomponents/datachart/datachart.component';
@@ -381,6 +383,7 @@ export const customCurrencyMaskConfig = {
         TablerocajeroComponent,
         TablerocajeroprincipalComponent,
         TableroconsultorComponent,
+        TableroconsultorvisualComponent,
         TableroauditoriaComponent,
         TablerogerenciaComponent,
         TableroDirective,
@@ -393,6 +396,7 @@ export const customCurrencyMaskConfig = {
         InformativecardComponent,
         GraficabarraComponent,
         TablatransferenciasComponent,
+        TablatransferenciasvisualComponent,
         TablatransferenciasrealizadasComponent,
         TablatransferenciasdevueltasComponent,
         DatachartComponent,
@@ -550,7 +554,7 @@ export const customCurrencyMaskConfig = {
 
     ],
     bootstrap: [AppComponent],
-    entryComponents: [TableroauditoriaComponent, TablerocajeroComponent, TablerocajeroprincipalComponent, TableroconsultorComponent, TablerogerenciaComponent, VistaprincipalconsultorComponent]
+    entryComponents: [TableroauditoriaComponent, TablerocajeroComponent, TablerocajeroprincipalComponent, TableroconsultorComponent,TableroconsultorvisualComponent, TablerogerenciaComponent, VistaprincipalconsultorComponent]
 })
 
 

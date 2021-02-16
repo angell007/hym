@@ -263,7 +263,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
           //this.EnviarCuentasSeleccionadas.emit(p);
           this._limpiarListas();
           setTimeout(() => {
-            this.MostrarTablero.emit();
+            this.MostrarTablero.emit('Consultor');
           }, 300);
         } else {
           this._swalService.ShowMessage(d);
@@ -358,7 +358,9 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       // this.router.navigate(['/tablero']);
     }
   }
-
+  SiguientePasoVisual(){
+    this.MostrarTablero.emit('Visual');
+  }
   private _setCuentaDescuadre(idCuenta: string) {
     let ind = this.CuentasDescuadradas.findIndex(x => x == idCuenta);
     if (ind == -1) {

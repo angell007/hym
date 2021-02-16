@@ -11,6 +11,8 @@ export class VistaprincipalconsultorComponent implements OnInit {
 
   public MostrarApertura:boolean = false;
   public Cargado:boolean = false;
+  public MostrarConsultor:boolean = false;
+  public MostrarVisualConsultor:boolean = false;
 
   constructor(private _cuentaBancariaService:CuentabancariaService,
               private _generalService:GeneralService) 
@@ -38,12 +40,15 @@ export class VistaprincipalconsultorComponent implements OnInit {
       // console.log(data);
       
       if (!data.apertura_activa) {
+        console.log('MostrarApertura');
         this.MostrarApertura = true;
         this.Cargado = true;
         localStorage.setItem("Apertura_Consultor", "");
         localStorage.setItem("Volver_Apertura", "Si"); 
       }else{
-        this.MostrarApertura = false;
+        console.log('MostrarConsultor');
+        
+        this.MostrarConsultor = true;
         this.Cargado = true;
         localStorage.setItem("Volver_Apertura", "No"); 
         localStorage.setItem("Apertura_Consultor", data.query_data.Id_Diario_Consultor);
@@ -51,13 +56,31 @@ export class VistaprincipalconsultorComponent implements OnInit {
     });
   }
 
-  public ShowTablero(){
-    this.MostrarApertura = false;
+  public ShowTablero($event){
+  //  this.MostrarApertura = false;
+  console.log('show',$event);
+    this.setViews();    
+    if($event == 'Consultor'){
+
+      this.MostrarConsultor = true;
+    }else{
+      this.MostrarVisualConsultor = true;
+      
+    }
+
   }
 
   public ShowAperturaCuentas($event){
+    this.setViews();    
     this.MostrarApertura = true;
 
   }
+
+  public setViews(){
+    this.MostrarApertura = false;
+    this.MostrarVisualConsultor = false;
+    this.MostrarConsultor = false;
+  }
+
 
 }

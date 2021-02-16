@@ -1,0 +1,217 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header alert alert-primary">
+                <div class="row">
+                    <div class="col-md-1" style="text-align:center;">
+                        <img class="mt-2" src="../../../../assets/images/transfer.png" alt="icono_transferencia" style="width:1.5rem; height:1.5rem;">
+                    </div>
+                    <div class="col-md-7" style="font-size: 1.5rem;">
+                        <label>Transferencias</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered custom-table">
+                    <thead>
+                        <tr>
+                            <th class="custom-thead" style="width: 10%;">Fecha</th>
+                            <th class="custom-thead">Recibo</th>
+                            <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Cajero</th>
+                            <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Realizada/Bloqueado Por</th>
+                            <th class="custom-thead">Valor</th>
+                            <th class="custom-thead">Valor Recibido</th>
+                            <th class="custom-thead">Cliente</th>
+                            <th class="custom-thead">CC. Destino</th>
+                            <th class="custom-thead">Cta. Destino</th>
+                            <th class="custom-thead">Destinatario</th>
+                            <th class="custom-thead">Pendiente</th>
+
+                            <th class="custom-thead">Estado</th>
+                            <th class="custom-thead">Acciones</th>
+                        </tr>
+                        <tr>
+                            <th class="table-filters">
+                                <my-date-range-picker name="mydaterange" [options]="myDateRangePickerOptions" [(ngModel)]="Filtros.fecha" (dateRangeChanged)="dateRangeChanged($event)" placeholder="Filtro Fechas">
+                                </my-date-range-picker>
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro cod." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.codigo">
+                            </th>
+                            <th class="table-filters">
+
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro caj." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cajero">
+
+                            </th>
+                            <th class="table-filters">
+
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro Rel/Op." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.realiza">
+
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro val." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.valor">
+                            </th>
+                            <th class="table-filters">
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro cli." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cliente">
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro ced." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cedula">
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro cta." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cta_destino">
+                            </th>
+                            <th class="table-filters">
+                                <input type="text" class="form-control form-control-sm" placeholder="Filtro dest." (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.nombre_destinatario">
+                            </th>
+                            <th class="table-filters"></th>
+                            <th class="table-filters">
+                                <select *ngIf="Filtros.estado != 'Pagada'" type="text" class="form-control form-control-sm" placeholder="Filtro estado" (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.estado" style="width:80% !important;padding: 0px !important;">
+                  <option value="Todos" selected>Todos</option>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="devuelta">Devueltas</option>
+                  <option value="Alertada">Alertada</option>
+               <!--    <option value="Pagada">Pagada</option> -->
+                </select>
+                            </th>
+                            <!--   <th class="table-filters"></th> -->
+                        </tr>
+                        <tr *ngIf="Cargando">
+                            <td colspan="9" class="text-center">
+                                <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                                    <h2>CARGANDO TRANSFERENCIAS</h2>
+                                    <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="CARGANDO">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="TransferenciasListar.length == 0 && !Cargando">
+                            <td colspan="10" class="text-center">
+                                <i class="ti-alert font-size-20 text-warning"></i>
+                                <h4>No hay transferencias pendientes!</h4>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!Cargando">
+                        <tr *ngFor="let ts of TransferenciasSeleccionadas; let i = index;" style="background-color: #f7ab31;">
+                            <!--TRANSFERENCIA SELECCIONADA-->
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
+                                {{ts.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.Codigo}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.NombreCajero}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.NombreFuncionarioOpera != '' ? ts.NombreFuncionarioOpera : ts.Funcionario_Bloqueo }}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd " style="text-align:right;cursor:pointer;">
+                                {{ts.Valor_Transferencia | customcurrency:ts.Codigo_Moneda}}({{ts.Tasa_Cambio}})</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Valor_Transferenci - ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
+                                {{ts.Nombre_Remitente}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Numero_Documento_Destino}}</td>
+
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="cursor:pointer;">{{ts.Cuenta_Destino | mask: '0000-0000-0000-0000-0000'}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">{{ts.Destinatario}}</td>
+
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="text-align:right;cursor:pointer;">{{ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd" style="cursor:pointer;">{{ts.Estado}}</td>
+                            <td class="custom-cell specialtd text-center">
+                                <!-- <button class="btn btn-default btn-xs" type="button" title="Pagar Transferencia" style="margin:0;"
+                  (click)="BloquearTransferencia(ts)">
+                  <i class="ti-money text-success"></i>
+                </button> -->
+                            </td>
+                        </tr>
+                        <tr *ngFor="let t of TransferenciasListar; let i = index;" style="cursor:pointer;" [ngClass]="
+               {
+                'pagada': t.Estado == 'Pagada',
+                'bg-warning text-black': t.Alertada == 'Si',
+                'bg-info':      (t.Seleccionada == 1 && t.Estado != 'Pagada'),
+                'text-light':    (t.Seleccionada == 1 || t.Estado == 'Pagada'),
+                'bg-success': t.Bloqueada == 1,
+                'text-white':   t.Bloqueada == 1
+                }
+
+                ">
+                            <!--TRANSFERENCIAS DISPONIBLES-->
+                            <td class="custom-cell specialtd text-center">
+                                <label *ngIf="t.Devolucion != '0'" title="Tiene devoluciones" class="badge badge-danger">D</label> {{t.Fecha | date:"dd-MM-yyyy HH:mm" }}</td>
+                            <td class="custom-cell specialtd">{{t.Codigo}}</td>
+
+                            <td class="custom-cell specialtd">{{t.NombreCajero}}</td>
+
+                            <td class="custom-cell specialtd">{{t.NombreFuncionarioOpera != '' ? t.NombreFuncionarioOpera : t.Funcionario_Bloqueo}}</td>
+                            <td class="custom-cell specialtd" style="text-align:right;">
+                                {{t.Valor_Transferencia | customcurrency:t.Codigo_Moneda}}({{t.Tasa_Cambio}})</td>
+
+
+                            <td class="custom-cell specialtd" style="text-align:right;">
+                                {{t.Valor_Transferencia - t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
+
+                            <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd text-center" style="cursor:pointer;">
+                                {{t.Nombre_Remitente}}</td>
+                            <td class="custom-cell specialtd" style="text-align:right;">
+                                {{t.Numero_Documento_Destino}}</td>
+                            <td class="custom-cell specialtd">
+                                {{t.Cuenta_Destino | mask: '0000-0000-0000-0000-0000' }}</td>
+                            <td class="custom-cell specialtd">{{t.Destinatario}}</td>
+
+                            <td class="custom-cell specialtd" style="text-align:right;">
+                                {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
+                            <td class="custom-cell specialtd">{{t.Estado}}</td>
+                            <td class="custom-cell specialtd text-center">
+
+                                <button *ngIf="t.Estado_Consultor == 'Abierta' " class="btn btn-danger btn-xs" type="button" title="Desbloquear" style="margin:0;">
+                  <i class="ti-lock text-light"></i>
+                </button>
+
+
+                                <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;">
+                            <!--     <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;" (click)="DevolverTransferencia(t)"> -->
+                  <i class="ti-search text-primary"></i>
+                </button>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="paginacion-container" *ngIf="TransferenciasListar.length > 0">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
+                  {{ InformacionPaginacion.total }}</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <ngb-pagination class="pull-right" *ngIf="Filtros.estado=='Pagada'" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltradaObservable(true)" [boundaryLinks]="true">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-modalpagostransferencia [AbrirModal]="AbrirModalDevolucion.asObservable()"></app-modalpagostransferencia>
+
+<app-modalabonocompracuenta [AbrirModal]="AbrirModalCompra.asObservable()" (ActualizarDatos)="ActualizarValorCuentaBancaria()">
+</app-modalabonocompracuenta>
+
+<swal title='' text='' type='' #alertSwal></swal>
+<swal #OtraCosa [options]="alertOption"></swal>
