@@ -30,6 +30,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
   @Input() Id_Funcionario: string = '';
   @Input() Id_Apertura: string = '';
   @Input() CuentasBancariasSeleccionadas: any = [];
+  @Input('AbrirCuentas') AbrirCuentas: EventEmitter<any>;
   @ViewChild('OtraCosa') OtraCosa: any;
 
   @Output() ActualizarIndicadores = new EventEmitter();
@@ -460,8 +461,9 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
   }
 
 
-
-
+  public volver(){
+    this.AbrirCuentas.emit();
+  }
   public ubicadoEnTransferencia: boolean = false;
   public bloqueadaTransferencia: boolean = false;
 

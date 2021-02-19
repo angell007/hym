@@ -246,6 +246,7 @@ import { AperturacuentasconsultorComponent } from './tableros/tableroconsultor/a
 import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
 import { CuadrecuentasconsultorComponent } from './tableros/tableroconsultor/cuadrecuentasconsultor/cuadrecuentasconsultor.component';
 import { ModalpagostransferenciaComponent } from './simplecomponents/modalpagostransferencia/modalpagostransferencia.component';
+import { ModalpagostransferenciaverComponent } from './simplecomponents/modalpagostransferenciaver/modalpagostransferenciaver.component';
 import { ModaldevoluciontransferenciaComponent } from './simplecomponents/modaldevoluciontransferencia/modaldevoluciontransferencia.component';
 import { ModalabonocompracuentaComponent } from './simplecomponents/modalabonocompracuenta/modalabonocompracuenta.component';
 import { ModalamovertransferenciaComponent } from './simplecomponents/modalamovertransferencia/modalamovertransferencia.component';
@@ -470,6 +471,7 @@ export const customCurrencyMaskConfig = {
         VistaprincipalconsultorComponent,
         CuadrecuentasconsultorComponent,
         ModalpagostransferenciaComponent,
+        ModalpagostransferenciaverComponent,
         ModaldevoluciontransferenciaComponent,
         ModalabonocompracuentaComponent,
         ModalamovertransferenciaComponent,

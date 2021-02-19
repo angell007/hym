@@ -1,0 +1,49 @@
+<app-modal-basic [dialogClass]="'modal-lg'" #ModalPagosTransferencia>
+    <div class="app-modal-header">
+        <h4 class="modal-title">Pagos Realizados</h4>
+        <!-- <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+    </div>
+    <div class="app-modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered custom-table">
+                    <thead>
+                        <tr>
+                            <th class="custom-thead" style="width: 10%;">Fecha</th>
+                            <th class="custom-thead">Recibo</th>
+                            <th class="custom-thead">Valor</th>
+                            <th class="custom-thead">Destinatario</th>
+
+                        </tr>
+                        <tr *ngIf="TransferenciasRealizadas.length == 0">
+                            <td colspan="5" class="text-center">
+                                <i class="ti-alert font-size-20 text-warning"></i>
+                                <h4>No se han realizado pagos!</h4>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="TransferenciasRealizadas.length > 0">
+                        <tr *ngFor="let tr of TransferenciasRealizadas; let i = index;" [ngClass]="{'bg-anulada':tr.Devuelta == 'Si'}">
+                            <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Fecha | date:"dd-MM-yyyy" }}</td>
+                            <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Recibo}}</td>
+                            <td class="custom-cell text-right" style="text-align:right;cursor:pointer;">
+                                {{tr.Valor_Pagado | customcurrency:tr.Codigo_Moneda}}</td>
+                            <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Destinatario}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="app-modal-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModal()">Cerrar</button>
+        </div>
+    </div>
+</app-modal-basic>
+
+<app-modaldevoluciontransferencia [AbrirModal]="AbrirModalDevolver.asObservable()" (RecargarPagos)="GetPagosTransferencia()">
+</app-modaldevoluciontransferencia>

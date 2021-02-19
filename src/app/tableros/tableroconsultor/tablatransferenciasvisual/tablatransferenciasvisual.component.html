@@ -9,7 +9,9 @@
                     <div class="col-md-7" style="font-size: 1.5rem;">
                         <label>Transferencias</label>
                     </div>
-
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="volver()">Volver</button>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -165,8 +167,8 @@
                 </button>
 
 
-                                <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;">
-                            <!--     <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;" (click)="DevolverTransferencia(t)"> -->
+                                <!--  <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;"> -->
+                                <button class="btn btn-default btn-xs" type="button" title="Ver Pagos" style="margin:0;" (click)="DevolverTransferencia(t)">
                   <i class="ti-search text-primary"></i>
                 </button>
 
@@ -208,7 +210,7 @@
 </div>
 
 
-<app-modalpagostransferencia [AbrirModal]="AbrirModalDevolucion.asObservable()"></app-modalpagostransferencia>
+<app-modalpagostransferenciaver [AbrirModal]="AbrirModalDevolucion.asObservable()"></app-modalpagostransferenciaver>
 
 <app-modalabonocompracuenta [AbrirModal]="AbrirModalCompra.asObservable()" (ActualizarDatos)="ActualizarValorCuentaBancaria()">
 </app-modalabonocompracuenta>

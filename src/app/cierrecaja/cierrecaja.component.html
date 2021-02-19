@@ -1,241 +1,220 @@
 <div class="container-fluid">
-  <div class="card">
-    <div class="row card-body">
-      <div class="col-md-12">
-        <h4>CIERRE DE CAJA - {{Nombre_Funcionario}}</h4>
-      </div>
+    <div class="card">
+        <div class="row card-body">
+            <div class="col-md-12">
+                <h4>CIERRE DE CAJA - {{Nombre_Funcionario}}</h4>
+            </div>
 
-      <div class="col-md-12">
+            <div class="col-md-12">
 
-        <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="Modulos.length == 0;">
-          <h2>CARGANDO DATOS DEL CIERRE</h2>
-          <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
+                <div style="text-align: center; margin-top:10px; margin-bottom:10px;" *ngIf="Modulos.length == 0;">
+                    <h2>CARGANDO DATOS DEL CIERRE</h2>
+                    <img src="{{globales.ruta}}IMAGENES/GIFS/reloj_arena_cargando.gif" style="width:250px;" alt="">
+                </div>
+
+                <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Modulos.length != 0;">
+                    <thead>
+                        <tr>
+                            <th [ngStyle]="{'width':10% !important,'min-width':10% !important, 'max-width':10% !important}"></th>
+                            <th *ngFor="let m of Modulos[0].Movimientos" [ngStyle]="{'text-align':center, 'width':sizeColunm,'min-width':sizeColunm,'max-width':sizeColunm}" colspan="2" [ngStyle]="{'background-color':m.Color}">
+                                <h4>{{m.Nombre}}</h4>
+                            </th>
+                            <th [ngStyle]="{'width':10% !important,'min-width':10% !important, 'max-width':10% !important}"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>MONEDAS</td>
+                            <ng-container *ngFor="let m of Modulos[0].Movimientos">
+                                <td>Ingreso</td>
+                                <td>Egreso</td>
+                            </ng-container>
+                            <td>TOTAL</td>
+                        </tr>
+
+                        <ng-container *ngFor="let m of Modulos">
+
+                            <tr *ngIf="validate(m.Movimientos)">
+
+                                <th class="p-2">{{m.Nombre}} </th>
+
+                                <ng-container *ngFor="let item of m.Movimientos; index as i ">
+                                    <th class="text-right p-2"> <span class="text-primary">{{item.Ingreso_Total }}</span></th>
+                                    <th class="text-right p-2"> <span class="text-danger">{{item.Egreso_Total }}</span></th>
+                                </ng-container>
+
+                                <th class="text-right p-2">
+                                    <span class="text-success"> {{reduce(m.Movimientos)}}</span>
+                                </th>
+                            </tr>
+                        </ng-container>
+
+                    </tbody>
+                </table>
+
+                <div class="w-100 my-3"></div>
+
+                <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Modulos.length != 0;">
+                    <thead> </thead>
+                    <tbody>
+
+                        <tr>
+                            <td><b>Moneda</b></td>
+                            <td class="mx-1" *ngFor="let m of Modulos">{{m.Nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Montos Iniciales</b></td>
+                            <td class="mx-1" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ingreso</td>
+                            <th *ngFor="let m of Modulos" class="text-right p-2">
+                                <span class="text-success"> {{Ingresos(m.Movimientos)}} </span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>Egreso</td>
+                            <th *ngFor="let m of Modulos" class="text-right p-2">
+                                <span class="text-success"> {{Egresos(m.Movimientos)}} </span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>Total a Entregar</td>
+                            <th *ngFor="let m of Modulos" class="text-right p-2">
+                                <span class="text-success"> {{reduce(m.Movimientos)}} </span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>Entregado</td>
+                            <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
+
+                                <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1" placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )" [disabled]="reduce(m.Movimientos) == 0">
+
+                                <ng-container *ngIf="i == 1">
+                                    Fajo Entero
+
+                                    <select class="form-control sp-text" name="" id="">
+                    <option value="">100.000</option>
+                  </select>
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )"> Medio Fajo
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">100.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )"> Suelto
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">100.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">50.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">20.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <select class="form-control sp-text" name="" id="">
+
+                    <option value="">10.000</option>
+                  </select>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+
+                                    <label for="">Suplemento</label>
+
+                                    <input type="text" class="input_pesos form-control sp-text" (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
+                                </ng-container>
+
+
+
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <td>Diferencia</td>
+                            <td class="mx-1" *ngFor="let d of Diferencias; ">
+                                {{d }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
         </div>
 
-        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Modulos.length != 0;">
-          <thead>
-            <tr>
-              <th [ngStyle]="{'width':10% !important,'min-width':10% !important, 'max-width':10% !important}"></th>
-              <th *ngFor="let m of Modulos[0].Movimientos"
-                [ngStyle]="{'text-align':center, 'width':sizeColunm,'min-width':sizeColunm,'max-width':sizeColunm}"
-                colspan="2" [ngStyle]="{'background-color':m.Color}">
-                <h4>{{m.Nombre}}</h4>
-              </th>
-              <th [ngStyle]="{'width':10% !important,'min-width':10% !important, 'max-width':10% !important}"> </th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <tr>
-              <td>MONEDAS</td>
-              <ng-container *ngFor="let m of Modulos[0].Movimientos">
-                <td>Ingreso</td>
-                <td>Egreso</td>
-              </ng-container>
-              <td>TOTAL</td>
-            </tr>
-
-            <ng-container *ngFor="let m of Modulos">
-
-              <tr *ngIf="validate(m.Movimientos)">
-
-                <th class="p-2">{{m.Nombre}} </th>
-
-                <ng-container *ngFor="let item of m.Movimientos; index as i ">
-                  <th class="text-right p-2"> <span class="text-primary">{{item.Ingreso_Total }}</span></th>
-                  <th class="text-right p-2"> <span class="text-danger">{{item.Egreso_Total }}</span></th>
-                </ng-container>
-
-                <th class="text-right p-2">
-                  <span class="text-success"> {{reduce(m.Movimientos)}}</span>
-                </th>
-              </tr>
-            </ng-container>
-
-          </tbody>
-        </table>
-
-        <div class="w-100 my-3"></div>
-
-        <table class="table table-striped table-bordered cierre-caja-table" *ngIf="Modulos.length != 0;">
-          <thead> </thead>
-          <tbody>
-
-            <tr>
-              <td><b>Moneda</b></td>
-              <td class="mx-1" *ngFor="let m of Modulos">{{m.Nombre }}</td>
-            </tr>
-            <tr>
-              <td><b>Montos Iniciales</b></td>
-              <td class="mx-1" *ngFor="let vm of ValoresMonedasApertura">{{vm | customcurrency:''}}</td>
-            </tr>
-            <tr>
-              <td>Ingreso</td>
-              <th *ngFor="let m of Modulos" class="text-right p-2">
-                <span class="text-success"> {{Ingresos(m.Movimientos)}} </span>
-              </th>
-            </tr>
-            <tr>
-              <td>Egreso</td>
-              <th *ngFor="let m of Modulos" class="text-right p-2">
-                <span class="text-success"> {{Egresos(m.Movimientos)}} </span>
-              </th>
-            </tr>
-            <tr>
-              <td>Total a Entregar</td>
-              <th *ngFor="let m of Modulos" class="text-right p-2">
-                <span class="text-success"> {{reduce(m.Movimientos)}} </span>
-              </th>
-            </tr>
-            <tr>
-              <td>Entregado</td>
-              <th *ngFor="let m of Modulos; index as i " class="text-right p-2">
-
-                <input type="text" class="form-control sp-text" name="Entregado_{{i}}" aria-describedby="basic-addon1"
-                  placeholder="0" (blur)="CalcularDiferencia($event.target.value, reduce(m.Movimientos), i )"
-                  [disabled]="reduce(m.Movimientos) == 0">
-
-                <ng-container *ngIf="i == 1">
-                  Fajo Entero
-
-                  <select class="form-control sp-text" name="" id="">
-                    <option value="">100.000</option>
-                  </select>
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">50.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">20.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">10.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-                  Medio Fajo
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">100.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">50.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">20.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">10.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-                  Suelto
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">100.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">50.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">20.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <select class="form-control sp-text" name="" id="">
-
-                    <option value="">10.000</option>
-                  </select>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-
-                  <label for="">Suplemento</label>
-
-                  <input type="text" class="input_pesos form-control sp-text"
-                    (blur)="CalcularSumaImput($event.target.value, reduce(m.Movimientos), i )">
-                </ng-container>
-
-
-
-              </th>
-
-            </tr>
-            <tr>
-              <td>Diferencia</td>
-              <td class="mx-1" *ngFor="let d of Diferencias; ">
-                {{d | customcurrency:''}}
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-12">
-      <label class="block-element">Observaciones</label>
-      <textarea style="width: 100%;" name="Observaciones" id="" rows="4"
-        [(ngModel)]="CierreCajaModel.Observacion"></textarea>
-    </div>
-    <div class="col-md-12">
-      <div class="row">
         <div class="col-md-12">
-          <button class="btn btn-info btn-block"
-            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar el cierre de caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
-            (confirm)="GuardarCierre()">Guardar Cierre
-          </button>
+            <label class="block-element">Observaciones</label>
+            <textarea style="width: 100%;" name="Observaciones" id="" rows="4" [(ngModel)]="CierreCajaModel.Observacion"></textarea>
         </div>
-      </div>
-    </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-info btn-block" [disabled]="HayDiferencias" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar el cierre de caja' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                        (confirm)="GuardarCierre()">Guardar Cierre
+          </button>
+                </div>
+            </div>
+        </div>
 
-  </div>
+    </div>
 </div>
 
 <swal #alertSwal type="" title="" text=""></swal>
