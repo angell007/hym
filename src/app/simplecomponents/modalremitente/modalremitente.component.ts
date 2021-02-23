@@ -28,7 +28,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   public Editar: boolean = false;
   public accion: string = 'crear';
   public MensajeGuardar: string = 'Se dispone a guardar esta caja recaudo';
-
+  public tipo:any = '';
   public RemitenteModel: RemitenteModel = new RemitenteModel();
 
   constructor(private _swalService: SwalService,
@@ -38,7 +38,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.suscripcion = this.AbrirModalEvent.subscribe((data: any) => {
-    
+      this.tipo = data.tipo;
       this.accion = data.accion;
 
   console.log('data.->>',data);

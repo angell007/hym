@@ -4098,7 +4098,9 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         }
       }
     }); */
-
+    
+    
+    
 
     if (this.flag) {
       this.flag = false;
@@ -4216,6 +4218,10 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     });
   }
 
+  DescargarServicio(doc:string){
+    
+    window.open(this.globales.ruta + 'php/serviciosexternos/descargar_documento.php?'+'doc='+doc , "_blank")
+  }
 
   public CerrarModalServicioEditar() {
     this.ModalServicioEditar.hide();
