@@ -17,22 +17,22 @@ import { ToastService } from '../../shared/services/toasty/toast.service';
 })
 export class BalancegeneralComponent implements OnInit {
 
-  public Monedas:Array<any> = [];
-  public TotalGeneral:Array<any> = [];
-  public ArmarTabla:boolean = false;
-  public MonedasColSpan:number = 1;
+  public Monedas: Array<any> = [];
+  public TotalGeneral: Array<any> = [];
+  public ArmarTabla: boolean = false;
+  public MonedasColSpan: number = 1;
 
-  constructor(private _indicadorService:IndicadorService,
-              private _monedaService:MonedaService,
-              private _toastService:ToastService) { }
+  constructor(private _indicadorService: IndicadorService,
+    private _monedaService: MonedaService,
+    private _toastService: ToastService) { }
 
-  public ListaBalance:Array<any> = [];
+  public ListaBalance: Array<any> = [];
   ngOnInit() {
     this.GetMonedas();
     this.GetBalance();
   }
 
-  GetBalance(){
+  GetBalance() {
     this._indicadorService.getBalanceGeneral().subscribe((data: any) => {
       this.ListaBalance = data.Valores_Tabla;
       this.TotalGeneral = data.Total_General;
@@ -40,30 +40,30 @@ export class BalancegeneralComponent implements OnInit {
     });
   }
 
-  GetMonedas(){
-    this._monedaService.getMonedas().subscribe((data:any) => {
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Monedas = data.query_data;
         this.MonedasColSpan = this.Monedas.length + 2;
-      }else{
+      } else {
 
         this.Monedas = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  GetNombreArray(ind:any){
+  GetNombreArray(ind: any) {
     let i = 0;
     for (let index = 0; index < this.ListaBalance.length; index++) {
-      
+
       for (const key in this.ListaBalance[index]) {
         if (ind == i) {
           return key;
-        }      
+        }
         i++;
-      }  
+      }
     }
   }
 

@@ -2,13 +2,10 @@
   <div class="page-title">
     <h4 class="block-element text-center">Balance General</h4>
     <div class="row">
-      <div class="col-md"  *ngFor="let tg of TotalGeneral">
-          <app-informativetotalmonedatercerocard
-            [SaldoMoneda]="tg.Totales"
-            [CodigoMoneda]="tg.Codigo"
-            [NombreMoneda]="tg.Moneda"
-            CardClass="bg-info">                
-          </app-informativetotalmonedatercerocard>
+      <div class="col-md" *ngFor="let tg of TotalGeneral">
+        <app-informativetotalmonedatercerocard [SaldoMoneda]="tg.Totales" [CodigoMoneda]="tg.Codigo"
+          [NombreMoneda]="tg.Moneda" CardClass="bg-info">
+        </app-informativetotalmonedatercerocard>
       </div>
     </div>
   </div>
@@ -29,14 +26,25 @@
                 <h5 class="mb-0">
                   <i class="fa fa-users text-info"></i> {{ item.Nombre }} <i class="fa fa-angle-down rotate-icon"></i>
                   <div style="display:inline-block;" class="pull-right">
-                   <span *ngFor="let tg of item.Totales_Grupo; let ind = index">{{tg.Totales | customcurrency:tg.Codigo}} {{ind == item.Totales_Grupo.length ? '' : ' | '}}</span>
+                    <table class="table">
+                      <thead>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td *ngFor="let tg of item.Totales_Grupo; let ind = index"
+                            style="border: 1px solid #929292; font-size: 0.8em !important; padding: 2px  5px !important;">
+                            {{ tg.Totales | customcurrency:tg.Codigo }} </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </h5>
               </a>
             </div>
 
             <!-- Card body -->
-            <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}" data-parent="#accordionEx">
+            <div id="collapseOne{{i}}" class="collapse " role="tabpanel" aria-labelledby="headingOne{{i}}"
+              data-parent="#accordionEx">
               <div class="card-body">
                 <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
@@ -57,14 +65,13 @@
                     <tbody *ngIf="item.Terceros.length > 0">
                       <tr *ngFor="let t of item.Terceros">
                         <td class="custom-cell">{{t.Nombre_Tercero}}</td>
-                        <td *ngFor="let tm of t.Totales_Monedas" 
-                          class="text-right custom-cell" appColorsaldo [value]="tm.Total">{{tm.Total | customcurrency:tm.Codigo}}
+                        <td *ngFor="let tm of t.Totales_Monedas" class="text-right custom-cell" appColorsaldo
+                          [value]="tm.Total">{{tm.Total | customcurrency:tm.Codigo}}
                         </td>
                         <td>
-                          <a 
-                            class="btn btn-light btn-rounded btn-sm m-0"
-                            style="cursor:pointer;" [routerLink]="['/tercerover',t.Id_Tercero]">
-                            <i class="ti-zoom-in text-info"></i> 
+                          <a class="btn btn-light btn-rounded btn-sm m-0" style="cursor:pointer;"
+                            [routerLink]="['/tercerover',t.Id_Tercero]">
+                            <i class="ti-zoom-in text-info"></i>
                             Detalle
                           </a>
                         </td>
@@ -75,22 +82,26 @@
                   <!-- Accordion card 1 -->
                   <div class="card" *ngFor="let subitem of item.tercero; let j = index">
                     <div class="card-header" role="tab" id="headingOne2">
-                      <a data-toggle="collapse" data-parent="#accordionEx1" href="#collapseOne{{i}}{{j}}" aria-expanded="true"
-                        aria-controls="collapseOne{{i}}">
-                        
+                      <a data-toggle="collapse" data-parent="#accordionEx1" href="#collapseOne{{i}}{{j}}"
+                        aria-expanded="true" aria-controls="collapseOne{{i}}">
+
                         <table class="table" style="font-size: 12px">
-                            <tr>
-                                <th style="width: 120px"><h5 class="mb-0"> {{subitem.Nombre}} </h5></th>
-                                <th class="text-center" style="width: 120px">Total Pesos:</th>
-                                <th class="text-center {{subitem.SaldoPeso < 0 ? 'text-danger' : 'text-success'}}" style="width: 120px"> {{subitem.SaldoPeso | currency:"$."}} </th>
-                                <th class="text-center" style="width: 120px">Total Bolivares: </th>
-                                <th class="text-center {{subitem.saldoBolivar < 0 ? 'text-danger' : 'text-success'}} " style="width: 120px">{{subitem.saldoBolivar | currency:"BsS."}} </th>
-                                <th class="text-center" style="width: 120px">
-                                <button class="btn btn-primary btn-sm" [routerLink]="['/tercerover',subitem.Id_Tercero]" >
-                                    Ver
-                                </button>
-                                </th>
-                              </tr>
+                          <tr>
+                            <th style="width: 120px">
+                              <h5 class="mb-0"> {{subitem.Nombre}} </h5>
+                            </th>
+                            <th class="text-center" style="width: 120px">Total Pesos:</th>
+                            <th class="text-center {{subitem.SaldoPeso < 0 ? 'text-danger' : 'text-success'}}"
+                              style="width: 120px"> {{subitem.SaldoPeso | currency:"$."}} </th>
+                            <th class="text-center" style="width: 120px">Total Bolivares: </th>
+                            <th class="text-center {{subitem.saldoBolivar < 0 ? 'text-danger' : 'text-success'}} "
+                              style="width: 120px">{{subitem.saldoBolivar | currency:"BsS."}} </th>
+                            <th class="text-center" style="width: 120px">
+                              <button class="btn btn-primary btn-sm" [routerLink]="['/tercerover',subitem.Id_Tercero]">
+                                Ver
+                              </button>
+                            </th>
+                          </tr>
                         </table>
                       </a>
                     </div>
