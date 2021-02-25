@@ -64,6 +64,10 @@ export class FuncionarioactivosComponent implements OnInit, OnChanges {
     this.FuncionariosFiltrados = [];
   }
 
+  actualizar(){
+    this.GetFuncionariosActivos();
+  }
+
   FiltrarFuncionario() {
 
     if (this.FuncionarioBusqueda == '') {

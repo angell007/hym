@@ -1742,6 +1742,14 @@
                                     [ngClass]="{'ti-close':Servicio.Estado == 'Activo', 'ti-back-right':Servicio.Estado == 'Inactivo'}"></i>
                                   {{Servicio.Estado == 'Activo' ? '' : ''}}
                                 </button>
+
+
+                                <button *ngIf="Servicio.Documento" class="btn btn-success btn-xs btn-warning"
+                                  type="button" style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
+
+                                  <i class="fa fa-download"></i>
+                                </button>
+
                               </td>
                             </tr>
                           </tbody>
@@ -1931,6 +1939,12 @@
                                                                                     [ngClass]="{'ti-close':Servicio.Estado == 'Activo', 'ti-back-right':Servicio.Estado == 'Inactivo'}"></i>
                                                                                 {{Servicio.Estado == 'Activo' ? '' : ''}}
                                                                             </button> -->
+
+                                <button *ngIf="Servicio.Documento" class="btn btn-success btn-xs btn-warning"
+                                  type="button" style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
+
+                                  <i class="fa fa-download"></i>
+                                </button>
                               </td>
                             </tr>
                           </tbody>
@@ -2043,7 +2057,7 @@
                   <div class="col-md-10">
                     <button type="button"
                       [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
-                      (confirm)="GuardarServicio(FormServicio,ModalServicioEditar,'Creacion','Enviados')"
+                      (confirm)="GuardarServicio(FormServicio,ModalServicioEditar,'creacion','Enviados')"
                       class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
                   </div>
                   <div class="col-md-2">

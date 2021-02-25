@@ -265,6 +265,8 @@ import { NgxCurrencyModule } from "ngx-currency";
 import { ModaldevoluccionComponent } from './modaldevoluccion/modaldevoluccion.component';
 import { MotivoscambioComponent } from './motivoscambio/motivoscambio.component';
 import { LogComponent } from './configuracion/log/log.component';
+import { TablerocajerorecaudadorComponent } from './tablerocajerorecaudador/tablerocajerorecaudador.component';
+import { TablaRecaudoComponent } from './tabla-recaudo/tabla-recaudo.component';
 
 
 
@@ -486,8 +488,10 @@ export const customCurrencyMaskConfig = {
         ConsolidadoComponent,
         ModaldevoluccionComponent,
         MotivoscambioComponent,
-        LogComponent
-        
+        LogComponent,
+        TablerocajerorecaudadorComponent,
+        TablaRecaudoComponent
+
     ],
     exports: [
         ModalBasicComponent
@@ -556,7 +560,7 @@ export const customCurrencyMaskConfig = {
 
     ],
     bootstrap: [AppComponent],
-    entryComponents: [TableroauditoriaComponent, TablerocajeroComponent, TablerocajeroprincipalComponent, TableroconsultorComponent,TableroconsultorvisualComponent, TablerogerenciaComponent, VistaprincipalconsultorComponent]
+    entryComponents: [TableroauditoriaComponent, TablerocajerorecaudadorComponent, TablerocajeroComponent, TablerocajeroprincipalComponent, TableroconsultorComponent, TableroconsultorvisualComponent, TablerogerenciaComponent, VistaprincipalconsultorComponent]
 })
 
 

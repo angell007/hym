@@ -23,10 +23,12 @@ export class ConsolidadosService {
 
   constructor(public globales: Globales, private http: HttpClient) {
 
-    TimerObservable.create(0, 10000)
-      .subscribe(() => {
-        this.GetData();
-      });
+    if (Number(this.user.Id_Perfil) != 100) {
+      TimerObservable.create(0, 10000)
+        .subscribe(() => {
+          this.GetData();
+        });
+    }
   }
 
 

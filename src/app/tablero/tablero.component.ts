@@ -9,6 +9,7 @@ import { TablerocajeroprincipalComponent } from "../tableros/tablerocajeroprinci
 import { TableroconsultorComponent } from "../tableros/tableroconsultor/tableroconsultor.component";
 import { TablerogerenciaComponent } from "../tableros/tablerogerencia/tablerogerencia.component";
 import { VistaprincipalconsultorComponent } from '../tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
+import { TablerocajerorecaudadorComponent } from '../tablerocajerorecaudador/tablerocajerorecaudador.component';
 
 
 @Component({
@@ -31,10 +32,11 @@ export class TableroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/perfiles/dashboard.php', {
       params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
     }).subscribe((data: any) => {
-      // console.log(data);
       var vari: any;
+
       console.log(data.Id_Perfil);
-      switch (data.Id_Perfil) {        
+
+      switch (data.Id_Perfil) {
         //administrador
         case '1':
           vari = TablerocajeroprincipalComponent;
@@ -60,6 +62,9 @@ export class TableroComponent implements OnInit {
         case '6':
           //vari = TablerogerenciaComponent
           vari = TablerocajeroprincipalComponent;
+          break;
+        case '100':
+          vari = TablerocajerorecaudadorComponent;
           break;
       }
 

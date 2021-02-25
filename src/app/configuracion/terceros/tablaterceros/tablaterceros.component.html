@@ -273,17 +273,20 @@
                         <input type="text" placeholder="Cupo de Crédito" class="form-control" name="Cupo" [(ngModel)]="TerceroModel.Cupo" [disabled]="TerceroModel.Credito == 'No'">
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label>Recauda?</label>
-                    <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.Recauda">
-            <option selected value="No">No</option>
-            <option value="Si">Si</option>
-          </select>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Recauda?</label>
+                        <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.Recauda">
+                            <option selected value="No">No</option>
+                            <option value="Si">Si</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+
+
             <div class="col-md-2" *ngIf="TerceroModel.Recauda=='Si'">
                 <div class="form-group">
                     <label>(%) Porcentaje Recaudacón </label>
