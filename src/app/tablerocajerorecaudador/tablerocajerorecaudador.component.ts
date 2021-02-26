@@ -778,20 +778,18 @@ export class TablerocajerorecaudadorComponent implements OnInit {
 
         this.http.post(this.globales.rutaNueva + 'recaudos', { 'lista': this.ListaDestinatarios, 'modelo': this.TransferenciaModel }).subscribe((data: any) => {
           this.LimpiarModeloTransferencia();
-
           this.ListaDestinatarios.forEach((det, index) => {
             this.ListaDestinatarios[index].Numero_Documento_Destino = '';
             this.ListaDestinatarios[index].Nombre_Destinatario = '';
-            this.EliminarDestinatarioTransferencia(index)
+            this.ListaDestinatarios[index].id_destinatario_transferencia = '';
+            this.ListaDestinatarios[index].Valor_Transferencia = '0';
           })
-          // this.SetTransferenciaDefault();
 
-          // this.movimientoExitosoSwal.show();
           this.Transferencia1 = true;
           this.Transferencia2 = false;
-          // this.CargarTransferenciasDiarias();
 
         });
+
 
       // return false
       // if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
@@ -815,7 +813,7 @@ export class TablerocajerorecaudadorComponent implements OnInit {
   }
 
   EliminarDestinatarioTransferencia(index) {
-    this.ListaDestinatarios.splice(index, 1);
+    // this.ListaDestinatarios.splice(index, 1);
     this.HabilitarCampoValor();
   }
 

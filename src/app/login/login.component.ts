@@ -20,53 +20,54 @@ export class LoginComponent implements OnInit {
   Exito: boolean = false;
   Mensaje: string = '';
 
-  constructor(private userService: FuncionarioService, private router : Router, private http: HttpClient, private globales: Globales, private _generalService:GeneralService) { }
+  constructor(private userService: FuncionarioService, private router: Router, private http: HttpClient, private globales: Globales, private _generalService: GeneralService) { }
 
   ngOnInit() {
-    if(localStorage.getItem("User")){
+    if (localStorage.getItem("User")) {
       this.router.navigate(['/tablero']);
     }
   }
- 
-  onSubmit(Username, Password, Oficina, Caja){
-    this.userService.login(Username,Password).subscribe((data:any)=>{
-        if(data.Error=="No"){
-            this.Error=false;
-            this.Exito=true;
-            this.Mensaje="Usted ha iniciado sesion correctamente, esta siendo dirijido al tablero principal.";
-            
-            localStorage.setItem('Token',data.Token);
-            localStorage.setItem('User',JSON.stringify(data.Funcionario));
-            this._generalService.Funcionario = data.Funcionario;
-            // localStorage.setItem('CuentaConsultor', '');
-            // localStorage.setItem('MonedaCuentaConsultor', '');
-            //localStorage.setItem('Oficina',JSON.stringify(Oficina));
-            //localStorage.setItem('Caja',JSON.stringify(Caja));
-            localStorage.setItem('Tipo_Oficina',"Propia"); //CAMBIAR POR UNA VALIDACIÓN EN EL LOGIN
-            //console.log(localStorage);
-            
-            this.router.navigate(['/tablero']);
-        }else{
-          this.Error=true;
-          this.Mensaje=data.Mensaje;
-        }
-       
+
+  onSubmit(Username, Password, Oficina, Caja) {
+    this.userService.login(Username, Password).subscribe((data: any) => {
+      if (data.Error == "No") {
+        this.Error = false;
+        this.Exito = true;
+        this.Mensaje = "Usted ha iniciado sesion correctamente, esta siendo dirijido al tablero principal.";
+
+        localStorage.setItem('Token', data.Token);
+        localStorage.setItem('User', JSON.stringify(data.Funcionario));
+        this._generalService.Funcionario = data.Funcionario;
+
+        // localStorage.setItem('CuentaConsultor', '');
+        // localStorage.setItem('MonedaCuentaConsultor', '');
+        //localStorage.setItem('Oficina',JSON.stringify(Oficina));
+        //localStorage.setItem('Caja',JSON.stringify(Caja));
+        localStorage.setItem('Tipo_Oficina', "Propia"); //CAMBIAR POR UNA VALIDACIÓN EN EL LOGIN
+        //console.log(localStorage);
+
+        this.router.navigate(['/tablero']);
+      } else {
+        this.Error = true;
+        this.Mensaje = data.Mensaje;
+      }
+
     },
-  (err: HttpErrorResponse)=>{
-    this.Error=true;
-    this.Mensaje="Falló la Conexión";
-  });
+      (err: HttpErrorResponse) => {
+        this.Error = true;
+        this.Mensaje = "Falló la Conexión";
+      });
   }
 
 
-  saveIdentificacion(id){
+  saveIdentificacion(id) {
     let datos = new FormData();
-    datos.append("id",id);
-    this.http.post(this.globales.ruta + 'php/funcionarios/reset_clave.php',datos).subscribe((data: any) => {
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/funcionarios/reset_clave.php', datos).subscribe((data: any) => {
       this.confirmacionSwal.title = "Clave Restablecida";
       this.confirmacionSwal.text = data.Mensaje;
       this.confirmacionSwal.type = data.Tipo;
-      this.confirmacionSwal.show(); 
+      this.confirmacionSwal.show();
 
     });
 

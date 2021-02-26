@@ -32,35 +32,25 @@ export class TableroComponent implements OnInit {
     this.http.get(this.globales.ruta + 'php/perfiles/dashboard.php', {
       params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
     }).subscribe((data: any) => {
+
       var vari: any;
-
-      console.log(data.Id_Perfil);
-
+      vari = TablerogerenciaComponent
       switch (data.Id_Perfil) {
-        //administrador
         case '1':
-          vari = TablerocajeroprincipalComponent;
           break;
-        //cajeroprincipal
         case '2':
           vari = TablerocajeroComponent;
-          // vari = TablerocajeroprincipalComponent;
           break;
-        //cajero
         case '3':
           vari = TablerocajeroComponent;
           break;
-        //consultor  
         case '4':
           vari = VistaprincipalconsultorComponent;
           break;
-        //auditor
         case '5':
-          //vari = TableroauditoriaComponent
           vari = TablerocajeroprincipalComponent;
           break;
         case '6':
-          //vari = TablerogerenciaComponent
           vari = TablerocajeroprincipalComponent;
           break;
         case '100':
@@ -72,6 +62,7 @@ export class TableroComponent implements OnInit {
       let viewContainerRef = this.tableroDinamico.viewContainerRef;
       viewContainerRef.clear();
       viewContainerRef.createComponent(componentFactory);
+
     });
 
   }

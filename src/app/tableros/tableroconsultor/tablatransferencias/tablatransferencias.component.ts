@@ -22,7 +22,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-tablatransferencias',
   templateUrl: './tablatransferencias.component.html',
-  styleUrls: [ '../../../../style.scss','./tablatransferencias.component.scss'],
+  styleUrls: ['../../../../style.scss', './tablatransferencias.component.scss'],
 })
 
 export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestroy {
@@ -168,14 +168,14 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       this.filter = data
     })
 
-    if (this.Funcionario.Id_Perfil == 4) {
-      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
-        .subscribe(() => {
-          this.ConsultaFiltradaObservable(false, this.filter);
-          this.ActualizarIndicadores.emit()
-          // this.ConsultaFiltradaObservable(false, this.filter);
-        });
-    }
+    // if (this.Funcionario.Id_Perfil == 4) {
+    //   this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
+    //     .subscribe(() => {
+    //       this.ConsultaFiltradaObservable(false, this.filter);
+    //       this.ActualizarIndicadores.emit()
+    //       // this.ConsultaFiltradaObservable(false, this.filter);
+    //     });
+    // }
 
     this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
@@ -191,7 +191,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (this.TransferenciasActualizadas != null) {
       this.TransferenciasActualizadas.unsubscribe();
     }
-    this.SubscriptionTimer1.unsubscribe();
+    // this.SubscriptionTimer1.unsubscribe();
     this.SubscriptionTimer2.unsubscribe();
   }
 
@@ -215,13 +215,13 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   public flagHabilitado: boolean = true;
 
   async BloquearTransferencia(modelo: any) {
-    console.log('modelo' , modelo);
+    console.log('modelo', modelo);
 
     this.infoTranferencia = await this.searchInfo(modelo);
-    console.log('infor' ,this.infoTranferencia);
-    
-    console.log('infor' ,this.flagHabilitado);
-    
+    console.log('infor', this.infoTranferencia);
+
+    console.log('infor', this.flagHabilitado);
+
 
     if (this.flagHabilitado) {
       if (this.infoTranferencia['Estado_Consultor'] == 'Cerrada') {
@@ -348,10 +348,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       datos.append("id_cuenta_origen", this.TransferenciaModel.Cuenta_Origen);
 
       this.http.post(this.globales.ruta + 'php/transferencias/guardar_transferencia_consultor.php', datos).subscribe((data: any) => {
-        if(data.codigo == 'success'){
+        if (data.codigo == 'success') {
           this.flagHabilitado = true;
           localStorage.setItem('flagHabilitado', 'true')
-  
+
           this.ShowSwal('success', 'Registro Exitoso', 'Se ha realizado la transferencia exitosamente!');
           this.ValorRealCuenta = 0;
           modal.hide();
@@ -360,10 +360,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
           this._limpiarMovimientoBancoModel();
           // this.ConsultaFiltrada();
 
-        }else{
+        } else {
           this.ShowSwal(data.codigo, data.titulo, data.mensaje);
         }
-      
+
       });
     }
   }
@@ -505,11 +505,11 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   ConsultaFiltradaObservable(paginacion: boolean = false, filter: string = '') {
-    if(this.Filtros.estado == 'Pagada'){
+    if (this.Filtros.estado == 'Pagada') {
       paginacion = true;
     }
-  console.log('paginacion',paginacion);
-  
+    console.log('paginacion', paginacion);
+
     var p = this.SetFiltros(paginacion, filter);
 
     if (p === '') {
@@ -523,8 +523,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     this._transferenciaService.GetTransferenciasConsultorObservableDev(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
-        console.log(this.TransferenciasListar,'transfers');
-        
+        console.log(this.TransferenciasListar, 'transfers');
+
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
@@ -641,13 +641,13 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     }
     this.http.get(this.globales.rutaNueva + 'ubicarse', { params: transferencia }).subscribe((data: any) => {
     });
-  /*  let transfereciaSelect = this.TransferenciasSeleccionadas.find(t=>t.Seleccionada==1);
-   
-   if (transfereciaSelect) {
-     transfereciaSelect.Seleccionada = 0;
-   }
-
-   transferencia.Seleccionada = 1; */
+    /*  let transfereciaSelect = this.TransferenciasSeleccionadas.find(t=>t.Seleccionada==1);
+     
+     if (transfereciaSelect) {
+       transfereciaSelect.Seleccionada = 0;
+     }
+  
+     transferencia.Seleccionada = 1; */
   }
 
 
@@ -692,7 +692,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   suma3(a) {
     let suma = 0;
     a.forEach((element) => {
-      suma += ( parseFloat(element.Valor_Transferencia ) -  parseFloat( element.Valor_Real) )
+      suma += (parseFloat(element.Valor_Transferencia) - parseFloat(element.Valor_Real))
     })
     return suma;
   }

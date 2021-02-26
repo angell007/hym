@@ -22,7 +22,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-tablatransferenciasvisual',
   templateUrl: './tablatransferenciasvisual.component.html',
-  styleUrls: [ '../../../../style.scss','./tablatransferenciasvisual.component.scss'],
+  styleUrls: ['../../../../style.scss', './tablatransferenciasvisual.component.scss'],
 })
 
 export class TablatransferenciasvisualComponent implements OnInit, OnChanges, OnDestroy {
@@ -126,8 +126,8 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
     private _router: Router,
     private _TesCustomServiceService: TesCustomServiceService,
   ) {
-  console.log('constructor');
-  
+    console.log('constructor');
+
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Desbloquear esta transferencia",
@@ -168,14 +168,14 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
       this.filter = data
     })
 
-    if (this.Funcionario.Id_Perfil == 4) {
-      this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
-        .subscribe(() => {
-          this.ConsultaFiltradaObservable(false, this.filter);
-          this.ActualizarIndicadores.emit()
-          // this.ConsultaFiltradaObservable(false, this.filter);
-        });
-    }
+    // if (this.Funcionario.Id_Perfil == 4) {
+    //   this.SubscriptionTimer1 = this.TransferenciasActualizadas = TimerObservable.create(0, 1000)
+    //     .subscribe(() => {
+    //       this.ConsultaFiltradaObservable(false, this.filter);
+    //       this.ActualizarIndicadores.emit()
+    //       // this.ConsultaFiltradaObservable(false, this.filter);
+    //     });
+    // }
 
     this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
       .subscribe(() => {
@@ -191,7 +191,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
     if (this.TransferenciasActualizadas != null) {
       this.TransferenciasActualizadas.unsubscribe();
     }
-    this.SubscriptionTimer1.unsubscribe();
+    // this.SubscriptionTimer1.unsubscribe();
     this.SubscriptionTimer2.unsubscribe();
   }
 
@@ -229,7 +229,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
 
 
 
- 
+
 
 
   FormatValue(value: string) {
@@ -356,11 +356,11 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
   }
 
   ConsultaFiltradaObservable(paginacion: boolean = false, filter: string = '') {
-    if(this.Filtros.estado == 'Pagada'){
+    if (this.Filtros.estado == 'Pagada') {
       paginacion = true;
     }
     //console.log('paginacion',paginacion);
-  
+
     var p = this.SetFiltros(paginacion, filter);
 
     if (p === '') {
@@ -375,7 +375,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
       if (data.codigo == 'success') {
         this.TransferenciasListar = data.query_data;
         //console.log(this.TransferenciasListar,'transfers');
-        
+
         this.TotalItems = data.numReg;
       } else {
         this.TransferenciasListar = [];
@@ -461,7 +461,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
   }
 
 
-  public volver(){
+  public volver() {
     this.AbrirCuentas.emit();
   }
   public ubicadoEnTransferencia: boolean = false;
@@ -500,7 +500,7 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
   suma3(a) {
     let suma = 0;
     a.forEach((element) => {
-      suma += ( parseFloat(element.Valor_Transferencia ) -  parseFloat( element.Valor_Real) )
+      suma += (parseFloat(element.Valor_Transferencia) - parseFloat(element.Valor_Real))
     })
     return suma;
   }

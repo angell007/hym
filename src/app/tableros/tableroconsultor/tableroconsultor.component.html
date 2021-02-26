@@ -1,244 +1,273 @@
 <div class="container-fluid">
-    <div class="row">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row" id="informative-cards-container">
-                        <div class="col-md-3">
-                            <app-informativecard [CantidadMostrar]="Indicadores.Pendientes" TituloCard="Pendientes" IconoCard="ti-receipt" CardClass="bg-danger" AdditionalText="" (click)="customFilter('Todos');" style="cursor: pointer;">
-                                {{Indicadores}}
-                            </app-informativecard>
-                        </div>
-                        <div class="col-md-3">
-                            <app-informativecard [CantidadMostrar]="Indicadores.Realizadas" TituloCard="Realizadas" IconoCard="ti-check" CardClass="bg-success" AdditionalText="" (click)="customFilter('Pagada');" style="cursor: pointer;">
-                            </app-informativecard>
-                        </div>
-                        <!--   <div class="col-md-3">
-              <app-informativecard [CantidadMostrar]="Indicadores.Devueltas" TituloCard="Devueltas"
-                IconoCard="ti-back-right" CardClass="bg-warning" AdditionalText="" TextColor="black"
-                (click)="customFilter('devuelta');" style="cursor: pointer;">
+
+          <div class="row" id="informative-cards-container">
+
+            <div class="col-md-3">
+
+              <app-informativecard [CantidadMostrar]="Indicadores.Pendientes" TituloCard="Pendientes"
+                IconoCard="ti-receipt" CardClass="bg-danger" AdditionalText="" (click)="customFilter('Todos');"
+                style="cursor: pointer;">
               </app-informativecard>
-            </div> -->
-                        <!--   <div class="col-md-3">
+
+            </div>
+
+            <div class="col-md-3">
+              <app-informativecard [CantidadMostrar]="Indicadores.Realizadas" TituloCard="Realizadas"
+                IconoCard="ti-check" CardClass="bg-success" AdditionalText="" (click)="customFilter('Pagada');"
+                style="cursor: pointer;">
+              </app-informativecard>
+            </div>
+
+            <!--   <div class="col-md-3">
+                                <app-informativecard [CantidadMostrar]="Indicadores.Devueltas" TituloCard="Devueltas"
+                                IconoCard="ti-back-right" CardClass="bg-warning" AdditionalText="" TextColor="black"
+                                (click)="customFilter('devuelta');" style="cursor: pointer;">
+                                </app-informativecard>
+                        </div> -->
+            <!--   <div class="col-md-3">
                             <app-informativecard [CantidadMostrar]="Indicadores.Productividad" TituloCard="% Productividad" IconoCard="ti-stats-up" CardClass="bg-info" AdditionalText="%">
                             </app-informativecard>
                         </div> -->
-                    </div>
-                    <app-tablatransferencias [Id_Funcionario]="funcionario.Identificacion_Funcionario" [Id_Apertura]="Id_Apertura" [CuentasBancariasSeleccionadas]="CuentasSeleccionadas" (ActualizarIndicadores)="CargarIndicadores()">
-                    </app-tablatransferencias>
-                </div>
-            </div>
+
+          </div>
+
+          <app-tablatransferencias [Id_Funcionario]="funcionario.Identificacion_Funcionario" [Id_Apertura]="Id_Apertura"
+            [CuentasBancariasSeleccionadas]="CuentasSeleccionadas" (ActualizarIndicadores)="CargarIndicadores()">
+          </app-tablatransferencias>
+
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <app-modal-basic [dialogClass]="'modal-xs'" id="ModalCambiarBanco" #ModalCambiarBanco>
-    <div class="app-modal-header" style="margin: 0 auto;">
-        <h4>Cambio de Cuenta</h4>
-        <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
+  <div class="app-modal-header" style="margin: 0 auto;">
+    <h4>Cambio de Cuenta</h4>
+    <button type="button" class="close basic-close" (click)="ModalCambiarBanco.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="app-modal-body">
-        <form #FormCambiarBanco="ngForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <label>País</label>
-                    <select name="Id_Pais" id="Pais" class="form-control" (change)="CargarBancosPais($event.target.value)" required>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCambiarBanco="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label>País</label>
+          <select name="Id_Pais" id="Pais" class="form-control" (change)="CargarBancosPais($event.target.value)"
+            required>
             <option value="" selected> Seleccione Pais</option>
             <option *ngFor="let p of Paises" [value]="p.Id_Pais">{{p.Nombre}}</option>
           </select>
-                </div>
-                <div class="col-md-6">
-                    <label>Bancos</label>
-                    <select name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" [(ngModel)]="AperturaCuentaModel.Id_Cuenta_Bancaria" required class="form-control" (change)="VerificarSaldo($event.target.value)">
+        </div>
+        <div class="col-md-6">
+          <label>Bancos</label>
+          <select name="Id_Cuenta_Bancaria" id="Id_Cuenta_Bancaria" [(ngModel)]="AperturaCuentaModel.Id_Cuenta_Bancaria"
+            required class="form-control" (change)="VerificarSaldo($event.target.value)">
             <option value=""> Seleccione Banco</option>
             <option *ngFor="let banco of ListaBancos" [value]="banco.Id_Cuenta_Bancaria">{{banco.Nombre_Titular}}
               ({{banco.Numero_Cuenta}}) </option>
           </select>
-                </div>
-            </div>
-            <hr>
-            <div class="col-md-12 ">
-                <label>Saldo Cuenta Bancaria</label>
-                <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial" [(ngModel)]="AperturaCuentaModel.Valor" [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }" required>
-            </div>
-
-        </form>
-    </div>
-    <div class="app-modal-footer" style="margin: 0 auto;">
-        <div class="text-center">
-            <button id="GuardarInicio" class="btn btn-primary btn-sm" [disabled]="!FormCambiarBanco.valid" (click)="GuardarMontoInicial2(ModalCambiarBanco)">Iniciar
-      </button>
         </div>
+      </div>
+      <hr>
+      <div class="col-md-12 ">
+        <label>Saldo Cuenta Bancaria</label>
+        <input style="width: 100%" currencyMask type="text" class="form-control" name="Monto_Inicial"
+          [(ngModel)]="AperturaCuentaModel.Valor" [options]="{ prefix: 'BsS. ', thousands: '.', decimal: ',' }"
+          required>
+      </div>
+
+    </form>
+  </div>
+  <div class="app-modal-footer" style="margin: 0 auto;">
+    <div class="text-center">
+      <button id="GuardarInicio" class="btn btn-primary btn-sm" [disabled]="!FormCambiarBanco.valid"
+        (click)="GuardarMontoInicial2(ModalCambiarBanco)">Iniciar
+      </button>
     </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-xl'" id="ModalCierreCuenta" #ModalCierreCuenta>
-    <div class="app-modal-header" style="margin: 0 auto;">
-        <h4>Resumen de Cuenta</h4>
-        <button type="button" class="close basic-close" (click)="CerrarModalCierreCuenta()">
+  <div class="app-modal-header" style="margin: 0 auto;">
+    <h4>Resumen de Cuenta</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModalCierreCuenta()">
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="app-modal-body">
-        <form #FormCierreCuenta="ngForm">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-4" style="display:flex;align-items:center;">
-                            <b>Saldo Inicial: {{CodigoMoneda}} {{MontoInicial | number | puntos}}</b>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="pull-right">
-                                <button class="btn btn-primary btn-sm" (click)="AbrirModalCompra()"><i class="ti-server"></i> Agregar
-                  Depósito</button>
-                                <button class="btn btn-success btn-sm" (click)="AbrirModalAjuste()"><i class="ti-money"></i> Agregar
-                  ajuste</button>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-bordered" id="tabla-cierre">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center;font-weight: bold;">Fecha</th>
-                                <th style="text-align:center;font-weight: bold;">Recibo</th>
-                                <th style="text-align:center;font-weight: bold;">Ingreso</th>
-                                <th style="text-align:center;font-weight: bold;">Egreso</th>
-                                <th style="text-align:center;font-weight: bold;">Saldo</th>
-                            </tr>
-                            <tr *ngIf="MovimientosCuentaBancaria.length == 0">
-                                <th colspan="5" style="text-align:center;font-weight: bold;"><i class="ti-face-sad"></i> No hay movimientos en la cuenta</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngIf="MovimientosCuentaBancaria.length > 0">
-                            <tr *ngFor="let mov of MovimientosCuentaBancaria">
-                                <td>{{mov.Fecha | date:"MMM d, y"}}</td>
-                                <td>{{mov.Recibo}}</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Ingreso | number | puntos}}</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Egreso | number | puntos}}</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Saldo | number | puntos}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-md-4">
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <td style="width:40%; font-weight: bold;">Saldo Inicial</td>
-                                <td style="width:60%;text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.SaldoInicial | number | puntos}}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;">Egresos</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Egresos | number | puntos}}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;">Ingresos</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Ingresos | number | puntos}}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: bold;">Saldo final</td>
-                                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.SaldoFinal | number | puntos}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCierreCuenta="ngForm">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4" style="display:flex;align-items:center;">
+              <b>Saldo Inicial: {{CodigoMoneda}} {{MontoInicial | number | puntos}}</b>
             </div>
-        </form>
-    </div>
-    <div class="app-modal-footer" style="margin: 0 auto;">
-        <div class="text-center">
-            <button id="guardarcierre" class="btn btn-success btn-sm" [swal]="{ title : '¿Está Seguro?', text : 'Se va a guardar el cierre de cuenta' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Comprobar!' }"
-                (confirm)="CerrarCuentaConsultor()" [disabled]="!FormCierreCuenta.valid">Cerrar Cuenta
-      </button>
-            <button id="cerrarmodal" class="btn btn-danger btn-sm" (click)="CerrarModalCierreCuenta()">Cerrar
-      </button>
+            <div class="col-md-8">
+              <div class="pull-right">
+                <button class="btn btn-primary btn-sm" (click)="AbrirModalCompra()"><i class="ti-server"></i> Agregar
+                  Depósito</button>
+                <button class="btn btn-success btn-sm" (click)="AbrirModalAjuste()"><i class="ti-money"></i> Agregar
+                  ajuste</button>
+              </div>
+            </div>
+          </div>
+          <table class="table table-bordered" id="tabla-cierre">
+            <thead>
+              <tr>
+                <th style="text-align:center;font-weight: bold;">Fecha</th>
+                <th style="text-align:center;font-weight: bold;">Recibo</th>
+                <th style="text-align:center;font-weight: bold;">Ingreso</th>
+                <th style="text-align:center;font-weight: bold;">Egreso</th>
+                <th style="text-align:center;font-weight: bold;">Saldo</th>
+              </tr>
+              <tr *ngIf="MovimientosCuentaBancaria.length == 0">
+                <th colspan="5" style="text-align:center;font-weight: bold;"><i class="ti-face-sad"></i> No hay
+                  movimientos en la cuenta</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="MovimientosCuentaBancaria.length > 0">
+              <tr *ngFor="let mov of MovimientosCuentaBancaria">
+                <td>{{mov.Fecha | date:"MMM d, y"}}</td>
+                <td>{{mov.Recibo}}</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Ingreso | number | puntos}}</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Egreso | number | puntos}}</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{mov.Saldo | number | puntos}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <div class="col-md-4">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td style="width:40%; font-weight: bold;">Saldo Inicial</td>
+                <td style="width:60%;text-align:right;">{{CodigoMoneda}}
+                  {{CierreValoresModel.SaldoInicial | number | puntos}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Egresos</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Egresos | number | puntos}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Ingresos</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.Ingresos | number | puntos}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold;">Saldo final</td>
+                <td style="text-align:right;">{{CodigoMoneda}} {{CierreValoresModel.SaldoFinal | number | puntos}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer" style="margin: 0 auto;">
+    <div class="text-center">
+      <button id="guardarcierre" class="btn btn-success btn-sm"
+        [swal]="{ title : '¿Está Seguro?', text : 'Se va a guardar el cierre de cuenta' , type : 'warning', showCancelButton : true , confirmButtonText : 'Si, Guardar', cancelButtonText : 'No, Comprobar!' }"
+        (confirm)="CerrarCuentaConsultor()" [disabled]="!FormCierreCuenta.valid">Cerrar Cuenta
+      </button>
+      <button id="cerrarmodal" class="btn btn-danger btn-sm" (click)="CerrarModalCierreCuenta()">Cerrar
+      </button>
     </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCrearAjuste" #ModalCrearAjuste>
-    <div class="app-modal-header">
-        <h4>Movimiento de Ajuste</h4>
-        <button type="button" class="close basic-close" (click)="ModalCrearAjuste.hide()">
+  <div class="app-modal-header">
+    <h4>Movimiento de Ajuste</h4>
+    <button type="button" class="close basic-close" (click)="ModalCrearAjuste.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="app-modal-body">
-        <form #FormAjusteCuenta="ngForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="">Cuenta</label>
-                    <label for="" style="display:block;"><b>{{DatosCuentaModel.Nro_Cuenta}}</b></label>
-                </div>
-                <div class="col-md-6">
-                    <label>Valor (en {{CodigoMoneda}})</label>
-                    <input class="form-control text-right" name="Valor" type="text" [(ngModel)]="AjusteCuentaModel.Valor" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Observación</label>
-                        <textarea rows="4" cols="50" class="form-control" placeholder="Observaciones del ajuste" name="Detalle" [(ngModel)]="AjusteCuentaModel.Detalle"></textarea>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-success btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este movimiento' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarMovimientoAjuste()">Crear Ajuste
-      </button>
-            <button id="cerrarmodalajuste" class="btn btn-danger btn-sm" (click)="ModalCrearAjuste.hide()">Cerrar
-      </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormAjusteCuenta="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label for="">Cuenta</label>
+          <label for="" style="display:block;"><b>{{DatosCuentaModel.Nro_Cuenta}}</b></label>
         </div>
+        <div class="col-md-6">
+          <label>Valor (en {{CodigoMoneda}})</label>
+          <input class="form-control text-right" name="Valor" type="text" [(ngModel)]="AjusteCuentaModel.Valor"
+            required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Observación</label>
+            <textarea rows="4" cols="50" class="form-control" placeholder="Observaciones del ajuste" name="Detalle"
+              [(ngModel)]="AjusteCuentaModel.Detalle"></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button [disabled]="!FormAjusteCuenta.valid" type="submit" class="btn btn-success btn-sm"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este movimiento' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarMovimientoAjuste()">Crear Ajuste
+      </button>
+      <button id="cerrarmodalajuste" class="btn btn-danger btn-sm" (click)="ModalCrearAjuste.hide()">Cerrar
+      </button>
     </div>
+  </div>
 </app-modal-basic>
 
 <app-modal-basic [dialogClass]="'modal-lg'" id="ModalCompraCuenta" #ModalCompraCuenta>
-    <div class="app-modal-header">
-        <h4>Reportar Ingreso Cuenta</h4>
-        <button type="button" class="close basic-close" (click)="ModalCompraCuenta.hide()">
+  <div class="app-modal-header">
+    <h4>Reportar Ingreso Cuenta</h4>
+    <button type="button" class="close basic-close" (click)="ModalCompraCuenta.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
-    </div>
-    <div class="app-modal-body">
-        <form #FormCompraCuenta="ngForm">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="">Cuenta</label>
-                    <label for="" style="display:block;"><b>{{DatosCuentaModel.Nro_Cuenta}}</b></label>
-                </div>
-                <div class="col-md-6">
-                    <label>Valor (en {{CodigoMoneda}})</label>
-                    <input class="form-control text-right" name="Valor" type="text" [(ngModel)]="CompraCuentaModel.Valor" placeholder="Valor en {{CodigoMoneda}}" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label>Observación</label>
-                        <textarea rows="4" cols="50" class="form-control" placeholder="Observaciones de la compra (sea claro con el motivo ya que una observacion vaga puede generar confusion posteriormente!)" name="Detalle" [(ngModel)]="CompraCuentaModel.Detalle" required></textarea>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="app-modal-footer">
-        <div class="text-right">
-            <button [disabled]="!FormCompraCuenta.valid" type="submit" class="btn btn-success btn-sm" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
-                (confirm)="GuardarCompra()">Realizar Compra ({{CodigoMoneda}})
-      </button>
-            <button id="cerrarmodalajuste" class="btn btn-danger btn-sm" (click)="ModalCompraCuenta.hide()">Cerrar
-      </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormCompraCuenta="ngForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label for="">Cuenta</label>
+          <label for="" style="display:block;"><b>{{DatosCuentaModel.Nro_Cuenta}}</b></label>
         </div>
+        <div class="col-md-6">
+          <label>Valor (en {{CodigoMoneda}})</label>
+          <input class="form-control text-right" name="Valor" type="text" [(ngModel)]="CompraCuentaModel.Valor"
+            placeholder="Valor en {{CodigoMoneda}}" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label>Observación</label>
+            <textarea rows="4" cols="50" class="form-control"
+              placeholder="Observaciones de la compra (sea claro con el motivo ya que una observacion vaga puede generar confusion posteriormente!)"
+              name="Detalle" [(ngModel)]="CompraCuentaModel.Detalle" required></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button [disabled]="!FormCompraCuenta.valid" type="submit" class="btn btn-success btn-sm"
+        [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar esta compra' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Realizarla',cancelButtonText: 'No,Dejame Comprobar!'}"
+        (confirm)="GuardarCompra()">Realizar Compra ({{CodigoMoneda}})
+      </button>
+      <button id="cerrarmodalajuste" class="btn btn-danger btn-sm" (click)="ModalCompraCuenta.hide()">Cerrar
+      </button>
     </div>
+  </div>
 </app-modal-basic>
 
-<app-modalaperturacuenta [AbrirModal]="AbrirModalAperturaCuenta.asObservable()" (EnviarCuentasSeleccionadas)="RecibirCuentasSeleccionadas($event)">
+<app-modalaperturacuenta [AbrirModal]="AbrirModalAperturaCuenta.asObservable()"
+  (EnviarCuentasSeleccionadas)="RecibirCuentasSeleccionadas($event)">
 </app-modalaperturacuenta>
 
 <swal title='' text='' type='' #alertSwal></swal>

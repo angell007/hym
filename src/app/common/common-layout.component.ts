@@ -174,9 +174,13 @@ export class CommonLayoutComponent implements OnInit {
 
     public NombreCaja: string = '';
     public NombreOficina: string = '';
+    public permisos;
+    public indicadores: boolean;
+    public configuracion: boolean;
 
 
     constructor(private router: Router,
+
         private activeRoute: ActivatedRoute,
         public qz: QzTrayService,
         private http: HttpClient,
@@ -196,6 +200,23 @@ export class CommonLayoutComponent implements OnInit {
         private _funcionarioService: NuevofuncionarioService,
         private consolidadosService: ConsolidadosService) {
 
+        this.http.get(this.globales.ruta + 'php/perfiles/dashboard.php', {
+            params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
+        }).subscribe((data: any) => {
+            window.localStorage.setItem('permisos', JSON.stringify(data.permisos));
+            this.permisos = data.permisos;
+            let auxind = this.permisos.find(element => element['Nombre_Modulo'] == 'Indicadores')
+            this.indicadores = (auxind != undefined) ? true : false
+            let auxcon = this.permisos.find(element => element['Nombre_Modulo'] == 'Configuracion')
+            this.configuracion = (auxcon != undefined) ? true : false
+        });
+
+
+
+        console.log([
+            this.indicadores,
+            this.configuracion
+        ]);
 
         this.Cargar();
 
@@ -242,6 +263,7 @@ export class CommonLayoutComponent implements OnInit {
         if (!localStorage.getItem('Volver_Apertura')) {
             localStorage.setItem("Volver_Apertura", "Si");
         }
+
 
     }
 
@@ -356,10 +378,6 @@ export class CommonLayoutComponent implements OnInit {
 
     salir() {
 
-        // if (!this.ValidateConsultorBeforeLogout()) {
-        //     return;
-        // }
-
         this._registrarCierreSesion();
 
         localStorage.removeItem("Token");
@@ -368,6 +386,7 @@ export class CommonLayoutComponent implements OnInit {
         localStorage.removeItem('Perfil');
         localStorage.setItem('CuentaConsultor', '');
         localStorage.setItem('MonedaCuentaConsultor', '');
+        localStorage.clear();
 
         setTimeout(() => {
             this.router.navigate(["/login"]);
@@ -1113,7 +1132,7 @@ export class CommonLayoutComponent implements OnInit {
 
                 console.log(macFormatted);
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
-                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted ,id_funcionario:this.user.Identificacion_Funcionario} }).subscribe((data: any) => {
+                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted, id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
 
                         // console.log(data);
 

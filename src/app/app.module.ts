@@ -267,6 +267,8 @@ import { MotivoscambioComponent } from './motivoscambio/motivoscambio.component'
 import { LogComponent } from './configuracion/log/log.component';
 import { TablerocajerorecaudadorComponent } from './tablerocajerorecaudador/tablerocajerorecaudador.component';
 import { TablaRecaudoComponent } from './tabla-recaudo/tabla-recaudo.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { HandlerrouteService } from './handlerroute.service';
 
 
 
@@ -490,7 +492,8 @@ export const customCurrencyMaskConfig = {
         MotivoscambioComponent,
         LogComponent,
         TablerocajerorecaudadorComponent,
-        TablaRecaudoComponent
+        TablaRecaudoComponent,
+        RedirectComponent
 
     ],
     exports: [
@@ -556,7 +559,8 @@ export const customCurrencyMaskConfig = {
         WebnavigationService,
         // TransferenciasconsultorService,
         TransferenciaService,
-        TesCustomServiceService
+        TesCustomServiceService,
+        HandlerrouteService
 
     ],
     bootstrap: [AppComponent],

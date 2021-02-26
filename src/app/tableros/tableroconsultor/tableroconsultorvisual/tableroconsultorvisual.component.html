@@ -1,32 +1,38 @@
 <div class="container-fluid">
-    <div class="row">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row" id="informative-cards-container">
-                        <div class="col-md-3">
-                            <app-informativecard [CantidadMostrar]="Indicadores.Pendientes" TituloCard="Pendientes" IconoCard="ti-receipt" CardClass="bg-danger" AdditionalText="" (click)="customFilter('Todos');" style="cursor: pointer;">
-                                {{Indicadores}}
-                            </app-informativecard>
-                        </div>
-                        <div class="col-md-3">
-                            <app-informativecard [CantidadMostrar]="Indicadores.Realizadas" TituloCard="Realizadas" IconoCard="ti-check" CardClass="bg-success" AdditionalText="" (click)="customFilter('Pagada');" style="cursor: pointer;">
-                            </app-informativecard>
-                        </div>
-                        <!--   <div class="col-md-3">
+          <div class="row" id="informative-cards-container">
+            <div class="col-md-3">
+              <app-informativecard [CantidadMostrar]="Indicadores.Pendientes" TituloCard="Pendientes"
+                IconoCard="ti-receipt" CardClass="bg-danger" AdditionalText="" (click)="customFilter('Todos');"
+                style="cursor: pointer;">
+                {{Indicadores}}
+              </app-informativecard>
+            </div>
+            <div class="col-md-3">
+              <app-informativecard [CantidadMostrar]="Indicadores.Realizadas" TituloCard="Realizadas"
+                IconoCard="ti-check" CardClass="bg-success" AdditionalText="" (click)="customFilter('Pagada');"
+                style="cursor: pointer;">
+              </app-informativecard>
+            </div>
+            <!--   <div class="col-md-3">
               <app-informativecard [CantidadMostrar]="Indicadores.Devueltas" TituloCard="Devueltas"
                 IconoCard="ti-back-right" CardClass="bg-warning" AdditionalText="" TextColor="black"
                 (click)="customFilter('devuelta');" style="cursor: pointer;">
               </app-informativecard>
             </div> -->
 
-                    </div>
-                    <app-tablatransferenciasvisual [AbrirCuentas]="AbrirCuentas" [Id_Funcionario]="funcionario.Identificacion_Funcionario" [Id_Apertura]="Id_Apertura" [CuentasBancariasSeleccionadas]="CuentasSeleccionadas" (ActualizarIndicadores)="CargarIndicadores()">
-                    </app-tablatransferenciasvisual>
-                </div>
-            </div>
+          </div>
+          <app-tablatransferenciasvisual [AbrirCuentas]="AbrirCuentas"
+            [Id_Funcionario]="funcionario.Identificacion_Funcionario" [Id_Apertura]="Id_Apertura"
+            [CuentasBancariasSeleccionadas]="CuentasSeleccionadas" (ActualizarIndicadores)="CargarIndicadores()">
+          </app-tablatransferenciasvisual>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 
