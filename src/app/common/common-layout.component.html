@@ -12,8 +12,10 @@
         <div class="side-nav-inner">
           <div class="side-nav-logo">
             <a href="index.html">
+
               <div class="logo logo-dark" style="background-image: url('assets/images/logo/logo.png')"></div>
               <div class="logo logo-white" style="background-image: url('assets/images/logo/logo-white.png')"></div>
+
             </a>
             <div class="mobile-toggle side-nav-toggle">
               <a href="">
@@ -160,13 +162,13 @@
           <div class="header-container">
             <ul class="nav-left">
               <li>
-                <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);"
+                <a class="side-nav-toggle" href="javascript:void(0);"
                   (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                   <i class="fa fa-bars"></i>
                 </a>
-                <a *ngIf="OcultarCajero" href="" [routerLink]="['/tablero']" class="logo logo-dark">
+                <!-- <a  href="" [routerLink]="['/tablero']" class="logo logo-dark">
                   <img src="assets/images/logo/logo-white.png" />
-                </a>
+                </a> -->
               </li>
               <li class="d-flex justify-content-center h-100 hm-100 text-center user-profile"
                 style="box-sizing: border-box;">
@@ -268,7 +270,7 @@
           </div>
         </div>
 
-        <div class="side-panel" [ngClass]="{'side-panel-open' : app.layout.sidePanelOpen}">
+        <div class="side-panel" [ngClass]="{'side-panel-open' : app.layout.sidePanelOpen}" *ngIf="_vService.isValid()">
           <div class="side-panel-wrapper bg-white">
             <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item">
@@ -332,20 +334,13 @@
                           </a>
                         </li>
                         <li>
-                          <a href="javascript:void(0);" *ngIf="!OcultarConsultor" (click)="VerificarAntesDeCierre()">
+                          <a href="javascript:void(0);" (click)="VerificarAntesDeCierre()">
                             <i class="fa fa-lock pdd-right-10"></i>
                             <span>Cierre de Caja</span>
                             <span class="label label-warning mrg-left-5"><i
                                 class="fa fa-exclamation-triangle"></i></span>
                           </a>
                         </li>
-                        <!--
-                                    <li>
-                                        <a href="">
-                                            <i class="ti-settings pdd-right-10"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li> -->
                       </ul>
                     </div>
                   </div>
@@ -355,16 +350,17 @@
           </div>
         </div>
 
+
         <!--
         <div class="header navbar contenido {{OcultarCajero ? 'header2': '' }}">
           <div class="header-container">
             <ul class="nav-left">
               <li>
-                <a *ngIf="!OcultarCajero" class="side-nav-toggle" href="javascript:void(0);"
+                <a  class="side-nav-toggle" href="javascript:void(0);"
                   (click)="app.layout.isMenuCollapsed = !app.layout.isMenuCollapsed">
                   <i class="fa fa-bars"></i>
                 </a>
-                <a *ngIf="OcultarCajero" href="" [routerLink]="['/tablero']" class="logo logo-dark"><img
+                <a  href="" [routerLink]="['/tablero']" class="logo logo-dark"><img
                     src="assets/images/logo/logo.png" /></a>
               </li>
             </ul>

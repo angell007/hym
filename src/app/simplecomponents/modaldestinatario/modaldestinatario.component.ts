@@ -192,8 +192,6 @@ export class ModaldestinatarioComponent implements OnInit {
       return;
     }
 
-    console.log(this.DestinatarioModel);
-
     this.LimpiarBancosModelo();
     this.DestinatarioModel = this.generalService.limpiarString(this.DestinatarioModel);
 

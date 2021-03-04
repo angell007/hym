@@ -177,8 +177,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   public ConsultarAperturaFuncionario() {
     this._cuentaBancariaService.GetAperturaFuncionario(this.Id_Funcionario).subscribe((data: any) => {
-      // console.log(data);
-
       if (!data.apertura_activa) {
         this.AbrirCuentas.emit();
       } else {
@@ -190,8 +188,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
 
   private _getCuentasFuncionarioApertura() {
     this._cuentaBancariaService.GetCuentasFuncionarioApertura(this.Id_Apertura).subscribe((data: any) => {
-      // console.log(data);
-
       if (data.codigo == 'success') {
         this.CuentasSeleccionadas = data.query_data;
       } else {
@@ -202,7 +198,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public AbrirModalAPerturaCuentas() {
-    // console.log("abriendo modal apertura cuenta desde tablero");
     this.AbrirModalAperturaCuenta.next();
   }
 
@@ -373,8 +368,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   CargarIndicadores() {
     this.http.get(this.globales.ruta + 'php/transferencias/indicadores_transferencias.php', { params: { id_funcionario: this.Id_Funcionario } }).subscribe((data: any) => {
 
-      // console.log(data);
-
       if (data.existe == 1) {
         this.Indicadores = data.indicadores;
         this.ChartData = [];
@@ -509,7 +502,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
           this.AperturaCuentaModel.Id_Moneda = this.ListaBancos[index].Id_Moneda;
           this.AperturaCuentaModel.Id_Cuenta_Bancaria = id_cuenta;
           this.AperturaCuentaModel.Valor = data.Valor_Cuenta;
-          //GuardarInicio
         }
       }
     });
@@ -519,7 +511,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
     var index = this.ListaBancos.findIndex(x => x.Id_Cuenta_Bancaria === this.CuentaConsultor);
     if (index > -1) {
       return this.ListaBancos[index].Numero_Cuenta;
-      //GuardarInicio
     }
   }
 
@@ -628,8 +619,6 @@ export class TableroconsultorComponent implements OnInit, OnDestroy {
   }
 
   public RecibirCuentasSeleccionadas(datos: any) {
-    // console.log(datos);
-
     this.CuentasSeleccionadas = datos.cuentas;
     this.Id_Apertura = datos.id_apertura;
   }

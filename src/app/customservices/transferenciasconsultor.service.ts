@@ -46,6 +46,7 @@ export class TransferenciasconsultorService {
 
   testcustom() {
     this.subjec.next('data')
+
   }
 
   SetFiltros(paginacion: boolean = false, filter: string) {

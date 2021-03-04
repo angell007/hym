@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row" id="informative-cards-container">
     <div class="col-md-3">
-      <app-informativecard [CantidadMostrar]="Conteo.Totales" TituloCard="Giros totales" IconoCard="ti-shuffle"
+      <!-- <app-informativecard [CantidadMostrar]="Conteo.Totales" TituloCard="Giros totales" IconoCard="ti-shuffle"
         CardClass="bg-info" AdditionalText="">
       </app-informativecard>
     </div>
@@ -19,7 +19,7 @@
     <div class="col-md-3">
       <app-informativecard [CantidadMostrar]="Conteo.Anulados" TituloCard="Anulados" IconoCard="ti-close"
         CardClass="bg-danger" AdditionalText="">
-      </app-informativecard>
+      </app-informativecard> -->
     </div>
   </div>
   <div class="row">
@@ -60,6 +60,7 @@
                     <option value="" selected>Todos</option>
                     <option value="Pendiente">Pendiente</option>
                     <option value="Pagado">Pagada</option>
+                    <option value="Anulado">Anulada</option>
                   </select>
                 </th>
               </tr>

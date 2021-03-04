@@ -20,12 +20,13 @@ import { tap } from 'rxjs/operators';
 import { NotificacionsService } from '../customservices/notificacions.service';
 import { ConsolidadosService } from '../customservices/consolidados.service';
 import { TrasladosCustomService } from '../customservices/traslados.custom.service';
+import { ValidateCajeroService } from '../validate-cajero.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './common-layout.component.html',
     styleUrls: ['./common-layout.component.scss', '../../../node_modules/ng2-toasty/bundles/style-bootstrap.css', '../.././style.scss'],
-    providers: [QzTrayService, NotificacionsService, ConsolidadosService, TrasladosCustomService]
+    providers: [QzTrayService, NotificacionsService, ConsolidadosService, TrasladosCustomService, ValidateCajeroService]
 
 })
 
@@ -198,7 +199,9 @@ export class CommonLayoutComponent implements OnInit {
         private _aperturaCajaService: AperturacajaService,
         private _generalService: GeneralService,
         private _funcionarioService: NuevofuncionarioService,
-        private consolidadosService: ConsolidadosService) {
+        private consolidadosService: ConsolidadosService,
+        private _vService: ValidateCajeroService
+    ) {
 
         this.http.get(this.globales.ruta + 'php/perfiles/dashboard.php', {
             params: { id: JSON.parse(localStorage['User']).Identificacion_Funcionario }
@@ -210,13 +213,6 @@ export class CommonLayoutComponent implements OnInit {
             let auxcon = this.permisos.find(element => element['Nombre_Modulo'] == 'Configuracion')
             this.configuracion = (auxcon != undefined) ? true : false
         });
-
-
-
-        console.log([
-            this.indicadores,
-            this.configuracion
-        ]);
 
         this.Cargar();
 
@@ -1022,11 +1018,9 @@ export class CommonLayoutComponent implements OnInit {
             timeout: duracion,
             onAdd: (toast: ToastData) => {
                 this.MostrarToasty = true;
-                // console.log('Toast ' + toast.id + ' has been added!');
             },
             onRemove: function (toast: ToastData) {
                 this.MostrarToasty = false;
-                // console.log('Toast ' + toast.id + ' has been removed!');
             }
         }
 
@@ -1037,7 +1031,6 @@ export class CommonLayoutComponent implements OnInit {
             // case 'wait': this.toastyService.wait(toastOptions); break;
             // case 'error': this.toastyService.error(toastOptions); break;
             // case 'warning': this.toastyService.warning(toastOptions); break;
-            // default : console.log(tipo); break;
         }
     }
 
@@ -1119,7 +1112,6 @@ export class CommonLayoutComponent implements OnInit {
     }
 
     CheckCajaOficina() {
-        // console.log("estoy entrando aca");
         var macFormatted = '';
         this.qz.getMac().subscribe(
             data => {
@@ -1131,10 +1123,10 @@ export class CommonLayoutComponent implements OnInit {
                 }
 
                 console.log(macFormatted);
+
                 if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
                     this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted, id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
 
-                        // console.log(data);
 
                         // if (d.limites.query_data.length > 0) {
                         //     this.MonedasSistema.forEach((element: any, index: number) => {
@@ -1147,7 +1139,6 @@ export class CommonLayoutComponent implements OnInit {
                         //   }
 
                         if (data.mensaje == 'Se han encontrado registros!') {
-                            // console.log(data.query_data.Id_Oficina)
                             this.oficina_seleccionada = data.query_data.Id_Oficina;
                             this.caja_seleccionada = data.query_data.Id_Caja;
 
@@ -1174,7 +1165,6 @@ export class CommonLayoutComponent implements OnInit {
                     });
                     //this.modalOficinaCaja.show();
                 } else {
-                    //console.log("entro al else");
                     this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);
@@ -1201,4 +1191,15 @@ export class CommonLayoutComponent implements OnInit {
         this.qz.removePrinter();
     }
 
+    ComprobarPos() {
+        const misPermisos = JSON.parse(window.localStorage.getItem('permisos'));
+        let pos = misPermisos.find((permiso) => {
+            return permiso.Nombre_Modulo == 'POS';
+        })
+        if ((pos != null && pos != undefined && pos != '') || JSON.parse(localStorage['User']).Id_Perfil == 2 || JSON.parse(localStorage['User']).Id_Perfil == 3) {
+            return true
+        } else {
+            return false
+        }
+    }
 }

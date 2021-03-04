@@ -122,8 +122,6 @@ export class TablaRecaudoComponent implements OnInit {
   }
 
   ConsultaFiltrada(paginacion: boolean = false) {
-    console.log('paginacion', paginacion);
-
     var p = this.SetFiltros(paginacion);
 
     if (p === '') {
@@ -157,7 +155,6 @@ export class TablaRecaudoComponent implements OnInit {
   }
 
   SetInformacionPaginacion(data: any) {
-    console.log(data);
     this.TotalItems = data.length
     var calculoHasta = (this.page * this.pageSize);
     var desde = calculoHasta - this.pageSize + 1;

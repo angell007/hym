@@ -57,7 +57,7 @@ export class SexternosService {
 
   @ViewChild('alertSwal') alertSwal: any;
 
-  SetFiltros(paginacion: boolean, filtro:any) {
+  SetFiltros(paginacion: boolean, filtro: any) {
     let params: any = {};
     params.id_funcionario = this.user.Identificacion_Funcionario
 
@@ -75,30 +75,26 @@ export class SexternosService {
     if (filtro.servicio.trim() != "") {
       params.servicio = filtro.servicio;
     }
-    console.log(filtro,'filtro');
-    
     return params;
   }
 
   ConsultaFiltrada(paginacion: boolean = false, filtro) {
     this.Servicios = [];
-    var p = this.SetFiltros(paginacion,filtro);
+    var p = this.SetFiltros(paginacion, filtro);
     if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
 
     this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php?', { params: p }).subscribe((data: any) => {
-       console.log('lista s1');
-       
       if (data.codigo == 'success') {
         this.page1 = 1;
-        this.TotalItems1 =  this.TotalItems1 = data.query_data.length;
+        this.TotalItems1 = this.TotalItems1 = data.query_data.length;
 
         this.Servicios = data.query_data;
         this.SetInformacionPaginacion(data.query_data);
-        this.Cargando=false;
+        this.Cargando = false;
       }
     });
   }
@@ -112,103 +108,89 @@ export class SexternosService {
     this.InformacionPaginacion['desde'] = desde;
     this.InformacionPaginacion['hasta'] = hasta;
     this.InformacionPaginacion['total'] = this.TotalItems;
-
-    console.log(this.InformacionPaginacion , 'pag');
-    
   }
 
 
   CargarDatosServicios(tipo?) {
-    console.log(tipo);
-    this.Cargando=true;
+    this.Cargando = true;
     this.Servicios = [];
     this.Servicios_Caja = [];
     this.Servicios_Pagos = [];
-    if(tipo=='Enviados'  ){
+    if (tipo == 'Enviados') {
 
       this.CargarServiciosDiarios(this.FiltrosRealizados);
-    }else if(tipo == 'Pagado' || tipo == 'Activo'){
+    } else if (tipo == 'Pagado' || tipo == 'Activo') {
 
       this.CargarMisServicios(tipo);
 
-    }else if( !tipo ){
+    } else if (!tipo) {
 
       this.CargarServiciosDiarios(this.FiltrosRealizados);
-      this.CargarMisServicios( 'Activo' );
-      this.CargarMisServicios( 'Pagado' );
+      this.CargarMisServicios('Activo');
+      this.CargarMisServicios('Pagado');
     }
     this.ListaServiciosExternos = [];
     this.ListaServiciosExternos = this.globales.ServiciosExternos;
   }
 
   CargarServiciosDiarios(filtro) {
-    console.log(filtro,'ff');
-    
     this.Servicios = [];
-    var p = this.SetFiltros(false,filtro);
+    var p = this.SetFiltros(false, filtro);
     if (p === '') {
       this.ResetValues();
       return;
     }
-    
-    
+
+
 
     this.Servicios = [];
-    this.Cargando=true;
-    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params:p }).subscribe((data: any) => {
+    this.Cargando = true;
+    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_lista_servicios.php', { params: p }).subscribe((data: any) => {
       this.Servicios = data.query_data;
-      console.log('lista s2');
       this.SetInformacionPaginacion(data.query_data);
       this.page1 = 1;
       this.TotalItems1 = data.query_data.length;
-
-      console.log(this.page1,this.TotalItems1,'   oneeee');
-      
-
-      this.Cargando=false;
+      this.Cargando = false;
     });
   }
 
-  CargarMisServicios(tipo){
-    this.Cargando=true;
-    var filtro:any = {}
+  CargarMisServicios(tipo) {
+    this.Cargando = true;
+    var filtro: any = {}
 
     if (tipo == 'Activo') {
       this.Servicios_Caja = [];
       filtro = this.FiltrosPendientes
-    }else if('Pagado'){
+    } else if ('Pagado') {
       this.Servicios_Pagos = [];
       filtro = this.FiltrosPagados
     }
+    var p: any = this.SetFiltros(false, filtro);
+    if (p === '') {
+      this.ResetValues();
+      return;
+    }
+    p.Id_Caja = this.generalService.Caja
+    p.Estado = tipo
 
-    console.log(filtro,'ff');
-    
-  
-      var p:any = this.SetFiltros(false,filtro);
-      if (p === '') {
-        this.ResetValues();
-        return;
-      }
-      p.Id_Caja = this.generalService.Caja
-      p.Estado = tipo 
-
-      this.http.get(this.globales.ruta + 'php/serviciosexternos/get_servicios_by_caja.php',
-                   { params: p 
-                            }).subscribe((data: any) => {
-        if(tipo== 'Activo'){
+    this.http.get(this.globales.ruta + 'php/serviciosexternos/get_servicios_by_caja.php',
+      {
+        params: p
+      }).subscribe((data: any) => {
+        if (tipo == 'Activo') {
           this.page2 = 1;
           this.Servicios_Caja = data;
 
-        }else{
+        } else {
           this.page3 = 1;
           this.Servicios_Pagos = data;
         }
-        this.Cargando=false;
+        this.Cargando = false;
 
         this.SetInformacionPaginacion(data);
       });
- 
-    
+
+
   }
 
 
@@ -232,6 +214,6 @@ export class SexternosService {
     return this.http.post(this.globales.ruta + 'php/serviciosexternos/cambiar_estado_servicio_custom.php', datos);
   }
 
- 
-  
+
+
 }

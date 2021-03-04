@@ -136,11 +136,11 @@ export class ModalegresoComponent implements OnInit {
 
   GuardarEgreso() {
 
-    if( !this.EgresoModel['Id_Tercero'] ||  typeof this.EgresoModel['Id_Tercero'] == undefined ){
+    if (!this.EgresoModel['Id_Tercero'] || typeof this.EgresoModel['Id_Tercero'] == undefined) {
       this._swalService.ShowMessage(['error', 'Error', 'El cliente digitado no se ha encontrado en el sistema.']);
-      return 
+      return
     }
-    
+
     //this.EgresoModel['formaPago'] = this.selectCustomFormaPago.nativeElement.value;
     if (!this.ValidateBeforeSubmit()) {
       return;
@@ -170,6 +170,7 @@ export class ModalegresoComponent implements OnInit {
 
     let datos = new FormData();
     datos.append("modelo", info);
+    datos.append("oficina", localStorage.getItem('Oficina'));
 
     //****************************************************************************************************** */
 

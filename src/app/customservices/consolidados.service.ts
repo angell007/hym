@@ -4,9 +4,12 @@ import { Globales } from '../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { ValidateCajeroService } from '../validate-cajero.service';
 
 @Injectable()
+
 export class ConsolidadosService {
+
   public MonedasSistema: any = [];
   public user = JSON.parse(localStorage['User']);
   public Modulos: Array<string> = ['Cambios', 'Transferencias', 'Giros', 'Traslados', 'Corresponsal', 'Servicios'];
@@ -16,14 +19,18 @@ export class ConsolidadosService {
   public TotalesCustom: any = [];
   public Totales: any = [];
   public Saldos: any = [];
+  public temporalData: any = [];
   public ValoresMonedasApertura = []
   public TotalRestaIngresosEgresos = [];
   public subject = new Subject;
   public observer$ = this.subject.asObservable();
+  public nuevaData = true;
 
-  constructor(public globales: Globales, private http: HttpClient) {
 
-    if (Number(this.user.Id_Perfil) != 100) {
+  constructor(public globales: Globales, private http: HttpClient, private _vService: ValidateCajeroService
+  ) {
+    if (this._vService.isValid) {
+      console.log('observable');
       TimerObservable.create(0, 10000)
         .subscribe(() => {
           this.GetData();
@@ -40,22 +47,38 @@ export class ConsolidadosService {
     return suma;
   }
 
+  mifuncion(a1: Array<any>, a2: Array<any>) {
+    return JSON.stringify(a1) === JSON.stringify(a2);
+  }
+
   async GetData() {
 
-
-
-    this.TotalRestaIngresosEgresos = []
-    this.SumatoriaTotales = []
+    console.log('comprobando');
 
     let p: any = { id: this.user.Identificacion_Funcionario };
     this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
-      this.Modulos = data;
 
-      data.forEach(element => {
-        this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
-      });
+      if (this.nuevaData) {
+        this.TotalRestaIngresosEgresos = []
+        this.SumatoriaTotales = []
+        this.temporalData = data
+        this.nuevaData = false;
+        this.Modulos = data;
+        data.forEach(element => {
+          this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
+        });
+      } else {
+        if (!this.mifuncion(this.temporalData, data)) {
+          this.TotalRestaIngresosEgresos = []
+          this.SumatoriaTotales = []
+          this.Modulos = data;
+          this.temporalData = data
+          data.forEach(element => {
+            this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
+          });
+        }
+      }
     });
-
   }
 
   async getValoresIniciales() {

@@ -40,7 +40,8 @@
         <div class="form-group col-md-2">
           <label for="">Tasa</label>
           <input type="number" class="form-control" id="Tasa" name="Tasa" placeholder="Tasa"
-            [(ngModel)]="CompraModel.Tasa"  (blur)="CalcularCambio()" [disabled]="CompraModel.Id_Moneda_Compra == ''" required>
+            [(ngModel)]="CompraModel.Tasa" (blur)="CalcularCambio()" [disabled]="CompraModel.Id_Moneda_Compra == ''"
+            required>
         </div>
         <!-- <div class="form-group col-md-2">
                 <label for="">Tasa</label>
@@ -58,8 +59,9 @@
         <div class="form-group col-md-2">
           <label for="">Valor Pesos</label>
           <!-- <label style="display:block;" for="">{{CompraModel.Valor_Peso | customcurrency}}</label>-->
-          <input type="number" class="form-control" id="Valor_Peso" name="Valor_Peso" placeholder="Valor_Peso"
-            [(ngModel)]="CompraModel.Valor_Peso" required>
+          <input type="text" class="form-control" id="Valor_Peso" name="Valor_Peso" currencyMask
+            [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }" placeholder="Valor_Peso"
+            [(ngModel)]="CompraModel.Valor_Peso" [disabled]="HabilitarCampos" required>
 
         </div>
         <div class="col-md-2">

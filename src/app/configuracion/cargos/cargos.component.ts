@@ -9,141 +9,140 @@ import { Globales } from '../../shared/globales/globales';
 @Component({
   selector: 'app-cargos',
   templateUrl: './cargos.component.html',
-  styleUrls: ['./cargos.component.scss','../../../style.scss']
+  styleUrls: ['./cargos.component.scss', '../../../style.scss']
 })
 export class CargosComponent implements OnInit {
 
-  public Grupo : any = [];
+  public Grupo: any = [];
   Cargo: any = [];
   Dependencia: any = [];
 
   //variables de formulario
-  public Identificacion : any = [];
-  public Nombre : any = [];
-  public Codigo : any = [];
+  public Identificacion: any = [];
+  public Nombre: any = [];
+  public Codigo: any = [];
 
-  public boolNombre:boolean = false;
-  public boolCodigo:boolean = false;
+  public boolNombre: boolean = false;
+  public boolCodigo: boolean = false;
 
-  @ViewChild('ModalDocumento') ModalDocumento:any;
-  @ViewChild('ModalVerDocumento') ModalVerDocumento:any;
-  @ViewChild('ModalEditarDocumento') ModalEditarDocumento:any;
-  @ViewChild('errorSwal') errorSwal:any;
-  @ViewChild('saveSwal') saveSwal:any;
-  @ViewChild('deleteSwal') deleteSwal:any;
-  @ViewChild('FormDocumento') FormDocumento:any;
+  @ViewChild('ModalDocumento') ModalDocumento: any;
+  @ViewChild('ModalVerDocumento') ModalVerDocumento: any;
+  @ViewChild('ModalEditarDocumento') ModalEditarDocumento: any;
+  @ViewChild('errorSwal') errorSwal: any;
+  @ViewChild('saveSwal') saveSwal: any;
+  @ViewChild('deleteSwal') deleteSwal: any;
+  @ViewChild('FormDocumento') FormDocumento: any;
   IdGrupo: any;
   IdDependencia: any;
 
-  constructor(private http : HttpClient, private globales: Globales) { }
+  constructor(private http: HttpClient, private globales: Globales) { }
 
   ngOnInit() {
     this.ActualizarVista();
   }
 
-  ActualizarVista(){
-    console.log('actualizando');
-    
+  ActualizarVista() {
 
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
-      params:{modulo:'Grupo_Tercero'}
-    }).subscribe((data:any)=>{
-      this.Grupo = data;       
+
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
+      params: { modulo: 'Grupo_Tercero' }
+    }).subscribe((data: any) => {
+      this.Grupo = data;
     });
 
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
-      params:{modulo:'Cargo'}
-    }).subscribe((data:any)=>{
-      this.Cargo = data;       
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
+      params: { modulo: 'Cargo' }
+    }).subscribe((data: any) => {
+      this.Cargo = data;
     });
 
-    this.http.get(this.globales.ruta+'php/genericos/lista_generales.php',{
-      params:{modulo:'Dependencia'}
-    }).subscribe((data:any)=>{
-      this.Dependencia = data;       
+    this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', {
+      params: { modulo: 'Dependencia' }
+    }).subscribe((data: any) => {
+      this.Dependencia = data;
     });
   }
 
-  GuardarGrupo(formulario: NgForm, modal){
+  GuardarGrupo(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();        
-    datos.append("modulo",'Grupo_Tercero');
-    datos.append("datos",info);
+    let datos = new FormData();
+    datos.append("modulo", 'Grupo_Tercero');
+    datos.append("datos", info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{
-      formulario.reset();
-      this.ActualizarVista();
-      this.saveSwal.show();
-    });  
-    
+    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.ActualizarVista();
+        this.saveSwal.show();
+      });
+
   }
 
-  GuardarDependencia(formulario: NgForm, modal){
+  GuardarDependencia(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();        
-    datos.append("modulo",'Dependencia');
-    datos.append("datos",info);
+    let datos = new FormData();
+    datos.append("modulo", 'Dependencia');
+    datos.append("datos", info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{
-      formulario.reset();
-      this.ActualizarVista();
-      this.saveSwal.show();
-    });  
-    
+    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.ActualizarVista();
+        this.saveSwal.show();
+      });
+
   }
 
-  GuardarCargo(formulario: NgForm, modal){
+  GuardarCargo(formulario: NgForm, modal) {
     let info = JSON.stringify(formulario.value);
-    let datos = new FormData();        
-    datos.append("modulo",'Cargo');
-    datos.append("datos",info);
+    let datos = new FormData();
+    datos.append("modulo", 'Cargo');
+    datos.append("datos", info);
     this.OcultarFormulario(modal);
-    this.http.post(this.globales.ruta+'php/genericos/guardar_generico.php',datos)
-    .catch(error => { 
-      console.error('An error occurred:', error.error);
-      this.errorSwal.show();
-      return this.handleError(error);
-    })
-    .subscribe((data:any)=>{
-      formulario.reset();
-      this.ActualizarVista();
-      this.saveSwal.show();
-    });  
-    
+    this.http.post(this.globales.ruta + 'php/genericos/guardar_generico.php', datos)
+      .catch(error => {
+        console.error('An error occurred:', error.error);
+        this.errorSwal.show();
+        return this.handleError(error);
+      })
+      .subscribe((data: any) => {
+        formulario.reset();
+        this.ActualizarVista();
+        this.saveSwal.show();
+      });
+
   }
 
   handleError(error: Response) {
     return Observable.throw(error);
   }
- 
-  Edicion:any ={};
-  EditarGrupo(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Grupo_Tercero', id:id}
-    }).subscribe((data:any)=>{
+
+  Edicion: any = {};
+  EditarGrupo(id, modal) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { modulo: 'Grupo_Tercero', id: id }
+    }).subscribe((data: any) => {
       this.Identificacion = id;
       this.Edicion = data;
       modal.show();
     });
   }
 
-  EditarDependencia(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Dependencia', id:id}
-    }).subscribe((data:any)=>{    
-      
+  EditarDependencia(id, modal) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { modulo: 'Dependencia', id: id }
+    }).subscribe((data: any) => {
+
       // console.log(data);
 
       this.Identificacion = id;
@@ -153,10 +152,10 @@ export class CargosComponent implements OnInit {
     });
   }
 
-  EditarCargo(id, modal){
-    this.http.get(this.globales.ruta+'php/genericos/detalle.php',{
-      params:{modulo:'Cargo', id:id}
-    }).subscribe((data:any)=>{      
+  EditarCargo(id, modal) {
+    this.http.get(this.globales.ruta + 'php/genericos/detalle.php', {
+      params: { modulo: 'Cargo', id: id }
+    }).subscribe((data: any) => {
       this.Identificacion = id;
       this.Nombre = data.Nombre;
       this.IdDependencia = data.Id_Dependencia;
@@ -165,47 +164,45 @@ export class CargosComponent implements OnInit {
   }
 
 
-  EliminarGrupo(id){
+  EliminarGrupo(id) {
     let datos = new FormData();
     //datos.append("modulo", 'Grupo_Tercero');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/cargos/inactivar_grupo_cargo.php', datos ).subscribe((data: any) => {
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/cargos/inactivar_grupo_cargo.php', datos).subscribe((data: any) => {
       this.ActualizarVista();
     });
   }
 
-  EliminarDependencia(id){
+  EliminarDependencia(id) {
     let datos = new FormData();
     //datos.append("modulo", 'Dependencia');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/dependencias/inactivar_dependencia.php', datos ).subscribe((data: any) => {
-      console.log('actualizando1111q1');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/dependencias/inactivar_dependencia.php', datos).subscribe((data: any) => {
       this.ActualizarVista();
     });
   }
 
-  EliminarCargo(id){
+  EliminarCargo(id) {
     let datos = new FormData();
-  //  datos.append("modulo", 'Cargo');
-    datos.append("id", id); 
-    this.http.post(this.globales.ruta + 'php/cargos/inactivar_cargo.php', datos ).subscribe((data: any) => {
-       this.ActualizarVista();
+    //  datos.append("modulo", 'Cargo');
+    datos.append("id", id);
+    this.http.post(this.globales.ruta + 'php/cargos/inactivar_cargo.php', datos).subscribe((data: any) => {
+      this.ActualizarVista();
     });
   }
 
-  OcultarFormulario(modal)
-  {
+  OcultarFormulario(modal) {
     this.Identificacion = null;
     this.Nombre = null;
     this.Codigo = null;
     modal.hide();
   }
 
-  Cerrar(modal){
+  Cerrar(modal) {
     this.OcultarFormulario(modal);
   }
 
-  OcultarFormularios(activeModal:any){
+  OcultarFormularios(activeModal: any) {
     activeModal.hide();
   }
 

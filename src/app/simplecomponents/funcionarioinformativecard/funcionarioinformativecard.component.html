@@ -2,46 +2,51 @@
 padding: 2px;
 margin: 0;
 border-radius: 25em;">
-    <div class="card-body" style="padding: 0px;">
-        <div class="row">
-            <div class="col-md-2" style="float:left">
-                <ng-container *ngIf="Funcionario.Imagen == '' || Funcionario.Imagen == 0">
-                    <img style="padding: 2px;" class="img-circle img-responsive" src="../../../assets/images/cliente.jpg" alt="funcionario-img">
+  <div class="card-body" style="padding: 0px;">
+    <div class="row">
+      <div class="col-md-2" style="float:left">
+        <ng-container *ngIf="Funcionario.Imagen == '' || Funcionario.Imagen == 0">
+          <img style="padding: 2px;" class="img-circle img-responsive" src="../../../assets/images/cliente.jpg"
+            alt="funcionario-img">
+        </ng-container>
+        <ng-template #elseTemplate>
+          <img style="padding: 2px;" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{Funcionario.Imagen}}"
+            class="img-circle img-responsive" alt="funcionario-img">
+        </ng-template>
+      </div>
+
+      <div class="col-md-10">
+        <div class="row ">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="mx-auto col-md-10">
+                <small>{{Funcionario.Nombre_Funcionario}}</small>
+                <small>{{Funcionario.Nombre_Oficina}}</small>
+                <div class="w-100"></div>
+                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-info"></i>
+                <small>{{Funcionario.Hora_Apertura}}</small>
+                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
+                <small>{{Funcionario.Hora_Cierre}}</small>
+
+                <ng-container *ngIf="user.Id_Perfil != 2">
+
+
+                  <i style="margin: 0.1em;"
+                    [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}"
+                    (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
+
                 </ng-container>
-                <ng-template #elseTemplate>
-                    <img style="padding: 2px;" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{Funcionario.Imagen}}" class="img-circle img-responsive" alt="funcionario-img">
-                </ng-template>
+
+                <i style="margin: 0.1em;" Class="ti-bar-chart text-info"
+                  (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)"></i>
+
+              </div>
             </div>
-
-            <div class="col-md-10">
-                <div class="row ">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="mx-auto col-md-10">
-                                <small>{{Funcionario.Nombre_Funcionario}}</small>
-                                <small>{{Funcionario.Nombre_Oficina}}</small>
-                                <div class="w-100"></div>
-                                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-info"></i>
-                                <small>{{Funcionario.Hora_Apertura}}</small>
-                                <i style="margin-right: 0.1em;" class="ti-alarm-clock text-danger"></i>
-                                <small>{{Funcionario.Hora_Cierre}}</small>
-
-                                <ng-container *ngIf="user.Id_Perfil != 2">
-
-
-                                    <i style="margin: 0.1em;" [ngClass]="{'ti-unlock text-success': SesionAbierta, 'ti-lock text-danger': !SesionAbierta}" (click)=" (SesionAbierta) ? Cerrar(Funcionario.Identificacion_Funcionario) : Abrir(Funcionario.Identificacion_Funcionario)"></i>
-
-                                </ng-container>
-
-                                <i style="margin: 0.1em;" Class="ti-bar-chart text-info" (click)="AbrirCierreFuncionario(Funcionario.Identificacion_Funcionario)"></i>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <swal #alerSwal title="" text="" type="">

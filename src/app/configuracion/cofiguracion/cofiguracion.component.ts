@@ -15,9 +15,9 @@ import { Globales } from '../../shared/globales/globales';
 
 export class CofiguracionComponent implements OnInit {
 
-  public configuracion: any=[];
-  public Monedas: any=[];
-  public Funcionarios: any=[];
+  public configuracion: any = [];
+  public Monedas: any = [];
+  public Funcionarios: any = [];
   public AtributosMonedas: { [email: string]: any; } = {};
 
   //variables del formulario configuracion
@@ -124,18 +124,18 @@ export class CofiguracionComponent implements OnInit {
   @ViewChild('errorSwal') errorSwal: any;
   @ViewChild('confirmswal') confirmswal: any;
 
-  public configuracionGeneral:any = {};
+  public configuracionGeneral: any = {};
 
   public checkados = [];
-  MonedaCampo= [];
+  MonedaCampo = [];
   MonedaValor = [];
-  public Switch:boolean;
-  
+  public Switch: boolean;
+
   constructor(private http: HttpClient, private globales: Globales) { }
 
 
   ngOnInit() {
-    
+
     this.http.get(this.globales.ruta + 'php/genericos/lista_generales.php', { params: { modulo: 'Funcionario' } }).subscribe((data: any) => {
       this.Funcionarios = data;
     });
@@ -216,20 +216,18 @@ export class CofiguracionComponent implements OnInit {
     });
   }
 
-  HabilitarFuncionario(i,j,pos){
+  HabilitarFuncionario(i, j, pos) {
 
     var posicion = this.MonedaValor.findIndex(x => x.Id_Moneda_Valor == pos);
     var checkeado = ((document.getElementById("Diario_" + i + "_" + j) as HTMLInputElement).checked);
-    console.log(posicion);
-    console.log(checkeado);
-    
-    switch(checkeado){      
-      case true:{
-       (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = false;
-       this.MonedaValor[posicion].Diario = 1;
+
+    switch (checkeado) {
+      case true: {
+        (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = false;
+        this.MonedaValor[posicion].Diario = 1;
         break;
       }
-      case false:{
+      case false: {
         (document.getElementById("Identificacion_funcionario_" + i + "_" + j) as HTMLInputElement).disabled = true;
         this.MonedaValor[posicion].Identificacion_Funcionario = "";
         this.MonedaValor[posicion].Diario = "0";
@@ -237,11 +235,9 @@ export class CofiguracionComponent implements OnInit {
       }
     }
 
-    console.log(this.MonedaValor);
-    
   }
 
-  asignarFuncionario(id, funcionario){
+  asignarFuncionario(id, funcionario) {
     var posicion = this.MonedaValor.findIndex(x => x.Id_Moneda_Valor == id);
     this.MonedaValor[posicion].Identificacion_Funcionario = funcionario;
     this.MonedaValor[posicion].Diario = 1;

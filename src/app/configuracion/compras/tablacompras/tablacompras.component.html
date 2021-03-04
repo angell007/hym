@@ -5,10 +5,20 @@
         <tr>
           <th class="text-center custom-thead">Titular</th>
           <th class="text-center custom-thead">Banco</th>
-          <th class="text-center custom-thead">Cuenta</th>
-          <th class="text-center custom-thead">Tipo Cuenta</th>
+          <!-- <th class="text-center custom-thead">Cuenta</th> -->
+          <!-- <th class="text-center custom-thead">Tipo Cuenta</th> -->
           <th class="text-center custom-thead">Valor</th>
         </tr>
+
+        <tr>
+          <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.titutlar"
+              (change)="ConsultaFiltrada()"></th>
+          <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.banco"
+              (change)="ConsultaFiltrada()"></th>
+          <th class="table-filters"><input type="text" class="form-control" [(ngModel)]="Filtros.valor"
+              (change)="ConsultaFiltrada()"></th>
+        </tr>
+
         <tr *ngIf="ComprasPendientes.length == 0 || Id_Moneda == '' ">
           <th colspan="5" class="text-center">
             <div><i class="text-warning font-size-20 ti-alert"></i></div>
@@ -17,6 +27,7 @@
             </div>
           </th>
         </tr>
+
       </thead>
       <tbody *ngIf="Id_Moneda != '' ||  ComprasPendientes.length != 0 ">
         <tr *ngFor="let cp of ComprasPendientes; let i = index"
@@ -24,9 +35,9 @@
           [ngClass]="{'bg-selected': cp.Seleccionado == 1}" style="cursor:pointer;">
           <td class="custom-cell">{{cp.Nombre_Titular}}</td>
           <td class="custom-cell">{{cp.Banco}}</td>
-          <td class="custom-cell text-right">{{cp.Numero_Cuenta | mask: '0000.0000.0000.0000'}}</td>
-          <td class="custom-cell">{{cp.Tipo_Cuenta}}</td>
-          <td class="custom-cell text-right">{{cp.Valor | customcurrency:CodigoMoneda}}</td>
+          <!-- <td class="custom-cell text-right">{{cp.Numero_Cuenta | mask: '0000.0000.0000.0000'}}</td> -->
+          <!-- <td class="custom-cell">{{cp.Tipo_Cuenta}}</td> -->
+          <td class="custom-cell text-right">{{cp.Valor | customcurrency:cp.Codigo: false:'1.0-0'}}</td>
         </tr>
       </tbody>
     </table>

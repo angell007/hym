@@ -11,7 +11,7 @@ import { Globales } from '../../../shared/globales/globales';
 @Component({
   selector: 'app-tablatransferenciascajero',
   templateUrl: './tablatransferenciascajero.component.html',
-  styleUrls: [ '../../../../style.scss','./tablatransferenciascajero.component.scss'],
+  styleUrls: ['../../../../style.scss', './tablatransferenciascajero.component.scss'],
   providers: [NormailizerService]
 })
 export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
@@ -122,10 +122,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   }
 
   ConsultaFiltrada(paginacion: boolean = false) {
-  console.log('paginacion',paginacion);
-  
     var p = this.SetFiltros(paginacion);
-
     if (p === '') {
       this.ResetValues();
       return;
@@ -209,8 +206,8 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
   }
 
   AlertarRecibo(transferencia: any) {
-    let data :any ={Id_Transferencia:transferencia.Id_Transferencia}
-    this._transferenciaService.AlertarTransferencia(data).subscribe((data:any)=>{
+    let data: any = { Id_Transferencia: transferencia.Id_Transferencia }
+    this._transferenciaService.AlertarTransferencia(data).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this._swalService.ShowMessage(data);
       } else {
@@ -219,7 +216,7 @@ export class TablatransferenciascajeroComponent implements OnInit, OnDestroy {
       }
     })
 
-   
+
   }
 
   printReciboTransferencia(id: string) {

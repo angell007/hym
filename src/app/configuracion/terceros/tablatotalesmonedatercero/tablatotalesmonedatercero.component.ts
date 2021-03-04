@@ -32,7 +32,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public Cargando: boolean = false;
   public RutaGifCargando: string;
   public CodigoMonedaActual: string = '';
-  public fecha_filtro= '';
+  public fecha_filtro = '';
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '180px',
     height: '18px',
@@ -148,11 +148,11 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   private SetFiltros(paginacion: boolean, fecha: any = '') {
 
-  //console.log(this.Id_Tercero,'idte');
-  
+    //console.log(this.Id_Tercero,'idte');
+
     let params: any = {};
 
-   
+
 
     if (this.Id_Moneda == '') {
       this.Id_Moneda = '1';
@@ -199,18 +199,10 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
 
     if (fecha == false) {
-      console.log('1');
       var p = this.SetFiltros(paginacion);
-      console.log(p,'p');
     } else {
       var p = this.SetFiltros(paginacion, fecha.formatted);
     }
-    
-    console.log(p,'p1');
-    
-    //p = JSON.stringify(p);
-    console.log(p,'p2');
-  
     this.Cargando = true;
     //this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
     this._movimientoService.getPesosTercero(p).subscribe((data: any) => {
@@ -222,9 +214,6 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
         this.TotalItems = data.numReg;
         this.Balance = data.balance;
         this.CodigoMonedaActual = data.codigo_moneda;
-
-        console.log(this.Movimientos,'movis');
-        
       } else {
         this.MovimientosTercero = [];
         this.Movimientos = [];
@@ -234,7 +223,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
-      
+
 
       this.Cargando = false;
       this.SetInformacionPaginacion();

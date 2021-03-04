@@ -88,17 +88,12 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   }
 
   GetMonedas() {
-    console.log('monedas---------------');
-    
     this._monedaService.getMonedas().subscribe((data: any) => {
       if (data != null) {
         this.Monedas = data;
-        let mdefault= this.Monedas.find(m=>m.MDefault==1);
-        console.log('mdefault',mdefault);
-        
+        let mdefault = this.Monedas.find(m => m.MDefault == 1);
         this.TrasladoModel.Moneda = mdefault['Id_Moneda']
       } else {
-
         this.Monedas = [];
         let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
@@ -124,7 +119,7 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     } else if (this.TrasladoModel.Destino == 'Proveedor') {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
     } else if (this.TrasladoModel.Destino == 'Cuenta Bancaria') {
-      return this._cuentaBancariaService.getFiltrarCuentasBancarias(match,this.TrasladoModel.Id_Pais_Origen );
+      return this._cuentaBancariaService.getFiltrarCuentasBancarias(match, this.TrasladoModel.Id_Pais_Origen);
     } else if (this.TrasladoModel.Destino == 'Cajero') {
       return this._cuentaBancariaService.getFiltrarCajero(match);
     }
@@ -139,7 +134,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           this.ConsultaOrigen(term)
             .map(response => response)
             .do(data => {
-              console.log(data);
               return data;
             })
         )
@@ -161,19 +155,20 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
   formatter_destino = (x: { Nombre: string }) => x.Nombre;
 
   GuardarTraslado() {
-    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-      if (this.TrasladoModel.Moneda == element.id) {
-        if (parseFloat(element.saldo) < parseFloat(this.TrasladoModel.Valor)) {
-          this.flag = true;
-        }
-      }
-    });
 
-    if (this.flag) {
-      this.flag = false;
-      this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
-      return false
-    }
+    // this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
+    //   if (this.TrasladoModel.Moneda == element.id) {
+    //     if (parseFloat(element.saldo) < parseFloat(this.TrasladoModel.Valor)) {
+    //       this.flag = true;
+    //     }
+    //   }
+    // });
+
+    // if (this.flag) {
+    //   this.flag = false;
+    //   this._swalService.ShowMessage(['warning', 'alerta', 'No cuentas con suficiente Saldo !']);
+    //   return false
+    // }
 
 
     if (!this.ValidateBeforeSubmit()) {
@@ -235,11 +230,11 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   public settearMoneda() {
 
-    // console.log(this.TrasladoModel.Moneda);
-    this._consolidadoService.TotalRestaIngresosEgresos.forEach(element => {
-      if (this.TrasladoModel.Moneda == element[3]) {
-        this.Mymoneda = element[2]
+    this.Monedas.forEach(element => {
+      if (this.TrasladoModel.Moneda == element.Id_Moneda) {
+        this.Mymoneda = element.Nombre
       }
+
     });
 
   }
@@ -289,13 +284,11 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
     if (typeof (value) == 'object') {
       this.TrasladoModel.Id_Origen = this.TrasladoModel.Origen == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
 
-     
+
 
       switch (this.TrasladoModel.Origen) {
         case 'Cuenta Bancaria':
-         // this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria
-          console.log('cuentas bancarias', value);
-          
+          // this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria          
           this.TrasladoModel.Moneda = value.Id_Moneda
           this.TrasladoModel.Id_Moneda_Origen = value.Id_Moneda
           this.TrasladoModel.Id_Pais_Origen = value.Id_Pais
@@ -311,10 +304,6 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
           //this.TrasladoModel.Id_Destino = value.Id_Tercero
           break;
       }
-
-          
-      console.log('cuentas2 ', this.TrasladoModel.Moneda);
-
     } else {
       this.TrasladoModel.Id_Origen = '';
     }
@@ -323,15 +312,15 @@ export class ModaltrasladoComponent implements OnInit, OnDestroy {
 
   CompletarDestino(value) {
 
-  
+
     if (typeof (value) == 'object') {
 
       switch (this.TrasladoModel.Destino) {
         case 'Cuenta Bancaria':
           this.TrasladoModel.Id_Destino = value.Id_Cuenta_Bancaria
-         // console.log('cuentas bancarias', value);
+          // console.log('cuentas bancarias', value);
           this.TrasladoModel.Id_Moneda_Destino = value.Id_Moneda
-        
+
           break;
 
         case 'Cajero':

@@ -97,7 +97,6 @@ export class ModalajusteterceroComponent implements OnInit {
       this.MovimientoTerceroModel.Valor_Tipo_Movimiento = '0';
       this.MovimientoTerceroModel.Fecha = this._generalService.FechaActual;
       this.MovimientoTerceroModel = this._generalService.limpiarString(this.MovimientoTerceroModel);
-      console.log(this.MovimientoTerceroModel);
 
       let info = this._generalService.normalize(JSON.stringify(this.MovimientoTerceroModel));
       let datos = new FormData();
@@ -107,7 +106,7 @@ export class ModalajusteterceroComponent implements OnInit {
       if (this.Editar) {
         this._movimientoTerceroService.editMovimientoTercero(datos)
           .catch(error => {
-            //console.log('An error occurred:', error);
+            console.log('An error occurred:', error);
             this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
             return this.handleError(error);
           })
@@ -125,7 +124,7 @@ export class ModalajusteterceroComponent implements OnInit {
       } else {
         this._movimientoTerceroService.saveMovimientoTercero(datos)
           .catch(error => {
-            //console.log('An error occurred:', error);
+            console.log('An error occurred:', error);
             this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
             return this.handleError(error);
           })

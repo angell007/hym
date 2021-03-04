@@ -114,12 +114,9 @@ export class ModalremitentegiroComponent implements OnInit {
     datos.append("modelo", info);
 
     if (this.Editar) {
-
-      console.log(this.Editar);
-
       this._remitenteService.editRemitente(datos)
         .catch(error => {
-          //console.log('An error occurred:', error);
+          console.log('An error occurred:', error);
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })
@@ -140,7 +137,7 @@ export class ModalremitentegiroComponent implements OnInit {
     } else {
       this._remitenteService.saveRemitente(datos)
         .catch(error => {
-          //console.log('An error occurred:', error);
+          console.log('An error occurred:', error);
           this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error']);
           return this.handleError(error);
         })

@@ -10,6 +10,8 @@ export class NotificacionsService {
   public contadorTraslado = 0;
   public contadorTrasladoCustom = 0;
   public alertasCajas: any = [];
+  public nuevaData: boolean = false;
+  public temporalData: any = [];
 
   notifcaciones$ = new Subject<string>()
 
@@ -22,13 +24,35 @@ export class NotificacionsService {
 
   }
 
+  mifuncion(a1: Array<any>, a2: Array<any>) {
+    return JSON.stringify(a1) === JSON.stringify(a2);
+  }
+
   counter() {
     this.http.get(`${this.globales.ruta}/php/trasladocaja/notificaciones_traslado.php`, { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
-      this.alertasCajas = data;
-      if (this.alertasCajas.length > 0) {
-        this.notifcaciones$.next(this.alertasCajas.length)
+
+      if (this.nuevaData) {
+
+        this.alertasCajas = data;
+        if (this.alertasCajas.length > 0) {
+          this.notifcaciones$.next(this.alertasCajas.length)
+        } else {
+          this.notifcaciones$.next('0');
+        }
+        this.temporalData = data
+        this.nuevaData = false;
+
       } else {
-        this.notifcaciones$.next('0');
+        if (!this.mifuncion(this.temporalData, data)) {
+
+          this.alertasCajas = data;
+          if (this.alertasCajas.length > 0) {
+            this.notifcaciones$.next(this.alertasCajas.length)
+          } else {
+            this.notifcaciones$.next('0');
+          }
+          this.temporalData = data
+        }
       }
     });
   }

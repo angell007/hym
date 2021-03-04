@@ -18,7 +18,7 @@ import { type } from 'jquery';
 export class CierrecajaComponent implements OnInit {
 
   @ViewChild('alertSwal') alertSwal: any;
-  public HayDiferencias :boolean = true;
+  public HayDiferencias: boolean = true;
   id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
   public solo_ver: boolean = this.activeRoute.snapshot.params["solo_ver"];
   public fechaSoloVer: string = this.activeRoute.snapshot.params["fechaSoloVer"];
@@ -100,16 +100,13 @@ export class CierrecajaComponent implements OnInit {
         this.TotalEntregado[i] = 0;
         this.Diferencias[i] = 0;
       }
-      this.Modulos.forEach((m:any,i) => {
-        
-        this.CalcularSumaImput(0,this.reduce(m.Movimientos), i );
-      });
-     
-     
-    });
+      this.Modulos.forEach((m: any, i) => {
 
-    //console.log(this.TotalEntregado, 'entregado');
-    
+        this.CalcularSumaImput(0, this.reduce(m.Movimientos), i);
+      });
+
+
+    });
   }
 
 
@@ -126,7 +123,6 @@ export class CierrecajaComponent implements OnInit {
       let resumen = JSON.stringify(this.ResumenMovimiento);
       let model = JSON.stringify(this.CierreCajaModel);
       let data = new FormData();
-console.log('sddddddddddddd');
 
       data.append("entregado", entregado);
       data.append("diferencias", diferencias);
@@ -134,11 +130,13 @@ console.log('sddddddddddddd');
       data.append("funcionario", this.id_funcionario);
       data.append("id", this.id_funcionario);
 
-      this.cliente.post(this.globales.rutaNueva + 'cierre-caja/cajero/guardar', { entregado: entregado,
-         diferencias: diferencias,
-          modelo: model,
-           funcionario: this.id_funcionario,
-           id: this.id_funcionario}).subscribe((data: any) => {
+      this.cliente.post(this.globales.rutaNueva + 'cierre-caja/cajero/guardar', {
+        entregado: entregado,
+        diferencias: diferencias,
+        modelo: model,
+        funcionario: this.id_funcionario,
+        id: this.id_funcionario
+      }).subscribe((data: any) => {
         if (data.tipo == 'error') {
           this.ShowSwal(data.tipo, 'Error', data.mensaje);
         } else {
@@ -154,15 +152,7 @@ console.log('sddddddddddddd');
     for (let index = 0; index < this.Modulos.length; index++) {
 
       if (this.Diferencias[index] < 0) {
-        console.log('estoy aqui');
       }
-
-      //   if (this.TotalEntregado[index].Entregado == 0) {
-      //     this.ShowSwal('warning', 'Alerta', 'Debe colocar el valor entregado en ' + this.TotalEntregado[index].Nombre);
-      //     return false;
-      //   }
-
-
     }
 
     return true;
@@ -260,18 +250,15 @@ console.log('sddddddddddddd');
     if (calculado == '') {
       return false;
     }
-    console.log(ingresado,'igre');
-    console.log(calculado,'calc');
-    
     this.TotalEntregado[pos] = ingresado;
     let resta = ingresado - calculado;
     this.Diferencias[pos] = resta;
     this.validarDiferencias();
   }
 
-  validarDiferencias(){
-   let diferencia =  this.Diferencias.find(d => d != 0 );
-   this.HayDiferencias = diferencia ? true : false 
+  validarDiferencias() {
+    let diferencia = this.Diferencias.find(d => d != 0);
+    this.HayDiferencias = diferencia ? true : false
   }
 
   ArmarResumenMovimientos() {

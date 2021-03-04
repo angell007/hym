@@ -22,6 +22,7 @@ export class TablatrasladosComponent implements OnInit {
   public RutaGifCargando: string;
 
   public AbrirModalAgregar: Subject<any> = new Subject<any>();
+  public AbrirModalEdit: Subject<any> = new Subject<any>();
 
   public Filtros: any = {
     fecha: '',
@@ -32,7 +33,8 @@ export class TablatrasladosComponent implements OnInit {
     tipo_origen: '',
     tipo_destino: '',
     moneda: '',
-    estado: ''
+    estado: '',
+    valor: ''
   };
 
   public Origen: any = '';
@@ -89,6 +91,9 @@ export class TablatrasladosComponent implements OnInit {
       return this._terceroService.getTercerosPorTipo('Proveedor', match);
     } else if (this.Filtros.tipo_destino == 'Cuenta Bancaria') {
       return this._cuentaBancariaService.getFiltrarCuentasBancarias(match);
+    } else if (this.Filtros.tipo_destino == 'Cajero') {
+      console.log(this._cuentaBancariaService.getFiltrarCajero(match));
+      return this._cuentaBancariaService.getFiltrarCajero(match);
     }
   }
 
@@ -122,6 +127,10 @@ export class TablatrasladosComponent implements OnInit {
 
   AbrirModal(idTraslado: string) {
     this.AbrirModalAgregar.next(idTraslado);
+  }
+
+  AbrirModal2(idTraslado: any) {
+    this.AbrirModalEdit.next(idTraslado);
   }
 
   SetFiltros(paginacion: boolean) {
@@ -172,6 +181,10 @@ export class TablatrasladosComponent implements OnInit {
       params.estado = this.Filtros.estado;
     }
 
+    if (this.Filtros.valor.trim() != "") {
+      params.valor = this.Filtros.valor;
+    }
+
     return params;
   }
 
@@ -186,6 +199,7 @@ export class TablatrasladosComponent implements OnInit {
 
     this.Cargando = true;
     this._trasladoService.getListaTraslados(p).subscribe((data: any) => {
+
       if (data.codigo == 'success') {
         this.Traslados = data.query_data;
         this.TotalItems = data.numReg;
@@ -258,6 +272,7 @@ export class TablatrasladosComponent implements OnInit {
     });
   }
 
+
   CompletarOrigen(value) {
 
     if (typeof (value) == 'object') {
@@ -273,12 +288,15 @@ export class TablatrasladosComponent implements OnInit {
   CompletarDestino(value) {
 
     if (typeof (value) == 'object') {
-      this.Filtros.destino = this.Filtros.tipo_destino == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : value.Id_Tercero;
+
+      this.Filtros.destino = this.Filtros.tipo_destino == 'Cuenta Bancaria' ? value.Id_Cuenta_Bancaria : String(value.Id_Tercero);
+      console.log(this.Filtros.destino);
       this.ConsultaFiltrada();
     } else {
       this.Filtros.destino = '';
       this.ConsultaFiltrada();
     }
+
   }
 
   ConsultaSelectOrigen() {

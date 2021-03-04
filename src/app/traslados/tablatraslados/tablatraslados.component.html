@@ -27,6 +27,7 @@
                   <tr>
                     <th class="custom-thead">Fecha</th>
                     <th class="custom-thead">Código</th>
+                    <th class="custom-thead">Detalle</th>
                     <th class="custom-thead">Funcionario</th>
                     <th class="custom-thead">Origen</th>
                     <th class="custom-thead">Destino</th>
@@ -44,6 +45,7 @@
                       <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
                         [(ngModel)]="Filtros.codigo">
                     </th>
+                    <th class="table-filters"> </th>
                     <th class="table-filters">
                       <input type="text" class="form-control" placeholder="Filtro funcionario"
                         (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.funcionario">
@@ -56,10 +58,12 @@
                         <option value="Proveedor">Proveedor</option>
                         <option value="Cuenta Bancaria">Cuenta Bancaria</option>
                       </select>
+
                       <input type="text" class="form-control" placeholder="Filtro origen"
                         [disabled]="Filtros.tipo_origen == ''" [(ngModel)]="Origen" [ngbTypeahead]="search_origen"
                         [resultTemplate]="rt_origen" [inputFormatter]="formatter_origen"
                         (ngModelChange)="CompletarOrigen(Origen)">
+
                     </th>
                     <th class="table-filters">
                       <select id="tipo_destino" class="form-control" (change)="ConsultaSelectDestino()"
@@ -68,11 +72,15 @@
                         <option value="Cliente">Cliente</option>
                         <option value="Proveedor">Proveedor</option>
                         <option value="Cuenta Bancaria">Cuenta Bancaria</option>
+                        <option value="Cajero">Cajero</option>
+
                       </select>
+
                       <input type="text" class="form-control" placeholder="Filtro destino"
                         [disabled]="Filtros.tipo_destino == ''" [(ngModel)]="Destino" [ngbTypeahead]="search_destino"
                         [resultTemplate]="rt_destino" [inputFormatter]="formatter_destino"
                         (ngModelChange)="CompletarDestino(Destino)">
+
                     </th>
                     <th class="table-filters">
                       <select id="moneda" class="form-control" (change)="ConsultaFiltrada()"
@@ -81,7 +89,14 @@
                         <option *ngFor="let m of Monedas" [value]="m.Id_Moneda">{{m.Nombre}}</option>
                       </select>
                     </th>
-                    <th class="table-filters"></th>
+
+                    <th class="table-filters">
+
+                      <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
+                        [(ngModel)]="Filtros.valor">
+
+                    </th>
+
                     <th class="table-filters">
                       <select id="estado" class="form-control" (change)="ConsultaFiltrada()"
                         [(ngModel)]="Filtros.estado">
@@ -90,7 +105,9 @@
                         <option value="Anulado">Anulado</option>
                       </select>
                     </th>
+
                     <th class="table-filters"></th>
+
                   </tr>
                   <tr *ngIf="Cargando">
                     <td colspan="9" class="text-center">
@@ -112,23 +129,28 @@
                   <tr
                     *ngFor="let t of Traslados | paginate: {  id: 'otrotrasladoss', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
                     [ngClass]="{'bg-anulada':t.Estado == 'Anulado'}">
-                    <td class="text-center">{{t.Fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-                    <td class="text-center">{{t.Codigo}}</td>
-                    <td class="text-center">{{t.Nombre_Funcionario}}</td>
-                    <td class="text-center">{{t.Nombre_Origen}}</td>
-                    <td class="text-center">{{t.Nombre_Destino}}</td>
-                    <td class="text-center">{{t.Nombre_Moneda}}</td>
+                    <td class="text-left ">{{t.Fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td class="text-left ">{{t.Codigo}}</td>
+                    <td class="text-left ">{{t.Detalle}}</td>
+                    <td class="text-left ">{{t.Nombre_Funcionario}}</td>
+                    <td class="text-left ">{{t.Nombre_Origen}}</td>
+                    <td class="text-left ">{{t.Nombre_Destino}}</td>
+                    <td class="text-left ">{{t.Nombre_Moneda}}</td>
                     <td class="text-right">{{t.Valor | customcurrency:t.Codigo_Moneda}}</td>
-                    <td class="text-center">{{t.Estado}}</td>
-                    <td class="text-center">
-                      <div class="text-center" *ngIf="t.Estado != 'Anulado'">
-                        <a class="dropdown-item waves-light waves-effect caja-botones accionable"
-                          (confirm)="AnularTraslado(t)"
+                    <td class="text-left ">{{t.Estado}}</td>
+                    <td class="text-left ">
+                      <div class="text-center caja-botones  " *ngIf="t.Estado != 'Anulado'">
+
+                        <a class=" accionable" (confirm)="AnularTraslado(t)"
                           [swal]="{title : '¿Está Seguro?', text: 'Se dispone a anular este traslado' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Anular',cancelButtonText: 'No!'}">
                           <i
                             [ngClass]="{'ti-trash text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Anulado'}"></i>
-                          {{t.Estado == 'Activo' ? '' : 'Activar'}}</a>
+                          {{t.Estado == 'Activo' ? '' : 'Activar'}}
+                        </a>
 
+                        <a class="accionable" (click)="AbrirModal2(t)">
+                          <i class="ti-pencil text-warning"></i>
+                        </a>
                       </div>
                     </td>
                   </tr>
@@ -169,3 +191,9 @@
 <app-modaltraslado [AbrirModal]="AbrirModalAgregar.asObservable()"
   (ActualizarTabla)="cleanfilter(); ConsultaFiltrada() ">
 </app-modaltraslado>
+
+<!-- ['corchete entrada'] -->
+<!-- (salida) -->
+
+<app-edit-traslado [Enter]="AbrirModalEdit.asObservable()" (ActualizarTabla)="cleanfilter(); ConsultaFiltrada() ">
+</app-edit-traslado>

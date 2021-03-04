@@ -43,7 +43,6 @@ export class ConsolidadoComponent implements OnInit {
         datos.forEach((elements: any) => {
           this.ValoresMonedasApertura[index] += elements.Ingreso - elements.Egreso
           elements.saldo = this.ValoresMonedasApertura[index]
-          console.log(elements.saldo);
           elements.codigo = this.ValoresMonedasApertura2[index]['Codigo']
         });
       });

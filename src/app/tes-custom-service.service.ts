@@ -58,7 +58,7 @@ export class TesCustomServiceService {
       params.pag = this.page;
     }
 
-    params.estado = 'Pagada' ;
+    params.estado = 'Pagada';
 
 
     return params;
@@ -75,7 +75,7 @@ export class TesCustomServiceService {
     }
 
     // const resp = this._http.get(this._rutaBase + 'get_filter_transferencias_consultores.php', { params: p }).subscribe((data) => {
-      this.subjec.next(filter)
+    this.subjec.next(filter)
     // });
 
   }

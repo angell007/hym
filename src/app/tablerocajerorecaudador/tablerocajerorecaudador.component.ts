@@ -249,15 +249,12 @@ export class TablerocajerorecaudadorComponent implements OnInit {
 
     if (typeof (modelo) == 'object') {
 
-      console.log('insider');
       listaDestinatarios[i].Numero_Documento_Destino = modelo.id_destinatario;
       listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
     } else if (typeof (modelo) == 'string') {
       if (modelo == '') {
-        console.log('insider2');
         listaDestinatarios[i].Numero_Documento_Destino = '';
       } else {
-        console.log('insider22');
         listaDestinatarios[i].Numero_Documento_Destino = modelo;
       }
 
@@ -607,8 +604,8 @@ export class TablerocajerorecaudadorComponent implements OnInit {
       Porcentaje_Recauda: 0,
 
       //DATOS DEL CAMBIO
-      Moneda_Origen: '',
-      Moneda_Destino: '',
+      Moneda_Origen: '2',
+      Moneda_Destino: '2',
       Cantidad_Recibida: '',
       Cantidad_Transferida: '',
       Cantidad_Transferida_Con_Bolivares: '0',
@@ -783,6 +780,7 @@ export class TablerocajerorecaudadorComponent implements OnInit {
             this.ListaDestinatarios[index].Nombre_Destinatario = '';
             this.ListaDestinatarios[index].id_destinatario_transferencia = '';
             this.ListaDestinatarios[index].Valor_Transferencia = '0';
+            this.EliminarDestinatarioTransferencia(index);
           })
 
           this.Transferencia1 = true;
@@ -813,8 +811,12 @@ export class TablerocajerorecaudadorComponent implements OnInit {
   }
 
   EliminarDestinatarioTransferencia(index) {
-    // this.ListaDestinatarios.splice(index, 1);
-    this.HabilitarCampoValor();
+
+    if (index != 0) {
+      this.ListaDestinatarios.splice(index, 1);
+      this.HabilitarCampoValor();
+    }
+
   }
 
   ValidateBeforeSubmit() {

@@ -52,6 +52,10 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   public MostrarSelect: boolean = false;
   public CuentasVaciasInicial: boolean = true;
 
+  public Modulos: Array<any> = [];
+  public Permisos: Array<any> = [];
+  public PermisosAenviar: Array<any> = [];
+
   constructor(private _activeRoute: ActivatedRoute,
     private http: HttpClient,
     private global: Globales,
@@ -95,38 +99,47 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
         this.FuncionarioModel.Identificacion_Funcionario = '';
       }
     });
+
+    this.getModulos();
+    this.getPermisos();
   }
 
   getOficinas() {
     this.http.get(this.global.ruta + 'php/oficinas/get_oficinas.php').subscribe((data: any) => {
-      // console.log(data);
       this.oficinas = data.query_data.map((oficina) => {
         return {
           value: oficina.Id_Oficina,
           label: oficina.Nombre,
         }
       });
-    
-      this.oficinas.push({ value: '', label: 'Todos' });
-      // console.log( this.oficinas);
 
+      this.oficinas.push({ value: '', label: 'Todos' });
 
     });
 
   }
-  
+
+  getModulos() {
+    this.http.get(this.global.rutaNueva + 'modulos').subscribe((data: any) => {
+      this.Modulos = data;
+    });
+
+  }
+  getPermisos() {
+    this.http.get(this.global.ruta + 'php/funcionarios/getCustomPermisos.php', {
+      params: { id: this._idFuncionario }
+    }).subscribe((data: any) => {
+      this.Permisos = data.permisos
+      this.PermisosAenviar = this.Permisos;
+      console.log(this.PermisosAenviar);
+    });
+  }
+
   getOficinasDependientes() {
     this._funcionarioService.getFuncionarioOficinasDependencias(this._idFuncionario).subscribe((data: any) => {
-      // console.log(data);
-     
       data.forEach((oficina) => {
         this.oficinas_dependientes.push(oficina.Id_Oficina);
       });
-    
-   
-      console.log( this.oficinas_dependientes);
-
-
     });
 
   }
@@ -193,13 +206,10 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
 
   SetPerfiles() {
     this.PerfilesPermisos = this._generalService.PerfilesPermisos;
-  } 
+  }
 
   GetDatosFuncionario() {
     this._funcionarioService.getDatosFuncionario(this._idFuncionario).subscribe((data: any) => {
-
-      console.log(data);
-
       if (data.codigo == 'success') {
         this.FuncionarioModel = data.query_data;
         this.ContactoEmergenciaModel = data.Contacto_Emergencia;
@@ -228,7 +238,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     this._cuentaService.getCuentasBancariasSelect().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.CuentasBancarias = data.query_data;
-        // console.log(this.CuentasBancarias);
+
       } else {
 
         this.CuentasBancarias = [];
@@ -252,8 +262,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     let permisos = this._generalService.normalize(JSON.stringify(this.PerfilesPermisos));
     let cuentas = this._generalService.normalize(JSON.stringify(this.CuentasConsultor));
 
-    //console.log(this.oficinas_dependientes);
-
     if (this.oficinas_dependientes.length > 0) {
       this.oficinas_dependientes.forEach((element) => {
         if (element == "") {
@@ -270,16 +278,14 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     datos.append("contacto_emergencia", contacto_emergencia);
     datos.append("permisos", permisos);
     datos.append('cuentas_asociadas', cuentas);
+    datos.append('permisosEnviados', JSON.stringify(this.PermisosAenviar));
 
     //if (this.FuncionarioModel.Id_Perfil == '2') {
-      datos.append('Oficinas_Asociadas', oficinas);
-  //  }
+    datos.append('Oficinas_Asociadas', oficinas);
+    //  }
 
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {
-
-        console.log(['editar', response]);
-
         if (response.codigo == 'success') {
           this._swalService.ShowMessage(response);
           this.LimpiarModelo();
@@ -446,6 +452,40 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     }
   }
 
+  verifyPermiso(modulo: object) {
+    const resp = this.Permisos.find((permiso) => {
+      return permiso.Nombre_Modulo == modulo['Nombre_Modulo']
+    })
+    if (resp != null && resp != undefined && resp != '') {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  verifyPermisoCopia(modulo: object) {
+    const resp = this.PermisosAenviar.find((permiso) => {
+      return permiso.Nombre_Modulo == modulo['Nombre_Modulo']
+    })
+    if (resp != null && resp != undefined && resp != '') {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  setModule(item: object) {
+    if (this.verifyPermisoCopia(item)) {
+      this.PermisosAenviar = this.PermisosAenviar.filter((permiso) => {
+        return permiso.Nombre_Modulo != item['Nombre_Modulo']
+      });
+    } else {
+      item['Id_Funcionario'] = this.FuncionarioModel.Identificacion_Funcionario;
+      item['Id_Funcionario_Modulo'] = item['Id_Modulo']
+      this.PermisosAenviar.push(item);
+    }
+  }
+
   MostrarSelectCuentas() {
     if (this.FuncionarioModel.Id_Perfil == '') {
       this.MostrarSelect = false;
@@ -463,7 +503,6 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   }
 
   TestSelect() {
-    // console.log(this.CuentasConsultor);
 
   }
 

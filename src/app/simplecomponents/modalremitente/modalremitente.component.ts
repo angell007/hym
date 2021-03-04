@@ -28,7 +28,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
   public Editar: boolean = false;
   public accion: string = 'crear';
   public MensajeGuardar: string = 'Se dispone a guardar esta caja recaudo';
-  public tipo:any = '';
+  public tipo: any = '';
   public RemitenteModel: RemitenteModel = new RemitenteModel();
 
   constructor(private _swalService: SwalService,
@@ -41,8 +41,6 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
       this.tipo = data.tipo;
       this.accion = data.accion;
 
-  console.log('data.->>',data);
-  
       if (data.id_remitente != "0" && data.accion == 'editar') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
@@ -58,13 +56,13 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
         });
       } else if (data.id_remitente != "0" && data.accion == 'editar desde giro') {
-       
-        
+
+
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
         this.tipo_persona = data.tipo;
-        this.RemitenteModel.Tipo = data.tipo; 
-        let p = { id_remitente: data.id_remitente ,tipo_persona:this.tipo_persona};
+        this.RemitenteModel.Tipo = data.tipo;
+        let p = { id_remitente: data.id_remitente, tipo_persona: this.tipo_persona };
         this._remitenteService.getRemitenteGiro(p).subscribe((d: any) => {
           if (d.codigo == 'success') {
             this.RemitenteModel = d.query_data;
@@ -75,7 +73,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
           }
 
         });
-        
+
       } else if (data.id_remitente != "0" && data.accion == 'editar desde transferencia') {
         this.MensajeGuardar = 'Se dispone a actualizar este remitente';
         this.Editar = true;
@@ -92,21 +90,19 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
 
         });
       } else if (data.id_remitente != "0" && data.accion == 'crear desde giro') {
-        console.clear()
-        console.log(data,'guardando');
-        
-        if(data.tipo=='destinatario'){
-      
+
+        if (data.tipo == 'destinatario') {
+
           this.MensajeGuardar = 'Se dispone a guardar este destinatario';
-        }else{
-          
+        } else {
+
           this.MensajeGuardar = 'Se dispone a guardar este remitente';
-                
+
         }
         //this.MensajeGuardar = 'Se dispone a guardar este remitente';
         this.Editar = false;
-        this.tipo_persona = data.tipo; 
-        this.RemitenteModel.Tipo = data.tipo; 
+        this.tipo_persona = data.tipo;
+        this.RemitenteModel.Tipo = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
         this.ModalRemitente.show();
 
@@ -115,7 +111,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
         this.Editar = false;
         //this.tipo_persona = data.tipo;
         this.RemitenteModel.Id_Transferencia_Remitente = data.id_remitente;
-        
+
         this.RemitenteModel.Tipo = data.tipo;
         this.ModalRemitente.show();
 
@@ -153,8 +149,7 @@ export class ModalremitenteComponent implements OnInit, OnDestroy {
     // console.log(this.RemitenteModel);
 
     let modelo = this._generalService.normalize(JSON.stringify(this.RemitenteModel));
-    console.log('modelosave',modelo);
-    
+
     let datos = new FormData();
     datos.append("modelo", modelo);
 

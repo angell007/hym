@@ -24,8 +24,9 @@
                                 class="thumb-img img-circle img-thumbnail img-responsive" id="foto_visual">
                             </label>
                             <div class="col-md-6">
-                              <input name="Foto" id="Foto" [(ngModel)]="funcionario.Foto" type="file" accept="image/png, image/jpeg"
-                                class="form-control form-control-sm text-right f-9" style="display: none;" (change)="CargaFoto($event)">
+                              <input name="Foto" id="Foto" [(ngModel)]="funcionario.Foto" type="file"
+                                accept="image/png, image/jpeg" class="form-control form-control-sm text-right f-9"
+                                style="display: none;" (change)="CargaFoto($event)">
                             </div>
                           </div>
                         </div>
@@ -33,9 +34,10 @@
                           <div class="row">
                             <div class="col-md-4">
                               <div class="form-group">
-                                <input type="number" min="0" name="Identificacion_Funcionario" [(ngModel)]="funcionario.Identificacion_Funcionario"
-                                  class="form-control form-control-sm f-9" id="identificacion" required 
-                                  (blur)="validarIdentificacion($event.target.value)" 
+                                <input type="number" min="0" name="Identificacion_Funcionario"
+                                  [(ngModel)]="funcionario.Identificacion_Funcionario"
+                                  class="form-control form-control-sm f-9" id="identificacion" required
+                                  (blur)="validarIdentificacion($event.target.value)"
                                   (input)="validarLongitud($event.target.value)" />
                                 <label class="floating-label">Identificación (*)</label>
 
@@ -43,16 +45,18 @@
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <input type="text" name="Nombres" [(ngModel)]="funcionario.Nombres" class="letras form-control form-control-sm"
-                                  id="nombres" (focusout)="boolNombresIP = true" required #nombresInformacionPersonalEd="ngModel" />
+                                <input type="text" name="Nombres" [(ngModel)]="funcionario.Nombres"
+                                  class="letras form-control form-control-sm" id="nombres"
+                                  (focusout)="boolNombresIP = true" required #nombresInformacionPersonalEd="ngModel" />
                                 <label class="floating-label">Nombres (*)</label>
 
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <input type="text" name="Apellidos" [(ngModel)]="funcionario.Apellidos" class="letras form-control form-control-sm"
-                                  id="apellidos" (focusout)="boolApellidosIP = true" required
+                                <input type="text" name="Apellidos" [(ngModel)]="funcionario.Apellidos"
+                                  class="letras form-control form-control-sm" id="apellidos"
+                                  (focusout)="boolApellidosIP = true" required
                                   #apellidosInformacionPersonalEd="ngModel" />
                                 <label class="floating-label">Apellidos (*)</label>
 
@@ -61,25 +65,26 @@
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="date" name="Fecha_Nacimiento"
-                                  [(ngModel)]="funcionario.Fecha_Nacimiento" id="fnac" required (focusout)="boolNacimientoIP = true"
-                                  #nacimientoInformacionPersonalEd="ngModel" />
+                                  [(ngModel)]="funcionario.Fecha_Nacimiento" id="fnac" required
+                                  (focusout)="boolNacimientoIP = true" #nacimientoInformacionPersonalEd="ngModel" />
                                 <label class="floating-label" for="floating-label">Fecha de Nacimiento: (*)</label>
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
                                 <input class="form-control form-control-sm" type="text" name="Lugar_Nacimiento"
-                                  [(ngModel)]="funcionario.Lugar_Nacimiento" id="lnac" (focusout)="boolLugarNacimientoIP = true"
-                                  required #lugarnacimientoInformacionPersonalEd="ngModel" />
+                                  [(ngModel)]="funcionario.Lugar_Nacimiento" id="lnac"
+                                  (focusout)="boolLugarNacimientoIP = true" required
+                                  #lugarnacimientoInformacionPersonalEd="ngModel" />
                                 <label class="floating-label">Lugar de Nacimiento (*)</label>
 
                               </div>
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
-                                <select class="form-control form-control-sm" name="Tipo_Sangre" [(ngModel)]="funcionario.Tipo_Sangre"
-                                  id="sangre" (focusout)="boolTipoSangreIP = true" required
-                                  #tiposangreInformacionPersonalEd="ngModel">
+                                <select class="form-control form-control-sm" name="Tipo_Sangre"
+                                  [(ngModel)]="funcionario.Tipo_Sangre" id="sangre" (focusout)="boolTipoSangreIP = true"
+                                  required #tiposangreInformacionPersonalEd="ngModel">
                                   <option value="">Seleccione</option>
                                   <option value="O+">O+</option>
                                   <option value="O-">O-</option>
@@ -102,26 +107,29 @@
 
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input type="number" name="Telefono" [(ngModel)]="funcionario.Telefono" class="telefono form-control form-control-sm"
-                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoIP = true"
-                              required #telefonoInformacionPersonalEd="ngModel">
+                            <input type="number" name="Telefono" [(ngModel)]="funcionario.Telefono"
+                              class="telefono form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                              (focusout)="boolTelefonoIP = true" required #telefonoInformacionPersonalEd="ngModel">
                             <label class="floating-label">Teléfono Fijo</label>
 
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input type="number" name="Celular" [(ngModel)]="funcionario.Celular" class="celular form-control form-control-sm"
-                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolCelularIP = true"
-                              required #celularInformacionPersonalEd="ngModel">
+                            <input type="number" name="Celular" [(ngModel)]="funcionario.Celular"
+                              class="celular form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                              (focusout)="boolCelularIP = true" required #celularInformacionPersonalEd="ngModel">
                             <label class="floating-label">Celular</label>
 
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                            <input type="email" name="Correo" [(ngModel)]="funcionario.Correo" class="form-control form-control-sm"
-                              (focusout)="boolCorreoIP = true" required #correoInformacionPersonalEd="ngModel">
+                            <input type="email" name="Correo" [(ngModel)]="funcionario.Correo"
+                              class="form-control form-control-sm" (focusout)="boolCorreoIP = true" required
+                              #correoInformacionPersonalEd="ngModel">
                             <label class="floating-label">Correo electrónico</label>
 
                           </div>
@@ -130,9 +138,10 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <input type="text" name="Direccion_Residencia" [(ngModel)]="funcionario.Direccion_Residencia"
-                              class="form-control form-control-sm" id="residencia" (focusout)="boolDireccionIP = true"
-                              required #direccionInformacionPersonalEd="ngModel" />
+                            <input type="text" name="Direccion_Residencia"
+                              [(ngModel)]="funcionario.Direccion_Residencia" class="form-control form-control-sm"
+                              id="residencia" (focusout)="boolDireccionIP = true" required
+                              #direccionInformacionPersonalEd="ngModel" />
                             <label class="floating-label">Dirección de Residencia (*)</label>
 
                           </div>
@@ -141,8 +150,9 @@
                       <div class="row">
                         <div class="col-md-2">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Estado_Civil" [(ngModel)]="funcionario.Estado_Civil"
-                              id="civil" (focusout)="boolEstadoCivilIP = true" required #estadocivilInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Estado_Civil"
+                              [(ngModel)]="funcionario.Estado_Civil" id="civil" (focusout)="boolEstadoCivilIP = true"
+                              required #estadocivilInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="Soltero(a)">Soltero(a)</option>
                               <option value="Casado(a)">Casado(a)</option>
@@ -155,8 +165,8 @@
                         </div>
                         <div class="col-md-2">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Hijos" [(ngModel)]="funcionario.Hijos" id="hijos"
-                              (focusout)="boolHijosIP = true" required #hijosInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Hijos" [(ngModel)]="funcionario.Hijos"
+                              id="hijos" (focusout)="boolHijosIP = true" required #hijosInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="0">0</option>
                               <option value="1">1</option>
@@ -175,8 +185,9 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Grado_Instruccion" [(ngModel)]="funcionario.Grado_Instruccion"
-                              id="educacion" (focusout)="boolGradoIP = true" required #gradoInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Grado_Instruccion"
+                              [(ngModel)]="funcionario.Grado_Instruccion" id="educacion" (focusout)="boolGradoIP = true"
+                              required #gradoInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="Primarios">Primarios</option>
                               <option value="Secundarios">Secundarios</option>
@@ -191,8 +202,9 @@
                         </div>
                         <div class="col-md-5">
                           <div class="form-group">
-                            <input type="text" name="Titulo_Estudio" [(ngModel)]="funcionario.Titulo_Estudio" class="letras form-control form-control-sm"
-                              id="titulo" (focusout)="boolTituloIP = true" required #tituloInformacionPersonalEd="ngModel" />
+                            <input type="text" name="Titulo_Estudio" [(ngModel)]="funcionario.Titulo_Estudio"
+                              class="letras form-control form-control-sm" id="titulo" (focusout)="boolTituloIP = true"
+                              required #tituloInformacionPersonalEd="ngModel" />
                             <label class="floating-label">Nombre del Título (*)</label>
 
                           </div>
@@ -203,9 +215,9 @@
                       <div class="row">
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Id_Grupo" [(ngModel)]="funcionario.Id_Grupo"
-                              (change)="Dependencia_Grupo($event.target.value)" (focusout)="boolGrupoIP = true"
-                              #grupoInformacionPersonalEd="ngModel" required id="grupo">
+                            <select class="form-control form-control-sm" name="Id_Grupo"
+                              [(ngModel)]="funcionario.Id_Grupo" (change)="Dependencia_Grupo($event.target.value)"
+                              (focusout)="boolGrupoIP = true" #grupoInformacionPersonalEd="ngModel" required id="grupo">
                               <option value="">Seleccione Grupo</option>
                               <option *ngFor="let Grupo of Grupos" [value]="Grupo.Id_Grupo">{{Grupo.Nombre}}</option>
                             </select>
@@ -215,19 +227,22 @@
 
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Id_Dependencia" [(ngModel)]="funcionario.Id_Dependencia"
-                              (change)="Cargo_Dependencia($event.target.value)" id="dependencia" (focusout)="boolDependenciaIP = true"
-                              required #dependenciaInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Id_Dependencia"
+                              [(ngModel)]="funcionario.Id_Dependencia" (change)="Cargo_Dependencia($event.target.value)"
+                              id="dependencia" (focusout)="boolDependenciaIP = true" required
+                              #dependenciaInformacionPersonalEd="ngModel">
                               <option value="">Seleccione Dependencia</option>
-                              <option *ngFor="let Dependencia of Dependencias" [value]="Dependencia.Id_Dependencia">{{Dependencia.Nombre}}</option>
+                              <option *ngFor="let Dependencia of Dependencias" [value]="Dependencia.Id_Dependencia">
+                                {{Dependencia.Nombre}}</option>
                             </select>
                             <label class="floating-label">Dependencia (*)</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Id_Cargo" [(ngModel)]="funcionario.Id_Cargo"
-                              required id="cargo" (focusout)="boolCargoIP = true" #cargoInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Id_Cargo"
+                              [(ngModel)]="funcionario.Id_Cargo" required id="cargo" (focusout)="boolCargoIP = true"
+                              #cargoInformacionPersonalEd="ngModel">
                               <option value="">Seleccione Cargo</option>
                               <option *ngFor="let Cargo of Cargos " [value]="Cargo.Id_Cargo">{{Cargo.Nombre}}</option>
                             </select>
@@ -236,32 +251,36 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input type="number" name="Salario" [(ngModel)]="funcionario.Salario" class="dinero form-control form-control-sm"
-                              onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolSalarioIP = true"
-                              required #salarioInformacionPersonalEd="ngModel" />
+                            <input type="number" name="Salario" [(ngModel)]="funcionario.Salario"
+                              class="dinero form-control form-control-sm"
+                              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                              (focusout)="boolSalarioIP = true" required #salarioInformacionPersonalEd="ngModel" />
                             <label class="floating-label">Salario (*)</label>
                           </div>
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input class="form-control form-control-sm f-9" type="date" name="Fecha_Ingreso" [(ngModel)]="funcionario.Fecha_Ingreso"
-                              (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel" />
+                            <input class="form-control form-control-sm f-9" type="date" name="Fecha_Ingreso"
+                              [(ngModel)]="funcionario.Fecha_Ingreso" (focusout)="boolIngresoIP = true" required
+                              #ingresoInformacionPersonalEd="ngModel" />
                             <label for="floating-label">Fecha de Ingreso: (*)</label>
                           </div>
                         </div>
 
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Peso" [(ngModel)]="funcionario.Saldo_Inicial_Peso"
-                              (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel" />
+                            <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Peso"
+                              [(ngModel)]="funcionario.Saldo_Inicial_Peso" (focusout)="boolIngresoIP = true" required
+                              #ingresoInformacionPersonalEd="ngModel" />
                             <label for="floating-label">Saldo Inicial Peso</label>
                           </div>
                         </div>
 
                         <div class="col-md-3">
                           <div class="form-group">
-                            <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Bolivar" [(ngModel)]="funcionario.Saldo_Inicial_Bolivar"
-                              (focusout)="boolIngresoIP = true" required #ingresoInformacionPersonalEd="ngModel" />
+                            <input class="form-control form-control-sm f-9" name="Saldo_Inicial_Bolivar"
+                              [(ngModel)]="funcionario.Saldo_Inicial_Bolivar" (focusout)="boolIngresoIP = true" required
+                              #ingresoInformacionPersonalEd="ngModel" />
                             <label for="floating-label">Saldo Inicial Bolivar</label>
                           </div>
                         </div>
@@ -272,8 +291,9 @@
                       <div class="row">
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Talla_Camisa" [(ngModel)]="funcionario.Talla_Camisa"
-                              (focusout)="boolCamisaIP = true" required #camisaInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Talla_Camisa"
+                              [(ngModel)]="funcionario.Talla_Camisa" (focusout)="boolCamisaIP = true" required
+                              #camisaInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="NA">N/A</option>
                               <option value="XS">XS</option>
@@ -289,8 +309,9 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Talla_Pantalon" [(ngModel)]="funcionario.Talla_Pantalon"
-                              (focusout)="boolPantalonIP = true" required #pantalonInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Talla_Pantalon"
+                              [(ngModel)]="funcionario.Talla_Pantalon" (focusout)="boolPantalonIP = true" required
+                              #pantalonInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="NA">N/A</option>
                               <option value="0">0</option>
@@ -321,8 +342,9 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <select class="form-control form-control-sm" name="Talla_Botas" [(ngModel)]="funcionario.Talla_Botas"
-                              (focusout)="boolBotasIP = true" required #botasInformacionPersonalEd="ngModel">
+                            <select class="form-control form-control-sm" name="Talla_Botas"
+                              [(ngModel)]="funcionario.Talla_Botas" (focusout)="boolBotasIP = true" required
+                              #botasInformacionPersonalEd="ngModel">
                               <option value="">Seleccione</option>
                               <option value="NA">N/A</option>
                               <option value="33">33</option>
@@ -346,7 +368,7 @@
                       </div>
                     </div>
                   </form>
-                  
+
                 </div>
               </wizard-step>
               <!--FIN INFORMACION PERSONAL-->
@@ -359,16 +381,18 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <input type="text" name="Nombre" [(ngModel)]="contacto_emergencia.Nombre" class="letras form-control form-control-sm"
-                            (focusout)="boolNombreCE = true" required #nombreContactoEmergenciaEd="ngModel" />
+                          <input type="text" name="Nombre" [(ngModel)]="contacto_emergencia.Nombre"
+                            class="letras form-control form-control-sm" (focusout)="boolNombreCE = true" required
+                            #nombreContactoEmergenciaEd="ngModel" />
                           <label class="floating-label">Nombre Completo (*)</label>
 
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <input type="text" name="Parentesco" [(ngModel)]="contacto_emergencia.Parentesco" class="letras form-control form-control-sm"
-                            (focusout)="boolParentescoCE = true" required #parentescoContactoEmergenciaEd="ngModel" />
+                          <input type="text" name="Parentesco" [(ngModel)]="contacto_emergencia.Parentesco"
+                            class="letras form-control form-control-sm" (focusout)="boolParentescoCE = true" required
+                            #parentescoContactoEmergenciaEd="ngModel" />
                           <label class="floating-label">Parentesco (*)</label>
 
                         </div>
@@ -377,26 +401,29 @@
                     <div class="row" id="3">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="number" name="Celular" [(ngModel)]="contacto_emergencia.Celular" class="celular form-control form-control-sm"
-                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolCelularCE = true"
-                            required #celularContactoEmergenciaEd="ngModel" />
+                          <input type="number" name="Celular" [(ngModel)]="contacto_emergencia.Celular"
+                            class="celular form-control form-control-sm"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            (focusout)="boolCelularCE = true" required #celularContactoEmergenciaEd="ngModel" />
                           <label class="floating-label">Celular</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="number" name="Telefono" [(ngModel)]="contacto_emergencia.Telefono" class="telefono form-control form-control-sm"
-                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoCE = true"
-                            required #telefonoContactoEmergenciaEd="ngModel" />
+                          <input type="number" name="Telefono" [(ngModel)]="contacto_emergencia.Telefono"
+                            class="telefono form-control form-control-sm"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            (focusout)="boolTelefonoCE = true" required #telefonoContactoEmergenciaEd="ngModel" />
                           <label class="floating-label">Teléfono Fijo</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Direccion" [(ngModel)]="contacto_emergencia.Direccion" class="telefono form-control form-control-sm"
-                            (focusout)="boolDireccionCE = true" required #direccionContactoEmergenciaEd="ngModel" />
+                          <input type="text" name="Direccion" [(ngModel)]="contacto_emergencia.Direccion"
+                            class="telefono form-control form-control-sm" (focusout)="boolDireccionCE = true" required
+                            #direccionContactoEmergenciaEd="ngModel" />
                           <label class="floating-label">Dirección de Residencia</label>
 
                         </div>
@@ -415,24 +442,27 @@
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa" class="form-control form-control-sm"
-                            (focusout)="boolEmpresaEL1 = true" #empresaExperienciaLaboral1Ed="ngModel" />
+                          <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[0].Nombre_Empresa"
+                            class="form-control form-control-sm" (focusout)="boolEmpresaEL1 = true"
+                            #empresaExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label">Empresa</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo" class="letras form-control form-control-sm"
-                            (focusout)="boolCargoEL1 = true" #cargoExperienciaLaboral1Ed="ngModel" />
+                          <input type="text" name="Cargo" [(ngModel)]="experiencia[0].Cargo"
+                            class="letras form-control form-control-sm" (focusout)="boolCargoEL1 = true"
+                            #cargoExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label">Cargo</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe" class="letras form-control form-control-sm"
-                            (focusout)="boolJefeEL1 = true"  #jefeExperienciaLaboral1Ed="ngModel" />
+                          <input type="text" name="Jefe" [(ngModel)]="experiencia[0].Jefe"
+                            class="letras form-control form-control-sm" (focusout)="boolJefeEL1 = true"
+                            #jefeExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label">Jefe Inmediato</label>
 
                         </div>
@@ -441,16 +471,18 @@
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[0].Ingreso_Empresa"
-                            (focusout)="boolFechaIngresoEL1 = true"  #fechaingresoExperienciaLaboral1Ed="ngModel" />
+                          <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa"
+                            [(ngModel)]="experiencia[0].Ingreso_Empresa" (focusout)="boolFechaIngresoEL1 = true"
+                            #fechaingresoExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label" for="floating-label">Fecha de ingreso:</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[0].Retiro_Empresa"
-                            (focusout)="boolFechaRetiroEL1 = true"  #fecharetiroExperienciaLaboral1Ed="ngModel" />
+                          <input class="form-control form-control-sm" type="date" name="Retiro_Empresa"
+                            [(ngModel)]="experiencia[0].Retiro_Empresa" (focusout)="boolFechaRetiroEL1 = true"
+                            #fecharetiroExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label" for="floating-label">Fecha de retiro:</label>
 
                         </div>
@@ -458,8 +490,8 @@
                       <div class="col-md-4">
                         <div class="form-group">
                           <input type="text" name="Telefono" [(ngModel)]="experiencia[0].Telefono" class="form-control"
-                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoEL1 = true"
-                             #telefonoExperienciaLaboral1Ed="ngModel" />
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            (focusout)="boolTelefonoEL1 = true" #telefonoExperienciaLaboral1Ed="ngModel" />
                           <label class="floating-label">Numero de Contacto</label>
 
                         </div>
@@ -468,9 +500,10 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <textarea name="Labores" [(ngModel)]="experiencia[0].Labores" class="autosi form-control form-control-sm"
-                            cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
-                            (focusout)="boolLaboresEL1 = true"  #laboresExperienciaLaboral1Ed="ngModel"></textarea>
+                          <textarea name="Labores" [(ngModel)]="experiencia[0].Labores"
+                            class="autosi form-control form-control-sm" cols="5" rows="5"
+                            style="overflow: hidden; word-wrap: break-word; resize: vertical;"
+                            (focusout)="boolLaboresEL1 = true" #laboresExperienciaLaboral1Ed="ngModel"></textarea>
                           <label class="floating-label">Tareas Realizadas</label>
 
                         </div>
@@ -481,24 +514,27 @@
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa" class="form-control form-control-sm"
-                            (focusout)="boolEmpresaEL2 = true"  #empresaExperienciaLaboral2Ed="ngModel" />
+                          <input type="text" name="Nombre_Empresa" [(ngModel)]="experiencia[1].Nombre_Empresa"
+                            class="form-control form-control-sm" (focusout)="boolEmpresaEL2 = true"
+                            #empresaExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label">Empresa</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo" class="letras form-control form-control-sm"
-                            (focusout)="boolCargoEL2 = true"  #cargoExperienciaLaboral2Ed="ngModel" />
+                          <input type="text" name="Cargo" [(ngModel)]="experiencia[1].Cargo"
+                            class="letras form-control form-control-sm" (focusout)="boolCargoEL2 = true"
+                            #cargoExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label">Cargo</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe" class="letras form-control form-control-sm"
-                            (focusout)="boolJefeEL2 = true"  #jefeExperienciaLaboral2Ed="ngModel" />
+                          <input type="text" name="Jefe" [(ngModel)]="experiencia[1].Jefe"
+                            class="letras form-control form-control-sm" (focusout)="boolJefeEL2 = true"
+                            #jefeExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label">Jefe Inmediato</label>
 
                         </div>
@@ -507,25 +543,28 @@
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa" [(ngModel)]="experiencia[1].Ingreso_Empresa"
-                            (focusout)="boolFechaIngresoEL2 = true"  #fechaingresoExperienciaLaboral2Ed="ngModel" />
+                          <input class="form-control form-control-sm" type="date" name="Ingreso_Empresa"
+                            [(ngModel)]="experiencia[1].Ingreso_Empresa" (focusout)="boolFechaIngresoEL2 = true"
+                            #fechaingresoExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label" for="floating-label">Fecha de ingreso:</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input class="form-control form-control-sm" type="date" name="Retiro_Empresa" [(ngModel)]="experiencia[1].Retiro_Empresa"
-                            (focusout)="boolFechaRetiroEL2 = true"  #fecharetiroExperienciaLaboral2Ed="ngModel" />
+                          <input class="form-control form-control-sm" type="date" name="Retiro_Empresa"
+                            [(ngModel)]="experiencia[1].Retiro_Empresa" (focusout)="boolFechaRetiroEL2 = true"
+                            #fecharetiroExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label" for="floating-label">Fecha de retiro:</label>
 
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
-                          <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono" class="form-control form-control-sm"
-                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoEL2 = true"
-                             #telefonoExperienciaLaboral2Ed="ngModel" />
+                          <input type="text" name="Telefono" [(ngModel)]="experiencia[1].Telefono"
+                            class="form-control form-control-sm"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            (focusout)="boolTelefonoEL2 = true" #telefonoExperienciaLaboral2Ed="ngModel" />
                           <label class="floating-label">Número de Contacto</label>
 
                         </div>
@@ -534,9 +573,10 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
-                          <textarea name="Labores" [(ngModel)]="experiencia[1].Labores" class="autosi form-control form-control-sm"
-                            cols="5" rows="5" style="overflow: hidden; word-wrap: break-word; resize: vertical;"
-                            (focusout)="boolLaboresEL2 = true"  #laboresExperienciaLaboral2Ed="ngModel"></textarea>
+                          <textarea name="Labores" [(ngModel)]="experiencia[1].Labores"
+                            class="autosi form-control form-control-sm" cols="5" rows="5"
+                            style="overflow: hidden; word-wrap: break-word; resize: vertical;"
+                            (focusout)="boolLaboresEL2 = true" #laboresExperienciaLaboral2Ed="ngModel"></textarea>
                           <label class="floating-label">Tareas Realizadas</label>
 
                         </div>
@@ -554,33 +594,37 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres" class="letras form-control form-control-sm"
-                          (focusout)="boolNombreRP1 = true"  #nombreReferenciasPersonales1Ed="ngModel" />
+                        <input type="text" name="Nombres" [(ngModel)]="referencias[0].Nombres"
+                          class="letras form-control form-control-sm" (focusout)="boolNombreRP1 = true"
+                          #nombreReferenciasPersonales1Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre completo</label>
 
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
-                        <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion" class="letras form-control form-control-sm"
-                          (focusout)="boolProfesionRP1 = true"  #profesionReferenciasPersonales1Ed="ngModel" />
+                        <input type="text" name="Profesion" [(ngModel)]="referencias[0].Profesion"
+                          class="letras form-control form-control-sm" (focusout)="boolProfesionRP1 = true"
+                          #profesionReferenciasPersonales1Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre de la profesión/cargo</label>
 
                       </div>
                     </div>
                     <div class="col-md-3">
                       <div class="form-group">
-                        <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa" class="form-control form-control-sm"
-                          (focusout)="boolEmpresaRP1 = true"  #empresaReferenciasPersonales1Ed="ngModel" />
+                        <input type="text" name="Empresa" [(ngModel)]="referencias[0].Empresa"
+                          class="form-control form-control-sm" (focusout)="boolEmpresaRP1 = true"
+                          #empresaReferenciasPersonales1Ed="ngModel" />
                         <label class="floating-label" for="codigo">Nombre de la empresa</label>
 
                       </div>
                     </div>
                     <div class="col-md-2">
                       <div class="form-group">
-                        <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono" class="celular form-control form-control-sm"
-                          onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoRP1 = true"
-                           #telefonoReferenciasPersonales1Ed="ngModel" />
+                        <input type="text" name="Telefono" [(ngModel)]="referencias[0].Telefono"
+                          class="celular form-control form-control-sm"
+                          onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                          (focusout)="boolTelefonoRP1 = true" #telefonoReferenciasPersonales1Ed="ngModel" />
                         <label class="floating-label" for="codigo">Numero de contacto</label>
 
                       </div>
@@ -592,33 +636,37 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
-                      <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres" class="letras form-control form-control-sm"
-                        (focusout)="boolNombreRP2 = true"  #nombreReferenciasPersonales2Ed="ngModel" />
+                      <input type="text" name="Nombres" [(ngModel)]="referencias[1].Nombres"
+                        class="letras form-control form-control-sm" (focusout)="boolNombreRP2 = true"
+                        #nombreReferenciasPersonales2Ed="ngModel" />
                       <label class="floating-label" for="codigo">Nombre completo</label>
 
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion" class="letras form-control form-control-sm"
-                        (focusout)="boolProfesionRP2 = true"  #profesionReferenciasPersonales2Ed="ngModel" />
+                      <input type="text" name="Profesion" [(ngModel)]="referencias[1].Profesion"
+                        class="letras form-control form-control-sm" (focusout)="boolProfesionRP2 = true"
+                        #profesionReferenciasPersonales2Ed="ngModel" />
                       <label class="floating-label" for="codigo">Nombre de profesión/cargo</label>
 
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa" class="form-control form-control-sm"
-                        (focusout)="boolEmpresaRP2 = true"  #empresaReferenciasPersonales2Ed="ngModel" />
+                      <input type="text" name="Empresa" [(ngModel)]="referencias[1].Empresa"
+                        class="form-control form-control-sm" (focusout)="boolEmpresaRP2 = true"
+                        #empresaReferenciasPersonales2Ed="ngModel" />
                       <label class="floating-label" for="codigo">Nombre de empresa</label>
 
                     </div>
                   </div>
                   <div class="col-md-2">
                     <div class="form-group">
-                      <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono" class="celular form-control form-control-sm"
-                        onkeypress="return event.charCode >= 48 && event.charCode <= 57" (focusout)="boolTelefonoRP2 = true"
-                         #telefonoReferenciasPersonales2Ed="ngModel" />
+                      <input type="text" name="Telefono" [(ngModel)]="referencias[1].Telefono"
+                        class="celular form-control form-control-sm"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        (focusout)="boolTelefonoRP2 = true" #telefonoReferenciasPersonales2Ed="ngModel" />
                       <label class="floating-label" for="codigo">Numero de contacto</label>
 
                     </div>
@@ -636,7 +684,8 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="floating-label">Cuentas Asociadas</label>
-                          <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias" name="Cuentas_Asociadas" [(ngModel)]="CuentasAsociadas" [multiple]="true"></ng-select>
+                          <ng-select [ngClass]="'ng-select' " class="cuentas" [options]="CuentasBancarias"
+                            name="Cuentas_Asociadas" [(ngModel)]="CuentasAsociadas" [multiple]="true"></ng-select>
 
                         </div>
                       </div>
@@ -647,17 +696,18 @@
               <!--FIN CUENTAS ASOCIADAS-->
               <!--INICIO INFORMACION PRIVILEGIOS-->
               <wizard-step [title]="'Privilegios'" (onComplete)="GuardarFuncionario(FormFuncionarioCrear)">
-                
+
                 <h5>Privilegios</h5>
                 <hr>
                 <div class="row m-t-30">
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Perfil</label>
-                      <select class="form-control form-control-sm" (change)="AsignarPermisos($event.target.value)" required name="Id_Perfil"
-                        ngModel>
+                      <select class="form-control form-control-sm" (change)="AsignarPermisos($event.target.value)"
+                        required name="Id_Perfil" ngModel>
                         <option value="">Seleccione</option>
-                        <option *ngFor="let Perfil of Perfiles; let i=index" [value]="Perfil.Id_Perfil">{{Perfil.Nombre}}</option>
+                        <option *ngFor="let Perfil of Perfiles; let i=index" [value]="Perfil.Id_Perfil">
+                          {{Perfil.Nombre}}</option>
 
                       </select>
                     </div>
@@ -678,20 +728,19 @@
 
                                 <input type="checkbox" name="Ver{{i}}" id="item.Ver{{i}}" (click)="CambiarVer(i)"
                                   [checked]="item.Ver==='1' ? true : false" class="switch">
-                                <!-- <input type="hidden" name="Ver"  [(ngModel)]="item.Ver" value="0" class="switch" >-->
+                                <input type="hidden" name="Ver" [(ngModel)]="item.Ver" value="0" class="switch">
                                 <label for="item.Ver{{i}}"></label>
                               </span>
-                              <label style="text-align: center; margin-left: 5px;"> Ver</label>
+                              <label style="text-align: center; margin-left: 5px;">Activar</label>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-3">
+                      <!-- <div class="col-md-3">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
                               <span class="switch switch-sm">
-
                                 <input type="checkbox" name="Crear" id="item.Crear{{i}}" [checked]="item.Crear==='1' ? true : false"
                                   class="switch" (click)="CambiarCrear(i)">
                                 <label for="item.Crear{{i}}"></label>
@@ -700,8 +749,8 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-md-3">
+                      </div> -->
+                      <!-- <div class="col-md-3">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
@@ -713,9 +762,9 @@
                               <label style="text-align: center">Editar</label>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
+                        </div> -->
+                    </div>
+                    <!-- <div class="col-md-3">
                         <div class="row">
                           <div class="col-md-12">
                             <div class="form-group">
@@ -728,10 +777,10 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </div> -->
                   </div>
                 </div>
+                <!-- </div> -->
 
                 <div class="row m-t-30">
                   <div class="col-md-12">

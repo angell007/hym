@@ -126,8 +126,6 @@ export class TablatransferenciasvisualComponent implements OnInit, OnChanges, On
     private _router: Router,
     private _TesCustomServiceService: TesCustomServiceService,
   ) {
-    console.log('constructor');
-
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Desbloquear esta transferencia",

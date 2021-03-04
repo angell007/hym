@@ -19,14 +19,13 @@ export class CuentabancariaService {
     return this.client.get(this._rutaBase + '/get_cuentas_bancarias.php');
   }
 
-  getFiltrarCuentasBancarias(match: string, Id_Pais_Origen:any = ''): Observable<any> {
-    console.log('Id_Pais_Origen!',Id_Pais_Origen);
-    
+  getFiltrarCuentasBancarias(match: string, Id_Pais_Origen: any = ''): Observable<any> {
     let p = { match: match, id_pais_origen: Id_Pais_Origen };
     return this.client.get(this._rutaBase + '/filtrar_cuentas_bancarias.php', { params: p });
   }
 
   getFiltrarCajero(match: string): Observable<any> {
+    console.log(match);
     let p = { match: match };
     return this.client.get(this.globales.rutaNueva + 'filtrar-cajeros', { params: p });
   }

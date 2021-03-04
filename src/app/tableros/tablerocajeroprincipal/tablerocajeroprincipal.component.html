@@ -1,8 +1,8 @@
 <div class="container-fluid p-3">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 d-flex justify-content-center">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
           <div class="row">
             <div class="col-md-12">
               <label>Balance General</label>
@@ -52,28 +52,32 @@
                             <!-- 
                               TODO arreglar esta monedas
                              -->
-                            <ng-container *ngFor="let total of Totales; index as i ">
+                            <!-- <ng-container *ngFor="let total of Totales; index as i "> -->
 
-                              <tr class="bg-info text-white">
-                                <th scope="col">{{total['Oficina']}}</th>
-                                <th scope="col">Bolivares Soberanos</th>
-                                <th scope="col">Pesos</th>
-                                <th scope="col">Viejitos</th>
-                              </tr>
+                            <tr class="bg-info text-white">
+                              <th class="text-center" scope="col">Cajero</th>
+                              <th class="text-center" scope="col">Bolivares Soberanos</th>
+                              <th class="text-center" scope="col">Pesos</th>
+                              <th class="text-center" scope="col">Viejitos</th>
+                            </tr>
 
-                              <tr *ngFor="let  data of  total['Data'];  ">
-                                <th>{{ data['Funcionario_Nombre']  +  ' '  + ' '  + data['Funcionario_Apellido'] }}</th>
-                                <th *ngFor="let  dataFuncionario of  data.data;  " class="text-right">
-                                  {{  reduce(dataFuncionario['Movimientos']) | currency:' '}}
-                                </th>
-                              </tr>
+                            <!-- <tr *ngFor="let total of Totales; index as i ">
+                              <td>{{ total | json}} </td>
+                            </tr> -->
 
-                              <tr class=" text-info font-weight-bold">
+                            <tr *ngFor="let total of Totales; index as i ">
+                              <th>{{ total['Funcionario_Nombre']  +  ' '  + ' '  + total['Funcionario_Apellido'] }}</th>
+                              <th *ngFor="let  dataFuncionario of  total.data;  " class="text-right">
+                                {{  reduce(dataFuncionario['Movimientos']) | currency:' '}}
+                              </th>
+                            </tr>
+
+                            <!-- <tr class=" text-info font-weight-bold">
                                 <th> Total </th>
                                 <th *ngFor="let item of TotalesByCaja[i].Of"> {{  item.Monto | currency:' ' }} </th>
-                              </tr>
+                              </tr> -->
 
-                            </ng-container>
+                            <!-- </ng-container> -->
 
 
                           </tbody>
@@ -96,14 +100,14 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <div class="row">
             <div class="col-md-12" id="funcionarios-container">
               <app-funcionarioactivos [Fecha_Consulta]="Fecha_fin">
               </app-funcionarioactivos>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </div>
     </div>

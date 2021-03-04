@@ -14,8 +14,8 @@ export class FuncionarioinformativecardComponent implements OnInit {
 
   @Input() Funcionario: any = {};
   @Input() Fecha: string = '';
-  @Output('Actualizar') Actualizar:EventEmitter<any> = new EventEmitter<any>();
-  @ViewChild('alerSwal') alerSwal:any;
+  @Output('Actualizar') Actualizar: EventEmitter<any> = new EventEmitter<any>();
+  @ViewChild('alerSwal') alerSwal: any;
   public Funcionarios_Activos: Array<any> = [];
   public SesionAbierta: boolean = false;
   public user: any = '';
@@ -43,13 +43,12 @@ export class FuncionarioinformativecardComponent implements OnInit {
     const params = new FormData();
     params.append('id', id)
     this.client.post(this.globales.rutaNueva + 'cierre-caja/funcionario', params).subscribe((data: any) => {
-      console.log(data);
 
-      if(data == 'Caja abierta Correctamente'){
+      if (data == 'Caja abierta Correctamente') {
 
         this._swalService.ShowMessage(['success', 'Operación exitosa', 'Caja abierta Correctamente!']);
-      }else{
-        
+      } else {
+
         this._swalService.ShowMessage(['error', 'Error', 'Ha ocurrido un error inesperado!']);
       }
       this.Actualizar.emit();

@@ -755,6 +755,23 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.permisoService._openSubject.next();
   }
 
+  //  someAsynFunction() {
+  //   return new Promise((resolve, reject){
+
+  // this.MonedasCambio.find(x => x.Id_Moneda == value);
+
+  //  if (somethingWasSuccesful) {
+  //     resolve();     
+  //  } else {
+  //     reject()
+  //  }
+  // });
+  //  }
+
+  //  myPromise = new Promise(function(resolve, reject) {
+  //   this.MonedasCambio.find(x => x.Id_Moneda == value);
+  //  });
+
   //#region FUNCIONES CAMBIOS
 
   async BuscarMoneda(value) {
@@ -762,22 +779,19 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     return c
   }
 
+
   async SetMonedaCambio(value) {
     this.MonedaParaCambio.id = value;
     this.CambioModel.Valor_Origen = ''
     this.CambioModel.Valor_Destino = ''
 
-    let monedaFind = await this.BuscarMoneda(value)
-
     if (value != '') {
-      let xx = await this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).toPromise().then((data) => {
+      let xx = await this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).toPromise().then(async (data) => {
 
         if (data['codigo'] == 'success') {
-
           this.MonedaParaCambio.Valores = data['query_data'];
-          this.MonedaParaCambio.nombre = monedaFind.Nombre;
+          this.MonedaParaCambio.nombre = await this.MonedasCambio.find(x => x.Id_Moneda == value);
           this.CambioModel.Recibido = '';
-
           if (this.Venta) {
 
             this.CambioModel.Tasa = data['query_data'].Sugerido_Venta_Efectivo;

@@ -269,6 +269,9 @@ import { TablerocajerorecaudadorComponent } from './tablerocajerorecaudador/tabl
 import { TablaRecaudoComponent } from './tabla-recaudo/tabla-recaudo.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { HandlerrouteService } from './handlerroute.service';
+import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.component';
+import { EditTrasladoComponent } from './components/edit-traslado/edit-traslado.component';
+import { ValidateCajeroService } from './validate-cajero.service';
 
 
 
@@ -493,13 +496,16 @@ export const customCurrencyMaskConfig = {
         LogComponent,
         TablerocajerorecaudadorComponent,
         TablaRecaudoComponent,
-        RedirectComponent
+        RedirectComponent,
+        CajasAbiertasComponent,
+        EditTrasladoComponent
 
     ],
     exports: [
         ModalBasicComponent
     ],
     providers: [
+        ValidateCajeroService,
         ActualizarService,
         QzTrayService,
         CambioService,

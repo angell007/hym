@@ -162,9 +162,10 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
 
   public SeleccionarCuenta(seleccionada: string, cuenta: any) {
-    console.log(seleccionada, 'seleccionada');
-    console.log(cuenta, 'cuenta');
-    
+
+    // console.log(seleccionada, 'seleccionada');
+    // console.log(cuenta, 'cuenta');
+
     if (seleccionada == '0') {
 
       this._cuentaBancariaService.CheckEstadoAperturaCuenta(cuenta.Id_Cuenta_Bancaria).subscribe((data: any) => {
@@ -358,7 +359,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       // this.router.navigate(['/tablero']);
     }
   }
-  SiguientePasoVisual(){
+  SiguientePasoVisual() {
     this.MostrarTablero.emit('Visual');
   }
   private _setCuentaDescuadre(idCuenta: string) {

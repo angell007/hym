@@ -300,7 +300,6 @@ export class CambioService {
         if (tipo_moneda_origen == 'l') {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) % parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Destino = cambio;
-          console.log('if', cambio);
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Origen) * parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Destino = cambio;
@@ -321,7 +320,6 @@ export class CambioService {
         } else {
           var cambio = (parseFloat(this.CambioModel.Valor_Destino) * parseFloat(this.CambioModel.Tasa));
           this.CambioModel.Valor_Origen = cambio;
-          console.log('else2', cambio);
         }
       }
     }
@@ -664,14 +662,14 @@ export class CambioService {
     let sug = parseFloat(this.MonedaParaTransferencia.Valores.Sugerido_Compra_Efectivo);
     //tasa_cambio = parseFloat(tasa_cambio);
 
-    console.log(max);
-    console.log(min);
-    console.log(sug);
-    console.log(tasa_cambio);
-    console.log(tasa_cambio > max || tasa_cambio < min);
-    console.log(tasa_cambio > max && tasa_cambio < min);
-    console.log(tasa_cambio > max);
-    console.log(tasa_cambio < min);
+    // console.log(max);
+    // console.log(min);
+    // console.log(sug);
+    // console.log(tasa_cambio);
+    // console.log(tasa_cambio > max || tasa_cambio < min);
+    // console.log(tasa_cambio > max && tasa_cambio < min);
+    // console.log(tasa_cambio > max);
+    // console.log(tasa_cambio < min);
 
     if (tasa_cambio > max || tasa_cambio < min) {
       this.TransferenciaModel.Tasa_Cambio = sug;
@@ -854,9 +852,7 @@ export class CambioService {
 
 
   getInfo(Tercero: any, otro: any, another: any) {
-    console.log(Tercero, otro, another);
     this.CambioModel.Id_Tercero = Tercero.Id_Tercero
-    console.log(this.CambioModel.Id_Tercero);
   }
 
   setFormaPago() {
@@ -874,8 +870,6 @@ export class CambioService {
   devolverCambio(id: any, modal: any) {
 
     this.http.get(this.globales.rutaNueva + `cambios/${id}`,).subscribe((data: any) => {
-      console.log(data);
-
       this.devCambio = data['cambio'];
       this.Motivos = data['motivos'];
       this.devCambio['Valor_Devolver'] = this.devCambio['Valor_Destino'];
@@ -889,7 +883,6 @@ export class CambioService {
 
   printCambio(id) {
     this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id }, responseType: 'blob' }).subscribe((data: any) => {
-      console.log(data);
       const link = document.createElement('a');
       link.setAttribute('target', '_blank');
       const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
@@ -915,7 +908,6 @@ export class CambioService {
     let datos = new FormData();
     datos.append("data", JSON.stringify(this.devCambio));
     this.http.post(this.globales.rutaNueva + 'devolucion/store', datos).subscribe((data: any) => {
-      console.log(data);
     })
   };
 

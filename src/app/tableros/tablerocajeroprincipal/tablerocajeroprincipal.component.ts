@@ -9,6 +9,7 @@ import { ToastService } from '../../shared/services/toasty/toast.service';
 import { element } from 'protractor';
 import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
+// import { ValidateCajeroService } from '../../validate-cajero.service';
 
 @Component({
   selector: 'app-tablerocajeroprincipal',
@@ -56,7 +57,9 @@ export class TablerocajeroprincipalComponent implements OnInit {
     private _cajaService: CajaService,
     private _monedaService: MonedaService,
     private _paisService: PaisService,
-    private _toastService: ToastService) {
+    private _toastService: ToastService,
+    // private _validateCajeroService: ValidateCajeroService
+  ) {
 
     this.model = {
       beginDate: { year: this._generalService.AnioActual, month: this._generalService.MesActualDosDigitos, day: this._generalService.DiaActual },
@@ -255,9 +258,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
     // this.ConsultarTotalesDepartamento();
   }
 
-  // Test() {
-  //   // console.log(this.Fecha_fin);
-  // }
 
   ShowSwal(tipo: string, titulo: string, msg: string) {
     this.alertSwal.type = tipo;
@@ -289,8 +289,6 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public suma: any = [];
 
   reduceAll(a, ii) {
-
-
     // if (this.suma[ii] == '' || this.suma[ii] == undefined) {
     //   this.suma[ii] = 0;
     // }

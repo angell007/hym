@@ -10,6 +10,8 @@ cajero ppal: 1234567891
 clave 1234567891
 4144411
 
+$filterBanco .= " AND CB.Nombre_Titular LIKE '%$q%' ";
+{{cp.Valor | customcurrency:cp.Codigo: false:'1.0-0'}}
 
 $query='UPDATE Tercero Set Cupo_Disponible = Cupo_Disponible - '.$valorDescontar.'
 WHERE Id_Tercero = '.$idTercero;

@@ -87,14 +87,14 @@
       </thead>
       <tbody *ngIf="!Cargando">
         <tr *ngFor="let c of Compras; let i = index;" [ngClass]="{'bg-anulada':c.Estado == 'Anulada'}">
-          <td class="text-center pb-0 mb-0" >{{c.Fecha | date:"dd-MM-yyyy"}}</td>
-          <td class="text-center pb-0 mb-0" >{{c.Codigo}}</td>
-          <td class="text-center pb-0 mb-0" >{{c.Nombre_Funcionario}}</td>
-          <td class="text-center pb-0 mb-0" >{{c.Nombre_Tercero}}</td>
-          <td class="text-center pb-0 mb-0" >{{c.Nombre_Moneda}}</td>
-          <td class=" text-right pb-0 mb-0" >{{c.Valor_Compra | customcurrency:c.Codigo_Moneda}}</td>
-          <td class=" text-right pb-0 mb-0" >{{c.Tasa | customcurrency}}</td>
-          <td class=" text-right pb-0 mb-0" >{{c.Valor_Peso | customcurrency}}</td>
+          <td class="text-center pb-0 mb-0">{{c.Fecha | date:"dd-MM-yyyy"}}</td>
+          <td class="text-center pb-0 mb-0">{{c.Codigo}}</td>
+          <td class="text-center pb-0 mb-0">{{c.Nombre_Funcionario}}</td>
+          <td class="text-center pb-0 mb-0">{{c.Nombre_Tercero}}</td>
+          <td class="text-center pb-0 mb-0">{{c.Nombre_Moneda}}</td>
+          <td class=" text-right pb-0 mb-0">{{c.Valor_Compra | customcurrency:c.Codigo_Moneda}}</td>
+          <td class=" text-right pb-0 mb-0">{{c.Tasa | customcurrency}}</td>
+          <td class=" text-right pb-0 mb-0">{{c.Valor_Peso | customcurrency}}</td>
           <td class="text-center  pb-0 mb-0" [ngClass]="{'bg-white':c.Estado != 'Anulada'}">
             <div class="text-center  pb-0 mb-0" *ngIf="c.Estado != 'Anulada'">
               <!-- <div ngbDropdown class="dropdown-primary"> -->
