@@ -8,7 +8,7 @@
               style="width:1.5rem; height:1.5rem;">
           </div>
           <div class="col-md-7" style="font-size: 1.5rem;">
-            <label>Transferencias</label>
+            <label>Transferencias {{Filtros.estado}}</label>
           </div>
           <div class="col-md-4 text-right">
             <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="VerCuentas()">Ver
@@ -212,24 +212,36 @@
 
               </td>
             </tr>
-            <!-- <tr>
+            <tr>
+
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
+              <td></td>
+              <td></td>
+
+              <!-- <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="custom-cell specialtd text-right">$ {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
+              <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+              <td></td>
+              <td></td>
+              <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
               <td></td>
               <td></td>
               <td></td> -->
 
-            <!-- <td class="custom-cell specialtd text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td> -->
-            <!-- <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td> -->
-
-            <!-- <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td> -->
-            <!-- <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td> -->
-            <!-- <td></td>
-              <td></td>
-            </tr> -->
+            </tr>
           </tbody>
         </table>
         <table class="table table-striped table-bordered custom-table" *ngIf="Filtros.estado != 'Pagada' ">
@@ -459,7 +471,13 @@
                   {{ InformacionPaginacion.total }}</b></p>
             </div>
             <div class="col-md-8">
-              <ngb-pagination class="pull-right" *ngIf="Filtros.estado=='Pagada'" [collectionSize]="TotalItems"
+              <ngb-pagination class="pull-right" *ngIf="Filtros.estado == 'Pagada'" [collectionSize]="TotalItems"
+                [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
+                (pageChange)="ConsultaFiltradaObservable(true)" [boundaryLinks]="true">
+              </ngb-pagination>
+            </div>
+            <div class="col-md-8">
+              <ngb-pagination class="pull-right" *ngIf="Filtros.estado != 'Pagada'" [collectionSize]="TotalItems"
                 [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm"
                 (pageChange)="ConsultaFiltradaObservable(true)" [boundaryLinks]="true">
               </ngb-pagination>

@@ -397,12 +397,13 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <!-- <label class="font-size-18">Número de documento</label> -->
+
                             <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
                               placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
                               [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
                               [(ngModel)]="CambioModel.Id_Tercero" [inputFormatter]="formatterClienteCambioCompra"
                               (ngModelChange)="CambioModel.Id_Tercero" [required]="tipoCliente != ''">
+
                           </div>
                         </div>
                       </div>
@@ -464,7 +465,7 @@
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         Compra
                         <span>
-                          {{ MonedaParaCambio.nombre }}
+                          <!-- {{   MonedaParaCambio.nombre.includes('Nombre') |  json }} -->
                         </span>
                       </label>
                       <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
@@ -515,10 +516,8 @@
                     </div>
 
                     <div class="col-md-4" *ngIf="Venta">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion
-                        de
-                        pesos a
-                        {{ MonedaParaCambio.nombre}}</label>
+                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion de
+                        pesos </label>
                       <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
                         class="inputfield font-size-18  form-control form-control-lg" name="Valor_Origen" id="Cambia"
                         [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" currencyMask
@@ -731,18 +730,21 @@
                         <div class="row">
                           <div class="col-md-4">
                             <label>Tercero</label>
+
                             <input class="form-control font-size-18" name="Id_Tercero" type="text"
                               [(ngModel)]="tercero_credito" placeholder="Nombre Tercero"
                               [ngbTypeahead]="search_tercero_credito" [resultTemplate]="rt_tercero_credito"
                               [inputFormatter]="formatter_tercero_credito"
                               (ngModelChange)="AutoCompletarTerceroCredito(tercero_credito)">
                           </div>
+
                           <div class="col-md-4">
                             <label>Cupo Tercero</label>
                             <input name="Cupo_T" [(ngModel)]="TransferenciaModel.Cupo_Tercero" type="text" disabled
                               class="form-control font-size-18" placeholder="Cupo disponible" currencyMask
                               [options]="{  prefix: '$ ', thousands: '.' , decimal: ',' ,  precision: '0' }">
                           </div>
+
                           <div *ngIf="InputBolsaBolivares" class="col-md-4">
                             <label>Bolsa de Bolivares</label>
                             <input name="SaldoBolivar" [(ngModel)]="TransferenciaModel.Bolsa_Bolivares" type="text"

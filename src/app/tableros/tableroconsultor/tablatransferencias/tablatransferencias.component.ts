@@ -166,7 +166,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       this.ConsultaFiltradaObservable(false, this.filter);
     })
 
-    this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 15000)
+    this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 500)
       .subscribe(() => {
         this.ConsultaFiltradaObservable(false, this.filter);
       });
@@ -466,6 +466,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
         this.ShowSwal(data.codigo, data.titulo, data.mensaje);
       }
 
+      console.log(this.TransferenciasListar);
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
@@ -485,28 +486,28 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
     this._transferenciaService.GetTransferenciasConsultorObservableDev(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
-        if (!this.nuevaData) {
-          if (!this.mifuncion(this.temporalData, data.query_data)) {
-            this.temporalData = data.query_data
-            this.TransferenciasListar = data.query_data;
-            this.TotalItems = data.numReg;
-            this.Cargando = false;
-            this.ActualizarIndicadores.emit()
-            this.SetInformacionPaginacion();
-          }
-        } else {
-          this.temporalData = data.query_data
-          this.TransferenciasListar = data.query_data;
-          this.nuevaData = false;
-          this.TotalItems = data.numReg;
-          this.Cargando = false;
-          this.ActualizarIndicadores.emit()
+        // if (!this.nuevaData) {
+        // if (!this.mifuncion(this.temporalData, data.query_data)) {
+        this.temporalData = data.query_data
+        this.TransferenciasListar = data.query_data;
+        this.TotalItems = data.numReg;
+        this.Cargando = false;
+        this.ActualizarIndicadores.emit()
+        this.SetInformacionPaginacion();
+        // }
+        // } else {
+        // this.temporalData = data.query_data
+        // this.TransferenciasListar = data.query_data;
+        // this.nuevaData = false;
+        // this.TotalItems = data.numReg;
+        // this.Cargando = false;
+        // this.ActualizarIndicadores.emit()
 
-          this.SetInformacionPaginacion();
-        }
+        // this.SetInformacionPaginacion();
+        // }
       } else {
         this.TransferenciasListar = [];
-        this.ShowSwal('info', data.titulo, data.mensaje);
+        // this.ShowSwal('info', data.titulo, data.mensaje);
       }
     });
   }

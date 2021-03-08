@@ -53,8 +53,6 @@ export class ConsolidadosService {
 
   async GetData() {
 
-    console.log('comprobando');
-
     let p: any = { id: this.user.Identificacion_Funcionario };
     this.http.get(`${this.globales.rutaNueva}cierre-caja`, { params: p }).subscribe((data: any) => {
 

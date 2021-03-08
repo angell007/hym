@@ -1,0 +1,59 @@
+<div class="container-fluid">
+
+  <div class="card">
+
+    <div class="row col-md-12">
+
+      <div class="form-group col-4  mt-5">
+        <label for="">Fecha inicio</label>
+        <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm" [(ngModel)]="Fecha_inicio"
+          (change)="onDataChange()" [attr.max]="FechaActual">
+      </div>
+
+      <div class="form-group col-4 mt-5">
+        <label for="">Fecha fin</label>
+        <input type="date" placeholder="Escoja fecha" class="form-control form-control-sm" [(ngModel)]="Fecha_fin"
+          (change)="onDataChange()" [attr.max]="FechaActual">
+      </div>
+
+      <div class="form-group col-4 mt-5">
+        <label for="">Funcionario</label>
+        <input type="number" placeholder="Identificacion" class="form-control form-control-sm"
+          [(ngModel)]="id_funcionario" (change)="onDataChange()">
+      </div>
+
+    </div>
+
+    <table class=" table table-striped table-bordered cierre-caja-table px-2" *ngIf="Monedas.length != 0;">
+      <thead>
+        <tr>
+          <th>Moneda</th>
+          <th *ngFor="  let m of Modulos let i = index">
+            {{ m }}
+          </th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <ng-container *ngFor="  let m of Monedas let i = index">
+          <tr>
+            <th>
+              {{ m.Nombre }}
+            </th>
+            <th *ngFor="  let mov of m.mov">
+              {{ mov.Total }}
+            </th>
+            <th>
+              {{ reduce(m.mov) }}
+            </th>
+          </tr>
+        </ng-container>
+
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<swal #alertSwal type="" title="" text=""></swal>

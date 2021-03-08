@@ -7,53 +7,58 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class NuevofuncionarioService {
 
-  constructor(private client:HttpClient, private globales:Globales) { }
+  constructor(private client: HttpClient, private globales: Globales) { }
 
-  private _rutaBase:string = this.globales.ruta+'php/funcionarios/';
+  private _rutaBase: string = this.globales.ruta + 'php/funcionarios/';
 
-  getFuncionarioOficinasDependencias(idFuncionario:string){
-    let p = {id_funcionario:idFuncionario};
-    return this.client.get(this._rutaBase+'get_funcionario_oficinas_dependencias.php', {params:p});
+  getFuncionarioOficinasDependencias(idFuncionario: string) {
+    let p = { id_funcionario: idFuncionario };
+    return this.client.get(this._rutaBase + 'get_funcionario_oficinas_dependencias.php', { params: p });
   }
 
-  validarIdentificacion(idFuncionario:string):Observable<any>{
-    let p = {id:idFuncionario};
-    return this.client.get(this._rutaBase+'verificar_identificacion_funcionario.php', {params:p});
+  getFuncionarioOficinas(idFuncionario: string) {
+    let p = { id_funcionario: idFuncionario };
+    return this.client.get(this._rutaBase + 'get_funcionario_oficinas.php', { params: p });
   }
 
-  getPerfilesFuncionario(idPerfil:string, idFuncionario:string){
-    let p = {id_funcionario:idFuncionario, id_perfil:idPerfil};
-    return this.client.get(this._rutaBase+'get_permisos_funcionario.php', {params:p});
+  validarIdentificacion(idFuncionario: string): Observable<any> {
+    let p = { id: idFuncionario };
+    return this.client.get(this._rutaBase + 'verificar_identificacion_funcionario.php', { params: p });
   }
 
-  getDatosFuncionario(idFuncionario:string):Observable<any>{
-    let p ={id_funcionario:idFuncionario};
-    return this.client.get(this._rutaBase+'get_funcionario_by_id.php', {params:p});
+  getPerfilesFuncionario(idPerfil: string, idFuncionario: string) {
+    let p = { id_funcionario: idFuncionario, id_perfil: idPerfil };
+    return this.client.get(this._rutaBase + 'get_permisos_funcionario.php', { params: p });
   }
 
-  getListaFuncionarios(p:any):Observable<any>{
-    return this.client.get(this._rutaBase+'get_lista_funcionarios.php', {params:p});
-  }
-  
-  public FiltrarFuncionariosXNombre(nombre:string):Observable<any>{
-    let p ={match:nombre};
-    return this.client.get(this._rutaBase+'filtrar_funcionario.php', {params:p});
+  getDatosFuncionario(idFuncionario: string): Observable<any> {
+    let p = { id_funcionario: idFuncionario };
+    return this.client.get(this._rutaBase + 'get_funcionario_by_id.php', { params: p });
   }
 
-  saveFuncionario(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_funcionario_nuevo.php', datos);
-  }
-  
-  public LogCierreSesion(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'guardar_log_cierre_sesion.php', datos);
+  getListaFuncionarios(p: any): Observable<any> {
+    return this.client.get(this._rutaBase + 'get_lista_funcionarios.php', { params: p });
   }
 
-  editFuncionario(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'editar_funcionario.php', datos);
+  public FiltrarFuncionariosXNombre(nombre: string): Observable<any> {
+    let p = { match: nombre };
+    return this.client.get(this._rutaBase + 'filtrar_funcionario.php', { params: p });
   }
 
-  cambiarEstadoFuncionario(datos:FormData):Observable<any>{
-    return this.client.post(this._rutaBase+'cambiar_estado_funcionario.php', datos);
+  saveFuncionario(datos: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'guardar_funcionario_nuevo.php', datos);
+  }
+
+  public LogCierreSesion(datos: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'guardar_log_cierre_sesion.php', datos);
+  }
+
+  editFuncionario(datos: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'editar_funcionario.php', datos);
+  }
+
+  cambiarEstadoFuncionario(datos: FormData): Observable<any> {
+    return this.client.post(this._rutaBase + 'cambiar_estado_funcionario.php', datos);
   }
 
 }

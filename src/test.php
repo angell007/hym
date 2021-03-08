@@ -1,293 +1,398 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-header('Content-Type: application/json');
 
-include_once('../../class/class.querybasedatos.php');
-include_once('../../class/class.paginacion.php');
+namespace App\Http\Controllers;
 
-$pagina = (isset($_REQUEST['pag']) ? $_REQUEST['pag'] : '');
-$pageSize = (isset($_REQUEST['tam']) ? $_REQUEST['tam'] : '');
-$id_funcionario = (isset($_REQUEST['id_funcionario']) ? $_REQUEST['id_funcionario'] : '');
-$condicion = 'WHERE (T.Estado = "Activa" OR T.Estado = "Pagada") AND TD.Estado_Consultor = "Cerrada" ';
-$condicion = SetCondiciones($condicion);
-$having = SetHaving($_REQUEST);
-
-$query_pendiente = 'SELECT 
-	      T.Id_Transferencia,
-        T.Fecha,
-        T.Cantidad_Transferida,
-        T.Tasa_Cambio,
-	      TD.Id_Transferencia_Destinatario,
-        TD.Estado,
-        TD.Valor_Transferencia,
-        TD.Numero_Documento_Destino,
-	      SUBSTRING(R.Codigo, 3) as Codigo,
-	      CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
-	      DC.Numero_Cuenta AS Cuenta_Destino,
-	      D.Nombre AS Destinatario,
-          D.Id_Destinatario As Doc_Destinatario,
-          D.Tipo_Documento As Type_Documento,
-        (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
-	      IFNULL((SELECT 
-	                SUM(Valor)
-	              FROM Pago_Transfenecia
-	              WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
-	      (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
-	                SUM(Valor)
-	              FROM Pago_Transfenecia
-	              WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
-        IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
-        (CASE
-          WHEN TD.Estado = "Pagada" THEN 1
-          WHEN TD.Estado = "Pendiente" THEN 2
-         END) AS Orden_Consulta,
-        IFNULL((SELECT 
-                  Id_Pago_Transfenecia 
-                FROM Pago_Transfenecia 
-                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
-	    FROM Transferencia T  
-	    INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
-	    INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
-	    INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
-	    INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
-	    INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
-	    ' . $condicion . '
-        AND TD.Estado = "Pendiente" Having Devolucion = 0 
-        ';
-
-$query_pagadas = 'SELECT
-        T.Id_Transferencia,
-        T.Fecha,
-        T.Cantidad_Transferida,
-        T.Tasa_Cambio,
-        TD.Id_Transferencia_Destinatario,
-        TD.Estado,
-        TD.Valor_Transferencia,
-        TD.Numero_Documento_Destino,
-        SUBSTRING(R.Codigo, 3) as Codigo,
-        CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
-        DC.Numero_Cuenta AS Cuenta_Destino,
-        D.Nombre AS Destinatario,
-        D.Id_Destinatario As Doc_Destinatario,
-        D.Tipo_Documento As Type_Documento,
-        (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
-        IFNULL((SELECT 
-                  SUM(Valor)
-                FROM Pago_Transfenecia
-                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
-        (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
-                  SUM(Valor)
-                FROM Pago_Transfenecia
-                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
-        IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
-        (CASE
-          WHEN TD.Estado = "Pagada" THEN 1
-          WHEN TD.Estado = "Pendiente" THEN 2
-         END) AS Orden_Consulta,
-        IFNULL((SELECT 
-                  Id_Pago_Transfenecia 
-                FROM Pago_Transfenecia 
-                WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
-        FROM Transferencia T  
-        INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
-        INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
-        INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
-        INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
-        INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
-        ' . $condicion . '
-        AND PT.Cajero = ' . $id_funcionario . ' AND TD.Estado = "Pagada"';
-
-$query_devueltas = "SELECT
-    T.Id_Transferencia,
-    T.Fecha,
-    T.Cantidad_Transferida,
-    T.Tasa_Cambio,
-    TD.Id_Transferencia_Destinatario,
-    TD.Estado,
-    TD.Valor_Transferencia,
-    TD.Numero_Documento_Destino,
-    SUBSTRING(R.Codigo, 3) as Codigo,
-    CONCAT(F.Nombres, \" \" , F.Apellidos) as NombreCajero,
-    DC.Numero_Cuenta AS Cuenta_Destino,
-    D.Nombre AS Destinatario,
-    D.Id_Destinatario As Doc_Destinatario,
-    D.Tipo_Documento As Type_Documento,
-  (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
-    IFNULL((SELECT 
-              SUM(Valor)
-            FROM Pago_Transfenecia
-            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), \"0\") AS Pago_Parcial,
-    (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
-              SUM(Valor)
-            FROM Pago_Transfenecia
-            WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"No\"), 0)) AS Valor_Real,
-  IFNULL((SELECT CONCAT_WS(\" \", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), \"Disponible\") AS Funcionario_Bloqueo,
-  (CASE
-    WHEN TD.Estado = \"Pagada\" THEN 1
-    WHEN TD.Estado = \"Pendiente\" THEN 2
-   END) AS Orden_Consulta,
-  IFNULL((SELECT 
-            Id_Pago_Transfenecia 
-          FROM Pago_Transfenecia 
-          WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = \"Si\" LIMIT 1), \"0\") AS Devolucion
-  FROM Transferencia T  
-  INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
-  INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
-  INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-  LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino 
-  INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
-  INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario $condicion";
+use App\Models\Cambio;
+use App\Models\CorresponsalDiario;
+use App\Models\Diario;
+use App\Models\DiarioMonedaCierre;
+use App\Models\Giro;
+use App\Models\Moneda;
+use App\Models\Servicio;
+use App\Models\Transferencia;
+use App\Models\TrasladoCaja;
+use App\Models\Egreso;
+use App\Models\Otrotraslado;
 
 
-$query_pagadas_parciales = '
-        SELECT 
-          T.Id_Transferencia,
-          TD.Id_Transferencia_Destinatario,
-          T.Fecha,
-          SUBSTRING(R.Codigo, 3) as Codigo,
-          CONCAT(F.Nombres, " " , F.Apellidos) as NombreCajero,
-          T.Cantidad_Transferida,
-          TD.Valor_Transferencia,
-          TD.Numero_Documento_Destino,
-          DC.Numero_Cuenta AS Cuenta_Destino,
-          D.Nombre AS Destinatario,
-          D.Id_Destinatario As Doc_Destinatario,
-          D.Tipo_Documento As Type_Documento,
-          "Pagada" AS Estado,
-          (SELECT Codigo FROM Moneda WHERE Id_Moneda = TD.Id_Moneda) AS Codigo_Moneda,
-          IFNULL((SELECT 
-                    SUM(Valor)
-                  FROM Pago_Transfenecia
-                  WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), "0") AS Pago_Parcial,
-          T.Tasa_Cambio,
-          (CAST(TD.Valor_Transferencia AS DECIMAL(20,2)) - IFNULL((SELECT 
-                    SUM(Valor)
-                  FROM Pago_Transfenecia
-                  WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "No"), 0)) AS Valor_Real,
-          IFNULL((SELECT CONCAT_WS(" ", Nombres, Apellidos) FROM Funcionario WHERE Identificacion_Funcionario = PT.Cajero), "Disponible") AS Funcionario_Bloqueo,
-          1 AS Orden_Consulta,
-           IFNULL((SELECT Id_Pago_Transfenecia FROM Pago_Transfenecia WHERE Id_Transferencia_Destino = TD.Id_Transferencia_Destinatario AND Devuelta = "Si" LIMIT 1), "0") AS Devolucion
-        FROM Transferencia T  
-        INNER JOIN Recibo R ON T.Id_Transferencia = R.Id_Transferencia
-        INNER JOIN Funcionario F ON F.Identificacion_Funcionario = T.Identificacion_Funcionario
-        INNER JOIN Transferencia_Destinatario TD ON T.Id_Transferencia = TD.Id_Transferencia
-        LEFT JOIN Pago_Transfenecia PT ON TD.Id_Transferencia_Destinatario = PT.Id_Transferencia_Destino AND Devuelta = "No"
-        INNER JOIN Destinatario_Cuenta DC ON TD.Id_Destinatario_Cuenta = DC.Id_Destinatario_Cuenta
-        INNER JOIN Destinatario D ON TD.Numero_Documento_Destino = D.Id_Destinatario
-        ' . $condicion . '
-        AND PT.Cajero = ' . $id_funcionario . ' AND TD.Estado = "Pendiente"';
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
-// $query_union = $query_pendiente . ' UNION (' . $query_pagadas . ')  ORDER BY Fecha DESC';
-$query_union = $query_pendiente . ' UNION (' . $query_pagadas . ')  UNION (' . $query_devueltas . ') ORDER BY Fecha DESC';
-
-$query_union = "
-        SELECT 
-            r.*
-          FROM ($query_union) r
-          ORDER BY r.Orden_Consulta DESC";
-
-$query_paginacion = "
-        SELECT 
-            COUNT(*) AS Total
-          FROM ($query_union) r";
-
-$paginationObj = new PaginacionData($pageSize, $query_paginacion, $pagina);
-
-//Se crea la instancia que contiene la consulta a realizar
-$queryObj = new QueryBaseDatos($query_union);
-
-//Ejecuta la consulta de la instancia queryobj y retorna el resultado de la misma segun los parametros
-$result = $queryObj->Consultar('Multiple', true, $paginationObj);
-
-echo json_encode($result);
-
-function SetCondiciones($condicion)
+class FlujoEfectivoController extends Controller
 {
-    $req = $_REQUEST;
+    public $id = '';
+    public $result = [];
 
-    // $condicion = ' WHERE PT.Cajero ='.$req['id_funcionario'];
+    public $fecha_inicio;
+    public $fecha_fin;
 
-    if (isset($req['fecha']) && $req['fecha'] != "") {
-        if ($condicion != "") {
-            $condicion .= " AND DATE(T.Fecha) = '" . $req['fecha'] . "'";
-        } else {
-            $condicion .=  " WHERE DATE(T.Fecha) = '" . $req['fecha'] . "'";
-        }
+
+    //Oficinas del sistema
+
+    function getFuncionarios($oficina)
+    {
+
+        $inicio =  $this->fecha_inicio->format('Y-m-d');
+        $fin = $this->fecha_fin->format('Y-m-d');
+
+        return DB::select(
+            "SELECT fun.Identificacion_Funcionario FROM Diario as dia
+                                                        INNER JOIN Funcionario as fun ON fun.Identificacion_Funcionario = dia.Id_Funcionario
+                                                        INNER JOIN Oficina as of On of.Id_Oficina = dia.Oficina_Apertura
+                                                        WHERE of.Id_Oficina = $oficina
+                                                        AND  dia.Fecha >= '$inicio'
+                                                        AND  dia.Fecha <= '$fin'
+                                                       
+                                                        "
+        );
     }
 
-    if (isset($req['codigo']) && $req['codigo'] != '') {
-        if ($condicion != "") {
-            $condicion .= " AND R.Codigo LIKE '%" . $req['codigo'] . "%'";
-        } else {
-            $condicion .= " WHERE R.Codigo LIKE '%" . $req['codigo'] . "%'";
-        }
+    function getOficinasFuncionario()
+    {
+
+        return DB::select('SELECT Id_Oficina From Oficina');
     }
 
-    if (isset($req['cajero']) && $req['cajero']  != '') {
-        if ($condicion != "") {
-            $condicion .= " AND CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['cajero'] . "%'";
-        } else {
-            $condicion .= " WHERE CONCAT_WS(' ', F.Nombres, F.Apellidos) LIKE '%" . $req['cajero'] . "%'";
+
+    function getFullDatafuncionario()
+    {
+        $this->fecha_fin = Carbon::now();
+        $this->fecha_inicio = Carbon::now();
+
+        if (request()->has('Fecha_fin')) {
+
+            $this->fecha_fin = Carbon::parse(request()->get('Fecha_fin'));
         }
+
+        if (request()->has('Fecha_inicio')) {
+
+            $this->fecha_inicio = Carbon::parse(request()->get('Fecha_inicio'));
+        }
+
+        $dataFuncionario = [];
+
+        foreach ($this->getOficinasFuncionario() as $index => $oficinaDependiente) {
+
+            array_push($dataFuncionario, $this->getFuncionarios($oficinaDependiente->Id_Oficina));
+        }
+
+        return $dataFuncionario;
     }
 
-    if (isset($req['valor']) && $req['valor']  != '') {
-        if ($condicion != "") {
-            $condicion .= " AND TD.Valor_Transferencia = " . $req['valor'];
-        } else {
-            $condicion .= " WHERE TD.Valor_Transferencia = " . $req['valor'];
-        }
-    }
 
-    if (isset($req['cedula']) && $req['cedula']  != '') {
-        if ($condicion != "") {
-            $condicion .= " AND TD.Numero_Documento_Destino = " . $req['cedula'];
-        } else {
-            $condicion .= " WHERE TD.Numero_Documento_Destino = " . $req['cedula'];
-        }
-    }
+    public function  getInfo()
+    {
 
-    if (isset($req['cta_destino']) && $req['cta_destino'] != '') {
-        if ($condicion != "") {
-            $condicion .= " AND DC.Numero_Cuenta LIKE '%" . $req['cta_destino'] . "%'";
-        } else {
-            $condicion .= " WHERE DC.Numero_Cuenta LIKE '%" . $req['cta_destino'] . "%'";
-        }
-    }
+        $funcionarios = [];
 
-    if (isset($req['nombre_destinatario']) && $req['nombre_destinatario']) {
-        if ($condicion != "") {
-            $condicion .= " AND D.Nombre LIKE '%" . $req['nombre_destinatario'] . "%'";
-        } else {
-            $condicion .= " WHERE D.Nombre LIKE '%" . $req['nombre_destinatario'] . "%'";
-        }
-    }
-
-    if (isset($req['estado']) && $req['estado']) {
-
-        if ($condicion != "") {
-            if (strtolower($req['estado']) == 'devuelta') {
-                $condicion .= " AND  PT.Devuelta = 'Si'";
-            } else {
-                $condicion .= " AND TD.Estado = '" . $req['estado'] . "'";
+        foreach ($this->getOficinasFuncionario() as $ofi) {
+            $data = $this->getFullDatafuncionario($ofi);
+            foreach ($data as $ofi) {
+                if (count($ofi) > 0) {
+                    foreach ($ofi as $fun) {
+                        array_push($funcionarios, $fun->Identificacion_Funcionario);
+                    }
+                }
             }
         }
+
+
+        // $funcionarios = [9999999, 1524854];
+
+        $funcionarios = [1524854, 9999999];
+        $modulos = ['Transferencias', 'Cambios'];
+
+        $cambiosI = 0;
+        $cambiosE = 0;
+
+        $this->id = request()->get("id");
+        $Monedas = $this->getMonedas();
+        $resultado = collect();
+
+
+        foreach ($Monedas as $moneda) {
+
+            $data["Nombre"] = $moneda->Nombre;
+            $data["Codigo"] = $moneda->Codigo;
+            $data["Id"] = $moneda->Id_Moneda;
+
+            $cambios = [];
+            $transferencias = [];
+            $giros = [];
+            $traslados = [];
+            $corresponsal = [];
+            $servicios = [];
+            $egresos = [];
+            $otros = [];
+
+
+            foreach ($funcionarios as $funcionario) {
+
+                $this->id =  $funcionario;
+                $cambios[] = $this->ConsultarIngresosEgresosCambios($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+
+                $this->id =  $funcionario;
+                $transferencias[] = $this->ConsultarIngresosEgresosTransferencias($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+
+                $this->id =  $funcionario;
+                $giros[] = $this->ConsultarIngresosEgresosGiros($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+
+                $this->id =  $funcionario;
+                $traslados[] = $this->ConsultarIngresosEgresosTraslados($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+
+                $this->id =  $funcionario;
+                $corresponsal[] = $this->ConsultarIngresosEgresosCorresponsal($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+                $this->id =  $funcionario;
+                $servicios[] = $this->ConsultarIngresosEgresosServicios($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+                $this->id =  $funcionario;
+                $egresos[] = $this->ConsultarEgresos($moneda->Id_Moneda);
+            }
+            foreach ($funcionarios as $funcionario) {
+                $this->id =  $funcionario;
+                $otros[] = $this->ConsultarIngresosOtrosTraslados($moneda->Id_Moneda);
+            }
+
+
+
+            $data['mov'] = [];
+
+            array_push($data['mov'],  ['Nombre' => 'Cambio', 'Total' =>  collect($cambios)->sum('Ingreso_Total') - collect($cambios)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Transferencia', 'Total' => collect($transferencias)->sum('Ingreso_Total') - collect($transferencias)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Giros', 'Total' => collect($giros)->sum('Ingreso_Total') - collect($giros)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Traslados', 'Total' => collect($traslados)->sum('Ingreso_Total') - collect($traslados)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Corresponsal', 'Total' => collect($corresponsal)->sum('Ingreso_Total') - collect($corresponsal)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Servicios', 'Total' => collect($servicios)->sum('Ingreso_Total') - collect($servicios)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Egresos', 'Total' => collect($egresos)->sum('Ingreso_Total') - collect($egresos)->sum('Egreso_Total')]);
+            array_push($data['mov'],  ['Nombre' => 'Otros', 'Total' => collect($otros)->sum('Ingreso_Total') - collect($otros)->sum('Egreso_Total')]);
+
+
+            $resultado->push($data);
+        }
+
+        return response()->json($resultado);
     }
 
-    return $condicion;
-}
+    public function ConsultarIngresosEgresosCambios($Id_Moneda)
+    {
 
-function SetHaving()
-{
-    $req = $_REQUEST;
-    $having = '';
 
-    if (isset($req['pendiente']) && $req['pendiente']) {
-        $having .= " HAVING Valor_Real = " . $req['pendiente'];
+        $cambios = Cambio::where(function ($q) use ($Id_Moneda) {
+            $q->where('Moneda_Destino',  $Id_Moneda)
+                ->orWhere('Moneda_Origen',  $Id_Moneda);
+        })
+            ->whereDate("Fecha", $this->getFecha())
+            ->where('Identificacion_Funcionario', $this->id)
+            ->select(
+                DB::raw("
+                IFnull(SUM(
+                Case
+                WHEN Tipo = 'Compra' AND Moneda_Origen = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Origen  IS NOT NULL  THEN 
+                Valor_Origen
+                Else 0
+                END
+                )
+                +
+                SUM(
+                Case
+                WHEN Tipo = 'Venta' AND fomapago_id <> 3 
+                AND Moneda_Origen = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Origen IS NOT NULL  THEN 
+                Valor_Origen -  IfNull((SELECT SUM(dv.valor_entregado) From Devolucion_Cambios dv WHERE dv.cambio_id = Id_Cambio), 0) 
+                Else 0
+                END
+                ), 0) As Ingreso_Total
+                "),
+                DB::raw("
+                IFnull(SUM( Case
+                WHEN Tipo = 'Compra' AND fomapago_id <> 3 AND Moneda_Destino = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Destino IS NOT NULL  THEN 
+                Valor_Destino
+                Else 0
+                END
+                )
+                +
+                SUM(
+                Case
+                WHEN Tipo = 'Venta'  AND Moneda_Destino = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Destino IS NOT NULL   THEN 
+                Valor_Destino - IfNull((SELECT SUM(dv.valor_recibido) From Devolucion_Cambios dv WHERE dv.cambio_id = Id_Cambio), 0) 
+                Else 0
+                END
+                ), 0)  As Egreso_Total
+                "),
+                DB::raw("'Cambios' as Nombre")
+            )->first();
+
+
+        return (!$cambios) ? ['Ingreso_Total' => '0', 'Nombre' => 'Cambios', 'Egreso_Total' => '0'] : $cambios;
     }
 
-    return $having;
+
+
+    public function ConsultarIngresosEgresosTransferencias($Id_Moneda)
+    {
+
+        $transferencias =   Transferencia::where('Moneda_Origen', $Id_Moneda)
+            ->whereDate("Fecha", $this->getFecha())
+            ->where('Identificacion_Funcionario', $this->id)
+            ->whereIn('Estado',  ['Activa', 'Pagada'])
+            ->select(
+                DB::raw("Sum(IF(Forma_Pago <> 'Credito' AND Forma_Pago <> 'Consignacion',Cantidad_Recibida, 0 )) AS Ingreso_Total, 'Transferencias' as Nombre"),
+                DB::raw('0 AS Egreso_Total')
+            )
+            ->groupByRaw('Moneda_Origen')
+            ->first();
+
+
+        return (!$transferencias) ? ['Ingreso_Total' => '0', 'Nombre' => 'Transferencias', 'Egreso_Total' => '0'] : $transferencias;
+    }
+
+
+    public function ConsultarIngresosEgresosGiros($Id_Moneda)
+    {
+
+        $giros =   Giro::where('Id_Moneda', $Id_Moneda)
+            ->whereDate('Fecha', $this->getFecha())
+            ->select(
+                DB::raw("IfNull(Sum(CASE WHEN Estado <> 'Anulado' AND Identificacion_Funcionario = $this->id THEN Valor_Total Else 0 END), 0) AS Ingreso_Total"),
+                DB::raw("IfNull(Sum(CASE WHEN Estado = 'Pagado' AND Funcionario_Pago = $this->id THEN Valor_Entrega Else 0 END), 0) AS Egreso_Total"),
+                DB::raw("'Giros' as Nombre")
+            )->first();
+
+        return (!$giros) ? ['Ingreso_Total' => '0', 'Nombre' => 'Giros', 'Egreso_Total' => '0'] :  $giros;
+    }
+
+    public function ConsultarIngresosEgresosTraslados($Id_Moneda)
+    {
+
+
+        $Ingreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
+            ->whereDate('Fecha_Traslado', Carbon::now()->format('Y-m-d'))->where('Funcionario_Destino', $this->id)
+            ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Ingreso_Total'))
+            ->groupByRaw('Id_Moneda')
+            ->where('Estado', 'Aprobado')
+            ->first();
+
+
+        $Egreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
+            ->whereDate('Fecha_Traslado', Carbon::now()->format('Y-m-d'))->where('Id_Cajero_Origen', $this->id)
+            ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Egreso_Total'))
+            ->groupByRaw('Id_Moneda')
+            ->where('Estado', 'Aprobado')
+            ->first();
+
+
+        return  [
+            'Ingreso_Total' => ($Ingreso_Total == null) ? 0 : $Ingreso_Total['Ingreso_Total'],
+            'Egreso_Total'  => ($Egreso_Total == null) ? 0 : $Egreso_Total['Egreso_Total'],
+            'Nombre' => 'Traslados'
+        ];
+    }
+
+    public function ConsultarIngresosEgresosCorresponsal($Id_Moneda)
+    {
+
+        $corresponsales =   CorresponsalDiario::where('Id_Moneda', $Id_Moneda)
+
+            ->whereDate('Fecha', $this->getFecha())
+            ->where('Identificacion_Funcionario', $this->id)
+            ->select(
+                DB::raw('IF(sum(Consignacion) > 0, sum(Consignacion), 0) AS Ingreso_Total,  "Corresponsal" as Nombre'),
+                DB::raw('IF(sum(Retiro) > 0, sum(Retiro), 0) AS Egreso_Total')
+            )
+            ->groupByRaw('Id_Moneda')
+            ->first();
+
+        return (!$corresponsales) ?  ['Ingreso_Total' => '0', 'Nombre' => 'Corresponsal', 'Egreso_Total' => '0'] : $corresponsales;
+    }
+
+    public function ConsultarIngresosEgresosServicios($Id_Moneda)
+    {
+
+        $Ingreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
+
+            ->whereDate('Fecha', $this->getFecha())
+            ->where('Identificacion_Funcionario', $this->id)
+            ->where('Estado', '!=', 'Anulado')
+            ->select(
+                DB::raw('IF(sum(Valor + Comision) > 0, sum(Valor + Comision), 0) AS Ingreso_Total')
+
+            )
+            ->groupByRaw('Id_Moneda')
+            ->first();
+
+        $Egreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
+
+            ->whereDate('Fecha_Pago', $this->getFecha())
+            ->where('Id_Funcionario_Destino', $this->id)
+            ->where('Estado', 'Pagado')
+            ->select(
+                DB::raw('IF(sum(Valor + Comision) > 0, sum(Valor + Comision), 0) AS Egreso_Total')
+
+            )
+            ->groupByRaw('Id_Moneda')
+            ->first();
+
+
+        return  [
+            'Ingreso_Total' => ($Ingreso_Total == null) ? 0 : $Ingreso_Total['Ingreso_Total'],
+            'Egreso_Total'  => ($Egreso_Total == null) ? 0 : $Egreso_Total['Egreso_Total'],
+            'Nombre' => 'Servicios'
+        ];
+    }
+
+    public function ConsultarEgresos($Id_Moneda)
+    {
+        $egresos =   Egreso::where('Id_Moneda', $Id_Moneda)
+
+            ->whereDate('Fecha', $this->getFecha())
+            ->where('Identificacion_Funcionario', $this->id)
+            ->where('Estado', '<>', 'Anulado')
+            ->select(
+
+                DB::raw('0 AS Ingreso_Total'),
+                DB::raw('SUM(Valor) AS Egreso_Total, "Egresos" as Nombre ')
+            )
+            ->groupByRaw('Id_Moneda')
+            ->first();
+
+        return (!$egresos) ? ['Ingreso_Total' => '0', 'Nombre' => 'Egresos', 'Egreso_Total' => '0'] :  $egresos;
+    }
+
+
+    public function ConsultarIngresosOtrosTraslados($Id_Moneda)
+    {
+        $otrosTraslados =   Otrotraslado::where('Id_Moneda', $Id_Moneda)
+            ->where('Id_Cajero', $this->id)
+            ->whereDate('Fecha', $this->getFecha())
+            ->select(
+
+                DB::raw('0 AS Egreso_Total'),
+                DB::raw('SUM(Valor) AS Ingreso_Total, "OtrosTraslados" as Nombre ')
+            )
+            ->groupByRaw('Id_Moneda')
+            ->first();
+
+        return (!$otrosTraslados) ? ['Ingreso_Total' => '0', 'Nombre' => 'OtrosTraslados', 'Egreso_Total' => '0'] :  $otrosTraslados;
+    }
+
+
+    public function getMonedas()
+    {
+        return Moneda::where('Estado', 'Activa')->get();
+    }
+
+    public function getFecha()
+    {
+        return Carbon::now()->format('Y-m-d');
+    }
 }

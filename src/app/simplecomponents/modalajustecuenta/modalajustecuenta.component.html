@@ -26,14 +26,14 @@
         <div class="col-md-4">
           <label>Valor (en {{CodigoMoneda}})</label>
           <input class="form-control text-right" name="Valor" type="text" min="0" [(ngModel)]="AjusteCuentaModel.Valor"
-            currencyMask [options]="{ thousands: '.', decimal: ',' }" required>
+            currencyMask [options]="{ thousands: '.', decimal: ',', precision:'0' }" required>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
             <label>Observación</label>
-            <textarea style="width:100%;" rows="4"  placeholder="Observaciones" name="Detalle"
+            <textarea style="width:100%;" rows="4" placeholder="Observaciones" name="Detalle"
               [(ngModel)]="AjusteCuentaModel.Detalle" required></textarea>
           </div>
         </div>

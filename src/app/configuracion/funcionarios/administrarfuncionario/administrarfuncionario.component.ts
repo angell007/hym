@@ -136,7 +136,14 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
   }
 
   getOficinasDependientes() {
+
     this._funcionarioService.getFuncionarioOficinasDependencias(this._idFuncionario).subscribe((data: any) => {
+      data.forEach((oficina) => {
+        this.oficinas_dependientes.push(oficina.Id_Oficina);
+      });
+    });
+
+    this._funcionarioService.getFuncionarioOficinas(this._idFuncionario).subscribe((data: any) => {
       data.forEach((oficina) => {
         this.oficinas_dependientes.push(oficina.Id_Oficina);
       });
@@ -279,10 +286,7 @@ export class AdministrarfuncionarioComponent implements OnInit, OnDestroy {
     datos.append("permisos", permisos);
     datos.append('cuentas_asociadas', cuentas);
     datos.append('permisosEnviados', JSON.stringify(this.PermisosAenviar));
-
-    //if (this.FuncionarioModel.Id_Perfil == '2') {
     datos.append('Oficinas_Asociadas', oficinas);
-    //  }
 
     if (this.Edicion) {
       this._funcionarioService.editFuncionario(datos).subscribe((response: any) => {

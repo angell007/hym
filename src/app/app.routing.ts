@@ -75,6 +75,7 @@ import { TableroconsultorComponent } from './tableros/tableroconsultor/tableroco
 import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vistaprincipalconsultor/vistaprincipalconsultor.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.component';
+import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
 
 // insert into Funcionario_Modulo (`Id_Funcionario`, `Id_Modulo`) SELECT fun.Identificacion_Funcionario, modi.Id_Modulo FROM Modulo as modi inner join Funcionario fun on fun.Identificacion_Funcionario = 9999999
 
@@ -86,6 +87,10 @@ export const AppRoutes: Routes = [
     {
         path: 'aperturados', component: CommonLayoutComponent,
         children: [{ path: '', component: CajasAbiertasComponent, canActivate: [AuthGuard] }]
+    },
+    {
+        path: 'flujo', component: CommonLayoutComponent,
+        children: [{ path: '', component: FlujoEfectivoComponent, canActivate: [AuthGuard] }]
     },
     {
         path: 'consultor', component: CommonLayoutComponent,

@@ -13,6 +13,7 @@
             <tr>
               <th class="custom-thead" style="width: 10%;">Fecha</th>
               <th class="custom-thead">Recibo</th>
+              <th class="custom-thead">Nro Transferencia</th>
               <th class="custom-thead">Valor</th>
               <th class="custom-thead">Destinatario</th>
               <th class="custom-thead"></th>
@@ -29,6 +30,7 @@
               [ngClass]="{'bg-anulada':tr.Devuelta == 'Si'}">
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Fecha | date:"dd-MM-yyyy" }}</td>
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Recibo}}</td>
+              <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Codigo_Transferencia}}</td>
               <td class="custom-cell text-right" style="text-align:right;cursor:pointer;">
                 {{tr.Valor_Pagado | customcurrency:tr.Codigo_Moneda}}</td>
               <td class="custom-cell text-center" style="cursor:pointer;">{{tr.Destinatario}}</td>

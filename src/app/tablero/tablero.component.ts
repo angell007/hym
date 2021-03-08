@@ -34,9 +34,10 @@ export class TableroComponent implements OnInit {
     }).subscribe((data: any) => {
 
       var vari: any;
-      vari = TablerogerenciaComponent
+      // vari = TablerogerenciaComponent
       switch (data.Id_Perfil) {
         case '1':
+          vari = TablerocajeroprincipalComponent;
           break;
         case '2':
           vari = TablerocajeroComponent;

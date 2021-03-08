@@ -780,52 +780,51 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
 
-  async SetMonedaCambio(value) {
-    this.MonedaParaCambio.id = value;
+  async SetMonedaCambio(value = '1') {
+
     this.CambioModel.Valor_Origen = ''
     this.CambioModel.Valor_Destino = ''
 
-    if (value != '') {
-      let xx = await this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).toPromise().then(async (data) => {
+    this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).subscribe(async (data) => {
 
-        if (data['codigo'] == 'success') {
-          this.MonedaParaCambio.Valores = data['query_data'];
-          this.MonedaParaCambio.nombre = await this.MonedasCambio.find(x => x.Id_Moneda == value);
-          this.CambioModel.Recibido = '';
-          if (this.Venta) {
+      if (data['codigo'] == 'success') {
+        this.MonedaParaCambio.Valores = data['query_data'];
+        this.MonedaParaCambio.nombre = this.MonedasCambio.find(x => x.Id_Moneda == value);
 
-            this.CambioModel.Tasa = data['query_data'].Sugerido_Venta_Efectivo;
-            this.CambioModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
-            this.CambioModel.Moneda_Destino = value;
-          } else {
-            this.CambioModel.Tasa = data['query_data'].Sugerido_Compra_Efectivo;
-            this.CambioModel.Moneda_Origen = value;
-            this.CambioModel.Moneda_Destino = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
-          }
+        this.CambioModel.Recibido = '';
+        if (this.Venta) {
 
-          this.HabilitarCamposCambio();
+          this.CambioModel.Tasa = data['query_data'].Sugerido_Venta_Efectivo;
+          this.CambioModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+          this.CambioModel.Moneda_Destino = value;
         } else {
-          this.swalService.ShowMessage([data['codigo'], data['titulo'], 'No se encontraron valores de configuración para esta moneda ' + this.c.Nombre + ', seleccione otra!']);
-          this.HabilitarCampos = true;
-          this.ResetMonedaParaCambio();
-          this._limpiarCompraVenta(value);
-          this.MonedaParaCambio.nombre = '';
-          this.CambioModel.Tasa = '';
-          this.CambioModel.Recibido = '';
+          this.CambioModel.Tasa = data['query_data'].Sugerido_Compra_Efectivo;
+          this.CambioModel.Moneda_Origen = value;
+          this.CambioModel.Moneda_Destino = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
         }
-      });
 
+        this.HabilitarCamposCambio();
+      } else {
+        this.swalService.ShowMessage([data['codigo'], data['titulo'], 'No se encontraron valores de configuración para esta moneda ' + this.c.Nombre + ', seleccione otra!']);
+        this.HabilitarCampos = true;
+        this.ResetMonedaParaCambio();
+        this._limpiarCompraVenta(value);
+        this.MonedaParaCambio.nombre = '';
+        this.CambioModel.Tasa = '';
+        this.CambioModel.Recibido = '';
 
-    } else {
-      this._limpiarCompraVenta(value);
-
-      this.MonedaParaCambio.nombre = '';
-      this.CambioModel.Tasa = '';
-      this.CambioModel.Recibido = '';
-      this.ResetMonedaParaCambio();
-      this.HabilitarCamposCambio();
-    }
+      }
+    });
   }
+  // else {
+  //   this._limpiarCompraVenta(value);
+  //   this.MonedaParaCambio.nombre = '';
+  //   this.CambioModel.Tasa = '';
+  //   this.CambioModel.Recibido = '';
+  //   this.ResetMonedaParaCambio();
+  //   this.HabilitarCamposCambio();
+  // }
+  // }
 
   private _limpiarCompraVenta(value: string = '') {
     if (this.Venta) {
@@ -2204,6 +2203,8 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
   }
 
   AutoCompletarTerceroCredito(datos_tercero) {
+
+    console.log(datos_tercero);
 
     if (typeof (datos_tercero) == 'object') {
 
@@ -4624,10 +4625,12 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
 
   search_destino3 = (text$: Observable<string>) => text$.pipe(distinctUntilChanged(), switchMap(term => term.length < 2 ? [] : this.http.get(this.globales.rutaNueva + 'terceros-filter', { params: { id_destinatario: term, tipo: this.selectCustomClient.nativeElement.value } }).map((response) => {
     return response;
-  }).do((data) => {
-    return data
-  })));
-  formatterClienteCambioCompra = (x: { Id_Destinatario: string }) => x.Id_Destinatario;
+  }).do((data) => data)));
+
+  formatterClienteCambioCompra = (x: { Id_Destinatario: string }) => {
+    console.log(x['Id_Tercero'])
+    return x['Id_Tercero']
+  };
 
 
 
@@ -4689,6 +4692,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
             .map(response => response)
         )
       );
+
   formatter_tercero_credito = (x: { Nombre: string }) => x.Nombre;
 
   //#endregion

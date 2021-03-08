@@ -272,6 +272,7 @@ import { HandlerrouteService } from './handlerroute.service';
 import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.component';
 import { EditTrasladoComponent } from './components/edit-traslado/edit-traslado.component';
 import { ValidateCajeroService } from './validate-cajero.service';
+import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
 
 
 
@@ -498,7 +499,8 @@ export const customCurrencyMaskConfig = {
         TablaRecaudoComponent,
         RedirectComponent,
         CajasAbiertasComponent,
-        EditTrasladoComponent
+        EditTrasladoComponent,
+        FlujoEfectivoComponent
 
     ],
     exports: [
