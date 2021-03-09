@@ -12,7 +12,7 @@ import { GeneralService } from '../../shared/services/general/general.service';
 })
 export class FlujoEfectivoComponent implements OnInit {
 
-  public id_funcionario = '9999999';
+  public id_funcionario;
   public Monedas: Array<string> = [];
   public MonedasSistema: any = [];
   public ValoresMonedasApertura: any = [];

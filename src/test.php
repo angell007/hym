@@ -31,19 +31,14 @@ class FlujoEfectivoController extends Controller
 
     function getFuncionarios($oficina)
     {
-
-        $inicio =  $this->fecha_inicio->format('Y-m-d');
-        $fin = $this->fecha_fin->format('Y-m-d');
-
         return DB::select(
             "SELECT fun.Identificacion_Funcionario FROM Diario as dia
                                                         INNER JOIN Funcionario as fun ON fun.Identificacion_Funcionario = dia.Id_Funcionario
                                                         INNER JOIN Oficina as of On of.Id_Oficina = dia.Oficina_Apertura
                                                         WHERE of.Id_Oficina = $oficina
-                                                        AND  dia.Fecha >= '$inicio'
-                                                        AND  dia.Fecha <= '$fin'
-                                                       
-                                                        "
+                                                        AND  dia.Fecha >= '$this->fecha_inicio'
+                                                        AND  dia.Fecha <= '$this->fecha_fin'
+                                                         "
         );
     }
 
@@ -54,20 +49,8 @@ class FlujoEfectivoController extends Controller
     }
 
 
-    function getFullDatafuncionario()
+    function getFullDatafuncionarios()
     {
-        $this->fecha_fin = Carbon::now();
-        $this->fecha_inicio = Carbon::now();
-
-        if (request()->has('Fecha_fin')) {
-
-            $this->fecha_fin = Carbon::parse(request()->get('Fecha_fin'));
-        }
-
-        if (request()->has('Fecha_inicio')) {
-
-            $this->fecha_inicio = Carbon::parse(request()->get('Fecha_inicio'));
-        }
 
         $dataFuncionario = [];
 
@@ -83,32 +66,38 @@ class FlujoEfectivoController extends Controller
     public function  getInfo()
     {
 
+        $this->fecha_fin = Carbon::now();
+        $this->fecha_inicio = Carbon::now();
+
         $funcionarios = [];
 
-        foreach ($this->getOficinasFuncionario() as $ofi) {
-            $data = $this->getFullDatafuncionario($ofi);
-            foreach ($data as $ofi) {
-                if (count($ofi) > 0) {
-                    foreach ($ofi as $fun) {
-                        array_push($funcionarios, $fun->Identificacion_Funcionario);
-                    }
+        if (request()->has('Fecha_fin')) {
+
+            $this->fecha_fin = Carbon::parse(request()->get('Fecha_fin'));
+        }
+
+        if (request()->has('Fecha_inicio')) {
+
+            $this->fecha_inicio = Carbon::parse(request()->get('Fecha_inicio'));
+        }
+
+        if (request()->has('id') && request()->get('id') != '' && request()->get('id') != 'null' && request()->get('id') != 'undefined') {
+
+            array_push($funcionarios, request()->get('id'));
+        } else {
+
+            foreach ($this->getFullDatafuncionarios() as $func) {
+
+                foreach ($func as $item) {
+                    array_push($funcionarios, $item->Identificacion_Funcionario);
                 }
             }
         }
 
 
-        // $funcionarios = [9999999, 1524854];
 
-        $funcionarios = [1524854, 9999999];
-        $modulos = ['Transferencias', 'Cambios'];
-
-        $cambiosI = 0;
-        $cambiosE = 0;
-
-        $this->id = request()->get("id");
         $Monedas = $this->getMonedas();
         $resultado = collect();
-
 
         foreach ($Monedas as $moneda) {
 
@@ -192,7 +181,7 @@ class FlujoEfectivoController extends Controller
             $q->where('Moneda_Destino',  $Id_Moneda)
                 ->orWhere('Moneda_Origen',  $Id_Moneda);
         })
-            ->whereDate("Fecha", $this->getFecha())
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Identificacion_Funcionario', $this->id)
             ->select(
                 DB::raw("
@@ -242,7 +231,7 @@ class FlujoEfectivoController extends Controller
     {
 
         $transferencias =   Transferencia::where('Moneda_Origen', $Id_Moneda)
-            ->whereDate("Fecha", $this->getFecha())
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Identificacion_Funcionario', $this->id)
             ->whereIn('Estado',  ['Activa', 'Pagada'])
             ->select(
@@ -261,7 +250,7 @@ class FlujoEfectivoController extends Controller
     {
 
         $giros =   Giro::where('Id_Moneda', $Id_Moneda)
-            ->whereDate('Fecha', $this->getFecha())
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->select(
                 DB::raw("IfNull(Sum(CASE WHEN Estado <> 'Anulado' AND Identificacion_Funcionario = $this->id THEN Valor_Total Else 0 END), 0) AS Ingreso_Total"),
                 DB::raw("IfNull(Sum(CASE WHEN Estado = 'Pagado' AND Funcionario_Pago = $this->id THEN Valor_Entrega Else 0 END), 0) AS Egreso_Total"),
@@ -276,7 +265,8 @@ class FlujoEfectivoController extends Controller
 
 
         $Ingreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
-            ->whereDate('Fecha_Traslado', Carbon::now()->format('Y-m-d'))->where('Funcionario_Destino', $this->id)
+            ->whereBetween("Fecha_Traslado", [$this->fecha_inicio, $this->fecha_fin])
+            ->where('Funcionario_Destino', $this->id)
             ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Ingreso_Total'))
             ->groupByRaw('Id_Moneda')
             ->where('Estado', 'Aprobado')
@@ -284,7 +274,8 @@ class FlujoEfectivoController extends Controller
 
 
         $Egreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
-            ->whereDate('Fecha_Traslado', Carbon::now()->format('Y-m-d'))->where('Id_Cajero_Origen', $this->id)
+            ->whereBetween("Fecha_Traslado", [$this->fecha_inicio, $this->fecha_fin])
+            ->where('Id_Cajero_Origen', $this->id)
             ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Egreso_Total'))
             ->groupByRaw('Id_Moneda')
             ->where('Estado', 'Aprobado')
@@ -303,7 +294,7 @@ class FlujoEfectivoController extends Controller
 
         $corresponsales =   CorresponsalDiario::where('Id_Moneda', $Id_Moneda)
 
-            ->whereDate('Fecha', $this->getFecha())
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Identificacion_Funcionario', $this->id)
             ->select(
                 DB::raw('IF(sum(Consignacion) > 0, sum(Consignacion), 0) AS Ingreso_Total,  "Corresponsal" as Nombre'),
@@ -320,7 +311,7 @@ class FlujoEfectivoController extends Controller
 
         $Ingreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
 
-            ->whereDate('Fecha', $this->getFecha())
+            ->whereBetween("Fecha_Pago", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Identificacion_Funcionario', $this->id)
             ->where('Estado', '!=', 'Anulado')
             ->select(
@@ -332,7 +323,7 @@ class FlujoEfectivoController extends Controller
 
         $Egreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
 
-            ->whereDate('Fecha_Pago', $this->getFecha())
+            ->whereBetween("Fecha_Pago", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Id_Funcionario_Destino', $this->id)
             ->where('Estado', 'Pagado')
             ->select(
@@ -354,7 +345,7 @@ class FlujoEfectivoController extends Controller
     {
         $egresos =   Egreso::where('Id_Moneda', $Id_Moneda)
 
-            ->whereDate('Fecha', $this->getFecha())
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Identificacion_Funcionario', $this->id)
             ->where('Estado', '<>', 'Anulado')
             ->select(
@@ -372,8 +363,8 @@ class FlujoEfectivoController extends Controller
     public function ConsultarIngresosOtrosTraslados($Id_Moneda)
     {
         $otrosTraslados =   Otrotraslado::where('Id_Moneda', $Id_Moneda)
+            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
             ->where('Id_Cajero', $this->id)
-            ->whereDate('Fecha', $this->getFecha())
             ->select(
 
                 DB::raw('0 AS Egreso_Total'),
@@ -389,10 +380,5 @@ class FlujoEfectivoController extends Controller
     public function getMonedas()
     {
         return Moneda::where('Estado', 'Activa')->get();
-    }
-
-    public function getFecha()
-    {
-        return Carbon::now()->format('Y-m-d');
     }
 }

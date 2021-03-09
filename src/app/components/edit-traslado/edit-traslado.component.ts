@@ -18,6 +18,9 @@ export class EditTrasladoComponent implements OnInit {
   public openSubscription: any;
   public openSubscription2: any;
   public TrasladoModel: TrasladoModel = new TrasladoModel();
+  public Editar: boolean = false;
+  public MensajeGuardar: string = 'Se dispone a guardar este movimiento';
+
 
   public AbrirModalEdit: Subject<any>;
 

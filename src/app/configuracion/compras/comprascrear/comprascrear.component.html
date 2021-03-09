@@ -61,7 +61,7 @@
           <!-- <label style="display:block;" for="">{{CompraModel.Valor_Peso | customcurrency}}</label>-->
           <input type="text" class="form-control" id="Valor_Peso" name="Valor_Peso" currencyMask
             [options]="{thousands: '.' , decimal: ',' ,  precision: '0' }" placeholder="Valor_Peso"
-            [(ngModel)]="CompraModel.Valor_Peso" [disabled]="HabilitarCampos" required>
+            [(ngModel)]="CompraModel.Valor_Peso" disabled required>
 
         </div>
         <div class="col-md-2">

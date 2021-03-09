@@ -21,8 +21,8 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label>Detalles</label>
-                  <input type="text" placeholder="Detalles del Perfil" class="form-control form-control-sm" name="Detalle"
-                    [(ngModel)]="Cabecera.Detalle">
+                  <input type="text" placeholder="Detalles del Perfil" class="form-control form-control-sm"
+                    name="Detalle" [(ngModel)]="Cabecera.Detalle">
                 </div>
               </div>
               <div class="col-md-4">
@@ -41,85 +41,11 @@
             </div>
 
             <hr>
-            <div class="row" style="margin-bottom: 10px">
-              <div class="col-md-12 centrar m-t-20">
-                <h3>Privilegios</h3>
-              </div>
-            </div>
-
-            <div class="row titulo">
-              <div *ngFor="let item of Permisos; let i = index" id="fila{{i}}" class="col-md-3 borde">
-                <h5 class="m-t-15">{{item.Titulo_Modulo}}</h5>
-
-                <div class="row m-t-20 m-b-10">
-                  <div class="col-md-3">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <span class="switch switch-sm">
-                            <input type="checkbox" name="Ver{{i}}" id="item.Ver{{i}}" (click)="CambiarVer(i)" [checked]="item.Ver==1 ? true : false"
-                              class="switch">
-                            <!-- <input type="hidden" name="Ver"  [(ngModel)]="item.Ver" value="0" class="switch" >-->
-                            <label for="item.Ver{{i}}"></label>
-                          </span>
-                          <label style="text-align: center; margin-left: 5px;"> Ver</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <span class="switch switch-sm">
-
-                            <input type="checkbox" name="Crear" id="item.Crear{{i}}" [checked]="item.Crear==='1' ? true : false"
-                              class="switch" (click)="CambiarCrear(i)">
-                            <label for="item.Crear{{i}}"></label>
-                          </span>
-                          <label style="text-align: center">Crear</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <span class="switch switch-sm">
-                            <input type="checkbox" name="{{item.Modulo}}-Editar" id="{{item.Modulo}}-Editar" [checked]="item.Editar==='1' ? true : false"
-                              class="switch" (click)="CambiarEditar(i)">
-                            <label for="{{item.Modulo}}-Editar"></label>
-                          </span>
-                          <label style="text-align: center">Editar</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <span class="switch switch-sm">
-                            <input type="checkbox" name="{{item.Modulo}}-Eliminar" id="{{item.Modulo}}-Eliminar"
-                              [checked]="item.Eliminar==='1' ? true : false"  class="switch"
-                              (click)="CambiarEliminar(i)">
-                            <label for="{{item.Modulo}}-Eliminar"></label>
-                          </span>
-                          <label style="text-align: center">Eliminar</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
             <div class="row">
               <div class="col-md-12 col-md-offset-4">
                 <div class="text-right">
-                  <button type="submit" class="btn btn-primary" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                  <button type="submit" class="btn btn-primary"
+                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a guardar este formulario' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
                     (confirm)="GuardarPerfil(FormPerfil)">Actualizar Información</button>
                 </div>
               </div>

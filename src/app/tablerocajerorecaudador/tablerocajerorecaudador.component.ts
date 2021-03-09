@@ -59,6 +59,8 @@ export class TablerocajerorecaudadorComponent implements OnInit {
       copia: '',
       Cuentas: [],
       Id_Moneda: '',
+      pct: 0,
+      comision: 0,
       EditarVisible: false
     }
 
@@ -248,9 +250,10 @@ export class TablerocajerorecaudadorComponent implements OnInit {
   AutoCompletarDestinatario(modelo, i, listaDestinatarios, dest) {
 
     if (typeof (modelo) == 'object') {
-
+      console.log(modelo);
       listaDestinatarios[i].Numero_Documento_Destino = modelo.id_destinatario;
       listaDestinatarios[i].Nombre_Destinatario = modelo.Nombre;
+      listaDestinatarios[i].pct = modelo.Porcentaje_Recauda;
     } else if (typeof (modelo) == 'string') {
       if (modelo == '') {
         listaDestinatarios[i].Numero_Documento_Destino = '';
@@ -345,7 +348,6 @@ export class TablerocajerorecaudadorComponent implements OnInit {
         return;
       }
     }
-
     let nuevoDestinatario = {
       id_destinatario_transferencia: '',
       Numero_Documento_Destino: '',
@@ -355,7 +357,9 @@ export class TablerocajerorecaudadorComponent implements OnInit {
       copia: '',
       Cuentas: [],
       EditarVisible: false,
-      Id_Moneda: this.MonedaParaTransferencia.id
+      Id_Moneda: this.MonedaParaTransferencia.id,
+      pct: 0,
+      comision: 0,
     };
 
     this.ListaDestinatarios.push(nuevoDestinatario);
@@ -388,7 +392,7 @@ export class TablerocajerorecaudadorComponent implements OnInit {
 
   Asignar(valor, total_destinatarios, count) {
 
-    valor = valor - (valor * (this.TransferenciaModel.Porcentaje_Recauda) / 100);
+    valor = valor;
 
     let MultiplicadorDeConversion = 0;
 
@@ -417,9 +421,12 @@ export class TablerocajerorecaudadorComponent implements OnInit {
       for (let i = this.ListaDestinatarios.length - 1; i >= 0; i--) {
         this.ListaDestinatarios[i]['Valor_Transferencia'] = String(0);
         this.ListaDestinatarios[i].copia = String(0);
+
+
       }
       this.ListaDestinatarios[0].Valor_Transferencia = valor;
       this.ListaDestinatarios[0].copia = String(valor * MultiplicadorDeConversion);
+
     }
 
 
@@ -431,11 +438,15 @@ export class TablerocajerorecaudadorComponent implements OnInit {
           diferencia = diferencia - Number(this.ListaDestinatarios[i]['Valor_Transferencia'])
           this.ListaDestinatarios[i]['Valor_Transferencia'] = String(0);
           this.ListaDestinatarios[i].copia = String(0);
+
+
         }
 
         else {
           this.ListaDestinatarios[i]['Valor_Transferencia'] = String(Number(this.ListaDestinatarios[i]['Valor_Transferencia']) - diferencia);
           this.ListaDestinatarios[i].copia = String(Number(this.ListaDestinatarios[i]['Valor_Transferencia']) * MultiplicadorDeConversion);
+
+
           diferencia = 0
         }
 
@@ -760,7 +771,7 @@ export class TablerocajerorecaudadorComponent implements OnInit {
     let total_suma_transferir_destinatarios = this.GetTotalTransferenciaDestinatarios();
     this.TransferenciaModel.Identificacion_Funcionario = this.funcionario_data.Identificacion_Funcionario;
 
-    if ((total_suma_transferir_destinatarios > Number(this.TransferenciaModel.Cantidad_Transferida) - (Number(this.TransferenciaModel.Cantidad_Transferida) * (this.TransferenciaModel.Porcentaje_Recauda) / 100))) {
+    if ((total_suma_transferir_destinatarios != Number(this.TransferenciaModel.Cantidad_Transferida))) {
       this.ShowSwal('warning', 'Alerta', 'Haz bien tus cuentas!');
       return false
     }
@@ -774,6 +785,12 @@ export class TablerocajerorecaudadorComponent implements OnInit {
       case 'Transferencia':
 
         this.http.post(this.globales.rutaNueva + 'recaudos', { 'lista': this.ListaDestinatarios, 'modelo': this.TransferenciaModel }).subscribe((data: any) => {
+
+          if (data.status != undefined && data.status == 400) {
+            this.ShowSwal('warning', 'Alerta', data.message);
+            return false;
+          }
+
           this.LimpiarModeloTransferencia();
           this.ListaDestinatarios.forEach((det, index) => {
             this.ListaDestinatarios[index].Numero_Documento_Destino = '';
@@ -788,23 +805,6 @@ export class TablerocajerorecaudadorComponent implements OnInit {
 
         });
 
-
-      // return false
-      // if (this.TransferenciaModel.Bolsa_Bolivares != '0') {
-
-      //   if (total_suma_transferir_destinatarios > 0) {
-      //     let restante_bolsa = (((parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir) - total_suma_transferir_destinatarios)).toString();
-      //     if (total_suma_transferir_destinatarios < (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
-      //       this.TransferenciaModel.Cantidad_Transferida_Con_Bolivares = String(total_suma_transferir_destinatarios);
-      //     } else if (total_suma_transferir_destinatarios >= (parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir)) {
-      //       this.TransferenciaModel.Cantidad_Transferida_Con_Bolivares = String(parseFloat(this.TransferenciaModel.Bolsa_Bolivares) + total_a_transferir);
-      //     }
-      //     this.SaveTransferencia(restante_bolsa);
-      //   } else {
-      //     this.ShowSwal('warning', 'Alerta', 'No se han cargado valores para transferir, ya sea en los destinatarios o en los datos de la transferencia!');
-      //   }
-
-      // }
       default:
         break;
     }
@@ -1050,6 +1050,14 @@ export class TablerocajerorecaudadorComponent implements OnInit {
     this.alertSwal.show();
   }
 
+  // let objModal = { id_destinatario: this.ListaDestinatarios[posicionDestinatario].Numero_Documento_Destino, accion: accion };
+
+
+  recalculate(i) {
+
+    this.ListaDestinatarios[i].comision = (this.ListaDestinatarios[i].pct * +this.ListaDestinatarios[i].Valor_Transferencia) / 100
+
+  }
 
   handleError(error: Response) {
     return Observable.throw(error);

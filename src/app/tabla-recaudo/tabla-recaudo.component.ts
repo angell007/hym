@@ -30,11 +30,7 @@ export class TablaRecaudoComponent implements OnInit {
 
   public Filtros: any = {
     remitente: '',
-    recibo: '',
-    recibido: '',
-    transferido: '',
-    tasa: '',
-    estado: ''
+    documento: '',
   };
 
 
@@ -74,6 +70,9 @@ export class TablaRecaudoComponent implements OnInit {
     this._transferenciaService.getRecaudosFuncionario(this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario).subscribe(data => {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
+
+        console.log(this.RecibosTransferencia);
+
       } else {
         this.RecibosTransferencia = [];
       }
@@ -83,7 +82,6 @@ export class TablaRecaudoComponent implements OnInit {
   SetFiltros(paginacion: boolean) {
     let params: any = {};
 
-    // params.tam = this.pageSize;
     params.id_funcionario = this._generalService.SessionDataModel.funcionarioData.Identificacion_Funcionario;
 
     if (paginacion === true) {
@@ -93,29 +91,12 @@ export class TablaRecaudoComponent implements OnInit {
       params.pag = this.page;
     }
 
+    if (this.Filtros.documento.trim() != "") {
+      params.documento = this.Filtros.documento;
+    }
 
     if (this.Filtros.remitente.trim() != "") {
       params.remitente = this.Filtros.remitente;
-    }
-
-    if (this.Filtros.recibo.trim() != "") {
-      params.recibo = this.Filtros.recibo;
-    }
-
-    if (this.Filtros.recibido.trim() != "") {
-      params.recibido = this.Filtros.recibido;
-    }
-
-    if (this.Filtros.transferido.trim() != "") {
-      params.transferido = this.Filtros.transferido;
-    }
-
-    if (this.Filtros.tasa.trim() != "") {
-      params.tasa = this.Filtros.tasa;
-    }
-
-    if (this.Filtros.estado.trim() != "") {
-      params.estado = this.Filtros.estado;
     }
 
     return params;
@@ -146,11 +127,7 @@ export class TablaRecaudoComponent implements OnInit {
   ResetValues() {
     this.Filtros = {
       remitente: '',
-      recibo: '',
-      recibido: '',
-      transferido: '',
-      tasa: '',
-      estado: ''
+      documento: '',
     };
   }
 
@@ -199,9 +176,7 @@ export class TablaRecaudoComponent implements OnInit {
       });
   }
 
-  AbrirDetalleRecibo(transferencia: any) {
-    this.AbrirModalDetalleRecibo.next(transferencia);
-  }
+
 
   AlertarRecibo(transferencia: any) {
     let data: any = { Id_Transferencia: transferencia.Id_Transferencia }
@@ -217,18 +192,11 @@ export class TablaRecaudoComponent implements OnInit {
 
   }
 
-  printReciboTransferencia(id: string) {
-    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'transferencia' }, responseType: 'blob' }).subscribe((data: any) => {
-      const link = document.createElement('a');
-      link.setAttribute('target', '_blank');
-      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-
+  show(id: string) {
+    this.AbrirModalDetalleRecibo.next(id);
+    console.log(id);
   }
 
-
+  delete(id: string) {
+  }
 }

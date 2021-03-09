@@ -273,6 +273,7 @@ import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.componen
 import { EditTrasladoComponent } from './components/edit-traslado/edit-traslado.component';
 import { ValidateCajeroService } from './validate-cajero.service';
 import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
+import { ModalDetalleRecaudoComponent } from './modal-detalle-recaudo/modal-detalle-recaudo.component';
 
 
 
@@ -500,7 +501,8 @@ export const customCurrencyMaskConfig = {
         RedirectComponent,
         CajasAbiertasComponent,
         EditTrasladoComponent,
-        FlujoEfectivoComponent
+        FlujoEfectivoComponent,
+        ModalDetalleRecaudoComponent
 
     ],
     exports: [

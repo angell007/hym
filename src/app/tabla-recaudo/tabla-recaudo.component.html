@@ -3,21 +3,18 @@
     <thead class="rounded">
       <tr>
         <th class="custom-thead" style="width:60px;">Hora</th>
-        <!-- <th class="custom-thead" style="width:110px;">Código</th> -->
         <th class="custom-thead">Documento</th>
         <th class="custom-thead">Remitente</th>
-        <th class="custom-thead" style="width:110px;">Recibido</th>
-        <th class="custom-thead" style="width:110px;">Comision</th>
-        <!-- <th class="custom-thead" style="width:110px;">Transferido</th> -->
-        <!-- <th class="custom-thead" style="width:80px;">Tasa</th> -->
-        <!-- <th class="custom-thead" style="width:80px;">Estado</th> -->
-        <!-- <th class="custom-thead">Pagada por </th> -->
-        <!-- <th class="custom-thead" style="width:100px;">Acciones</th> -->
+        <th class="custom-thead">Recibido</th>
+        <th class="custom-thead" style="width: 450px !important;">Observación</th>
+        <!-- <th class="custom-thead">Comision</th> -->
+        <th class="custom-thead">Acciones</th>
+
       </tr>
       <tr>
-        <!-- <th class="table-filters"></th>
+        <th class="table-filters"></th>
         <th class="table-filters">
-          <input type="text" class="form-control" placeholder="Filtro Código" [(ngModel)]="Filtros.recibo"
+          <input type="text" class="form-control" placeholder="Filtro documento" [(ngModel)]="Filtros.documento"
             (change)="ConsultaFiltrada()">
         </th>
         <th class="table-filters">
@@ -25,16 +22,8 @@
             (change)="ConsultaFiltrada()">
         </th>
         <th class="table-filters"></th>
-        <th class="table-filters"></th> -->
-        <!-- <th class="table-filters"></th> -->
-        <!-- <th class="table-filters">
-          <select id="estado" class="form-control" [(ngModel)]="Filtros.estado" (change)="ConsultaFiltrada()">
-            <option value="" selected>Todos</option>
-            <option value="Activa">Activa</option>
-            <option value="Anulada">Anulada</option>
-          </select>
-        </th> -->
-        <!-- <th class="table-filters"></th> -->
+        <th class="table-filters"></th>
+        <th class="table-filters"></th>
         <!-- <th class="table-filters"></th> -->
       </tr>
 
@@ -62,42 +51,26 @@
         <td class="text-center">{{rt.updated_at | date:"HH:mm" }}</td>
         <!-- <td class="text-center">{{rt.Codigo}}</td> -->
         <td class=" text-center">{{rt.Remitente | currency:' ':'symbol':'3.0' }}</td>
-        <td class=" text-center">{{rt.remitente.Nombre}}</td>
+        <td class=" text-left">{{rt.remitente.Nombre}}</td>
         <td class="text-right"> {{rt.Recibido | customcurrency:rt.Codigo_Moneda_Origen}}</td>
-        <td class="text-right"> {{rt.Comision  }} %</td>
-        <!-- <td class="text-right"> {{rt.Transferido | customcurrency:rt.Codigo_Moneda_Destino }}</td> -->
+        <td class="text-right"> {{rt.Detalle  }}</td>
+        <!-- <td class="text-right"> {{rt.Comision  }} %</td> -->
 
-        <!-- <td class=" text-right"> {{rt.Tasa_Cambio }}</td> -->
-        <!-- <td class=" text-center"> {{rt.Estado }} </td> -->
-        <!-- <td class="text-center" *ngIf="rt.Devuelta == 'Si' && rt.Estado != 'Pagada' ">Devuelta</td> -->
-        <!-- <td class=" text-center" *ngIf="rt.Devuelta == 'No' ||  rt.Estado == 'Pagada'">{{ rt.Pagador }}</td> -->
-        <!-- <td class=" text-center" *ngIf="rt.Devuelta == ''"></td> -->
+        <td class="text-right">
 
-
-        <!-- <td class="text-right">
-          <button *ngIf="rt.Alertada == '' " class="btn btn-xs btn-warning alertar" type="button"
-            (confirm)="AlertarRecibo(rt)" style="margin:0;"
-            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Alertar este recibo de transferencia!' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Alertar',cancelButtonText: 'No!'}">
-            <i class="fa fa-exclamation"> </i>
-          </button>
-          <button class="btn btn-xs btn-info" type="button" (click)="AbrirDetalleRecibo(rt)" style="margin:0;">
-
+          <button class="btn btn-xs btn-info" type="button" title="Ver cambio" style="margin:0;" (click)="show(rt)">
             <i class="ti-search"></i>
           </button>
-          <button class="btn btn-xs btn-danger" style="margin:0;"
-            *ngIf="rt.Estado != 'Anulada' && rt.Estado != 'Pagada' " type="button"
-            (click)="AbrirModalAnularTransferencia(rt.Id_Transferencia)">
+
+          <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
+            [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+            (confirm)="delete(rt)">
             <i class="ti-close"></i>
           </button>
 
-          <ng-container *ngIf="rt.Tiene_Movimientos == 'No'">
-            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
-              (click)="printReciboTransferencia(rt.Id_Transferencia)">
-              <i class="ti-desktop"></i>
-            </button>
-          </ng-container>
+        </td>
 
-        </td> -->
+
       </tr>
     </tbody>
   </table>
@@ -143,5 +116,5 @@
   </div>
 </app-modal-basic>
 
-<!-- <app-modaldetallerecibotransferencia [AbrirModal]="AbrirModalDetalleRecibo.asObservable()">
-</app-modaldetallerecibotransferencia> -->
+<app-modal-detalle-recaudo [AbrirModal]="AbrirModalDetalleRecibo.asObservable()">
+</app-modal-detalle-recaudo>

@@ -251,13 +251,13 @@
               <th class="custom-thead">Recibo</th>
               <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Cajero</th>
               <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Bloqueado Por</th>
-              <th class="custom-thead">Valor</th>
-              <th class="custom-thead">Valor Recibido</th>
+              <!-- <th class="custom-thead">Valor</th> -->
               <th class="custom-thead">Cliente</th>
               <th class="custom-thead">CC. Destino</th>
               <th class="custom-thead">Cta. Destino</th>
               <th class="custom-thead">Destinatario</th>
-              <th class="custom-thead">Pendiente</th>
+              <th class="custom-thead">Pendiente</th> <!-- Pendiente  -->
+              <th class="custom-thead">Valor Recibido</th>
               <th class="custom-thead">Estado</th>
               <th class="custom-thead">Acciones</th>
             </tr>
@@ -305,7 +305,7 @@
                 <input type="text" class="form-control form-control-sm" placeholder="Filtro dest."
                   (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.nombre_destinatario">
               </th>
-              <th class="table-filters"></th>
+              <th class="table-filters"></th> <!-- Pendiente  -->
               <th class="table-filters">
                 <select *ngIf="Filtros.estado != 'Pagada'" type="text" class="form-control form-control-sm"
                   placeholder="Filtro estado" (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.estado"
@@ -348,13 +348,10 @@
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)"
                 class="custom-cell specialtd text-center" style="cursor:pointer;">
                 {{ts.NombreFuncionarioOpera != '' ? ts.NombreFuncionarioOpera : ts.Funcionario_Bloqueo }}</td>
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd "
+              <!-- <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd "
                 style="text-align:right;cursor:pointer;">
                 {{ts.Valor_Transferencia * ts.Tasa_Cambio | customcurrency: ts.Codigo_Moneda}} ({{ts.Tasa_Cambio}})
-              </td>
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)" class="custom-cell specialtd"
-                style="text-align:right;cursor:pointer;">
-                {{ts.Valor_Transferenci - ts.Valor_Real | customcurrency:ts.Codigo_Moneda}}</td>
+              </td> -->
 
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)"
                 class="custom-cell specialtd text-center" style="cursor:pointer;">
@@ -396,10 +393,8 @@
 
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">
                 {{t.NombreFuncionarioOpera != '' ? t.NombreFuncionarioOpera : t.Funcionario_Bloqueo}}</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
-                {{t.Valor_Transferencia * t.Tasa_Cambio | customcurrency: '$'}} ({{t.Tasa_Cambio}})</td>
-              <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
-                {{t.Valor_Transferencia - t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
+              <!-- <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
+                {{t.Valor_Transferencia * t.Tasa_Cambio | customcurrency: '$'}} ({{t.Tasa_Cambio}})</td> -->
 
               <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)"
                 class="custom-cell specialtd text-center" style="cursor:pointer;">
@@ -409,9 +404,12 @@
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">
                 {{t.Cuenta_Destino | mask: '0000-0000-0000-0000-0000' }}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.Destinatario}}</td>
-
+              <!-- Destinatario  -->
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
+                <!-- Pendiente  -->
                 {{t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
+              <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
+                {{t.Valor_Transferencia - t.Valor_Real | customcurrency:t.Codigo_Moneda}}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">{{t.Estado}}</td>
               <td class="custom-cell specialtd text-center">
 
@@ -439,29 +437,18 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
+              <!-- <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td> -->
+              <!-- <td class="custom-cell specialtd text-right">Bss {{suma1(TransferenciasListar) | customcurrency: ''}}</td> -->
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
-              <td></td>
-              <td></td>
-
-              <!-- <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="custom-cell specialtd text-right">$ {{suma1(TransferenciasListar) | customcurrency: ''}}</td>
-              <td class="custom-cell specialtd text-right">Bss {{suma3(TransferenciasListar) | customcurrency: ''}}</td>
-              <td></td>
-              <td></td>
-              <td class="custom-cell specialtd text-right">Bss {{suma2(TransferenciasListar) | customcurrency: ''}}</td>
-              <td></td>
-              <td></td>
-              <td></td> -->
 
             </tr>
+
           </tbody>
         </table>
         <div id="paginacion-container" *ngIf="TransferenciasListar.length > 0">

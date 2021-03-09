@@ -1,0 +1,104 @@
+<app-modal-basic [dialogClass]="'modal-lg'" id="ModalVerRecibo" #ModalVerRecibo>
+
+  <div class="app-modal-body ">
+
+    <div class=" col-md-7 ml-4 ">
+
+      <img class="text-center mb-3 " style="display: block;" src="assets/images/logo/logo.png" alt="">
+
+      <!-- <span class=" text-left"
+        style="font-size: 0.7em; font-weight: 700; display: block;">{{infoCompany.Nombre_Empresa}} </span> -->
+      <!-- <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">NIT
+        {{infoCompany.NIT}}</span> -->
+      <!-- <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">
+        {{infoCompany.Direccion}}</span> -->
+      <!-- <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">Tel
+        {{infoCompany.Telefono}}</span> -->
+      <!-- <span class=" text-left" style="font-size: 0.7em; font-weight: 700; display: block;">Cel
+        {{infoCompany.Celular}}</span> -->
+
+    </div>
+
+    <div class="col-md-3 mt-5 ">
+      <span class="text-center" style="font-size: 1em; font-weight: 700; display: block;">Recibo de Recaudo
+      </span>
+
+      <!-- <span class="text-center" style="font-size: 0.7em; font-weight: bolder; display: block;">{{Recaudo.Codigo}}</span> -->
+
+      <span class="text-center" style="font-size: 0.7em; font-weight: bolder; display: block;">Fecha:
+        {{Recaudo.created_at | date  }} </span>
+
+    </div>
+
+
+    <div class="mb-2 mt-4 card py-3" style="display:block">
+
+      <div class="col-md-3" style="font-size: 0.9em;"> Remitente </div>
+
+      <div class="col-md-8 text-right"> <span style="font-size: 0.9em; font-weight: bolder;">
+          {{Recaudo.remitente.Nombre}} </span>
+      </div>
+
+      <div class="col-md-3" style="font-size: 0.9em;"> Documento </div>
+
+      <div class="col-md-8 text-right"> <span style="font-size: 0.9em; font-weight: bolder;">
+          {{Recaudo.remitente.Id_Tercero}} </span>
+      </div>
+
+      <div class="col-md-12">
+        <span class="text-center mt-3" style="font-size: 1em; font-weight: 700; display: block;">Destinatarios
+        </span>
+      </div>
+
+
+      <div class="mb-3 card" style="display:block">
+        <div class="col-md-12">
+          <div class="invoicelist-body">
+            <table>
+              <thead>
+                <th class="custom-thead">Identificacion</th>
+                <th class="custom-thead">Nombre</th>
+                <th class="custom-thead">Transferido</th>
+                <th class="custom-thead">Comisión</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of DestinatariosRecaudo">
+                  <td class="text-center"><span style="font-size: 0.8em;">{{d.Destinatario_Id}}</span></td>
+                  <td class="text-left"><span style="font-size: 0.8em;">{{d.Nombre}}</span></td>
+                  <td class="text-right">
+                    <span style="font-size: 0.8em;">
+                      ${{d.Transferido | customcurrency:' '}}
+                    </span>
+                  </td>
+                  <td class="text-center"><span
+                      style="font-size: 0.8em;">${{ (d.Original * d.Comision ) /100 | customcurrency:' '}}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="invoicelist-footer">
+
+      <table style="width: 50%;">
+        <tr class="taxrelated">
+          <div class="w-100"></div>
+        </tr>
+        <tr>
+          <td><strong>Recibido:</strong></td>
+          <td id="total_price" style="font-weight: bolder; font-size: 1em;">
+            $ {{Recaudo.Recibido | customcurrency: ' '}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="clearfix">
+      <button type="button" class="btn btn-outline-light btn-lg pull-right"
+        (click)="ModalVerRecibo.hide()">Cerrar</button>
+    </div>
+  </div>
+</app-modal-basic>

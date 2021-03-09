@@ -14,40 +14,39 @@ import { CompraService } from '../../../shared/services/compra/compra.service';
 })
 export class TablacomprasrealizadasComponent implements OnInit {
 
-  public Compras:Array<any> = [];
-  public Monedas:Array<any> = [];
-  public Cargando:boolean = false;
-  public RutaGifCargando:string;
-  
-  public Filtros:any = {
-    fecha:'',
-    codigo:'',
-    funcionario:'',
-    tercero:'',
-    moneda:'',
-    valor:'',
-    tasa:'',
-    valor_peso:''
+  public Compras: Array<any> = [];
+  public Monedas: Array<any> = [];
+  public Cargando: boolean = false;
+  public RutaGifCargando: string;
+
+  public Filtros: any = {
+    fecha: '',
+    codigo: '',
+    funcionario: '',
+    tercero: '',
+    moneda: '',
+    valor: '',
+    tasa: '',
+    valor_peso: ''
   };
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   constructor(private _generalService: GeneralService,
-              private _swalService:SwalService,
-              private _toastService:ToastService,
-              private _monedaService:MonedaService,
-              private _compraService:CompraService) 
-  {
-    this.RutaGifCargando = _generalService.RutaImagenes+'GIFS/reloj_arena_cargando.gif';
+    private _swalService: SwalService,
+    private _toastService: ToastService,
+    private _monedaService: MonedaService,
+    private _compraService: CompraService) {
+    this.RutaGifCargando = _generalService.RutaImagenes + 'GIFS/reloj_arena_cargando.gif';
     this.ConsultaFiltrada();
     this.GetMonedas();
   }
@@ -55,27 +54,27 @@ export class TablacomprasrealizadasComponent implements OnInit {
   ngOnInit() {
   }
 
-  GetMonedas(){
-    this._monedaService.getMonedas().subscribe((data:any) => {
+  GetMonedas() {
+    this._monedaService.getMonedas().subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Monedas = data.query_data;
-      }else{
+      } else {
 
         this.Monedas = [];
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
       }
     });
   }
 
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
-    
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
+
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -83,7 +82,7 @@ export class TablacomprasrealizadasComponent implements OnInit {
     if (this.Filtros.fecha.trim() != "") {
       params.fecha = this.Filtros.fecha;
     }
-    
+
     if (this.Filtros.codigo.trim() != "") {
       params.codigo = this.Filtros.codigo;
     }
@@ -115,46 +114,49 @@ export class TablacomprasrealizadasComponent implements OnInit {
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
-    var p = this.SetFiltros(paginacion);    
+    var p = this.SetFiltros(paginacion);
 
-    if(p === ''){
+    if (p === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this._compraService.getListaCompra(p).subscribe((data:any) => {
+    this._compraService.getListaCompra(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.Compras = data.query_data;
         this.TotalItems = data.numReg;
-      }else{
+
+        console.log(data.query_data);
+
+      } else {
         this.Compras = [];
         this._swalService.ShowMessage(data);
       }
-      
+
       this.Cargando = false;
       this.SetInformacionPaginacion();
     });
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      fecha:'',
-      codigo:'',
-      funcionario:'',
-      tercero:'',
-      moneda:'',
-      valor:'',
-      tasa:'',
-      valor_peso:''
+      fecha: '',
+      codigo: '',
+      funcionario: '',
+      tercero: '',
+      moneda: '',
+      valor: '',
+      tasa: '',
+      valor_peso: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -162,16 +164,16 @@ export class TablacomprasrealizadasComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  AnularCompra(idCompra:string){
+  AnularCompra(idCompra: string) {
     let datos = new FormData();
     datos.append("id_compra", idCompra);
-    this._compraService.anularCompra(datos).subscribe((data:any) => {
-      if (data.codigo == 'success') { 
+    this._compraService.anularCompra(datos).subscribe((data: any) => {
+      if (data.codigo == 'success') {
         this.ConsultaFiltrada();
-        let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
         this._toastService.ShowToast(toastObj);
-      }else{
-        this._swalService.ShowMessage(data); 
+      } else {
+        this._swalService.ShowMessage(data);
       }
     });
   }

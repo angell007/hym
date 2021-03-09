@@ -103,8 +103,6 @@
         [swal]="{title:'¿Está Seguro?',text : MensajeGuardar , type:'warning', showCancelButton: true, confirmButtonText: Editar ? 'Si Actualizar' : 'Si Guardar', cancelButtonText:'No, Comprobar!'}"
         (confirm)="GuardarTraslado()"
         [disabled]="(!FormTraslado.valid || ( TrasladoModel.Id_Moneda_Destino != TrasladoModel.Id_Moneda_Origen ) )">{{Editar ? 'Actualizar' : 'Guardar'}}
-
-        {{ TrasladoModel.Id_Moneda_Destino != TrasladoModel.Id_Moneda_Origen }} {{ FormTraslado.valid }}
       </button>
     </div>
   </div>

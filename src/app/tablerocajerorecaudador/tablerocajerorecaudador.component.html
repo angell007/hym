@@ -9,7 +9,7 @@
             </span>
             <div class="info">
               <b class="text-dark font-size-22">Recaudos</b>
-              <p class="no-mrg-btm ">A cuentas extranjeras</p>
+              <p class="no-mrg-btm "></p>
             </div>
           </li>
         </ul>
@@ -54,14 +54,13 @@
                 </select>
               </div>
 
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <label class="transferencia font-size-18">Comisión</label>
                 <div class="w-100"> </div>
                 <label class="transferencia font-size-18">
                   {{TransferenciaModel.Porcentaje_Recauda}} %
                 </label>
-
-              </div>
+              </div> -->
 
             </div>
 
@@ -85,41 +84,36 @@
                       <label class="transferencia font-size-18" style="display:block;">Número
                         Documento</label>
 
-                      <input type="text" class="custom-input font-size-18" placeholder="Busqueda"
+
+                      <input type="text" class="form-control font-size-18" placeholder="Busqueda"
                         name="Numero_Documento_Origen" autocomplete="off"
                         [(ngModel)]="TransferenciaModel.Documento_Origen" [ngbTypeahead]="search_remitente2"
                         [resultTemplate]="rt_remitente" [inputFormatter]="formatter_remitente_custom"
                         (ngModelChange)="AutoCompletarRemitente(TransferenciaModel.Documento_Origen, i)"
                         value="TransferenciaModel.Documento_Origen" required tabindex="9">
 
-                      <!-- <i class="ti-pencil text-info pl-2 font-size-17" style="cursor:pointer;"
-                        *ngIf="EditRemitenteTransferencia"
-                        (click)="EditarRemitenteTransferencia(TransferenciaModel.Documento_Origen, RemitenteModalEnum.Editar_Transferencia)"
-                        id="ic_edit_remitente_transferencia"></i>
-
-                      <i class="ti-plus text-success pl-2 font-size-17" style="cursor:pointer;"
-                        *ngIf="!EditRemitenteTransferencia"
-                        (click)="EditarRemitenteTransferencia(TransferenciaModel.Documento_Origen, RemitenteModalEnum.Crear_Transferencia)"
-                        id="ic_crear_remitente_transferencia"></i> -->
-
                     </div>
                   </div>
                   <div class="col-md-5">
                     <div class="form-group">
                       <label class="transferencia font-size-18">Nombre</label>
-                      <label class="font-size-18" style="display:block;">{{TransferenciaModel.Nombre_Remitente
-                                                        == "" ? "Nombre Remitente" :
-                                                        TransferenciaModel.Nombre_Remitente}}</label>
+                      <input class="form-control font-size-18 py-3" style="height: 30px;" value="{{TransferenciaModel.Nombre_Remitente
+                        == '' ? 'Nombre Remitente' :
+                        TransferenciaModel.Nombre_Remitente}}" readonly>
                     </div>
+
                   </div>
+
                   <div class="col-md-3">
                     <div class="form-group">
                       <label class="transferencia font-size-18">Teléfono</label>
-                      <label class="font-size-18" style="display:block;">{{TransferenciaModel.Telefono_Remitente
-                                                        == "" ? "Telefono Remitente" :
-                                                        TransferenciaModel.Telefono_Remitente}}</label>
+                      <input class="form-control font-size-18 py-3" style="height: 30px;" value="{{TransferenciaModel.Telefono_Remitente
+                          == '' ? 'Telefono Remitente' :
+                          TransferenciaModel.Telefono_Remitente}}" readonly>
+
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -185,7 +179,7 @@
                   <div *ngFor="let destinatario of ListaDestinatarios; let i= index">
                     <div class="row">
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <label class="transferencia font-size-18">N. Documento
                             <i class="ti-pencil" style="cursor:poin ter;" *ngIf="destinatario.EditarVisible"
@@ -201,7 +195,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
                         <div class="form-group">
                           <label class="transferencia font-size-18">Nombre</label>
                           <input name="Nombre_Destino_{{i}}" [(ngModel)]="destinatario.Nombre_Destinatario" type="text"
@@ -225,6 +219,16 @@
                             </i>
                             <!-- </div> -->
                           </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="transferencia font-size-18">Comision</label>
+
+                          <input type="text" placeholder="0" disabled class="font-size-18 form-control alinear-derecha"
+                            name="comison"
+                            value="{{ (destinatario.pct * destinatario.Valor_Transferencia)/100 | currency:' ': false:'1.0-0' }}">
+
                         </div>
                       </div>
                       <!-- /**************************************************************************************************************************************************************************************************************/ -->
