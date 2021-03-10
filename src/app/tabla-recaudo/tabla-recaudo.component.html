@@ -7,6 +7,7 @@
         <th class="custom-thead">Remitente</th>
         <th class="custom-thead">Recibido</th>
         <th class="custom-thead" style="width: 450px !important;">Observación</th>
+        <th class="custom-thead">Estado</th>
         <!-- <th class="custom-thead">Comision</th> -->
         <th class="custom-thead">Acciones</th>
 
@@ -47,13 +48,14 @@
 
       <tr
         *ngFor="let rt of RecibosTransferencia  | paginate: {  id: 'transferencias', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
-        [ngClass]="{'bg-anulada':rt.Estado == 'Anulada','bg-warning': (rt.Alertada == 'Si' ) }">
+        [ngClass]=" {'bg-danger':rt.Estado == 'Anulado' , 'text-white':rt.Estado == 'Anulado' }">
         <td class="text-center">{{rt.updated_at | date:"HH:mm" }}</td>
         <!-- <td class="text-center">{{rt.Codigo}}</td> -->
         <td class=" text-center">{{rt.Remitente | currency:' ':'symbol':'3.0' }}</td>
         <td class=" text-left">{{rt.remitente.Nombre}}</td>
         <td class="text-right"> {{rt.Recibido | customcurrency:rt.Codigo_Moneda_Origen}}</td>
-        <td class="text-right"> {{rt.Detalle  }}</td>
+        <td class="text-left"> {{rt.Detalft}}</td>
+        <td class="text-left"> {{rt.Estado}}</td>
         <!-- <td class="text-right"> {{rt.Comision  }} %</td> -->
 
         <td class="text-right">
@@ -64,7 +66,7 @@
 
           <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
             [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-            (confirm)="delete(rt)">
+            (confirm)="delete(rt)" *ngIf="rt.Estado != 'Anulado'">
             <i class="ti-close"></i>
           </button>
 

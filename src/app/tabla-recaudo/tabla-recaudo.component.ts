@@ -115,6 +115,9 @@ export class TablaRecaudoComponent implements OnInit {
       if (data.codigo == 'success') {
         this.RecibosTransferencia = data.query_data;
         this.TotalItems = data.numReg;
+
+        console.log(this.RecibosTransferencia);
+
       } else {
         this.RecibosTransferencia = [];
       }
@@ -122,6 +125,7 @@ export class TablaRecaudoComponent implements OnInit {
       this.Cargando = false;
       this.SetInformacionPaginacion(data.query_data);
     });
+
   }
 
   ResetValues() {
@@ -153,11 +157,12 @@ export class TablaRecaudoComponent implements OnInit {
     this.ModalAnularTransferencia.hide();
   }
 
+
   AnularTransferencia() {
+
     let datos = new FormData();
 
     let info = this._normalizeService.normalize(JSON.stringify(this.MotivoAnulacion));
-    // console.log(info);
 
     datos.append("id_transferencia", this.Id_Transferencia_Anular);
     datos.append("motivo_anulacion", info);
@@ -188,8 +193,6 @@ export class TablaRecaudoComponent implements OnInit {
         this._swalService.ShowMessage(data);
       }
     })
-
-
   }
 
   show(id: string) {
@@ -197,6 +200,11 @@ export class TablaRecaudoComponent implements OnInit {
     console.log(id);
   }
 
-  delete(id: string) {
+  delete(recaudo) {
+
+    this.http.post(this.globales.rutaNueva + 'delete-recaudo', { id: recaudo.id }).subscribe((data) => {
+      console.log('data', data);
+      this.ConsultaFiltrada();
+    });
   }
 }

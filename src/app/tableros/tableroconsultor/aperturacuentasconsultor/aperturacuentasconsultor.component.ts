@@ -285,46 +285,42 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
 
   }
 
-  public Validardiferencia(posCuenta: number, valor: string, idMoneda: string) {
-    valor = valor.replace(/\./g, '');
-    // console.log([posCuenta, valor, idMoneda]);
+  Validardiferencia(posCuenta: number, valor: string, idMoneda: string) {
+    setTimeout(() => {
+      valor = valor.replace(/\./g, '');
+      let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
+      let p = { id_cuenta: id_cuenta };
+      this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response: any) => {
+        if (response == '0') {
+          this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+        } else {
+          if (valor != '') {
+            let valor_apertura = parseFloat(valor);
+            let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
+            let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
 
-    let id_cuenta = this.CuentasBancariasSeleccionadas[posCuenta].Id_Cuenta_Bancaria;
-    let p = { id_cuenta: id_cuenta };
-    this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response: any) => {
-      // console.log(response);
-      if (response == '0') {
-        this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
-      } else {
-        if (valor != '') {
-          let valor_apertura = parseFloat(valor);
-          // console.log(valor_apertura);
-          let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
-          let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
+            let topes = this._getTopesMoneda(idMoneda);
 
-          let topes = this._getTopesMoneda(idMoneda);
-
-          // console.log(topes);
-
-          if (diferencia < -topes.maximo || diferencia > topes.maximo) {
-            this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los límites permitidos, no podra aperturar cuentas hasta que no se corrijan los valores de la misma!']);
-            this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
-            this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
-            this._setCuentaDescuadre(id_cuenta);
+            if (diferencia < -topes.maximo || diferencia > topes.maximo) {
+              this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los límites permitidos, no podra aperturar cuentas hasta que no se corrijan los valores de la misma!']);
+              this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
+              this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '1';
+              this._setCuentaDescuadre(id_cuenta);
+            } else {
+              this._deleteCuentaDescuadre(id_cuenta);
+              this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
+              this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
+            }
           } else {
             this._deleteCuentaDescuadre(id_cuenta);
             this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
-            this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = diferencia;
+            this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = '0';
           }
-        } else {
-          this._deleteCuentaDescuadre(id_cuenta);
-          this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
-          this.CuentasBancariasSeleccionadas[posCuenta].Diferencia = '0';
         }
-      }
-    });
+      });
 
-    this._setCuentasSeleccionadasStorage(800);
+      this._setCuentasSeleccionadasStorage(800);
+    }, 500);
   }
 
   private _getTopesMoneda(idMoneda: string) {
@@ -359,6 +355,7 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       // this.router.navigate(['/tablero']);
     }
   }
+
   SiguientePasoVisual() {
     this.MostrarTablero.emit('Visual');
   }

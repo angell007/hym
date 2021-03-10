@@ -2,383 +2,233 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cambio;
-use App\Models\CorresponsalDiario;
-use App\Models\Diario;
-use App\Models\DiarioMonedaCierre;
-use App\Models\Giro;
-use App\Models\Moneda;
-use App\Models\Servicio;
-use App\Models\Transferencia;
-use App\Models\TrasladoCaja;
-use App\Models\Egreso;
-use App\Models\Otrotraslado;
-
-
+use App\Models\Recaudo;
+use App\Models\RecaudoDestinatario;
+use App\Models\Tercero;
+use App\Models\MovimientoTercero;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
-class FlujoEfectivoController extends Controller
+
+class RecaudoController extends Controller
 {
-    public $id = '';
-    public $result = [];
-
-    public $fecha_inicio;
-    public $fecha_fin;
-
-
-    //Oficinas del sistema
-
-    function getFuncionarios($oficina)
-    {
-        return DB::select(
-            "SELECT fun.Identificacion_Funcionario FROM Diario as dia
-                                                        INNER JOIN Funcionario as fun ON fun.Identificacion_Funcionario = dia.Id_Funcionario
-                                                        INNER JOIN Oficina as of On of.Id_Oficina = dia.Oficina_Apertura
-                                                        WHERE of.Id_Oficina = $oficina
-                                                        AND  dia.Fecha >= '$this->fecha_inicio'
-                                                        AND  dia.Fecha <= '$this->fecha_fin'
-                                                         "
-        );
-    }
-
-    function getOficinasFuncionario()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
 
-        return DB::select('SELECT Id_Oficina From Oficina');
-    }
+        $collect = collect([]);
+        try {
+
+            $infoModel = request()->get('modelo');
+            $transferido = $infoModel['Cantidad_Transferida'];
+            $desc = ($infoModel['Observacion_Transferencia'] != '' && $infoModel['Observacion_Transferencia'] != null)  ? $infoModel['Observacion_Transferencia'] : 'Sin observaciones';
 
 
-    function getFullDatafuncionarios()
-    {
+            // return response()->json([$infoModel , request()->get('lista')]);
 
-        $dataFuncionario = [];
+            $destinatarios = [];
 
-        foreach ($this->getOficinasFuncionario() as $index => $oficinaDependiente) {
+            foreach (request()->get('lista') as $cliente) {
 
-            array_push($dataFuncionario, $this->getFuncionarios($oficinaDependiente->Id_Oficina));
-        }
+                $destinatario =  Tercero::firstWhere('Id_Tercero', $cliente['Numero_Documento_Destino']);
 
-        return $dataFuncionario;
-    }
-
-
-    public function  getInfo()
-    {
-
-        $this->fecha_fin = Carbon::now();
-        $this->fecha_inicio = Carbon::now();
-
-        $funcionarios = [];
-
-        if (request()->has('Fecha_fin')) {
-
-            $this->fecha_fin = Carbon::parse(request()->get('Fecha_fin'));
-        }
-
-        if (request()->has('Fecha_inicio')) {
-
-            $this->fecha_inicio = Carbon::parse(request()->get('Fecha_inicio'));
-        }
-
-        if (request()->has('id') && request()->get('id') != '' && request()->get('id') != 'null' && request()->get('id') != 'undefined') {
-
-            array_push($funcionarios, request()->get('id'));
-        } else {
-
-            foreach ($this->getFullDatafuncionarios() as $func) {
-
-                foreach ($func as $item) {
-                    array_push($funcionarios, $item->Identificacion_Funcionario);
+                if ($destinatario == null) {
+                    return response()->json(['message' => 'Uno de los destinaraios no se encuentra en el sistema', 'status' => 400]);
                 }
+
+                array_push($destinatarios, $destinatario);
             }
+
+            $recaudoData = Recaudo::create([
+                'Codigo' => 0,
+                'Remitente' =>  $infoModel['Documento_Origen'],
+                'Recibido' => $infoModel['Cantidad_Transferida'],
+                'Transferido' => 0,
+                'Funcionario' => $infoModel['Identificacion_Funcionario'],
+                'Comision' => 0,
+                'Detalle' => $desc,
+                'Estado' => 'Activo'
+            ]);
+
+            $recaudoData->codigo = 'RC- ' . $recaudoData->id;
+            $recaudoData->save();
+
+            foreach ($destinatarios as $i => $destinatario) {
+
+
+                $transferido =  $transferido - (float)request()->get('lista')[$i]['Valor_Transferencia'];
+
+                MovimientoTercero::create([
+                    'Fecha' => Carbon::now()->format('Y-m-d'),
+                    'Valor' =>  (int)request()->get('lista')[$i]['Valor_Transferencia'],
+                    'Id_Moneda_Valor' => 2,
+                    'Tipo' => 'Ingreso',
+                    'Id_Tercero' => $destinatario->Id_Tercero,
+                    'Detalle' => $desc,
+                    'Id_Tipo_Movimiento' => 8,
+                    'Estado' => 'Activo',
+                ]);
+
+
+                MovimientoTercero::create([
+                    'Fecha' => Carbon::now()->format('Y-m-d'),
+                    'Valor' =>  (int)(request()->get('lista')[$i]['Valor_Transferencia'] * $destinatario->Porcentaje_Recauda) / 100,
+                    'Id_Moneda_Valor' => 2,
+                    'Tipo' => 'Egreso',
+                    'Id_Tercero' => $destinatario->Id_Tercero,
+                    'Detalle' => $desc,
+                    'Id_Tipo_Movimiento' => 8,
+                    'Estado' => 'Activo',
+                ]);
+
+
+                $recaudado =  MovimientoTercero::create([
+                    'Fecha' => Carbon::now()->format('Y-m-d'),
+                    'Valor' =>  (int)(request()->get('lista')[$i]['Valor_Transferencia'] * $destinatario->Porcentaje_Recauda) / 100,
+                    'Id_Moneda_Valor' => 2,
+                    'Tipo' => 'Ingreso',
+                    'Id_Tercero' => 888888888,
+                    'Detalle' => $desc,
+                    'Id_Tipo_Movimiento' => 8,
+                    'Estado' => 'Activo',
+                ]);
+
+
+                $recaudado =  RecaudoDestinatario::create([
+                    'Destinatario_Id' => $destinatario->Id_Tercero,
+                    'Recaudo_id' => $recaudoData->id,
+                    'Transferido' => (int)request()->get('lista')[$i]['Valor_Transferencia'] - (int)(request()->get('lista')[$i]['Valor_Transferencia'] * $destinatario->Porcentaje_Recauda) / 100,
+                    'Comision' => $destinatario->Porcentaje_Recauda,
+                    'Original' => (int)request()->get('lista')[$i]['Valor_Transferencia'],
+                ]);
+            }
+
+            return response()->json(['codigo' => 'success']);
+        } catch (\Exception $th) {
+            return response()->json(['status' => 400, 'Message' => $th->getMessage()]);
         }
-
-
-
-        $Monedas = $this->getMonedas();
-        $resultado = collect();
-
-        foreach ($Monedas as $moneda) {
-
-            $data["Nombre"] = $moneda->Nombre;
-            $data["Codigo"] = $moneda->Codigo;
-            $data["Id"] = $moneda->Id_Moneda;
-
-            $cambios = [];
-            $transferencias = [];
-            $giros = [];
-            $traslados = [];
-            $corresponsal = [];
-            $servicios = [];
-            $egresos = [];
-            $otros = [];
-
-
-            foreach ($funcionarios as $funcionario) {
-
-                $this->id =  $funcionario;
-                $cambios[] = $this->ConsultarIngresosEgresosCambios($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-
-                $this->id =  $funcionario;
-                $transferencias[] = $this->ConsultarIngresosEgresosTransferencias($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-
-                $this->id =  $funcionario;
-                $giros[] = $this->ConsultarIngresosEgresosGiros($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-
-                $this->id =  $funcionario;
-                $traslados[] = $this->ConsultarIngresosEgresosTraslados($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-
-                $this->id =  $funcionario;
-                $corresponsal[] = $this->ConsultarIngresosEgresosCorresponsal($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-                $this->id =  $funcionario;
-                $servicios[] = $this->ConsultarIngresosEgresosServicios($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-                $this->id =  $funcionario;
-                $egresos[] = $this->ConsultarEgresos($moneda->Id_Moneda);
-            }
-            foreach ($funcionarios as $funcionario) {
-                $this->id =  $funcionario;
-                $otros[] = $this->ConsultarIngresosOtrosTraslados($moneda->Id_Moneda);
-            }
-
-
-
-            $data['mov'] = [];
-
-            array_push($data['mov'],  ['Nombre' => 'Cambio', 'Total' =>  collect($cambios)->sum('Ingreso_Total') - collect($cambios)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Transferencia', 'Total' => collect($transferencias)->sum('Ingreso_Total') - collect($transferencias)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Giros', 'Total' => collect($giros)->sum('Ingreso_Total') - collect($giros)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Traslados', 'Total' => collect($traslados)->sum('Ingreso_Total') - collect($traslados)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Corresponsal', 'Total' => collect($corresponsal)->sum('Ingreso_Total') - collect($corresponsal)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Servicios', 'Total' => collect($servicios)->sum('Ingreso_Total') - collect($servicios)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Egresos', 'Total' => collect($egresos)->sum('Ingreso_Total') - collect($egresos)->sum('Egreso_Total')]);
-            array_push($data['mov'],  ['Nombre' => 'Otros', 'Total' => collect($otros)->sum('Ingreso_Total') - collect($otros)->sum('Egreso_Total')]);
-
-
-            $resultado->push($data);
-        }
-
-        return response()->json($resultado);
     }
 
-    public function ConsultarIngresosEgresosCambios($Id_Moneda)
+    function GetCodigoMoneda($id_moneda)
+    {
+        $codigo = Moneda::find($id_moneda, ['Nombre']);
+        return $codigo->Nombre;
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Egreso  $egreso
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Egreso $egreso)
+    {
+        //
+    }
+
+    public function filtrarTerceros()
+    {
+        return response()->json('data');
+    }
+
+    public function getRecaudos()
     {
 
-
-        $cambios = Cambio::where(function ($q) use ($Id_Moneda) {
-            $q->where('Moneda_Destino',  $Id_Moneda)
-                ->orWhere('Moneda_Origen',  $Id_Moneda);
+        $recaudos = Recaudo::whereHas('remitente', function ($q) {
+            $q->when(request()->get('remitente') != 'undefined' && request()->get('remitente') != '',  function ($query) {
+                $query->where('Nombre', 'Like',  '%' . request()->get('remitente') . '%');
+            });
+        })->with(['remitente' => function ($q) {
+            $q->when(request()->get('remitente') != 'undefined' && request()->get('remitente') != '',  function ($query) {
+                $query->where('Nombre', '%' . request()->get('remitente') . '%');
+            });
+        }])->when(request()->get('documento') != 'undefined' && request()->get('documento') != '',  function ($q) {
+            $q->where('remitente', '%' . request()->get('documento') . '%');
         })
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Identificacion_Funcionario', $this->id)
-            ->select(
-                DB::raw("
-                IFnull(SUM(
-                Case
-                WHEN Tipo = 'Compra' AND Moneda_Origen = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Origen  IS NOT NULL  THEN 
-                Valor_Origen
-                Else 0
-                END
-                )
-                +
-                SUM(
-                Case
-                WHEN Tipo = 'Venta' AND fomapago_id <> 3 
-                AND Moneda_Origen = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Origen IS NOT NULL  THEN 
-                Valor_Origen -  IfNull((SELECT SUM(dv.valor_entregado) From Devolucion_Cambios dv WHERE dv.cambio_id = Id_Cambio), 0) 
-                Else 0
-                END
-                ), 0) As Ingreso_Total
-                "),
-                DB::raw("
-                IFnull(SUM( Case
-                WHEN Tipo = 'Compra' AND fomapago_id <> 3 AND Moneda_Destino = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Destino IS NOT NULL  THEN 
-                Valor_Destino
-                Else 0
-                END
-                )
-                +
-                SUM(
-                Case
-                WHEN Tipo = 'Venta'  AND Moneda_Destino = $Id_Moneda AND Estado <> 'Anulado' AND Valor_Destino IS NOT NULL   THEN 
-                Valor_Destino - IfNull((SELECT SUM(dv.valor_recibido) From Devolucion_Cambios dv WHERE dv.cambio_id = Id_Cambio), 0) 
-                Else 0
-                END
-                ), 0)  As Egreso_Total
-                "),
-                DB::raw("'Cambios' as Nombre")
-            )->first();
+            ->where('Funcionario', request()->get('id_funcionario'))
+            ->get();
 
 
-        return (!$cambios) ? ['Ingreso_Total' => '0', 'Nombre' => 'Cambios', 'Egreso_Total' => '0'] : $cambios;
+        return response()->json(['query_data' => $recaudos, 'codigo' => 'success']);
     }
 
 
 
-    public function ConsultarIngresosEgresosTransferencias($Id_Moneda)
+    public function getrecaudoDestinatarios()
     {
 
-        $transferencias =   Transferencia::where('Moneda_Origen', $Id_Moneda)
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Identificacion_Funcionario', $this->id)
-            ->whereIn('Estado',  ['Activa', 'Pagada'])
-            ->select(
-                DB::raw("Sum(IF(Forma_Pago <> 'Credito' AND Forma_Pago <> 'Consignacion',Cantidad_Recibida, 0 )) AS Ingreso_Total, 'Transferencias' as Nombre"),
-                DB::raw('0 AS Egreso_Total')
-            )
-            ->groupByRaw('Moneda_Origen')
-            ->first();
+        $destinatarios =   DB::Select(
+            'SELECT RD.*, Te.* FROM Recaudo 
+        INNER JOIN Recaudo_Destinatario RD ON Recaudo.id = RD.Recaudo_Id 
+        INNER JOIN Tercero Te ON RD.Destinatario_Id = Te.Id_Tercero 
+        WHERE Recaudo.id = ' . request()->get('id')
+        );
 
-
-        return (!$transferencias) ? ['Ingreso_Total' => '0', 'Nombre' => 'Transferencias', 'Egreso_Total' => '0'] : $transferencias;
+        return response()->json(compact('destinatarios'));
     }
 
-
-    public function ConsultarIngresosEgresosGiros($Id_Moneda)
+    public function deleteRecaudo()
     {
 
-        $giros =   Giro::where('Id_Moneda', $Id_Moneda)
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->select(
-                DB::raw("IfNull(Sum(CASE WHEN Estado <> 'Anulado' AND Identificacion_Funcionario = $this->id THEN Valor_Total Else 0 END), 0) AS Ingreso_Total"),
-                DB::raw("IfNull(Sum(CASE WHEN Estado = 'Pagado' AND Funcionario_Pago = $this->id THEN Valor_Entrega Else 0 END), 0) AS Egreso_Total"),
-                DB::raw("'Giros' as Nombre")
-            )->first();
+        try {
 
-        return (!$giros) ? ['Ingreso_Total' => '0', 'Nombre' => 'Giros', 'Egreso_Total' => '0'] :  $giros;
-    }
+            $recaudo = Recaudo::find(request()->get('id'));
 
-    public function ConsultarIngresosEgresosTraslados($Id_Moneda)
-    {
+            $destinatarios =   DB::Select(
+                'SELECT RD.*, Te.* FROM Recaudo 
+        INNER JOIN Recaudo_Destinatario RD ON Recaudo.id = RD.Recaudo_Id 
+        INNER JOIN Tercero Te ON RD.Destinatario_Id = Te.Id_Tercero 
+        WHERE Recaudo.id = ' . request()->get('id')
+            );
 
 
-        $Ingreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
-            ->whereBetween("Fecha_Traslado", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Funcionario_Destino', $this->id)
-            ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Ingreso_Total'))
-            ->groupByRaw('Id_Moneda')
-            ->where('Estado', 'Aprobado')
-            ->first();
+            $remitente = DB::Select(
+                'SELECT T.* FROM Recaudo 
+        INNER JOIN Tercero T ON Recaudo.Remitente = T.Id_Tercero WHERE Recaudo.id = ' . request()->get('id')
+            );
+
+            foreach ($destinatarios as $destinatario) {
+
+                MovimientoTercero::create([
+                    'Fecha' => Carbon::now()->format('Y-m-d'),
+                    'Valor' => $destinatario->Transferido,
+                    'Id_Moneda_Valor' => 2,
+                    'Tipo' => 'Egreso',
+                    'Id_Tercero' => $destinatario->Id_Tercero,
+                    'Detalle' => 'Recaudo anulado',
+                    'Id_Tipo_Movimiento' => 8,
+                    'Estado' => 'Activo',
+                ]);
 
 
-        $Egreso_Total = TrasladoCaja::where('Id_Moneda', $Id_Moneda)
-            ->whereBetween("Fecha_Traslado", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Id_Cajero_Origen', $this->id)
-            ->select(DB::raw('IF(sum(Valor) > 0, sum(Valor), 0) As Egreso_Total'))
-            ->groupByRaw('Id_Moneda')
-            ->where('Estado', 'Aprobado')
-            ->first();
+                MovimientoTercero::create([
+                    'Fecha' => Carbon::now()->format('Y-m-d'),
+                    'Valor' => $destinatario->Transferido - ($destinatario->Comision * $destinatario->Transferido) / 100,
+                    'Id_Moneda_Valor' => 2,
+                    'Tipo' => 'Ingreso',
+                    'Id_Tercero' => 888888888,
+                    'Detalle' => 'Recaudo anulado',
+                    'Id_Tipo_Movimiento' => 8,
+                    'Estado' => 'Activo',
+                ]);
+            }
 
+            $recaudo->Detalle = 'Recaudo anulado';
+            $recaudo->Estado = 'Anulado';
+            $recaudo->save();
 
-        return  [
-            'Ingreso_Total' => ($Ingreso_Total == null) ? 0 : $Ingreso_Total['Ingreso_Total'],
-            'Egreso_Total'  => ($Egreso_Total == null) ? 0 : $Egreso_Total['Egreso_Total'],
-            'Nombre' => 'Traslados'
-        ];
-    }
-
-    public function ConsultarIngresosEgresosCorresponsal($Id_Moneda)
-    {
-
-        $corresponsales =   CorresponsalDiario::where('Id_Moneda', $Id_Moneda)
-
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Identificacion_Funcionario', $this->id)
-            ->select(
-                DB::raw('IF(sum(Consignacion) > 0, sum(Consignacion), 0) AS Ingreso_Total,  "Corresponsal" as Nombre'),
-                DB::raw('IF(sum(Retiro) > 0, sum(Retiro), 0) AS Egreso_Total')
-            )
-            ->groupByRaw('Id_Moneda')
-            ->first();
-
-        return (!$corresponsales) ?  ['Ingreso_Total' => '0', 'Nombre' => 'Corresponsal', 'Egreso_Total' => '0'] : $corresponsales;
-    }
-
-    public function ConsultarIngresosEgresosServicios($Id_Moneda)
-    {
-
-        $Ingreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
-
-            ->whereBetween("Fecha_Pago", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Identificacion_Funcionario', $this->id)
-            ->where('Estado', '!=', 'Anulado')
-            ->select(
-                DB::raw('IF(sum(Valor + Comision) > 0, sum(Valor + Comision), 0) AS Ingreso_Total')
-
-            )
-            ->groupByRaw('Id_Moneda')
-            ->first();
-
-        $Egreso_Total =   Servicio::where('Id_Moneda', $Id_Moneda)
-
-            ->whereBetween("Fecha_Pago", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Id_Funcionario_Destino', $this->id)
-            ->where('Estado', 'Pagado')
-            ->select(
-                DB::raw('IF(sum(Valor + Comision) > 0, sum(Valor + Comision), 0) AS Egreso_Total')
-
-            )
-            ->groupByRaw('Id_Moneda')
-            ->first();
-
-
-        return  [
-            'Ingreso_Total' => ($Ingreso_Total == null) ? 0 : $Ingreso_Total['Ingreso_Total'],
-            'Egreso_Total'  => ($Egreso_Total == null) ? 0 : $Egreso_Total['Egreso_Total'],
-            'Nombre' => 'Servicios'
-        ];
-    }
-
-    public function ConsultarEgresos($Id_Moneda)
-    {
-        $egresos =   Egreso::where('Id_Moneda', $Id_Moneda)
-
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Identificacion_Funcionario', $this->id)
-            ->where('Estado', '<>', 'Anulado')
-            ->select(
-
-                DB::raw('0 AS Ingreso_Total'),
-                DB::raw('SUM(Valor) AS Egreso_Total, "Egresos" as Nombre ')
-            )
-            ->groupByRaw('Id_Moneda')
-            ->first();
-
-        return (!$egresos) ? ['Ingreso_Total' => '0', 'Nombre' => 'Egresos', 'Egreso_Total' => '0'] :  $egresos;
-    }
-
-
-    public function ConsultarIngresosOtrosTraslados($Id_Moneda)
-    {
-        $otrosTraslados =   Otrotraslado::where('Id_Moneda', $Id_Moneda)
-            ->whereBetween("Fecha", [$this->fecha_inicio, $this->fecha_fin])
-            ->where('Id_Cajero', $this->id)
-            ->select(
-
-                DB::raw('0 AS Egreso_Total'),
-                DB::raw('SUM(Valor) AS Ingreso_Total, "OtrosTraslados" as Nombre ')
-            )
-            ->groupByRaw('Id_Moneda')
-            ->first();
-
-        return (!$otrosTraslados) ? ['Ingreso_Total' => '0', 'Nombre' => 'OtrosTraslados', 'Egreso_Total' => '0'] :  $otrosTraslados;
-    }
-
-
-    public function getMonedas()
-    {
-        return Moneda::where('Estado', 'Activa')->get();
+            return response()->json($recaudo, 200);
+        } catch (\Exception $th) {
+            return response()->json(['status' => 400, 'Message' => $th->getMessage()]);
+        }
     }
 }
