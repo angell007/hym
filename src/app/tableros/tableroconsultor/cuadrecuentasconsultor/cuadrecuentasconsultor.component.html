@@ -47,13 +47,6 @@
               </tr>
             </thead>
             <tbody *ngIf="Movimientos.length > 0">
-              <!-- <tr *ngIf="MostrarTotales">
-                <td colspan="3" class="text-center custom-cell">Total</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="MovimientosCuentaBancaria.totales.ingreso">{{MovimientosCuentaBancaria.totales.ingreso | customcurrency:MovimientosCuentaBancaria.totales.codigo_moneda}}</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="MovimientosCuentaBancaria.totales.egreso">{{MovimientosCuentaBancaria.totales.egreso | customcurrency:MovimientosCuentaBancaria.totales.codigo_moneda}}</td>
-                <td class="text-right custom-cell" appColorsaldo [value]="MovimientosCuentaBancaria.totales.balance">{{MovimientosCuentaBancaria.totales.balance | customcurrency:MovimientosCuentaBancaria.totales.codigo_moneda}}</td>
-                <td class="custom-cell"></td>
-              </tr> -->
               <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Devuelta'}">
                 <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy" }}</td>
                 <td class="custom-cell text-center">{{m.Recibo}}</td>
@@ -63,29 +56,30 @@
                   [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
                 <td class="text-right custom-cell" appColorsaldo [value]="m.Total"
                   [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{m.Total | customcurrency:m.Codigo_Moneda}}</td>
-                <!-- </td> -->
-                <td>
-                  <!-- [altColor]="m.Estado == 'Devuelta' ? 'white' : ''">{{ m.Estado  }} -->
-                  <div class="text-center" *ngIf="m.Tipo_Movimiento == 'Transferencia' && m.Estado != 'Devuelta'">
-                    <!-- <div ngbDropdown class="dropdown-primary"> -->
-                    <!-- <button ngbDropdownToggle -->
-                    <!-- class="btn btn-outline-primary btn-xs btn-rounded waves-effect waves-light " type="button"><i -->
-                    <!-- class="ti-angle-down"></i></button> -->
-                    <!-- <div ngbDropdownMenu> -->
-                    <a *ngIf="m.Estado != 'Anulada'" title="Devolución" class="" style="cursor: pointer;"
-                      (click)="DevolverTransferencia(m)">
-                      <i class="ti-back-right text-danger"></i>
-                      <!-- Devolución -->
-                    </a>
-                    <a class="" style="cursor: pointer;" title="Transferir Movimimiento"
-                      (click)="MoverTransferencia(m)">
-                      <i class="fa fa-exchange text-primary"></i>
-                      <!-- Transferir Movimimiento -->
-                    </a>
-                    <!-- </div> -->
-                    <!-- </div> -->
-                  </div>
+
+                <td class="text-right">
+
+                  <button class="btn btn-xs btn-info" type="button" title="Ver cambio" style="margin:0;"
+                    (click)="showAjuste(m)">
+                    <i class="ti-search"></i>
+                  </button>
+
+
+                  <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
+                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                    (confirm)="deleteAjuste(m)" *ngIf="m.Tipo_Movimiento == 'Ajuste' ">
+                    <i class="ti-close"></i>
+                  </button>
+
+                  <button class="btn btn-xs btn-warning" type="button" style="margin:0;"
+                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                    (confirm)="deleteAjuste(m)" *ngIf="m.Tipo_Movimiento == 'Compra' ">
+                    <i class="ti-close"></i>
+                  </button>
+
                 </td>
+
+
               </tr>
             </tbody>
           </table>
@@ -123,14 +117,18 @@
   (ActualizarTabla)="GetMovimientosCuentaDescuadre()">
 </app-modalajustecuenta>
 
-<app-modaldevoluciontransferencia [AbrirModal]="AbrirModalDevolucion.asObservable()"
+<!-- <app-modaldevoluciontransferencia [AbrirModal]="AbrirModalDevolucion.asObservable()"
   (RecargarPagos)="GetMovimientosCuentaDescuadre()">
-</app-modaldevoluciontransferencia>
+</app-modaldevoluciontransferencia> -->
+
+
+<app-modal-detalle-ajuste [AbrirModal]="AbrirModalDetalle.asObservable()"></app-modal-detalle-ajuste>
+
 
 <app-modalabonocompracuenta [AbrirModal]="AbrirModalCompra.asObservable()"
   (ActualizarDatos)="GetMovimientosCuentaDescuadre()">
 </app-modalabonocompracuenta>
 
-<app-modalamovertransferencia [AbrirModal]="AbrirModalMoverTransferencia.asObservable()"
+<!-- <app-modalamovertransferencia [AbrirModal]="AbrirModalMoverTransferencia.asObservable()"
   (ActualizarDatos)="GetMovimientosCuentaDescuadre()">
-</app-modalamovertransferencia>
+</app-modalamovertransferencia> -->

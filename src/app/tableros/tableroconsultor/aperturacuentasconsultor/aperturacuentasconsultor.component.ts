@@ -281,8 +281,6 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
   }
 
   public CerrarModal() {
-    // console.log("cerrando modal");
-
   }
 
   Validardiferencia(posCuenta: number, valor: string, idMoneda: string) {
@@ -292,14 +290,24 @@ export class AperturacuentasconsultorComponent implements OnInit, OnDestroy {
       let p = { id_cuenta: id_cuenta };
       this._cuentaBancariaService.VerificarCuentaSinApertura(p).subscribe((response: any) => {
         if (response == '0') {
+          console.log('Aqui 1');
           this.CuentasBancariasSeleccionadas[posCuenta].Correccion_Cuenta = '0';
         } else {
+          console.log('Aqui 2');
           if (valor != '') {
+            console.log('Aqui 3');
             let valor_apertura = parseFloat(valor);
             let valor_ultimo_cierre = parseFloat(this.CuentasBancariasSeleccionadas[posCuenta].Monto_Ultimo_Cierre);
             let diferencia = Math.abs(valor_apertura - valor_ultimo_cierre);
 
             let topes = this._getTopesMoneda(idMoneda);
+
+            console.log([
+              topes,
+              valor_apertura,
+              valor_ultimo_cierre,
+              diferencia
+            ]);
 
             if (diferencia < -topes.maximo || diferencia > topes.maximo) {
               this._swalService.ShowMessage(['warning', 'Alerta', 'La cuenta tiene una diferencia fuera de los límites permitidos, no podra aperturar cuentas hasta que no se corrijan los valores de la misma!']);

@@ -1,0 +1,77 @@
+<app-modal-basic [dialogClass]="'modal-xs'" id="ModalDetalle" #ModalDetalle>
+  <div class="app-modal-header">
+    <h4>Detalle del Movimiento</h4>
+    <button type="button" class="close basic-close" (click)="CerrarModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form #FormDetalle="ngForm">
+      <div class="row">
+
+        <!-- dataDetalle.Codigo_Movimiento,
+        dataDetalle.Detalle,
+        dataDetalle.Estado,
+        dataDetalle.Valor_Pagado,
+        dataDetalle.Tipo_Movimiento
+        dataDetalle.fecha -->
+
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Monto</label>
+
+            <input type="text" class="text-dark text-left form-control" readonly
+              value="{{ dataDetalle.Valor_Pagado |  currency:' ' : false:'1.0-0'  }}">
+
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Tipo de Recibo </label>
+
+            <input type="text" class="text-dark text-left form-control" readonly value="{{ dataDetalle.Recibo }}">
+
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label>Nro. Transacción</label>
+
+            <input type="text" class="text-dark text-left form-control" readonly
+              value="{{ dataDetalle.Codigo_Movimiento }}">
+
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label> Fecha </label>
+
+            <input class="text-dark text-left form-control" readonly value="{{ dataDetalle.Fecha  }}">
+
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="block-element">Detalle</label>
+
+          <textarea class="form-control" readonly style="width:100%;" rows="4" placeholder="Observaciones"
+            name="Observaciones">{{ dataDetalle.Detalle }}</textarea>
+
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <div class="text-right">
+      <button class="btn btn-outline-dark btn-sm btn-rounded" (click)="CerrarModal()">Cerrar
+      </button>
+    </div>
+  </div>
+</app-modal-basic>

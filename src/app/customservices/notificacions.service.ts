@@ -17,7 +17,7 @@ export class NotificacionsService {
 
   constructor(private http: HttpClient, private globales: Globales) {
 
-    TimerObservable.create(0, 15000)
+    TimerObservable.create(0, 2000)
       .subscribe(() => {
         this.counter();
       });

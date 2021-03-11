@@ -642,7 +642,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   suma1(a) {
     let suma = 0;
     a.forEach((element) => {
-      suma += parseFloat(element.Valor_Transferencia)
+      suma += parseFloat(element.Valor_Transferencia) * element.Tasa_Cambio
     })
     return suma;
   }

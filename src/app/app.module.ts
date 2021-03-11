@@ -274,6 +274,7 @@ import { EditTrasladoComponent } from './components/edit-traslado/edit-traslado.
 import { ValidateCajeroService } from './validate-cajero.service';
 import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
 import { ModalDetalleRecaudoComponent } from './modal-detalle-recaudo/modal-detalle-recaudo.component';
+import { ModalDetalleAjusteComponent } from './modal-detalle-ajuste/modal-detalle-ajuste.component';
 
 
 
@@ -502,7 +503,8 @@ export const customCurrencyMaskConfig = {
         CajasAbiertasComponent,
         EditTrasladoComponent,
         FlujoEfectivoComponent,
-        ModalDetalleRecaudoComponent
+        ModalDetalleRecaudoComponent,
+        ModalDetalleAjusteComponent
 
     ],
     exports: [
