@@ -97,21 +97,21 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   }
 
   GetMovimientos() {
-    // // if (this.Id_Moneda != '' && this.Id_Moneda != undefined) {
-    // //   this._movimientoService.getMovimientosTercero(this.Id_Tercero, this.Id_Moneda).subscribe((data:any) => {
-    // //     if (data.codigo == 'success') {
-    // //       this.MovimientosTercero = data.query_data;
-    // //       this.Movimientos = data.query_data.movimientos;
-    // //       this.MostrarTotales = true;
-    // //     }else{
-    // //       this.MovimientosTercero = [];
-    // //       this.Movimientos = [];
-    // //       this.MostrarTotales = false;
-    // //       let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
-    // //       this._toastService.ShowToast(toastObj);
-    // //     }  
-    // //     this.GetTotalesMonedas();
-    // //   });  
+    //   if (this.Id_Moneda != '' && this.Id_Moneda != undefined) {
+    //     this._movimientoService.getMovimientosTercero(this.Id_Tercero, this.Id_Moneda).subscribe((data:any) => {
+    //       if (data.codigo == 'success') {
+    //         this.MovimientosTercero = data.query_data;
+    //         this.Movimientos = data.query_data.movimientos;
+    //         this.MostrarTotales = true;
+    //       }else{
+    //         this.MovimientosTercero = [];
+    //         this.Movimientos = [];
+    //         this.MostrarTotales = false;
+    //         let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.codigo, duracion:4000};
+    //         this._toastService.ShowToast(toastObj);
+    //       }  
+    //       this.GetTotalesMonedas();
+    //     });  
     // }    
 
 
@@ -197,6 +197,7 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   public ConsultaFiltrada(paginacion: boolean = false, fecha: any = false) {
 
+    console.log('aqui');
 
     if (fecha == false) {
       var p = this.SetFiltros(paginacion);

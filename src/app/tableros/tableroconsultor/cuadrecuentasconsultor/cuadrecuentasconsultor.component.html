@@ -71,7 +71,7 @@
                     <i class="ti-close"></i>
                   </button>
 
-                  <button class="btn btn-xs btn-warning" type="button" style="margin:0;"
+                  <button class="btn btn-xs btn-danger" type="button" style="margin:0;"
                     [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este cambio, esta acción no se puede revertir' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
                     (confirm)="deleteAjuste(m)" *ngIf="m.Tipo_Movimiento == 'Compra' ">
                     <i class="ti-close"></i>

@@ -491,7 +491,7 @@
                     <!-- //TODO ver como no setear bolivares -->
                     <div class="col-md-4 mt-1">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
-                        Cambio </label>
+                        Cambio {{MonedaParaCambio  | json }} </label>
                       <input type="text" placeholder="Tasa"
                         class="inputfield font-size-18  form-control form-control-lg" autocomplete="false"
                         id="Precio_Sugerido" name="Tasa" (blur)="conversionMoneda('o', 'e')"

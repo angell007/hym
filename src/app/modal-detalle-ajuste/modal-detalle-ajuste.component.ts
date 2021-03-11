@@ -19,6 +19,7 @@ export class ModalDetalleAjusteComponent implements OnInit {
     Valor_Pagado: '',
     Tipo_Movimiento: '',
     Fecha: '',
+    Recibo: '',
   }
 
   constructor() { }

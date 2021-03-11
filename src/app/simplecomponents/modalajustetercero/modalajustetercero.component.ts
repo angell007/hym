@@ -130,6 +130,7 @@ export class ModalajusteterceroComponent implements OnInit {
           })
           .subscribe((data: any) => {
             if (data.codigo == 'success') {
+              console.log(data);
               this.ActualizarTabla.emit();
               this.CerrarModal();
               let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
