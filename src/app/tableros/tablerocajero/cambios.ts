@@ -87,7 +87,7 @@ export class Cambios {
         this.Cambios = [];
 
 
-        this.http.get('https://softwarehym.com/back/php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).pipe(tap(x => { console.log('Obteniendo inicio', x); }))
+        this.http.get('https://softwarehym.com/customback/php/cambio/lista_cambios_nuevo.php', { params: { funcionario: this.funcionario_data.Identificacion_Funcionario } }).pipe(tap(x => { console.log('Obteniendo inicio', x); }))
             .subscribe((data: any) => {
                 if (data.codigo == 'success') {
                     this.Cambios = data.query_data;

@@ -196,6 +196,7 @@
     </div>
 
     <div class="col-md-9 contenido">
+
       <div class="card modulos" id="cambios">
         <div class="card-header header-modulos">
           <div class="row">
@@ -397,13 +398,12 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-
+                            <!-- <label class="font-size-18">Número de documento</label> -->
                             <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
                               placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
                               [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
                               [(ngModel)]="CambioModel.Id_Tercero" [inputFormatter]="formatterClienteCambioCompra"
                               (ngModelChange)="CambioModel.Id_Tercero" [required]="tipoCliente != ''">
-
                           </div>
                         </div>
                       </div>
@@ -465,7 +465,7 @@
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         Compra
                         <span>
-                          <!-- {{   MonedaParaCambio.nombre.includes('Nombre') |  json }} -->
+
                         </span>
                       </label>
                       <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
@@ -488,10 +488,9 @@
                         (ngModelChange)="conversionMoneda('d', 'l')" [disabled]="HabilitarCampos" required tabindex="4">
                     </div>
 
-                    <!-- //TODO ver como no setear bolivares -->
                     <div class="col-md-4 mt-1">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
-                        Cambio {{MonedaParaCambio  | json }} </label>
+                        Cambio </label>
                       <input type="text" placeholder="Tasa"
                         class="inputfield font-size-18  form-control form-control-lg" autocomplete="false"
                         id="Precio_Sugerido" name="Tasa" (blur)="conversionMoneda('o', 'e')"
@@ -516,8 +515,10 @@
                     </div>
 
                     <div class="col-md-4" *ngIf="Venta">
-                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion de
-                        pesos </label>
+                      <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Conversion
+                        de
+                        pesos a
+                      </label>
                       <input #valorCambio type="text" autocomplete="false" placeholder="Valor"
                         class="inputfield font-size-18  form-control form-control-lg" name="Valor_Origen" id="Cambia"
                         [(ngModel)]="CambioModel.Valor_Origen" (ngModelChange)="conversionMoneda('o', 'e')" currencyMask
@@ -790,7 +791,7 @@
                         <div *ngFor="let destinatario of ListaDestinatarios; let i= index">
                           <div class="row">
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">N. Documento
                                   <i class="ti-pencil" style="cursor:poin ter;" *ngIf="destinatario.EditarVisible"
@@ -807,15 +808,17 @@
                               </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">Nombre</label>
-                                <input name="Nombre_Destino_{{i}}" [(ngModel)]="destinatario.Nombre_Destinatario"
-                                  type="text" placeholder="Nombre" class="form-control font-size-18" readonly
+                                <input name="Nombre_Destino_{{i}}"
+                                  [(ngModel)]="destinatario.id_destinatario_transferencia" type="text"
+                                  placeholder="Nombre" class="form-control font-size-18" readonly
                                   [disabled]="MonedaParaTransferencia.id == ''">
                               </div>
-                            </div>
-                            <div class="col-md-5">
+                            </div> -->
+
+                            <div class="col-md-6">
                               <div class="form-group">
                                 <label class="transferencia font-size-18">Cuenta</label>
                                 <select id="Id_Destinatario_Cuenta_{{i}}" name="Id_Destinatario_Cuenta_{{i}}"
