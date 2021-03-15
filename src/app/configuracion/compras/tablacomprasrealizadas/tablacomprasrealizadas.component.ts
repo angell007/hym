@@ -168,13 +168,13 @@ export class TablacomprasrealizadasComponent implements OnInit {
     let datos = new FormData();
     datos.append("id_compra", idCompra);
     this._compraService.anularCompra(datos).subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.ConsultaFiltrada();
-        let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
-        this._toastService.ShowToast(toastObj);
-      } else {
-        this._swalService.ShowMessage(data);
-      }
+      // if (data.codigo == 'success') {
+      this.ConsultaFiltrada();
+      let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.codigo, duracion: 4000 };
+      this._toastService.ShowToast(toastObj);
+      // } else {
+      //   this._swalService.ShowMessage(data);
+      // }
     });
   }
 

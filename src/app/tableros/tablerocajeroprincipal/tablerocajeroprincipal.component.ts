@@ -124,19 +124,19 @@ export class TablerocajeroprincipalComponent implements OnInit {
     let p = {};
 
 
-    // p = { fecha: this.Fecha_fin, id: this.Funcionario.Identificacion_Funcionario, };
-    // this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
+    p = { fecha: this.Fecha_fin, id: this.Funcionario.Identificacion_Funcionario, };
+    this._cajaService.getCajasAbiertasGeneral(p).subscribe((data: any) => {
 
-    //   if (data.success) {
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }
-    //   else {
+      if (data.success) {
+        this.CajerosAbiertos = data.conteo.Activos;
+        this.CajerosTotales = data.conteo.Totales;
+      }
+      else {
 
-    //     this.CajerosAbiertos = data.conteo.Activos;
-    //     this.CajerosTotales = data.conteo.Totales;
-    //   }
-    // });
+        this.CajerosAbiertos = data.conteo.Activos;
+        this.CajerosTotales = data.conteo.Totales;
+      }
+    });
 
 
     p = { id_funcionario: this.Funcionario.Identificacion_Funcionario, Fecha_fin: this.Fecha_fin, Fecha_inicio: this.Fecha_inicio };

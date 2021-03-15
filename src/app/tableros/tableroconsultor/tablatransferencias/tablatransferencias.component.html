@@ -11,8 +11,8 @@
             <label>Transferencias {{Filtros.estado}}</label>
           </div>
           <div class="col-md-4 text-right">
-            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button" (click)="VerCuentas()">Ver
-              Cuentas</button>
+            <button class="btn btn-outline-primary btn-rounded btn-sm" type="button"
+              (click)="VerCuentas()">Cuentas</button>
             <button class="btn btn-outline-danger btn-rounded btn-sm" type="button" (click)="CierreCuentas()">Cerrar
               Cuentas</button>
           </div>
@@ -260,7 +260,7 @@
             <tr>
               <th class="custom-thead" style="width: 10%;">Fecha</th>
               <th class="custom-thead">Recibo</th>
-              <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Cajero</th>
+              <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Cajerokk</th>
               <th style="word-wrap: break-word;word-break: break-all;" class="custom-thead">Bloqueado Por</th>
               <th class="custom-thead">Valor</th>
               <th class="custom-thead">Cliente</th>
@@ -298,8 +298,7 @@
                 <input type="text" class="form-control form-control-sm" placeholder="Filtro val."
                   (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.valor">
               </th>
-              <!-- <th class="table-filters">
-              </th> -->
+
               <th class="table-filters">
                 <input type="text" class="form-control form-control-sm" placeholder="Filtro cli."
                   (change)="ConsultaFiltradaObservable()" [(ngModel)]="Filtros.cliente">
@@ -324,9 +323,7 @@
                   style="width:80% !important;padding: 0px !important;">
                   <option value="Todos" selected>Todos</option>
                   <option value="Pendiente">Pendiente</option>
-                  <!-- <option value="devuelta">Devueltas</option> -->
                   <option value="Alertada">Alertada</option>
-                  <!--    <option value="Pagada">Pagada</option> -->
                 </select>
               </th>
               <th class="table-filters"></th>
@@ -410,9 +407,9 @@
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                 {{((t.Valor_Transferencia * t.Tasa_Cambio ))  | customcurrency: '' }} ({{t.Tasa_Cambio}})</td>
 
-              <td (click)="DeseleccionarTransferencia(ts.Id_Transferencia_Destinatario)"
-                class="custom-cell specialtd text-center" style="cursor:pointer;">
+              <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                 {{t.Nombre_Remitente}}</td>
+
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd" style="text-align:right;">
                 {{t.Numero_Documento_Destino}}</td>
               <td (click)="UbicarseTransferencia(t)" class="custom-cell specialtd">

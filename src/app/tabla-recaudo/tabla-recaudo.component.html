@@ -49,7 +49,7 @@
       <tr
         *ngFor="let rt of RecibosTransferencia  | paginate: {  id: 'transferencias', itemsPerPage: pageSize, currentPage: page, totalItems: TotalItems }"
         [ngClass]=" {'bg-danger':rt.Estado == 'Anulado' , 'text-white':rt.Estado == 'Anulado' }">
-        <td class="text-center">{{rt.updated_at | date:"HH:mm" }}</td>
+        <td class="text-center">{{rt.updated_at |  date:"MM/dd/yy" }}</td>
         <!-- <td class="text-center">{{rt.Codigo}}</td> -->
         <td class=" text-center">{{rt.Remitente | currency:' ':'symbol':'3.0' }}</td>
         <td class=" text-left">{{rt.remitente.Nombre}}</td>

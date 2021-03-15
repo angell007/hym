@@ -157,8 +157,8 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.ConsultaFiltradaObservable(false, this.filter);
   }
-
 
   ngOnInit() {
     this.sub = this._TesCustomServiceService.subjec.subscribe((data: string) => {
@@ -166,7 +166,7 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
       this.ConsultaFiltradaObservable(false, this.filter);
     })
 
-    this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 500)
+    this.SubscriptionTimer2 = this.TransferenciasActualizadas = TimerObservable.create(0, 300)
       .subscribe(() => {
         this.ConsultaFiltradaObservable(false, this.filter);
       });
@@ -486,25 +486,24 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
 
     this._transferenciaService.GetTransferenciasConsultorObservableDev(p).subscribe((data: any) => {
       if (data.codigo == 'success') {
-        // if (!this.nuevaData) {
-        // if (!this.mifuncion(this.temporalData, data.query_data)) {
-        this.temporalData = data.query_data
-        this.TransferenciasListar = data.query_data;
-        this.TotalItems = data.numReg;
-        this.Cargando = false;
-        this.ActualizarIndicadores.emit()
-        this.SetInformacionPaginacion();
-        // }
-        // } else {
-        // this.temporalData = data.query_data
-        // this.TransferenciasListar = data.query_data;
-        // this.nuevaData = false;
-        // this.TotalItems = data.numReg;
-        // this.Cargando = false;
-        // this.ActualizarIndicadores.emit()
-
-        // this.SetInformacionPaginacion();
-        // }
+        if (!this.nuevaData) {
+          if (!this.mifuncion(this.temporalData, data.query_data)) {
+            this.temporalData = data.query_data
+            this.TransferenciasListar = data.query_data;
+            this.TotalItems = data.numReg;
+            this.Cargando = false;
+            this.ActualizarIndicadores.emit()
+            this.SetInformacionPaginacion();
+          }
+        } else {
+          this.temporalData = data.query_data
+          this.TransferenciasListar = data.query_data;
+          this.nuevaData = false;
+          this.TotalItems = data.numReg;
+          this.Cargando = false;
+          this.ActualizarIndicadores.emit()
+          this.SetInformacionPaginacion();
+        }
       } else {
         this.TransferenciasListar = [];
         // this.ShowSwal('info', data.titulo, data.mensaje);
@@ -613,8 +612,10 @@ export class TablatransferenciasComponent implements OnInit, OnChanges, OnDestro
     if (transferencia.Estado == 'Pagada') {
       return false;
     }
+
     this.http.get(this.globales.rutaNueva + 'ubicarse', { params: transferencia }).subscribe((data: any) => {
     });
+
   }
 
 
