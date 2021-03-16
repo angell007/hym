@@ -85,12 +85,19 @@
             <i class="ti-close"></i>
           </button>
 
-          <ng-container *ngIf="rt.Tiene_Movimientos == 'No'">
+          <ng-container>
             <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
               (click)="printReciboTransferencia(rt.Id_Transferencia)">
               <i class="ti-desktop"></i>
             </button>
           </ng-container>
+
+          <!-- <ng-container *ngIf="cambio.Estado != 'Anulado'">
+            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio" style="margin:0;"
+              (click)="printTranserencia(rt.Id_Transferencia)">
+              <i class="ti-desktop"></i>
+            </button>
+          </ng-container> -->
 
         </td>
       </tr>

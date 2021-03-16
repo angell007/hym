@@ -1108,6 +1108,8 @@
                               <th class="custom-thead">Nombre Destinatario</th>
                               <th class="custom-thead">Valor Recibido Real</th>
                               <th class="custom-thead">Valor Entrega</th>
+                              <th class="custom-thead">Acciones</th>
+
                             </tr>
 
                             <tr>
@@ -1134,6 +1136,7 @@
                               </th>
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
+                              <th class="table-filters"></th>
                             </tr>
 
                             <tr *ngIf="giroService.Giros.length == 0 && !Cargando">
@@ -1157,6 +1160,14 @@
                               <td class="text-right">{{Giro.Valor_Total | customcurrency}}
                               </td>
                               <td class="text-right">{{Giro.Valor_Entrega | customcurrency}}
+                              </td>
+                              <td class="text-right">
+                                <ng-container>
+                                  <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                                    style="margin:0;" (click)="printReciboPago(Giro.Id_Giro)">
+                                    <i class="ti-desktop"></i>
+                                  </button>
+                                </ng-container>
                               </td>
                             </tr>
                           </tbody>
@@ -1186,6 +1197,7 @@
                               <th class="custom-thead">Cédula Destinatario</th>
                               <th class="custom-thead">Nombre Destinatario</th>
                               <th class="custom-thead">Valor Pagado</th>
+                              <th class="custom-thead">Acciones</th>
                             </tr>
 
                             <tr>
@@ -1211,6 +1223,7 @@
                                   [(ngModel)]="giroService.FiltrosAprobados.nombreDestinatario">
                               </th>
                               <th class="table-filters"></th>
+                              <th class="table-filters"></th>
                             </tr>
 
                             <tr *ngIf="giroService.GirosAprobados.length == 0 && !Cargando">
@@ -1230,6 +1243,14 @@
                               <td class="text-center">{{Giro.Documento_Destinatario}}</td>
                               <td class="text-center">{{Giro.Nombre_Destinatario}} </td>
                               <td class="text-center">{{Giro.Valor_Entrega | customcurrency}}
+                              </td>
+                              <td class="text-center">
+                                <ng-container>
+                                  <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                                    style="margin:0;" (click)="printReciboPagado(Giro.Id_Giro)">
+                                    <i class="ti-desktop"></i>
+                                  </button>
+                                </ng-container>
                               </td>
                             </tr>
                           </tbody>
@@ -1733,8 +1754,17 @@
                               <td class="text-center">{{Servicio.Total | customcurrency }}</td>
                               <td class="text-center">{{Servicio.Estado }}</td>
 
+
                               <td class="text-right">
-                                <button *ngIf="Servicio.Estado == 'Activo'" class="btn btn-success btn-xs" type="button"
+
+                                <ng-container>
+                                  <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                                    style="margin:0;" (click)="printReciboExterno(Servicio.Id_Servicio)">
+                                    <i class="ti-desktop"></i>
+                                  </button>
+                                </ng-container>
+
+                                <button *ngIf="Servicio.Estado == 'Activo'" class="btn btn-info btn-xs" type="button"
                                   style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
                                   <i class="ti-pencil"></i>
                                 </button>
@@ -1749,8 +1779,8 @@
                                 </button>
 
 
-                                <button *ngIf="Servicio.Documento" class="btn btn-success btn-xs btn-warning"
-                                  type="button" style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
+                                <button *ngIf="Servicio.Documento" class="btn  btn-xs btn-warning" type="button"
+                                  style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
 
                                   <i class="fa fa-download"></i>
                                 </button>
@@ -1791,7 +1821,7 @@
                               <th class="custom-thead">Comision</th>
                               <th class="custom-thead">Total</th>
                               <th class="custom-thead">Estado</th>
-                              <!--  <th class="custom-thead">Acciones</th> -->
+                              <th class="custom-thead">Acciones</th>
                             </tr>
                             <tr>
                               <th class="table-filters"></th>
@@ -1810,7 +1840,7 @@
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
                               <th class="table-filters"></th>
-                              <!-- <th class="table-filters"></th> -->
+                              <th class="table-filters"></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1839,6 +1869,14 @@
                               <td class="text-center">{{Servicio.Comision | customcurrency }}</td>
                               <td class="text-center">{{ Servicio.Total | customcurrency }}</td>
                               <td class="text-center">{{ Servicio.Estado }}</td>
+                              <td class="text-center">
+                                <ng-container>
+                                  <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                                    style="margin:0;" (click)="printReciboExternoPagado(Servicio.Id_Servicio)">
+                                    <i class="ti-desktop"></i>
+                                  </button>
+                                </ng-container>
+                              </td>
 
 
 

@@ -5252,6 +5252,53 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     modal.show();
   }
 
+  printReciboPago(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'pago' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  printReciboPagado(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'pagado' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  printReciboExterno(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'externo' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+  printReciboExternoPagado(id) {
+    this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'externoPagado' }, responseType: 'blob' }).subscribe((data: any) => {
+      const link = document.createElement('a');
+      link.setAttribute('target', '_blank');
+      const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }));
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
   printCambio(id) {
     this.http.get(this.globales.rutaNueva + 'print-cambio', { params: { id: id, modulo: 'cambio' }, responseType: 'blob' }).subscribe((data: any) => {
       const link = document.createElement('a');
