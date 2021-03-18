@@ -335,6 +335,27 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     }
   };
 
+  public monedaFind: any = {
+    id: '',
+    Nombre: '',
+    Valores: {
+      Min_Venta_Efectivo: '0',
+      Max_Venta_Efectivo: '0',
+      Sugerido_Venta_Efectivo: '',
+      Min_Compra_Efectivo: '0',
+      Max_Compra_Efectivo: '0',
+      Sugerido_Compra_Efectivo: '',
+      Min_Venta_Transferencia: '',
+      Max_Venta_Transferencia: '',
+      Sugerido_Venta_Transferencia: '',
+      Costo_Transferencia: '',
+      Comision_Efectivo_Transferencia: '',
+      Pagar_Comision_Desde: '',
+      Min_No_Cobro_Transferencia: '',
+    }
+
+  };
+
   public Bolsa_Restante = '0';
   public HabilitarCampos: boolean = true;
   public TotalPagoCambio: any = '';
@@ -644,11 +665,17 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this._getTodasMonedas();
     this.AsignarMonedas();
     this.settearMoneda();
-    this.TransferenciaModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
-    this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
-    this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
-    this.CorresponsalModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
-    this.ServicioExternoModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+
+    if (JSON.parse(localStorage.getItem('monedaDefault')) != null && JSON.parse(localStorage.getItem('monedaDefault')) != undefined) {
+
+      this.TransferenciaModel.Moneda_Origen = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+      this.MonedaDestino = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
+      this.MonedaOrigen = JSON.parse(localStorage.getItem('monedaDefault'))['Nombre'];
+      this.CorresponsalModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+      this.ServicioExternoModel.Id_Moneda = JSON.parse(localStorage.getItem('monedaDefault'))['Id_Moneda'];
+
+    }
+
     this.TrasladoModel.Id_Moneda = 2;
     this.SetMonedaTraslados(2);
 
@@ -786,7 +813,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
     this.CambioModel.Valor_Origen = ''
     this.CambioModel.Valor_Destino = ''
 
-    let monedaFind = await this.BuscarMoneda(value)
+    this.monedaFind = Object.assign({}, await this.BuscarMoneda(value));
 
     if (value != '') {
       let xx = await this.http.get(this.globales.ruta + 'php/monedas/buscar_valores_moneda.php', { params: { id_moneda: value } }).toPromise().then((data) => {
@@ -794,7 +821,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
         if (data['codigo'] == 'success') {
 
           this.MonedaParaCambio.Valores = data['query_data'];
-          this.MonedaParaCambio.nombre = monedaFind.Nombre;
+          this.MonedaParaCambio.nombre = this.monedaFind.Nombre;
           this.CambioModel.Recibido = '';
 
           if (this.Venta) {
@@ -830,6 +857,7 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       this.ResetMonedaParaCambio();
       this.HabilitarCamposCambio();
     }
+
   }
 
   private _limpiarCompraVenta(value: string = '') {
