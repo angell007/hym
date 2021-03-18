@@ -76,6 +76,7 @@ import { VistaprincipalconsultorComponent } from './tableros/tableroconsultor/vi
 import { RedirectComponent } from './redirect/redirect.component';
 import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.component';
 import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
+import { PagoAgentesExternosComponent } from './pago-agentes-externos/pago-agentes-externos.component';
 
 // insert into Funcionario_Modulo (`Id_Funcionario`, `Id_Modulo`) SELECT fun.Identificacion_Funcionario, modi.Id_Modulo FROM Modulo as modi inner join Funcionario fun on fun.Identificacion_Funcionario = 9999999
 
@@ -360,6 +361,11 @@ export const AppRoutes: Routes = [
         path: 'detallemovimientoscuentagerencial/:id_cuenta', component: CommonLayoutComponent,
         children: [{ path: '', component: DetallemovimientoscuentagerenteComponent, canActivate: [AuthGuard] }]
     },
+    {
+        path: 'pago-agentes-externos', component: CommonLayoutComponent,
+        children: [{ path: '', component: PagoAgentesExternosComponent, canActivate: [AuthGuard] }]
+    },
+   
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 

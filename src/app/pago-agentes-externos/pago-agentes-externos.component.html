@@ -1,0 +1,71 @@
+<div class="container-fluid">
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header">
+                    Pagos de agentes externos
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Lista de pagos</h5>
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Agente</th>
+                                <th>Fecha</th>
+                                <th>Recibo</th>
+                                <th>Valor</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="Cargando">
+                                <td colspan="5" class="text-center">
+                                    <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                                        <h2>CARGANDO REGISTROS...</h2>
+                                        <!--          <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO"> -->
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="pagos.length == 0 && !Cargando">
+                                <td colspan="9" class="text-center">
+                                    <i class="ti-alert font-size-20 text-warning"></i>
+                                    <h4>No hay RecibosTransferencia para mostrar!</h4>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let pago of pagos" [ngClass]="{ 'text-danger' : pago.Estado == 'Rechazado' , 'text-success': pago.Estado == 'Aprobado' }">
+                                <td>{{pago.Id_Pago_Cupo_Agente_Externo }}</td>
+                                <td>{{pago.Nombre }}</td>
+                                <td>{{pago.Fecha | date}}</td>
+                                <td>{{pago.Recibo}}</td>
+                                <td>{{pago.Valor | currency}}</td>
+                                <td>{{pago.Estado }}</td>
+                                <td class="text-right">
+                                    <a *ngIf="pago.Estado=='Pendiente'" class=" waves-effect  accionable" (confirm)="CambiarEstado(pago,'Aprobado')" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Aprobar el pago de este agente externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aceptar',cancelButtonText: 'No!'}">
+                                        <i class="fa fa-check text-success"></i>
+                                    </a>
+                                    <a *ngIf="pago.Estado=='Pendiente'" class=" waves-effect  accionable" (confirm)="CambiarEstado(pago,'Rechazado')" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a Rechazar el pago de este agente externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Aceptar',cancelButtonText: 'No!'}">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+
+            <ngb-pagination [(page)]="currentPage" [pageSize]="limit" [collectionSize]="numReg" (pageChange)="GetRegistroPagos()">
+                ></ngb-pagination>
+        </div>
+    </div>
+</div>
+
+<swal #confirmSwal title="" text="" type=""></swal>

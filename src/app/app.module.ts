@@ -275,6 +275,8 @@ import { ValidateCajeroService } from './validate-cajero.service';
 import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
 import { ModalDetalleRecaudoComponent } from './modal-detalle-recaudo/modal-detalle-recaudo.component';
 import { ModalDetalleAjusteComponent } from './modal-detalle-ajuste/modal-detalle-ajuste.component';
+import { PagoAgentesExternosComponent } from './pago-agentes-externos/pago-agentes-externos.component';
+
 
 
 
@@ -504,7 +506,8 @@ export const customCurrencyMaskConfig = {
         EditTrasladoComponent,
         FlujoEfectivoComponent,
         ModalDetalleRecaudoComponent,
-        ModalDetalleAjusteComponent
+        ModalDetalleAjusteComponent,
+        PagoAgentesExternosComponent
 
     ],
     exports: [
