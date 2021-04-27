@@ -48,10 +48,10 @@
               <div class="card-body">
                 <div class="accordion md-accordion" id="accordionEx1" role="tablist" aria-multiselectable="true">
 
-                  <table class="table table-bordered custom-table" *ngIf="ArmarTabla">
+                  <table class=" custom-table" *ngIf="ArmarTabla">
                     <thead>
                       <tr>
-                        <th class="custom-thead">Tercero</th>
+                        <th class="custom-thead mx-auto">Tercero</th>
                         <th class="custom-thead" *ngFor="let m of Monedas">{{m.Nombre}}</th>
                         <th style="width:5%;"></th>
                       </tr>
@@ -63,18 +63,22 @@
                       </tr>
                     </thead>
                     <tbody *ngIf="item.Terceros.length > 0">
-                      <tr *ngFor="let t of item.Terceros">
-                        <td class="custom-cell">{{t.Nombre_Tercero}}</td>
-                        <td *ngFor="let tm of t.Totales_Monedas" class="text-right custom-cell" appColorsaldo
-                          [value]="tm.Total">{{tm.Total | customcurrency:tm.Codigo}}
+
+                      <tr *ngFor="let t of item.Terceros" class="text-center  " style="margin-top: 30px  !important ;"
+                        style="vertical-align: middle !important">
+                        <td class="text-left p-2 " style="vertical-align: middle !important">{{t.Nombre_Tercero}}</td>
+                        <td *ngFor="let tm of t.Totales_Monedas" class="text-right text-center p-2"
+                          style="vertical-align: middle !important" appColorsaldo [value]="tm.Total">
+                          {{tm.Total | customcurrency:tm.Codigo}}
                         </td>
-                        <td>
+                        <td class="p-2">
                           <a class="btn btn-light btn-rounded btn-sm m-0" style="cursor:pointer;"
                             [routerLink]="['/tercerover',t.Id_Tercero]">
                             <i class="ti-zoom-in text-info"></i>
                             Detalle
                           </a>
                         </td>
+
                       </tr>
                     </tbody>
                   </table>

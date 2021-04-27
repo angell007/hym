@@ -33,6 +33,9 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
   public RutaGifCargando: string;
   public CodigoMonedaActual: string = '';
   public fecha_filtro = '';
+
+  public ItemBss = 0;
+
   myDateRangePickerOptions: IMyDrpOptions = {
     width: '180px',
     height: '18px',
@@ -74,6 +77,9 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.ConsultaFiltrada();
+    localStorage.setItem('usd', '0');
+    localStorage.setItem('bss', '0');
+    localStorage.setItem('cop', '0');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -195,9 +201,23 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
     return params;
   }
 
-  public ConsultaFiltrada(paginacion: boolean = false, fecha: any = false) {
+  public BsS = 0;
+  public saldoBsS(data, index) {
+    this.BsS += data[index].IngresoBsS - data[index].EgresoBsS
+    return this.BsS;
+  }
+  public USD = 0;
+  public saldoUSD(data, index) {
+    this.USD += data[index].IngresoUSD - data[index].EgresoUSD
+    return this.USD;
+  }
+  public Cop = 0;
+  public saldoCop(data, index) {
+    this.Cop += data[index].IngresoCOP - data[index].EgresoCOP
+    return this.Cop;
+  }
 
-    console.log('aqui');
+  public ConsultaFiltrada(paginacion: boolean = false, fecha: any = false) {
 
     if (fecha == false) {
       var p = this.SetFiltros(paginacion);
@@ -205,12 +225,30 @@ export class TablatotalesmonedaterceroComponent implements OnInit, OnChanges {
       var p = this.SetFiltros(paginacion, fecha.formatted);
     }
     this.Cargando = true;
-    //this._movimientoService.getMovimientosTercero(p).subscribe((data: any) => {
+
     this._movimientoService.getPesosTercero(p).subscribe((data: any) => {
 
+      // if (data.query_data != ""  && data.query_data != null && data.query_data != undefined) {
+
+      // }
+
+
       if (data.codigo == 'success') {
+
+        let index = data.query_data['movimientos'].length - 1
+
+        data.query_data['movimientos'].forEach((x) => {
+
+          data.query_data['movimientos'][index]['TotalBsS'] = this.saldoBsS(data.query_data['movimientos'], index)
+          data.query_data['movimientos'][index]['TotalUSD'] = this.saldoUSD(data.query_data['movimientos'], index)
+          data.query_data['movimientos'][index]['TotalCop'] = this.saldoCop(data.query_data['movimientos'], index)
+
+          index--;
+
+        })
+
         this.MovimientosTercero = data.query_data['movimientos'];
-        this.Movimientos = data.query_data['movimientos'];;
+        this.Movimientos = data.query_data['movimientos'];
         this.MostrarTotales = true;
         this.TotalItems = data.numReg;
         this.Balance = data.balance;

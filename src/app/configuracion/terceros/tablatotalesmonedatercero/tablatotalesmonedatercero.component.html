@@ -2,8 +2,9 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-9">
-        <h5 class="pt-2"><i class="fa fa-money text-success"></i> Balance: <span appColorsaldo
-            [value]="totalObj.Total">{{ Balance | customcurrency:CodigoMonedaActual}}</span>
+        <h5 class="pt-2"><i class="fa fa-money text-success"></i> Balance
+          <!-- <span appColorsaldo
+            [value]="totalObj.Total">{{ Balance | customcurrency:CodigoMonedaActual}}</span> -->
         </h5>
       </div>
       <div class="col-md-3">
@@ -17,15 +18,28 @@
       <!-- <table class="table table-hover table-sm table-striped table-bordered ustom-table"> -->
       <thead>
         <tr>
-          <th class="custom-thead" style="width:12%;">Fecha</th>
-          <th class="custom-thead" style="width:12%;">Movimiento</th>
-          <th class="custom-thead">Cajero</th>
-          <th class="custom-thead">Detalle</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Ingreso</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Egreso</th>
-          <th class="custom-thead" class="text-center" style="width:10%">Valor Pesos</th>
-          <th class="custom-thead" class="text-center" style="width:15%">Saldo</th>
-          <th class="custom-thead" class="text-center" style="width:6%;"></th>
+          <th class="custom-thead" style="width:8%;">Fecha</th>
+          <th class="custom-thead" style="width:8%;">Movimiento</th>
+
+          <th class="custom-thead  mx-5 px-5 text-center" style="width:10%">Cajero</th>
+          <th class="custom-thead  mx-5 px-5 text-center" style="width:10%">Detalle</th>
+
+          <th class="custom-thead" class="text-center" style="width:10%">Ingreso $</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Egreso $</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Total $</th>
+
+          <th class="custom-thead" class="text-center" style="width:10%">Ingreso Bss</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Egreso Bss</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Valor Bss</th>
+
+          <th class="custom-thead" class="text-center" style="width:10%">Ingreso Us</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Egreso Us</th>
+          <th class="custom-thead" class="text-center" style="width:10%">Valor Us</th>
+
+
+
+          <!-- <th class="custom-thead" class="text-center" style="width:15%">Saldo</th>
+          <th class="custom-thead" class="text-center" style="width:6%;"></th> -->
         </tr>
         <tr>
           <th class="custom-thead">
@@ -44,6 +58,7 @@
             Fecha Fin
             <input type="date" class="form-control form-control-sm" placeholder="Filtro fecha"
               (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.fecha_fin"> -->
+
           </th>
           <th class="custom-thead">
             <input type="text" class="form-control form-control-sm" placeholder="Filtro movimiento"
@@ -61,6 +76,12 @@
           <th class="custom-thead"></th>
           <th class="custom-thead"></th>
           <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
+          <th class="custom-thead"></th>
         </tr>
 
         <tr *ngIf="Movimientos.length == 0 && !Cargando">
@@ -72,24 +93,51 @@
       </thead>
       <tbody>
         <tr *ngIf="MostrarTotales">
-          <td colspan="6" class="text-center custom-cell font-size-17">Total</td>
+
+          <!-- <td colspan="6" class="text-center custom-cell font-size-17">Total</td> -->
           <!--  <td class="text-right custom-cell font-size-17" appColorsaldo [value]="MovimientosTercero.totales.balance">
             {{MovimientosTercero.totales.balance | customcurrency:MovimientosTercero.totales.codigo_moneda}}</td>
           <td class="custom-cell"></td> -->
+
         </tr>
         <tr *ngFor="let m of Movimientos ; let i = index" [ngClass]="{'bg-anulada':m.Estado == 'Anulado'}">
           <td class="text-center custom-cell">{{m.Fecha | date : "dd/MM/yyyy HH:mm" }}</td>
-          <td class="custom-cell text-center">{{m.Movimiento}}</td>
-          <td class="custom-cell text-center">{{m.Cajero}}</td>
-          <td class="custom-cell">{{m.Detalle}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Ingreso"
-            [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.Ingreso | customcurrency:m.Codigo_Moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
-            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.Egreso | customcurrency:m.Codigo_Moneda}}</td>
-          <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
-            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.ValorPesos | customcurrency:m.Codigo_Moneda}}</td>
+          <td class="custom-cell text-center mx-5 px-5 text-center">{{m.Movimiento}}</td>
+          <td class="custom-cell text-center mx-5 px-5 text-center">{{m.Cajero}}</td>
+          <td class="custom-cell mx-5 px-5 text-center">{{ m.Detalle  }}</td>
+
+
+          <td class="text-center custom-cell" appColorsaldo [value]="m.IngresoCOP"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.IngresoCOP | customcurrency:''}}</td>
+          <td class="text-center custom-cell" appColorsaldo [value]="m.EgresoCOP"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.EgresoCOP | customcurrency:''}}</td>
+
+          <td class="custom-cell text-center"> $ {{ m.TotalCop |  customcurrency: ''  }}
+          </td>
+
+          <td class="text-center custom-cell" appColorsaldo [value]="m.IngresoBsS"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.IngresoBsS | customcurrency:''}}</td>
+          <td class="text-center custom-cell" appColorsaldo [value]="m.EgresoBsS"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.EgresoBsS | customcurrency:''}}</td>
+
+          <td class="custom-cell text-center"> Bss {{ m.TotalBsS |  customcurrency: '' }}
+          </td>
+
+          <td class="text-center custom-cell" appColorsaldo [value]="m.IngresoUSD"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''">{{m.IngresoUSD | customcurrency:''}}</td>
+          <td class="text-center custom-cell" appColorsaldo [value]="m.EgresoUSD"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.EgresoUSD | customcurrency:''}}</td>
+
+          <td class="custom-cell text-center"> Us {{ m.TotalUSD |  customcurrency: ''  }}
+          </td>
+
+
+
+          <!-- <td class="text-right custom-cell" appColorsaldo [value]="m.Egreso"
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.ValorPesos | customcurrency:''}}</td>
           <td class="text-right custom-cell" appColorsaldo [value]="m.Total"
-            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.Total | customcurrency:m.Codigo_Moneda}}</td>
+            [altColor]="m.Estado == 'Anulado' ? 'white' : ''"> {{m.Total | customcurrency:''}}</td>
+          -->
           <td>
             <div *ngIf="m.Movimiento === 'Ajuste' && m.Estado != 'Anulado'" class="text-center">
               <div ngbDropdown class="dropdown-primary">

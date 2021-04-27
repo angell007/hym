@@ -138,7 +138,7 @@ export class CierrecuentasconsultorComponent implements OnInit {
   }
 
   public VolverATablero() {
-    this._route.navigate(["/tablero"]);
+    this._route.navigate(["/consultor"]);
   }
 
   private _registrarCierreSesion() {

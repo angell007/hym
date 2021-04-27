@@ -27,8 +27,8 @@
                   <tr>
                     <th class="custom-thead">Fecha</th>
                     <th class="custom-thead">Código</th>
-                    <th class="custom-thead">Detalle</th>
                     <th class="custom-thead">Funcionario</th>
+                    <th class="custom-thead">Detalle</th>
                     <th class="custom-thead">Origen</th>
                     <th class="custom-thead">Destino</th>
                     <th class="custom-thead">Moneda</th>
@@ -45,11 +45,11 @@
                       <input type="text" class="form-control" placeholder="Filtro codigo" (change)="ConsultaFiltrada()"
                         [(ngModel)]="Filtros.codigo">
                     </th>
-                    <th class="table-filters"> </th>
                     <th class="table-filters">
                       <input type="text" class="form-control" placeholder="Filtro funcionario"
                         (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.funcionario">
                     </th>
+                    <th class="table-filters"> </th>
                     <th class="table-filters">
                       <select id="tipo_origen" class="form-control" (change)="ConsultaSelectOrigen()"
                         [(ngModel)]="Filtros.tipo_origen">
@@ -131,8 +131,8 @@
                     [ngClass]="{'bg-anulada':t.Estado == 'Anulado'}">
                     <td class="text-left ">{{t.Fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                     <td class="text-left ">{{t.Codigo}}</td>
-                    <td class="text-left ">{{t.Detalle}}</td>
                     <td class="text-left ">{{t.Nombre_Funcionario}}</td>
+                    <td class="text-left ">{{t.Detalle}}</td>
                     <td class="text-left ">{{t.Nombre_Origen}}</td>
                     <td class="text-left ">{{t.Nombre_Destino}}</td>
                     <td class="text-left ">{{t.Nombre_Moneda}}</td>

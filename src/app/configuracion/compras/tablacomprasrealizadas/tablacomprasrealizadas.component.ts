@@ -5,12 +5,14 @@ import { SwalService } from '../../../shared/services/swal/swal.service';
 import { ToastService } from '../../../shared/services/toasty/toast.service';
 import { MonedaService } from '../../../shared/services/monedas/moneda.service';
 import { CompraService } from '../../../shared/services/compra/compra.service';
+import { ExportService } from '../../../export.service';
 
 @Component({
   selector: 'app-tablacomprasrealizadas',
   templateUrl: './tablacomprasrealizadas.component.html',
   styleUrls: ['./tablacomprasrealizadas.component.scss', '../../../../style.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [ExportService],
 })
 export class TablacomprasrealizadasComponent implements OnInit {
 
@@ -42,6 +44,7 @@ export class TablacomprasrealizadasComponent implements OnInit {
   }
 
   constructor(private _generalService: GeneralService,
+    private _export: ExportService,
     private _swalService: SwalService,
     private _toastService: ToastService,
     private _monedaService: MonedaService,
@@ -114,6 +117,11 @@ export class TablacomprasrealizadasComponent implements OnInit {
     return params;
   }
 
+  exportar() {
+    var p = this.SetFiltros(false);
+    this._export.exportCompras(p)
+  }
+
   ConsultaFiltrada(paginacion: boolean = false) {
 
     var p = this.SetFiltros(paginacion);
@@ -128,8 +136,6 @@ export class TablacomprasrealizadasComponent implements OnInit {
       if (data.codigo == 'success') {
         this.Compras = data.query_data;
         this.TotalItems = data.numReg;
-
-        console.log(data.query_data);
 
       } else {
         this.Compras = [];
