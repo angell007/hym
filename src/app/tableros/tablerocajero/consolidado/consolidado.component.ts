@@ -12,6 +12,7 @@ import { GeneralService } from '../../../shared/services/general/general.service
 })
 export class ConsolidadoComponent implements OnInit {
   public id_funcionario = this.activeRoute.snapshot.params["id_funcionario"];
+  public fecha = this.activeRoute.snapshot.params["fecha"];
   public Funcionario = JSON.parse(localStorage['User']);
   public pag: string;
   public datos: any;
@@ -24,7 +25,7 @@ export class ConsolidadoComponent implements OnInit {
   public funcionarioConsolidado: any;
 
   constructor(public globales: Globales, private http: HttpClient, public router: Router, public activeRoute: ActivatedRoute, private _generalService: GeneralService) {
-    this.myDate = new Date();
+    this.myDate = this.fecha ;
   }
 
 
@@ -34,7 +35,7 @@ export class ConsolidadoComponent implements OnInit {
 
   async getDatos() {
     await this.GetRegistroDiario();
-    this.http.get(this.globales.ruta + 'php/consolidados/getConsolidados.php', { params: { id_funcionario: this.id_funcionario, pag: '1000' } }).subscribe(async (data: any) => {
+    this.http.get(this.globales.ruta + 'php/consolidados/getConsolidados.php', { params: { id_funcionario: this.id_funcionario, pag: '1000', fecha: this.fecha } }).subscribe(async (data: any) => {
       this.datos = data.query_data;
       this.funcionarioConsolidado = data.funcionario;
       await this.datos.forEach(async (element: any, index: number) => {
@@ -51,7 +52,7 @@ export class ConsolidadoComponent implements OnInit {
 
   async GetRegistroDiario() {
     await this.http
-      .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.id_funcionario } })
+      .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.id_funcionario, fecha: this.fecha } })
       .pipe().toPromise().then((data: any) => {
         data.valores_diario.forEach((valores: any, i) => {
           this.ValoresMonedasApertura.push(parseFloat(valores.Valor_Moneda_Apertura));
@@ -59,18 +60,6 @@ export class ConsolidadoComponent implements OnInit {
         });
       });
   }
-
-
-  // calculateSaldo(Egreso, Ingreso) {
-  //   this.saldoFinal += parseFloat((Ingreso) ? Ingreso : 0) - parseFloat((Egreso) ? Egreso : 0)
-  //   return this.saldoFinal
-  // }
-
-
-  // calculateSaldo(ingreso) {
-  //   return ingreso
-  // }
-
 
   isEqual(str1: string, str2: string) {
     return str1.toUpperCase() === str2.toUpperCase()

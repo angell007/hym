@@ -321,7 +321,6 @@ export class TablatercerosComponent implements OnInit {
           this.ConsultaFiltrada();
           this.ModalTercero.hide();
         } else {
-
           this._swalService.ShowMessage(data);
         }
       });

@@ -4518,8 +4518,6 @@ export class TablerocajeroComponent implements OnInit, OnDestroy {
       .get(this.globales.ruta + 'php/diario/get_valores_diario.php', { params: { id: this.funcionario_data.Identificacion_Funcionario } })
       .subscribe((data: any) => {
 
-
-
         if (data.DiarioNeto <= 0) {
           if (data.valores_anteriores.length == 0) {
             this.ValoresMonedasApertura = [];

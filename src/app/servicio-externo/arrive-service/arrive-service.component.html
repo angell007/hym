@@ -1,0 +1,611 @@
+<div class="card modulos" id="servicios">
+  <div class="card-header header-modulos">
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-unstyled list-info">
+          <li>
+            <span class="thumb-img pdd-top-10">
+              <i class="ti-truck text-danger font-size-30"></i>
+            </span>
+            <div class="info">
+              <b class="text-dark font-size-22">Servicios Externos</b>
+              <p class="no-mrg-btm">Consignaciones, Pagos, Trámites</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <button (click)="CambiarVista('Servicio')" class="btn btn-danger mrg-top-10 btn-superior float-right">
+          <i class="fa fa-plus"></i> Nuevo Servicio
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div style="min-height: 470px;" *ngIf="Servicio1">
+      <div class="tab-success">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a href="#default-tabx-1" class="nav-link active" (click)="ActualizarTablasServiciosExternos('Enviados')"
+              role="tab" data-toggle="tab">Servicios
+              Enviados</a>
+          </li>
+          <li class="nav-item">
+            <a href="#default-tabx-2" (click)="ActualizarTablasServiciosExternos('Pagado')" class="nav-link " role="tab"
+              data-toggle="tab">
+              Pagados</a>
+          </li>
+          <li class="nav-item">
+            <a href="#default-tabx-3" (click)="ActualizarTablasServiciosExternos('Activo')" class="nav-link " role="tab"
+              data-toggle="tab">
+              Pendientes</a>
+          </li>
+        </ul>
+
+        <div class="tab-content p-3 ">
+          <div role="tabpanel" class="tab-pane fade in active  " id="default-tabx-1">
+            <div class="row" id="Servicios1">
+              <div class="col-md-12" id="Servicios1">
+                <h5>Servicios Realizados del día</h5>
+                <div class="tab-success table-responsive">
+                  <table class="table table-striped table-sm table-bordered mrg-top-10" style="min-width: 900px;">
+                    <thead class="rounded">
+                      <tr>
+                        <th class="custom-thead">Hora</th>
+                        <th class="custom-thead">Código</th>
+                        <th class="custom-thead">Servicio</th>
+                        <th class="custom-thead">Valor</th>
+                        <th class="custom-thead">Comision</th>
+                        <th class="custom-thead">Total</th>
+                        <th class="custom-thead">Estado</th>
+                        <th class="custom-thead">Acciones</th>
+                      </tr>
+                      <tr>
+                        <th class="table-filters"></th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosRealizados.codigo"
+                            (change)="_sexternos.CargarServiciosDiarios(_sexternos.FiltrosRealizados)">
+                        </th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosRealizados.servicio"
+                            (change)="_sexternos.CargarServiciosDiarios(_sexternos.FiltrosRealizados)">
+                        </th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="_sexternos.Cargando">
+                        <td colspan="7" class="text-center">
+                          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                            <h2>CARGANDO SERVICIOS EXTERNOS</h2>
+                            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngIf="_sexternos.Servicios.length == 0 && !_sexternos.Cargando">
+                        <td colspan="7" class="text-center">
+                          <i class="ti-alert font-size-20 text-warning"></i>
+                          <h4>No hay Servicios Externos para mostrar!</h4>
+                        </td>
+                      </tr>
+                      <tr
+                        *ngFor="let Servicio of _sexternos.Servicios | paginate: {  id: 'sexternos1', itemsPerPage:_sexternos.pageSize, currentPage:_sexternos.page1 }"
+                        class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                        <td class="text-center">{{Servicio.Fecha | date:"HH:mm" }}</td>
+                        <td class="text-center">{{Servicio.Codigo}}</td>
+                        <td class="text-center">{{Servicio.Nombre_Servicio_Externo }}</td>
+                        <td class="text-center">{{Servicio.Valor | customcurrency}}</td>
+                        <td class="text-center">{{Servicio.Comision | customcurrency }}</td>
+                        <td class="text-center">{{Servicio.Total | customcurrency }}</td>
+                        <td class="text-center">{{Servicio.Estado }}</td>
+
+
+                        <td class="text-right">
+
+                          <ng-container>
+                            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                              style="margin:0;" (click)="printReciboExterno(Servicio.Id_Servicio)">
+                              <i class="ti-desktop"></i>
+                            </button>
+                          </ng-container>
+
+                          <button *ngIf="Servicio.Estado == 'Activo'" class="btn btn-info btn-xs" type="button"
+                            style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                            <i class="ti-pencil"></i>
+                          </button>
+                          <button class="btn btn-xs" *ngIf="Servicio.Estado == 'Activo'"
+                            [ngClass]="{'btn-danger':Servicio.Estado == 'Activo', 'btn-warning':Servicio.Estado == 'Inactivo'}"
+                            (confirm)="CambiarEstadoServicio(Servicio.Id_Servicio, 'Anulado','Enviados')" type="button"
+                            style="margin:0;"
+                            [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                            <i
+                              [ngClass]="{'ti-close':Servicio.Estado == 'Activo', 'ti-back-right':Servicio.Estado == 'Inactivo'}"></i>
+                            {{Servicio.Estado == 'Activo' ? '' : ''}}
+                          </button>
+
+
+                          <button *ngIf="Servicio.Documento" class="btn  btn-xs btn-warning" type="button"
+                            style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
+
+                            <i class="fa fa-download"></i>
+                          </button>
+
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="paginacion-container" *ngIf="_sexternos.Servicios.length > 0">
+
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <pagination-controls id="sexternos1" (pageChange)="_sexternos.page1 = $event "
+                        previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                      </pagination-controls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade in  " id="default-tabx-1">
+            <div class="row" id="Servicios2">
+              <div class="col-md-12" id="Servicios1">
+                <h5>Servicios pagos del día </h5>
+                <div class="tab-success table-responsive">
+                  <table class="table table-striped table-sm table-bordered mrg-top-10" style="min-width: 900px;">
+                    <thead class="rounded">
+                      <tr>
+                        <th class="custom-thead">Hora</th>
+                        <th class="custom-thead">Código</th>
+                        <th class="custom-thead">Caja Origen</th>
+                        <th class="custom-thead">Servicio</th>
+                        <th class="custom-thead">Valor</th>
+                        <th class="custom-thead">Comision</th>
+                        <th class="custom-thead">Total</th>
+                        <th class="custom-thead">Estado</th>
+                        <th class="custom-thead">Acciones</th>
+                      </tr>
+                      <tr>
+                        <th class="table-filters"></th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosPagados.codigo"
+                            (change)="_sexternos.CargarMisServicios('Pagado')">
+                        </th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosPagados.servicio"
+                            (change)="_sexternos.CargarMisServicios('Pagado')">
+                        </th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="_sexternos.Cargando">
+                        <td colspan="9" class="text-center">
+                          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                            <h2>CARGANDO SERVICIOS EXTERNOS</h2>
+                            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngIf="_sexternos.Servicios_Pagos.length == 0 && !_sexternos.Cargando">
+                        <td colspan="9" class="text-center">
+                          <i class="ti-alert font-size-20 text-warning"></i>
+                          <h4>No hay Servicios Externos para mostrar!</h4>
+                        </td>
+                      </tr>
+                      <tr
+                        *ngFor="let Servicio of _sexternos.Servicios_Pagos | paginate: {  id: 'sexternos3', itemsPerPage:_sexternos.pageSize, currentPage:_sexternos.page3 }"
+                        class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }} ">
+                        <td class="text-center">{{Servicio.Fecha_Pago | date:"HH:mm" }}</td>
+                        <td class="text-center">{{Servicio.Codigo}}</td>
+                        <td class="text-center">{{Servicio.Caja }} - {{Servicio.Oficina }}</td>
+                        <td class="text-center">{{Servicio.Servicio_Externo }}</td>
+                        <td class="text-center">{{Servicio.Valor | customcurrency}}</td>
+                        <td class="text-center">{{Servicio.Comision | customcurrency }}</td>
+                        <td class="text-center">{{ Servicio.Total | customcurrency }}</td>
+                        <td class="text-center">{{ Servicio.Estado }}</td>
+                        <td class="text-center">
+                          <ng-container>
+                            <button class="btn btn-xs btn-success" type="button" title="Imprimir cambio"
+                              style="margin:0;" (click)="printReciboExternoPagado(Servicio.Id_Servicio)">
+                              <i class="ti-desktop"></i>
+                            </button>
+                          </ng-container>
+                        </td>
+
+
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="paginacion-container" *ngIf="_sexternos.Servicios_Pagos.length > 0">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <pagination-controls id="sexternos3" (pageChange)="_sexternos.page3 = $event "
+                        previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                      </pagination-controls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div role="tabpanel" class="tab-pane fade in   " id="default-tabx-2">
+            <div class="row" id="Servicios1">
+              <div class="col-md-12" id="Servicios1">
+                <h5>Todos los Servicios por pagar</h5>
+                <div class="tab-success table-responsive">
+                  <table class="table table-striped table-sm table-bordered mrg-top-10" style="min-width: 900px;">
+                    <thead class="rounded">
+                      <tr>
+                        <th style="width:15%" class="custom-thead">Fecha</th>
+                        <th style="width:12%" class="custom-thead">Código</th>
+                        <th style="width:15%" class="custom-thead">Caja Origen</th>
+                        <th style="width:10%" class="custom-thead">Servicio</th>
+                        <th style="width:12%" class="custom-thead">Valor</th>
+                        <th style="width:11%" class="custom-thead">Comision</th>
+                        <th style="width:12%" class="custom-thead">Total</th>
+                        <th style="width:5%" class="custom-thead">Acciones</th>
+                      </tr>
+                      <tr>
+                        <th class="table-filters"></th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosPendientes.codigo"
+                            (change)="_sexternos.CargarMisServicios('Activo')">
+                        </th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters">
+                          <input type="text" class="form-control" placeholder="Filtro Código"
+                            [(ngModel)]="_sexternos.FiltrosPendientes.servicio"
+                            (change)="_sexternos.CargarMisServicios('Activo')">
+                        </th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+                        <th class="table-filters"></th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="_sexternos.Cargando">
+                        <td colspan="9" class="text-center">
+                          <div style="text-align: center; margin-top:10px; margin-bottom:10px;">
+                            <h2>CARGANDO SERVICIOS EXTERNOS</h2>
+                            <img src="{{RutaGifCargando}}" style="width:250px;" alt="CARGANDO">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngIf="_sexternos.Servicios_Caja.length == 0 && !_sexternos.Cargando">
+                        <td colspan="9" class="text-center">
+                          <i class="ti-alert font-size-20 text-warning"></i>
+                          <h4>No hay Servicios Externos para mostrar!</h4>
+                        </td>
+                      </tr>
+                      <tr
+                        *ngFor="let Servicio of _sexternos.Servicios_Caja | paginate: {  id: 'sexternos2', itemsPerPage:_sexternos.pageSize, currentPage:_sexternos.page2 }"
+                        class=" {{Servicio.Estado == 'Inactivo' ? 'bg-danger text-white' : '' }}   {{ Servicio.locked == true ? 'bg-info  text-white' : '' }}">
+
+
+                        <td class="text-center servicios">{{Servicio.Fecha }}</td>
+                        <td class="text-center servicios ">{{Servicio.Codigo}}</td>
+                        <td class="text-center servicios ">{{Servicio.Caja }} - {{Servicio.Oficina }}</td>
+                        <td class="text-center servicios ">{{Servicio.Servicio_Externo }}</td>
+                        <td class="text-center servicios ">{{Servicio.Valor | customcurrency}}</td>
+                        <td class="text-center servicios ">{{Servicio.Comision | customcurrency }}</td>
+                        <td class="text-center servicios ">{{ Servicio.Total | customcurrency }}</td>
+                        <td class="text-right">
+
+                          <ng-container *ngIf="Servicio.locked == false">
+                            <button class="btn btn-success btn-xs" type="button" style="margin:1px;"
+                              (click)="showModalTranslate(FormModalTranslate, Servicio.Id_Servicio)">
+                              <i class="fa fa-arrow-right"></i>
+                            </button>
+                          </ng-container>
+
+                          <ng-container
+                            *ngIf="(Servicio.locked == false) || (Servicio.locked == true && Servicio.funcionario_locked == funcionario_data.Identificacion_Funcionario)">
+                            <button class="btn btn-warning btn-xs" type="button" style="margin:1px;"
+                              [swal]="{title : '¿Está Seguro?', text: 
+
+                              (Servicio.locked == true) ? 
+                              'Se dispone a des-bloquear este servicio'
+                              :
+                              'Se dispone a bloquear este servicio para ejecutarlo, si acepta nadie podrá realizar operaciones sobre el mismo hasta que finalice'
+                              
+                              , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Hazlo',cancelButtonText: 'No!'}" (confirm)="BloquearService(Servicio.Id_Servicio)">
+                              <i class="fa fa-lock"></i>
+                            </button>
+                          </ng-container>
+
+                          <ng-container *ngIf="Servicio.locked == false">
+                            <button class="btn btn-danger btn-xs" type="button" style="margin:1px;"
+                              (click)="showModal(FormModalUploadEvidence, Servicio.Id_Servicio)">
+                              <i class="fa fa-check"></i>
+                            </button>
+                          </ng-container>
+
+                          <ng-container *ngIf="Servicio.evidence != '' ">
+                            <button class="btn btn-info btn-xs" type="button" style="margin:1px;"
+                              (click)="download(Servicio.evidence)">
+                              <i class="fa fa-download"></i>
+                            </button>
+                          </ng-container>
+
+                          <button *ngIf="Servicio.Documento" class="btn btn-xs bg-secondary" type="button"
+                            style="margin:0;" (click)="DescargarServicio(Servicio.Documento)">
+                            <i class="fa fa-download"></i>
+                          </button>
+
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="paginacion-container" *ngIf="_sexternos.Servicios_Caja.length > 0">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <pagination-controls id="sexternos2" (pageChange)="_sexternos.page2 = $event "
+                        previousLabel="Anterior" nextLabel="Siguiente" responsive="true">
+                      </pagination-controls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div style="min-height: 470px;" *ngIf="Servicio2">
+
+
+      <div class="row" id="Servicios2" style="margin-top: 10px">
+        <div class="col-md-12">
+
+          <div class="mrg-top-30">
+            <form #FormServicio="ngForm">
+              <h4>Datos del servicio</h4>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="font-size-18" for="">Cajero</label>
+                    <ng-select [ngClass]="'ng-select' " class="cuentas" required [options]="cajas_externo"
+                      name="cajas_externo" [(ngModel)]="ServicioExternoModel.Id_Funcionario_Destino"></ng-select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="font-size-18">
+                    Tipo de Tercero
+                  </label>
+
+                  <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
+                    [(ngModel)]="ServicioExternoModel.tipoCliente" name="tipo">
+                    <option value="Cliente">Clientes</option>
+                    <option value="Proveedor">Proveedores</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="font-size-18">Número de documento</label>
+                    <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
+                      placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
+                      [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra"
+                      [(ngModel)]="ServicioExternoModel.Tercero" [inputFormatter]="formatterClienteCambioCompra">
+                  </div>
+                </div>
+
+                <!-- /***********************************************************************************************************************/ -->
+
+                <div class="col-md-6">
+                  <div class="fom-group">
+                    <label class="font-size-18" for="">Archivo</label>
+                    <input type="file" class="form-control" name="ArchivoServicioExterno" placeholder=""
+                      #ArchivoServicioExterno>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="font-size-18">Servicio</label>
+                    <select name="Servicio_Externo" class="form-control font-size-18"
+                      [(ngModel)]="ServicioExternoModel.Servicio_Externo" required>
+                      <option value="">Seleccione un Servicio</option>
+                      <option *ngFor="let se of ListaServiciosExternos" value="{{se.Id_Servicio_Externo}}">
+                        {{se.Nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="font-size-18">Valor</label>
+                    <input type="text" class="form-control text-right font-size-18" name="Valor"
+                      [(ngModel)]='ServicioExternoModel.Valor' placeholder="$ 20.000"
+                      (ngModelChange)="AsignarComisionServicioExterno2()" currencyMask
+                      [options]="{ thousands: '.' , decimal: ',' ,  precision: '0' }" required>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="font-size-18">Comisión</label>
+                    <input name="Comision" type="text" placeholder="Comisión" class="form-control font-size-18"
+                      [(ngModel)]="ServicioExternoModel.Comision" currencyMask
+                      [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}"
+                      [disabled]="ServicioExternoModel.Valor == ''" (blur)="AprobarCambioComision()" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label class="block-element font-size-18">Total en
+                      {{monedaPeso.Nombre }}</label>
+                    <input name="Total" type="text" placeholder="Total" class="form-control font-size-18"
+                      [(ngModel)]="Total_Servicio" disabled currencyMask
+                      [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row mrg-top-20">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="font-size-18">Observaciones</label>
+                    <textarea placeholder="Observaciones" style="width: 100%;" name="Detalle"
+                      [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="row mrg-top-5">
+            <div class="col-md-10">
+              <button type="button"
+                [swal]="{title : '¿Está seguro?', text: 'Se dispone a guardar este Servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, guardar',cancelButtonText: '¡No, déjame comprobar!'}"
+                (confirm)="GuardarServicio(FormServicio,ModalServicioEditar,'creacion','Enviados')"
+                class="btn btn-danger btn-sm btn-block" [disabled]="!FormServicio.valid">Crear Servicio</button>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-secondary btn-sm btn-block" (click)="volverReciboServicio()">Volver</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="FormModalUploadEvidence" #FormModalUploadEvidence>
+  <div class="app-modal-header">
+    <button class="btn-close"
+      style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios(FormModalUploadEvidence)">X</button>
+    <h4>Terminar servicio</h4>
+  </div>
+  <div class="app-modal-body" style="max-height: calc(100vh - 210px); overflow-y: auto;">
+    <form #FormUploadEvidence="ngForm">
+      <div class="row">
+
+        <div class="col-md-6">
+          <label class="font-size-18">
+            Tipo de Tercero
+          </label>
+
+          <select class="inputfield font-size-18  form-control form-control-lg" #selectCustomClient
+            [(ngModel)]="tipoCliente" name="tipo">
+            <option value="Cliente">Clientes</option>
+            <option value="Proveedor">Proveedores</option>
+          </select>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-size-18">Número de documento</label>
+            <input name="Id_Tercero" id="Id_Tercero" type="text" class="form-control font-size-18"
+              placeholder="Número Documento" name="Documento_Remitente" autocomplete="off"
+              [ngbTypeahead]="search_destino3" [resultTemplate]="clienteCambioCompra" [(ngModel)]="tercero"
+              [inputFormatter]="formatterClienteCambioCompra">
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="font-size-18" for="">Evidencia</label>
+            <input type="file" class="form-control" name="ArchivoServicioExterno" placeholder=""
+              #ArchivoServicioExterno>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-size-18">Observaciones</label>
+            <textarea form-control placeholder="Observaciones" style="width: 100%;" name="Detalle"
+              [(ngModel)]="ObservacionByFinalizar"> </textarea>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </form>
+  </div>
+  <div class="app-modal-footer" id="guardar">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm"
+        [swal]="{title : '¿Está seguro?', text: 'Se dispone a terminar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, Hazlo',cancelButtonText: '¡No, déjame comprobar!'}"
+        (confirm)="saveFinaliceService(FormModalUploadEvidence)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+
+
+<app-modal-basic [dialogClass]="'modal-lg'" id="FormModalTranslate" #FormModalTranslate>
+  <div class="app-modal-header">
+    <button class="btn-close"
+      style="position: absolute; right: 0; background-color: transparent; color: black; font-weight: 900; text-align: center; border-style: none"
+      (click)="OcultarFormularios(FormModalTranslate)">X</button>
+    <h4>Trasladar servicio</h4>
+  </div>
+
+  <div class="app-modal-body" style="max-height: calc(100vh - 210px);">
+    <form #FormTranslate="ngForm">
+      <div class="row">
+        <div class="col-md-11">
+          <div class="form-group">
+            <label class="font-size-18" for="">Cajero</label>
+            <ng-select [ngClass]="'ng-select' " class="cuentas" required [options]="cajas_externo" name="cajas_externo"
+              [(ngModel)]="ServicioExternoModel.Id_Funcionario_Destino"></ng-select>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-12">
+          <div class="form-group">
+            <label class="font-size-18">Observaciones</label>
+            <textarea class="form-control" placeholder="Observaciones" style="width: 100%;" name="Detalle"
+              [(ngModel)]="ServicioExternoModel.Detalle"> </textarea>
+          </div>
+        </div> -->
+
+      </div>
+      <hr>
+    </form>
+  </div>
+  <div class="app-modal-footer" id="guardar">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm"
+        [swal]="{title : '¿Está seguro?', text: 'Se dispone a terminar este servicio' , type : 'warning', showCancelButton : true , confirmButtonText: 'Sí, Hazlo',cancelButtonText: '¡No, déjame comprobar!'}"
+        (confirm)="TranslateService(FormModalTranslate)">Guardar</button>
+    </div>
+  </div>
+</app-modal-basic>
+
+<ng-template #clienteCambioCompra let-r="result" let-t="term">
+  <span class="f-9">{{ r.Id_Tercero }}
+    <strong>{{r.Nombre}}</strong>
+  </span>
+</ng-template>

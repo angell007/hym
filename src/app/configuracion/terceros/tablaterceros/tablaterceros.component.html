@@ -3,8 +3,8 @@
     <ul class="list-unstyled list-info">
         <li>
             <span class="thumb-img pdd-top-10">
-        <!-- <i class=" text-danger font-size-30"></i> -->
-      </span>
+                <!-- <i class=" text-danger font-size-30"></i> -->
+            </span>
             <div class="info">
                 <b class="text-dark font-size-22">Terceros </b>
                 <p class="no-mrg-btm ">Todos los terceros de nuestro sistema</p>
@@ -18,8 +18,8 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-4">
                 <button class="btn btn-info btn-block mrg-top-10 btn-grande text-center" (click)="NuevoTercero()">
-          Nuevo Tercero
-        </button>
+                    Nuevo Tercero
+                </button>
             </div>
         </div>
     </div>
@@ -40,42 +40,49 @@
                 </tr>
                 <tr>
                     <th class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()" placeholder="Cedula">
+                        <input type="text" class="form-control" [(ngModel)]="Filtros.id" (change)="ConsultaFiltrada()"
+                            placeholder="Cedula">
                     </th>
                     <th class="text-center">
-                        <input type="text" class="form-control" [(ngModel)]="Filtros.nombre" (change)="ConsultaFiltrada()" placeholder="Nombre y/o apellidos">
+                        <input type="text" class="form-control" [(ngModel)]="Filtros.nombre"
+                            (change)="ConsultaFiltrada()" placeholder="Nombre y/o apellidos">
                     </th>
                     <th class="text-center">
-                        <select class="custom-select form-control" [(ngModel)]="Filtros.departamento" (change)="ConsultaFiltrada()">
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
-            </select>
+                        <select class="custom-select form-control" [(ngModel)]="Filtros.departamento"
+                            (change)="ConsultaFiltrada()">
+                            <option value="" selected>Seleccione</option>
+                            <option *ngFor="let d of Departamentos" [value]="d.Nombre">{{d.Nombre}}</option>
+                        </select>
                     </th>
                     <th class="text-center">
-                        <select class="custom-select form-control" (change)="GetMunicipiosDepartamento($event.target.value)">
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
-            </select>
+                        <select class="custom-select form-control"
+                            (change)="GetMunicipiosDepartamento($event.target.value)">
+                            <option value="" selected>Seleccione</option>
+                            <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                        </select>
 
-                        <select class="custom-select form-control" [(ngModel)]="Filtros.municipio" (change)="ConsultaFiltrada()">
-              <option value="" selected>Seleccione</option>
-              <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
-            </select>
+                        <select class="custom-select form-control" [(ngModel)]="Filtros.municipio"
+                            (change)="ConsultaFiltrada()">
+                            <option value="" selected>Seleccione</option>
+                            <option *ngFor="let m of Municipios" [value]="m.Nombre">{{m.Nombre}}</option>
+                        </select>
                     </th>
                     <th class="text-center">
-                        <select class="custom-select form-control" [(ngModel)]="Filtros.tipo" (change)="ConsultaFiltrada()">
-              <option value="" selected>Seleccione</option>
-              <option value="Cliente">Cliente</option>
-              <option value="Proveedor">Proveedor</option>
-              <option value="Corresponsal">Corresponsal</option>
-            </select>
+                        <select class="custom-select form-control" [(ngModel)]="Filtros.tipo"
+                            (change)="ConsultaFiltrada()">
+                            <option value="" selected>Seleccione</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Corresponsal">Corresponsal</option>
+                        </select>
                     </th>
                     <th class="text-center">
-                        <select id="estado" class="form-control" (change)="ConsultaFiltrada()" [(ngModel)]="Filtros.estado">
-              <option value="" selected>Seleccione</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select>
+                        <select id="estado" class="form-control" (change)="ConsultaFiltrada()"
+                            [(ngModel)]="Filtros.estado">
+                            <option value="" selected>Seleccione</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
                     </th>
                     <th class="text-center"></th>
                 </tr>
@@ -114,8 +121,11 @@
                             <a style="cursor:pointer;" (click)="EditarTercero(t.Id_Tercero)">
                                 <i class="ti-pencil text-warning"></i>
                             </a>
-                            <a (confirm)="CambiarEstadoTercero(t.Id_Tercero)" [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este tercero' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                                <i [ngClass]="{'ti-trash text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Inactivo'}"></i> {{t.Estado == 'Activo' ? '' : ''}}
+                            <a (confirm)="CambiarEstadoTercero(t.Id_Tercero)"
+                                [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este tercero' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                                <i
+                                    [ngClass]="{'ti-trash text-danger':t.Estado == 'Activo', 'ti-back-right text-success':t.Estado == 'Inactivo'}"></i>
+                                {{t.Estado == 'Activo' ? '' : ''}}
                             </a>
                             <!-- </div> -->
                             <!-- </div> -->
@@ -129,11 +139,12 @@
                 <div class="col-md-3">
                     <p>
                         <b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de
-              {{ InformacionPaginacion.total }}</b>
+                            {{ InformacionPaginacion.total }}</b>
                     </p>
                 </div>
                 <div class="col-md-9">
-                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize" [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
+                    <ngb-pagination class="pull-right" [collectionSize]="TotalItems" [(page)]="page" [maxSize]="maxSize"
+                        [pageSize]="pageSize" size="sm" (pageChange)="ConsultaFiltrada(true)" [boundaryLinks]="true">
                     </ngb-pagination>
                 </div>
             </div>
@@ -154,8 +165,8 @@
             <h4>Editar Tercero</h4>
         </ng-template>
         <button type="button" class="close basic-close" (click)="CerrarModalTercero()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="app-modal-body">
         <form #FormTercero="ngForm">
@@ -163,23 +174,28 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>T. Doc</label>
-                        <select class="form-control" required name="Id_Tipo_Documento" [(ngModel)]="TerceroModel.Id_Tipo_Documento" [disabled]="Edicion">
-              <option value="">Seleccione tipo de documento</option>
-              <option *ngFor="let tp of TiposDocumento" [value]="tp.Id_Tipo_Documento">{{tp.Nombre}}</option>
-            </select>
+                        <select class="form-control" required name="Id_Tipo_Documento"
+                            [(ngModel)]="TerceroModel.Id_Tipo_Documento" [disabled]="Edicion">
+                            <option value="">Seleccione tipo de documento</option>
+                            <option *ngFor="let tp of TiposDocumento" [value]="tp.Id_Tipo_Documento">{{tp.Nombre}}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Identificación</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Identificación Tercero" class="form-control" name="Id_Tercero" [(ngModel)]="TerceroModel.Id_Tercero" (change)="VerificarIdentificacion()"
-                            required>
+                        <input type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="Identificación Tercero" class="form-control" name="Id_Tercero"
+                            [(ngModel)]="TerceroModel.Id_Tercero" (change)="VerificarIdentificacion()" required>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
                         <label>Nombre y Apellido</label>
-                        <input type="text" placeholder="Nombre y Apellido Tercero" class="form-control" name="Nombre" [(ngModel)]="TerceroModel.Nombre" required>
+                        <input type="text" placeholder="Nombre y Apellido Tercero" class="form-control" name="Nombre"
+                            [(ngModel)]="TerceroModel.Nombre" required>
                     </div>
                 </div>
             </div>
@@ -187,51 +203,63 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Dirección</label>
-                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion" [(ngModel)]="TerceroModel.Direccion">
+                        <input type="text" placeholder="Dirección del Tercero" class="form-control" name="Direccion"
+                            [(ngModel)]="TerceroModel.Direccion">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Barrio</label>
-                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio" [(ngModel)]="TerceroModel.Barrio">
+                        <input type="text" placeholder="Barrio del Tercero" class="form-control" name="Barrio"
+                            [(ngModel)]="TerceroModel.Barrio">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Departamento</label>
-                        <select class="form-control" required name="Id_Departamento" [(ngModel)]="TerceroModel.Id_Departamento" (change)="GetMunicipiosList($event.target.value)">
-              <option value="">Seleccione un Departamento</option>
-              <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
-            </select>
+                        <select class="form-control" required name="Id_Departamento"
+                            [(ngModel)]="TerceroModel.Id_Departamento"
+                            (change)="GetMunicipiosList($event.target.value)">
+                            <option value="">Seleccione un Departamento</option>
+                            <option *ngFor="let d of Departamentos" [value]="d.Id_Departamento">{{d.Nombre}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Municipio</label>
-                        <select class="form-control" required name="Id_Municipio" [(ngModel)]="TerceroModel.Id_Municipio">
-              <option value="">Seleccione un Municipio</option>
-              <option *ngFor="let m of MunicipiosList" [value]="m.Id_Municipio">{{m.Nombre}}</option>
-            </select>
+                        <select class="form-control" required name="Id_Municipio"
+                            [(ngModel)]="TerceroModel.Id_Municipio">
+                            <option value="">Seleccione un Municipio</option>
+                            <option *ngFor="let m of MunicipiosList" [value]="m.Id_Municipio">{{m.Nombre}}</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Teléfono del Tercero" class="form-control" name="Telefono" [(ngModel)]="TerceroModel.Telefono">
+                        <input type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="Teléfono del Tercero" class="form-control" name="Telefono"
+                            [(ngModel)]="TerceroModel.Telefono">
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Celular</label>
-                        <input type="number" step="1" min=0 onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Celular del Tercero" class="form-control" name="Celular" [(ngModel)]="TerceroModel.Celular">
+                        <input type="number" step="1" min=0
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="Celular del Tercero" class="form-control" name="Celular"
+                            [(ngModel)]="TerceroModel.Celular">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo" [(ngModel)]="TerceroModel.Correo">
+                        <input type="email" email placeholder="Correo del Tercero" class="form-control" name="Correo"
+                            [(ngModel)]="TerceroModel.Correo">
                     </div>
                 </div>
             </div>
@@ -242,35 +270,38 @@
                     <div class="form-group">
                         <label>Tipo</label>
                         <select class="form-control" [(ngModel)]="TerceroModel.Tipo_Tercero" name="Tipo" required>
-              <option value="">Seleccione</option>
-              <option value="Cliente">Cliente</option>
-              <option value="Proveedor">Proveedor</option>
-              <option value="Corresponsal">Corresponsal</option>
-            </select>
+                            <option value="">Seleccione</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Proveedor">Proveedor</option>
+                            <option value="Corresponsal">Corresponsal</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Grupo Tercero</label>
-                        <select class="form-control" [(ngModel)]="TerceroModel.Id_Grupo_Tercero" name="Id_Grupo_Tercero" required>
-              <option value="">Seleccione</option>
-              <option *ngFor="let g of Grupos" value="{{g.Id_Grupo_Tercero}}">{{g.Nombre_Grupo}}</option>
-            </select>
+                        <select class="form-control" [(ngModel)]="TerceroModel.Id_Grupo_Tercero" name="Id_Grupo_Tercero"
+                            required>
+                            <option value="">Seleccione</option>
+                            <option *ngFor="let g of Grupos" value="{{g.Id_Grupo_Tercero}}">{{g.Nombre_Grupo}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Crédito</label>
-                        <select class="form-control" name="Credito" [(ngModel)]="TerceroModel.Credito" (change)="VaciarCupo()">
-              <option selected value="No">No</option>
-              <option value="Si">Si</option>
-            </select>
+                        <select class="form-control" name="Credito" [(ngModel)]="TerceroModel.Credito"
+                            (change)="VaciarCupo()">
+                            <option value="Si">Si</option>
+                            <option selected value="No">No</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Cupo</label>
-                        <input type="text" placeholder="Cupo de Crédito" class="form-control" name="Cupo" [(ngModel)]="TerceroModel.Cupo" [disabled]="TerceroModel.Credito == 'No'">
+                        <input type="text" placeholder="Cupo de Crédito" class="form-control" name="Cupo"
+                            [(ngModel)]="TerceroModel.Cupo" [disabled]="TerceroModel.Credito == 'No'">
                     </div>
                 </div>
 
@@ -279,7 +310,7 @@
                     <div class="form-group">
                         <label>Recauda?</label>
                         <select class="form-control" name="recauda" [(ngModel)]="TerceroModel.Recauda">
-                            <option selected value="No">No</option>
+                            <option value="No">No</option>
                             <option value="Si">Si</option>
                         </select>
                     </div>
@@ -290,7 +321,8 @@
             <div class="col-md-2" *ngIf="TerceroModel.Recauda=='Si'">
                 <div class="form-group">
                     <label>(%) Porcentaje Recaudacón </label>
-                    <input type="number" placeholder="Porcentaje" class="form-control" name="porcentaje" [(ngModel)]="TerceroModel.Porcentaje_Recauda">
+                    <input type="number" placeholder="Porcentaje" class="form-control" name="porcentaje"
+                        [(ngModel)]="TerceroModel.Porcentaje_Recauda">
 
                 </div>
             </div>
@@ -301,9 +333,11 @@
 
         <div class="text-right">
             <button type="button" class="btn btn-outline-danger btn-rounded btn-sm" (click)="CerrarModalTercero()">
-        Cerrar</button>
-            <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm" [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}" (confirm)="GuardarTercero()"
-                [disabled]="!FormTercero.valid"> {{Edicion ? 'Actualizar' : 'Guardar'}}</button>
+                Cerrar</button>
+            <button type="submit" class="btn btn-outline-primary btn-rounded btn-sm"
+                [swal]="{title : '¿Está Seguro?', text: MensajeGuardar , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Guardar',cancelButtonText: 'No,Dejame Comprobar!'}"
+                (confirm)="GuardarTercero()" [disabled]="!FormTercero.valid"> {{Edicion ? 'Actualizar' :
+                'Guardar'}}</button>
         </div>
         <!-- {{ Edicion  | json }} -->
     </div>

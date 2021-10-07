@@ -43,7 +43,8 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     //   this.ModalPermiso.show(); 
     // });
     this.openModalSubscription = this.permisoService.openModalPermiso.subscribe(d => {
-      // console.log(d);
+
+      console.log(d);
 
       this.accion = d.accion;
       this.response.accion = d.accion;
@@ -83,6 +84,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
   }
 
   CerrarModal() {
+    console.log(this.accion);
     this.Codigo = "";
     this.ModalPermiso.hide();
 
@@ -90,6 +92,7 @@ export class ModalpermisojefeComponent implements OnInit, OnDestroy {
     } else if (this.accion == 'servicio_externo') {
       this.response.verificado = false;
       this.permisoService._subject.next(this.response);
+      console.log(this.response);
     } else {
       this.permisoService._subject.next(this.response);
     }

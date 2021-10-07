@@ -20,13 +20,13 @@ export class CorresponsalesbancariosComponent implements OnInit {
 
   public CorresponsalModel: CorresponsalModel = new CorresponsalModel();
   //variables que hacen referencia a los campos del formulario editar   
-  
+
   public Identificacion: any = [];
   public Nombre: any = [];
   public Cupo: any = [];
   public Departamento: any = [];
   public Municipio: any = [];
-  public tercero_credito:any = [];
+  public tercero_credito: any = [];
   public boolCorresponsal: boolean = false;
   public boolCupo: boolean = false;
   public boolDepartamento: boolean = false;
@@ -56,23 +56,20 @@ export class CorresponsalesbancariosComponent implements OnInit {
     });
   }
 
-  
-search_tercero_credito = (text$: Observable<string>) =>
-text$
-  .pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    switchMap(term => term.length < 3 ? [] :
 
-      this.http.get(this.globales.ruta + 'php/terceros/get_terceros_corresponsal.php', { params: { Nombre: term } })
-        .map(response => response)
-    )
-  );
-
+  search_tercero_credito = (text$: Observable<string>) =>
+    text$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(term => term.length < 3 ? [] :
+          this.http.get(this.globales.ruta + 'php/terceros/get_terceros_corresponsal.php', { params: { Nombre: term } })
+            .map(response => response)
+        )
+      );
 
   formatter_tercero_credito = (x: { Nombre: string }) => x.Nombre;
-  
-  
+
 
   @HostListener('document:keyup', ['$event']) handleKeyUp(event) {
     if (event.keyCode === 27) {
@@ -108,8 +105,8 @@ text$
   }
 
   GuardarCorresponsal() {
-    if( typeof (this.CorresponsalModel.Tercero) != 'object'){
-      this._swalService.ShowMessage(['warning','Datos Incompletos','Debe escoger un tercero']) 
+    if (typeof (this.CorresponsalModel.Tercero) != 'object') {
+      this._swalService.ShowMessage(['warning', 'Datos Incompletos', 'Debe escoger un tercero'])
       return
     }
 

@@ -118,6 +118,7 @@ export class CommonLayoutComponent implements OnInit {
     egresoTraslado: any = 0;
 
     public counter = '0';
+    public counterServices = '0';
 
     //VARIABLES NUEVA
     public Oficinas: any = [];
@@ -218,6 +219,7 @@ export class CommonLayoutComponent implements OnInit {
 
         this._notificacionService.counter();
         this._notificacionService.notifcaciones$.subscribe((data: any) => this.counter = data)
+        // this._notificacionService.notifcacionesServices$.subscribe((data: any) => this.counterServices = data)
 
 
         this.app = {

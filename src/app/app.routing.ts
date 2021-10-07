@@ -77,10 +77,23 @@ import { RedirectComponent } from './redirect/redirect.component';
 import { CajasAbiertasComponent } from './cajas-abiertas/cajas-abiertas.component';
 import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efectivo.component';
 import { PagoAgentesExternosComponent } from './pago-agentes-externos/pago-agentes-externos.component';
+import { ArriveServiceComponent } from './servicio-externo/arrive-service/arrive-service.component';
 
 // insert into Funcionario_Modulo (`Id_Funcionario`, `Id_Modulo`) SELECT fun.Identificacion_Funcionario, modi.Id_Modulo FROM Modulo as modi inner join Funcionario fun on fun.Identificacion_Funcionario = 9999999
 
 export const AppRoutes: Routes = [
+
+    {
+        path: 'servicio-externo', component: CommonLayoutComponent,
+        children: [{ path: '', component: ArriveServiceComponent, canActivate: [AuthGuard] }]
+    },
+
+    // {
+    //     path: 'servicio-externo',
+    //     component: ArriveServiceComponent
+    //     // component: CommonLayoutComponent, loadChildren: () => import('./servicio-externo/servicio-externo.module').then(m => m.ServicioExternoModule)
+    // },
+
     {
         path: 'tablero', component: CommonLayoutComponent,
         children: [{ path: '', component: TableroComponent, canActivate: [AuthGuard] }]
@@ -338,7 +351,7 @@ export const AppRoutes: Routes = [
         children: [{ path: '', component: CierrecajaComponent, canActivate: [AuthGuard] }]
     },
     {
-        path: 'consolidado/:id_funcionario', component: CommonLayoutComponent,
+        path: 'consolidado/:id_funcionario/:fecha', component: CommonLayoutComponent,
         children: [{ path: '', component: ConsolidadoComponent, canActivate: [AuthGuard] }]
     },
     {
@@ -365,7 +378,7 @@ export const AppRoutes: Routes = [
         path: 'pago-agentes-externos', component: CommonLayoutComponent,
         children: [{ path: '', component: PagoAgentesExternosComponent, canActivate: [AuthGuard] }]
     },
-   
+
     { path: 'login', component: LoginComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
 

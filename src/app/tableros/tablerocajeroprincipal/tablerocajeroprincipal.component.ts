@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { GeneralService } from '../../shared/services/general/general.service';
 import { DepartamentoService } from '../../shared/services/departamento/departamento.service';
@@ -9,6 +9,7 @@ import { ToastService } from '../../shared/services/toasty/toast.service';
 import { element } from 'protractor';
 import { Globales } from '../../shared/globales/globales';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 // import { ValidateCajeroService } from '../../validate-cajero.service';
 
 @Component({
@@ -48,6 +49,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
   public Totales: Array<any> = [];
   public model: any;
   public TotalesByCaja: any;
+  @Input() Fecha: string = '';
 
   constructor(
     public globales: Globales,
@@ -58,6 +60,7 @@ export class TablerocajeroprincipalComponent implements OnInit {
     private _monedaService: MonedaService,
     private _paisService: PaisService,
     private _toastService: ToastService,
+    public router: Router
     // private _validateCajeroService: ValidateCajeroService
   ) {
 
@@ -91,6 +94,18 @@ export class TablerocajeroprincipalComponent implements OnInit {
         this._toastService.ShowToast(toastObj);
       }
     });
+  }
+
+  AbrirCierreFuncionario(funcionario: any) {
+
+    this.Fecha_fin = (this.Fecha_fin == '') ? this.FechaActual : this.Fecha_fin
+
+    let user = funcionario;
+    if (this.Fecha == '') {
+      this.router.navigate(['/consolidado', user,  this.Fecha_fin]);
+    } else {
+      this.router.navigate(['/consolidado', user,  this.Fecha_fin]);
+    }
   }
 
   GetMonedas() {

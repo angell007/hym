@@ -218,7 +218,7 @@
                 </ul>
               </li>
               <li class="notifications dropdown">
-                <span class="counter">{{  counter }}</span>
+                <span class="counter">{{ counter }}</span>
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-refresh"></i>
                 </a>
@@ -259,7 +259,49 @@
                     </span>
                   </li>
                 </ul>
+
+
               </li>
+              <!-- <li class="notifications dropdown">
+                <span class="counter">{{ counterServices }}</span>
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-refresh"></i>
+                </a>
+
+                <ul class="dropdown-menu ">
+                  <li class="notice-header">
+                    <i class="ti-bell pdd-right-10"></i>
+                    <span>Servicios Recibidos</span>
+                  </li>
+                  <li>
+                    <ul class="list-info overflow-y-auto relative scrollable">
+                      <li *ngFor="let alerta of  _notificacionService.alertasServices">
+                        <a href="#{{alerta.Component}}" scrollTo>
+                          <img class="thumb-img" *ngIf="alerta.Imagen ==''" src="assets/images/user.jpg" alt="">
+                          <img class="thumb-img" *ngIf=" alerta.Imagen != '' "
+                            src="{{globales.ruta}}IMAGENES/FUNCIONARIOS/{{alerta.Imagen}}" alt="">
+                          <div class="info">
+                            <span class="title">
+                              <span class="font-size-14 text-semibold">{{alerta.NombreFuncionario}} </span>
+                              <span class="font-size-14 text-semibold">{{alerta.Valor }}</span>
+                              <span class="text-gray"> con código </span>
+                              <span class="font-size-14 text-semibold">{{alerta.Codigo}} </span>
+                            </span>
+                             <span class="sub-title">{{alerta.Fecha_Traslado | date: 'hh:mm' }}</span> 
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="notice-footer">
+                    <span>
+                      <a href="#traslados" scrollTo (click)="muestra_tabla('traslados')" class="text-gray">Ver Todos los
+                        Servicios <i class="ei-right-chevron pdd-left-5 font-size-10"></i></a>
+                    </span>
+                  </li>
+                </ul>
+              </li> -->
+
               <li>
                 <a class="side-panel-toggle" href="javascript:void(0);"
                   (click)="app.layout.sidePanelOpen = !app.layout.sidePanelOpen">
@@ -309,16 +351,22 @@
                               <h4 class="mt-1">Mis Saldos</h4>
                             </div>
                           </div>
+
+                       
+
                           <div class="row">
                             <div class="col-6 border right"
-                              *ngFor="let item of consolidadosService.TotalRestaIngresosEgresos">
+                              *ngFor="let item of  consolidadosService.TotalRestaIngresosEgresos ; let i= index ">
                               <div class="pdd-vertical-10">
-                                <span class="font-size-18 text-dark">{{  item.saldo | currency:' ' }}</span><br>
-                                <small>{{ item.cod  }}</small>
+                                <span class="font-size-18 text-dark">{{ item.saldo | currency:' ' }}</span><br>
+                                <small>S.a :  {{ item.cod }}  {{  consolidadosService.saldosAnteriores[i]['Valor_Moneda_Apertura']  | currency:' ' }}  </small>
                               </div>
                             </div>
                           </div>
                         </div>
+                        <!-- /******************************************************************************************************/ -->
+
+                        <!-- /******************************************************************************************************/ -->
                       </div>
                     </div>
                   </div>
@@ -634,11 +682,11 @@
                   <td style="text-align:center;"><strong>{{totalIngresosPesos | currency : "$."}}
                     </strong></td>
                   <td style="text-align:center;"><strong>{{totalIngresosBolivares | currency: "BsS.
-                                            "}}</strong></td>
+                      "}}</strong></td>
                   <td style="width:80px;text-align:right;" colspan="2"><strong>Total</strong></td>
                   <td style="text-align:center;"><strong>{{TotalEgresosPesos | currency : "$." }}</strong></td>
                   <td style="text-align:center;"><strong>{{TotalEgresosBolivares | currency: "BsS.
-                                            "}}</strong></td>
+                      "}}</strong></td>
                 </tr>
 
               </tbody>
@@ -669,9 +717,9 @@
             <tr>
               <td style="background:#efefef;"><strong>Total a Entregar</strong></td>
               <td style="background:#efefef;text-align:right;"><strong id="total_entrega"> {{
-                                    EntregadoIngresosPesos | currency : "$." }}</strong></td>
+                  EntregadoIngresosPesos | currency : "$." }}</strong></td>
               <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{EntregadoIngresosBolivar
-                                    | currency: "BsS. " }}</strong></td>
+                  | currency: "BsS. " }}</strong></td>
             </tr>
             <tr>
               <td>Entregado</td>
@@ -717,7 +765,8 @@
                   <td colspan="3">
                     <input id="MonedasPesos" type="number" min="0" step="1" pattern="\d+" name="datos[F50]" value="0"
                       class="nume2" ngModel (input)="calcularFajoBilletes(0,0,'Moneda')"
-                      style=" width: 170px !important;" /></td>
+                      style=" width: 170px !important;" />
+                  </td>
                 </tr>
 
               </table>
@@ -876,7 +925,7 @@
                         <td style="font-size: 10px; font-weight: 600;">{{movimiento.Fecha | date : "dd/MM/yyyy" }}</td>
                         <td *ngIf="movimiento.Ajuste == 'No'; else yesContent"><a [routerLink]=""
                             (click)="verRecibo(movimiento.Id_Recibo)">{{movimiento.Codigo
-                                                        }}</a></td>
+                            }}</a></td>
                         <ng-template #yesContent>
                           <td>Ajuste</td>
                         </ng-template>
@@ -933,7 +982,7 @@
               <tr>
                 <td style="background:#efefef;"><strong>Saldo Actual</strong></td>
                 <td style="background:#efefef;text-align:right;"><strong id="total_entregaBsS">{{SaldoActual
-                                        | currency:"BsS."}}</strong></td>
+                    | currency:"BsS."}}</strong></td>
               </tr>
               <tr>
                 <td>Diferencia</td>

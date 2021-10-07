@@ -444,8 +444,8 @@
                     <div class="col-md-6">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
                         {{ Venta ? 'Moneda que vende' : (CambioModel.fomapago != 1) ? 'Moneda
-                                                que entrega' : 'Moneda
-                                                Abonada'}}
+                        que entrega' : 'Moneda
+                        Abonada'}}
                       </label>
                       <select *ngIf="Venta" class="inputfield  form-control form-control-lg font-size-18"
                         placeholder="Destino" id="Destino" name="Destino" [(ngModel)]="monedaDefectoVenta['Id_Moneda']"
@@ -503,8 +503,8 @@
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
 
                         {{ Venta ? '' : (CambioModel.fomapago != 1) ? 'Abono a cuenta por valor
-                                                de':
-                                                'Entrega ' + MonedaDestino}}
+                        de':
+                        'Entrega ' + MonedaDestino}}
 
                       </label>
                       <input type="text" placeholder="Entrega" name="Valor_Destino"
@@ -689,6 +689,7 @@
                         <option value="Transferencia">Transferencia</option>
                         <option value="Cliente" *ngIf="TransferenciaModel.Forma_Pago != 'Credito'">Cliente</option>
                         <option value="Proveedor" *ngIf="TransferenciaModel.Forma_Pago != 'Credito'">Proveedor</option>
+                        <option value="Corresponsal">Corresponsal</option>
                       </select>
                     </div>
 
@@ -830,8 +831,8 @@
                                     *ngFor="let c of destinatario.Cuentas;  index as i;"
                                     [value]="c.Id_Destinatario_Cuenta" #custom>
                                     {{c.Numero_Cuenta | mask:
-                                                                        '0000-0000-0000-0000-0000' }} {{ Apodo }} {{
-                                                                        c.Apodo }}
+                                    '0000-0000-0000-0000-0000' }} {{ Apodo }} {{
+                                    c.Apodo }}
                                     {{ c.Name }} {{ Name }}
                                   </option>
                                 </select>
@@ -842,7 +843,8 @@
                                 <!-- <label class="transferencia font-size-18"> {{MonedaParaTransferencia.nombre}}</label> -->
                                 <div class="row">
                                   <div class="col-md-10">
-                                    {{ (MonedaParaTransferencia.nombre != '' && MonedaParaTransferencia.nombre != undefined ) ? MonedaParaTransferencia.nombre.Codigo : '' }}
+                                    {{ (MonedaParaTransferencia.nombre != '' && MonedaParaTransferencia.nombre !=
+                                    undefined ) ? MonedaParaTransferencia.nombre.Codigo : '' }}
                                     <input id="Valor_Transferencia_{{i}}" type="text" placeholder="Valor a Transferir"
                                       [disabled]="DeshabilitarValor" class="font-size-18 form-control alinear-derecha"
                                       name="Valor_Transferencia_{{i}}" [(ngModel)]="destinatario.Valor_Transferencia"
@@ -923,7 +925,8 @@
                             </div>
 
                             <div class="form-group">
-                              {{ (MonedaParaTransferencia.nombre != '' && MonedaParaTransferencia.nombre != undefined ) ? MonedaParaTransferencia.nombre.Codigo : '' }}
+                              {{ (MonedaParaTransferencia.nombre != '' && MonedaParaTransferencia.nombre != undefined )
+                              ? MonedaParaTransferencia.nombre.Codigo : '' }}
 
                               <input *ngIf="TransferenciaModel.Bolsa_Bolivares == '0'" id="Cantidad_Transferida"
                                 type="text" placeholder="Valor Transferencia"
@@ -1005,16 +1008,16 @@
                             <div class="form-group">
                               <label class="transferencia font-size-18">Nombre</label>
                               <label class="font-size-18" style="display:block;">{{TransferenciaModel.Nombre_Remitente
-                                                                == "" ? "Nombre Remitente" :
-                                                                TransferenciaModel.Nombre_Remitente}}</label>
+                                == "" ? "Nombre Remitente" :
+                                TransferenciaModel.Nombre_Remitente}}</label>
                             </div>
                           </div>
                           <div class="col-md-3">
                             <div class="form-group">
                               <label class="transferencia font-size-18">Teléfono</label>
                               <label class="font-size-18" style="display:block;">{{TransferenciaModel.Telefono_Remitente
-                                                                == "" ? "Telefono Remitente" :
-                                                                TransferenciaModel.Telefono_Remitente}}</label>
+                                == "" ? "Telefono Remitente" :
+                                TransferenciaModel.Telefono_Remitente}}</label>
                             </div>
                           </div>
                         </div>
@@ -1413,8 +1416,8 @@
                             <div class="form-group">
                               <label class="font-size-18">Nombre Completo</label>
                               <label class="block-element font-size-18">{{GiroModel.Nombre_Remitente
-                                                                == '' ? "Nombre" :
-                                                                GiroModel.Nombre_Remitente}}</label>
+                                == '' ? "Nombre" :
+                                GiroModel.Nombre_Remitente}}</label>
 
                             </div>
                           </div>
@@ -1424,8 +1427,8 @@
                             <div class="form-group">
                               <label class="font-size-18">Teléfono</label>
                               <label class="block-element font-size-18">{{GiroModel.Telefono_Remitente
-                                                                == '' ?
-                                                                "Telefono" : GiroModel.Telefono_Remitente}}</label>
+                                == '' ?
+                                "Telefono" : GiroModel.Telefono_Remitente}}</label>
 
                             </div>
                           </div>
@@ -1490,8 +1493,8 @@
                             <div class="form-group">
                               <label class="font-size-18">Nombre Completo</label>
                               <label class="block-element font-size-18">{{GiroModel.Nombre_Destinatario
-                                                                == '' ? "Nombre"
-                                                                : GiroModel.Nombre_Destinatario}}</label>
+                                == '' ? "Nombre"
+                                : GiroModel.Nombre_Destinatario}}</label>
 
                             </div>
                           </div>
@@ -1501,8 +1504,8 @@
                             <div class="form-group">
                               <label class="font-size-18">Teléfono</label>
                               <label class="block-element font-size-18">{{GiroModel.Telefono_Destinatario
-                                                                == '' ?
-                                                                "Telefono" : GiroModel.Telefono_Destinatario}}</label>
+                                == '' ?
+                                "Telefono" : GiroModel.Telefono_Destinatario}}</label>
 
                             </div>
                           </div>
@@ -1551,8 +1554,8 @@
                         <div class="form-group">
                           <label class="font-size-18">Valor a Entregar</label>
                           <label class="block-element font-size-18">{{GiroModel.Valor_Entrega
-                                                        == '' ? "0" :
-                                                        GiroModel.Valor_Entrega | customcurrency}}</label>
+                            == '' ? "0" :
+                            GiroModel.Valor_Entrega | customcurrency}}</label>
 
                         </div>
                       </div>
@@ -1560,8 +1563,8 @@
                         <div class="form-group">
                           <label class="font-size-18">Total Recibido</label>
                           <label class="block-element font-size-18">{{GiroModel.Valor_Total ==
-                                                        '' ? "0" :
-                                                        GiroModel.Valor_Total | customcurrency}}</label>
+                            '' ? "0" :
+                            GiroModel.Valor_Total | customcurrency}}</label>
 
                         </div>
                       </div>
@@ -1764,19 +1767,26 @@
                                   </button>
                                 </ng-container>
 
-                                <button *ngIf="Servicio.Estado == 'Activo'" class="btn btn-info btn-xs" type="button"
-                                  style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
-                                  <i class="ti-pencil"></i>
-                                </button>
-                                <button class="btn btn-xs" *ngIf="Servicio.Estado == 'Activo'"
-                                  [ngClass]="{'btn-danger':Servicio.Estado == 'Activo', 'btn-warning':Servicio.Estado == 'Inactivo'}"
-                                  (confirm)="CambiarEstadoServicio(Servicio.Id_Servicio, 'Anulado','Enviados')"
-                                  type="button" style="margin:0;"
-                                  [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
-                                  <i
-                                    [ngClass]="{'ti-close':Servicio.Estado == 'Activo', 'ti-back-right':Servicio.Estado == 'Inactivo'}"></i>
-                                  {{Servicio.Estado == 'Activo' ? '' : ''}}
-                                </button>
+                                <ng-container
+                                  *ngIf="!Servicio.locked && Servicio.funcionario_locked != funcionario_data.Identificacion_Funcionario">
+                                  <button *ngIf="Servicio.Estado == 'Activo'" class="btn btn-info btn-xs" type="button"
+                                    style="margin:0;" (click)="editarServicio(Servicio.Id_Servicio)">
+                                    <i class="ti-pencil"></i>
+                                  </button>
+                                </ng-container>
+
+                                <ng-container
+                                  *ngIf="!Servicio.locked && Servicio.funcionario_locked != funcionario_data.Identificacion_Funcionario">
+                                  <button class="btn btn-xs" *ngIf="Servicio.Estado == 'Activo'"
+                                    [ngClass]="{'btn-danger':Servicio.Estado == 'Activo', 'btn-warning':Servicio.Estado == 'Inactivo'}"
+                                    (confirm)="CambiarEstadoServicio(Servicio.Id_Servicio, 'Anulado','Enviados')"
+                                    type="button" style="margin:0;"
+                                    [swal]="{title : '¿Está Seguro?', text: 'Se dispone a cambiar el estado de este servicio externo' , type : 'warning', showCancelButton : true , confirmButtonText: 'Si, Cambiar',cancelButtonText: 'No!'}">
+                                    <i
+                                      [ngClass]="{'ti-close':Servicio.Estado == 'Activo', 'ti-back-right':Servicio.Estado == 'Inactivo'}"></i>
+                                    {{Servicio.Estado == 'Activo' ? '' : ''}}
+                                  </button>
+                                </ng-container>
 
 
                                 <button *ngIf="Servicio.Documento" class="btn  btn-xs btn-warning" type="button"
@@ -3042,7 +3052,7 @@
           <div class="form-group">
             <label><b>{{vma.Codigo}}</b></label>
             <label class="block-element">{{vma.Valor_Moneda_Cierre |
-                                    customcurrency:vma.Codigo}}</label>
+              customcurrency:vma.Codigo}}</label>
 
           </div>
         </div>

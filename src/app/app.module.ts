@@ -26,6 +26,8 @@ import localeES from '@angular/common/locales/es';
 import { SelectModule } from 'ng-select';
 import { QzTrayService } from './shared/qz-tray.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+import { Socket } from 'ngx-socket-io';
+// import { ArriveServiceComponent } from './arrive-service/arrive-service.component';
 
 registerLocaleData(localeES);
 
@@ -276,8 +278,8 @@ import { FlujoEfectivoComponent } from './components/flujo-efectivo/flujo-efecti
 import { ModalDetalleRecaudoComponent } from './modal-detalle-recaudo/modal-detalle-recaudo.component';
 import { ModalDetalleAjusteComponent } from './modal-detalle-ajuste/modal-detalle-ajuste.component';
 import { PagoAgentesExternosComponent } from './pago-agentes-externos/pago-agentes-externos.component';
-
-
+import { ArriveServiceComponent } from './servicio-externo/arrive-service/arrive-service.component';
+// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 
 export const customCurrencyMaskConfig = {
@@ -295,12 +297,14 @@ export const customCurrencyMaskConfig = {
     // inputMode: CurrencyMaskInputMode.NATURAL
 };
 
+// const config: SocketIoConfig = { url: 'https://grupo-hym.com/customback/', options: {} };
 
 @NgModule({
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
+        // SocketIoModule.forRoot(config),
         RouterModule.forRoot(AppRoutes, { useHash: false }),
         NgbModule.forRoot(),
         PerfectScrollbarModule,
@@ -334,6 +338,7 @@ export const customCurrencyMaskConfig = {
     ],
     schemas: [NO_ERRORS_SCHEMA],
     declarations: [
+        ArriveServiceComponent,
         PuntosPipe,
         CustomcurrencyPipe,
         AppComponent,

@@ -15,7 +15,7 @@
 
             </small>
           </b>
-          <p class="no-mrg-btm ">Movimientos hoy <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy' }}</span>
+          <p class="no-mrg-btm ">Movimientos dia <span class="name pdd-right-5">{{ myDate | date:'dd/MM/yyyy' }}</span>
           </p>
         </div>
       </li>
@@ -28,7 +28,7 @@
 
             <a href="#default-tab-{{i}}" [ngClass]="{'active':  i == 0 ,  'nav-link': true}" role="tab"
               data-toggle="tab">
-              {{ dato.Nombre  | uppercase  }}
+              {{ dato.Nombre | uppercase }}
             </a>
 
           </li>
@@ -39,8 +39,10 @@
             <div role="tabpanel" id="default-tab-{{i}}"
               [ngClass]="{'active':  i == 0, 'tab-pane fade in  card-body ': true }">
               <h5> {{ dato.Nombre }} Saldo inicial
+                
                 <span
-                  class="font-size-15 font-weight-bold">{{(ValoresMonedasApertura2[i]) ? ValoresMonedasApertura2[i]['codigo'] : '' }}
+                  class="font-size-15 font-weight-bold">{{(ValoresMonedasApertura2[i]) ?
+                  ValoresMonedasApertura2[i]['codigo'] : '' }}
                   {{ (ValoresMonedasApertura2[i]) ? ValoresMonedasApertura2[i]['Valor_Moneda_Apertura'] : '' }}
                 </span>
               </h5>
@@ -66,8 +68,8 @@
                   <tr *ngFor="let mov of (dato.query_data).sort(); index as x;">
                     <td> {{mov.Detalle}}</td>
                     <td> {{mov.Tipo}}</td>
-                    <td> {{mov.Ingreso |  currency:' ' }}</td>
-                    <td> {{mov.Egreso  |  currency:' ' }}</td>
+                    <td> {{mov.Ingreso | currency:' ' }}</td>
+                    <td> {{mov.Egreso | currency:' ' }}</td>
                     <td> {{mov.codigo }}
                       {{ mov.saldo | currency:' ' }}
                     </td>

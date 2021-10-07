@@ -10,10 +10,12 @@ export class NotificacionsService {
   public contadorTraslado = 0;
   public contadorTrasladoCustom = 0;
   public alertasCajas: any = [];
+  public alertasServices: any = [];
   public nuevaData: boolean = false;
   public temporalData: any = [];
 
   notifcaciones$ = new Subject<string>()
+  notifcacionesServices$ = new Subject<string>()
 
   constructor(private http: HttpClient, private globales: Globales) {
 
@@ -55,5 +57,34 @@ export class NotificacionsService {
         }
       }
     });
+
+    // this.nuevaData = false;
+
+    // this.http.get(`${this.globales.ruta}/php/alerts/services.php`, { params: { id: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+
+    //   if (this.nuevaData) {
+    //     this.alertasServices = data;
+    //     if (this.alertasServices.length > 0) {
+    //       this.notifcacionesServices$.next(this.alertasServices.length)
+    //     } else {
+    //       this.notifcacionesServices$.next('0');
+    //     }
+    //     this.temporalData = data
+    //     this.nuevaData = false;
+
+    //   } else {
+    //     if (!this.mifuncion(this.temporalData, data)) {
+
+    //       this.alertasServices = data;
+    //       if (this.alertasServices.length > 0) {
+    //         this.notifcacionesServices$.next(this.alertasServices.length)
+    //       } else {
+    //         this.notifcacionesServices$.next('0');
+    //       }
+    //       this.temporalData = data
+    //     }
+    //   }
+    // });
+
   }
 }

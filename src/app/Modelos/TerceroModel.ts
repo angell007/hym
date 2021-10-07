@@ -18,6 +18,6 @@ export class TerceroModel {
     public Tipo_Tercero: string = 'Cliente';
     public Estado: string = 'Activo';
     public recauda: string = 'Activo';
-    public Recauda: string = 'Si';
+    public Recauda: string = 'No';
     public Porcentaje_Recaudo = ''
 }

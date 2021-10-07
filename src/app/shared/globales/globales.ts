@@ -5,10 +5,8 @@ import { HttpClient } from '../../../../node_modules/@angular/common/http';
 @Injectable()
 export class Globales {
 
-  //  ruta: string = 'https://grupohym.com.co/customback/';
-  ruta: string = 'https://softwarehym.com/customback/';
-  //  rutaNueva: string = 'https://backnew.grupohym.com.co/';
-  rutaNueva: string = 'https://backnew.softwarehym.com/';
+  ruta: string = 'https://grupo-hym.com/customback/';
+  rutaNueva: string = 'https://backend.grupo-hym.com/';
 
   public urlRiff = '';
   public urlCne = '';

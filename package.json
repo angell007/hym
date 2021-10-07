@@ -58,6 +58,7 @@
     "ngx-masonry": "^1.1.2",
     "ngx-pagination": "^5.0.0",
     "ngx-perfect-scrollbar": "^5.3.5",
+    "ngx-socket-io": "^3.0.1",
     "node-sass": "^4.14.1",
     "nvd3": "^1.8.6",
     "pace-js": "^1.0.2",
