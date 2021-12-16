@@ -488,7 +488,7 @@
                         (ngModelChange)="conversionMoneda('d', 'l')" [disabled]="HabilitarCampos" required tabindex="4">
                     </div>
 
-                    <div class="col-md-4 mt-1">
+                    <div class="col-md-4 mt-1" [hidden]="!Venta && tipoCliente == '' ">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Tasa
                         Cambio </label>
                       <input type="text" placeholder="Tasa"
@@ -498,6 +498,8 @@
                         [options]="{ thousands: '.' , decimal: ',' , precision: (MonedaParaCambio.id == 1) ? '2' : '0' }"
                         tabindex="5" [(ngModel)]="CambioModel.Tasa">
                     </div>
+
+
 
                     <div class="col-md-4 mt-1" *ngIf="!Venta">
                       <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">
@@ -529,7 +531,7 @@
                   </div>
 
                   <div class="row">
-                    <ng-container *ngIf="mostrarPagaCon">
+                    <ng-container *ngIf="mostrarPagaCon" [hidden]="!Venta && tipoCliente == '' ">
                       <div *ngIf="!Venta" class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Paga
                           Con</label>
@@ -542,7 +544,7 @@
                       </div>
                     </ng-container>
 
-                    <ng-container *ngIf="mostrarDevueltos">
+                    <ng-container *ngIf="mostrarDevueltos" [hidden]="!Venta && tipoCliente == '' ">
                       <div *ngIf="!Venta" class="col-md-6">
                         <label class="font-size-18 {{ Venta === false ? 'text-info' : 'text-success' }}">Vueltos</label>
                         <input readonly type="text" placeholder="Vueltos"
@@ -666,6 +668,7 @@
                 </app-tablatransferenciascajero>
               </div>
             </div>
+            <!-- /*************************************************************************************************************** -->
 
             <div class="row" id="transferencias2" *ngIf="Transferencia2" style="margin-top: 50px">
               <div class="col-md-12">
@@ -695,7 +698,9 @@
 
                     <div class="col-md-3">
                       <label class="transferencia font-size-18">Moneda para el cambio</label>
-                      <select id="Moneda_Transferencia" class="form-control font-size-18" name="Moneda_Transferencia"
+                      <select id="Moneda_Transferencia"
+                        [disabled]="'Transferencia' == TransferenciaModel.Tipo_Transferencia "
+                        class="form-control font-size-18" name="Moneda_Transferencia"
                         [(ngModel)]="TransferenciaModel.Moneda_Destino" required
                         (change)="SetMonedaTransferencia($event.target.value)" tabindex="3">
                         <option selected value="">Seleccione moneda</option>
@@ -705,12 +710,12 @@
                     </div>
 
                     <div class="col-md-3" *ngIf="ControlVisibilidadTransferencia.SelectCliente">
-                      <label class="transferencia font-size-18">Seleccione Cliente</label>
+                      <label class="transferencia font-size-18">Seleccione
+                        {{TransferenciaModel.Tipo_Transferencia}}</label>
 
-                      <input class="form-control font-size-18" name="Id_Tercero" type="text"
-                        placeholder="Nombre Tercero" [ngbTypeahead]="search_tercero_credito_tipo"
-                        [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" [resultTemplate]="rt_tercero_credito"
-                        [inputFormatter]="formatter_tercero_credito">
+                      <input class="form-control font-size-18" name="Id_Tercero" type="text" placeholder="Nombre"
+                        [ngbTypeahead]="search_tercero_credito_tipo" [(ngModel)]="TransferenciaModel.Id_Tercero_Destino"
+                        [resultTemplate]="rt_tercero_credito" [inputFormatter]="formatter_tercero_credito">
 
                       <!-- <input type="text" class="custom-input font-size-18" name="Id_Tercero_Destino" list="clientes"
                         [(ngModel)]="TransferenciaModel.Id_Tercero_Destino" (keyup)="searchClientes($event)"
@@ -880,18 +885,18 @@
                         <div class="row mrg-top-20">
                           <div class="col-md-4">
                             <div class="form-group text-center">
-                              <label class="transferencia font-size-18">Moneda
-                                Recibida</label>
+                              <label class="transferencia font-size-18">Valor a Transferir</label>
                               <label class="block-element font-weight-bold font-size-18">Pesos</label>
-
                             </div>
+
                             <div class="form-group">
                               <input *ngIf="TransferenciaModel.Bolsa_Bolivares == '0'"
                                 class="font-size-18 form-control alinear-derecha" id="Cantidad_Recibida" type="text"
-                                (blur)="CalcularCambioMoneda($event.target.value, 'por origen')" autocomplete="off"
-                                placeholder="Valor Recibido" [(ngModel)]="TransferenciaModel.Cantidad_Recibida"
-                                name="Cantidad_Recibida" required currencyMask
-                                [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}" tabindex="7">
+                                (blur)="CalcularCambioMoneda($event.target.value, 'por origen'); getTotal()"
+                                autocomplete="off" placeholder="Valor Recibido"
+                                [(ngModel)]="TransferenciaModel.Cantidad_Recibida" name="Cantidad_Recibida" required
+                                currencyMask [options]="{ thousands: '.' , decimal: ',' ,  precision: '0'}"
+                                tabindex="7">
 
                               <!-- <input *ngIf="TransferenciaModel.Bolsa_Bolivares != '0'"
                               class="font-size-18 form-control alinear-derecha" id="Cantidad_Recibida" type="text"
@@ -903,7 +908,7 @@
                           </div>
                           <div class="col-md-4" *ngIf="TransferenciaModel.Moneda_Destino !=2">
                             <div class="form-group text-center">
-                              <label class="transferencia font-size-18">Tasa de Cambio
+                              <label class="transferencia font-size-18">Costo compensación
 
                               </label>
                               <input id="Tasa_Cambio_Transferencia" type="text"
@@ -917,8 +922,7 @@
 
                           <div class="col-md-4" *ngIf="TransferenciaModel.Moneda_Destino != 2">
                             <div class="form-group text-center">
-                              <label class="transferencia font-size-18">Moneda de
-                                Transferencia
+                              <label class="transferencia font-size-18">Monto a recibir
                               </label>
                               <!-- <label
                               class="block-element font-weight-bold font-size-18">{{MonedaParaTransferencia.nombre == "" ? "Moneda" : MonedaParaTransferencia.nombre}}</label> -->
@@ -1024,6 +1028,30 @@
                       </div>
                     </div>
 
+
+                    <div class="row mrg-top-20">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="transferencia font-size-18">Costo de transferencia</label>
+                          <input class="font-size-18 form-control alinear-derecha" id="costo" type="text"
+                            autocomplete="off" placeholder="Costo por  la transferencia" name="costo" required
+                            currencyMask
+                            [options]="{ prefix: '', thousands: '.', decimal: ',', inputMode:1, precision:0 }"
+                            [(ngModel)]="TransferenciaModel.Costo_Transferencia" (ngModelChange)="getTotal()">
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="transferencia font-size-18">Total</label>
+                          <input class="font-size-18 form-control alinear-derecha" name="Total" [disabled]="true"
+                            type="text" autocomplete="off" placeholder="Total" required currencyMask
+                            [options]="{ prefix: '', thousands: '.', decimal: ',', inputMode:1, precision:0 }"
+                            [(ngModel)]="TransferenciaModel.Total">
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="row mrg-top-20">
                       <div class="col-md-12">
                         <div class="form-group">
@@ -1051,6 +1079,9 @@
                 </form>
               </div>
             </div>
+
+            <!-- /*************************************************************************************************************** -->
+
           </div>
         </div>
       </div>
@@ -2239,7 +2270,7 @@
                   </ul>
                   <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active mb-3" id="traslado-tab-1">
-                      <h5 class="mt-3">Traslados Enviados del día</h5>
+                      <h5 class="mt-3">Traslados Enviados del días</h5>
                       <div class="table-responsive">
                         <table class="table table-striped table-sm table-bordered mrg-top-10" style="min-width: 900px;">
                           <thead class="rounded">
@@ -2316,18 +2347,26 @@
                               <td class="cell-cajero" class="text-center">
                                 <label>{{Traslado.Estado}}</label>
                               </td>
-                              <td class="text-right" *ngIf="Traslado.Estado == 'Pendiente'">
+
+                              <td class="text-right">
+
+                                <ng-container *ngIf="Traslado.Estado == 'Pendiente'">
+                                  <button class="btn btn-info btn-xs" type="button" style="margin:0;"
+                                    (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
+                                    <i class="ti-pencil"></i>
+                                  </button>
+
+                                  <button class="btn btn-danger btn-xs" type="button" style="margin:0;"
+                                    [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
+                                    (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
+                                    <i class="ti-close"></i>
+                                  </button>
+                                </ng-container>
+
                                 <button class="btn btn-success btn-xs" type="button" style="margin:0;"
-                                  (click)="editarTraslado(Traslado.Id_Traslado_Caja)">
-                                  <i class="ti-pencil"></i>
+                                  (click)="printTraslado(Traslado.Id_Traslado_Caja)">
+                                  <i class="ti-desktop"></i>
                                 </button>
-                                <button class="btn btn-danger btn-xs" type="button" style="margin:0;"
-                                  [swal]="{title:'¿Está Seguro?',text : 'Se dispone a anular este traslado' , type:'warning', showCancelButton: true, confirmButtonText: 'Si, Anular', cancelButtonText:'No, Dejame Comprobar!'}"
-                                  (confirm)="decisionTraslado(Traslado.Id_Traslado_Caja,'Anulado')">
-                                  <i class="ti-close"></i>
-                                </button>
-                              </td>
-                              <td class="text-center" *ngIf="Traslado.Estado != 'Pendiente'">
 
                               </td>
 

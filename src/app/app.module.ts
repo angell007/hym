@@ -92,7 +92,7 @@ import { CargoService } from './shared/services/cargos/cargo.service';
 import { PerfilService } from './shared/services/perfiles/perfil.service';
 import { ConfiguracionService } from './shared/services/configuraciones/configuracion.service';
 import { WebnavigationService } from './shared/services/navegacionweb/webnavigation.service';
-// import { Actualizar } 
+// import { Actualizar }
 // from './shared/services/navegacionweb/webnavigation.service';
 
 
