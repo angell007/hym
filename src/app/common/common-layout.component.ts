@@ -1115,72 +1115,61 @@ export class CommonLayoutComponent implements OnInit {
 
     CheckCajaOficina() {
         var macFormatted = '';
-        this.qz.getMac().subscribe(
-            data => {
-                for (var i = 0; i < data.macAddress.length; i++) {
-                    macFormatted += data.macAddress[i];
-                    if (i % 2 == 1 && i < data.macAddress.length - 1) {
-                        macFormatted += ":";
-                    }
-                }
+        // this.qz.getMac().subscribe(
+        //     data => {
+        // for (var i = 0; i < data.macAddress.length; i++) {
+        //     macFormatted += data.macAddress[i];
+        //     if (i % 2 == 1 && i < data.macAddress.length - 1) {
+        //         macFormatted += ":";
+        //     }
+        // }
 
-                console.log(macFormatted);
+        console.log(macFormatted);
 
-                if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
-                    this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: macFormatted, id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
+        if (this.oficina_seleccionada == '' || this.caja_seleccionada == '') {
+            this.http.get(this.globales.ruta + 'php/cajas/get_caja_mac.php', { params: { mac: 'F4:39:09:E3:70:11', id_funcionario: this.user.Identificacion_Funcionario } }).subscribe((data: any) => {
 
+                if (data.mensaje == 'Se han encontrado registros!') {
+                    this.oficina_seleccionada = data.query_data.Id_Oficina;
+                    this.caja_seleccionada = data.query_data.Id_Caja;
 
-                        // if (d.limites.query_data.length > 0) {
-                        //     this.MonedasSistema.forEach((element: any, index: number) => {
-                        //       d.limites.query_data.forEach((element2: any) => {
-                        //         if (element.Id_Moneda == element2.Id_Moneda) {
-                        //           this.OficinaModel[element.Nombre] = element2.Monto
-                        //         }
-                        //       })
-                        //     });
-                        //   }
+                    localStorage.setItem('Oficina', this.oficina_seleccionada);
+                    localStorage.setItem('Caja', this.caja_seleccionada);
 
-                        if (data.mensaje == 'Se han encontrado registros!') {
-                            this.oficina_seleccionada = data.query_data.Id_Oficina;
-                            this.caja_seleccionada = data.query_data.Id_Caja;
-
-                            localStorage.setItem('Oficina', this.oficina_seleccionada);
-                            localStorage.setItem('Caja', this.caja_seleccionada);
-
-                            this.SetNombreOficina(this.oficina_seleccionada);
-                            this.SetNombreCaja(this.caja_seleccionada);
-                            this.mostrarDatos = true;
-                            this.DesconectarQz();
-                        } else {
-                            this.macSwal.title = data.titulo;
-                            this.macSwal.html = data.mensaje;
-                            this.macSwal.type = data.codigo;
-                            this.macSwal.show();
-                            this.DesconectarQz();
-
-
-                            //this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
-                            /*setTimeout(() => {
-                                this.salir();
-                            }, 10000);*/
-                        }
-                    });
-                    //this.modalOficinaCaja.show();
-                } else {
-                    this.ListarCajas(this.oficina_seleccionada);
                     this.SetNombreOficina(this.oficina_seleccionada);
                     this.SetNombreCaja(this.caja_seleccionada);
                     this.mostrarDatos = true;
                     this.DesconectarQz();
+                } else {
+                    this.macSwal.title = data.titulo;
+                    this.macSwal.html = data.mensaje;
+                    this.macSwal.type = data.codigo;
+                    this.macSwal.show();
+                    this.DesconectarQz();
+
+
+                    //this.ShowSwal('error', 'Error con Equipo', 'El equipo desde donde intenta ingresar no se encuentra registrado en nuestro sistema, por favor contacte al administrador');
+                    /*setTimeout(() => {
+                        this.salir();
+                    }, 10000);*/
                 }
-            },
-            err => {
-                this.macSwal.title = "QZ TRY NO ENCONTRADO O NO HABILITADO"
-                this.macSwal.html = "El Software QzTry NO ha sido habilitado o no ha sido encontrado en el sistema, por favor descarguelo <a  href='https://qz.io/' target='_blank'>aquí</a> y siga <a href='' target='_blank'>estas instucciones</a> para volver a intentarlo"
-                this.macSwal.type = "error"
-                this.macSwal.show();
-            }
-        );
+            });
+            //this.modalOficinaCaja.show();
+        } else {
+            this.ListarCajas(this.oficina_seleccionada);
+            this.SetNombreOficina(this.oficina_seleccionada);
+            this.SetNombreCaja(this.caja_seleccionada);
+            this.mostrarDatos = true;
+            this.DesconectarQz();
+        }
+        // },
+        // err => {
+        //     this.macSwal.title = "QZ TRY NO ENCONTRADO O NO HABILITADO"
+        //     this.macSwal.html = "El Software QzTry NO ha sido habilitado o no ha sido encontrado en el sistema, por favor descarguelo <a  href='https://qz.io/' target='_blank'>aquí</a> y siga <a href='' target='_blank'>estas instucciones</a> para volver a intentarlo"
+        //     this.macSwal.type = "error"
+        //     this.macSwal.show();
+        // }
+        // );
 
 
 

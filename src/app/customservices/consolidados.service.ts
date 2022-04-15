@@ -64,14 +64,14 @@ export class ConsolidadosService {
 			this.nuevaData = false;
 			this.Modulos = data;
 
-			data.forEach(element => {
-				if (element.Movimientos) {
-					this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
-				}
-				if (!element.Movimientos) {
-					this.saldosAnteriores = element
-				}
-			});
+			// data.forEach(element => {
+			// 	if (element.Movimientos) {
+			// 		this.TotalRestaIngresosEgresos.push({ saldo: this.reduce(element.Movimientos), cod: element.Codigo, id: element.Id })
+			// 	}
+			// 	if (!element.Movimientos) {
+			// 		this.saldosAnteriores = element
+			// 	}
+			// });
 
 			this.TotalRestaIngresosEgresos.forEach((TIE: any) => {
 				this.saldosAnteriores.forEach((SA: any) => {
